@@ -1,0 +1,1132 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生态平台 - 管理系统</title>
+<style>
+:root {
+  --primary: #2563EB; --primary-hover: #1D4ED8; --primary-light: #EFF6FF;
+  --gray-900: #0F172A; --gray-700: #334155; --gray-500: #64748B;
+  --gray-400: #94A3B8; --gray-200: #E2E8F0; --gray-100: #F1F5F9;
+  --gray-50: #F8FAFC; --white: #FFFFFF;
+  --success: #16A34A; --success-light: #F0FDF4;
+  --warning: #D97706; --warning-light: #FFFBEB;
+  --danger: #DC2626; --danger-light: #FEF2F2;
+  --info: #0284C7; --info-light: #F0F9FF;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; font-size: 14px; color: var(--gray-700); background: var(--gray-50); display: flex; height: 100vh; overflow: hidden; }
+.sidebar { width: 240px; background: var(--white); border-right: 1px solid var(--gray-200); display: flex; flex-direction: column; flex-shrink: 0; height: 100vh; }
+.sidebar-logo { height: 64px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--gray-200); gap: 10px; }
+.logo-icon { width: 32px; height: 32px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.logo-text { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+.sidebar-nav { padding: 12px 8px; flex: 1; overflow-y: auto; }
+.nav-section-title { font-size: 11px; font-weight: 500; color: var(--gray-400); padding: 8px 12px 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 0 12px; height: 36px; border-radius: 6px; cursor: pointer; color: var(--gray-500); font-size: 14px; transition: all 0.15s; margin-bottom: 2px; }
+.nav-item:hover { background: var(--gray-100); color: var(--gray-700); }
+.nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 500; }
+.nav-sub .nav-item { font-size: 13px; height: 32px; padding-left: 36px; }
+.sidebar-footer { padding: 12px 8px; border-top: 1px solid var(--gray-200); }
+.prd-link { display: flex; align-items: center; justify-content: center; height: 36px; padding: 0 12px; border-radius: 6px; font-size: 13px; font-weight: 500; color: var(--primary); text-decoration: none; transition: all 0.15s; }
+.prd-link:hover { background: var(--primary-light); color: var(--primary-hover); text-decoration: underline; }
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.page-header { height: 56px; background: var(--white); border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; padding: 0 32px; flex-shrink: 0; }
+.breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gray-500); }
+.breadcrumb .sep { color: var(--gray-400); }
+.breadcrumb .current { color: var(--gray-900); font-weight: 500; }
+.breadcrumb .link { cursor: pointer; color: var(--primary); }
+.breadcrumb .link:hover { text-decoration: underline; }
+.content { flex: 1; overflow-y: auto; padding: 24px 32px; }
+.card { background: var(--white); border: 1px solid var(--gray-200); border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.card-header { padding: 16px 20px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; }
+.card-title { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: var(--gray-50); }
+th { padding: 0 16px; height: 40px; text-align: left; font-size: 12px; font-weight: 500; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid var(--gray-200); white-space: nowrap; }
+td { padding: 0 16px; height: 44px; border-bottom: 1px solid var(--gray-100); font-size: 14px; color: var(--gray-700); }
+tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--gray-50); }
+.btn { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; border: none; transition: all 0.15s; white-space: nowrap; }
+.btn-sm { height: 30px; padding: 0 10px; font-size: 13px; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-secondary { background: var(--white); color: var(--gray-700); border: 1px solid var(--gray-200); }
+.btn-secondary:hover { background: var(--gray-50); }
+.btn-ghost { background: transparent; color: var(--primary); }
+.btn-ghost:hover { background: var(--primary-light); }
+.btn-danger-ghost { background: transparent; color: var(--danger); border: none; }
+.btn-danger-ghost:hover { background: var(--danger-light); }
+.badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+.badge-success { background: var(--success-light); color: var(--success); }
+.badge-warning { background: var(--warning-light); color: var(--warning); }
+.badge-danger { background: var(--danger-light); color: var(--danger); }
+.badge-info { background: var(--info-light); color: var(--info); }
+.badge-neutral { background: var(--gray-100); color: var(--gray-500); }
+.input { height: 36px; border: 1px solid var(--gray-200); border-radius: 6px; padding: 0 12px; font-size: 14px; color: var(--gray-700); background: var(--white); outline: none; width: 100%; }
+.input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
+.select { height: 36px; border: 1px solid var(--gray-200); border-radius: 6px; padding: 0 32px 0 12px; font-size: 14px; color: var(--gray-700); background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center; outline: none; width: 100%; cursor: pointer; appearance: none; }
+.select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 13px; font-weight: 500; color: var(--gray-700); margin-bottom: 6px; }
+.required { color: var(--danger); margin-left: 2px; }
+.form-error { font-size: 12px; color: var(--danger); margin-top: 4px; display: none; }
+.form-error.show { display: block; }
+.input.error, .select.error { border-color: var(--danger); }
+.input.error:focus, .select.error:focus { box-shadow: 0 0 0 3px rgba(220,38,38,0.12); }
+.tabs { display: flex; border-bottom: 1px solid var(--gray-200); padding: 0 24px; background: var(--white); }
+.tab { padding: 0 16px; height: 44px; display: flex; align-items: center; font-size: 14px; color: var(--gray-500); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; white-space: nowrap; }
+.tab:hover { color: var(--gray-700); }
+.tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 500; }
+.toggle { position: relative; display: inline-block; width: 36px; height: 20px; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; cursor: pointer; inset: 0; background: var(--gray-200); border-radius: 20px; transition: 0.2s; }
+.toggle-slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.2s; }
+.toggle input:checked + .toggle-slider { background: var(--primary); }
+.toggle input:checked + .toggle-slider:before { transform: translateX(16px); }
+.drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; display: none; }
+.drawer-overlay.show { display: block; }
+.drawer { position: fixed; top: 0; right: 0; width: 480px; height: 100vh; background: var(--white); box-shadow: -20px 0 60px rgba(0,0,0,0.15); z-index: 101; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.25s ease; }
+.drawer.show { transform: translateX(0); }
+.drawer-header { height: 56px; padding: 0 24px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.drawer-title { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+.drawer-body { flex: 1; overflow-y: auto; padding: 24px; }
+.drawer-footer { height: 56px; padding: 0 24px; border-top: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-shrink: 0; }
+.close-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; cursor: pointer; color: var(--gray-500); border: none; background: transparent; }
+.close-btn:hover { background: var(--gray-100); }
+.section-title { font-size: 11px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; margin-top: 20px; }
+.section-title:first-child { margin-top: 0; }
+.ad-slot-config { border: 1px solid var(--gray-200); border-radius: 8px; padding: 14px; margin-bottom: 10px; background: var(--gray-50); }
+.ad-slot-config-header { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; }
+.page-view { display: none; }
+.page-view.active { display: flex; flex-direction: column; height: 100%; }
+.tab-content { display: none; }
+.empty-state { padding: 48px 24px; text-align: center; color: var(--gray-400); }
+.empty-state p { font-size: 14px; margin-top: 12px; }
+.app-info-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: 8px; padding: 20px 24px; margin-bottom: 0; display: flex; align-items: center; gap: 20px; }
+.app-icon { width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-size: 22px; font-weight: 700; flex-shrink: 0; }
+.group-connector { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+.logic-toggle { display: flex; border: 1px solid var(--gray-200); border-radius: 6px; overflow: hidden; }
+.logic-btn { padding: 3px 14px; font-size: 12px; font-weight: 500; border: none; cursor: pointer; transition: all 0.15s; }
+.logic-btn.active { background: var(--primary); color: white; }
+.logic-btn:not(.active) { background: var(--white); color: var(--gray-500); }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+    <span class="logo-text">生态平台</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">核心功能</div>
+    <div class="nav-item active" id="nav-app" onclick="showPage('app-list')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      应用管理
+    </div>
+    <div class="nav-item" id="nav-user-parent" onclick="showPage('user-segment')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      用户管理
+    </div>
+    <div class="nav-sub">
+      <div class="nav-item" id="nav-segment" onclick="showPage('user-segment')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        广告用户分群
+      </div>
+      <div class="nav-item" id="nav-noad" onclick="showPage('user-noad')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        免广告用户
+      </div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="https://xcnhz08770yd.feishu.cn/docx/RtNYdxtwQoo4hfxwGtecnwsKnOh?from=from_copylink" target="_blank" class="prd-link">需求文档PRD</a>
+  </div>
+</aside>
+
+<main class="main">
+
+<!-- PAGE: 应用列表 -->
+<div id="page-app-list" class="page-view active">
+  <div class="page-header"><div class="breadcrumb"><span class="current">应用管理</span></div></div>
+  <div class="content">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">应用列表</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div style="position:relative">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--gray-400)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input class="input" placeholder="搜索应用名称 / APPID" style="width:220px;padding-left:34px">
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="showPage('app-edit')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            创建应用
+          </button>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>APP名称</th><th>APPID</th><th>应用平台</th><th>应用区域</th><th>收款方式</th><th>开放类型</th><th>审核状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">G</div><span style="font-weight:500;color:var(--gray-900)">GameHub Pro</span></div></td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">APP_001</code></td>
+            <td><span class="badge badge-info">Android</span></td><td>东南亚</td><td>Stripe</td>
+            <td><span class="badge badge-success">公开</span></td>
+            <td><span class="badge badge-success">已通过</span></td>
+            <td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="showPage('app-edit')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#f093fb,#f5576c);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">S</div><span style="font-weight:500;color:var(--gray-900)">ShopEasy</span></div></td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">APP_002</code></td>
+            <td><span class="badge badge-neutral">iOS</span></td><td>欧洲</td><td>PayPal</td>
+            <td><span class="badge badge-warning">私有</span></td>
+            <td><span class="badge badge-warning">审核中</span></td>
+            <td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="showPage('app-edit')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#4facfe,#00f2fe);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">M</div><span style="font-weight:500;color:var(--gray-900)">MediaStream</span></div></td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">APP_003</code></td>
+            <td><span class="badge badge-info">Android</span></td><td>北美</td><td>Stripe</td>
+            <td><span class="badge badge-success">公开</span></td>
+            <td><span class="badge badge-danger">已拒绝</span></td>
+            <td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="showPage('app-edit')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="padding:12px 20px;border-top:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:13px;color:var(--gray-500)">共 3 条记录</span>
+        <div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" disabled>上一页</button><button class="btn btn-sm btn-primary">1</button><button class="btn btn-sm btn-secondary" disabled>下一页</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: 应用编辑 -->
+<div id="page-app-edit" class="page-view">
+  <div class="page-header"><div class="breadcrumb"><span class="link" onclick="showPage('app-list')">应用管理</span><span class="sep">/</span><span class="current">GameHub Pro</span></div></div>
+  <div class="content" style="padding:0;display:flex;flex-direction:column;overflow:hidden">
+    <div style="padding:20px 32px 16px">
+      <div class="app-info-card">
+        <div class="app-icon">G</div>
+        <div style="flex:1">
+          <div style="font-size:16px;font-weight:600;color:var(--gray-900);margin-bottom:4px">GameHub Pro</div>
+          <div style="display:flex;gap:20px;flex-wrap:wrap">
+            <span style="font-size:13px;color:var(--gray-500)">APPID: <span style="color:var(--gray-700);font-weight:500">APP_001</span></span>
+            <span style="font-size:13px;color:var(--gray-500)">平台: <span style="color:var(--gray-700);font-weight:500">Android</span></span>
+            <span style="font-size:13px;color:var(--gray-500)">区域: <span style="color:var(--gray-700);font-weight:500">东南亚</span></span>
+            <span style="font-size:13px;color:var(--gray-500)">审核: <span class="badge badge-success" style="vertical-align:middle">已通过</span></span>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-sm">编辑基础信息</button>
+      </div>
+    </div>
+    <div class="tabs">
+      <div class="tab" onclick="switchTab('tab-version',this)">版本管理</div>
+      <div class="tab" onclick="switchTab('tab-push',this)">Push消息推送</div>
+      <div class="tab" onclick="switchTab('tab-payment',this)">收款账号管理</div>
+      <div class="tab active" onclick="switchTab('tab-adslot',this)">广告位管理</div>
+      <div class="tab" onclick="switchTab('tab-strategy',this)">广告策略管理</div>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:24px 32px">
+      <div id="tab-version" class="tab-content">
+        <div class="card"><div class="card-header"><span class="card-title">版本列表</span><button class="btn btn-primary btn-sm">+ 新增版本</button></div><div class="empty-state"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--gray-300)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><p>暂无版本数据</p></div></div>
+      </div>
+      <div id="tab-push" class="tab-content">
+        <div class="card"><div class="card-header"><span class="card-title">Push消息推送</span><button class="btn btn-primary btn-sm">+ 新建推送</button></div><div class="empty-state"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--gray-300)"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><p>暂无推送记录</p></div></div>
+      </div>
+      <div id="tab-payment" class="tab-content">
+        <div class="card"><div class="card-header"><span class="card-title">收款账号管理</span><button class="btn btn-primary btn-sm">+ 添加账号</button></div><div class="empty-state"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--gray-300)"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><p>暂无收款账号</p></div></div>
+      </div>
+      <div id="tab-adslot" class="tab-content" style="display:block">
+        <div class="card">
+          <div class="card-header"><span class="card-title">广告位列表</span><button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-adslot')">+ 添加广告位</button></div>
+          <table><thead><tr><th>广告位名称</th><th>广告位ID</th><th>广告类型</th><th>创建时间</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td><span style="font-weight:500;color:var(--gray-900)">开屏广告位</span></td><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">SLOT_001</code></td><td><span class="badge badge-info">开屏</span></td><td style="font-size:13px;color:var(--gray-500)">2024-01-15 10:30</td><td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-ghost" onclick="showPage('ad-source')">广告源配置</button><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-adslot')">编辑</button><button class="btn btn-sm btn-danger-ghost" onclick="deleteAdslot('SLOT_001', '开屏广告位')">删除</button></div></td></tr>
+            <tr><td><span style="font-weight:500;color:var(--gray-900)">插屏广告位</span></td><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">SLOT_002</code></td><td><span class="badge badge-warning">插屏</span></td><td style="font-size:13px;color:var(--gray-500)">2024-01-16 14:20</td><td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-ghost" onclick="showPage('ad-source')">广告源配置</button><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-adslot')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td></tr>
+            <tr><td><span style="font-weight:500;color:var(--gray-900)">Banner广告位</span></td><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">SLOT_003</code></td><td><span class="badge badge-neutral">Banner</span></td><td style="font-size:13px;color:var(--gray-500)">2024-01-17 09:00</td><td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-ghost" onclick="showPage('ad-source')">广告源配置</button><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-adslot')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+      <div id="tab-strategy" class="tab-content">
+        <div class="card">
+          <div class="card-header"><span class="card-title">广告策略列表</span><button class="btn btn-primary btn-sm" onclick="openStrategyDrawer('add')">+ 添加策略</button></div>
+          <table><thead><tr><th>策略名称</th><th>包含广告位</th><th>全局策略</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td><span style="font-weight:500;color:var(--gray-900)">默认策略</span></td><td><span class="badge badge-info">3 个广告位</span></td><td style="font-size:13px;color:var(--gray-500)">开屏/插屏冷却间隔: <span style="color:var(--gray-700)">30s</span></td><td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openStrategyDrawer('edit')">编辑</button><button class="btn btn-sm btn-danger-ghost" onclick="deleteStrategy('STR_001', '默认策略')">删除</button></div></td></tr>
+            <tr><td><span style="font-weight:500;color:var(--gray-900)">高频策略</span></td><td><span class="badge badge-info">2 个广告位</span></td><td style="font-size:13px;color:var(--gray-500)">开屏/插屏冷却间隔: <span style="color:var(--gray-700)">15s</span></td><td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openStrategyDrawer('edit')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: 广告源配置 -->
+<div id="page-ad-source" class="page-view">
+  <div class="page-header"><div class="breadcrumb"><span class="link" onclick="showPage('app-list')">应用管理</span><span class="sep">/</span><span class="link" onclick="showPage('app-edit')">GameHub Pro</span><span class="sep">/</span><span class="current">开屏广告位 · 广告源配置</span></div></div>
+  <div class="content">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <button class="btn btn-secondary" onclick="showPage('app-edit')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>返回</button>
+      <div><div style="font-size:15px;font-weight:600;color:var(--gray-900)">开屏广告位</div><div style="font-size:12px;color:var(--gray-500)">广告位ID: SLOT_001 · 类型: 开屏</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">广告源列表</span><button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-adsource')">+ 添加广告源</button></div>
+      <table><thead><tr><th>广告标题</th><th>广告ID</th><th>广告平台</th><th>广告源ID</th><th>操作</th></tr></thead>
+      <tbody>
+        <tr><td><span style="font-weight:500;color:var(--gray-900)">开屏广告-主源</span></td><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px" class="ad-id-cell"></code></td><td><span class="badge badge-info">fengchuan</span></td><td style="font-size:13px;color:var(--gray-500)">fc_src_001_splash</td><td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-adsource')">编辑</button><button class="btn btn-sm btn-danger-ghost" onclick="deleteAdsource('AD_001', '开屏广告-主源')">删除</button></div></td></tr>
+        <tr><td><span style="font-weight:500;color:var(--gray-900)">开屏广告-备源</span></td><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px" class="ad-id-cell"></code></td><td><span class="badge badge-info">fengchuan</span></td><td style="font-size:13px;color:var(--gray-500)">fc_src_002_splash_bk</td><td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-adsource')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: 广告用户分群 -->
+<div id="page-user-segment" class="page-view">
+  <div class="page-header"><div class="breadcrumb"><span class="current">广告用户分群</span></div></div>
+  <div class="content">
+    <div class="card">
+      <div class="card-header"><span class="card-title">用户分群列表</span></div>
+      <table><thead><tr><th style="width:48px">序号</th><th>分群名称</th><th>分群编码</th><th>用户数量</th><th>广告策略</th></tr></thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--gray-400);font-size:13px">1</td>
+          <td><span style="font-weight:500;color:var(--gray-900)">高价值用户</span></td>
+          <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">user_group_high_value</code></td>
+          <td style="font-weight:500;color:var(--gray-900)">12,480</td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div><div style="font-size:13px;color:var(--primary);cursor:pointer;font-weight:500" onclick="openModal('modal-strategy-view')">默认策略</div></div><button class="btn btn-sm btn-secondary" style="height:26px;padding:0 8px;font-size:12px" onclick="openDrawer('drawer-bind-strategy')">重新绑定</button></div></td>
+        </tr>
+        <tr>
+          <td style="color:var(--gray-400);font-size:13px">2</td>
+          <td><span style="font-weight:500;color:var(--gray-900)">活跃用户</span></td>
+          <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">user_group_active</code></td>
+          <td style="font-weight:500;color:var(--gray-900)">38,920</td>
+          <td><div style="display:flex;align-items:center;gap:6px"><span style="font-size:13px;color:var(--gray-400)">未绑定</span><button class="btn btn-sm btn-primary" style="height:26px;padding:0 10px;font-size:12px" onclick="openDrawer('drawer-bind-strategy')">绑定策略</button></div></td>
+        </tr>
+        <tr>
+          <td style="color:var(--gray-400);font-size:13px">3</td>
+          <td><span style="font-weight:500;color:var(--gray-900)">沉默用户</span></td>
+          <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">user_group_silent</code></td>
+          <td style="font-weight:500;color:var(--gray-900)">5,210</td>
+          <td><div style="display:flex;align-items:center;gap:6px"><span style="font-size:13px;color:var(--gray-400)">未绑定</span><button class="btn btn-sm btn-primary" style="height:26px;padding:0 10px;font-size:12px" onclick="openDrawer('drawer-bind-strategy')">绑定策略</button></div></td>
+        </tr>
+      </tbody></table>
+      <div style="padding:12px 20px;border-top:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px;color:var(--gray-500)">共 3 条记录</span><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" disabled>上一页</button><button class="btn btn-sm btn-primary">1</button><button class="btn btn-sm btn-secondary" disabled>下一页</button></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: 免广告用户 -->
+<div id="page-user-noad" class="page-view">
+  <div class="page-header"><div class="breadcrumb"><span class="current">免广告用户</span></div></div>
+  <div class="content">
+    <div class="card">
+      <div class="card-header"><span class="card-title">免广告用户列表</span><button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-noad-user')">+ 添加用户</button></div>
+      <table><thead><tr><th>用户ID</th><th>用户账号</th><th>用户分群</th><th>有效期（天）</th><th>结束时间</th><th>操作</th></tr></thead>
+      <tbody>
+        <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">UID_100234</code></td><td>user_zhang@example.com</td><td><span class="badge badge-info">高价值用户</span></td><td>365</td><td style="font-size:13px;color:var(--gray-500)">2025-01-10</td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+        <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">UID_200891</code></td><td>user_li@example.com</td><td><span class="badge badge-warning">活跃用户</span></td><td style="color:var(--gray-400)">—</td><td><span class="badge badge-success">永久</span></td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+        <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">UID_305672</code></td><td>user_wang@example.com</td><td><span class="badge badge-info">高价值用户</span></td><td>30</td><td style="font-size:13px;color:var(--gray-500)">2024-02-18</td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+        <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">UID_412038</code></td><td>user_chen@example.com</td><td><span class="badge badge-neutral">沉默用户</span></td><td>90</td><td style="font-size:13px;color:var(--gray-500)">2024-04-10</td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+      </tbody></table>
+      <div style="padding:12px 20px;border-top:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px;color:var(--gray-500)">共 4 条记录</span><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" disabled>上一页</button><button class="btn btn-sm btn-primary">1</button><button class="btn btn-sm btn-secondary" disabled>下一页</button></div></div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- DRAWER: 广告位添加/编辑 -->
+<div class="drawer-overlay" id="overlay-adslot" onclick="closeDrawer('drawer-adslot')"></div>
+<div class="drawer" id="drawer-adslot">
+  <div class="drawer-header"><span class="drawer-title" id="adslot-drawer-title">添加广告位</span><button class="close-btn" onclick="closeDrawer('drawer-adslot')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">广告位名称 <span class="required">*</span></label>
+      <input class="input" placeholder="请输入广告位名称" id="adslot-name">
+      <div class="form-error" id="adslot-name-error">此项为必填项</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">广告位ID <span class="required">*</span></label>
+      <input class="input" placeholder="请输入广告位ID，如 SLOT_001" id="adslot-id">
+      <div class="form-error" id="adslot-id-error">此项为必填项</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">广告类型 <span class="required">*</span></label>
+      <select class="select" id="adslot-type">
+        <option value="">请选择广告类型</option>
+        <option value="splash">开屏</option>
+        <option value="interstitial">插屏</option>
+        <option value="banner">Banner</option>
+        <option value="native">原生</option>
+        <option value="rewarded">激励视频</option>
+      </select>
+      <div class="form-error" id="adslot-type-error">此项为必填项</div>
+    </div>
+  </div>
+  <div class="drawer-footer"><button class="btn btn-secondary" onclick="closeDrawer('drawer-adslot')">取消</button><button class="btn btn-primary" id="adslot-save-btn" onclick="validateAndSaveAdslot()">保存</button></div>
+</div>
+
+<!-- DRAWER: 绑定广告策略 -->
+<div class="drawer-overlay" id="overlay-bind-strategy" onclick="closeDrawer('drawer-bind-strategy')"></div>
+<div class="drawer" id="drawer-bind-strategy" style="width:600px">
+  <div class="drawer-header"><span class="drawer-title">绑定广告策略</span><button class="close-btn" onclick="closeDrawer('drawer-bind-strategy')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="drawer-body">
+    <div style="font-size:13px;color:var(--gray-500);margin-bottom:16px">勾选需要配置广告策略的 APP，并为每个 APP 选择对应策略</div>
+    <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden">
+      <div style="padding:10px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);display:flex;align-items:center;gap:10px"><input type="checkbox" id="bind-check-all" style="width:15px;height:15px;cursor:pointer" onchange="toggleAllBindApps(this)"><label for="bind-check-all" style="font-size:13px;font-weight:500;color:var(--gray-700);cursor:pointer">全选</label></div>
+      <div class="bind-app-row" style="padding:12px 16px;border-bottom:1px solid var(--gray-100);display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;gap:12px">
+          <input type="checkbox" class="bind-app-checkbox" style="width:15px;height:15px;cursor:pointer" onchange="toggleBindAppStrategy(this)">
+          <div style="display:flex;align-items:center;gap:8px;flex:1"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">G</div><div><div style="font-size:13px;font-weight:500;color:var(--gray-900)">GameHub Pro</div><div style="font-size:12px;color:var(--gray-400)">APP_001 · Android</div></div></div>
+          <select class="select bind-strategy-select" style="width:220px" disabled onchange="showBindStrategyPreview(this)"><option value="">请选择广告策略</option><option value="STR_001">默认策略 (STR_001)</option><option value="STR_002">高频策略 (STR_002)</option></select>
+        </div>
+        <div class="bind-strategy-preview" style="display:none;margin-top:10px;margin-left:27px;padding:12px;background:var(--primary-light);border-radius:6px;border:1px solid #BFDBFE"></div>
+      </div>
+      <div class="bind-app-row" style="padding:12px 16px;border-bottom:1px solid var(--gray-100);display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;gap:12px">
+          <input type="checkbox" class="bind-app-checkbox" style="width:15px;height:15px;cursor:pointer" onchange="toggleBindAppStrategy(this)">
+          <div style="display:flex;align-items:center;gap:8px;flex:1"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#f093fb,#f5576c);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">S</div><div><div style="font-size:13px;font-weight:500;color:var(--gray-900)">ShopEasy</div><div style="font-size:12px;color:var(--gray-400)">APP_002 · iOS</div></div></div>
+          <select class="select bind-strategy-select" style="width:220px" disabled onchange="showBindStrategyPreview(this)"><option value="">请选择广告策略</option><option value="STR_001">默认策略 (STR_001)</option><option value="STR_002">高频策略 (STR_002)</option></select>
+        </div>
+        <div class="bind-strategy-preview" style="display:none;margin-top:10px;margin-left:27px;padding:12px;background:var(--primary-light);border-radius:6px;border:1px solid #BFDBFE"></div>
+      </div>
+      <div class="bind-app-row" style="padding:12px 16px;display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;gap:12px">
+          <input type="checkbox" class="bind-app-checkbox" style="width:15px;height:15px;cursor:pointer" onchange="toggleBindAppStrategy(this)">
+          <div style="display:flex;align-items:center;gap:8px;flex:1"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#4facfe,#00f2fe);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">M</div><div><div style="font-size:13px;font-weight:500;color:var(--gray-900)">MediaStream</div><div style="font-size:12px;color:var(--gray-400)">APP_003 · Android</div></div></div>
+          <select class="select bind-strategy-select" style="width:220px" disabled onchange="showBindStrategyPreview(this)"><option value="">请选择广告策略</option><option value="STR_001">默认策略 (STR_001)</option><option value="STR_002">高频策略 (STR_002)</option></select>
+        </div>
+        <div class="bind-strategy-preview" style="display:none;margin-top:10px;margin-left:27px;padding:12px;background:var(--primary-light);border-radius:6px;border:1px solid #BFDBFE"></div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-footer"><button class="btn btn-secondary" onclick="closeDrawer('drawer-bind-strategy')">取消</button><button class="btn btn-primary" onclick="closeDrawer('drawer-bind-strategy')">确认绑定</button></div>
+</div>
+
+<!-- DRAWER: 广告源编辑 -->
+<div class="drawer-overlay" id="overlay-adsource" onclick="closeDrawer('drawer-adsource')"></div>
+<div class="drawer" id="drawer-adsource">
+  <div class="drawer-header"><span class="drawer-title">编辑广告源</span><button class="close-btn" onclick="closeDrawer('drawer-adsource')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">广告标题 <span class="required">*</span></label>
+      <input class="input" placeholder="请输入广告标题" value="开屏广告-主源" id="adsource-title">
+      <div class="form-error" id="adsource-title-error">此项为必填项</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">广告平台 <span class="required">*</span></label>
+      <select class="select" id="adsource-platform">
+        <option value="">请选择广告平台</option>
+        <option value="fengchuan" selected>fengchuan</option>
+      </select>
+      <div class="form-error" id="adsource-platform-error">此项为必填项</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">广告源ID <span class="required">*</span></label>
+      <input class="input" placeholder="请输入广告源ID" value="fc_src_001_splash" id="adsource-id">
+      <div class="form-error" id="adsource-id-error">此项为必填项</div>
+    </div>
+  </div>
+  <div class="drawer-footer"><button class="btn btn-secondary" onclick="closeDrawer('drawer-adsource')">取消</button><button class="btn btn-primary" id="adsource-save-btn" onclick="validateAndSaveAdsource()">保存</button></div>
+</div>
+
+<!-- DRAWER: 广告策略 -->
+<div class="drawer-overlay" id="overlay-strategy" onclick="closeDrawer('drawer-strategy')"></div>
+<div class="drawer" id="drawer-strategy" style="width:640px">
+  <div class="drawer-header"><span class="drawer-title" id="strategy-drawer-title">添加广告策略</span><button class="close-btn" onclick="closeDrawer('drawer-strategy')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">策略名称 <span class="required">*</span></label>
+      <input class="input" placeholder="请输入策略名称" id="strategy-name">
+      <div class="form-error" id="strategy-name-error">此项为必填项</div>
+    </div>
+    <div class="section-title">配置广告位 <span class="required">*</span></div>
+    <div id="slot-config-list"></div>
+    <div class="form-error" id="strategy-slot-error" style="margin-bottom:10px">请至少配置一个广告位</div>
+    <button class="btn btn-secondary btn-sm" style="margin-bottom:20px" onclick="addSlotConfig()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加广告位</button>
+    <div class="section-title">配置全局策略 <span class="required">*</span></div>
+    <div class="form-group">
+      <label class="form-label">开屏/插屏冷却间隔（s） <span class="required">*</span></label>
+      <input class="input" type="number" placeholder="请输入冷却间隔秒数" style="max-width:200px" id="strategy-cooldown">
+      <div class="form-error" id="strategy-cooldown-error">此项为必填项</div>
+    </div>
+  </div>
+  <div class="drawer-footer"><button class="btn btn-secondary" onclick="closeDrawer('drawer-strategy')">取消</button><button class="btn btn-primary" id="strategy-save-btn" onclick="validateAndSaveStrategy()">保存策略</button></div>
+</div>
+
+<!-- DRAWER: 免广告用户 -->
+<div class="drawer-overlay" id="overlay-noad-user" onclick="closeDrawer('drawer-noad-user')"></div>
+<div class="drawer" id="drawer-noad-user">
+  <div class="drawer-header"><span class="drawer-title">添加免广告用户</span><button class="close-btn" onclick="closeDrawer('drawer-noad-user')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="drawer-body">
+    <div class="form-group"><label class="form-label">用户ID <span class="required">*</span></label><input class="input" placeholder="请输入用户ID"></div>
+    <div class="form-group"><label class="form-label">用户分群 <span class="required">*</span></label><select class="select"><option value="">请选择用户分群</option><option>高价值用户 (user_group_high_value)</option><option>活跃用户 (user_group_active)</option><option>沉默用户 (user_group_silent)</option></select></div>
+    <div class="form-group"><label class="form-label">生效时长（天）</label><input class="input" type="number" placeholder="请输入天数，不填则永久生效" min="1"><div style="font-size:12px;color:var(--gray-400);margin-top:4px">不填则永久生效</div></div>
+    <div class="form-group"><label class="form-label">备注</label><input class="input" placeholder="请输入备注（选填）"></div>
+  </div>
+  <div class="drawer-footer"><button class="btn btn-secondary" onclick="closeDrawer('drawer-noad-user')">取消</button><button class="btn btn-primary" onclick="closeDrawer('drawer-noad-user')">确认添加</button></div>
+</div>
+
+<!-- DRAWER: 创建/编辑分群 -->
+<div class="drawer-overlay" id="overlay-segment" onclick="closeDrawer('drawer-segment')"></div>
+<div class="drawer" id="drawer-segment" style="width:680px">
+  <div class="drawer-header"><span class="drawer-title" id="segment-drawer-title">创建用户分群</span><button class="close-btn" onclick="closeDrawer('drawer-segment')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="drawer-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="form-group"><label class="form-label">分群名称 <span class="required">*</span></label><input class="input" placeholder="请输入分群名称"></div>
+      <div class="form-group"><label class="form-label">分群级别 <span class="required">*</span></label><select class="select"><option value="">请选择级别</option><option>P0</option><option>P1</option><option>P2</option><option>P3</option><option>P4</option><option>P5</option></select></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">分群编码 <span class="required">*</span></label>
+      <div style="display:flex">
+        <span style="height:36px;display:flex;align-items:center;padding:0 12px;background:var(--gray-50);border:1px solid var(--gray-200);border-right:none;border-radius:6px 0 0 6px;font-size:14px;color:var(--gray-500);white-space:nowrap">user_group_</span>
+        <input class="input" placeholder="请输入编码后缀" style="border-radius:0 6px 6px 0" id="segment-code-input">
+      </div>
+      <div style="font-size:12px;color:var(--gray-400);margin-top:4px">编码不可重复，仅支持字母、数字和下划线</div>
+    </div>
+    <div class="form-group"><label class="form-label">分群描述</label><textarea class="input" placeholder="请输入分群描述（选填）" style="height:72px;resize:none;padding-top:8px"></textarea></div>
+    <div class="section-title">分群规则</div>
+    <div id="rule-group-list"></div>
+    <button class="btn btn-secondary btn-sm" style="margin-bottom:20px" onclick="addRuleGroup()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加规则组</button>
+    <div class="section-title">广告策略</div>
+    <div style="font-size:13px;color:var(--gray-500);margin-bottom:10px">勾选需要配置广告策略的 APP，并为每个 APP 选择对应策略</div>
+    <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden">
+      <div style="padding:10px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);display:flex;align-items:center;gap:10px"><input type="checkbox" id="app-check-all" style="width:15px;height:15px;cursor:pointer" onchange="toggleAllApps(this)"><label for="app-check-all" style="font-size:13px;font-weight:500;color:var(--gray-700);cursor:pointer">全选</label></div>
+      <div class="app-strategy-row" style="padding:12px 16px;border-bottom:1px solid var(--gray-100);display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;gap:12px">
+          <input type="checkbox" class="app-checkbox" style="width:15px;height:15px;cursor:pointer" onchange="toggleAppStrategy(this)">
+          <div style="display:flex;align-items:center;gap:8px;flex:1"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">G</div><div><div style="font-size:13px;font-weight:500;color:var(--gray-900)">GameHub Pro</div><div style="font-size:12px;color:var(--gray-400)">APP_001 · Android</div></div></div>
+          <select class="select app-strategy-select" style="width:220px" disabled onchange="showStrategyPreview(this)"><option value="">请选择广告策略</option><option value="STR_001">默认策略 (STR_001)</option><option value="STR_002">高频策略 (STR_002)</option></select>
+        </div>
+        <div class="strategy-preview" style="display:none;margin-top:10px;margin-left:27px;padding:12px;background:var(--primary-light);border-radius:6px;border:1px solid #BFDBFE"></div>
+      </div>
+      <div class="app-strategy-row" style="padding:12px 16px;border-bottom:1px solid var(--gray-100);display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;gap:12px">
+          <input type="checkbox" class="app-checkbox" style="width:15px;height:15px;cursor:pointer" onchange="toggleAppStrategy(this)">
+          <div style="display:flex;align-items:center;gap:8px;flex:1"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#f093fb,#f5576c);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">S</div><div><div style="font-size:13px;font-weight:500;color:var(--gray-900)">ShopEasy</div><div style="font-size:12px;color:var(--gray-400)">APP_002 · iOS</div></div></div>
+          <select class="select app-strategy-select" style="width:220px" disabled onchange="showStrategyPreview(this)"><option value="">请选择广告策略</option><option value="STR_001">默认策略 (STR_001)</option><option value="STR_002">高频策略 (STR_002)</option></select>
+        </div>
+        <div class="strategy-preview" style="display:none;margin-top:10px;margin-left:27px;padding:12px;background:var(--primary-light);border-radius:6px;border:1px solid #BFDBFE"></div>
+      </div>
+      <div class="app-strategy-row" style="padding:12px 16px;display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;gap:12px">
+          <input type="checkbox" class="app-checkbox" style="width:15px;height:15px;cursor:pointer" onchange="toggleAppStrategy(this)">
+          <div style="display:flex;align-items:center;gap:8px;flex:1"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#4facfe,#00f2fe);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">M</div><div><div style="font-size:13px;font-weight:500;color:var(--gray-900)">MediaStream</div><div style="font-size:12px;color:var(--gray-400)">APP_003 · Android</div></div></div>
+          <select class="select app-strategy-select" style="width:220px" disabled onchange="showStrategyPreview(this)"><option value="">请选择广告策略</option><option value="STR_001">默认策略 (STR_001)</option><option value="STR_002">高频策略 (STR_002)</option></select>
+        </div>
+        <div class="strategy-preview" style="display:none;margin-top:10px;margin-left:27px;padding:12px;background:var(--primary-light);border-radius:6px;border:1px solid #BFDBFE"></div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-footer"><button class="btn btn-secondary" onclick="closeDrawer('drawer-segment')">取消</button><button class="btn btn-primary" onclick="closeDrawer('drawer-segment')">保存</button></div>
+</div>
+
+<!-- MODAL: 广告策略查看 -->
+<div class="drawer-overlay" id="overlay-modal-strategy-view" onclick="closeModal('modal-strategy-view')" style="z-index:200"></div>
+<div id="modal-strategy-view" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.95);width:580px;background:var(--white);border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,0.15);z-index:201;display:none;flex-direction:column;opacity:0;transition:all 0.2s ease">
+  <div style="height:56px;padding:0 24px;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between;flex-shrink:0"><span style="font-size:15px;font-weight:600;color:var(--gray-900)">广告策略详情</span><button class="close-btn" onclick="closeModal('modal-strategy-view')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div style="padding:24px;overflow-y:auto">
+    <div style="display:flex;gap:12px;margin-bottom:16px">
+      <div style="flex:1;background:var(--gray-50);border-radius:6px;padding:12px 16px"><div style="font-size:11px;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">策略名称</div><div style="font-size:14px;font-weight:500;color:var(--gray-900)">默认策略</div></div>
+      <div style="flex:1;background:var(--gray-50);border-radius:6px;padding:12px 16px"><div style="font-size:11px;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">策略ID</div><div style="font-size:14px;font-weight:500;color:var(--gray-900)">STR_001</div></div>
+    </div>
+    <div style="font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">全局策略</div>
+    <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:6px;padding:10px 16px;margin-bottom:16px;font-size:13px;color:var(--gray-500)">开屏/插屏冷却间隔：<span style="color:var(--gray-900);font-weight:600">30s</span></div>
+    <div style="font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">广告位配置</div>
+    <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden">
+      <table style="margin:0"><thead><tr><th>广告位</th><th>展示状态</th><th>频次上限</th><th>展示间隔</th><th>刷新间隔</th></tr></thead>
+      <tbody>
+        <tr><td><span style="font-weight:500">开屏广告位</span><br><span style="font-size:12px;color:var(--gray-400)">SLOT_001</span></td><td><span class="badge badge-success">开启</span></td><td>5次/小时</td><td>30s</td><td>60s</td></tr>
+        <tr><td><span style="font-weight:500">插屏广告位</span><br><span style="font-size:12px;color:var(--gray-400)">SLOT_002</span></td><td><span class="badge badge-neutral">关闭</span></td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td><span style="font-weight:500">Banner广告位</span><br><span style="font-size:12px;color:var(--gray-400)">SLOT_003</span></td><td><span class="badge badge-success">开启</span></td><td>10次/小时</td><td>15s</td><td>30s</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+  <div style="height:56px;padding:0 24px;border-top:1px solid var(--gray-200);display:flex;align-items:center;justify-content:flex-end"><button class="btn btn-secondary" onclick="closeModal('modal-strategy-view')">关闭</button></div>
+</div>
+
+<!-- MODAL: 删除限制提示 -->
+<div class="drawer-overlay" id="overlay-modal-delete-restrict" onclick="closeModal('modal-delete-restrict')" style="z-index:200"></div>
+<div id="modal-delete-restrict" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.95);width:420px;background:var(--white);border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,0.15);z-index:201;display:none;flex-direction:column;opacity:0;transition:all 0.2s ease">
+  <div style="height:56px;padding:0 24px;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+    <span style="font-size:15px;font-weight:600;color:var(--gray-900)">无法删除</span>
+    <button class="close-btn" onclick="closeModal('modal-delete-restrict')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div style="padding:24px;overflow-y:auto">
+    <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--warning);flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div style="flex:1">
+        <div style="font-size:14px;color:var(--gray-700);line-height:1.5" id="delete-restrict-message">该项已被其他数据引用，无法删除。请先移除相关引用。</div>
+      </div>
+    </div>
+  </div>
+  <div style="height:56px;padding:0 24px;border-top:1px solid var(--gray-200);display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-shrink:0">
+    <button class="btn btn-primary" onclick="closeModal('modal-delete-restrict')">我知道了</button>
+  </div>
+</div>
+
+<script>
+// ---- Navigation ----
+function showPage(name) {
+  document.querySelectorAll('.page-view').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
+  if (name === 'app-list' || name === 'app-edit' || name === 'ad-source') {
+    document.getElementById('nav-app').classList.add('active');
+  } else if (name === 'user-segment') {
+    document.getElementById('nav-user-parent').classList.add('active');
+    document.getElementById('nav-segment').classList.add('active');
+  } else if (name === 'user-noad') {
+    document.getElementById('nav-user-parent').classList.add('active');
+    document.getElementById('nav-noad').classList.add('active');
+  }
+  if (name === 'app-edit') {
+    var activeTab = document.querySelector('#page-app-edit .tab.active');
+    if (activeTab) { var m = activeTab.getAttribute('onclick').match(/'([^']+)'/); if (m) showTabContent(m[1]); }
+  }
+}
+function switchTab(tabId, el) {
+  document.querySelectorAll('#page-app-edit .tab').forEach(function(t){ t.classList.remove('active'); });
+  el.classList.add('active');
+  showTabContent(tabId);
+}
+function showTabContent(tabId) {
+  document.querySelectorAll('.tab-content').forEach(function(c){ c.style.display = 'none'; });
+  var el = document.getElementById(tabId);
+  if (el) el.style.display = 'block';
+}
+
+// ---- Drawer ----
+function openDrawer(id) {
+  var oid = 'overlay-' + id.replace('drawer-', '');
+  document.getElementById(oid).classList.add('show');
+  document.getElementById(id).classList.add('show');
+}
+function closeDrawer(id) {
+  var oid = 'overlay-' + id.replace('drawer-', '');
+  document.getElementById(oid).classList.remove('show');
+  document.getElementById(id).classList.remove('show');
+}
+
+// ---- Modal ----
+function openModal(id) {
+  var overlay = document.getElementById('overlay-' + id);
+  var modal = document.getElementById(id);
+  if (overlay) { overlay.classList.add('show'); overlay.style.display = 'block'; }
+  if (modal) { modal.style.display = 'flex'; setTimeout(function(){ modal.style.opacity = '1'; modal.style.transform = 'translate(-50%,-50%) scale(1)'; }, 10); }
+}
+function closeModal(id) {
+  var overlay = document.getElementById('overlay-' + id);
+  var modal = document.getElementById(id);
+  if (modal) { modal.style.opacity = '0'; modal.style.transform = 'translate(-50%,-50%) scale(0.95)'; setTimeout(function(){ modal.style.display = 'none'; }, 200); }
+  if (overlay) { overlay.classList.remove('show'); overlay.style.display = 'none'; }
+}
+</script>
+
+<script>
+// ---- Strategy Drawer ----
+var slotCounter = 0;
+function openStrategyDrawer(mode) {
+  document.getElementById('strategy-drawer-title').textContent = mode === 'edit' ? '\u7f16\u8f91\u5e7f\u544a\u7b56\u7565' : '\u6dfb\u52a0\u5e7f\u544a\u7b56\u7565';
+  var list = document.getElementById('slot-config-list');
+  list.innerHTML = '';
+  slotCounter = 0;
+  addSlotConfig(); addSlotConfig();
+  openDrawer('drawer-strategy');
+}
+function addSlotConfig() {
+  slotCounter++;
+  var id = slotCounter;
+  var list = document.getElementById('slot-config-list');
+  var div = document.createElement('div');
+  div.className = 'ad-slot-config';
+  div.id = 'slot-block-' + id;
+  div.innerHTML =
+    '<div class="ad-slot-config-header">' +
+    '<div style="flex:1;min-width:0">' +
+    '<select class="select slot-select" style="width:100%" onchange="validateSlotDup()">' +
+    '<option value="">\u8bf7\u9009\u62e9\u5e7f\u544a\u4f4d</option>' +
+    '<option value="SLOT_001">\u5f00\u5c4f\u5e7f\u544a\u4f4d (SLOT_001)</option>' +
+    '<option value="SLOT_002">\u63d2\u5c4f\u5e7f\u544a\u4f4d (SLOT_002)</option>' +
+    '<option value="SLOT_003">Banner\u5e7f\u544a\u4f4d (SLOT_003)</option>' +
+    '</select>' +
+    '<div class="slot-dup-err" style="display:none;align-items:center;gap:4px;margin-top:4px"><span style="font-size:12px;color:var(--danger)">\u8be5\u5e7f\u544a\u4f4d\u5df2\u6dfb\u52a0\uff0c\u8bf7\u52ff\u91cd\u590d\u914d\u7f6e</span></div>' +
+    '</div>' +
+    '<button class="btn btn-sm btn-danger-ghost" style="padding:0 8px;margin-left:8px;flex-shrink:0" onclick="removeSlotConfig(' + id + ')">' +
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button></div>' +
+    '<div style="margin-top:10px;padding-bottom:10px;border-bottom:1px solid var(--gray-200)">' +
+    '<div style="font-size:11px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px">\u5e7f\u544a\u6e90</div>' +
+    '<select class="select"><option value="">\u8bf7\u9009\u62e9\u5e7f\u544a\u6e90</option><option value="AD_001">\u5f00\u5c4f\u5e7f\u544a-\u4e3b\u6e90 (AD_001)</option><option value="AD_002">\u5f00\u5c4f\u5e7f\u544a-\u5907\u6e90 (AD_002)</option></select></div>' +
+    '<div style="margin-top:10px">' +
+    '<div style="font-size:11px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">\u63a7\u5236\u53c2\u6570</div>' +
+    '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">' +
+    '<span style="font-size:13px;color:var(--gray-700);white-space:nowrap">\u5c55\u793a\u72b6\u6001</span>' +
+    '<label class="toggle"><input type="checkbox" id="tog-' + id + '" onchange="toggleSlotDyn(\'sp-' + id + '\',this)"><span class="toggle-slider"></span></label>' +
+    '<span style="font-size:13px;color:var(--gray-500)" id="tog-' + id + '-lbl">\u5df2\u5173\u95ed</span></div>' +
+    '<div id="sp-' + id + '" style="display:none;gap:10px;align-items:flex-end">' +
+    '<div style="flex:1"><label class="form-label" style="white-space:nowrap">\u9891\u6b21\u4e0a\u9650\uff08\u6b21/\u5c0f\u65f6\uff09</label><input class="input" type="number" placeholder="5"></div>' +
+    '<div style="flex:1"><label class="form-label" style="white-space:nowrap">\u5c55\u793a\u95f4\u9694\uff08s\uff09</label><input class="input" type="number" placeholder="30"></div>' +
+    '<div style="flex:1"><label class="form-label" style="white-space:nowrap">\u5237\u65b0\u95f4\u9694\uff08s\uff09</label><input class="input" type="number" placeholder="60"></div>' +
+    '</div></div>';
+  list.appendChild(div);
+}
+function removeSlotConfig(id) {
+  var el = document.getElementById('slot-block-' + id);
+  if (el) { el.remove(); validateSlotDup(); }
+}
+function toggleSlotDyn(pid, cb) {
+  var p = document.getElementById(pid);
+  var lbl = document.getElementById(cb.id + '-lbl');
+  if (cb.checked) { p.style.display = 'flex'; if (lbl) lbl.textContent = '\u5df2\u5f00\u542f'; }
+  else { p.style.display = 'none'; if (lbl) lbl.textContent = '\u5df2\u5173\u95ed'; }
+}
+function validateSlotDup() {
+  var list = document.getElementById('slot-config-list');
+  var sels = list.querySelectorAll('.slot-select');
+  var cnt = {};
+  sels.forEach(function(s){ if (s.value) cnt[s.value] = (cnt[s.value]||0)+1; });
+  var hasDup = false;
+  sels.forEach(function(s){
+    var err = s.parentElement.querySelector('.slot-dup-err');
+    if (s.value && cnt[s.value] > 1) { s.style.borderColor='var(--danger)'; if(err) err.style.display='flex'; hasDup=true; }
+    else { s.style.borderColor=''; if(err) err.style.display='none'; }
+  });
+  return !hasDup;
+}
+function saveStrategy() { if (!validateSlotDup()) return; closeDrawer('drawer-strategy'); }
+
+// ---- Form Validation ----
+function validateAndSaveAdsource() {
+  var title = document.getElementById('adsource-title');
+  var platform = document.getElementById('adsource-platform');
+  var id = document.getElementById('adsource-id');
+  var hasError = false;
+  
+  // Clear previous errors
+  document.getElementById('adsource-title-error').classList.remove('show');
+  document.getElementById('adsource-platform-error').classList.remove('show');
+  document.getElementById('adsource-id-error').classList.remove('show');
+  title.classList.remove('error');
+  platform.classList.remove('error');
+  id.classList.remove('error');
+  
+  // Validate
+  if (!title.value.trim()) {
+    document.getElementById('adsource-title-error').classList.add('show');
+    title.classList.add('error');
+    hasError = true;
+  }
+  if (!platform.value) {
+    document.getElementById('adsource-platform-error').classList.add('show');
+    platform.classList.add('error');
+    hasError = true;
+  }
+  if (!id.value.trim()) {
+    document.getElementById('adsource-id-error').classList.add('show');
+    id.classList.add('error');
+    hasError = true;
+  }
+  
+  if (!hasError) {
+    closeDrawer('drawer-adsource');
+  }
+}
+
+function validateAndSaveAdslot() {
+  var name = document.getElementById('adslot-name');
+  var id = document.getElementById('adslot-id');
+  var type = document.getElementById('adslot-type');
+  var hasError = false;
+  
+  // Clear previous errors
+  document.getElementById('adslot-name-error').classList.remove('show');
+  document.getElementById('adslot-id-error').classList.remove('show');
+  document.getElementById('adslot-type-error').classList.remove('show');
+  name.classList.remove('error');
+  id.classList.remove('error');
+  type.classList.remove('error');
+  
+  // Validate
+  if (!name.value.trim()) {
+    document.getElementById('adslot-name-error').classList.add('show');
+    name.classList.add('error');
+    hasError = true;
+  }
+  if (!id.value.trim()) {
+    document.getElementById('adslot-id-error').classList.add('show');
+    id.classList.add('error');
+    hasError = true;
+  }
+  if (!type.value) {
+    document.getElementById('adslot-type-error').classList.add('show');
+    type.classList.add('error');
+    hasError = true;
+  }
+  
+  if (!hasError) {
+    closeDrawer('drawer-adslot');
+  }
+}
+
+function validateAndSaveStrategy() {
+  var name = document.getElementById('strategy-name');
+  var slotList = document.getElementById('slot-config-list');
+  var cooldown = document.getElementById('strategy-cooldown');
+  var hasError = false;
+  
+  // Clear previous errors
+  document.getElementById('strategy-name-error').classList.remove('show');
+  document.getElementById('strategy-slot-error').classList.remove('show');
+  document.getElementById('strategy-cooldown-error').classList.remove('show');
+  name.classList.remove('error');
+  cooldown.classList.remove('error');
+  
+  // Validate strategy name
+  if (!name.value.trim()) {
+    document.getElementById('strategy-name-error').classList.add('show');
+    name.classList.add('error');
+    hasError = true;
+  }
+  
+  // Validate at least one slot configured
+  if (slotList.children.length === 0) {
+    document.getElementById('strategy-slot-error').classList.add('show');
+    hasError = true;
+  }
+  
+  // Validate each slot configuration
+  var slots = slotList.querySelectorAll('.ad-slot-config');
+  slots.forEach(function(slot) {
+    var slotSelect = slot.querySelector('.slot-select');
+    var sourceSelect = slot.querySelectorAll('.select')[1];
+    var toggle = slot.querySelector('input[type="checkbox"]');
+    var inputs = slot.querySelectorAll('input[type="number"]');
+    
+    if (!slotSelect.value) {
+      slotSelect.classList.add('error');
+      hasError = true;
+    }
+    
+    if (!sourceSelect.value) {
+      sourceSelect.classList.add('error');
+      hasError = true;
+    }
+    
+    if (toggle && toggle.checked) {
+      inputs.forEach(function(inp) {
+        if (!inp.value) {
+          inp.classList.add('error');
+          hasError = true;
+        }
+      });
+    }
+  });
+  
+  // Validate global strategy (cooldown)
+  if (!cooldown.value) {
+    document.getElementById('strategy-cooldown-error').classList.add('show');
+    cooldown.classList.add('error');
+    hasError = true;
+  }
+  
+  if (!validateSlotDup()) {
+    hasError = true;
+  }
+  
+  if (!hasError) {
+    closeDrawer('drawer-strategy');
+  }
+}
+
+// Add real-time validation
+document.addEventListener('DOMContentLoaded', function() {
+  var adsourceInputs = ['adsource-title', 'adsource-id'];
+  adsourceInputs.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', function() {
+        if (this.value.trim()) {
+          this.classList.remove('error');
+          document.getElementById(id + '-error').classList.remove('show');
+        }
+      });
+    }
+  });
+  
+  var adslotInputs = ['adslot-name', 'adslot-id'];
+  adslotInputs.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', function() {
+        if (this.value.trim()) {
+          this.classList.remove('error');
+          document.getElementById(id + '-error').classList.remove('show');
+        }
+      });
+    }
+  });
+  
+  var strategyName = document.getElementById('strategy-name');
+  if (strategyName) {
+    strategyName.addEventListener('input', function() {
+      if (this.value.trim()) {
+        this.classList.remove('error');
+        document.getElementById('strategy-name-error').classList.remove('show');
+      }
+    });
+  }
+});
+
+// ---- Delete Restriction ----
+function showDeleteRestrictionModal(message) {
+  document.getElementById('delete-restrict-message').textContent = message;
+  openModal('modal-delete-restrict');
+}
+
+// Mock delete handlers with restriction checks
+function deleteAdslot(slotId, slotName) {
+  // Check if slot is referenced by any strategy - for demo, first slot is always referenced
+  var isReferenced = (slotId === 'SLOT_001');
+  if (isReferenced) {
+    showDeleteRestrictionModal('该广告位已被广告策略引用，无法删除。请先在广告策略中移除该广告位。');
+  } else {
+    if (confirm('确定删除该广告位吗？')) {
+      // Perform deletion
+    }
+  }
+}
+
+function deleteAdsource(sourceId, sourceName) {
+  // Check if source is referenced by any strategy - for demo, first source is always referenced
+  var isReferenced = (sourceId === 'AD_001');
+  if (isReferenced) {
+    showDeleteRestrictionModal('该广告源已被广告策略引用，无法删除。请先在广告策略中移除该广告源。');
+  } else {
+    if (confirm('确定删除该广告源吗？')) {
+      // Perform deletion
+    }
+  }
+}
+
+function deleteStrategy(strategyId, strategyName) {
+  // Check if strategy is referenced by any user segment - for demo, first strategy is always referenced
+  var isReferenced = (strategyId === 'STR_001');
+  if (isReferenced) {
+    showDeleteRestrictionModal('该广告策略已被用户分群引用，无法删除。请先在用户分群中移除该策略的绑定。');
+  } else {
+    if (confirm('确定删除该广告策略吗？')) {
+      // Perform deletion
+    }
+  }
+}
+
+</script>
+
+<script>
+// ---- Segment Drawer ----
+var ruleGroupCounter = 0, ruleCounter = 0;
+var tagOptions = ['\u8bbe\u5907\u578b\u53f7','\u5730\u7406\u4f4d\u7f6e','\u7ed1\u5b9a\u8bbe\u5907\u6570','\u76f4\u64ad\u67e5\u770b','\u56de\u653e\u70b9\u51fb','\u544a\u8b66\u63a8\u9001\u70b9\u51fb','\u5206\u4eab\u8bbe\u5907','\u4e91\u5b58\u50a8\u72b6\u6001','\u5b58\u50a8\u5361\u72b6\u6001'];
+var operatorMap = {'\u8bbe\u5907\u578b\u53f7':['\u7b49\u4e8e','\u4e0d\u7b49\u4e8e','\u5305\u542b'],'\u5730\u7406\u4f4d\u7f6e':['\u7b49\u4e8e','\u4e0d\u7b49\u4e8e','\u5305\u542b'],'\u7ed1\u5b9a\u8bbe\u5907\u6570':['\u5927\u4e8e','\u5c0f\u4e8e','\u7b49\u4e8e','\u5927\u4e8e\u7b49\u4e8e','\u5c0f\u4e8e\u7b49\u4e8e'],'\u76f4\u64ad\u67e5\u770b':['\u5927\u4e8e','\u5c0f\u4e8e','\u7b49\u4e8e'],'\u56de\u653e\u70b9\u51fb':['\u5927\u4e8e','\u5c0f\u4e8e','\u7b49\u4e8e'],'\u544a\u8b66\u63a8\u9001\u70b9\u51fb':['\u5927\u4e8e','\u5c0f\u4e8e','\u7b49\u4e8e'],'\u5206\u4eab\u8bbe\u5907':['\u5927\u4e8e','\u5c0f\u4e8e','\u7b49\u4e8e'],'\u4e91\u5b58\u50a8\u72b6\u6001':['\u7b49\u4e8e','\u4e0d\u7b49\u4e8e'],'\u5b58\u50a8\u5361\u72b6\u6001':['\u7b49\u4e8e','\u4e0d\u7b49\u4e8e']};
+var valueTypeMap = {'\u4e91\u5b58\u50a8\u72b6\u6001':['\u5df2\u5f00\u542f','\u672a\u5f00\u542f'],'\u5b58\u50a8\u5361\u72b6\u6001':['\u5df2\u63d2\u5165','\u672a\u63d2\u5165','\u5f02\u5e38']};
+
+function openSegmentDrawer(mode) {
+  document.getElementById('segment-drawer-title').textContent = mode === 'edit' ? '\u7f16\u8f91\u5206\u7fa4' : '\u521b\u5efa\u7528\u6237\u5206\u7fa4';
+  var rl = document.getElementById('rule-group-list');
+  rl.innerHTML = ''; ruleGroupCounter = 0; ruleCounter = 0;
+  addRuleGroup();
+  openDrawer('drawer-segment');
+}
+function addRuleGroup() {
+  ruleGroupCounter++;
+  var gid = ruleGroupCounter;
+  var list = document.getElementById('rule-group-list');
+  if (list.children.length > 0) {
+    var conn = document.createElement('div');
+    conn.className = 'group-connector';
+    conn.innerHTML = '<div style="flex:1;height:1px;background:var(--gray-200)"></div>' +
+      '<div class="logic-toggle">' +
+      '<button class="logic-btn active" onclick="setGroupLogic(this,\'AND\')">\u4e14</button>' +
+      '<button class="logic-btn" onclick="setGroupLogic(this,\'OR\')">\u6216</button>' +
+      '</div><div style="flex:1;height:1px;background:var(--gray-200)"></div>';
+    list.appendChild(conn);
+  }
+  var g = document.createElement('div');
+  g.id = 'rg-' + gid;
+  g.style.cssText = 'background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:14px;margin-bottom:0';
+  g.innerHTML =
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">' +
+    '<span style="font-size:13px;font-weight:600;color:var(--gray-700)">\u89c4\u5219\u7ec4 ' + gid + '</span>' +
+    '<button class="btn btn-sm btn-danger-ghost" style="padding:0 8px" onclick="removeRuleGroup(' + gid + ')">\u5220\u9664\u89c4\u5219\u7ec4</button></div>' +
+    '<div id="rules-' + gid + '"></div>' +
+    '<div style="display:flex;align-items:center;gap:10px;margin-top:8px">' +
+    '<button class="btn btn-sm btn-secondary" onclick="addRule(' + gid + ')">\u6dfb\u52a0\u89c4\u5219</button>' +
+    '<span style="font-size:12px;color:var(--gray-400)">\u7ec4\u5185\u903b\u8f91\uff1a</span>' +
+    '<div class="logic-toggle">' +
+    '<button class="logic-btn active" onclick="setInnerLogic(this,' + gid + ',\'AND\')">\u4e14</button>' +
+    '<button class="logic-btn" onclick="setInnerLogic(this,' + gid + ',\'OR\')">\u6216</button>' +
+    '</div></div>';
+  list.appendChild(g);
+  addRule(gid);
+}
+function addRule(gid) {
+  ruleCounter++;
+  var rid = ruleCounter;
+  var container = document.getElementById('rules-' + gid);
+  var tagOpts = tagOptions.map(function(t){ return '<option value="' + t + '">' + t + '</option>'; }).join('');
+  var defOps = (operatorMap[tagOptions[0]]||['\u7b49\u4e8e']).map(function(o){ return '<option>' + o + '</option>'; }).join('');
+  var row = document.createElement('div');
+  row.id = 'rule-' + rid;
+  row.style.cssText = 'display:flex;align-items:flex-start;gap:8px;margin-bottom:8px';
+  row.innerHTML =
+    '<select class="select" style="width:150px;flex-shrink:0" onchange="onTagChange(this,' + rid + ')">' + tagOpts + '</select>' +
+    '<select class="select" id="op-' + rid + '" style="width:110px;flex-shrink:0">' + defOps + '</select>' +
+    '<div id="vw-' + rid + '" style="flex:1;min-width:0"><input class="input" placeholder="\u8f93\u5165\u503c"></div>' +
+    '<input class="input" placeholder="\u65f6\u95f4\u7a97\u53e3\uff08\u9009\u586b\uff09" style="width:130px;flex-shrink:0">' +
+    '<button class="btn btn-sm btn-danger-ghost" style="padding:0 8px;flex-shrink:0" onclick="removeRule(' + rid + ')">' +
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>';
+  container.appendChild(row);
+}
+function onTagChange(sel, rid) {
+  var tag = sel.value;
+  var opSel = document.getElementById('op-' + rid);
+  var vw = document.getElementById('vw-' + rid);
+  var ops = operatorMap[tag] || ['\u7b49\u4e8e','\u4e0d\u7b49\u4e8e'];
+  opSel.innerHTML = ops.map(function(o){ return '<option>' + o + '</option>'; }).join('');
+  var enums = valueTypeMap[tag];
+  if (enums) { vw.innerHTML = '<select class="select">' + enums.map(function(v){ return '<option>' + v + '</option>'; }).join('') + '</select>'; }
+  else { vw.innerHTML = '<input class="input" placeholder="\u8f93\u5165\u503c">'; }
+}
+function removeRule(rid) { var el = document.getElementById('rule-' + rid); if (el) el.remove(); }
+function removeRuleGroup(gid) {
+  var g = document.getElementById('rg-' + gid);
+  var prev = g.previousElementSibling;
+  if (prev && prev.classList.contains('group-connector')) prev.remove();
+  else { var next = g.nextElementSibling; if (next && next.classList.contains('group-connector')) next.remove(); }
+  g.remove();
+}
+function setGroupLogic(btn, val) {
+  // Sync all group connectors
+  document.querySelectorAll('#rule-group-list .group-connector .logic-toggle').forEach(function(toggle) {
+    toggle.querySelectorAll('.logic-btn').forEach(function(b) {
+      b.classList.toggle('active', b.textContent === (val === 'AND' ? '\u4e14' : '\u6216'));
+    });
+  });
+}
+function setInnerLogic(btn, gid, val) { setGroupLogic(btn, val); }
+
+// ---- App Strategy ----
+function toggleAppStrategy(cb) {
+  var row = cb.closest('.app-strategy-row');
+  var sel = row.querySelector('.app-strategy-select');
+  var prev = row.querySelector('.strategy-preview');
+  sel.disabled = !cb.checked;
+  if (!cb.checked) { sel.value = ''; if (prev) prev.style.display = 'none'; }
+}
+function toggleAllApps(masterCb) {
+  document.querySelectorAll('.app-checkbox').forEach(function(cb){ cb.checked = masterCb.checked; toggleAppStrategy(cb); });
+}
+var strategyData = {
+  STR_001: { name:'\u9ed8\u8ba4\u7b56\u7565', id:'STR_001', cooldown:'30s', slots:[
+    {name:'\u5f00\u5c4f\u5e7f\u544a\u4f4d',id:'SLOT_001',on:true,freq:'5\u6b21/\u5c0f\u65f6',interval:'30s',refresh:'60s'},
+    {name:'\u63d2\u5c4f\u5e7f\u544a\u4f4d',id:'SLOT_002',on:false},
+    {name:'Banner\u5e7f\u544a\u4f4d',id:'SLOT_003',on:true,freq:'10\u6b21/\u5c0f\u65f6',interval:'15s',refresh:'30s'}
+  ]},
+  STR_002: { name:'\u9ad8\u9891\u7b56\u7565', id:'STR_002', cooldown:'15s', slots:[
+    {name:'\u5f00\u5c4f\u5e7f\u544a\u4f4d',id:'SLOT_001',on:true,freq:'10\u6b21/\u5c0f\u65f6',interval:'15s',refresh:'30s'},
+    {name:'\u63d2\u5c4f\u5e7f\u544a\u4f4d',id:'SLOT_002',on:true,freq:'8\u6b21/\u5c0f\u65f6',interval:'20s',refresh:'45s'}
+  ]}
+};
+function showStrategyPreview(sel) {
+  var row = sel.closest('.app-strategy-row');
+  var prev = row.querySelector('.strategy-preview');
+  if (!prev) return;
+  var d = strategyData[sel.value];
+  if (!d) { prev.style.display = 'none'; return; }
+  var rows = d.slots.map(function(s){
+    return '<tr>' +
+      '<td style="padding:6px 10px;font-size:12px">' + s.name + ' <span style="color:var(--gray-400)">' + s.id + '</span></td>' +
+      '<td style="padding:6px 10px"><span class="badge ' + (s.on?'badge-success':'badge-neutral') + '" style="font-size:11px">' + (s.on?'\u5f00\u542f':'\u5173\u95ed') + '</span></td>' +
+      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.freq:'\u2014') + '</td>' +
+      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.interval:'\u2014') + '</td>' +
+      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.refresh:'\u2014') + '</td>' +
+      '</tr>';
+  }).join('');
+  prev.innerHTML =
+    '<div style="display:flex;gap:16px;margin-bottom:8px;font-size:12px;color:var(--gray-500)">' +
+    '<span>\u7b56\u7565\u540d\u79f0\uff1a<b style="color:var(--gray-900)">' + d.name + '</b></span>' +
+    '<span>ID\uff1a<b style="color:var(--gray-900)">' + d.id + '</b></span>' +
+    '<span>\u51b7\u5374\u95f4\u9694\uff1a<b style="color:var(--gray-900)">' + d.cooldown + '</b></span></div>' +
+    '<table style="width:100%;border-collapse:collapse;background:white;border:1px solid #BFDBFE;border-radius:4px;overflow:hidden">' +
+    '<thead><tr style="background:#DBEAFE"><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5e7f\u544a\u4f4d</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5c55\u793a</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u9891\u6b21</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5c55\u793a\u95f4\u9694</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5237\u65b0\u95f4\u9694</th></tr></thead>' +
+    '<tbody>' + rows + '</tbody></table>';
+  prev.style.display = 'block';
+}
+
+// ---- Bind Strategy Drawer ----
+function toggleBindAppStrategy(cb) {
+  var row = cb.closest('.bind-app-row');
+  var sel = row.querySelector('.bind-strategy-select');
+  var prev = row.querySelector('.bind-strategy-preview');
+  sel.disabled = !cb.checked;
+  if (!cb.checked) { sel.value = ''; if (prev) prev.style.display = 'none'; }
+}
+function toggleAllBindApps(masterCb) {
+  document.querySelectorAll('.bind-app-checkbox').forEach(function(cb){ cb.checked = masterCb.checked; toggleBindAppStrategy(cb); });
+}
+function showBindStrategyPreview(sel) {
+  var row = sel.closest('.bind-app-row');
+  var prev = row.querySelector('.bind-strategy-preview');
+  if (!prev) return;
+  var d = strategyData[sel.value];
+  if (!d) { prev.style.display = 'none'; return; }
+  var rows = d.slots.map(function(s){
+    return '<tr>' +
+      '<td style="padding:6px 10px;font-size:12px">' + s.name + ' <span style="color:var(--gray-400)">' + s.id + '</span></td>' +
+      '<td style="padding:6px 10px"><span class="badge ' + (s.on?'badge-success':'badge-neutral') + '" style="font-size:11px">' + (s.on?'\u5f00\u542f':'\u5173\u95ed') + '</span></td>' +
+      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.freq:'\u2014') + '</td>' +
+      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.interval:'\u2014') + '</td>' +
+      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.refresh:'\u2014') + '</td>' +
+      '</tr>';
+  }).join('');
+  prev.innerHTML =
+    '<div style="display:flex;gap:16px;margin-bottom:8px;font-size:12px;color:var(--gray-500)">' +
+    '<span>\u7b56\u7565\u540d\u79f0\uff1a<b style="color:var(--gray-900)">' + d.name + '</b></span>' +
+    '<span>ID\uff1a<b style="color:var(--gray-900)">' + d.id + '</b></span>' +
+    '<span>\u51b7\u5374\u95f4\u9694\uff1a<b style="color:var(--gray-900)">' + d.cooldown + '</b></span></div>' +
+    '<table style="width:100%;border-collapse:collapse;background:white;border:1px solid #BFDBFE;border-radius:4px;overflow:hidden">' +
+    '<thead><tr style="background:#DBEAFE"><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5e7f\u544a\u4f4d</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5c55\u793a</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u9891\u6b21</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5c55\u793a\u95f4\u9694</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5237\u65b0\u95f4\u9694</th></tr></thead>' +
+    '<tbody>' + rows + '</tbody></table>';
+  prev.style.display = 'block';
+}
+
+// ---- ID Generation ----
+function genAdId() {
+  var n = Math.floor(Math.random() * 90000) + 10000;
+  return 'S' + n;
+}
+function genStrategyId() {
+  var d = new Date();
+  var date = d.getFullYear().toString() +
+    String(d.getMonth()+1).padStart(2,'0') +
+    String(d.getDate()).padStart(2,'0');
+  var r = Math.floor(Math.random() * 9000) + 1000;
+  return 'ad_' + date + '_' + r;
+}
+
+// Render dynamic IDs on page load
+window.addEventListener('DOMContentLoaded', function() {
+  // Ad source table IDs
+  document.querySelectorAll('.ad-id-cell').forEach(function(el) {
+    el.textContent = genAdId();
+  });
+  // Strategy table IDs
+  document.querySelectorAll('.strategy-id-cell').forEach(function(el) {
+    el.textContent = genStrategyId();
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,2718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareCamPro</title>
+<style>
+:root {
+  --primary: #1A73E8;
+  --success: #34A853;
+  --warning: #FBBC04;
+  --danger: #EA4335;
+  --bg: #F5F7FA;
+  --card: #FFFFFF;
+  --text-main: #1A1A2E;
+  --text-sub: #6B7280;
+  --border: #E5E7EB;
+  --radius-card: 16px;
+  --radius-btn: 12px;
+  --radius-pill: 20px;
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow-float: 0 8px 32px rgba(0,0,0,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  background: #D1D5DB;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  padding: 24px 0;
+  min-height: 100vh;
+}
+#outer { display: flex; align-items: flex-start; position: relative; }
+.phone {
+  width: 375px; height: 812px;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  flex-shrink: 0; overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.22);
+  border-radius: 12px; position: relative; z-index: 1;
+}
+.page { display: none; flex: 1; flex-direction: column; overflow-y: auto; overflow-x: hidden; position: relative; }
+.page.active { display: flex; }
+/* Status Bar */
+.status-bar {
+  background: var(--card); padding: 10px 20px 6px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; font-weight: 600; color: var(--text-main); flex-shrink: 0;
+}
+.status-bar .time { font-size: 15px; font-weight: 700; }
+.status-icons { display: flex; gap: 5px; align-items: center; }
+.status-icons svg { width: 15px; height: 15px; }
+/* Tab Bar */
+.tab-bar {
+  background: var(--card); border-top: 1px solid var(--border);
+  display: flex; padding: 8px 0 16px; flex-shrink: 0;
+}
+.tab-item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 3px; cursor: pointer; padding: 4px 0;
+}
+.tab-item svg { width: 22px; height: 22px; color: var(--text-sub); transition: color 0.2s; }
+.tab-item span { font-size: 10px; font-weight: 500; color: var(--text-sub); }
+.tab-item.active svg { color: var(--primary); }
+.tab-item.active span { color: var(--primary); }
+/* Page Header */
+.page-header {
+  background: var(--card); padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+  position: sticky; top: 0; z-index: 50;
+}
+.page-header h2 { font-size: 18px; font-weight: 700; color: var(--text-main); flex: 1; }
+.back-btn {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--bg);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+</style>
+
+<style>
+/* ===== HOME PAGE ===== */
+.home-topbar {
+  background: var(--card); padding: 10px 16px 12px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+  position: sticky; top: 0; z-index: 50;
+}
+.home-topbar .left h2 { font-size: 18px; font-weight: 700; color: var(--text-main); }
+.home-topbar .left p { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
+.home-topbar .right { display: flex; gap: 10px; align-items: center; }
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--bg);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  position: relative;
+}
+.icon-btn svg { width: 18px; height: 18px; color: var(--text-sub); }
+.red-dot {
+  position: absolute; top: 4px; right: 4px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--danger); border: 1.5px solid var(--card);
+}
+.avatar-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), #4A90E2);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+/* Family Tabs */
+.family-bar {
+  background: var(--card); padding: 10px 16px;
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.family-bar::-webkit-scrollbar { display: none; }
+.family-chip {
+  padding: 5px 14px; border-radius: var(--radius-pill);
+  font-size: 12px; font-weight: 500; white-space: nowrap; cursor: pointer;
+  border: 1.5px solid var(--border); color: var(--text-sub); background: var(--bg);
+  transition: all 0.2s;
+}
+.family-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+/* Device Cards */
+.device-list { padding: 12px 16px; display: flex; flex-direction: column; gap: 12px; }
+.device-card {
+  background: var(--card); border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card); overflow: hidden; cursor: pointer;
+  transition: transform 0.15s;
+}
+.device-card:active { transform: scale(0.98); }
+.device-thumb {
+  width: 100%; aspect-ratio: 16/9; position: relative; overflow: hidden;
+}
+.cam-bg {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+}
+.cam-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.5));
+}
+.cam-status {
+  position: absolute; top: 8px; left: 10px;
+  display: flex; align-items: center; gap: 5px;
+}
+.status-badge {
+  padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600;
+  backdrop-filter: blur(4px);
+}
+.status-badge.online { background: rgba(52,168,83,0.85); color: #fff; }
+.status-badge.offline { background: rgba(0,0,0,0.45); color: #fff; }
+.status-badge.sleep { background: rgba(251,188,4,0.85); color: #1a1a2e; }
+.share-badge {
+  position: absolute; top: 8px; right: 10px;
+  padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600;
+  background: rgba(26,115,232,0.85); color: #fff;
+}
+.cam-name {
+  position: absolute; bottom: 8px; left: 10px;
+  font-size: 13px; font-weight: 600; color: #fff;
+}
+.device-actions {
+  display: flex; border-top: 1px solid var(--border);
+}
+.dev-action {
+  flex: 1; padding: 10px 0; display: flex; flex-direction: column;
+  align-items: center; gap: 4px; cursor: pointer; position: relative;
+  border-right: 1px solid var(--border); transition: background 0.15s;
+}
+.dev-action:last-child { border-right: none; }
+.dev-action:active { background: var(--bg); }
+.dev-action svg { width: 18px; height: 18px; color: var(--text-sub); }
+.dev-action span { font-size: 10px; color: var(--text-sub); font-weight: 500; }
+.dev-action .msg-dot {
+  position: absolute; top: 8px; right: calc(50% - 14px);
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--danger); border: 1.5px solid var(--card);
+}
+.cloud-tag {
+  font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 6px;
+  background: linear-gradient(135deg, #1A73E8, #4A90E2); color: #fff;
+}
+.cloud-tag.inactive { background: var(--border); color: var(--text-sub); }
+/* Add Device */
+.add-device-btn {
+  margin: 0 16px 16px; padding: 14px;
+  background: var(--card); border-radius: var(--radius-card);
+  border: 2px dashed var(--border); display: flex; align-items: center;
+  justify-content: center; gap: 8px; cursor: pointer; transition: border-color 0.2s;
+}
+.add-device-btn:hover { border-color: var(--primary); }
+.add-device-btn svg { width: 20px; height: 20px; color: var(--primary); }
+.add-device-btn span { font-size: 14px; color: var(--primary); font-weight: 500; }
+</style>
+
+<style>
+/* ===== MESSAGES PAGE ===== */
+.search-wrap {
+  padding: 12px 16px 0; background: var(--card);
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.search-box {
+  background: var(--bg); border-radius: var(--radius-btn);
+  padding: 9px 14px; display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px;
+}
+.search-box input {
+  flex: 1; border: none; outline: none; font-size: 14px;
+  color: var(--text-main); background: transparent;
+}
+.search-box input::placeholder { color: var(--text-sub); }
+.search-box svg { width: 17px; height: 17px; flex-shrink: 0; }
+.ai-tag {
+  padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700;
+  background: linear-gradient(135deg, #1A73E8, #9C27B0); color: #fff;
+}
+.filter-scroll {
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+  padding-bottom: 12px;
+}
+.filter-scroll::-webkit-scrollbar { display: none; }
+.f-chip {
+  padding: 5px 12px; border-radius: var(--radius-pill);
+  font-size: 12px; font-weight: 500; white-space: nowrap; cursor: pointer;
+  border: 1.5px solid var(--border); color: var(--text-sub); background: var(--card);
+}
+.f-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+/* Playback source tabs */
+.pb-src-tab {
+  padding: 6px 16px; border-radius: 20px;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  background: rgba(255,255,255,0.1); color: #aaa; transition: all 0.2s;
+}
+.pb-src-tab.active { background: var(--primary); color: #fff; }
+
+.fp-chip {
+  padding: 5px 12px; border-radius: var(--radius-pill);
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  border: 1.5px solid var(--border); color: var(--text-sub); background: var(--bg);
+  transition: all 0.15s;
+}
+.fp-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+/* Calendar day cells */
+.cal-day {
+  padding: 6px 2px; font-size: 12px; border-radius: 8px; cursor: pointer;
+  color: var(--text-main); transition: all 0.15s;
+}
+.cal-day:hover { background: var(--bg); }
+.cal-day.selected { background: var(--primary); color: #fff; font-weight: 700; }
+.cal-day.today { font-weight: 700; color: var(--primary); }
+.cal-day.today.selected { color: #fff; }
+.cal-day.empty { cursor: default; }
+.msg-list { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+.msg-item {
+  background: var(--card); border-radius: var(--radius-card);
+  padding: 12px; display: flex; gap: 12px; align-items: flex-start;
+  box-shadow: var(--shadow-card); cursor: pointer;
+}
+.msg-thumb {
+  width: 72px; height: 54px; border-radius: 10px; overflow: hidden; flex-shrink: 0;
+}
+.msg-content { flex: 1; }
+.msg-type { font-size: 13px; font-weight: 600; color: var(--text-main); }
+.msg-device { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
+.msg-time { font-size: 11px; color: var(--text-sub); margin-top: 3px; }
+.msg-tag {
+  display: inline-block; padding: 2px 8px; border-radius: 10px;
+  font-size: 10px; font-weight: 600; margin-top: 4px;
+}
+.tag-person { background: #DBEAFE; color: #1D4ED8; }
+.tag-motion { background: #FEF3C7; color: #D97706; }
+.tag-sound { background: #D1FAE5; color: #065F46; }
+.tag-vehicle { background: #EDE9FE; color: #6D28D9; }
+
+/* ===== PROFILE PAGE ===== */
+.profile-hero {
+  background: linear-gradient(135deg, #1A73E8, #4A90E2);
+  padding: 24px 16px 20px; display: flex; align-items: center; gap: 16px;
+}
+.profile-avatar-lg {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.profile-hero .info .name { font-size: 18px; font-weight: 700; color: #fff; }
+.profile-hero .info .account { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 3px; }
+.profile-hero .edit-btn {
+  margin-left: auto; padding: 6px 14px; border-radius: var(--radius-pill);
+  background: rgba(255,255,255,0.2); color: #fff; font-size: 12px;
+  font-weight: 600; cursor: pointer; border: 1px solid rgba(255,255,255,0.4);
+}
+.menu-section { padding: 12px 16px 0; }
+.menu-section-title { font-size: 11px; font-weight: 600; color: var(--text-sub); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.menu-group {
+  background: var(--card); border-radius: var(--radius-card);
+  overflow: hidden; box-shadow: var(--shadow-card); margin-bottom: 12px;
+}
+.menu-item {
+  display: flex; align-items: center; padding: 13px 16px;
+  border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.15s;
+}
+.menu-item:last-child { border-bottom: none; }
+.menu-item:active { background: var(--bg); }
+.menu-icon {
+  width: 34px; height: 34px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0;
+}
+.menu-label { flex: 1; font-size: 14px; color: var(--text-main); font-weight: 500; }
+.menu-arrow { color: var(--text-sub); }
+.menu-arrow svg { width: 15px; height: 15px; }
+.logout-btn {
+  margin: 4px 16px 20px; padding: 14px;
+  background: var(--card); border-radius: var(--radius-card);
+  text-align: center; font-size: 15px; font-weight: 600;
+  color: var(--danger); cursor: pointer; box-shadow: var(--shadow-card);
+}
+
+/* ===== DEVICE SETTINGS PAGE ===== */
+.settings-item {
+  display: flex; align-items: center; padding: 14px 16px;
+  border-bottom: 1px solid var(--border); cursor: pointer;
+  transition: background 0.15s;
+}
+.settings-item:active { background: var(--bg); }
+.settings-item:last-child { border-bottom: none; }
+
+/* Range input styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(26,115,232,0.3);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(26,115,232,0.3);
+}
+</style>
+
+<style>
+/* ===== SERVICE STORE PAGE ===== */
+.store-header {
+  background: var(--card); padding: 12px 16px;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+  display: flex; align-items: center; gap: 12px;
+  position: sticky; top: 0; z-index: 50;
+}
+.store-header h2 { font-size: 18px; font-weight: 700; color: var(--text-main); flex: 1; }
+.service-tabs {
+  background: var(--card); padding: 0 16px;
+  display: flex; gap: 0; overflow-x: auto; scrollbar-width: none;
+  border-bottom: 2px solid var(--border); flex-shrink: 0;
+}
+.service-tabs::after {
+  content: ''; display: block; min-width: 16px; flex-shrink: 0;
+}
+.service-tabs::-webkit-scrollbar { display: none; }
+.svc-tab {
+  padding: 12px 14px; font-size: 13px; font-weight: 500;
+  color: var(--text-sub); white-space: nowrap; cursor: pointer;
+  border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s;
+}
+.svc-tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+.store-body { flex: 1; overflow-y: auto; }
+/* Cloud storage banner */
+.cloud-banner {
+  margin: 16px 16px 0;
+  background: linear-gradient(135deg, #0F2A5E, #1A73E8);
+  border-radius: var(--radius-card); padding: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.cloud-banner .banner-text .title { font-size: 14px; font-weight: 700; color: #fff; }
+.cloud-banner .banner-text .sub { font-size: 11px; color: rgba(255,255,255,0.75); margin-top: 4px; line-height: 1.5; }
+.cloud-banner .banner-icon {
+  width: 56px; height: 56px; flex-shrink: 0;
+  background: rgba(255,255,255,0.15); border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+.cloud-banner .banner-icon svg { width: 28px; height: 28px; color: #fff; }
+/* Plan cards */
+.plan-scroll {
+  padding: 16px 16px 0;
+  display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none;
+}
+.plan-scroll::-webkit-scrollbar { display: none; }
+.plan-card {
+  min-width: 130px; background: var(--card); border-radius: var(--radius-card);
+  padding: 14px 12px; border: 2px solid var(--border); cursor: pointer;
+  transition: all 0.2s; position: relative; flex-shrink: 0;
+}
+.plan-card.selected { border-color: var(--primary); background: #EEF5FF; }
+.plan-card .op-tag {
+  position: absolute; top: -1px; left: 12px;
+  padding: 2px 8px; border-radius: 0 0 8px 8px;
+  font-size: 10px; font-weight: 700;
+}
+.op-tag.best { background: var(--success); color: #fff; }
+.op-tag.hot { background: var(--danger); color: #fff; }
+.plan-card .discount {
+  display: inline-block; padding: 2px 6px; border-radius: 6px;
+  background: #FEF3C7; color: #D97706; font-size: 10px; font-weight: 700;
+  margin-bottom: 6px; margin-top: 14px;
+}
+.plan-card .plan-name { font-size: 14px; font-weight: 700; color: var(--text-main); }
+.plan-card .plan-price { font-size: 18px; font-weight: 800; color: var(--primary); margin-top: 6px; }
+.plan-card .plan-price span { font-size: 11px; font-weight: 500; color: var(--text-sub); }
+.plan-card .plan-features { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+.plan-card .feat { font-size: 11px; color: var(--text-sub); display: flex; align-items: center; gap: 4px; }
+.plan-card .feat::before { content: '✓'; color: var(--success); font-weight: 700; font-size: 11px; }
+/* Plan detail */
+.plan-detail {
+  margin: 16px 16px 0; background: var(--card);
+  border-radius: var(--radius-card); padding: 16px; box-shadow: var(--shadow-card);
+}
+.plan-detail h4 { font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 12px; }
+.detail-row {
+  display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px;
+}
+.detail-row svg { width: 16px; height: 16px; color: var(--primary); flex-shrink: 0; margin-top: 1px; }
+.detail-row p { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
+/* Store bottom bar */
+.store-bottom {
+  background: var(--card); border-top: 1px solid var(--border);
+  padding: 12px 16px 16px; flex-shrink: 0;
+}
+.device-selector {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  padding: 10px 12px; background: var(--bg); border-radius: var(--radius-btn);
+}
+.device-selector svg { width: 16px; height: 16px; color: var(--text-sub); }
+.device-selector .dev-name { flex: 1; font-size: 13px; font-weight: 600; color: var(--text-main); }
+.device-selector .dev-plan { font-size: 11px; color: var(--success); }
+.device-selector .chevron { color: var(--text-sub); }
+.agree-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+}
+.agree-row input { width: 16px; height: 16px; accent-color: var(--primary); }
+.agree-row label { font-size: 12px; color: var(--text-sub); }
+.agree-row a { color: var(--primary); text-decoration: none; }
+.buy-btn {
+  width: 100%; padding: 14px; border-radius: var(--radius-btn);
+  background: var(--primary); color: #fff; border: none;
+  font-size: 16px; font-weight: 700; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(26,115,232,0.35);
+}
+/* Payment modal */
+.modal-mask {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.4);
+  z-index: 800; display: none;
+}
+.modal-mask.show { display: block; }
+.pay-modal {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: var(--card);
+  border-radius: 20px 20px 0 0; padding: 20px 16px 32px;
+  z-index: 900; display: none;
+}
+.pay-modal.show { display: block; }
+.pay-modal h4 { font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+.pay-modal .pay-amount { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 16px; }
+.pay-option {
+  display: flex; align-items: center; gap: 12px; padding: 14px 12px;
+  border: 2px solid var(--border); border-radius: var(--radius-btn);
+  margin-bottom: 10px; cursor: pointer; transition: border-color 0.2s;
+}
+.pay-option.selected { border-color: var(--primary); }
+.pay-option .pay-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.pay-option .pay-name { flex: 1; font-size: 14px; font-weight: 600; color: var(--text-main); }
+.pay-option .radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; }
+.pay-option.selected .radio { border-color: var(--primary); background: var(--primary); }
+.pay-option.selected .radio::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #fff; }
+.pay-confirm-btn {
+  width: 100%; padding: 14px; border-radius: var(--radius-btn);
+  background: var(--primary); color: #fff; border: none;
+  font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 16px;
+}
+/* Annotation */
+#ann-layer { position: fixed; inset: 0; pointer-events: none; z-index: 500; }
+#ann-layer .sticky-note { pointer-events: all; }
+.ann-zone { position: fixed; top: 0; height: 100vh; z-index: 10; display: none; cursor: crosshair; }
+.ann-zone.show { display: block; }
+.ann-fab {
+  position: fixed; bottom: 24px; left: 24px;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: #fff; box-shadow: var(--shadow-float);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 600; border: 1.5px solid var(--border); transition: all 0.2s;
+}
+.ann-fab.active { background: var(--primary); border-color: var(--primary); }
+.ann-fab.active svg { color: #fff; }
+.ann-fab svg { width: 20px; height: 20px; color: var(--text-sub); }
+.ann-hint {
+  position: fixed; bottom: 76px; left: 8px;
+  background: var(--primary); color: #fff; border-radius: 10px;
+  font-size: 12px; padding: 6px 10px; z-index: 600; display: none; max-width: 200px; line-height: 1.4;
+}
+.ann-hint.show { display: block; }
+.save-btn {
+  position: fixed; bottom: 24px; left: 76px;
+  padding: 8px 16px; border-radius: var(--radius-pill);
+  background: var(--success); color: #fff; border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  box-shadow: var(--shadow-float); z-index: 600; display: none;
+}
+.save-btn.show { display: block; }
+.sticky-note {
+  position: fixed; width: 160px; background: #FFF9C4; border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15); padding: 8px 10px 10px;
+  z-index: 510; cursor: move; font-size: 12px; color: #333; line-height: 1.5; user-select: none;
+}
+.sticky-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.sticky-num { font-size: 10px; font-weight: 700; color: #999; }
+.sticky-del {
+  width: 16px; height: 16px; border-radius: 50%; background: #FF6B6B;
+  color: #fff; border: none; font-size: 10px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.sticky-text { word-break: break-all; outline: none; min-height: 20px; }
+.sticky-text:empty:before { content: attr(placeholder); color: #aaa; pointer-events: none; }
+</style>
+
+</head>
+<body>
+
+<!-- ===== VERSION SWITCHER ===== -->
+<style>
+#version-panel {
+  position: fixed; left: 0; top: 50%;
+  transform: translateY(-50%);
+  background: #0F172A; border-radius: 0 12px 12px 0;
+  padding: 12px 8px; z-index: 9999;
+  display: flex; flex-direction: column; gap: 4px;
+  box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+#version-panel .vp-label {
+  font-size: 9px; font-weight: 700; color: #475569;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  text-align: center; padding: 0 4px 6px;
+  border-bottom: 1px solid #1E293B; margin-bottom: 2px;
+}
+.vb-tab {
+  padding: 6px 10px; border-radius: 6px;
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  color: #64748B; border: 1px solid transparent;
+  transition: all 0.15s; white-space: nowrap;
+  display: flex; align-items: center; gap: 6px;
+  line-height: 1;
+}
+.vb-tab:hover { color: #CBD5E1; background: rgba(255,255,255,0.06); }
+.vb-tab.active { color: #fff; background: #2563EB; border-color: #2563EB; }
+.vb-tab .vb-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: currentColor; flex-shrink: 0;
+}
+
+/* Feature highlight badge */
+.feat-badge {
+  position: absolute; z-index: 200;
+  background: #F59E0B; color: #fff;
+  font-size: 9px; font-weight: 700;
+  padding: 1px 5px; border-radius: 4px;
+  pointer-events: none; white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  letter-spacing: 0.3px;
+}
+.feat-badge.new { background: #2563EB; }
+.feat-badge.updated { background: #16A34A; }
+</style>
+
+<div id="version-panel">
+  <div class="vp-label">版本</div>
+  <div class="vb-tab active" id="vbtab-0" onclick="switchVersion(0)">
+    <span class="vb-dot"></span>套餐运营方案
+  </div>
+  <div class="vb-tab" id="vbtab-1" onclick="switchVersion(1)">
+    <span class="vb-dot"></span>AOV工作模式
+  </div>
+</div>
+
+<div id="ann-layer"></div>
+<div class="ann-zone" id="ann-zone-left" onclick="handleZoneClick(event)"></div>
+<div class="ann-zone" id="ann-zone-right" onclick="handleZoneClick(event)"></div>
+
+<!-- Language Toggle removed -->
+
+<div id="outer">
+<div class="phone" id="app">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+    </div>
+  </div>
+
+  <!-- ===== HOME PAGE ===== -->
+  <div class="page active" id="page-home">
+    <div class="home-topbar">
+      <div class="left">
+        <h2 data-i18n="home_title">我的家</h2>
+        <p data-i18n="home_subtitle">2台在线 · 1台离线 · 1台休眠</p>
+      </div>
+      <div class="right">
+        <div class="icon-btn" onclick="switchPage('messages')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <div class="red-dot"></div>
+        </div>
+        <div class="avatar-btn" onclick="switchPage('profile')">J</div>
+      </div>
+    </div>
+    <div class="family-bar">
+      <div class="family-chip active" data-i18n="family_all">全部家庭</div>
+      <div class="family-chip" data-i18n="family_living">客厅</div>
+      <div class="family-chip" data-i18n="family_entrance">入口</div>
+      <div class="family-chip" data-i18n="family_backyard">后院</div>
+      <div class="family-chip" data-i18n="family_add">+ 添加分组</div>
+    </div>
+    <div class="device-list">
+      <!-- Device 1 -->
+      <div class="device-card" onclick="switchPage('liveview')">
+        <div class="device-thumb">
+          <div class="cam-bg" style="background:linear-gradient(135deg,#0d1b3e,#1a3a6e);">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="rgba(255,255,255,0.3)"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+          </div>
+          <div class="cam-overlay"></div>
+          <div class="cam-status">
+            <span class="status-badge online" data-i18n="status_online">● 在线</span>
+          </div>
+          <span class="share-badge" data-i18n="shared">已分享</span>
+          <span class="cam-name">Front Door</span>
+        </div>
+        <div class="device-actions">
+          <div class="dev-action" onclick="event.stopPropagation();switchPage('messages')">
+            <div class="msg-dot"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            <span data-i18n="action_messages">消息</span>
+          </div>
+          <div class="dev-action" onclick="event.stopPropagation();currentDevice='frontdoor';switchPage('playback')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span data-i18n="action_playback">回放</span>
+          </div>
+          <div class="dev-action" onclick="event.stopPropagation();switchPage('store')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+            <span><span class="cloud-tag inactive" data-i18n="cloud_free">免费版</span></span>
+          </div>
+          <div class="dev-action" onclick="event.stopPropagation();switchPage('settings')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/></svg>
+            <span data-i18n="action_settings">设置</span>
+          </div>
+        </div>
+      </div>
+      <!-- Device 2 -->
+      <div class="device-card" onclick="switchPage('liveview')">
+        <div class="device-thumb">
+          <div class="cam-bg" style="background:linear-gradient(135deg,#0d2e1a,#1a5c34);">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="rgba(255,255,255,0.3)"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+          </div>
+          <div class="cam-overlay"></div>
+          <div class="cam-status"><span class="status-badge online" data-i18n="status_online">● 在线</span></div>
+          <span class="cam-name">Backyard</span>
+        </div>
+        <div class="device-actions">
+          <div class="dev-action" onclick="event.stopPropagation();switchPage('messages')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            <span data-i18n="action_messages">消息</span>
+          </div>
+          <div class="dev-action" onclick="event.stopPropagation();currentDevice='backyard';switchPage('playback')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span data-i18n="action_playback">回放</span>
+          </div>
+          <div class="dev-action" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+            <span><span class="cloud-tag">Pro</span></span>
+          </div>
+          <div class="dev-action" onclick="event.stopPropagation();switchPage('settings')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/></svg>
+            <span data-i18n="action_settings">设置</span>
+          </div>
+        </div>
+      </div>
+      <!-- Device 3 offline -->
+      <div class="device-card">
+        <div class="device-thumb">
+          <div class="cam-bg" style="background:linear-gradient(135deg,#1a1a1a,#333);">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="rgba(255,255,255,0.2)"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+          </div>
+          <div class="cam-overlay"></div>
+          <div class="cam-status"><span class="status-badge offline" data-i18n="status_offline">● 离线</span></div>
+          <span class="cam-name">Garage</span>
+        </div>
+        <div class="device-actions">
+          <div class="dev-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            <span data-i18n="action_messages">消息</span>
+          </div>
+          <div class="dev-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span>Playback</span>
+          </div>
+          <div class="dev-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+            <span>Settings</span>
+          </div>
+        </div>
+      </div>
+      <!-- Add Device -->
+      <div class="add-device-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span data-i18n="add_device">添加设备</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MESSAGES PAGE ===== -->
+  <div class="page" id="page-messages">
+    <!-- Search + Filter Bar -->
+    <div class="search-wrap">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="AI Search — describe what happened...">
+        <span class="ai-tag">AI</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1A73E8" stroke-width="2" width="17" height="17"><path d="M12 2a3 3 0 013 3v7a3 3 0 01-6 0V5a3 3 0 013-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+      </div>
+      <!-- Date + Filter row -->
+      <div style="display:flex;align-items:center;gap:8px;padding-bottom:12px;">
+        <!-- Date picker trigger -->
+        <div id="dateTrigger" onclick="toggleCalendar()" style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--radius-pill);border:1.5px solid var(--border);background:var(--bg);cursor:pointer;flex:1;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span id="dateLabel" style="font-size:12px;font-weight:500;color:var(--text-main);">All Dates</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2" style="margin-left:auto;"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <!-- Filter trigger -->
+        <div id="filterTrigger" onclick="toggleFilterPanel()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-pill);border:1.5px solid var(--border);background:var(--bg);cursor:pointer;white-space:nowrap;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          <span id="filterLabel" style="font-size:12px;font-weight:500;color:var(--text-main);">Filter</span>
+          <span id="filterBadge" style="display:none;background:var(--primary);color:#fff;border-radius:10px;font-size:10px;font-weight:700;padding:1px 6px;">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calendar Popup -->
+    <div id="calendarPopup" style="display:none;background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;flex-shrink:0;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div onclick="calPrevMonth()" style="cursor:pointer;padding:4px 8px;border-radius:8px;background:var(--bg);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </div>
+        <span id="calMonthLabel" style="font-size:14px;font-weight:700;color:var(--text-main);"></span>
+        <div onclick="calNextMonth()" style="cursor:pointer;padding:4px 8px;border-radius:8px;background:var(--bg);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;">
+        <div style="font-size:10px;font-weight:600;color:var(--text-sub);padding:4px 0;">Sun</div>
+        <div style="font-size:10px;font-weight:600;color:var(--text-sub);padding:4px 0;">Mon</div>
+        <div style="font-size:10px;font-weight:600;color:var(--text-sub);padding:4px 0;">Tue</div>
+        <div style="font-size:10px;font-weight:600;color:var(--text-sub);padding:4px 0;">Wed</div>
+        <div style="font-size:10px;font-weight:600;color:var(--text-sub);padding:4px 0;">Thu</div>
+        <div style="font-size:10px;font-weight:600;color:var(--text-sub);padding:4px 0;">Fri</div>
+        <div style="font-size:10px;font-weight:600;color:var(--text-sub);padding:4px 0;">Sat</div>
+      </div>
+      <div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;"></div>
+      <div style="display:flex;justify-content:flex-end;margin-top:10px;">
+        <div onclick="clearDate()" style="font-size:12px;color:var(--text-sub);cursor:pointer;padding:4px 10px;">Clear</div>
+      </div>
+    </div>
+
+    <!-- Filter Panel -->
+    <div id="filterPanel" style="display:none;background:var(--card);border-bottom:1px solid var(--border);padding:14px 16px;flex-shrink:0;">
+      <div style="font-size:12px;font-weight:600;color:var(--text-sub);margin-bottom:8px;">Device</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;" id="deviceChips">
+        <div class="fp-chip active" onclick="toggleChip(this,'device')">All Devices</div>
+        <div class="fp-chip" onclick="toggleChip(this,'device')">Front Door</div>
+        <div class="fp-chip" onclick="toggleChip(this,'device')">Backyard</div>
+        <div class="fp-chip" onclick="toggleChip(this,'device')">Garage</div>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:var(--text-sub);margin-bottom:8px;">Event Type</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;" id="eventChips">
+        <div class="fp-chip active" onclick="toggleChip(this,'event')">All Events</div>
+        <div class="fp-chip" onclick="toggleChip(this,'event')">Person</div>
+        <div class="fp-chip" onclick="toggleChip(this,'event')">Motion</div>
+        <div class="fp-chip" onclick="toggleChip(this,'event')">Vehicle</div>
+        <div class="fp-chip" onclick="toggleChip(this,'event')">Sound</div>
+        <div class="fp-chip" onclick="toggleChip(this,'event')">Package</div>
+        <div class="fp-chip" onclick="toggleChip(this,'event')">Animal</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:14px;">
+        <div onclick="resetFilter()" style="flex:1;padding:10px;border-radius:var(--radius-btn);background:var(--bg);text-align:center;font-size:13px;font-weight:600;color:var(--text-sub);cursor:pointer;">Reset</div>
+        <div onclick="applyFilter()" style="flex:2;padding:10px;border-radius:var(--radius-btn);background:var(--primary);text-align:center;font-size:13px;font-weight:600;color:#fff;cursor:pointer;">Apply</div>
+      </div>
+    </div>
+
+    <!-- Active filter summary -->
+    <div id="filterSummary" style="display:none;padding:8px 16px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0;">
+      <span id="filterSummaryText" style="font-size:12px;color:var(--text-sub);"></span>
+    </div>
+
+    <div class="msg-list">
+      <div class="msg-item" onclick="showMessageDetail('Person Detected','A person was detected at your Front Door camera. This detection was triggered by motion and AI analysis.','Today 09:38','Front Door')">
+        <div class="msg-thumb"><div class="cam-bg" style="background:linear-gradient(135deg,#0d1b3e,#1a3a6e);border-radius:10px;"></div></div>
+        <div class="msg-content">
+          <div class="msg-type">Person Detected</div>
+          <div class="msg-device">Front Door</div>
+          <div class="msg-time">Today 09:38</div>
+          <span class="msg-tag tag-person">Person</span>
+        </div>
+      </div>
+      <div class="msg-item" onclick="showMessageDetail('Motion Detected','Motion was detected in your Backyard. The camera captured movement in the monitored area.','Today 09:20','Backyard')">
+        <div class="msg-thumb"><div class="cam-bg" style="background:linear-gradient(135deg,#0d2e1a,#1a5c34);border-radius:10px;"></div></div>
+        <div class="msg-content">
+          <div class="msg-type">Motion Detected</div>
+          <div class="msg-device">Backyard</div>
+          <div class="msg-time">Today 09:20</div>
+          <span class="msg-tag tag-motion">Motion</span>
+        </div>
+      </div>
+      <div class="msg-item" onclick="showMessageDetail('Vehicle Detected','A vehicle was detected at your Front Door. The AI system identified a car passing by.','Today 08:55','Front Door')">
+        <div class="msg-thumb"><div class="cam-bg" style="background:linear-gradient(135deg,#0d1b3e,#1a3a6e);border-radius:10px;"></div></div>
+        <div class="msg-content">
+          <div class="msg-type">Vehicle Detected</div>
+          <div class="msg-device">Front Door</div>
+          <div class="msg-time">Today 08:55</div>
+          <span class="msg-tag tag-vehicle">Vehicle</span>
+        </div>
+      </div>
+      <div class="msg-item" onclick="showMessageDetail('Sound Alert','Unusual sound was detected at your Backyard. The audio detection system triggered an alert.','Yesterday 22:14','Backyard')">
+        <div class="msg-thumb"><div class="cam-bg" style="background:linear-gradient(135deg,#0d2e1a,#1a5c34);border-radius:10px;"></div></div>
+        <div class="msg-content">
+          <div class="msg-type">Sound Alert</div>
+          <div class="msg-device">Backyard</div>
+          <div class="msg-time">Yesterday 22:14</div>
+          <span class="msg-tag tag-sound">Sound</span>
+        </div>
+      </div>
+      <div class="msg-item" onclick="showMessageDetail('Person Detected','A person was detected at your Front Door camera. This detection was triggered by motion and AI analysis.','Yesterday 20:02','Front Door')">
+        <div class="msg-thumb"><div class="cam-bg" style="background:linear-gradient(135deg,#0d1b3e,#1a3a6e);border-radius:10px;"></div></div>
+        <div class="msg-content">
+          <div class="msg-type">Person Detected</div>
+          <div class="msg-device">Front Door</div>
+          <div class="msg-time">Yesterday 20:02</div>
+          <span class="msg-tag tag-person">Person</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Fixed Marketing Tip -->
+    <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="switchPage('store')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span style="font-size:11px;color:var(--text-sub);flex:1;">Enable smart services to enjoy more features and amazing playback</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+  </div>
+
+  <!-- ===== MESSAGE DETAIL PAGE ===== -->
+  <div class="page" id="page-msgdetail">
+    <div style="background:var(--card);padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0;position:sticky;top:0;z-index:50;">
+      <div class="back-btn" onclick="switchPage('messages')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </div>
+      <h2 style="font-size:18px;font-weight:700;color:var(--text-main);flex:1;">Message Detail</h2>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:16px;">
+      <!-- Message Image -->
+      <div style="width:100%;aspect-ratio:16/9;border-radius:var(--radius-card);overflow:hidden;background:linear-gradient(135deg,#0d1b3e,#1a3a6e);margin-bottom:16px;display:flex;align-items:center;justify-content:center;">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="rgba(255,255,255,0.3)"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+      </div>
+      
+      <!-- Message Content -->
+      <div style="background:var(--card);border-radius:var(--radius-card);padding:16px;box-shadow:var(--shadow-card);margin-bottom:16px;">
+        <div style="font-size:15px;font-weight:700;color:var(--text-main);margin-bottom:8px;" id="msgDetailType">Person Detected</div>
+        <div style="font-size:13px;color:var(--text-sub);line-height:1.6;margin-bottom:12px;" id="msgDetailDesc">A person was detected at your Front Door camera. This detection was triggered by motion and AI analysis.</div>
+        <div style="display:flex;align-items:center;gap:8px;padding-top:12px;border-top:1px solid var(--border);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span style="font-size:12px;color:var(--text-sub);" id="msgDetailTime">Today 09:38</span>
+        </div>
+      </div>
+      
+      <!-- Device Info -->
+      <div style="background:var(--card);border-radius:var(--radius-card);padding:16px;box-shadow:var(--shadow-card);">
+        <div style="font-size:12px;font-weight:600;color:var(--text-sub);margin-bottom:10px;text-transform:uppercase;">Device</div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#0d1b3e,#1a3a6e);flex-shrink:0;"></div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:600;color:var(--text-main);" id="msgDetailDevice">Front Door</div>
+            <div style="font-size:12px;color:var(--text-sub);margin-top:2px;">Online</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PROFILE PAGE ===== -->
+  <div class="page" id="page-profile">
+    <div class="profile-hero">
+      <div class="profile-avatar-lg">J</div>
+      <div class="info">
+        <div class="name">John Smith</div>
+        <div class="account">john@example.com</div>
+      </div>
+      <div class="edit-btn">Edit</div>
+    </div>
+    <div style="flex:1;overflow-y:auto;">
+      <div class="menu-section">
+        <div class="menu-group">
+          <div class="menu-item" onclick="switchPage('store')">
+            <div class="menu-icon" style="background:#EEF2FF;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+            <span class="menu-label">Service Store</span>
+            <div class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-icon" style="background:#FFF7ED;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg></div>
+            <span class="menu-label">My Orders</span>
+            <div class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-icon" style="background:#FFF0F0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></div>
+            <span class="menu-label">My Coupons</span>
+            <div class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-section">
+        <div class="menu-group">
+          <div class="menu-item">
+            <div class="menu-icon" style="background:#F0FDF4;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <span class="menu-label">Help & Feedback</span>
+            <div class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-icon" style="background:#F0F9FF;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+            <span class="menu-label">Customer Service</span>
+            <div class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-icon" style="background:#F5F3FF;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+            <span class="menu-label">About</span>
+            <div class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+        </div>
+      </div>
+      <div class="logout-btn">Sign Out</div>
+    </div>
+  </div>
+
+  <!-- ===== SERVICE STORE PAGE ===== -->
+  <div class="page" id="page-store">
+    <div class="store-header">
+      <div class="back-btn" onclick="switchPage('profile')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </div>
+      <h2>Service Store</h2>
+    </div>
+    <div class="service-tabs">
+      <div class="svc-tab active" onclick="selectSvcTab(this)">Cloud Storage</div>
+      <div class="svc-tab" onclick="selectSvcTab(this)">AI Service</div>
+      <div class="svc-tab" onclick="selectSvcTab(this)">Offline Monitor</div>
+      <div class="svc-tab" onclick="selectSvcTab(this)">Ad-Free</div>
+      <div class="svc-tab" onclick="selectSvcTab(this)">Data Plan</div>
+    </div>
+    <div class="store-body">
+      <!-- Banner -->
+      <div class="cloud-banner">
+        <div class="banner-text">
+          <div class="title">Cloud Storage vs SD Card</div>
+          <div class="sub">Never lose footage again. Cloud storage keeps your recordings safe, accessible anywhere, anytime.</div>
+        </div>
+        <div class="banner-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/></svg>
+        </div>
+      </div>
+      <!-- Plan Cards -->
+      <div class="plan-scroll">
+        <!-- Plan A -->
+        <div class="plan-card selected" onclick="selectPlan(this,'basic')">
+          <div class="op-tag best">Best Value</div>
+          <div class="discount">30% OFF</div>
+          <div class="plan-name">Basic</div>
+          <div class="plan-price">$2.99<span>/mo</span></div>
+          <div class="plan-features">
+            <div class="feat">15-day event recording</div>
+            <div class="feat">Motion & person detection</div>
+            <div class="feat">Event alerts</div>
+          </div>
+        </div>
+        <!-- Plan B -->
+        <div class="plan-card" onclick="selectPlan(this,'pro')">
+          <div class="op-tag hot">HOT</div>
+          <div class="discount">30% OFF</div>
+          <div class="plan-name">Pro</div>
+          <div class="plan-price">$5.99<span>/mo</span></div>
+          <div class="plan-features">
+            <div class="feat">30-day 24h recording</div>
+            <div class="feat">Universal AI detection</div>
+            <div class="feat">Priority alerts</div>
+          </div>
+        </div>
+        <!-- Plan C -->
+        <div class="plan-card" onclick="selectPlan(this,'superpro')">
+          <div class="discount" style="margin-top:14px;">30% OFF</div>
+          <div class="plan-name">Super Pro</div>
+          <div class="plan-price">$9.99<span>/mo</span></div>
+          <div class="plan-features">
+            <div class="feat">30-day 24h recording</div>
+            <div class="feat">Universal AI detection</div>
+            <div class="feat">AI Super Search</div>
+          </div>
+        </div>
+      </div>
+      <!-- Plan Detail -->
+      <div class="plan-detail" id="planDetail">
+        <h4>Basic Plan — What's Included</h4>
+        <div class="detail-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/></svg>
+          <p>15-day rolling cloud storage for motion-triggered events. Footage is encrypted and stored securely.</p>
+        </div>
+        <div class="detail-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <p>AI-powered motion and person detection with instant push notifications to your phone.</p>
+        </div>
+        <div class="detail-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
+          <p>Real-time event alerts with thumbnail previews. Never miss an important moment.</p>
+        </div>
+        <div class="detail-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <p>Access recordings from any device — phone, tablet, or browser — anytime, anywhere.</p>
+        </div>
+      </div>
+      <div style="height:16px;"></div>
+    </div>
+    <!-- Bottom Bar -->
+    <div class="store-bottom">
+      <div class="device-selector">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+        <div style="flex:1;">
+          <div class="dev-name">Front Door</div>
+          <div class="dev-plan">No active plan</div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="agree-row">
+        <input type="checkbox" id="agreeCheck" checked>
+        <label for="agreeCheck">I have read and agree to the <a href="#">Cloud Service Agreement</a></label>
+      </div>
+      <button class="buy-btn" onclick="showPayModal()">Buy Now — $2.99/mo</button>
+    </div>
+  </div>
+
+  <!-- ===== LIVE VIEW PAGE ===== -->
+  <div class="page" id="page-liveview">
+    <div style="background:#000;flex:1;display:flex;flex-direction:column;">
+      <!-- Top controls -->
+      <div style="padding:12px 16px;display:flex;align-items:center;gap:12px;">
+        <div onclick="switchPage('home')" style="cursor:pointer;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </div>
+        <span style="color:#fff;font-size:15px;font-weight:600;flex:1;">Front Door</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M1 6l5 5 6-6 6 6 5-5"/></svg>
+          <span style="color:#fff;font-size:11px;">Strong</span>
+        </div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" onclick="switchPage('settings')" style="cursor:pointer;"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/></svg>
+      </div>
+      <!-- Video area -->
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0d1b3e,#1a3a6e);position:relative;">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="rgba(255,255,255,0.2)"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+        <div style="position:absolute;bottom:12px;right:12px;display:flex;gap:8px;">
+          <div style="background:rgba(0,0,0,0.5);border-radius:8px;padding:6px 10px;color:#fff;font-size:11px;cursor:pointer;">HD</div>
+          <div style="background:rgba(0,0,0,0.5);border-radius:8px;padding:6px;cursor:pointer;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+          </div>
+        </div>
+      </div>
+      <!-- Bottom controls -->
+      <div style="padding:16px;background:#111;">
+        <div style="display:flex;justify-content:space-around;margin-bottom:16px;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
+            <div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>
+            </div>
+            <span style="color:#aaa;font-size:10px;">Sound</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
+            <div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <span style="color:#aaa;font-size:10px;">Snapshot</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
+            <div style="width:44px;height:44px;border-radius:50%;background:rgba(255,0,0,0.2);display:flex;align-items:center;justify-content:center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <span style="color:#aaa;font-size:10px;">Alarm</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;" onclick="switchPage('playback')">
+            <div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <span style="color:#aaa;font-size:10px;">Playback</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
+            <div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2a3 3 0 013 3v7a3 3 0 01-6 0V5a3 3 0 013-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg>
+            </div>
+            <span style="color:#aaa;font-size:10px;">Talk</span>
+          </div>
+        </div>
+        <!-- PTZ -->
+        <div style="display:flex;justify-content:center;">
+          <div style="display:grid;grid-template-columns:44px 44px 44px;grid-template-rows:44px 44px 44px;gap:4px;">
+            <div></div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></div>
+            <div></div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+            <div style="background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="12" r="4"/></svg></div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+            <div></div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PLAYBACK PAGE ===== -->
+  <div class="page" id="page-playback">
+    <div style="background:#000;flex:1;display:flex;flex-direction:column;">
+      <div style="padding:12px 16px;display:flex;align-items:center;gap:12px;">
+        <div onclick="switchPage('home')" style="cursor:pointer;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </div>
+        <span style="color:#fff;font-size:15px;font-weight:600;flex:1;">Playback</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </div>
+      <!-- Source tabs -->
+      <div style="display:flex;padding:0 16px;gap:8px;margin-bottom:8px;" id="pbSourceTabs">
+        <div class="pb-src-tab active" onclick="switchPbSource(this,'cloud')">Cloud</div>
+        <div class="pb-src-tab" onclick="switchPbSource(this,'sd')">SD Card</div>
+      </div>
+      
+      <!-- Normal playback content -->
+      <div id="pbNormalContent" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+        <!-- Video -->
+        <div style="aspect-ratio:16/9;background:linear-gradient(135deg,#0d1b3e,#1a3a6e);display:flex;align-items:center;justify-content:center;position:relative;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="rgba(255,255,255,0.3)" id="pbPlayIcon"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="rgba(255,255,255,0.3)" id="pbPauseIcon" style="display:none;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          <div style="position:absolute;bottom:8px;right:8px;display:flex;gap:6px;">
+            <div style="background:rgba(0,0,0,0.5);border-radius:6px;padding:4px 8px;color:#fff;font-size:10px;">0.5x</div>
+            <div style="background:var(--primary);border-radius:6px;padding:4px 8px;color:#fff;font-size:10px;">1x</div>
+            <div style="background:rgba(0,0,0,0.5);border-radius:6px;padding:4px 8px;color:#fff;font-size:10px;">2x</div>
+            <div style="background:rgba(0,0,0,0.5);border-radius:6px;padding:4px 8px;color:#fff;font-size:10px;">4x</div>
+          </div>
+        </div>
+        <!-- Timeline -->
+        <div style="padding:12px 16px;background:#111;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="color:#aaa;font-size:11px;">00:00</span>
+            <span style="color:#fff;font-size:11px;font-weight:600;">09:38</span>
+            <span style="color:#aaa;font-size:11px;">23:59</span>
+          </div>
+          <div style="height:36px;background:#222;border-radius:8px;position:relative;overflow:hidden;">
+            <div style="position:absolute;left:0;top:0;width:40%;height:100%;background:rgba(26,115,232,0.3);"></div>
+            <div style="position:absolute;left:10%;top:8px;width:4px;height:20px;background:#34A853;border-radius:2px;"></div>
+            <div style="position:absolute;left:22%;top:8px;width:4px;height:20px;background:#34A853;border-radius:2px;"></div>
+            <div style="position:absolute;left:38%;top:8px;width:4px;height:20px;background:#FBBC04;border-radius:2px;"></div>
+            <div style="position:absolute;left:40%;top:0;width:2px;height:100%;background:#fff;border-radius:1px;"></div>
+          </div>
+          <div style="display:flex;justify-content:center;gap:16px;margin-top:12px;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><polygon points="22 5 17 9 13 9 13 15 17 15 22 19 22 5"/></svg>
+              <span style="color:#aaa;font-size:10px;">Sound</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;" id="pbPlayPauseBtn" onclick="togglePlayPause()">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" id="pbPlayBtn"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" id="pbPauseBtn" style="display:none;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+              <span style="color:#aaa;font-size:10px;">Play</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+              <span style="color:#aaa;font-size:10px;">Fullscreen</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span style="color:#aaa;font-size:10px;">Download</span>
+            </div>
+          </div>
+        </div>
+        <!-- Event list -->
+        <div style="flex:1;overflow-y:auto;background:#0a0a0a;padding:12px 16px;">
+          <div style="font-size:12px;font-weight:600;color:#aaa;margin-bottom:10px;">Events</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="background:#1a1a1a;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;border:1.5px solid #1A73E8;">
+              <div style="width:56px;height:42px;border-radius:8px;background:linear-gradient(135deg,#0d1b3e,#1a3a6e);flex-shrink:0;"></div>
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:600;color:#fff;">Person Detected</div>
+                <div style="font-size:11px;color:#aaa;margin-top:2px;">09:38:22</div>
+              </div>
+              <span style="padding:2px 8px;border-radius:8px;background:#DBEAFE;color:#1D4ED8;font-size:10px;font-weight:600;">Person</span>
+            </div>
+            <div style="background:#1a1a1a;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;">
+              <div style="width:56px;height:42px;border-radius:8px;background:linear-gradient(135deg,#0d1b3e,#1a3a6e);flex-shrink:0;"></div>
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:600;color:#fff;">Motion Detected</div>
+                <div style="font-size:11px;color:#aaa;margin-top:2px;">08:55:10</div>
+              </div>
+              <span style="padding:2px 8px;border-radius:8px;background:#FEF3C7;color:#D97706;font-size:10px;font-weight:600;">Motion</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- SD Card not inserted content -->
+      <div id="pbNoSDContent" style="flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;background:#000;padding:24px;text-align:center;">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5" style="margin-bottom:20px;"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10v8H7z"/><line x1="7" y1="15" x2="17" y2="15"/></svg>
+        <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;">No SD Card Inserted</div>
+        <div style="font-size:13px;color:#aaa;line-height:1.6;margin-bottom:20px;">Insert an SD card to view local recordings stored on your device.</div>
+        <div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:16px;margin-bottom:20px;border:1px solid rgba(255,255,255,0.1);">
+          <div style="font-size:12px;font-weight:600;color:#fff;margin-bottom:8px;">System Recommendation</div>
+          <div style="font-size:12px;color:#aaa;line-height:1.6;">Please purchase an SD card with high-speed certification (Class 10 or UHS-I) for optimal recording performance.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DEVICE SETTINGS PAGE ===== -->
+  <div class="page" id="page-settings">
+    <div class="page-header">
+      <div class="back-btn" onclick="switchPage('liveview')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </div>
+      <h2>设备设置</h2>
+    </div>
+    
+    <!-- Device Overview -->
+    <div style="padding:16px;background:var(--card);border-bottom:1px solid var(--border);">
+      <div style="display:flex;gap:16px;margin-bottom:16px;">
+        <div style="width:80px;height:80px;border-radius:12px;background:linear-gradient(135deg,#0d1b3e,#1a3a6e);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="rgba(255,255,255,0.4)"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:16px;font-weight:700;color:var(--text-main);margin-bottom:8px;">Front Door</div>
+          <div style="font-size:12px;color:var(--text-sub);margin-bottom:4px;">Model: IPC-2K Pro</div>
+          <div style="display:flex;gap:12px;margin-top:8px;">
+            <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-sub);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>Online</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-sub);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+              <span>Strong</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Status Grid -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="background:var(--bg);border-radius:var(--radius-btn);padding:12px;">
+          <div style="font-size:11px;color:var(--text-sub);margin-bottom:4px;">Network</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text-main);">WiFi 5GHz</div>
+          <div style="font-size:10px;color:var(--text-sub);margin-top:2px;">-45 dBm</div>
+        </div>
+        <div style="background:var(--bg);border-radius:var(--radius-btn);padding:12px;">
+          <div style="font-size:11px;color:var(--text-sub);margin-bottom:4px;">Storage</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text-main);">256 GB</div>
+          <div style="font-size:10px;color:var(--text-sub);margin-top:2px;">SD Card</div>
+        </div>
+        <div style="background:var(--bg);border-radius:var(--radius-btn);padding:12px;">
+          <div style="font-size:11px;color:var(--text-sub);margin-bottom:4px;">Firmware</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text-main);">v2.4.1</div>
+          <div style="font-size:10px;color:var(--success);margin-top:2px;">Latest</div>
+        </div>
+        <div style="background:var(--bg);border-radius:var(--radius-btn);padding:12px;">
+          <div style="font-size:11px;color:var(--text-sub);margin-bottom:4px;">Uptime</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text-main);">45 days</div>
+          <div style="font-size:10px;color:var(--text-sub);margin-top:2px;">Stable</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Settings Menu -->
+    <div style="padding:12px 16px;">
+      <div style="font-size:11px;font-weight:600;color:var(--text-sub);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">设备设置</div>
+      <div style="background:var(--card);border-radius:var(--radius-card);overflow:hidden;box-shadow:var(--shadow-card);">
+        <div class="settings-item" style="cursor:default;opacity:0.7;">
+          <div style="display:flex;align-items:center;gap:12px;flex:1;">
+            <div style="width:36px;height:36px;border-radius:10px;background:#E3F2FD;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A73E8" stroke-width="2"><circle cx="12" cy="12" r="1"/><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/></svg>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text-main);">侦测设置</div>
+              <div style="font-size:12px;color:var(--text-sub);margin-top:2px;">运动、人形、车辆</div>
+            </div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="settings-item" style="cursor:default;opacity:0.7;">
+          <div style="display:flex;align-items:center;gap:12px;flex:1;">
+            <div style="width:36px;height:36px;border-radius:10px;background:#F3E5F5;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9C27B0" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text-main);">通知设置</div>
+              <div style="font-size:12px;color:var(--text-sub);margin-top:2px;">告警与推送</div>
+            </div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="settings-item" style="cursor:default;opacity:0.7;">
+          <div style="display:flex;align-items:center;gap:12px;flex:1;">
+            <div style="width:36px;height:36px;border-radius:10px;background:#FCE4EC;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E91E63" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text-main);">画面设置</div>
+              <div style="font-size:12px;color:var(--text-sub);margin-top:2px;">亮度、对比度</div>
+            </div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="settings-item" style="cursor:default;opacity:0.7;">
+          <div style="display:flex;align-items:center;gap:12px;flex:1;">
+            <div style="width:36px;height:36px;border-radius:10px;background:#FFF3E0;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF9800" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text-main);">音频设置</div>
+              <div style="font-size:12px;color:var(--text-sub);margin-top:2px;">麦克风、扬声器</div>
+            </div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="settings-item" style="cursor:default;opacity:0.7;">
+          <div style="display:flex;align-items:center;gap:12px;flex:1;">
+            <div style="width:36px;height:36px;border-radius:10px;background:#E0F2F1;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#009688" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 11h.01M12 11h.01M8 11h.01"/></svg>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text-main);">存储设置</div>
+              <div style="font-size:12px;color:var(--text-sub);margin-top:2px;">SD卡管理</div>
+            </div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="settings-item" style="cursor:default;opacity:0.7;">
+          <div style="display:flex;align-items:center;gap:12px;flex:1;">
+            <div style="width:36px;height:36px;border-radius:10px;background:#E8F5E9;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 17M7 12 17 12"/></svg>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text-main);">云台设置</div>
+              <div style="font-size:12px;color:var(--text-sub);margin-top:2px;">水平、垂直、变焦</div>
+            </div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="settings-item" onclick="switchPage('battery')">
+          <div style="display:flex;align-items:center;gap:12px;flex:1;">
+            <div style="width:36px;height:36px;border-radius:10px;background:#F1F8E9;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8BC34A" stroke-width="2"><rect x="2" y="7" width="20" height="10" rx="1"/><line x1="22" y1="11" x2="22" y2="13"/><line x1="6" y1="11" x2="14" y2="11"/></svg>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text-main);">电池管理</div>
+              <div style="font-size:12px;color:var(--text-sub);margin-top:2px;">电源设置</div>
+            </div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="settings-item" style="cursor:default;opacity:0.7;">
+          <div style="display:flex;align-items:center;gap:12px;flex:1;">
+            <div style="width:36px;height:36px;border-radius:10px;background:#FFFDE7;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CDDC39" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text-main);">灯光设置</div>
+              <div style="font-size:12px;color:var(--text-sub);margin-top:2px;">LED、红外</div>
+            </div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="settings-item" style="cursor:default;opacity:0.7;">
+          <div style="display:flex;align-items:center;gap:12px;flex:1;">
+            <div style="width:36px;height:36px;border-radius:10px;background:#E0E7FF;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5C6BC0" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text-main);">一键分享</div>
+              <div style="font-size:12px;color:var(--text-sub);margin-top:2px;">邀请家人</div>
+            </div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Delete Device Button -->
+    <div style="padding:12px 16px;">
+      <button onclick="showDeleteConfirmModal()" style="width:100%;padding:14px;border-radius:var(--radius-btn);background:#FFEBEE;border:1.5px solid #FFCDD2;color:#F44336;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;">
+        删除设备
+      </button>
+    </div>
+    <div style="height:16px;"></div>
+  </div>
+
+  <!-- ===== BATTERY MANAGEMENT PAGE ===== -->
+  <div class="page" id="page-battery">
+    <div class="page-header">
+      <div class="back-btn" onclick="switchPage('settings')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </div>
+      <h2>Battery Management</h2>
+    </div>
+    
+    <!-- Battery Status -->
+    <div style="padding:16px;background:var(--card);border-bottom:1px solid var(--border);">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#8BC34A,#9CCC65);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <div style="text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:#fff;">78</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.8);">%</div>
+          </div>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:600;color:var(--text-sub);margin-bottom:8px;" data-i18n="battery_status">电池状态</div>
+          <div style="font-size:16px;font-weight:700;color:var(--text-main);margin-bottom:4px;" data-i18n="battery_good">良好</div>
+          <div style="font-size:12px;color:var(--text-sub);" data-i18n="battery_est">预计续航：12天</div>
+          <div style="width:100%;height:6px;background:var(--border);border-radius:3px;margin-top:8px;overflow:hidden;">
+            <div style="width:78%;height:100%;background:#8BC34A;border-radius:3px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Work Mode Selection -->
+    <div style="padding:12px 16px;">
+      <div style="font-size:11px;font-weight:600;color:var(--text-sub);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;" data-i18n="work_mode">工作模式</div>
+      <div style="background:var(--card);border-radius:var(--radius-card);overflow:hidden;box-shadow:var(--shadow-card);">
+        
+        <!-- Power Saving Mode -->
+        <div style="padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectWorkMode('powersave')">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <input type="radio" name="workMode" value="powersave" id="mode-powersave" style="width:18px;height:18px;cursor:pointer;accent-color:var(--primary);">
+            <div style="flex:1;">
+              <label for="mode-powersave" style="font-size:14px;font-weight:600;color:var(--text-main);cursor:pointer;" data-i18n="mode_powersave">省电模式</label>
+              <div style="font-size:12px;color:var(--text-sub);margin-top:4px;" data-i18n="mode_powersave_desc">设备默认休眠，通过事件唤醒录像，续航更长</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- AOV Mode -->
+        <div style="padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectWorkMode('aov')">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <input type="radio" name="workMode" value="aov" id="mode-aov" style="width:18px;height:18px;cursor:pointer;accent-color:var(--primary);">
+            <div style="flex:1;">
+              <label for="mode-aov" style="font-size:14px;font-weight:600;color:var(--text-main);cursor:pointer;" data-i18n="mode_aov">AOV 模式</label>
+              <div style="font-size:12px;color:var(--text-sub);margin-top:4px;" data-i18n="mode_aov_desc">设备持续运行，每隔一段时间抓拍一张图片，有事件发生时触发告警录像</div>
+            </div>
+          </div>
+          
+          <!-- AOV Frame Rate Settings (Expandable) -->
+          <div id="aovSettings" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+            <div style="font-size:12px;font-weight:600;color:var(--text-sub);margin-bottom:8px;" data-i18n="aov_frame_label">拍照帧率（数值越小，功耗越高）</div>
+            <!-- Frame Rate Picker Trigger -->
+            <div onclick="showFrameRatePicker()" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;background:var(--bg);cursor:pointer;border:1.5px solid var(--border);">
+              <span style="font-size:13px;color:var(--text-sub);" data-i18n="aov_frame_placeholder">选择帧率</span>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:14px;font-weight:700;color:var(--primary);" id="selectedFrameRateLabel">5s/帧</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            
+            <!-- AOV Power Saving Threshold -->
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+              <div style="font-size:12px;font-weight:600;color:var(--text-sub);margin-bottom:8px;" data-i18n="aov_threshold_label">省电模式电量阈值</div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <input type="range" min="10" max="50" step="10" value="20" style="flex:1;" id="aovThreshold" oninput="updateAovThreshold(this.value)">
+                <span style="font-size:14px;font-weight:600;color:var(--primary);min-width:40px;text-align:right;" id="aovThresholdValue">20%</span>
+              </div>
+              <div style="font-size:11px;color:var(--text-sub);margin-top:6px;" data-i18n="aov_threshold_desc">电量低于此值时，自动切换至省电模式</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Always On Mode -->
+        <div style="padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectWorkMode('alwayson')">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <input type="radio" name="workMode" value="alwayson" id="mode-alwayson" style="width:18px;height:18px;cursor:pointer;accent-color:var(--primary);">
+            <div style="flex:1;">
+              <label for="mode-alwayson" style="font-size:14px;font-weight:600;color:var(--text-main);cursor:pointer;" data-i18n="mode_alwayson">常电模式</label>
+              <div style="font-size:12px;color:var(--text-sub);margin-top:4px;" data-i18n="mode_alwayson_desc">设备一直连续录像，电池电量低于设定值时，自动进入省电模式</div>
+            </div>
+          </div>
+          
+          <!-- Always On Power Saving Threshold -->
+          <div id="alwaysonSettings" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+            <div style="font-size:12px;font-weight:600;color:var(--text-sub);margin-bottom:8px;" data-i18n="alwayson_threshold_label">省电模式电量阈值</div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <input type="range" min="10" max="50" step="10" value="30" style="flex:1;" id="alwaysonThreshold" oninput="updateAlwaysonThreshold(this.value)">
+              <span style="font-size:14px;font-weight:600;color:var(--primary);min-width:40px;text-align:right;" id="alwaysonThresholdValue">30%</span>
+            </div>
+            <div style="font-size:11px;color:var(--text-sub);margin-top:6px;" data-i18n="alwayson_threshold_desc">电量低于此值时，自动切换至省电模式</div>
+          </div>
+        </div>
+        
+        <!-- Smart Mode -->
+        <div style="padding:14px 16px;cursor:pointer;" onclick="selectWorkMode('smart')">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <input type="radio" name="workMode" value="smart" id="mode-smart" style="width:18px;height:18px;cursor:pointer;accent-color:var(--primary);">
+            <div style="flex:1;">
+              <label for="mode-smart" style="font-size:14px;font-weight:600;color:var(--text-main);cursor:pointer;">智能模式</label>
+              <div style="font-size:12px;color:var(--text-sub);margin-top:4px;">根据时间计划配置需要使用的工作模式</div>
+            </div>
+            <div id="smartSettingsEntry" style="display:none;align-items:center;gap:4px;padding:5px 10px;border-radius:20px;background:var(--bg);border:1px solid var(--border);cursor:pointer;" onclick="event.stopPropagation();switchPage('smart-schedule')">
+              <span style="font-size:11px;color:var(--text-sub);">配置计划</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Event Recording Duration -->
+    <div style="padding:12px 16px;">
+      <div style="font-size:11px;font-weight:600;color:var(--text-sub);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;" data-i18n="event_recording">事件录像</div>
+      <div style="background:var(--card);border-radius:var(--radius-card);overflow:hidden;box-shadow:var(--shadow-card);padding:16px;">
+        <div style="font-size:12px;font-weight:600;color:var(--text-sub);margin-bottom:12px;" data-i18n="record_duration_label">录像时长</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <input type="range" min="5" max="30" step="1" value="15" style="flex:1;" id="recordDuration" oninput="updateRecordDuration(this.value)">
+          <span style="font-size:16px;font-weight:700;color:var(--primary);min-width:50px;text-align:right;" id="recordDurationValue">15s</span>
+        </div>
+        
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:var(--bg);">
+          <input type="checkbox" id="stopOnMotionStop" style="width:18px;height:18px;cursor:pointer;accent-color:var(--primary);">
+          <label for="stopOnMotionStop" style="flex:1;cursor:pointer;">
+            <div style="font-size:13px;font-weight:600;color:var(--text-main);" data-i18n="stop_on_motion">运动停止则停止录像</div>
+            <div style="font-size:11px;color:var(--text-sub);margin-top:2px;" data-i18n="stop_on_motion_desc">开启后，设备可在未达到录像时长时自行中断录像</div>
+          </label>
+        </div>
+      </div>
+    </div>
+    
+    <div style="height:16px;"></div>
+  </div>
+
+  <!-- ===== SMART SCHEDULE PAGE ===== -->
+  <div class="page" id="page-smart-schedule">
+    <div class="page-header">
+      <div class="back-btn" onclick="switchPage('battery')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </div>
+      <h2>智能模式</h2>
+      <div onclick="showAddScheduleModal()" style="width:32px;height:32px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </div>
+    </div>
+
+    <!-- Default Mode -->
+    <div style="padding:16px;background:var(--card);border-bottom:1px solid var(--border);">
+      <div style="font-size:12px;font-weight:600;color:var(--text-sub);margin-bottom:4px;">默认执行模式</div>
+      <div style="font-size:11px;color:var(--text-sub);margin-bottom:12px;">计划外时间段执行该模式</div>
+      <div style="display:flex;gap:8px;">
+        <div class="smart-default-btn active" onclick="selectSmartDefault(this)" style="flex:1;padding:10px 6px;border-radius:10px;border:1.5px solid var(--primary);background:#EEF5FF;text-align:center;font-size:13px;font-weight:600;color:var(--primary);cursor:pointer;">省电模式</div>
+        <div class="smart-default-btn" onclick="selectSmartDefault(this)" style="flex:1;padding:10px 6px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);text-align:center;font-size:13px;font-weight:600;color:var(--text-sub);cursor:pointer;">AOV模式</div>
+        <div class="smart-default-btn" onclick="selectSmartDefault(this)" style="flex:1;padding:10px 6px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);text-align:center;font-size:13px;font-weight:600;color:var(--text-sub);cursor:pointer;">常电模式</div>
+      </div>
+    </div>
+
+    <!-- Schedule List -->
+    <div style="padding:12px 16px;">
+      <div style="font-size:11px;font-weight:600;color:var(--text-sub);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">时间计划</div>
+      <div id="scheduleList" style="display:flex;flex-direction:column;gap:10px;">
+
+        <!-- Sample item 1 -->
+        <div class="schedule-item" style="background:var(--card);border-radius:var(--radius-card);padding:14px 16px;box-shadow:var(--shadow-card);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="padding:3px 10px;border-radius:20px;background:#EEF5FF;color:var(--primary);font-size:12px;font-weight:700;">AOV模式</span>
+              <span style="font-size:15px;font-weight:700;color:var(--text-main);">08:00 - 22:00</span>
+            </div>
+            <div onclick="deleteSchedule(this)" style="cursor:pointer;width:28px;height:28px;border-radius:50%;background:#FFEBEE;display:flex;align-items:center;justify-content:center;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#EA4335" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+            </div>
+          </div>
+          <div style="display:flex;gap:5px;">
+            <span style="width:28px;height:28px;border-radius:8px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">一</span>
+            <span style="width:28px;height:28px;border-radius:8px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">二</span>
+            <span style="width:28px;height:28px;border-radius:8px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">三</span>
+            <span style="width:28px;height:28px;border-radius:8px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">四</span>
+            <span style="width:28px;height:28px;border-radius:8px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">五</span>
+            <span style="width:28px;height:28px;border-radius:8px;background:var(--border);color:var(--text-sub);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">六</span>
+            <span style="width:28px;height:28px;border-radius:8px;background:var(--border);color:var(--text-sub);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">日</span>
+          </div>
+        </div>
+
+        <!-- Sample item 2 -->
+        <div class="schedule-item" style="background:var(--card);border-radius:var(--radius-card);padding:14px 16px;box-shadow:var(--shadow-card);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="padding:3px 10px;border-radius:20px;background:#E8F5E9;color:#34A853;font-size:12px;font-weight:700;">常电模式</span>
+              <span style="font-size:15px;font-weight:700;color:var(--text-main);">22:00 - 08:00</span>
+            </div>
+            <div onclick="deleteSchedule(this)" style="cursor:pointer;width:28px;height:28px;border-radius:50%;background:#FFEBEE;display:flex;align-items:center;justify-content:center;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#EA4335" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+            </div>
+          </div>
+          <div style="display:flex;gap:5px;">
+            <span style="width:28px;height:28px;border-radius:8px;background:var(--border);color:var(--text-sub);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">一</span>
+            <span style="width:28px;height:28px;border-radius:8px;background:var(--border);color:var(--text-sub);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">二</span>
+            <span style="width:28px;height:28px;border-radius:8px;background:var(--border);color:var(--text-sub);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">三</span>
+            <span style="width:28px;height:28px;border-radius:8px;background:var(--border);color:var(--text-sub);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">四</span>
+            <span style="width:28px;height:28px;border-radius:8px;background:var(--border);color:var(--text-sub);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">五</span>
+            <span style="width:28px;height:28px;border-radius:8px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">六</span>
+            <span style="width:28px;height:28px;border-radius:8px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">日</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Empty state hint -->
+      <div style="text-align:center;padding:20px 0 8px;">
+        <div style="font-size:12px;color:var(--text-sub);">点击右上角 + 添加时间计划</div>
+      </div>
+    </div>
+    <div style="height:16px;"></div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar" id="mainTabBar">
+    <div class="tab-item active" id="tab-home" onclick="switchPage('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span data-i18n="tab_home">首页</span>
+    </div>
+    <div class="tab-item" id="tab-messages" onclick="switchPage('messages')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span data-i18n="tab_messages">消息</span>
+    </div>
+    <div class="tab-item" id="tab-profile" onclick="switchPage('profile')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span data-i18n="tab_profile">我的</span>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+
+<!-- Marketing Recommendation Modal -->
+<div class="modal-mask" id="marketingMask" onclick="hideMarketingModal()" style="position:absolute;"></div>
+<div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-radius:20px 20px 0 0;padding:20px 16px 32px;z-index:900;display:none;" id="marketingModal">
+  <div style="text-align:center;margin-bottom:20px;">
+    <div style="font-size:16px;font-weight:700;color:var(--text-main);margin-bottom:8px;" id="marketingTitle">SD Card Storage Full</div>
+    <div style="font-size:13px;color:var(--text-sub);line-height:1.6;" id="marketingDesc">SD card storage capacity is insufficient. Some historical recordings will be overwritten. Enable cloud storage to automatically cycle recordings and never lose key footage.</div>
+  </div>
+  <div style="background:var(--bg);border-radius:var(--radius-card);padding:14px;margin-bottom:16px;position:relative;border:1.5px solid var(--primary);">
+    <div style="position:absolute;top:-8px;left:12px;background:var(--danger);color:#fff;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:700;">60% OFF</div>
+    <div style="font-size:12px;font-weight:600;color:var(--text-sub);margin-bottom:8px;">Recommended Plan</div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="flex:1;">
+        <div style="font-size:14px;font-weight:700;color:var(--text-main);">Basic Plan</div>
+        <div style="font-size:12px;color:var(--text-sub);margin-top:2px;">15-day event recording</div>
+        <div style="font-size:12px;color:var(--text-sub);">Motion & person detection</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:16px;font-weight:800;color:var(--primary);">$2.99</div>
+        <div style="font-size:10px;color:var(--text-sub);">/month</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <button onclick="viewServiceDetails()" style="width:100%;padding:10px;border-radius:var(--radius-btn);background:var(--bg);border:1.5px solid var(--border);color:var(--text-main);font-size:13px;font-weight:600;cursor:pointer;">View Details</button>
+    </div>
+  </div>
+  <div style="display:flex;gap:10px;margin-bottom:12px;">
+    <button onclick="recordMarketingAction('not_interested')" style="flex:1;padding:12px;border-radius:var(--radius-btn);background:var(--bg);border:1.5px solid var(--border);color:var(--text-sub);font-size:13px;font-weight:600;cursor:pointer;">Not Interested</button>
+    <button onclick="recordMarketingAction('buy_now')" style="flex:1;padding:12px;border-radius:var(--radius-btn);background:var(--primary);color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;">Buy Now</button>
+  </div>
+  <button onclick="hideMarketingModal()" style="width:100%;padding:10px;border-radius:var(--radius-btn);background:transparent;border:1.5px solid var(--border);color:var(--text-sub);font-size:13px;font-weight:600;cursor:pointer;">Close</button>
+</div>
+
+<!-- Delete Device Confirmation Modal -->
+<div class="modal-mask" id="deleteConfirmMask" onclick="hideDeleteConfirmModal()" style="position:absolute;"></div>
+<div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-radius:20px 20px 0 0;padding:20px 16px 32px;z-index:900;display:none;" id="deleteConfirmModal">
+  <div style="text-align:center;margin-bottom:20px;">
+    <div style="width:56px;height:56px;border-radius:50%;background:#FFEBEE;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F44336" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+    </div>
+    <div style="font-size:16px;font-weight:700;color:var(--text-main);margin-bottom:8px;" data-i18n="delete_title">删除设备？</div>
+    <div style="font-size:13px;color:var(--text-sub);line-height:1.6;" data-i18n="delete_desc">删除设备后，您将无法查看和接收来自该设备的视频和消息</div>
+  </div>
+  <div style="display:flex;gap:10px;">
+    <button onclick="hideDeleteConfirmModal()" style="flex:1;padding:12px;border-radius:var(--radius-btn);background:var(--bg);border:1.5px solid var(--border);color:var(--text-main);font-size:13px;font-weight:600;cursor:pointer;" data-i18n="cancel">取消</button>
+    <button onclick="confirmDeleteDevice()" style="flex:1;padding:12px;border-radius:var(--radius-btn);background:#F44336;color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;" data-i18n="delete_confirm">删除</button>
+  </div>
+</div>
+
+<!-- Frame Rate Picker Modal -->
+<div class="modal-mask" id="frameRateMask" onclick="hideFrameRatePicker()" style="position:absolute;"></div>
+<div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-radius:20px 20px 0 0;z-index:900;display:none;" id="frameRateModal">
+  <div style="padding:16px 16px 0;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);">
+    <span style="font-size:15px;font-weight:700;color:var(--text-main);" data-i18n="framerate_title">选择拍照帧率</span>
+    <div onclick="hideFrameRatePicker()" style="cursor:pointer;padding:4px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </div>
+  </div>
+  <div style="padding:8px 0 24px;" id="frameRateList"></div>
+</div>
+
+<!-- Add Schedule Modal -->
+<div class="modal-mask" id="scheduleModalMask" onclick="hideAddScheduleModal()" style="position:absolute;"></div>
+<div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-radius:20px 20px 0 0;z-index:900;display:none;" id="scheduleModal">
+  <div style="padding:16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);">
+    <span style="font-size:15px;font-weight:700;color:var(--text-main);">添加时间计划</span>
+    <div onclick="hideAddScheduleModal()" style="cursor:pointer;padding:4px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </div>
+  </div>
+  <div style="padding:16px;display:flex;flex-direction:column;gap:16px;">
+    
+    <!-- Work Mode Selection -->
+    <div>
+      <div style="font-size:12px;font-weight:600;color:var(--text-sub);margin-bottom:8px;">工作模式</div>
+      <div style="display:flex;gap:8px;">
+        <div class="sch-mode-btn active" onclick="selectSchMode(this,'省电模式')" style="flex:1;padding:9px 4px;border-radius:8px;border:1.5px solid var(--primary);background:#EEF5FF;text-align:center;font-size:12px;font-weight:600;color:var(--primary);cursor:pointer;">省电模式</div>
+        <div class="sch-mode-btn" onclick="selectSchMode(this,'AOV模式')" style="flex:1;padding:9px 4px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);text-align:center;font-size:12px;font-weight:600;color:var(--text-sub);cursor:pointer;">AOV模式</div>
+        <div class="sch-mode-btn" onclick="selectSchMode(this,'常电模式')" style="flex:1;padding:9px 4px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);text-align:center;font-size:12px;font-weight:600;color:var(--text-sub);cursor:pointer;">常电模式</div>
+      </div>
+    </div>
+    
+    <!-- Time Range -->
+    <div>
+      <div style="font-size:12px;font-weight:600;color:var(--text-sub);margin-bottom:8px;">时间段</div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="flex:1;background:var(--bg);border-radius:8px;border:1.5px solid var(--border);padding:10px 12px;text-align:center;">
+          <div style="font-size:10px;color:var(--text-sub);margin-bottom:4px;">开始时间</div>
+          <input type="time" id="schStartTime" value="08:00" style="border:none;background:transparent;font-size:16px;font-weight:700;color:var(--text-main);text-align:center;outline:none;width:100%;cursor:pointer;">
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        <div style="flex:1;background:var(--bg);border-radius:8px;border:1.5px solid var(--border);padding:10px 12px;text-align:center;">
+          <div style="font-size:10px;color:var(--text-sub);margin-bottom:4px;">结束时间</div>
+          <input type="time" id="schEndTime" value="22:00" style="border:none;background:transparent;font-size:16px;font-weight:700;color:var(--text-main);text-align:center;outline:none;width:100%;cursor:pointer;">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Repeat Days -->
+    <div>
+      <div style="font-size:12px;font-weight:600;color:var(--text-sub);margin-bottom:8px;">重复</div>
+      <div style="display:flex;gap:6px;">
+        <div class="day-btn active" onclick="toggleDay(this)" style="flex:1;padding:8px 2px;border-radius:8px;border:1.5px solid var(--primary);background:#EEF5FF;text-align:center;font-size:12px;font-weight:600;color:var(--primary);cursor:pointer;">一</div>
+        <div class="day-btn active" onclick="toggleDay(this)" style="flex:1;padding:8px 2px;border-radius:8px;border:1.5px solid var(--primary);background:#EEF5FF;text-align:center;font-size:12px;font-weight:600;color:var(--primary);cursor:pointer;">二</div>
+        <div class="day-btn active" onclick="toggleDay(this)" style="flex:1;padding:8px 2px;border-radius:8px;border:1.5px solid var(--primary);background:#EEF5FF;text-align:center;font-size:12px;font-weight:600;color:var(--primary);cursor:pointer;">三</div>
+        <div class="day-btn active" onclick="toggleDay(this)" style="flex:1;padding:8px 2px;border-radius:8px;border:1.5px solid var(--primary);background:#EEF5FF;text-align:center;font-size:12px;font-weight:600;color:var(--primary);cursor:pointer;">四</div>
+        <div class="day-btn active" onclick="toggleDay(this)" style="flex:1;padding:8px 2px;border-radius:8px;border:1.5px solid var(--primary);background:#EEF5FF;text-align:center;font-size:12px;font-weight:600;color:var(--primary);cursor:pointer;">五</div>
+        <div class="day-btn" onclick="toggleDay(this)" style="flex:1;padding:8px 2px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);text-align:center;font-size:12px;font-weight:600;color:var(--text-sub);cursor:pointer;">六</div>
+        <div class="day-btn" onclick="toggleDay(this)" style="flex:1;padding:8px 2px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);text-align:center;font-size:12px;font-weight:600;color:var(--text-sub);cursor:pointer;">日</div>
+      </div>
+    </div>
+    
+    <!-- Confirm Button -->
+    <button onclick="confirmAddSchedule()" style="width:100%;padding:14px;border-radius:var(--radius-btn);background:var(--primary);color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;">确认添加</button>
+  </div>
+</div>
+
+<!-- Payment Modal -->
+<div class="modal-mask" id="modalMask" onclick="hidePayModal()"></div>
+<div class="pay-modal" id="payModal">
+  <h4>Complete Purchase</h4>
+  <div class="pay-amount">$2.99<span style="font-size:14px;color:var(--text-sub);font-weight:500;">/month</span></div>
+  <div class="pay-option selected" onclick="selectPay(this)">
+    <div class="pay-icon" style="background:#07C160;"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
+    <span class="pay-name">WeChat Pay</span>
+    <div class="radio"></div>
+  </div>
+  <div class="pay-option" onclick="selectPay(this)">
+    <div class="pay-icon" style="background:#1677FF;"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
+    <span class="pay-name">Alipay</span>
+    <div class="radio"></div>
+  </div>
+  <button class="pay-confirm-btn" onclick="hidePayModal()">Confirm Payment</button>
+</div>
+
+<!-- Annotation Controls -->
+<div class="ann-hint" id="annHint">✏️ Annotation mode — click side areas to add notes</div>
+<div class="ann-fab" id="annFab" onclick="toggleAnnotation()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+</div>
+<button class="save-btn" id="saveBtn" onclick="saveAnnotations()">💾 Save</button>
+
+</div><!-- /outer -->
+
+<script>
+// Pages that show tab bar
+const TAB_PAGES = ['home','messages','profile'];
+const tabMap = { home:'tab-home', messages:'tab-messages', profile:'tab-profile' };
+
+function switchPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  // Tab bar visibility
+  const tabBar = document.getElementById('mainTabBar');
+  tabBar.style.display = TAB_PAGES.includes(page) ? 'flex' : 'none';
+  // Tab highlight
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  if (tabMap[page]) document.getElementById(tabMap[page]).classList.add('active');
+  currentPage = page;
+  // Render annotations for this page
+  const key = getPageKey();
+  const list = annotations[key] || [];
+  list.forEach(n => { if (!document.getElementById('note_' + n.id)) createStickyDOM(n.id, n.text, n.x, n.y); });
+  
+  // Auto-show marketing modal when entering SD card playback
+  if (page === 'playback') {
+    clearTimeout(msgDetailTimeout);
+    clearTimeout(marketingTimeout);
+    marketingTimeout = setTimeout(() => {
+      if (currentPbSource === 'sd') {
+        // Reset marketing modal content for playback
+        document.getElementById('marketingTitle').textContent = 'SD Card Storage Full';
+        document.getElementById('marketingDesc').textContent = 'SD card storage capacity is insufficient. Some historical recordings will be overwritten. Enable cloud storage to automatically cycle recordings and never lose key footage.';
+        showMarketingModal();
+      }
+    }, 2000);
+  } else if (page !== 'msgdetail') {
+    // Clear timeouts for other pages
+    clearTimeout(msgDetailTimeout);
+    clearTimeout(marketingTimeout);
+  }
+}
+
+// Service store tabs
+const svcContent = {
+  'Cloud Storage': {
+    bannerTitle: 'Cloud Storage vs SD Card',
+    bannerSub: 'Never lose footage again. Cloud storage keeps your recordings safe, accessible anywhere, anytime.',
+    bannerIcon: '<path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/>',
+    plans: [
+      { key:'basic', tag:'Best Value', tagClass:'best', discount:'30% OFF', name:'Basic', price:'$2.99', unit:'/mo', features:['15-day event recording','Motion & person detection','Event alerts'] },
+      { key:'pro', tag:'HOT', tagClass:'hot', discount:'30% OFF', name:'Pro', price:'$5.99', unit:'/mo', features:['30-day 24h recording','Universal AI detection','Priority alerts'] },
+      { key:'superpro', tag:'', tagClass:'', discount:'30% OFF', name:'Super Pro', price:'$9.99', unit:'/mo', features:['30-day 24h recording','Universal AI detection','AI Super Search'] }
+    ],
+    defaultPlan: 'basic',
+    buyLabel: 'Buy Now — $2.99/mo'
+  },
+  'AI Service': {
+    bannerTitle: 'Smart AI Monitoring',
+    bannerSub: 'Advanced AI scenarios tailored for your family — elderly care, child safety, pet monitoring and more.',
+    bannerIcon: '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>',
+    plans: [
+      { key:'elderly', tag:'Popular', tagClass:'best', discount:'20% OFF', name:'Elder Care', price:'$3.99', unit:'/mo', features:['Fall detection alerts','Inactivity monitoring','Emergency notifications'] },
+      { key:'child', tag:'HOT', tagClass:'hot', discount:'20% OFF', name:'Child Care', price:'$3.99', unit:'/mo', features:['Child zone boundary alerts','Stranger detection','Safe time reports'] },
+      { key:'pet', tag:'', tagClass:'', discount:'20% OFF', name:'Pet Monitor', price:'$2.99', unit:'/mo', features:['Pet activity tracking','Unusual behavior alerts','Daily activity summary'] },
+      { key:'kitchen', tag:'', tagClass:'', discount:'20% OFF', name:'Kitchen Safety', price:'$2.99', unit:'/mo', features:['Flame & smoke detection','Stove-on reminders','Safety event alerts'] },
+      { key:'universal', tag:'Best', tagClass:'best', discount:'20% OFF', name:'Universal AI', price:'$6.99', unit:'/mo', features:['All AI scenarios included','People, vehicles, animals','Package & object detection'] }
+    ],
+    defaultPlan: 'elderly',
+    buyLabel: 'Buy Now — $3.99/mo'
+  },
+  'Offline Monitor': {
+    bannerTitle: 'Stay Informed, Always',
+    bannerSub: 'Get instant alerts the moment your camera goes offline. Never miss a device outage again.',
+    bannerIcon: '<path d="M1 1l22 22"/><path d="M16.72 11.06A10.94 10.94 0 0119 12.55"/><path d="M5 12.55a10.94 10.94 0 015.17-2.39"/><path d="M10.71 5.05A16 16 0 0122.56 9"/><path d="M1.42 9a15.91 15.91 0 014.7-2.88"/><path d="M8.53 16.11a6 6 0 016.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/>',
+    plans: [
+      { key:'basic_off', tag:'Best Value', tagClass:'best', discount:'', name:'Basic Alert', price:'$0.99', unit:'/mo', features:['Offline push notification','Real-time device status','Email alerts'] },
+      { key:'pro_off', tag:'HOT', tagClass:'hot', discount:'', name:'Pro Alert', price:'$1.99', unit:'/mo', features:['Instant offline alerts','SMS + push + email','Reconnect notifications','Alert history 30 days'] }
+    ],
+    defaultPlan: 'basic_off',
+    buyLabel: 'Buy Now — $0.99/mo'
+  },
+  'Ad-Free': {
+    bannerTitle: 'Clean, Distraction-Free Experience',
+    bannerSub: 'Remove all commercial ads from the app. Enjoy a pure, focused monitoring experience.',
+    bannerIcon: '<circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>',
+    plans: [
+      { key:'adfree_m', tag:'', tagClass:'', discount:'', name:'Monthly', price:'$0.99', unit:'/mo', features:['No banner ads','No video ads','No pop-up promotions'] },
+      { key:'adfree_y', tag:'Best Value', tagClass:'best', discount:'40% OFF', name:'Annual', price:'$5.99', unit:'/yr', features:['No banner ads','No video ads','No pop-up promotions','Save 40% vs monthly'] }
+    ],
+    defaultPlan: 'adfree_y',
+    buyLabel: 'Buy Now — $5.99/yr'
+  },
+  'Data Plan': {
+    bannerTitle: 'Keep Your Camera Connected',
+    bannerSub: 'Top up SIM card data for your cellular-connected cameras. Stay online anywhere, anytime.',
+    bannerIcon: '<path d="M1 6l5 5 6-6 6 6 5-5"/><path d="M1 12l5 5 6-6 6 6 5-5"/>',
+    plans: [
+      { key:'data_1g', tag:'', tagClass:'', discount:'', name:'1 GB', price:'$2.99', unit:'/mo', features:['1 GB data per month','Auto-renew available','Supports 4G/LTE cameras'] },
+      { key:'data_5g', tag:'HOT', tagClass:'hot', discount:'10% OFF', name:'5 GB', price:'$9.99', unit:'/mo', features:['5 GB data per month','HD video streaming','Auto-renew available'] },
+      { key:'data_20g', tag:'Best Value', tagClass:'best', discount:'20% OFF', name:'20 GB', price:'$29.99', unit:'/mo', features:['20 GB data per month','Unlimited HD streaming','Priority network access'] }
+    ],
+    defaultPlan: 'data_1g',
+    buyLabel: 'Buy Now — $2.99/mo'
+  }
+};
+
+const aiPlanDetails = {
+  basic: { title:'Basic Plan', items:[['cloud','15-day rolling cloud storage for motion-triggered events.'],['eye','AI motion and person detection with instant push notifications.'],['bell','Real-time event alerts with thumbnail previews.'],['monitor','Access recordings from any device anytime.']] },
+  pro: { title:'Pro Plan', items:[['cloud','30-day continuous 24h cloud recording.'],['cpu','Universal AI detection — people, vehicles, animals, packages.'],['bell','Priority alerts with AI-classified event types.'],['monitor','Multi-device access with HD streaming.']] },
+  superpro: { title:'Super Pro Plan', items:[['cloud','30-day continuous 24h cloud recording.'],['cpu','Universal AI detection with behavioral analysis.'],['search','AI Super Search — find events by natural language.'],['shield','End-to-end encryption and audit logs.']] },
+  elderly: { title:'Elder Care Plan', items:[['eye','Fall detection using AI posture analysis — instant alert when a fall is detected.'],['bell','Inactivity monitoring: alert if no movement detected for a set period.'],['shield','Emergency notification to family members with event snapshot.'],['monitor','Daily activity summary report for peace of mind.']] },
+  child: { title:'Child Care Plan', items:[['eye','Child zone boundary alerts — get notified when child enters restricted areas.'],['shield','Stranger detection: alert when unknown person approaches child.'],['bell','Safe time reports showing child activity throughout the day.'],['monitor','Parent dashboard with timeline of child-related events.']] },
+  pet: { title:'Pet Monitor Plan', items:[['eye','Pet activity tracking — monitor your pet\'s movement patterns throughout the day.'],['bell','Unusual behavior alerts: excessive barking, inactivity, or distress signals.'],['monitor','Daily activity summary with pet movement heatmap.'],['shield','Multi-pet support for households with more than one animal.']] },
+  kitchen: { title:'Kitchen Safety Plan', items:[['eye','Flame and smoke detection using AI visual analysis — faster than traditional sensors.'],['bell','Stove-on reminders: alert if stove is left on for extended periods.'],['shield','Safety event alerts with snapshot sent to your phone immediately.'],['monitor','Kitchen activity log for reviewing cooking habits and safety patterns.']] },
+  universal: { title:'Universal AI Plan', items:[['cpu','All AI scenarios included: elder care, child safety, pet monitoring, kitchen safety.'],['eye','Detect people, vehicles, animals, packages, and custom objects.'],['search','AI Super Search across all detected events.'],['shield','Behavioral analysis and anomaly detection for comprehensive protection.']] },
+  basic_off: { title:'Basic Alert Plan', items:[['bell','Instant push notification the moment your camera goes offline.'],['monitor','Real-time device status dashboard — see all cameras at a glance.'],['shield','Email alerts as backup notification channel.'],['eye','Reconnect notification when device comes back online.']] },
+  pro_off: { title:'Pro Alert Plan', items:[['bell','Instant offline alerts via push, SMS, and email simultaneously.'],['monitor','Real-time device status with connection quality monitoring.'],['shield','30-day alert history log for reviewing outage patterns.'],['eye','Reconnect notifications with downtime duration report.']] },
+  adfree_m: { title:'Ad-Free Monthly', items:[['eye','Remove all banner ads from home screen and device cards.'],['monitor','No video ads before playback or live view.'],['shield','No pop-up promotions or upsell interruptions.'],['bell','Clean notification center without promotional messages.']] },
+  adfree_y: { title:'Ad-Free Annual', items:[['eye','Remove all banner ads from home screen and device cards.'],['monitor','No video ads before playback or live view.'],['shield','No pop-up promotions or upsell interruptions.'],['bell','Save 40% compared to monthly subscription — best value.']] },
+  data_1g: { title:'1 GB Data Plan', items:[['monitor','1 GB mobile data per month for cellular-connected cameras.'],['shield','Supports 4G/LTE cameras with standard definition streaming.'],['bell','Low data warning notification at 80% usage.'],['eye','Auto-renew available for uninterrupted connectivity.']] },
+  data_5g: { title:'5 GB Data Plan', items:[['monitor','5 GB mobile data per month — suitable for HD video streaming.'],['shield','Supports 4G/LTE cameras with high definition streaming.'],['bell','Usage alerts at 80% and 95% consumption.'],['eye','Auto-renew with 10% discount on renewal.']] },
+  data_20g: { title:'20 GB Data Plan', items:[['monitor','20 GB mobile data per month — unlimited HD streaming capacity.'],['shield','Priority network access for stable, low-latency connections.'],['bell','Real-time usage monitoring with detailed consumption reports.'],['eye','Best value for multi-camera cellular setups.']] }
+};
+
+// Horizontal scroll for service tabs via mouse wheel
+document.addEventListener('DOMContentLoaded', () => {
+  const tabs = document.querySelector('.service-tabs');
+  if (tabs) {
+    tabs.addEventListener('wheel', e => {
+      e.preventDefault();
+      tabs.scrollLeft += e.deltaY;
+    }, { passive: false });
+  }
+});
+
+function selectSvcTab(el) {
+  document.querySelectorAll('.svc-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const tabName = el.textContent.trim();
+  const cfg = svcContent[tabName];
+  if (!cfg) return;
+  // Update banner
+  document.querySelector('.cloud-banner .banner-text .title').textContent = cfg.bannerTitle;
+  document.querySelector('.cloud-banner .banner-text .sub').textContent = cfg.bannerSub;
+  document.querySelector('.cloud-banner .banner-icon svg').innerHTML = cfg.bannerIcon;
+  // Rebuild plan cards
+  const scroll = document.querySelector('.plan-scroll');
+  scroll.innerHTML = cfg.plans.map((p, i) => `
+    <div class="plan-card ${i===0?'selected':''}" onclick="selectPlan(this,'${p.key}')">
+      ${p.tag ? `<div class="op-tag ${p.tagClass}">${p.tag}</div>` : ''}
+      <div class="discount" style="margin-top:${p.tag?'':'14px'}">${p.discount || '&nbsp;'}</div>
+      <div class="plan-name">${p.name}</div>
+      <div class="plan-price">${p.price}<span>${p.unit}</span></div>
+      <div class="plan-features">${p.features.map(f=>`<div class="feat">${f}</div>`).join('')}</div>
+    </div>`).join('');
+  // Update detail
+  renderPlanDetail(cfg.defaultPlan);
+  // Update buy button
+  document.querySelector('.buy-btn').textContent = cfg.buyLabel;
+}
+
+// Plan selection
+const svgMap = {
+  cloud: '<path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/>',
+  eye: '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
+  bell: '<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>',
+  monitor: '<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+  cpu: '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>',
+  search: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'
+};
+function renderPlanDetail(key) {
+  const d = aiPlanDetails[key];
+  if (!d) return;
+  document.getElementById('planDetail').innerHTML = `<h4>${d.title} — What's Included</h4>` +
+    d.items.map(([icon, text]) =>
+      `<div class="detail-row"><svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" width="16" height="16">${svgMap[icon]}</svg><p>${text}</p></div>`
+    ).join('');
+}
+function selectPlan(el, key) {
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  renderPlanDetail(key);
+}
+
+// Payment modal
+function showPayModal() {
+  document.getElementById('payModal').classList.add('show');
+  document.getElementById('modalMask').classList.add('show');
+}
+function hidePayModal() {
+  document.getElementById('payModal').classList.remove('show');
+  document.getElementById('modalMask').classList.remove('show');
+}
+function selectPay(el) {
+  document.querySelectorAll('.pay-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// Playback source switch
+function switchPbSource(el, src) {
+  document.querySelectorAll('.pb-src-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  // SD card shows same content as cloud (same UI, different source label)
+  const evtTitle = document.querySelector('#page-playback [style*="Events"]');
+  if (evtTitle) evtTitle.textContent = src === 'sd' ? 'SD Card Events' : 'Events';
+  currentPbSource = src;
+  
+  // Check if SD card is inserted (Backyard device has no SD card)
+  const hasSDCard = currentDevice !== 'backyard';
+  const normalContent = document.getElementById('pbNormalContent');
+  const noSDContent = document.getElementById('pbNoSDContent');
+  
+  if (src === 'sd' && !hasSDCard) {
+    // Show no SD card message
+    normalContent.style.display = 'none';
+    noSDContent.style.display = 'flex';
+    clearTimeout(marketingTimeout);
+    // Show marketing modal immediately
+    marketingTimeout = setTimeout(() => {
+      showMarketingModal();
+    }, 100);
+  } else if (src === 'sd' && hasSDCard) {
+    // Show normal playback content
+    normalContent.style.display = 'flex';
+    noSDContent.style.display = 'none';
+    clearTimeout(marketingTimeout);
+    marketingTimeout = setTimeout(() => {
+      showMarketingModal();
+    }, 2000);
+  } else {
+    // Cloud source - always show normal content
+    normalContent.style.display = 'flex';
+    noSDContent.style.display = 'none';
+    clearTimeout(marketingTimeout);
+    hideMarketingModal();
+  }
+}
+
+// ===== PLAYBACK CONTROLS =====
+let currentPbSource = 'cloud';
+let currentDevice = 'frontdoor'; // 'frontdoor' or 'backyard'
+let isPlaying = false;
+let marketingShownCount = 0;
+let marketingTimeout = null;
+let msgDetailTimeout = null;
+
+function togglePlayPause() {
+  isPlaying = !isPlaying;
+  const playBtn = document.getElementById('pbPlayBtn');
+  const pauseBtn = document.getElementById('pbPauseBtn');
+  
+  if (isPlaying) {
+    playBtn.style.display = 'none';
+    pauseBtn.style.display = 'block';
+  } else {
+    playBtn.style.display = 'block';
+    pauseBtn.style.display = 'none';
+  }
+}
+
+function showMarketingModal() {
+  document.getElementById('marketingMask').style.display = 'block';
+  document.getElementById('marketingModal').style.display = 'block';
+}
+
+function hideMarketingModal() {
+  document.getElementById('marketingMask').style.display = 'none';
+  document.getElementById('marketingModal').style.display = 'none';
+}
+
+function viewServiceDetails() {
+  hideMarketingModal();
+  switchPage('store');
+  // Scroll to Cloud Storage tab
+  setTimeout(() => {
+    const cloudTab = document.querySelector('.svc-tab');
+    if (cloudTab) cloudTab.click();
+  }, 100);
+}
+
+function recordMarketingAction(action) {
+  if (action === 'not_interested') {
+    marketingShownCount++;
+    // Next time recommend lower tier plan
+    console.log('User not interested. Count:', marketingShownCount);
+  } else if (action === 'buy_now') {
+    showPayModal();
+  }
+  hideMarketingModal();
+}
+
+// ===== DELETE DEVICE =====
+function showDeleteConfirmModal() {
+  document.getElementById('deleteConfirmMask').style.display = 'block';
+  document.getElementById('deleteConfirmModal').style.display = 'block';
+}
+
+function hideDeleteConfirmModal() {
+  document.getElementById('deleteConfirmMask').style.display = 'none';
+  document.getElementById('deleteConfirmModal').style.display = 'none';
+}
+
+function confirmDeleteDevice() {
+  hideDeleteConfirmModal();
+  // Device deleted, return to home
+  switchPage('home');
+  console.log('Device deleted successfully');
+}
+
+// ===== BATTERY MANAGEMENT =====
+function selectWorkMode(mode) {
+  document.getElementById('mode-' + mode).checked = true;
+  document.getElementById('aovSettings').style.display = 'none';
+  document.getElementById('alwaysonSettings').style.display = 'none';
+  // 智能模式：显示"配置计划"入口按钮
+  const smartEntry = document.getElementById('smartSettingsEntry');
+  if (smartEntry) smartEntry.style.display = mode === 'smart' ? 'flex' : 'none';
+  if (mode === 'aov') document.getElementById('aovSettings').style.display = 'block';
+  else if (mode === 'alwayson') document.getElementById('alwaysonSettings').style.display = 'block';
+}
+
+// Smart mode default selection
+function selectSmartDefault(el) {
+  document.querySelectorAll('.smart-default-btn').forEach(b => {
+    b.style.borderColor = 'var(--border)';
+    b.style.background = 'var(--bg)';
+    b.style.color = 'var(--text-sub)';
+  });
+  el.style.borderColor = 'var(--primary)';
+  el.style.background = '#EEF5FF';
+  el.style.color = 'var(--primary)';
+}
+
+function deleteSchedule(el) {
+  el.closest('.schedule-item').remove();
+}
+
+// Add Schedule Modal
+let currentSchMode = '省电模式';
+
+function showAddScheduleModal() {
+  // Reset form
+  currentSchMode = '省电模式';
+  document.querySelectorAll('.sch-mode-btn').forEach((b, i) => {
+    if (i === 0) {
+      b.style.borderColor = 'var(--primary)'; b.style.background = '#EEF5FF'; b.style.color = 'var(--primary)';
+    } else {
+      b.style.borderColor = 'var(--border)'; b.style.background = 'var(--bg)'; b.style.color = 'var(--text-sub)';
+    }
+  });
+  document.getElementById('schStartTime').value = '08:00';
+  document.getElementById('schEndTime').value = '22:00';
+  document.querySelectorAll('.day-btn').forEach((b, i) => {
+    if (i < 5) {
+      b.classList.add('active');
+      b.style.borderColor = 'var(--primary)'; b.style.background = '#EEF5FF'; b.style.color = 'var(--primary)';
+    } else {
+      b.classList.remove('active');
+      b.style.borderColor = 'var(--border)'; b.style.background = 'var(--bg)'; b.style.color = 'var(--text-sub)';
+    }
+  });
+  document.getElementById('scheduleModalMask').style.display = 'block';
+  document.getElementById('scheduleModal').style.display = 'block';
+}
+
+function hideAddScheduleModal() {
+  document.getElementById('scheduleModalMask').style.display = 'none';
+  document.getElementById('scheduleModal').style.display = 'none';
+}
+
+function selectSchMode(el, mode) {
+  currentSchMode = mode;
+  document.querySelectorAll('.sch-mode-btn').forEach(b => {
+    b.style.borderColor = 'var(--border)'; b.style.background = 'var(--bg)'; b.style.color = 'var(--text-sub)';
+  });
+  el.style.borderColor = 'var(--primary)'; el.style.background = '#EEF5FF'; el.style.color = 'var(--primary)';
+}
+
+function toggleDay(el) {
+  const isActive = el.classList.contains('active');
+  if (isActive) {
+    el.classList.remove('active');
+    el.style.borderColor = 'var(--border)'; el.style.background = 'var(--bg)'; el.style.color = 'var(--text-sub)';
+  } else {
+    el.classList.add('active');
+    el.style.borderColor = 'var(--primary)'; el.style.background = '#EEF5FF'; el.style.color = 'var(--primary)';
+  }
+}
+
+function confirmAddSchedule() {
+  const start = document.getElementById('schStartTime').value;
+  const end = document.getElementById('schEndTime').value;
+  const days = ['一','二','三','四','五','六','日'];
+  const activeDays = Array.from(document.querySelectorAll('.day-btn')).map((b, i) => ({ active: b.classList.contains('active'), label: days[i] }));
+  
+  const modeColors = { '省电模式': ['#EEF5FF','var(--primary)'], 'AOV模式': ['#EEF5FF','var(--primary)'], '常电模式': ['#E8F5E9','#34A853'] };
+  const [bg, color] = modeColors[currentSchMode] || ['#EEF5FF','var(--primary)'];
+  
+  const dayHtml = activeDays.map(d => `<span style="padding:2px 6px;border-radius:4px;background:${d.active ? 'var(--primary)' : 'var(--border)'};color:${d.active ? '#fff' : 'var(--text-sub)'};font-size:10px;font-weight:600;">${d.label}</span>`).join('');
+  
+  const item = document.createElement('div');
+  item.className = 'schedule-item';
+  item.style.cssText = 'background:var(--bg);border-radius:10px;padding:10px 12px;border:1px solid var(--border);';
+  item.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="padding:2px 8px;border-radius:6px;background:${bg};color:${color};font-size:11px;font-weight:700;">${currentSchMode}</span>
+        <span style="font-size:13px;font-weight:700;color:var(--text-main);">${start} - ${end}</span>
+      </div>
+      <div onclick="deleteSchedule(this)" style="cursor:pointer;padding:4px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EA4335" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+      </div>
+    </div>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;">${dayHtml}</div>
+  `;
+  document.getElementById('scheduleList').appendChild(item);
+  hideAddScheduleModal();
+}
+
+// Frame rate picker
+const frameRates = [1,2,3,4,5,6,7,8,9,10];
+let selectedFrameRate = 5;
+
+function showFrameRatePicker() {
+  const list = document.getElementById('frameRateList');
+  const lang = document.documentElement.lang || 'zh';
+  const highPowerLabel = lang === 'zh' ? '高能耗' : 'HIGH POWER';
+  const unitLabel = lang === 'zh' ? 's/帧' : 's/frame';
+  list.innerHTML = frameRates.map(n => {
+    const isSelected = n === selectedFrameRate;
+    const isHigh = n <= 3;
+    return `<div onclick="pickFrameRate(${n})" style="display:flex;align-items:center;padding:14px 20px;border-bottom:1px solid var(--border);cursor:pointer;background:${isSelected ? '#EEF5FF' : 'transparent'};">
+      <span style="flex:1;font-size:15px;color:var(--text-main);font-weight:${isSelected ? '600' : '400'};">${n}${unitLabel}</span>
+      ${isHigh ? `<span style="padding:2px 8px;border-radius:6px;background:#FF9800;color:#fff;font-size:10px;font-weight:700;margin-right:10px;">${highPowerLabel}</span>` : ''}
+      ${isSelected ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>` : ''}
+    </div>`;
+  }).join('');
+  document.getElementById('frameRateMask').style.display = 'block';
+  document.getElementById('frameRateModal').style.display = 'block';
+}
+
+function pickFrameRate(n) {
+  selectedFrameRate = n;
+  const lang = document.documentElement.lang || 'zh';
+  const unitLabel = lang === 'zh' ? 's/帧' : 's/frame';
+  document.getElementById('selectedFrameRateLabel').textContent = n + unitLabel;
+  hideFrameRatePicker();
+}
+
+function hideFrameRatePicker() {
+  document.getElementById('frameRateMask').style.display = 'none';
+  document.getElementById('frameRateModal').style.display = 'none';
+}
+
+function updateAovThreshold(value) {
+  document.getElementById('aovThresholdValue').textContent = value + '%';
+}
+function updateAlwaysonThreshold(value) {
+  document.getElementById('alwaysonThresholdValue').textContent = value + '%';
+}
+function updateRecordDuration(value) {
+  document.getElementById('recordDurationValue').textContent = value + 's';
+}
+
+// ===== INIT CHINESE TEXT =====
+// 设置页菜单项文本（直接硬编码中文，避免icon被覆盖）
+(function initChineseText() {
+  // Tab bar
+  const tabSpans = document.querySelectorAll('.tab-item span');
+  const tabTexts = ['首页','消息','我的'];
+  tabSpans.forEach((el, i) => { if (tabTexts[i]) el.textContent = tabTexts[i]; });
+
+  // Home
+  const homeTitle = document.querySelector('.home-topbar .left h2');
+  if (homeTitle) homeTitle.textContent = '我的家';
+  const homeSub = document.querySelector('.home-topbar .left p');
+  if (homeSub) homeSub.textContent = '2台在线 · 1台离线 · 1台休眠';
+
+  // Messages page
+  const searchInput = document.querySelector('#page-messages input[type="text"]');
+  if (searchInput) searchInput.placeholder = 'AI 搜索 — 描述发生了什么...';
+  const dateLabel = document.getElementById('dateLabel');
+  if (dateLabel) dateLabel.textContent = '全部日期';
+  const filterLabel = document.getElementById('filterLabel');
+  if (filterLabel) filterLabel.textContent = '筛选';
+  const deviceChips = document.querySelectorAll('#deviceChips .fp-chip');
+  ['全部设备','Front Door','Backyard','Garage'].forEach((t, i) => { if (deviceChips[i]) deviceChips[i].textContent = t; });
+  const eventChips = document.querySelectorAll('#eventChips .fp-chip');
+  ['全部事件','人形','移动','车辆','声音','包裹','动物'].forEach((t, i) => { if (eventChips[i]) eventChips[i].textContent = t; });
+  const resetBtn = document.querySelector('#filterPanel [onclick="resetFilter()"]');
+  if (resetBtn) resetBtn.textContent = '重置';
+  const applyBtn = document.querySelector('#filterPanel [onclick="applyFilter()"]');
+  if (applyBtn) applyBtn.textContent = '应用';
+  const clearBtn = document.querySelector('[onclick="clearDate()"]');
+  if (clearBtn) clearBtn.textContent = '清除';
+  const mktTip = document.querySelector('#page-messages [onclick="switchPage(\'store\')"] span');
+  if (mktTip) mktTip.textContent = '开通智能服务，畅享更多智能服务及精彩回看';
+  document.querySelectorAll('.msg-tag.tag-person').forEach(el => el.textContent = '人形');
+  document.querySelectorAll('.msg-tag.tag-motion').forEach(el => el.textContent = '移动');
+  document.querySelectorAll('.msg-tag.tag-vehicle').forEach(el => el.textContent = '车辆');
+  document.querySelectorAll('.msg-tag.tag-sound').forEach(el => el.textContent = '声音');
+  const msgTypeMap = ['检测到人形','检测到移动','检测到车辆','声音告警','检测到人形'];
+  document.querySelectorAll('.msg-type').forEach((el, i) => { if (msgTypeMap[i]) el.textContent = msgTypeMap[i]; });
+  const msgTimeMap = ['今天 09:38','今天 09:20','今天 08:55','昨天 22:14','昨天 20:02'];
+  document.querySelectorAll('.msg-time').forEach((el, i) => { if (msgTimeMap[i]) el.textContent = msgTimeMap[i]; });
+
+  // Message Detail
+  const mdTitle = document.querySelector('#page-msgdetail h2');
+  if (mdTitle) mdTitle.textContent = '消息详情';
+
+  // Profile
+  const editBtn = document.querySelector('.profile-hero .edit-btn');
+  if (editBtn) editBtn.textContent = '编辑';
+  const menuLabels = document.querySelectorAll('.menu-label');
+  ['服务商城','我的订单','我的券包','帮助与反馈','客服中心','关于'].forEach((t, i) => { if (menuLabels[i]) menuLabels[i].textContent = t; });
+  const logoutBtn = document.querySelector('.logout-btn');
+  if (logoutBtn) logoutBtn.textContent = '退出登录';
+
+  // Service Store
+  const storeTitle = document.querySelector('#page-store .store-header h2');
+  if (storeTitle) storeTitle.textContent = '服务商城';
+  const svcTabTexts = ['云存储','AI智能服务','离线监测','去广告','流量充值'];
+  document.querySelectorAll('.svc-tab').forEach((el, i) => { if (svcTabTexts[i]) el.textContent = svcTabTexts[i]; });
+  const buyBtn = document.querySelector('.buy-btn');
+  if (buyBtn) buyBtn.textContent = '立即购买 — ¥19.9/月';
+  const agreeLabel = document.querySelector('.agree-row label');
+  if (agreeLabel) agreeLabel.innerHTML = '我已阅读并同意<a href="#">《云服务协议》</a>';
+  const devPlan = document.querySelector('.dev-plan');
+  if (devPlan) devPlan.textContent = '暂无生效套餐';
+
+  // Playback
+  const pbTabs = document.querySelectorAll('.pb-src-tab');
+  if (pbTabs[0]) pbTabs[0].textContent = '云回放';
+  if (pbTabs[1]) pbTabs[1].textContent = 'SD卡回放';
+
+  // Settings page — 只更新文字div，不碰icon容器
+  const settingsTitle = document.querySelector('#page-settings .page-header h2');
+  if (settingsTitle) settingsTitle.textContent = '设备设置';
+  const settingsData = [
+    ['侦测设置','运动、人形、车辆'],
+    ['通知设置','告警与推送'],
+    ['画面设置','亮度、对比度'],
+    ['音频设置','麦克风、扬声器'],
+    ['存储设置','SD卡管理'],
+    ['云台设置','水平、垂直、变焦'],
+    ['电池管理','电源设置'],
+    ['灯光设置','LED、红外'],
+    ['一键分享','邀请家人'],
+  ];
+  document.querySelectorAll('#page-settings .settings-item').forEach((item, i) => {
+    if (!settingsData[i]) return;
+    // 精确选取文字div（第二个子div，不含icon容器）
+    const textWrap = item.querySelector('div[style*="flex:1"] > div, div[style*="flex: 1"] > div');
+    if (!textWrap) return;
+    const titleEl = textWrap.querySelector('div:first-child');
+    const subEl = textWrap.querySelector('div:last-child');
+    if (titleEl) titleEl.textContent = settingsData[i][0];
+    if (subEl) subEl.textContent = settingsData[i][1];
+  });
+  const deleteDevBtn = document.querySelector('#page-settings button[onclick="showDeleteConfirmModal()"]');
+  if (deleteDevBtn) deleteDevBtn.textContent = '删除设备';
+
+  // Battery page
+  const batteryTitle = document.querySelector('#page-battery .page-header h2');
+  if (batteryTitle) batteryTitle.textContent = '电池管理';
+
+  // Delete confirm modal
+  const delTitle = document.querySelector('#deleteConfirmModal div[style*="font-size:16px"]');
+  if (delTitle) delTitle.textContent = '删除设备？';
+  const delDesc = document.querySelector('#deleteConfirmModal div[style*="font-size:13px"]');
+  if (delDesc) delDesc.textContent = '删除设备后，您将无法查看和接收来自该设备的视频和消息';
+  const cancelBtn = document.querySelector('#deleteConfirmModal button:first-of-type');
+  if (cancelBtn) cancelBtn.textContent = '取消';
+  const confirmBtn = document.querySelector('#deleteConfirmModal button:last-of-type');
+  if (confirmBtn) confirmBtn.textContent = '删除';
+
+  // Frame rate unit
+  document.getElementById('selectedFrameRateLabel').textContent = selectedFrameRate + 's/帧';
+})();
+
+// ===== MESSAGE DETAIL =====
+function showMessageDetail(type, desc, time, device) {
+  document.getElementById('msgDetailType').textContent = type;
+  document.getElementById('msgDetailDesc').textContent = desc;
+  document.getElementById('msgDetailTime').textContent = time;
+  document.getElementById('msgDetailDevice').textContent = device;
+  
+  switchPage('msgdetail');
+  
+  // Show marketing modal after 1 second
+  clearTimeout(msgDetailTimeout);
+  msgDetailTimeout = setTimeout(() => {
+    // Update marketing modal content for message detail
+    document.getElementById('marketingTitle').textContent = 'Enable Cloud Storage';
+    document.getElementById('marketingDesc').textContent = 'Enable cloud storage to unlock video playback and record amazing moments. Never miss important events again.';
+    showMarketingModal();
+  }, 1000);
+}
+
+// ===== CALENDAR =====
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+let calDate = new Date();
+let selectedDate = null;
+
+function renderCalendar() {
+  const y = calDate.getFullYear(), m = calDate.getMonth();
+  document.getElementById('calMonthLabel').textContent = `${MONTHS[m]} ${y}`;
+  const grid = document.getElementById('calGrid');
+  const today = new Date();
+  const firstDay = new Date(y, m, 1).getDay();
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  let html = '';
+  for (let i = 0; i < firstDay; i++) html += `<div class="cal-day empty"></div>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const isToday = today.getFullYear()===y && today.getMonth()===m && today.getDate()===d;
+    const isSel = selectedDate && selectedDate.getFullYear()===y && selectedDate.getMonth()===m && selectedDate.getDate()===d;
+    html += `<div class="cal-day${isToday?' today':''}${isSel?' selected':''}" onclick="selectDate(${y},${m},${d})">${d}</div>`;
+  }
+  grid.innerHTML = html;
+}
+
+function selectDate(y, m, d) {
+  selectedDate = new Date(y, m, d);
+  const dayName = DAYS[selectedDate.getDay()];
+  const label = `${MONTHS[m].slice(0,3)} ${d}, ${y} (${dayName})`;
+  document.getElementById('dateLabel').textContent = label;
+  document.getElementById('dateTrigger').style.borderColor = 'var(--primary)';
+  renderCalendar();
+  toggleCalendar();
+  updateFilterSummary();
+}
+
+function clearDate() {
+  selectedDate = null;
+  document.getElementById('dateLabel').textContent = 'All Dates';
+  document.getElementById('dateTrigger').style.borderColor = 'var(--border)';
+  renderCalendar();
+  updateFilterSummary();
+}
+
+function calPrevMonth() { calDate.setMonth(calDate.getMonth()-1); renderCalendar(); }
+function calNextMonth() { calDate.setMonth(calDate.getMonth()+1); renderCalendar(); }
+
+function toggleCalendar() {
+  const cal = document.getElementById('calendarPopup');
+  const fp = document.getElementById('filterPanel');
+  fp.style.display = 'none';
+  if (cal.style.display === 'none') { cal.style.display = 'block'; renderCalendar(); }
+  else cal.style.display = 'none';
+}
+
+// ===== FILTER PANEL =====
+function toggleFilterPanel() {
+  const fp = document.getElementById('filterPanel');
+  const cal = document.getElementById('calendarPopup');
+  cal.style.display = 'none';
+  fp.style.display = fp.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleChip(el, group) {
+  const container = el.parentElement;
+  const allChip = container.querySelector('.fp-chip');
+  if (el === allChip) {
+    container.querySelectorAll('.fp-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+  } else {
+    allChip.classList.remove('active');
+    el.classList.toggle('active');
+    const anyActive = Array.from(container.querySelectorAll('.fp-chip')).slice(1).some(c => c.classList.contains('active'));
+    if (!anyActive) allChip.classList.add('active');
+  }
+}
+
+function applyFilter() {
+  document.getElementById('filterPanel').style.display = 'none';
+  updateFilterSummary();
+}
+
+function resetFilter() {
+  document.querySelectorAll('#deviceChips .fp-chip, #eventChips .fp-chip').forEach(c => c.classList.remove('active'));
+  document.querySelector('#deviceChips .fp-chip').classList.add('active');
+  document.querySelector('#eventChips .fp-chip').classList.add('active');
+  updateFilterSummary();
+}
+
+function updateFilterSummary() {
+  const devices = Array.from(document.querySelectorAll('#deviceChips .fp-chip.active')).map(c=>c.textContent);
+  const events = Array.from(document.querySelectorAll('#eventChips .fp-chip.active')).map(c=>c.textContent);
+  const hasDeviceFilter = !devices.includes('All Devices');
+  const hasEventFilter = !events.includes('All Events');
+  const hasDate = !!selectedDate;
+  const count = (hasDeviceFilter?1:0) + (hasEventFilter?1:0) + (hasDate?1:0);
+  const badge = document.getElementById('filterBadge');
+  const summary = document.getElementById('filterSummary');
+  const label = document.getElementById('filterLabel');
+  if (count > 0) {
+    badge.style.display = 'inline'; badge.textContent = count;
+    document.getElementById('filterTrigger').style.borderColor = 'var(--primary)';
+    label.style.color = 'var(--primary)';
+  } else {
+    badge.style.display = 'none';
+    document.getElementById('filterTrigger').style.borderColor = 'var(--border)';
+    label.style.color = 'var(--text-main)';
+  }
+  const parts = [];
+  if (hasDate) parts.push(document.getElementById('dateLabel').textContent);
+  if (hasDeviceFilter) parts.push(devices.join(', '));
+  if (hasEventFilter) parts.push(events.join(', '));
+  if (parts.length > 0) {
+    summary.style.display = 'block';
+    document.getElementById('filterSummaryText').textContent = 'Showing: ' + parts.join(' · ');
+  } else {
+    summary.style.display = 'none';
+  }
+}
+
+// ===== ANNOTATION =====
+let annotationMode = false;
+let currentPage = 'home';
+let annotations = {};
+
+function getPageKey() { return 'ann_' + currentPage; }
+
+function loadAnnotations() {
+  try { annotations = JSON.parse(localStorage.getItem(annStorageKey()) || '{}'); }
+  catch(e) { annotations = {}; }
+}
+
+function saveAnnotationsRaw() {
+  const key = getPageKey();
+  (annotations[key] || []).forEach(n => {
+    const el = document.querySelector(`#note_${n.id} .sticky-text`);
+    if (el) n.text = el.innerText.trim();
+  });
+  localStorage.setItem(annStorageKey(), JSON.stringify(annotations));
+}
+
+function saveAnnotations() {
+  saveAnnotationsRaw();
+  annotationMode = false;
+  document.getElementById('annFab').classList.remove('active');
+  document.getElementById('annHint').classList.remove('show');
+  document.getElementById('saveBtn').classList.remove('show');
+  document.querySelectorAll('.ann-zone').forEach(z => z.classList.remove('show'));
+  document.querySelectorAll('.sticky-text').forEach(t => t.contentEditable = 'false');
+  const btn = document.getElementById('saveBtn');
+  btn.textContent = '✅ Saved';
+  setTimeout(() => btn.textContent = '💾 Save', 1500);
+}
+
+function toggleAnnotation() {
+  annotationMode = !annotationMode;
+  document.getElementById('annFab').classList.toggle('active', annotationMode);
+  document.getElementById('annHint').classList.toggle('show', annotationMode);
+  document.getElementById('saveBtn').classList.toggle('show', annotationMode);
+  const phone = document.getElementById('app');
+  const rect = phone.getBoundingClientRect();
+  const zL = document.getElementById('ann-zone-left');
+  const zR = document.getElementById('ann-zone-right');
+  zL.style.left = '0'; zL.style.width = rect.left + 'px';
+  zR.style.right = '0'; zR.style.width = (window.innerWidth - rect.right) + 'px';
+  document.querySelectorAll('.ann-zone').forEach(z => z.classList.toggle('show', annotationMode));
+  document.querySelectorAll('.sticky-text').forEach(t => t.contentEditable = annotationMode ? 'true' : 'false');
+}
+
+function handleZoneClick(e) {
+  const key = getPageKey();
+  if (!annotations[key]) annotations[key] = [];
+  const id = key + '_' + Date.now();
+  const x = e.clientX, y = e.clientY;
+  annotations[key].push({ id, text: '', x, y });
+  const note = createStickyDOM(id, '', x, y);
+  setTimeout(() => note.querySelector('.sticky-text').focus(), 50);
+}
+
+function createStickyDOM(id, text, x, y) {
+  const layer = document.getElementById('ann-layer');
+  const note = document.createElement('div');
+  note.className = 'sticky-note';
+  note.id = 'note_' + id;
+  note.dataset.page = getPageKey();
+  note.style.left = x + 'px'; note.style.top = y + 'px';
+  const editable = annotationMode ? 'true' : 'false';
+  note.innerHTML = `<div class="sticky-header"><span class="sticky-num">Note</span><button class="sticky-del" onclick="deleteNote('${id}')">×</button></div><div class="sticky-text" contenteditable="${editable}" placeholder="Write here...">${text}</div>`;
+  makeDraggable(note, id);
+  layer.appendChild(note);
+  return note;
+}
+
+function deleteNote(id) {
+  const key = getPageKey();
+  annotations[key] = (annotations[key] || []).filter(n => n.id !== id);
+  localStorage.setItem(annStorageKey(), JSON.stringify(annotations));
+  const el = document.getElementById('note_' + id);
+  if (el) el.remove();
+}
+
+function makeDraggable(el, id) {
+  let ox, oy;
+  el.addEventListener('mousedown', start);
+  el.addEventListener('touchstart', e => start(e.touches[0]), {passive:true});
+  function start(e) {
+    ox = e.clientX - el.offsetLeft; oy = e.clientY - el.offsetTop;
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', end);
+    document.addEventListener('touchmove', tm, {passive:true});
+    document.addEventListener('touchend', end);
+  }
+  function tm(e) { move(e.touches[0]); }
+  function move(e) {
+    const nx = e.clientX - ox, ny = e.clientY - oy;
+    el.style.left = nx + 'px'; el.style.top = ny + 'px';
+    const note = (annotations[getPageKey()] || []).find(n => n.id === id);
+    if (note) { note.x = nx; note.y = ny; }
+  }
+  function end() {
+    document.removeEventListener('mousemove', move);
+    document.removeEventListener('mouseup', end);
+    document.removeEventListener('touchmove', tm);
+    document.removeEventListener('touchend', end);
+    localStorage.setItem(annStorageKey(), JSON.stringify(annotations));
+  }
+}
+
+// Init
+loadAnnotations();
+// Render all saved annotations
+Object.keys(annotations).forEach(key => {
+  const savedPage = currentPage;
+  currentPage = key.replace('ann_', '');
+  (annotations[key] || []).forEach(n => createStickyDOM(n.id, n.text, n.x, n.y));
+  currentPage = savedPage;
+});
+
+// ===== VERSION SWITCHER =====
+const versions = [
+  {
+    name: '套餐运营方案',
+    features: [
+      ['home',       '38%',  '-2px',  'NEW',  'new',     '云服务开通入口'],
+      ['home',       '62%',  '-2px',  'NEW',  'new',     '云服务开通入口'],
+      ['messages',   '92%',  '4px',   'NEW',  'new',     '底部营销点位'],
+      ['playback',   '14%',  '-2px',  'NEW',  'new',     'SD卡回放营销弹窗'],
+      ['messages',   '28%',  '-2px',  'NEW',  'new',     '消息详情入口'],
+      ['msgdetail',  '8%',   '-2px',  'NEW',  'new',     '消息详情页'],
+      ['store',      '8%',   '-2px',  'NEW',  'new',     '服务商城'],
+    ]
+  },
+  {
+    name: 'AOV工作模式',
+    features: [] // 待定义
+  }
+];
+
+let currentVersion = 0;
+
+// Override storage key to be version-aware
+function annStorageKey() { return `ccp_annotations_v${currentVersion}`; }
+
+function switchVersion(idx) {
+  // Save current version's annotations first
+  saveAnnotationsRaw();
+
+  currentVersion = idx;
+
+  // Update tab highlight
+  document.querySelectorAll('.vb-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+
+  // Clear all sticky notes from DOM
+  document.getElementById('ann-layer').innerHTML = '';
+
+  // Load this version's annotations
+  loadAnnotations();
+  Object.keys(annotations).forEach(key => {
+    const saved = currentPage;
+    currentPage = key.replace('ann_', '');
+    (annotations[key] || []).forEach(n => {
+      if (!document.getElementById('note_' + n.id)) createStickyDOM(n.id, n.text, n.x, n.y);
+    });
+    currentPage = saved;
+  });
+
+  // Refresh feature badges
+  document.querySelectorAll('.feat-badge').forEach(b => b.remove());
+  renderVersionBadges(idx);
+}
+
+function renderVersionBadges(idx) {
+  const v = versions[idx];
+  if (!v || !v.features.length) return;
+  v.features.forEach(([page, top, left, label, type, desc]) => {
+    const pageEl = document.getElementById('page-' + page);
+    if (!pageEl) return;
+    const badge = document.createElement('div');
+    badge.className = `feat-badge ${type}`;
+    badge.title = desc;
+    badge.textContent = label;
+    badge.style.top = top;
+    badge.style.left = left;
+    pageEl.style.position = 'relative';
+    pageEl.appendChild(badge);
+  });
+}
+
+// Init version badges on load
+renderVersionBadges(0);
+</script>
+</body>
+</html>

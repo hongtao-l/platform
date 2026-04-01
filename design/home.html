@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPC Manager</title>
+<style>
+:root {
+  --primary: #1A73E8;
+  --success: #34A853;
+  --warning: #FBBC04;
+  --danger: #EA4335;
+  --bg: #F5F7FA;
+  --card: #FFFFFF;
+  --text-main: #1A1A2E;
+  --text-sub: #6B7280;
+  --border: #E5E7EB;
+  --radius-card: 16px;
+  --radius-btn: 12px;
+  --radius-pill: 20px;
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow-float: 0 8px 32px rgba(0,0,0,0.12);
+  --page-margin: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  background: #E8EAED;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  overflow-x: hidden;
+  padding: 20px 0;
+}
+/* Outer wrapper: phone + side annotation areas */
+#outer {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  height: auto;
+}
+.phone {
+  width: 375px;
+  height: 812px;
+  background: var(--bg);
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: visible;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: 1;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  border-radius: 8px;
+}
+/* Side annotation panels */
+.ann-side {
+  width: 220px;
+  min-height: 100vh;
+  position: relative;
+  flex-shrink: 0;
+}
+/* Global annotation layer (outside phone) */
+#ann-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 500;
+  /* 中间 375px 区域不拦截事件，通过 phone 自身处理 */
+}
+#ann-layer .sticky-note { pointer-events: all; }
+/* Pages */
+.page { display: none; flex: 1; flex-direction: column; overflow-y: auto; overflow-x: hidden; }
+.page.active { display: flex; }
+</style>
+
+<style>
+/* Status Bar */
+.status-bar {
+  background: var(--card);
+  padding: 12px 20px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+.status-bar .time { font-size: 15px; font-weight: 700; }
+.status-icons { display: flex; gap: 6px; align-items: center; }
+.status-icons svg { width: 16px; height: 16px; }
+
+/* Top Bar */
+.top-bar {
+  background: var(--card);
+  padding: 8px 16px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.top-bar .greeting h2 { font-size: 20px; font-weight: 700; color: var(--text-main); }
+.top-bar .greeting p { font-size: 13px; color: var(--text-sub); margin-top: 2px; }
+.top-bar .avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), #4A90E2);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 16px; font-weight: 700;
+  position: relative; cursor: pointer;
+}
+.badge {
+  position: absolute; top: -2px; right: -2px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--danger); border: 2px solid var(--card);
+}
+
+/* Group Tabs */
+.group-tabs {
+  background: var(--card);
+  padding: 12px 16px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  z-index: 2;
+}
+.group-tabs::-webkit-scrollbar { display: none; }
+.group-tab {
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  color: var(--text-sub);
+  background: var(--bg);
+  transition: all 0.2s;
+}
+.group-tab.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* Section */
+.section { padding: 16px 16px 0; }
+.section-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.section-header h3 { font-size: 17px; font-weight: 600; color: var(--text-main); }
+.section-header a { font-size: 13px; color: var(--primary); text-decoration: none; }
+
+/* Device Card */
+.device-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.device-card {
+  background: var(--card);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.device-card:active { transform: scale(0.97); }
+.device-thumb {
+  width: 100%; aspect-ratio: 16/9;
+  position: relative; overflow: hidden;
+}
+.device-thumb .cam-bg {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+}
+.device-thumb .cam-icon {
+  width: 32px; height: 32px; opacity: 0.6;
+}
+.device-thumb .status-dot {
+  position: absolute; top: 8px; right: 8px;
+  width: 8px; height: 8px; border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.8);
+}
+.status-dot.online { background: var(--success); }
+.status-dot.offline { background: #9CA3AF; }
+.device-info { padding: 10px 12px 12px; }
+.device-name { font-size: 13px; font-weight: 600; color: var(--text-main); }
+.device-status { font-size: 11px; color: var(--text-sub); margin-top: 3px; }
+.device-status.online { color: var(--success); }
+.device-actions {
+  display: flex; gap: 8px; margin-top: 8px;
+}
+.action-btn {
+  flex: 1; padding: 5px 0;
+  border-radius: 8px; border: none;
+  font-size: 11px; font-weight: 500;
+  cursor: pointer; background: var(--bg); color: var(--text-sub);
+  transition: background 0.15s;
+}
+.action-btn:hover { background: #E8F0FE; color: var(--primary); }
+
+/* Add Device Card */
+.add-card {
+  background: var(--card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  aspect-ratio: unset; min-height: 130px;
+  cursor: pointer; border: 2px dashed var(--border);
+  transition: border-color 0.2s;
+}
+.add-card:hover { border-color: var(--primary); }
+.add-card .add-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #E8F0FE; display: flex; align-items: center; justify-content: center;
+  margin-bottom: 8px;
+}
+.add-card span { font-size: 13px; color: var(--text-sub); }
+
+/* Bottom Tab Bar */
+.tab-bar {
+  width: 375px;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  display: flex;
+  padding: 8px 0 20px;
+  flex-shrink: 0;
+}
+.tab-item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 4px; cursor: pointer;
+  padding: 4px 0;
+}
+.tab-item svg { width: 24px; height: 24px; }
+.tab-item span { font-size: 10px; font-weight: 500; color: var(--text-sub); }
+.tab-item.active span { color: var(--primary); }
+.tab-item.active svg { color: var(--primary); }
+.tab-item svg { color: var(--text-sub); transition: color 0.2s; }
+
+/* Messages Page */
+.search-bar {
+  margin: 16px; background: var(--card);
+  border-radius: var(--radius-btn); padding: 10px 14px;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: var(--shadow-card);
+}
+.search-bar input {
+  flex: 1; border: none; outline: none; font-size: 15px;
+  color: var(--text-main); background: transparent;
+}
+.search-bar input::placeholder { color: var(--text-sub); }
+.filter-row {
+  padding: 0 16px 12px;
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+}
+.filter-row::-webkit-scrollbar { display: none; }
+.filter-chip {
+  padding: 5px 14px; border-radius: var(--radius-pill);
+  font-size: 12px; font-weight: 500; white-space: nowrap;
+  border: 1.5px solid var(--border); color: var(--text-sub);
+  background: var(--card); cursor: pointer;
+}
+.filter-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.msg-list { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; }
+.msg-item {
+  background: var(--card); border-radius: var(--radius-card);
+  padding: 12px; display: flex; gap: 12px; align-items: flex-start;
+  box-shadow: var(--shadow-card); cursor: pointer;
+}
+.msg-thumb {
+  width: 64px; height: 48px; border-radius: 10px; overflow: hidden; flex-shrink: 0;
+}
+.msg-thumb .cam-bg { width: 100%; height: 100%; }
+.msg-content { flex: 1; }
+.msg-type { font-size: 13px; font-weight: 600; color: var(--text-main); }
+.msg-device { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
+.msg-time { font-size: 11px; color: var(--text-sub); margin-top: 4px; }
+.msg-tag {
+  display: inline-block; padding: 2px 8px; border-radius: 10px;
+  font-size: 10px; font-weight: 600; margin-top: 4px;
+}
+.tag-motion { background: #FEF3C7; color: #D97706; }
+.tag-person { background: #DBEAFE; color: #1D4ED8; }
+.tag-sound { background: #D1FAE5; color: #065F46; }
+
+/* Profile Page */
+.profile-card {
+  margin: 16px; background: linear-gradient(135deg, var(--primary), #4A90E2);
+  border-radius: var(--radius-card); padding: 24px 20px;
+  display: flex; align-items: center; gap: 16px;
+  box-shadow: var(--shadow-float);
+}
+.profile-avatar {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 700; color: #fff;
+}
+.profile-info .name { font-size: 18px; font-weight: 700; color: #fff; }
+.profile-info .account { font-size: 13px; color: rgba(255,255,255,0.8); margin-top: 4px; }
+.menu-group {
+  margin: 0 16px 16px; background: var(--card);
+  border-radius: var(--radius-card); overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.menu-item {
+  display: flex; align-items: center; padding: 14px 16px;
+  border-bottom: 1px solid var(--border); cursor: pointer;
+  transition: background 0.15s;
+}
+.menu-item:last-child { border-bottom: none; }
+.menu-item:active { background: var(--bg); }
+.menu-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  margin-right: 12px; flex-shrink: 0;
+}
+.menu-label { flex: 1; font-size: 15px; color: var(--text-main); font-weight: 500; }
+.menu-arrow { color: var(--text-sub); }
+</style>
+
+<style>
+/* Annotation Tool */
+.ann-fab {
+  position: fixed; bottom: 24px; left: 24px;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: #fff; box-shadow: var(--shadow-float);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 600; border: 1.5px solid var(--border);
+  transition: all 0.2s;
+}
+.ann-fab.active { background: var(--primary); border-color: var(--primary); }
+.ann-fab.active svg { color: #fff; }
+.ann-fab svg { width: 20px; height: 20px; color: var(--text-sub); }
+.ann-hint {
+  position: fixed; bottom: 76px; left: 8px;
+  background: var(--primary); color: #fff;
+  border-radius: 10px; font-size: 12px; padding: 6px 10px;
+  z-index: 600; display: none; max-width: 200px; line-height: 1.4;
+}
+.ann-hint.show { display: block; }
+.save-btn {
+  position: fixed; bottom: 24px; left: 76px;
+  padding: 8px 16px; border-radius: var(--radius-pill);
+  background: var(--success); color: #fff; border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  box-shadow: var(--shadow-float); z-index: 600; display: none;
+}
+.save-btn.show { display: block; }
+/* Side click zones (annotation mode only) */
+.ann-zone {
+  position: fixed; top: 0; height: 100vh;
+  z-index: 10; display: none; cursor: crosshair;
+}
+.ann-zone.show { display: block; }
+/* Sticky notes */
+.sticky-note {
+  position: fixed; width: 160px;
+  background: #FFF9C4; border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  padding: 8px 10px 10px; z-index: 510; cursor: move;
+  font-size: 12px; color: #333; line-height: 1.5;
+  user-select: none;
+}
+.sticky-header {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 6px;
+}
+.sticky-num { font-size: 10px; font-weight: 700; color: #999; }
+.sticky-del {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #FF6B6B; color: #fff; border: none;
+  font-size: 10px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0;
+}
+.sticky-text {
+  word-break: break-all;
+  outline: none;
+  min-height: 20px;
+}
+.sticky-text:empty:before {
+  content: attr(placeholder);
+  color: #aaa;
+  pointer-events: none;
+}
+
+</style>
+
+</head>
+<body>
+<div id="ann-layer"></div>
+
+<!-- Side annotation click zones -->
+<div class="ann-zone" id="ann-zone-left"  onclick="handleZoneClick(event)"></div>
+<div class="ann-zone" id="ann-zone-right" onclick="handleZoneClick(event)"></div>
+
+<div id="outer">
+<div class="phone" id="app">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+    </div>
+  </div>
+
+  <!-- HOME PAGE -->
+  <div class="page active" id="page-home">
+    <div class="top-bar">
+      <div class="greeting">
+        <h2>Good Morning 👋</h2>
+        <p>3 devices online · 1 alert</p>
+      </div>
+      <div class="avatar" onclick="switchTab('profile')">
+        J
+        <div class="badge"></div>
+      </div>
+    </div>
+
+    <div class="group-tabs">
+      <div class="group-tab active">All Homes</div>
+      <div class="group-tab">Living Room</div>
+      <div class="group-tab">Entrance</div>
+      <div class="group-tab">Backyard</div>
+      <div class="group-tab">+ Add Group</div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <h3>My Cameras</h3>
+        <a href="#">Manage</a>
+      </div>
+      <div class="device-grid">
+
+        <!-- Device 1 -->
+        <div class="device-card">
+          <div class="device-thumb">
+            <div class="cam-bg" style="background: linear-gradient(135deg,#1a2a4a,#2d4a7a);">
+              <svg class="cam-icon" viewBox="0 0 24 24" fill="white"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            </div>
+            <div class="status-dot online"></div>
+          </div>
+          <div class="device-info">
+            <div class="device-name">Front Door</div>
+            <div class="device-status online">● Online</div>
+            <div class="device-actions">
+              <button class="action-btn">Live</button>
+              <button class="action-btn">Clips</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Device 2 -->
+        <div class="device-card">
+          <div class="device-thumb">
+            <div class="cam-bg" style="background: linear-gradient(135deg,#1a3a2a,#2d6a4a);">
+              <svg class="cam-icon" viewBox="0 0 24 24" fill="white"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            </div>
+            <div class="status-dot online"></div>
+          </div>
+          <div class="device-info">
+            <div class="device-name">Backyard</div>
+            <div class="device-status online">● Online</div>
+            <div class="device-actions">
+              <button class="action-btn">Live</button>
+              <button class="action-btn">Clips</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Device 3 -->
+        <div class="device-card">
+          <div class="device-thumb">
+            <div class="cam-bg" style="background: linear-gradient(135deg,#2a1a1a,#5a2d2d);">
+              <svg class="cam-icon" viewBox="0 0 24 24" fill="white"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            </div>
+            <div class="status-dot offline"></div>
+          </div>
+          <div class="device-info">
+            <div class="device-name">Garage</div>
+            <div class="device-status">● Offline</div>
+            <div class="device-actions">
+              <button class="action-btn">Settings</button>
+              <button class="action-btn">Help</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Device -->
+        <div class="add-card" onclick="alert('Add Device')">
+          <div class="add-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A73E8" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          <span>Add Device</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Recent Events -->
+    <div class="section" style="margin-top:16px;">
+      <div class="section-header">
+        <h3>Recent Events</h3>
+        <a href="#" onclick="switchTab('messages');return false;">See All</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;padding-bottom:8px;">
+        <div class="msg-item">
+          <div class="msg-thumb"><div class="cam-bg" style="background:linear-gradient(135deg,#1a2a4a,#2d4a7a);border-radius:10px;"></div></div>
+          <div class="msg-content">
+            <div class="msg-type">Person Detected</div>
+            <div class="msg-device">Front Door</div>
+            <div class="msg-time">2 min ago</div>
+            <span class="msg-tag tag-person">Person</span>
+          </div>
+        </div>
+        <div class="msg-item">
+          <div class="msg-thumb"><div class="cam-bg" style="background:linear-gradient(135deg,#1a3a2a,#2d6a4a);border-radius:10px;"></div></div>
+          <div class="msg-content">
+            <div class="msg-type">Motion Detected</div>
+            <div class="msg-device">Backyard</div>
+            <div class="msg-time">18 min ago</div>
+            <span class="msg-tag tag-motion">Motion</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MESSAGES PAGE -->
+  <div class="page" id="page-messages">
+    <div style="background:var(--card);padding:16px 16px 0;border-bottom:1px solid var(--border);">
+      <h2 style="font-size:20px;font-weight:700;color:var(--text-main);padding-bottom:12px;">Messages</h2>
+    </div>
+    <div class="search-bar" style="margin:16px 16px 0;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="AI Search — describe what you're looking for...">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A73E8" stroke-width="2"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+    </div>
+    <div class="filter-row" style="margin-top:12px;">
+      <div class="filter-chip active">All</div>
+      <div class="filter-chip">Front Door</div>
+      <div class="filter-chip">Backyard</div>
+      <div class="filter-chip">Today</div>
+      <div class="filter-chip">Person</div>
+      <div class="filter-chip">Motion</div>
+      <div class="filter-chip">Sound</div>
+    </div>
+    <div class="msg-list">
+      <div class="msg-item">
+        <div class="msg-thumb"><div class="cam-bg" style="background:linear-gradient(135deg,#1a2a4a,#2d4a7a);border-radius:10px;"></div></div>
+        <div class="msg-content">
+          <div class="msg-type">Person Detected</div>
+          <div class="msg-device">Front Door</div>
+          <div class="msg-time">Today 09:38</div>
+          <span class="msg-tag tag-person">Person</span>
+        </div>
+      </div>
+      <div class="msg-item">
+        <div class="msg-thumb"><div class="cam-bg" style="background:linear-gradient(135deg,#1a3a2a,#2d6a4a);border-radius:10px;"></div></div>
+        <div class="msg-content">
+          <div class="msg-type">Motion Detected</div>
+          <div class="msg-device">Backyard</div>
+          <div class="msg-time">Today 09:20</div>
+          <span class="msg-tag tag-motion">Motion</span>
+        </div>
+      </div>
+      <div class="msg-item">
+        <div class="msg-thumb"><div class="cam-bg" style="background:linear-gradient(135deg,#2a1a3a,#4a2d6a);border-radius:10px;"></div></div>
+        <div class="msg-content">
+          <div class="msg-type">Sound Alert</div>
+          <div class="msg-device">Living Room</div>
+          <div class="msg-time">Today 08:55</div>
+          <span class="msg-tag tag-sound">Sound</span>
+        </div>
+      </div>
+      <div class="msg-item">
+        <div class="msg-thumb"><div class="cam-bg" style="background:linear-gradient(135deg,#1a2a4a,#2d4a7a);border-radius:10px;"></div></div>
+        <div class="msg-content">
+          <div class="msg-type">Person Detected</div>
+          <div class="msg-device">Front Door</div>
+          <div class="msg-time">Yesterday 22:14</div>
+          <span class="msg-tag tag-person">Person</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE PAGE -->
+  <div class="page" id="page-profile">
+    <div style="background:var(--card);padding:16px 16px 0;border-bottom:1px solid var(--border);">
+      <h2 style="font-size:20px;font-weight:700;color:var(--text-main);padding-bottom:12px;">My Account</h2>
+    </div>
+    <div class="profile-card">
+      <div class="profile-avatar">J</div>
+      <div class="profile-info">
+        <div class="name">John Smith</div>
+        <div class="account">john@example.com</div>
+      </div>
+    </div>
+    <div class="menu-group">
+      <div class="menu-item">
+        <div class="menu-icon" style="background:#EEF2FF;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+        <span class="menu-label">Service Store</span>
+        <svg class="menu-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="menu-item">
+        <div class="menu-icon" style="background:#FFF7ED;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/></svg></div>
+        <span class="menu-label">My Orders</span>
+        <svg class="menu-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="menu-item">
+        <div class="menu-icon" style="background:#F0FDF4;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <span class="menu-label">My Services</span>
+        <svg class="menu-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="menu-item">
+        <div class="menu-icon" style="background:#F0F9FF;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <span class="menu-label">About</span>
+        <svg class="menu-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <div class="tab-item active" id="tab-home" onclick="switchTab('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </div>
+    <div class="tab-item" id="tab-messages" onclick="switchTab('messages')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span>Messages</span>
+    </div>
+    <div class="tab-item" id="tab-profile" onclick="switchTab('profile')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>My</span>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+
+  <!-- Annotation Tool (fixed to browser viewport) -->
+  <div class="ann-hint" id="annHint">✏️ 批注模式 — 点击手机两侧空白区域添加便利贴</div>
+  <div class="ann-fab" id="annFab" onclick="toggleAnnotation()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+  </div>
+  <button class="save-btn" id="saveBtn" onclick="saveAnnotations()">💾 Save</button>
+
+</div><!-- /phone -->
+</div><!-- /outer -->
+
+<script>
+// Tab switching
+function switchTab(tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  currentTab = tab;
+  // 只补充渲染当前 tab 尚未在 DOM 中的便利贴
+  const key = getTabKey();
+  const list = annotations[key] || [];
+  list.forEach(n => {
+    if (!document.getElementById('note_' + n.id)) createStickyDOM(n.id, n.text, n.x, n.y);
+  });
+}
+
+// Annotation
+let annotationMode = false;
+let currentTab = 'home';
+let pendingX = 0, pendingY = 0;
+let annotations = {};
+
+function getTabKey() { return 'ann_' + currentTab; }
+
+function loadAnnotations() {
+  try { annotations = JSON.parse(localStorage.getItem('ipc_annotations') || '{}'); }
+  catch(e) { annotations = {}; }
+}
+
+function saveAnnotations() {
+  localStorage.setItem('ipc_annotations', JSON.stringify(annotations));
+  const btn = document.getElementById('saveBtn');
+  btn.textContent = '✅ Saved';
+  setTimeout(() => btn.textContent = '💾 Save', 1500);
+}
+
+function renderAnnotations() {
+  // 只清除当前 tab 的便利贴，其他 tab 的保留
+  const key = getTabKey();
+  document.querySelectorAll(`.sticky-note[data-tab="${key}"]`).forEach(n => n.remove());
+  const list = annotations[key] || [];
+  list.forEach(n => createStickyDOM(n.id, n.text, n.x, n.y));
+}
+
+function toggleAnnotation() {
+  annotationMode = !annotationMode;
+  document.getElementById('annFab').classList.toggle('active', annotationMode);
+  document.getElementById('annHint').classList.toggle('show', annotationMode);
+  document.getElementById('saveBtn').classList.toggle('show', annotationMode);
+  // 动态计算 phone 左右边界，确保 zone 不覆盖 phone
+  const phone = document.getElementById('app');
+  const rect = phone.getBoundingClientRect();
+  const zoneL = document.getElementById('ann-zone-left');
+  const zoneR = document.getElementById('ann-zone-right');
+  zoneL.style.left = '0';
+  zoneL.style.width = rect.left + 'px';
+  zoneR.style.right = '0';
+  zoneR.style.width = (window.innerWidth - rect.right) + 'px';
+  document.querySelectorAll('.ann-zone').forEach(z => z.classList.toggle('show', annotationMode));
+  document.querySelectorAll('.sticky-text').forEach(t => {
+    t.contentEditable = annotationMode ? 'true' : 'false';
+  });
+}
+
+function handleZoneClick(e) {
+  const key = getTabKey();
+  if (!annotations[key]) annotations[key] = [];
+  const id = key + '_' + Date.now();
+  const x = e.clientX, y = e.clientY;
+  annotations[key].push({ id, text: '', x, y });
+  const note = createStickyDOM(id, '', x, y);
+  // 自动聚焦到文本区
+  setTimeout(() => note.querySelector('.sticky-text').focus(), 50);
+}
+
+function saveAnnotations() {
+  // 先把当前便利贴的 contenteditable 内容同步回 annotations
+  const key = getTabKey();
+  (annotations[key] || []).forEach(n => {
+    const el = document.querySelector(`#note_${n.id} .sticky-text`);
+    if (el) n.text = el.innerText.trim();
+  });
+  localStorage.setItem('ipc_annotations', JSON.stringify(annotations));
+  // 退出批注模式
+  annotationMode = false;
+  document.getElementById('annFab').classList.remove('active');
+  document.getElementById('annHint').classList.remove('show');
+  document.getElementById('saveBtn').classList.remove('show');
+  document.querySelectorAll('.ann-zone').forEach(z => z.classList.remove('show'));
+  document.querySelectorAll('.sticky-text').forEach(t => t.contentEditable = 'false');
+  const btn = document.getElementById('saveBtn');
+  btn.textContent = '✅ Saved';
+  setTimeout(() => btn.textContent = '💾 Save', 1500);
+}
+
+function createStickyDOM(id, text, x, y) {
+  const layer = document.getElementById('ann-layer');
+  const note = document.createElement('div');
+  note.className = 'sticky-note';
+  note.id = 'note_' + id;
+  note.dataset.tab = getTabKey();
+  note.style.left = x + 'px';
+  note.style.top = y + 'px';
+  const editable = annotationMode ? 'true' : 'false';
+  note.innerHTML = `
+    <div class="sticky-header">
+      <span class="sticky-num">Note</span>
+      <button class="sticky-del" onclick="deleteNote('${id}')">×</button>
+    </div>
+    <div class="sticky-text" contenteditable="${editable}" placeholder="Write here...">${text}</div>`;
+  makeDraggable(note, id);
+  layer.appendChild(note);
+  return note;
+}
+
+function deleteNote(id) {
+  const key = getTabKey();
+  annotations[key] = (annotations[key] || []).filter(n => n.id !== id);
+  localStorage.setItem('ipc_annotations', JSON.stringify(annotations));
+  const el = document.getElementById('note_' + id);
+  if (el) el.remove();
+}
+
+function makeDraggable(el, id) {
+  let ox, oy;
+  el.addEventListener('mousedown', start);
+  el.addEventListener('touchstart', e => start(e.touches[0]), {passive:true});
+  function start(e) {
+    ox = e.clientX - el.offsetLeft;
+    oy = e.clientY - el.offsetTop;
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', end);
+    document.addEventListener('touchmove', tm, {passive:true});
+    document.addEventListener('touchend', end);
+  }
+  function tm(e) { move(e.touches[0]); }
+  function move(e) {
+    const nx = e.clientX - ox, ny = e.clientY - oy;
+    el.style.left = nx + 'px'; el.style.top = ny + 'px';
+    const note = (annotations[getTabKey()] || []).find(n => n.id === id);
+    if (note) { note.x = nx; note.y = ny; }
+  }
+  function end() {
+    document.removeEventListener('mousemove', move);
+    document.removeEventListener('mouseup', end);
+    document.removeEventListener('touchmove', tm);
+    document.removeEventListener('touchend', end);
+    localStorage.setItem('ipc_annotations', JSON.stringify(annotations));
+  }
+}
+
+loadAnnotations();
+renderAnnotations();
+</script>
+</body>
+</html>
