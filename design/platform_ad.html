@@ -296,7 +296,7 @@ tbody tr:hover td { background: var(--gray-50); }
           <td><span style="font-weight:500;color:var(--gray-900)">高价值用户</span></td>
           <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">user_group_high_value</code></td>
           <td style="font-weight:500;color:var(--gray-900)">12,480</td>
-          <td><div style="display:flex;align-items:center;gap:6px"><div><div style="font-size:13px;color:var(--primary);cursor:pointer;font-weight:500" onclick="openModal('modal-strategy-view')">默认策略</div></div><button class="btn btn-sm btn-secondary" style="height:26px;padding:0 8px;font-size:12px" onclick="openDrawer('drawer-bind-strategy')">重新绑定</button></div></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><button class="btn btn-sm btn-secondary" style="height:26px;padding:0 8px;font-size:12px" onclick="openDrawer('drawer-view-segment-strategy')">查看</button><button class="btn btn-sm btn-secondary" style="height:26px;padding:0 8px;font-size:12px" onclick="openDrawer('drawer-bind-strategy')">重新绑定</button></div></td>
         </tr>
         <tr>
           <td style="color:var(--gray-400);font-size:13px">2</td>
@@ -404,6 +404,78 @@ tbody tr:hover td { background: var(--gray-50); }
     </div>
   </div>
   <div class="drawer-footer"><button class="btn btn-secondary" onclick="closeDrawer('drawer-bind-strategy')">取消</button><button class="btn btn-primary" onclick="closeDrawer('drawer-bind-strategy')">确认绑定</button></div>
+</div>
+
+<!-- DRAWER: 查看分群绑定策略 -->
+<div class="drawer-overlay" id="overlay-view-segment-strategy" onclick="closeDrawer('drawer-view-segment-strategy')"></div>
+<div class="drawer" id="drawer-view-segment-strategy" style="width:600px">
+  <div class="drawer-header"><span class="drawer-title">查看分群绑定策略</span><button class="close-btn" onclick="closeDrawer('drawer-view-segment-strategy')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="drawer-body">
+    <div style="font-size:13px;color:var(--gray-500);margin-bottom:16px">当前分群绑定的广告策略配置（仅查看）</div>
+    
+    <!-- GameHub Pro 策略 -->
+    <div style="margin-bottom:24px">
+      <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden;margin-bottom:12px">
+        <div style="padding:12px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);display:flex;align-items:center;gap:12px">
+          <div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">G</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:500;color:var(--gray-900)">GameHub Pro</div>
+            <div style="font-size:12px;color:var(--gray-400)">APP_001 · Android</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:13px;font-weight:500;color:var(--gray-900)">默认策略</div>
+            <div style="font-size:12px;color:var(--gray-400)">STR_001</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:0 4px">
+        <div style="font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">全局策略</div>
+        <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:6px;padding:10px 16px;margin-bottom:12px;font-size:13px;color:var(--gray-500)">开屏/插屏冷却间隔：<span style="color:var(--gray-900);font-weight:600">30s</span></div>
+        <div style="font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">广告位配置</div>
+        <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden">
+          <table style="margin:0"><thead><tr><th>广告位</th><th>广告源</th><th>展示状态</th><th>频次上限</th><th>展示间隔</th><th>刷新间隔</th></tr></thead>
+          <tbody>
+            <tr><td><span style="font-weight:500">开屏广告位</span><br><span style="font-size:12px;color:var(--gray-400)">SLOT_001</span></td><td><span style="font-weight:500">开屏广告-主源</span><br><span style="font-size:12px;color:var(--gray-400)">fengchuan · S47382</span></td><td><span class="badge badge-success">开启</span></td><td>5次/小时</td><td>30s</td><td>60s</td></tr>
+            <tr><td><span style="font-weight:500">插屏广告位</span><br><span style="font-size:12px;color:var(--gray-400)">SLOT_002</span></td><td style="color:var(--gray-400)">—</td><td><span class="badge badge-neutral">关闭</span></td><td>—</td><td>—</td><td>—</td></tr>
+            <tr><td><span style="font-weight:500">Banner广告位</span><br><span style="font-size:12px;color:var(--gray-400)">SLOT_003</span></td><td><span style="font-weight:500">Banner广告-主源</span><br><span style="font-size:12px;color:var(--gray-400)">fengchuan · S52891</span></td><td><span class="badge badge-success">开启</span></td><td>10次/小时</td><td>15s</td><td>30s</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ShopEasy 未绑定 -->
+    <div style="margin-bottom:24px">
+      <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden">
+        <div style="padding:12px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);display:flex;align-items:center;gap:12px">
+          <div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#f093fb,#f5576c);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">S</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:500;color:var(--gray-900)">ShopEasy</div>
+            <div style="font-size:12px;color:var(--gray-400)">APP_002 · iOS</div>
+          </div>
+          <div style="text-align:right;color:var(--gray-400)">
+            <div style="font-size:13px">未绑定</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MediaStream 未绑定 -->
+    <div>
+      <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden">
+        <div style="padding:12px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);display:flex;align-items:center;gap:12px">
+          <div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#4facfe,#00f2fe);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">M</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:500;color:var(--gray-900)">MediaStream</div>
+            <div style="font-size:12px;color:var(--gray-400)">APP_003 · Android</div>
+          </div>
+          <div style="text-align:right;color:var(--gray-400)">
+            <div style="font-size:13px">未绑定</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-footer"><button class="btn btn-secondary" onclick="closeDrawer('drawer-view-segment-strategy')">关闭</button></div>
 </div>
 
 <!-- DRAWER: 广告源编辑 -->
@@ -1029,14 +1101,14 @@ function toggleAllApps(masterCb) {
   document.querySelectorAll('.app-checkbox').forEach(function(cb){ cb.checked = masterCb.checked; toggleAppStrategy(cb); });
 }
 var strategyData = {
-  STR_001: { name:'\u9ed8\u8ba4\u7b56\u7565', id:'STR_001', cooldown:'30s', slots:[
-    {name:'\u5f00\u5c4f\u5e7f\u544a\u4f4d',id:'SLOT_001',on:true,freq:'5\u6b21/\u5c0f\u65f6',interval:'30s',refresh:'60s'},
-    {name:'\u63d2\u5c4f\u5e7f\u544a\u4f4d',id:'SLOT_002',on:false},
-    {name:'Banner\u5e7f\u544a\u4f4d',id:'SLOT_003',on:true,freq:'10\u6b21/\u5c0f\u65f6',interval:'15s',refresh:'30s'}
+  STR_001: { name:'默认策略', id:'STR_001', cooldown:'30s', slots:[
+    {name:'开屏广告位',id:'SLOT_001',on:true,freq:'5次/小时',interval:'30s',refresh:'60s',source:'开屏广告-主源',platform:'fengchuan',adId:'S47382'},
+    {name:'插屏广告位',id:'SLOT_002',on:false},
+    {name:'Banner广告位',id:'SLOT_003',on:true,freq:'10次/小时',interval:'15s',refresh:'30s',source:'Banner广告-主源',platform:'fengchuan',adId:'S52891'}
   ]},
-  STR_002: { name:'\u9ad8\u9891\u7b56\u7565', id:'STR_002', cooldown:'15s', slots:[
-    {name:'\u5f00\u5c4f\u5e7f\u544a\u4f4d',id:'SLOT_001',on:true,freq:'10\u6b21/\u5c0f\u65f6',interval:'15s',refresh:'30s'},
-    {name:'\u63d2\u5c4f\u5e7f\u544a\u4f4d',id:'SLOT_002',on:true,freq:'8\u6b21/\u5c0f\u65f6',interval:'20s',refresh:'45s'}
+  STR_002: { name:'高频策略', id:'STR_002', cooldown:'15s', slots:[
+    {name:'开屏广告位',id:'SLOT_001',on:true,freq:'10次/小时',interval:'15s',refresh:'30s',source:'开屏广告-主源',platform:'fengchuan',adId:'S47382'},
+    {name:'插屏广告位',id:'SLOT_002',on:true,freq:'8次/小时',interval:'20s',refresh:'45s',source:'插屏广告-主源',platform:'fengchuan',adId:'S61234'}
   ]}
 };
 function showStrategyPreview(sel) {
@@ -1048,19 +1120,20 @@ function showStrategyPreview(sel) {
   var rows = d.slots.map(function(s){
     return '<tr>' +
       '<td style="padding:6px 10px;font-size:12px">' + s.name + ' <span style="color:var(--gray-400)">' + s.id + '</span></td>' +
-      '<td style="padding:6px 10px"><span class="badge ' + (s.on?'badge-success':'badge-neutral') + '" style="font-size:11px">' + (s.on?'\u5f00\u542f':'\u5173\u95ed') + '</span></td>' +
-      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.freq:'\u2014') + '</td>' +
-      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.interval:'\u2014') + '</td>' +
-      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.refresh:'\u2014') + '</td>' +
+      '<td style="padding:6px 10px;font-size:12px">' + (s.source ? s.source + ' <span style="color:var(--gray-400)">' + s.platform + ' · ' + s.adId + '</span>' : '—') + '</td>' +
+      '<td style="padding:6px 10px"><span class="badge ' + (s.on?'badge-success':'badge-neutral') + '" style="font-size:11px">' + (s.on?'开启':'关闭') + '</span></td>' +
+      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.freq:'—') + '</td>' +
+      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.interval:'—') + '</td>' +
+      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.refresh:'—') + '</td>' +
       '</tr>';
   }).join('');
   prev.innerHTML =
     '<div style="display:flex;gap:16px;margin-bottom:8px;font-size:12px;color:var(--gray-500)">' +
-    '<span>\u7b56\u7565\u540d\u79f0\uff1a<b style="color:var(--gray-900)">' + d.name + '</b></span>' +
-    '<span>ID\uff1a<b style="color:var(--gray-900)">' + d.id + '</b></span>' +
-    '<span>\u51b7\u5374\u95f4\u9694\uff1a<b style="color:var(--gray-900)">' + d.cooldown + '</b></span></div>' +
+    '<span>策略名称：<b style="color:var(--gray-900)">' + d.name + '</b></span>' +
+    '<span>ID：<b style="color:var(--gray-900)">' + d.id + '</b></span>' +
+    '<span>冷却间隔：<b style="color:var(--gray-900)">' + d.cooldown + '</b></span></div>' +
     '<table style="width:100%;border-collapse:collapse;background:white;border:1px solid #BFDBFE;border-radius:4px;overflow:hidden">' +
-    '<thead><tr style="background:#DBEAFE"><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5e7f\u544a\u4f4d</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5c55\u793a</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u9891\u6b21</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5c55\u793a\u95f4\u9694</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5237\u65b0\u95f4\u9694</th></tr></thead>' +
+    '<thead><tr style="background:#DBEAFE"><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">广告位</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">广告源</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">展示</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">频次</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">展示间隔</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">刷新间隔</th></tr></thead>' +
     '<tbody>' + rows + '</tbody></table>';
   prev.style.display = 'block';
 }
@@ -1085,19 +1158,20 @@ function showBindStrategyPreview(sel) {
   var rows = d.slots.map(function(s){
     return '<tr>' +
       '<td style="padding:6px 10px;font-size:12px">' + s.name + ' <span style="color:var(--gray-400)">' + s.id + '</span></td>' +
-      '<td style="padding:6px 10px"><span class="badge ' + (s.on?'badge-success':'badge-neutral') + '" style="font-size:11px">' + (s.on?'\u5f00\u542f':'\u5173\u95ed') + '</span></td>' +
-      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.freq:'\u2014') + '</td>' +
-      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.interval:'\u2014') + '</td>' +
-      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.refresh:'\u2014') + '</td>' +
+      '<td style="padding:6px 10px;font-size:12px">' + (s.source ? s.source + ' <span style="color:var(--gray-400)">' + s.platform + ' · ' + s.adId + '</span>' : '—') + '</td>' +
+      '<td style="padding:6px 10px"><span class="badge ' + (s.on?'badge-success':'badge-neutral') + '" style="font-size:11px">' + (s.on?'开启':'关闭') + '</span></td>' +
+      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.freq:'—') + '</td>' +
+      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.interval:'—') + '</td>' +
+      '<td style="padding:6px 10px;font-size:12px">' + (s.on?s.refresh:'—') + '</td>' +
       '</tr>';
   }).join('');
   prev.innerHTML =
     '<div style="display:flex;gap:16px;margin-bottom:8px;font-size:12px;color:var(--gray-500)">' +
-    '<span>\u7b56\u7565\u540d\u79f0\uff1a<b style="color:var(--gray-900)">' + d.name + '</b></span>' +
-    '<span>ID\uff1a<b style="color:var(--gray-900)">' + d.id + '</b></span>' +
-    '<span>\u51b7\u5374\u95f4\u9694\uff1a<b style="color:var(--gray-900)">' + d.cooldown + '</b></span></div>' +
+    '<span>策略名称：<b style="color:var(--gray-900)">' + d.name + '</b></span>' +
+    '<span>ID：<b style="color:var(--gray-900)">' + d.id + '</b></span>' +
+    '<span>冷却间隔：<b style="color:var(--gray-900)">' + d.cooldown + '</b></span></div>' +
     '<table style="width:100%;border-collapse:collapse;background:white;border:1px solid #BFDBFE;border-radius:4px;overflow:hidden">' +
-    '<thead><tr style="background:#DBEAFE"><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5e7f\u544a\u4f4d</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5c55\u793a</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u9891\u6b21</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5c55\u793a\u95f4\u9694</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">\u5237\u65b0\u95f4\u9694</th></tr></thead>' +
+    '<thead><tr style="background:#DBEAFE"><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">广告位</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">广告源</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">展示</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">频次</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">展示间隔</th><th style="padding:4px 10px;font-size:11px;font-weight:500;color:var(--gray-500);text-align:left">刷新间隔</th></tr></thead>' +
     '<tbody>' + rows + '</tbody></table>';
   prev.style.display = 'block';
 }
