@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生态平台 - 套餐运营</title>
+<style>
+:root {
+  --primary:#2563EB;--primary-hover:#1D4ED8;--primary-light:#EFF6FF;
+  --gray-900:#0F172A;--gray-700:#334155;--gray-500:#64748B;
+  --gray-400:#94A3B8;--gray-200:#E2E8F0;--gray-100:#F1F5F9;
+  --gray-50:#F8FAFC;--white:#FFFFFF;
+  --success:#16A34A;--success-light:#F0FDF4;
+  --warning:#D97706;--warning-light:#FFFBEB;
+  --danger:#DC2626;--danger-light:#FEF2F2;
+  --info:#0284C7;--info-light:#F0F9FF;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;font-size:14px;color:var(--gray-700);background:var(--gray-50);display:flex;height:100vh;overflow:hidden;}
+.sidebar{width:240px;background:var(--white);border-right:1px solid var(--gray-200);display:flex;flex-direction:column;flex-shrink:0;height:100vh;}
+.sidebar-logo{height:64px;display:flex;align-items:center;padding:0 20px;border-bottom:1px solid var(--gray-200);gap:10px;}
+.logo-icon{width:32px;height:32px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-text{font-size:15px;font-weight:600;color:var(--gray-900);}
+.sidebar-nav{padding:12px 8px;flex:1;overflow-y:auto;}
+.nav-section-title{font-size:11px;font-weight:500;color:var(--gray-400);padding:8px 12px 4px;text-transform:uppercase;letter-spacing:.05em;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:0 12px;height:36px;border-radius:6px;cursor:pointer;color:var(--gray-500);font-size:14px;transition:all .15s;margin-bottom:2px;}
+.nav-item:hover{background:var(--gray-100);color:var(--gray-700);}
+.nav-item.active{background:var(--primary-light);color:var(--primary);font-weight:500;}
+.nav-sub .nav-item{font-size:13px;height:32px;padding-left:36px;}
+.sidebar-footer{padding:12px 8px;border-top:1px solid var(--gray-200);}
+.prd-link{display:flex;align-items:center;justify-content:center;height:36px;padding:0 12px;border-radius:6px;font-size:13px;font-weight:500;color:var(--primary);text-decoration:none;transition:all .15s;}
+.prd-link:hover{background:var(--primary-light);}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.page-header{height:56px;background:var(--white);border-bottom:1px solid var(--gray-200);display:flex;align-items:center;padding:0 32px;flex-shrink:0;}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--gray-500);}
+.breadcrumb .sep{color:var(--gray-400);}
+.breadcrumb .current{color:var(--gray-900);font-weight:500;}
+.breadcrumb .link{cursor:pointer;color:var(--primary);}
+.breadcrumb .link:hover{text-decoration:underline;}
+.content{flex:1;overflow-y:auto;padding:24px 32px;}
+.card{background:var(--white);border:1px solid var(--gray-200);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:15px;font-weight:600;color:var(--gray-900);}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--gray-50);}
+th{padding:0 16px;height:40px;text-align:left;font-size:12px;font-weight:500;color:var(--gray-500);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--gray-200);white-space:nowrap;}
+td{padding:0 16px;height:44px;border-bottom:1px solid var(--gray-100);font-size:14px;color:var(--gray-700);}
+tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--gray-50);}
+.btn{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;}
+.btn-sm{height:30px;padding:0 10px;font-size:13px;}
+.btn-primary{background:var(--primary);color:white;}
+.btn-primary:hover{background:var(--primary-hover);}
+.btn-secondary{background:var(--white);color:var(--gray-700);border:1px solid var(--gray-200);}
+.btn-secondary:hover{background:var(--gray-50);}
+.btn-ghost{background:transparent;color:var(--primary);}
+.btn-ghost:hover{background:var(--primary-light);}
+.btn-danger-ghost{background:transparent;color:var(--danger);border:none;}
+.btn-danger-ghost:hover{background:var(--danger-light);}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:500;}
+.badge-success{background:var(--success-light);color:var(--success);}
+.badge-warning{background:var(--warning-light);color:var(--warning);}
+.badge-danger{background:var(--danger-light);color:var(--danger);}
+.badge-info{background:var(--info-light);color:var(--info);}
+.badge-neutral{background:var(--gray-100);color:var(--gray-500);}
+.input{height:36px;border:1px solid var(--gray-200);border-radius:6px;padding:0 12px;font-size:14px;color:var(--gray-700);background:var(--white);outline:none;width:100%;}
+.input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.select{height:36px;border:1px solid var(--gray-200);border-radius:6px;padding:0 32px 0 12px;font-size:14px;color:var(--gray-700);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;outline:none;width:100%;cursor:pointer;appearance:none;}
+.select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:13px;font-weight:500;color:var(--gray-700);margin-bottom:6px;}
+.required{color:var(--danger);margin-left:2px;}
+.form-error{font-size:12px;color:var(--danger);margin-top:4px;display:none;}
+.form-error.show{display:block;}
+.form-hint{font-size:12px;color:var(--gray-400);margin-top:4px;}
+.tabs{display:flex;border-bottom:1px solid var(--gray-200);padding:0 24px;background:var(--white);}
+.tab{padding:0 16px;height:44px;display:flex;align-items:center;font-size:14px;color:var(--gray-500);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;white-space:nowrap;}
+.tab:hover{color:var(--gray-700);}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:500;}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;display:none;}
+.drawer-overlay.show{display:block;}
+.drawer{position:fixed;top:0;right:0;width:480px;height:100vh;background:var(--white);box-shadow:-20px 0 60px rgba(0,0,0,.15);z-index:101;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease;}
+.drawer.show{transform:translateX(0);}
+.drawer-header{height:56px;padding:0 24px;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.drawer-title{font-size:15px;font-weight:600;color:var(--gray-900);}
+.drawer-body{flex:1;overflow-y:auto;padding:24px;}
+.drawer-footer{height:56px;padding:0 24px;border-top:1px solid var(--gray-200);display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-shrink:0;}
+.close-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;color:var(--gray-500);border:none;background:transparent;}
+.close-btn:hover{background:var(--gray-100);}
+.section-title{font-size:11px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;margin-top:20px;}
+.section-title:first-child{margin-top:0;}
+.page-view{display:none;}
+.page-view.active{display:flex;flex-direction:column;height:100%;}
+.tab-content{display:none;}
+.app-info-card{background:var(--white);border:1px solid var(--gray-200);border-radius:8px;padding:20px 24px;display:flex;align-items:center;gap:20px;}
+.app-icon{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:22px;font-weight:700;flex-shrink:0;}
+.slot-config-block{border:1px solid var(--gray-200);border-radius:8px;padding:14px;margin-bottom:10px;background:var(--gray-50);}
+.slot-config-block-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.radio-group{display:flex;gap:16px;}
+.radio-item{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px;color:var(--gray-700);}
+.radio-item input{width:15px;height:15px;accent-color:var(--primary);cursor:pointer;}
+.pos-config{border:1px solid var(--gray-200);border-radius:6px;padding:12px;margin-bottom:8px;background:var(--white);}
+.pos-label{font-size:12px;font-weight:600;color:var(--gray-500);margin-bottom:8px;}
+.pos-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+    <span class="logo-text">生态平台</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">核心功能</div>
+    <div class="nav-item active" id="nav-app" onclick="showPage('app-list')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      应用管理
+    </div>
+    <div class="nav-item" id="nav-user-parent" onclick="showPage('user-segment')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      用户管理
+    </div>
+    <div class="nav-sub">
+      <div class="nav-item" id="nav-segment" onclick="showPage('user-segment')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        套餐用户分群
+      </div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="#" class="prd-link">需求文档PRD</a>
+  </div>
+</aside>
+
+<main class="main">
+
+<!-- PAGE: 应用列表 -->
+<div id="page-app-list" class="page-view active">
+  <div class="page-header"><div class="breadcrumb"><span class="current">应用管理</span></div></div>
+  <div class="content">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">应用列表</span>
+        <button class="btn btn-primary btn-sm" onclick="showPage('app-edit')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>创建应用
+        </button>
+      </div>
+      <table>
+        <thead><tr><th>APP名称</th><th>APPID</th><th>应用平台</th><th>应用区域</th><th>审核状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">G</div><span style="font-weight:500;color:var(--gray-900)">GameHub Pro</span></div></td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">APP_001</code></td>
+            <td><span class="badge badge-info">Android</span></td><td>东南亚</td>
+            <td><span class="badge badge-success">已通过</span></td>
+            <td><button class="btn btn-sm btn-secondary" onclick="showPage('app-edit')">编辑</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: 应用编辑 -->
+<div id="page-app-edit" class="page-view">
+  <div class="page-header"><div class="breadcrumb"><span class="link" onclick="showPage('app-list')">应用管理</span><span class="sep">/</span><span class="current">GameHub Pro</span></div></div>
+  <div class="content" style="padding:0;display:flex;flex-direction:column;overflow:hidden">
+    <div style="padding:20px 32px 16px">
+      <div class="app-info-card">
+        <div class="app-icon">G</div>
+        <div style="flex:1">
+          <div style="font-size:16px;font-weight:600;color:var(--gray-900);margin-bottom:4px">GameHub Pro</div>
+          <div style="display:flex;gap:20px;flex-wrap:wrap">
+            <span style="font-size:13px;color:var(--gray-500)">APPID: <span style="color:var(--gray-700);font-weight:500">APP_001</span></span>
+            <span style="font-size:13px;color:var(--gray-500)">平台: <span style="color:var(--gray-700);font-weight:500">Android</span></span>
+            <span style="font-size:13px;color:var(--gray-500)">区域: <span style="color:var(--gray-700);font-weight:500">东南亚</span></span>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-sm">编辑基础信息</button>
+      </div>
+    </div>
+    <div class="tabs">
+      <div class="tab" onclick="switchTab('tab-version',this)">版本管理</div>
+      <div class="tab" onclick="switchTab('tab-push',this)">Push消息推送</div>
+      <div class="tab" onclick="switchTab('tab-payment',this)">收款账号管理</div>
+      <div class="tab" onclick="switchTab('tab-adslot',this)">广告位管理</div>
+      <div class="tab" onclick="switchTab('tab-strategy',this)">广告策略管理</div>
+      <div class="tab active" onclick="switchTab('tab-pkg-slot',this)">套餐运营位</div>
+      <div class="tab" onclick="switchTab('tab-pkg-strategy',this)">套餐运营策略</div>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:24px 32px">
+      <div id="tab-version" class="tab-content"><div class="card"><div class="card-header"><span class="card-title">版本管理</span></div><div style="padding:48px;text-align:center;color:var(--gray-400)">暂无数据</div></div></div>
+      <div id="tab-push" class="tab-content"><div class="card"><div class="card-header"><span class="card-title">Push消息推送</span></div><div style="padding:48px;text-align:center;color:var(--gray-400)">暂无数据</div></div></div>
+      <div id="tab-payment" class="tab-content"><div class="card"><div class="card-header"><span class="card-title">收款账号管理</span></div><div style="padding:48px;text-align:center;color:var(--gray-400)">暂无数据</div></div></div>
+      <div id="tab-adslot" class="tab-content"><div class="card"><div class="card-header"><span class="card-title">广告位管理</span></div><div style="padding:48px;text-align:center;color:var(--gray-400)">暂无数据</div></div></div>
+      <div id="tab-strategy" class="tab-content"><div class="card"><div class="card-header"><span class="card-title">广告策略管理</span></div><div style="padding:48px;text-align:center;color:var(--gray-400)">暂无数据</div></div></div>
+
+      <!-- TAB: 套餐运营位 -->
+      <div id="tab-pkg-slot" class="tab-content" style="display:block">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">套餐运营位列表</span>
+            <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-pkg-slot','add')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加套餐运营位
+            </button>
+          </div>
+          <table>
+            <thead><tr><th>运营位名称</th><th>运营位编码</th><th>创建时间</th><th>操作</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span style="font-weight:500;color:var(--gray-900)">云存储推荐位</span></td>
+                <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">pkg_slot_cloud_001</code></td>
+                <td style="font-size:13px;color:var(--gray-500)">2026-03-20 10:00</td>
+                <td>
+                  <div style="display:flex;gap:4px">
+                    <button class="btn btn-sm btn-ghost" onclick="showPage('pkg-pool')">套餐池</button>
+                    <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-pkg-slot','edit')">编辑</button>
+                    <button class="btn btn-sm btn-danger-ghost">删除</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><span style="font-weight:500;color:var(--gray-900)">AI服务推荐位</span></td>
+                <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">pkg_slot_ai_001</code></td>
+                <td style="font-size:13px;color:var(--gray-500)">2026-03-21 14:30</td>
+                <td>
+                  <div style="display:flex;gap:4px">
+                    <button class="btn btn-sm btn-ghost" onclick="showPage('pkg-pool')">套餐池</button>
+                    <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-pkg-slot','edit')">编辑</button>
+                    <button class="btn btn-sm btn-danger-ghost">删除</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB: 套餐运营策略 -->
+      <div id="tab-pkg-strategy" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">套餐运营策略列表</span>
+            <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-pkg-strategy','add')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加策略
+            </button>
+          </div>
+          <table>
+            <thead><tr><th>策略名称</th><th>包含运营位</th><th>全局策略</th><th>操作</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span style="font-weight:500;color:var(--gray-900)">云存储推广策略</span></td>
+                <td><span class="badge badge-info">2 个运营位</span></td>
+                <td style="font-size:13px;color:var(--gray-500)">每日弹窗上限: <span style="color:var(--gray-700)">3次/天</span></td>
+                <td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-pkg-strategy','edit')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td>
+              </tr>
+              <tr>
+                <td><span style="font-weight:500;color:var(--gray-900)">动态匹配策略</span></td>
+                <td><span class="badge badge-info">1 个运营位</span></td>
+                <td style="font-size:13px;color:var(--gray-500)">每日弹窗上限: <span style="color:var(--gray-700)">2次/天</span></td>
+                <td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-pkg-strategy','edit')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: 套餐池 -->
+<div id="page-pkg-pool" class="page-view">
+  <div class="page-header">
+    <div class="breadcrumb">
+      <span class="link" onclick="showPage('app-list')">应用管理</span><span class="sep">/</span>
+      <span class="link" onclick="showPage('app-edit')">GameHub Pro</span><span class="sep">/</span>
+      <span class="current">云存储推荐位 · 套餐池</span>
+    </div>
+  </div>
+  <div class="content">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <button class="btn btn-secondary" onclick="showPage('app-edit')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>返回
+      </button>
+      <div>
+        <div style="font-size:15px;font-weight:600;color:var(--gray-900)">云存储推荐位</div>
+        <div style="font-size:12px;color:var(--gray-500)">运营位编码: pkg_slot_cloud_001</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">套餐池</span>
+        <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-add-pkg','add')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加套餐
+        </button>
+      </div>
+      <table>
+        <thead><tr><th style="width:48px">序号</th><th>套餐代码</th><th>套餐名称</th><th>套餐价格</th><th>套餐类型</th><th>订阅类型</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--gray-400);font-size:13px">1</td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PKG_CLOUD_BASIC</code></td>
+            <td><span style="font-weight:500;color:var(--gray-900)">基础云存储套餐</span></td>
+            <td style="font-weight:500;color:var(--gray-900)">¥9.9/月</td>
+            <td><span class="badge badge-info">云存储</span></td>
+            <td><span class="badge badge-success">是</span></td>
+            <td><button class="btn btn-sm btn-danger-ghost">移除</button></td>
+          </tr>
+          <tr>
+            <td style="color:var(--gray-400);font-size:13px">2</td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PKG_CLOUD_PRO</code></td>
+            <td><span style="font-weight:500;color:var(--gray-900)">Pro云存储套餐</span></td>
+            <td style="font-weight:500;color:var(--gray-900)">¥19.9/月</td>
+            <td><span class="badge badge-info">云存储</span></td>
+            <td><span class="badge badge-success">是</span></td>
+            <td><button class="btn btn-sm btn-danger-ghost">移除</button></td>
+          </tr>
+          <tr>
+            <td style="color:var(--gray-400);font-size:13px">3</td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PKG_CLOUD_SUPER</code></td>
+            <td><span style="font-weight:500;color:var(--gray-900)">Super Pro云存储套餐</span></td>
+            <td style="font-weight:500;color:var(--gray-900)">¥39.9/月</td>
+            <td><span class="badge badge-info">云存储</span></td>
+            <td><span class="badge badge-neutral">否</span></td>
+            <td><button class="btn btn-sm btn-danger-ghost">移除</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: 套餐用户分群 -->
+<div id="page-user-segment" class="page-view">
+  <div class="page-header"><div class="breadcrumb"><span class="current">套餐用户分群</span></div></div>
+  <div class="content">
+    <div class="card">
+      <div class="card-header"><span class="card-title">用户分群列表</span></div>
+      <table>
+        <thead><tr><th style="width:48px">序号</th><th>分群名称</th><th>分群编码</th><th>用户数量</th><th>运营策略</th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--gray-400);font-size:13px">1</td>
+            <td><span style="font-weight:500;color:var(--gray-900)">高价值用户</span></td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">user_group_high_value</code></td>
+            <td style="font-weight:500;color:var(--gray-900)">12,480</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="font-size:13px;color:var(--gray-700)">云存储推广策略</span>
+                <button class="btn btn-sm btn-secondary" style="height:26px;padding:0 8px;font-size:12px" onclick="openDrawer('drawer-view-pkg-strategy')">查看</button>
+                <button class="btn btn-sm btn-secondary" style="height:26px;padding:0 8px;font-size:12px" onclick="openDrawer('drawer-bind-pkg-strategy')">绑定策略</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td style="color:var(--gray-400);font-size:13px">2</td>
+            <td><span style="font-weight:500;color:var(--gray-900)">活跃用户</span></td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">user_group_active</code></td>
+            <td style="font-weight:500;color:var(--gray-900)">38,920</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="font-size:13px;color:var(--gray-400)">未绑定</span>
+                <button class="btn btn-sm btn-primary" style="height:26px;padding:0 10px;font-size:12px" onclick="openDrawer('drawer-bind-pkg-strategy')">绑定策略</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td style="color:var(--gray-400);font-size:13px">3</td>
+            <td><span style="font-weight:500;color:var(--gray-900)">沉默用户</span></td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">user_group_silent</code></td>
+            <td style="font-weight:500;color:var(--gray-900)">5,210</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="font-size:13px;color:var(--gray-400)">未绑定</span>
+                <button class="btn btn-sm btn-primary" style="height:26px;padding:0 10px;font-size:12px" onclick="openDrawer('drawer-bind-pkg-strategy')">绑定策略</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- DRAWER: 套餐运营位 添加/编辑 -->
+<div class="drawer-overlay" id="overlay-pkg-slot" onclick="closeDrawer('drawer-pkg-slot')"></div>
+<div class="drawer" id="drawer-pkg-slot">
+  <div class="drawer-header">
+    <span class="drawer-title" id="pkg-slot-title">添加套餐运营位</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-pkg-slot')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">运营位名称 <span class="required">*</span></label>
+      <input class="input" placeholder="请输入运营位名称" id="pkg-slot-name">
+      <div class="form-error" id="pkg-slot-name-error">此项为必填项</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">运营位编码 <span class="required">*</span></label>
+      <input class="input" placeholder="请输入运营位编码，如 pkg_slot_cloud_001" id="pkg-slot-code">
+      <div class="form-error" id="pkg-slot-code-error">此项为必填项</div>
+      <div class="form-hint">编码不可重复，仅支持字母、数字和下划线</div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-pkg-slot')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-pkg-slot')">保存</button>
+  </div>
+</div>
+
+<!-- DRAWER: 添加套餐到套餐池 -->
+<div class="drawer-overlay" id="overlay-add-pkg" onclick="closeDrawer('drawer-add-pkg')"></div>
+<div class="drawer" id="drawer-add-pkg" style="width:600px">
+  <div class="drawer-header">
+    <span class="drawer-title">添加套餐</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-add-pkg')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div style="font-size:13px;color:var(--gray-500);margin-bottom:12px">从 APP 下已创建的套餐中选择，支持多选</div>
+    <div style="margin-bottom:12px;position:relative">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--gray-400)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="input" placeholder="搜索套餐名称 / 代码" style="padding-left:34px">
+    </div>
+    <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden">
+      <div style="padding:10px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200)">
+        <table style="margin:0"><thead><tr><th style="width:36px"></th><th>套餐代码</th><th>套餐名称</th><th>价格</th><th>类型</th><th>订阅</th></tr></thead></table>
+      </div>
+      <div style="max-height:320px;overflow-y:auto">
+        <table style="margin:0">
+          <tbody>
+            <tr style="background:#EFF6FF">
+              <td style="width:36px"><input type="checkbox" checked style="width:15px;height:15px;accent-color:var(--primary)"></td>
+              <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PKG_CLOUD_BASIC</code></td>
+              <td style="font-weight:500;color:var(--gray-900)">基础云存储套餐</td>
+              <td>¥9.9/月</td>
+              <td><span class="badge badge-info">云存储</span></td>
+              <td><span class="badge badge-success">是</span></td>
+            </tr>
+            <tr style="background:#EFF6FF">
+              <td><input type="checkbox" checked style="width:15px;height:15px;accent-color:var(--primary)"></td>
+              <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PKG_CLOUD_PRO</code></td>
+              <td style="font-weight:500;color:var(--gray-900)">Pro云存储套餐</td>
+              <td>¥19.9/月</td>
+              <td><span class="badge badge-info">云存储</span></td>
+              <td><span class="badge badge-success">是</span></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="width:15px;height:15px;accent-color:var(--primary)"></td>
+              <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PKG_AI_BASIC</code></td>
+              <td style="font-weight:500;color:var(--gray-900)">基础AI服务套餐</td>
+              <td>¥14.9/月</td>
+              <td><span class="badge badge-warning">AI服务</span></td>
+              <td><span class="badge badge-success">是</span></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="width:15px;height:15px;accent-color:var(--primary)"></td>
+              <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PKG_CLOUD_SUPER</code></td>
+              <td style="font-weight:500;color:var(--gray-900)">Super Pro云存储套餐</td>
+              <td>¥39.9/月</td>
+              <td><span class="badge badge-info">云存储</span></td>
+              <td><span class="badge badge-neutral">否</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div style="margin-top:10px;font-size:13px;color:var(--gray-500)">已选 <span style="color:var(--primary);font-weight:600">2</span> 个套餐（蓝色背景为已在套餐池中）</div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-add-pkg')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-add-pkg')">确认添加</button>
+  </div>
+</div>
+
+<!-- DRAWER: 套餐运营策略 添加/编辑 -->
+<div class="drawer-overlay" id="overlay-pkg-strategy" onclick="closeDrawer('drawer-pkg-strategy')"></div>
+<div class="drawer" id="drawer-pkg-strategy" style="width:640px">
+  <div class="drawer-header">
+    <span class="drawer-title" id="pkg-strategy-title">添加套餐运营策略</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-pkg-strategy')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">策略名称 <span class="required">*</span></label>
+      <input class="input" placeholder="请输入策略名称" id="pkg-strategy-name">
+    </div>
+
+    <div class="section-title">运营位配置 <span class="required">*</span></div>
+    <div id="pkg-slot-config-list">
+      <!-- 运营位配置块 示例 -->
+      <div class="slot-config-block">
+        <div class="slot-config-block-header">
+          <span style="font-size:13px;font-weight:600;color:var(--gray-700)">运营位 #1</span>
+          <button class="btn btn-sm btn-danger-ghost" style="height:26px;padding:0 8px" onclick="removePkgSlotBlock(this)">移除</button>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label class="form-label">选择运营位 <span class="required">*</span></label>
+          <select class="select" onchange="onSlotSelect(this)">
+            <option value="">请选择运营位</option>
+            <option value="1" selected>云存储推荐位 (pkg_slot_cloud_001)</option>
+            <option value="2">AI服务推荐位 (pkg_slot_ai_001)</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label class="form-label">套餐策略 <span class="required">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="pkg-mode-1" value="static" checked onchange="togglePkgMode(this)"> 静态指定</label>
+            <label class="radio-item"><input type="radio" name="pkg-mode-1" value="dynamic" onchange="togglePkgMode(this)"> 动态匹配</label>
+          </div>
+        </div>
+
+        <!-- 静态指定配置 -->
+        <div class="static-config">
+          <div class="pos-config">
+            <div class="pos-label">1号位</div>
+            <div class="pos-row">
+              <div>
+                <div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">套餐 <span class="required">*</span></div>
+                <select class="select" style="font-size:13px">
+                  <option value="">搜索套餐...</option>
+                  <option selected>基础云存储套餐</option>
+                  <option>Pro云存储套餐</option>
+                </select>
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">运营标签</div>
+                <select class="select" style="font-size:13px">
+                  <option value="">无标签</option>
+                  <option selected>折扣</option>
+                  <option>新用户</option>
+                  <option>免费试用</option>
+                </select>
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">文案</div>
+                <input class="input" style="font-size:13px" placeholder="自定义文案" value="限时7折">
+              </div>
+            </div>
+          </div>
+          <div class="pos-config">
+            <div class="pos-label">2号位</div>
+            <div class="pos-row">
+              <div>
+                <div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">套餐</div>
+                <select class="select" style="font-size:13px"><option value="">搜索套餐...</option><option selected>Pro云存储套餐</option></select>
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">运营标签</div>
+                <select class="select" style="font-size:13px"><option value="">无标签</option><option>折扣</option><option selected>新用户</option></select>
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">文案</div>
+                <input class="input" style="font-size:13px" placeholder="自定义文案" value="新用户专享">
+              </div>
+            </div>
+          </div>
+          <div class="pos-config">
+            <div class="pos-label">3号位</div>
+            <div class="pos-row">
+              <div>
+                <div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">套餐</div>
+                <select class="select" style="font-size:13px"><option value="">搜索套餐...</option></select>
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">运营标签</div>
+                <select class="select" style="font-size:13px"><option value="">无标签</option></select>
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">文案</div>
+                <input class="input" style="font-size:13px" placeholder="自定义文案">
+              </div>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:12px;margin-bottom:0">
+            <label class="form-label">冷却期（小时） <span class="required">*</span></label>
+            <div style="display:flex;align-items:center;gap:8px">
+              <input class="input" type="number" placeholder="请输入小时数" style="max-width:160px" value="24">
+              <span style="font-size:12px;color:var(--gray-400)">两次弹窗的最小间隔</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 动态匹配配置（默认隐藏） -->
+        <div class="dynamic-config" style="display:none">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">触发场景 <span class="required">*</span></label>
+              <select class="select">
+                <option value="">请选择</option>
+                <option>云存循环覆盖</option>
+                <option>SD卡循环覆盖</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">匹配策略 <span class="required">*</span></label>
+              <select class="select">
+                <option value="">请选择</option>
+                <option>步进升级</option>
+                <option>最优折扣</option>
+                <option>历史偏好</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">匹配套餐类型 <span class="required">*</span></label>
+              <select class="select">
+                <option value="">请选择</option>
+                <option>云存储</option>
+                <option>AI</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-secondary btn-sm" style="margin-bottom:20px" onclick="addPkgSlotBlock()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加运营位
+    </button>
+
+    <div class="section-title">全局策略配置 <span class="required">*</span></div>
+    <div class="form-group">
+      <label class="form-label">每日弹窗上限（次/天） <span class="required">*</span></label>
+      <input class="input" type="number" placeholder="请输入次数" style="max-width:160px" value="3">
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-pkg-strategy')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-pkg-strategy')">保存策略</button>
+  </div>
+</div>
+
+<!-- DRAWER: 查看分群绑定的套餐运营策略 -->
+<div class="drawer-overlay" id="overlay-view-pkg-strategy" onclick="closeDrawer('drawer-view-pkg-strategy')"></div>
+<div class="drawer" id="drawer-view-pkg-strategy" style="width:600px">
+  <div class="drawer-header">
+    <span class="drawer-title">查看绑定策略</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-view-pkg-strategy')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div style="font-size:13px;color:var(--gray-500);margin-bottom:16px">当前分群绑定的套餐运营策略（仅查看）</div>
+    <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden;margin-bottom:16px">
+      <div style="padding:12px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);display:flex;align-items:center;gap:12px">
+        <div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">G</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--gray-900)">GameHub Pro</div><div style="font-size:12px;color:var(--gray-400)">APP_001 · Android</div></div>
+        <div style="text-align:right"><div style="font-size:13px;font-weight:500;color:var(--gray-900)">云存储推广策略</div></div>
+      </div>
+      <div style="padding:12px 16px">
+        <div style="font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">全局策略</div>
+        <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:6px;padding:10px 16px;margin-bottom:12px;font-size:13px;color:var(--gray-500)">每日弹窗上限：<span style="color:var(--gray-900);font-weight:600">3次/天</span></div>
+        <div style="font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">运营位配置</div>
+        <div style="border:1px solid var(--gray-200);border-radius:6px;overflow:hidden">
+          <table style="margin:0"><thead><tr><th>运营位</th><th>策略类型</th><th>配置详情</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span style="font-weight:500">云存储推荐位</span><br><span style="font-size:12px;color:var(--gray-400)">pkg_slot_cloud_001</span></td>
+              <td><span class="badge badge-info">静态指定</span></td>
+              <td style="font-size:13px;color:var(--gray-500)">1号位: 基础套餐 [折扣]<br>2号位: Pro套餐 [新用户]<br>冷却期: 24h</td>
+            </tr>
+            <tr>
+              <td><span style="font-weight:500">AI服务推荐位</span><br><span style="font-size:12px;color:var(--gray-400)">pkg_slot_ai_001</span></td>
+              <td><span class="badge badge-warning">动态匹配</span></td>
+              <td style="font-size:13px;color:var(--gray-500)">触发: 云存循环覆盖<br>策略: 步进升级<br>类型: 云存储</td>
+            </tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-footer"><button class="btn btn-secondary" onclick="closeDrawer('drawer-view-pkg-strategy')">关闭</button></div>
+</div>
+
+<!-- DRAWER: 绑定套餐运营策略 -->
+<div class="drawer-overlay" id="overlay-bind-pkg-strategy" onclick="closeDrawer('drawer-bind-pkg-strategy')"></div>
+<div class="drawer" id="drawer-bind-pkg-strategy" style="width:600px">
+  <div class="drawer-header">
+    <span class="drawer-title">绑定套餐运营策略</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-bind-pkg-strategy')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div style="font-size:13px;color:var(--gray-500);margin-bottom:16px">勾选需要配置套餐运营策略的 APP，并为每个 APP 选择对应策略</div>
+    <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden">
+      <div style="padding:10px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);display:flex;align-items:center;gap:10px">
+        <input type="checkbox" style="width:15px;height:15px;cursor:pointer">
+        <span style="font-size:13px;font-weight:500;color:var(--gray-700)">全选</span>
+      </div>
+      <div style="padding:12px 16px;border-bottom:1px solid var(--gray-100);display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <input type="checkbox" checked style="width:15px;height:15px;cursor:pointer;accent-color:var(--primary)">
+          <div style="display:flex;align-items:center;gap:8px;flex:1">
+            <div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">G</div>
+            <div><div style="font-size:13px;font-weight:500;color:var(--gray-900)">GameHub Pro</div><div style="font-size:12px;color:var(--gray-400)">APP_001 · Android</div></div>
+          </div>
+          <select class="select" style="width:220px">
+            <option value="">请选择套餐运营策略</option>
+            <option selected>云存储推广策略</option>
+            <option>动态匹配策略</option>
+          </select>
+        </div>
+        <!-- 策略预览 -->
+        <div style="margin-left:27px;padding:12px;background:var(--primary-light);border-radius:6px;border:1px solid #BFDBFE;font-size:13px">
+          <div style="font-weight:600;color:var(--gray-900);margin-bottom:6px">云存储推广策略</div>
+          <div style="color:var(--gray-500)">每日弹窗上限: <span style="color:var(--gray-700)">3次/天</span> · 包含 <span style="color:var(--gray-700)">2</span> 个运营位</div>
+        </div>
+      </div>
+      <div style="padding:12px 16px;display:flex;align-items:center;gap:12px">
+        <input type="checkbox" style="width:15px;height:15px;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:8px;flex:1">
+          <div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#f093fb,#f5576c);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">S</div>
+          <div><div style="font-size:13px;font-weight:500;color:var(--gray-900)">ShopEasy</div><div style="font-size:12px;color:var(--gray-400)">APP_002 · iOS</div></div>
+        </div>
+        <select class="select" style="width:220px" disabled><option value="">请选择套餐运营策略</option></select>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-bind-pkg-strategy')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-bind-pkg-strategy')">确认绑定</button>
+  </div>
+</div>
+
+<script>
+function showPage(name) {
+  document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (name === 'app-list' || name === 'app-edit' || name === 'pkg-pool') {
+    document.getElementById('nav-app').classList.add('active');
+  } else if (name === 'user-segment') {
+    document.getElementById('nav-segment').classList.add('active');
+    document.getElementById('nav-user-parent').classList.add('active');
+  }
+}
+
+function switchTab(tabId, el) {
+  document.querySelectorAll('#page-app-edit .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('#page-app-edit .tab-content').forEach(c => c.style.display = 'none');
+  document.getElementById(tabId).style.display = 'block';
+}
+
+function openDrawer(id, mode) {
+  if (id === 'drawer-pkg-slot') {
+    document.getElementById('pkg-slot-title').textContent = mode === 'add' ? '添加套餐运营位' : '编辑套餐运营位';
+    if (mode === 'edit') {
+      document.getElementById('pkg-slot-name').value = '云存储推荐位';
+      document.getElementById('pkg-slot-code').value = 'pkg_slot_cloud_001';
+    } else {
+      document.getElementById('pkg-slot-name').value = '';
+      document.getElementById('pkg-slot-code').value = '';
+    }
+  }
+  if (id === 'drawer-pkg-strategy') {
+    document.getElementById('pkg-strategy-title').textContent = mode === 'add' ? '添加套餐运营策略' : '编辑套餐运营策略';
+  }
+  const overlayId = 'overlay-' + id.replace('drawer-', '');
+  const overlay = document.getElementById(overlayId);
+  const drawer = document.getElementById(id);
+  if (overlay) overlay.classList.add('show');
+  if (drawer) drawer.classList.add('show');
+}
+
+function closeDrawer(id) {
+  const overlayId = 'overlay-' + id.replace('drawer-', '');
+  const overlay = document.getElementById(overlayId);
+  const drawer = document.getElementById(id);
+  if (overlay) overlay.classList.remove('show');
+  if (drawer) drawer.classList.remove('show');
+}
+
+function togglePkgMode(radio) {
+  const block = radio.closest('.slot-config-block');
+  const staticDiv = block.querySelector('.static-config');
+  const dynamicDiv = block.querySelector('.dynamic-config');
+  if (radio.value === 'static') {
+    staticDiv.style.display = 'block';
+    dynamicDiv.style.display = 'none';
+  } else {
+    staticDiv.style.display = 'none';
+    dynamicDiv.style.display = 'block';
+  }
+}
+
+let pkgSlotCounter = 1;
+
+function addPkgSlotBlock() {
+  pkgSlotCounter++;
+  const idx = pkgSlotCounter;
+  const list = document.getElementById('pkg-slot-config-list');
+  const block = document.createElement('div');
+  block.className = 'slot-config-block';
+  block.innerHTML = `
+    <div class="slot-config-block-header">
+      <span style="font-size:13px;font-weight:600;color:var(--gray-700)">运营位 #${idx}</span>
+      <button class="btn btn-sm btn-danger-ghost" style="height:26px;padding:0 8px" onclick="removePkgSlotBlock(this)">移除</button>
+    </div>
+    <div class="form-group" style="margin-bottom:12px">
+      <label class="form-label">选择运营位 <span class="required">*</span></label>
+      <select class="select">
+        <option value="">请选择运营位</option>
+        <option value="1">云存储推荐位 (pkg_slot_cloud_001)</option>
+        <option value="2">AI服务推荐位 (pkg_slot_ai_001)</option>
+      </select>
+    </div>
+    <div class="form-group" style="margin-bottom:12px">
+      <label class="form-label">套餐策略 <span class="required">*</span></label>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="pkg-mode-${idx}" value="static" checked onchange="togglePkgMode(this)"> 静态指定</label>
+        <label class="radio-item"><input type="radio" name="pkg-mode-${idx}" value="dynamic" onchange="togglePkgMode(this)"> 动态匹配</label>
+      </div>
+    </div>
+    <div class="static-config">
+      <div class="pos-config">
+        <div class="pos-label">1号位</div>
+        <div class="pos-row">
+          <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">套餐 <span class="required">*</span></div><select class="select" style="font-size:13px"><option value="">搜索套餐...</option><option>基础云存储套餐</option><option>Pro云存储套餐</option></select></div>
+          <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">运营标签</div><select class="select" style="font-size:13px"><option value="">无标签</option><option>折扣</option><option>新用户</option><option>免费试用</option></select></div>
+          <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">文案</div><input class="input" style="font-size:13px" placeholder="自定义文案"></div>
+        </div>
+      </div>
+      <div class="pos-config">
+        <div class="pos-label">2号位</div>
+        <div class="pos-row">
+          <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">套餐</div><select class="select" style="font-size:13px"><option value="">搜索套餐...</option><option>基础云存储套餐</option><option>Pro云存储套餐</option></select></div>
+          <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">运营标签</div><select class="select" style="font-size:13px"><option value="">无标签</option><option>折扣</option><option>新用户</option><option>免费试用</option></select></div>
+          <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">文案</div><input class="input" style="font-size:13px" placeholder="自定义文案"></div>
+        </div>
+      </div>
+      <div class="pos-config">
+        <div class="pos-label">3号位</div>
+        <div class="pos-row">
+          <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">套餐</div><select class="select" style="font-size:13px"><option value="">搜索套餐...</option></select></div>
+          <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">运营标签</div><select class="select" style="font-size:13px"><option value="">无标签</option></select></div>
+          <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">文案</div><input class="input" style="font-size:13px" placeholder="自定义文案"></div>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:12px;margin-bottom:0">
+        <label class="form-label">冷却期（小时） <span class="required">*</span></label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input class="input" type="number" placeholder="请输入小时数" style="max-width:160px">
+          <span style="font-size:12px;color:var(--gray-400)">两次弹窗的最小间隔</span>
+        </div>
+      </div>
+    </div>
+    <div class="dynamic-config" style="display:none">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">触发场景 <span class="required">*</span></label><select class="select"><option value="">请选择</option><option>云存循环覆盖</option><option>SD卡循环覆盖</option></select></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">匹配策略 <span class="required">*</span></label><select class="select"><option value="">请选择</option><option>步进升级</option><option>最优折扣</option><option>历史偏好</option></select></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-label">匹配套餐类型 <span class="required">*</span></label><select class="select"><option value="">请选择</option><option>云存储</option><option>AI</option></select></div>
+      </div>
+    </div>
+  `;
+  list.appendChild(block);
+  updateSlotNumbers();
+}
+
+function removePkgSlotBlock(btn) {
+  const list = document.getElementById('pkg-slot-config-list');
+  if (list.querySelectorAll('.slot-config-block').length <= 1) return;
+  btn.closest('.slot-config-block').remove();
+  updateSlotNumbers();
+}
+
+function updateSlotNumbers() {
+  document.querySelectorAll('#pkg-slot-config-list .slot-config-block').forEach((block, i) => {
+    block.querySelector('.slot-config-block-header span').textContent = `运营位 #${i + 1}`;
+  });
+}
+</script>
+</body>
+</html>
