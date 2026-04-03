@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生态平台 - 套餐运营 方案二</title>
+<style>
+:root {
+  --primary:#2563EB;--primary-hover:#1D4ED8;--primary-light:#EFF6FF;
+  --gray-900:#0F172A;--gray-700:#334155;--gray-500:#64748B;
+  --gray-400:#94A3B8;--gray-200:#E2E8F0;--gray-100:#F1F5F9;
+  --gray-50:#F8FAFC;--white:#FFFFFF;
+  --success:#16A34A;--success-light:#F0FDF4;
+  --warning:#D97706;--warning-light:#FFFBEB;
+  --danger:#DC2626;--danger-light:#FEF2F2;
+  --info:#0284C7;--info-light:#F0F9FF;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;font-size:14px;color:var(--gray-700);background:var(--gray-50);display:flex;height:100vh;overflow:hidden;}
+.sidebar{width:240px;background:var(--white);border-right:1px solid var(--gray-200);display:flex;flex-direction:column;flex-shrink:0;height:100vh;}
+.sidebar-logo{height:64px;display:flex;align-items:center;padding:0 20px;border-bottom:1px solid var(--gray-200);gap:10px;}
+.logo-icon{width:32px;height:32px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-text{font-size:15px;font-weight:600;color:var(--gray-900);}
+.sidebar-nav{padding:12px 8px;flex:1;overflow-y:auto;}
+.nav-section-title{font-size:11px;font-weight:500;color:var(--gray-400);padding:8px 12px 4px;text-transform:uppercase;letter-spacing:.05em;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:0 12px;height:36px;border-radius:6px;cursor:pointer;color:var(--gray-500);font-size:14px;transition:all .15s;margin-bottom:2px;}
+.nav-item:hover{background:var(--gray-100);color:var(--gray-700);}
+.nav-item.active{background:var(--primary-light);color:var(--primary);font-weight:500;}
+.sidebar-footer{padding:12px 8px;border-top:1px solid var(--gray-200);}
+.prd-link{display:flex;align-items:center;justify-content:center;height:36px;padding:0 12px;border-radius:6px;font-size:13px;font-weight:500;color:var(--primary);text-decoration:none;}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.page-header{height:56px;background:var(--white);border-bottom:1px solid var(--gray-200);display:flex;align-items:center;padding:0 32px;flex-shrink:0;}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--gray-500);}
+.breadcrumb .sep{color:var(--gray-400);}
+.breadcrumb .current{color:var(--gray-900);font-weight:500;}
+.breadcrumb .link{cursor:pointer;color:var(--primary);}
+.breadcrumb .link:hover{text-decoration:underline;}
+.content{flex:1;overflow-y:auto;padding:24px 32px;}
+.card{background:var(--white);border:1px solid var(--gray-200);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:15px;font-weight:600;color:var(--gray-900);}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--gray-50);}
+th{padding:0 16px;height:40px;text-align:left;font-size:12px;font-weight:500;color:var(--gray-500);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--gray-200);white-space:nowrap;}
+td{padding:0 16px;height:44px;border-bottom:1px solid var(--gray-100);font-size:14px;color:var(--gray-700);}
+tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--gray-50);}
+.btn{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;}
+.btn-sm{height:30px;padding:0 10px;font-size:13px;}
+.btn-primary{background:var(--primary);color:white;}
+.btn-primary:hover{background:var(--primary-hover);}
+.btn-secondary{background:var(--white);color:var(--gray-700);border:1px solid var(--gray-200);}
+.btn-secondary:hover{background:var(--gray-50);}
+.btn-ghost{background:transparent;color:var(--primary);}
+.btn-ghost:hover{background:var(--primary-light);}
+.btn-danger-ghost{background:transparent;color:var(--danger);border:none;}
+.btn-danger-ghost:hover{background:var(--danger-light);}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:500;}
+.badge-success{background:var(--success-light);color:var(--success);}
+.badge-warning{background:var(--warning-light);color:var(--warning);}
+.badge-info{background:var(--info-light);color:var(--info);}
+.badge-neutral{background:var(--gray-100);color:var(--gray-500);}
+.input{height:36px;border:1px solid var(--gray-200);border-radius:6px;padding:0 12px;font-size:14px;color:var(--gray-700);background:var(--white);outline:none;width:100%;}
+.input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.select{height:36px;border:1px solid var(--gray-200);border-radius:6px;padding:0 32px 0 12px;font-size:14px;color:var(--gray-700);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;outline:none;width:100%;cursor:pointer;appearance:none;}
+.select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:13px;font-weight:500;color:var(--gray-700);margin-bottom:6px;}
+.required{color:var(--danger);margin-left:2px;}
+.tabs{display:flex;border-bottom:1px solid var(--gray-200);padding:0 24px;background:var(--white);}
+.tab{padding:0 16px;height:44px;display:flex;align-items:center;font-size:14px;color:var(--gray-500);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;white-space:nowrap;}
+.tab:hover{color:var(--gray-700);}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:500;}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;display:none;}
+.drawer-overlay.show{display:block;}
+.drawer{position:fixed;top:0;right:0;width:560px;height:100vh;background:var(--white);box-shadow:-20px 0 60px rgba(0,0,0,.15);z-index:101;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease;}
+.drawer.show{transform:translateX(0);}
+.drawer-header{height:56px;padding:0 24px;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.drawer-title{font-size:15px;font-weight:600;color:var(--gray-900);}
+.drawer-body{flex:1;overflow-y:auto;padding:24px;}
+.drawer-footer{height:56px;padding:0 24px;border-top:1px solid var(--gray-200);display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-shrink:0;}
+.close-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;color:var(--gray-500);border:none;background:transparent;}
+.close-btn:hover{background:var(--gray-100);}
+.section-title{font-size:11px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;margin-top:20px;}
+.section-title:first-child{margin-top:0;}
+.page-view{display:none;}
+.page-view.active{display:flex;flex-direction:column;height:100%;}
+.app-info-card{background:var(--white);border:1px solid var(--gray-200);border-radius:8px;padding:20px 24px;display:flex;align-items:center;gap:20px;}
+.app-icon{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:22px;font-weight:700;flex-shrink:0;}
+.tab-content{display:none;}
+
+/* ===== FLOW EDITOR ===== */
+.flow-editor-wrap{display:flex;flex-direction:column;height:100%;overflow:hidden;}
+.flow-toolbar{height:52px;background:var(--white);border-bottom:1px solid var(--gray-200);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;}
+.flow-toolbar-title{font-size:14px;font-weight:600;color:var(--gray-900);flex:1;}
+.flow-body{display:flex;flex:1;overflow:hidden;}
+.flow-palette{width:200px;background:var(--white);border-right:1px solid var(--gray-200);padding:16px 12px;flex-shrink:0;overflow-y:auto;}
+.flow-palette-title{font-size:11px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;}
+.palette-block{border:1.5px solid var(--gray-200);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:grab;background:var(--white);transition:all .15s;user-select:none;}
+.palette-block:hover{border-color:var(--primary);background:var(--primary-light);}
+.palette-block:active{cursor:grabbing;}
+.palette-block-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-bottom:6px;}
+.palette-block-name{font-size:12px;font-weight:600;color:var(--gray-700);}
+.palette-block-desc{font-size:11px;color:var(--gray-400);margin-top:2px;line-height:1.4;}
+.flow-canvas-wrap{flex:1;position:relative;overflow:hidden;background:#F8FAFC;}
+.flow-canvas-bg{position:absolute;inset:0;background-image:radial-gradient(circle,#CBD5E1 1px,transparent 1px);background-size:24px 24px;}
+#flowCanvas{position:absolute;inset:0;width:100%;height:100%;}
+.flow-node{position:absolute;background:var(--white);border:2px solid var(--gray-200);border-radius:10px;min-width:200px;box-shadow:0 2px 8px rgba(0,0,0,.08);cursor:move;user-select:none;transition:border-color .15s,box-shadow .15s;}
+.flow-node:hover{border-color:var(--primary);box-shadow:0 4px 16px rgba(37,99,235,.15);}
+.flow-node.selected{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.2);}
+.flow-node-header{padding:10px 12px 8px;border-bottom:1px solid var(--gray-100);display:flex;align-items:center;gap:8px;}
+.flow-node-icon{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.flow-node-title{font-size:13px;font-weight:600;color:var(--gray-900);flex:1;}
+.flow-node-del{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--gray-400);border:none;background:transparent;opacity:0;transition:opacity .15s;}
+.flow-node:hover .flow-node-del{opacity:1;}
+.flow-node-del:hover{background:var(--danger-light);color:var(--danger);}
+.flow-node-body{padding:10px 12px;}
+.flow-node-field{font-size:12px;color:var(--gray-500);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.flow-node-field span{color:var(--gray-700);font-weight:500;}
+/* Ports */
+.port{position:absolute;width:12px;height:12px;border-radius:50%;border:2px solid var(--white);cursor:crosshair;transition:transform .15s;}
+.port:hover{transform:scale(1.4);}
+.port-in{background:#64748B;top:50%;transform:translateY(-50%);left:-7px;}
+.port-out{background:var(--primary);top:50%;transform:translateY(-50%);right:-7px;}
+.port-out-bottom{background:var(--primary);bottom:-7px;left:50%;transform:translateX(-50%);}
+/* Condition ports */
+.port-cond{width:10px;height:10px;border-radius:50%;border:2px solid var(--white);cursor:crosshair;position:absolute;}
+.port-cond-label{position:absolute;font-size:10px;font-weight:600;white-space:nowrap;}
+/* Node config panel */
+.node-config-panel{width:280px;background:var(--white);border-left:1px solid var(--gray-200);padding:16px;flex-shrink:0;overflow-y:auto;display:none;}
+.node-config-panel.show{display:block;}
+.node-config-title{font-size:13px;font-weight:600;color:var(--gray-900);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--gray-200);}
+/* Connection tooltip */
+.conn-label{position:absolute;background:var(--white);border:1px solid var(--gray-200);border-radius:4px;padding:2px 6px;font-size:10px;font-weight:600;color:var(--gray-500);pointer-events:none;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.08);}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+    <span class="logo-text">生态平台</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">核心功能</div>
+    <div class="nav-item active" id="nav-app" onclick="showPage('app-list')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      应用管理
+    </div>
+    <div class="nav-item" id="nav-user" onclick="showPage('user-segment')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      用户管理
+    </div>
+    <div style="padding-left:24px;">
+      <div class="nav-item" id="nav-segment" onclick="showPage('user-segment')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        套餐用户分群
+      </div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="#" class="prd-link">需求文档PRD</a>
+  </div>
+</aside>
+
+<main class="main">
+
+<!-- PAGE: 应用列表 -->
+<div id="page-app-list" class="page-view active">
+  <div class="page-header"><div class="breadcrumb"><span class="current">应用管理</span></div></div>
+  <div class="content">
+    <div class="card">
+      <div class="card-header"><span class="card-title">应用列表</span><button class="btn btn-primary btn-sm" onclick="showPage('app-edit')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>创建应用</button></div>
+      <table>
+        <thead><tr><th>APP名称</th><th>APPID</th><th>应用平台</th><th>应用区域</th><th>审核状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">G</div><span style="font-weight:500;color:var(--gray-900)">GameHub Pro</span></div></td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">APP_001</code></td>
+            <td><span class="badge badge-info">Android</span></td><td>东南亚</td>
+            <td><span class="badge badge-success">已通过</span></td>
+            <td><button class="btn btn-sm btn-secondary" onclick="showPage('app-edit')">编辑</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: 应用编辑 -->
+<div id="page-app-edit" class="page-view">
+  <div class="page-header"><div class="breadcrumb"><span class="link" onclick="showPage('app-list')">应用管理</span><span class="sep">/</span><span class="current">GameHub Pro</span></div></div>
+  <div class="content" style="padding:0;display:flex;flex-direction:column;overflow:hidden">
+    <div style="padding:20px 32px 16px">
+      <div class="app-info-card">
+        <div class="app-icon">G</div>
+        <div style="flex:1">
+          <div style="font-size:16px;font-weight:600;color:var(--gray-900);margin-bottom:4px">GameHub Pro</div>
+          <div style="display:flex;gap:20px;flex-wrap:wrap">
+            <span style="font-size:13px;color:var(--gray-500)">APPID: <span style="color:var(--gray-700);font-weight:500">APP_001</span></span>
+            <span style="font-size:13px;color:var(--gray-500)">平台: <span style="color:var(--gray-700);font-weight:500">Android</span></span>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-sm">编辑基础信息</button>
+      </div>
+    </div>
+    <div class="tabs">
+      <div class="tab" onclick="switchTab('tab-adslot',this)">广告位管理</div>
+      <div class="tab" onclick="switchTab('tab-ad-strategy',this)">广告策略管理</div>
+      <div class="tab" onclick="switchTab('tab-pkg-slot',this)">套餐运营位</div>
+      <div class="tab active" onclick="switchTab('tab-pkg-strategy',this)">套餐运营策略 <span style="font-size:10px;background:#7C3AED;color:#fff;padding:1px 6px;border-radius:10px;margin-left:4px;">方案二</span></div>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:24px 32px">
+      <div id="tab-adslot" class="tab-content"><div class="card"><div class="card-header"><span class="card-title">广告位管理</span></div><div style="padding:48px;text-align:center;color:var(--gray-400)">暂无数据</div></div></div>
+      <div id="tab-ad-strategy" class="tab-content"><div class="card"><div class="card-header"><span class="card-title">广告策略管理</span></div><div style="padding:48px;text-align:center;color:var(--gray-400)">暂无数据</div></div></div>
+      <div id="tab-pkg-slot" class="tab-content"><div class="card"><div class="card-header"><span class="card-title">套餐运营位</span></div><div style="padding:48px;text-align:center;color:var(--gray-400)">暂无数据</div></div></div>
+
+      <!-- TAB: 套餐运营策略 方案二 -->
+      <div id="tab-pkg-strategy" class="tab-content" style="display:block">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <span class="card-title">套餐运营策略列表</span>
+              <div style="font-size:12px;color:var(--gray-400);margin-top:2px;">每条策略可为各运营位配置可视化策略流</div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openStrategyDrawer('add')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加策略
+            </button>
+          </div>
+          <table>
+            <thead><tr><th>策略名称</th><th>包含运营位</th><th>全局策略</th><th>操作</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span style="font-weight:500;color:var(--gray-900)">云存储推广策略</span></td>
+                <td><span class="badge badge-info">2 个运营位</span></td>
+                <td style="font-size:13px;color:var(--gray-500)">弹窗总数: <span style="color:var(--gray-700)">5次/7天</span> · 同类型日上限: <span style="color:var(--gray-700)">2次/天</span></td>
+                <td><div style="display:flex;gap:4px">
+                  <button class="btn btn-sm btn-secondary" onclick="openStrategyDrawer('edit')">编辑</button>
+                  <button class="btn btn-sm btn-danger-ghost">删除</button>
+                </div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: 策略流编辑器 -->
+<div id="page-flow-editor" class="page-view">
+  <div class="page-header">
+    <div class="breadcrumb">
+      <span class="link" onclick="showPage('app-list')">应用管理</span><span class="sep">/</span>
+      <span class="link" onclick="showPage('app-edit')">GameHub Pro</span><span class="sep">/</span>
+      <span class="current">云存储推荐位 · 策略流编辑</span>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:8px;">
+      <button class="btn btn-secondary" onclick="showPage('app-edit')">取消</button>
+      <button class="btn btn-primary" onclick="showPage('app-edit')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        保存策略流
+      </button>
+    </div>
+  </div>
+  <div class="flow-editor-wrap">
+    <div class="flow-body">
+      <!-- 左侧组件面板 -->
+      <div class="flow-palette">
+        <div class="flow-palette-title">策略块</div>
+        <div class="palette-block" draggable="true" data-type="static" ondragstart="onPaletteDragStart(event,'static')">
+          <div class="palette-block-icon" style="background:#EFF6FF">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+          </div>
+          <div class="palette-block-name">静态指定</div>
+          <div class="palette-block-desc">手动指定套餐及运营标签</div>
+        </div>
+        <div class="palette-block" draggable="true" data-type="dynamic" ondragstart="onPaletteDragStart(event,'dynamic')">
+          <div class="palette-block-icon" style="background:#F0FDF4">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          </div>
+          <div class="palette-block-name">动态匹配</div>
+          <div class="palette-block-desc">按场景和策略自动推荐</div>
+        </div>
+
+        <div class="flow-palette-title" style="margin-top:16px">条件块</div>
+        <div class="palette-block" draggable="true" data-type="condition" ondragstart="onPaletteDragStart(event,'condition')">
+          <div class="palette-block-icon" style="background:#FFFBEB">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <div class="palette-block-name">用户行为判断</div>
+          <div class="palette-block-desc">根据用户操作分支流转</div>
+        </div>
+
+        <div class="flow-palette-title" style="margin-top:16px">终止块</div>
+        <div class="palette-block" draggable="true" data-type="end" ondragstart="onPaletteDragStart(event,'end')">
+          <div class="palette-block-icon" style="background:#FEF2F2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          </div>
+          <div class="palette-block-name">停止推送</div>
+          <div class="palette-block-desc">不再推送套餐弹窗</div>
+        </div>
+      </div>
+
+      <!-- 画布区域 -->
+      <div class="flow-canvas-wrap" id="flowCanvasWrap"
+        ondragover="event.preventDefault()"
+        ondrop="onCanvasDrop(event)">
+        <div class="flow-canvas-bg"></div>
+        <svg id="flowSvg" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;"></svg>
+        <div id="flowNodes"></div>
+      </div>
+
+      <!-- 右侧配置面板 -->
+      <div class="node-config-panel" id="nodeConfigPanel">
+        <div class="node-config-title" id="nodeConfigTitle">节点配置</div>
+        <div id="nodeConfigBody"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: 套餐用户分群 -->
+<div id="page-user-segment" class="page-view">
+  <div class="page-header"><div class="breadcrumb"><span class="current">套餐用户分群</span></div></div>
+  <div class="content">
+    <div class="card">
+      <div class="card-header"><span class="card-title">用户分群列表</span></div>
+      <table>
+        <thead><tr><th style="width:48px">序号</th><th>分群名称</th><th>分群编码</th><th>用户数量</th><th>运营策略</th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--gray-400);font-size:13px">1</td>
+            <td><span style="font-weight:500;color:var(--gray-900)">高价值用户</span></td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">user_group_high_value</code></td>
+            <td style="font-weight:500;color:var(--gray-900)">12,480</td>
+            <td><div style="display:flex;align-items:center;gap:6px">
+              <button class="btn btn-sm btn-secondary" style="height:26px;padding:0 8px;font-size:12px">查看</button>
+              <button class="btn btn-sm btn-secondary" style="height:26px;padding:0 8px;font-size:12px">绑定策略</button>
+            </div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- DRAWER: 策略编辑（方案二：运营位列表 + 配置策略流入口） -->
+<div class="drawer-overlay" id="overlay-strategy" onclick="closeDrawer('drawer-strategy')"></div>
+<div class="drawer" id="drawer-strategy">
+  <div class="drawer-header">
+    <span class="drawer-title" id="strategy-title">添加套餐运营策略</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-strategy')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">策略名称 <span class="required">*</span></label>
+      <input class="input" placeholder="请输入策略名称" value="云存储推广策略">
+    </div>
+
+    <div class="section-title">运营位配置 <span class="required">*</span></div>
+    <div style="font-size:12px;color:var(--gray-400);margin-bottom:12px;">为每个运营位独立配置策略流，点击【配置策略流】进入可视化编辑器</div>
+
+    <!-- 运营位 #1 -->
+    <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden;margin-bottom:10px;">
+      <div style="padding:12px 14px;background:var(--gray-50);display:flex;align-items:center;gap:10px;">
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:var(--gray-900)">云存储推荐位</div>
+          <div style="font-size:12px;color:var(--gray-400);margin-top:2px;">pkg_slot_cloud_001</div>
+        </div>
+        <button class="btn btn-sm btn-ghost" onclick="closeDrawer('drawer-strategy');showPage('flow-editor')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          配置策略流
+        </button>
+      </div>
+      <!-- 策略流预览 -->
+      <div style="padding:10px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;background:#EFF6FF;border:1px solid #BFDBFE;font-size:11px;font-weight:600;color:#2563EB;">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+          静态指定
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <div style="font-size:11px;color:var(--gray-400)">不感兴趣</div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <div style="display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;background:#F0FDF4;border:1px solid #BBF7D0;font-size:11px;font-weight:600;color:#16A34A;">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
+          动态匹配
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <div style="font-size:11px;color:var(--gray-400)">不感兴趣×3</div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <div style="display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;background:#FEF2F2;border:1px solid #FECACA;font-size:11px;font-weight:600;color:#DC2626;">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          停止推送
+        </div>
+      </div>
+    </div>
+
+    <!-- 运营位 #2 -->
+    <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden;margin-bottom:10px;">
+      <div style="padding:12px 14px;background:var(--gray-50);display:flex;align-items:center;gap:10px;">
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:var(--gray-900)">AI服务推荐位</div>
+          <div style="font-size:12px;color:var(--gray-400);margin-top:2px;">pkg_slot_ai_001</div>
+        </div>
+        <button class="btn btn-sm btn-ghost" onclick="closeDrawer('drawer-strategy');showPage('flow-editor')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          配置策略流
+        </button>
+      </div>
+      <div style="padding:10px 14px;">
+        <span style="font-size:12px;color:var(--gray-400)">暂未配置策略流，点击【配置策略流】开始编辑</span>
+      </div>
+    </div>
+
+    <button class="btn btn-secondary btn-sm" style="margin-bottom:20px">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加运营位
+    </button>
+
+    <div class="section-title">全局策略配置 <span class="required">*</span></div>
+    <div class="form-group">
+      <label class="form-label">弹窗总数限制 <span class="required">*</span></label>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input class="input" type="number" style="max-width:80px" value="5">
+        <span style="font-size:13px;color:var(--gray-500);white-space:nowrap">次 /</span>
+        <input class="input" type="number" style="max-width:80px" value="7">
+        <span style="font-size:13px;color:var(--gray-500);white-space:nowrap">天</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">同类型套餐弹窗日上限 <span class="required">*</span></label>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input class="input" type="number" style="max-width:80px" value="2">
+        <span style="font-size:13px;color:var(--gray-500);white-space:nowrap">次 / 天</span>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-strategy')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-strategy')">保存策略</button>
+  </div>
+</div>
+
+<script>
+// ===== Navigation =====
+function showPage(name) {
+  document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (['app-list','app-edit','flow-editor'].includes(name)) document.getElementById('nav-app').classList.add('active');
+  else if (name === 'user-segment') { document.getElementById('nav-user').classList.add('active'); document.getElementById('nav-segment').classList.add('active'); }
+  if (name === 'flow-editor') initFlowEditor();
+}
+
+function switchTab(tabId, el) {
+  document.querySelectorAll('#page-app-edit .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('#page-app-edit .tab-content').forEach(c => c.style.display = 'none');
+  document.getElementById(tabId).style.display = 'block';
+}
+
+function openStrategyDrawer(mode) {
+  document.getElementById('strategy-title').textContent = mode === 'add' ? '添加套餐运营策略' : '编辑套餐运营策略';
+  document.getElementById('overlay-strategy').classList.add('show');
+  document.getElementById('drawer-strategy').classList.add('show');
+}
+
+function closeDrawer(id) {
+  const overlayId = 'overlay-' + id.replace('drawer-', '');
+  document.getElementById(overlayId)?.classList.remove('show');
+  document.getElementById(id)?.classList.remove('show');
+}
+
+// ===== Flow Editor =====
+let nodes = [];
+let connections = [];
+let nodeCounter = 0;
+let draggingType = null;
+let connectingFrom = null; // {nodeId, portType}
+let selectedNodeId = null;
+let draggingNode = null;
+let dragOffset = {x:0, y:0};
+
+const nodeConfigs = {
+  static: {
+    title: '静态指定',
+    color: '#2563EB',
+    bg: '#EFF6FF',
+    border: '#BFDBFE',
+    icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/>',
+    fields: [
+      {label:'套餐位数量', type:'select', options:['1个','2个','3个'], default:'2个'},
+      {label:'1号位套餐', type:'select', options:['基础云存储套餐','Pro云存储套餐','Super Pro套餐'], default:'基础云存储套餐'},
+      {label:'1号位运营标签', type:'select', options:['无标签','折扣','新用户','免费试用'], default:'折扣'},
+      {label:'冷却期（小时）', type:'input', default:'24'},
+    ],
+    ports: ['不感兴趣','立即升级','关闭']
+  },
+  dynamic: {
+    title: '动态匹配',
+    color: '#16A34A',
+    bg: '#F0FDF4',
+    border: '#BBF7D0',
+    icon: '<circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>',
+    fields: [
+      {label:'触发场景', type:'select', options:['云存循环覆盖','SD卡循环覆盖'], default:'云存循环覆盖'},
+      {label:'匹配策略', type:'select', options:['步进升级','最优折扣','历史偏好'], default:'步进升级'},
+      {label:'匹配套餐类型', type:'select', options:['云存储','AI'], default:'云存储'},
+    ],
+    ports: ['不感兴趣','立即升级','关闭']
+  },
+  condition: {
+    title: '用户行为判断',
+    color: '#D97706',
+    bg: '#FFFBEB',
+    border: '#FDE68A',
+    icon: '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>',
+    fields: [
+      {label:'判断条件', type:'select', options:['不感兴趣次数 ≥', '关闭次数 ≥', '弹窗次数 ≥'], default:'不感兴趣次数 ≥'},
+      {label:'阈值', type:'input', default:'3'},
+    ],
+    ports: ['满足条件','不满足']
+  },
+  end: {
+    title: '停止推送',
+    color: '#DC2626',
+    bg: '#FEF2F2',
+    border: '#FECACA',
+    icon: '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>',
+    fields: [],
+    ports: []
+  }
+};
+
+function onPaletteDragStart(e, type) {
+  draggingType = type;
+  e.dataTransfer.effectAllowed = 'copy';
+}
+
+function onCanvasDrop(e) {
+  e.preventDefault();
+  if (!draggingType) return;
+  const wrap = document.getElementById('flowCanvasWrap');
+  const rect = wrap.getBoundingClientRect();
+  const x = e.clientX - rect.left - 100;
+  const y = e.clientY - rect.top - 40;
+  addNode(draggingType, x, y);
+  draggingType = null;
+}
+
+function addNode(type, x, y) {
+  const id = 'node_' + (++nodeCounter);
+  const cfg = nodeConfigs[type];
+  const node = { id, type, x, y, config: {} };
+  cfg.fields.forEach(f => node.config[f.label] = f.default || '');
+  nodes.push(node);
+  renderNode(node);
+  renderConnections();
+}
+
+function renderNode(node) {
+  const cfg = nodeConfigs[node.type];
+  const container = document.getElementById('flowNodes');
+  let existing = document.getElementById(node.id);
+  if (existing) existing.remove();
+
+  const el = document.createElement('div');
+  el.className = 'flow-node';
+  el.id = node.id;
+  el.style.left = node.x + 'px';
+  el.style.top = node.y + 'px';
+  el.style.minWidth = '200px';
+
+  // Header
+  let headerHtml = `
+    <div class="flow-node-header" style="background:${cfg.bg};border-bottom-color:${cfg.border}">
+      <div class="flow-node-icon" style="background:${cfg.color}20;border:1px solid ${cfg.border}">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${cfg.color}" stroke-width="2">${cfg.icon}</svg>
+      </div>
+      <span class="flow-node-title" style="color:${cfg.color}">${cfg.title}</span>
+      <button class="flow-node-del" onclick="deleteNode('${node.id}')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>`;
+
+  // Body
+  let bodyHtml = '<div class="flow-node-body">';
+  cfg.fields.forEach(f => {
+    bodyHtml += `<div class="flow-node-field"><span style="color:var(--gray-400)">${f.label}:</span> <span>${node.config[f.label]}</span></div>`;
+  });
+  if (cfg.fields.length === 0) {
+    bodyHtml += `<div style="font-size:12px;color:var(--gray-400);text-align:center;padding:4px 0;">流程终止节点</div>`;
+  }
+  bodyHtml += '</div>';
+
+  // Output ports (condition branches)
+  let portsHtml = '';
+  if (cfg.ports.length > 0) {
+    portsHtml = `<div style="border-top:1px solid ${cfg.border};padding:8px 12px;display:flex;flex-direction:column;gap:4px;">`;
+    cfg.ports.forEach((p, i) => {
+      const portId = `${node.id}_out_${i}`;
+      portsHtml += `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:3px 0;">
+          <span style="font-size:11px;color:var(--gray-500)">${p}</span>
+          <div class="port port-cond" id="${portId}" data-node="${node.id}" data-port="${i}" data-label="${p}"
+            style="position:relative;width:10px;height:10px;border-radius:50%;background:${cfg.color};border:2px solid white;cursor:crosshair;box-shadow:0 0 0 1px ${cfg.color}"
+            onmousedown="startConnect(event,'${node.id}',${i},'${p}')"></div>
+        </div>`;
+    });
+    portsHtml += '</div>';
+  }
+
+  el.innerHTML = headerHtml + bodyHtml + portsHtml;
+
+  // Input port
+  const inPort = document.createElement('div');
+  inPort.className = 'port port-in';
+  inPort.id = node.id + '_in';
+  inPort.dataset.node = node.id;
+  inPort.onmouseup = (e) => { e.stopPropagation(); finishConnect(node.id); };
+  el.appendChild(inPort);
+
+  // Drag to move
+  el.addEventListener('mousedown', (e) => {
+    if (e.target.classList.contains('port') || e.target.classList.contains('port-cond') || e.target.classList.contains('flow-node-del')) return;
+    if (connectingFrom) return;
+    draggingNode = node;
+    const rect = el.getBoundingClientRect();
+    dragOffset = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    selectNode(node.id);
+    e.preventDefault();
+  });
+
+  el.addEventListener('click', (e) => {
+    if (e.target.classList.contains('port') || e.target.classList.contains('port-cond') || e.target.classList.contains('flow-node-del')) return;
+    selectNode(node.id);
+  });
+
+  container.appendChild(el);
+}
+
+function selectNode(id) {
+  selectedNodeId = id;
+  document.querySelectorAll('.flow-node').forEach(n => n.classList.remove('selected'));
+  document.getElementById(id)?.classList.add('selected');
+  showNodeConfig(id);
+}
+
+function showNodeConfig(id) {
+  const node = nodes.find(n => n.id === id);
+  if (!node) return;
+  const cfg = nodeConfigs[node.type];
+  const panel = document.getElementById('nodeConfigPanel');
+  const title = document.getElementById('nodeConfigTitle');
+  const body = document.getElementById('nodeConfigBody');
+  panel.classList.add('show');
+  title.textContent = cfg.title + ' · 配置';
+
+  let html = '';
+  cfg.fields.forEach(f => {
+    html += `<div class="form-group">
+      <label class="form-label">${f.label}</label>`;
+    if (f.type === 'select') {
+      html += `<select class="select" onchange="updateNodeConfig('${id}','${f.label}',this.value)">`;
+      f.options.forEach(o => html += `<option ${node.config[f.label]===o?'selected':''}>${o}</option>`);
+      html += '</select>';
+    } else {
+      html += `<input class="input" type="text" value="${node.config[f.label]||''}" onchange="updateNodeConfig('${id}','${f.label}',this.value)">`;
+    }
+    html += '</div>';
+  });
+  if (cfg.fields.length === 0) html = '<div style="font-size:13px;color:var(--gray-400)">此节点无需配置</div>';
+  body.innerHTML = html;
+}
+
+function updateNodeConfig(id, key, val) {
+  const node = nodes.find(n => n.id === id);
+  if (node) { node.config[key] = val; renderNode(node); renderConnections(); }
+}
+
+function deleteNode(id) {
+  nodes = nodes.filter(n => n.id !== id);
+  connections = connections.filter(c => c.fromNode !== id && c.toNode !== id);
+  document.getElementById(id)?.remove();
+  if (selectedNodeId === id) {
+    selectedNodeId = null;
+    document.getElementById('nodeConfigPanel').classList.remove('show');
+  }
+  renderConnections();
+}
+
+// ===== Connection drawing =====
+let tempLine = null;
+
+function startConnect(e, nodeId, portIdx, label) {
+  e.stopPropagation();
+  connectingFrom = { nodeId, portIdx, label };
+  const svg = document.getElementById('flowSvg');
+  tempLine = document.createElementNS('http://www.w3.org/2000/svg','path');
+  tempLine.setAttribute('stroke','#94A3B8');
+  tempLine.setAttribute('stroke-width','2');
+  tempLine.setAttribute('fill','none');
+  tempLine.setAttribute('stroke-dasharray','5,3');
+  svg.appendChild(tempLine);
+}
+
+function finishConnect(toNodeId) {
+  if (!connectingFrom || connectingFrom.nodeId === toNodeId) { cancelConnect(); return; }
+  // avoid duplicate
+  const exists = connections.find(c => c.fromNode === connectingFrom.nodeId && c.fromPort === connectingFrom.portIdx && c.toNode === toNodeId);
+  if (!exists) {
+    connections.push({ fromNode: connectingFrom.nodeId, fromPort: connectingFrom.portIdx, label: connectingFrom.label, toNode: toNodeId });
+  }
+  cancelConnect();
+  renderConnections();
+}
+
+function cancelConnect() {
+  if (tempLine) { tempLine.remove(); tempLine = null; }
+  connectingFrom = null;
+}
+
+function getPortPos(nodeId, portIdx, isIn) {
+  const el = document.getElementById(nodeId);
+  if (!el) return {x:0,y:0};
+  const wrap = document.getElementById('flowCanvasWrap');
+  const wrapRect = wrap.getBoundingClientRect();
+  const elRect = el.getBoundingClientRect();
+
+  if (isIn) {
+    return { x: elRect.left - wrapRect.left, y: elRect.top - wrapRect.top + elRect.height / 2 };
+  }
+  // output port: find the port element
+  const portEl = document.getElementById(`${nodeId}_out_${portIdx}`);
+  if (portEl) {
+    const pr = portEl.getBoundingClientRect();
+    return { x: pr.left - wrapRect.left + pr.width/2, y: pr.top - wrapRect.top + pr.height/2 };
+  }
+  return { x: elRect.right - wrapRect.left, y: elRect.top - wrapRect.top + elRect.height/2 };
+}
+
+function makeCurve(x1,y1,x2,y2) {
+  const dx = Math.abs(x2-x1)*0.5;
+  return `M${x1},${y1} C${x1+dx},${y1} ${x2-dx},${y2} ${x2},${y2}`;
+}
+
+function renderConnections() {
+  const svg = document.getElementById('flowSvg');
+  // remove old connection paths (keep tempLine)
+  svg.querySelectorAll('.conn-path,.conn-label-el').forEach(e => e.remove());
+
+  connections.forEach((c, i) => {
+    const from = getPortPos(c.fromNode, c.fromPort, false);
+    const to = getPortPos(c.toNode, 0, true);
+    const cfg = nodeConfigs[nodes.find(n=>n.id===c.fromNode)?.type];
+    const color = cfg ? cfg.color : '#94A3B8';
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('class','conn-path');
+    path.setAttribute('d', makeCurve(from.x, from.y, to.x, to.y));
+    path.setAttribute('stroke', color);
+    path.setAttribute('stroke-width','2');
+    path.setAttribute('fill','none');
+    path.setAttribute('marker-end',`url(#arrow-${i})`);
+    svg.appendChild(path);
+
+    // arrowhead
+    let defs = svg.querySelector('defs');
+    if (!defs) { defs = document.createElementNS('http://www.w3.org/2000/svg','defs'); svg.prepend(defs); }
+    const marker = document.createElementNS('http://www.w3.org/2000/svg','marker');
+    marker.setAttribute('id',`arrow-${i}`);
+    marker.setAttribute('markerWidth','8');
+    marker.setAttribute('markerHeight','8');
+    marker.setAttribute('refX','6');
+    marker.setAttribute('refY','3');
+    marker.setAttribute('orient','auto');
+    const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    poly.setAttribute('points','0 0, 8 3, 0 6');
+    poly.setAttribute('fill', color);
+    marker.appendChild(poly);
+    defs.appendChild(marker);
+
+    // label
+    const mx = (from.x + to.x) / 2, my = (from.y + to.y) / 2;
+    const fo = document.createElementNS('http://www.w3.org/2000/svg','foreignObject');
+    fo.setAttribute('class','conn-label-el');
+    fo.setAttribute('x', mx - 30);
+    fo.setAttribute('y', my - 10);
+    fo.setAttribute('width','80');
+    fo.setAttribute('height','20');
+    fo.innerHTML = `<div xmlns="http://www.w3.org/1999/xhtml" style="background:white;border:1px solid #E2E8F0;border-radius:4px;padding:1px 5px;font-size:10px;font-weight:600;color:${color};text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.label}</div>`;
+    svg.appendChild(fo);
+  });
+}
+
+// Mouse move for dragging nodes and temp connection line
+document.addEventListener('mousemove', (e) => {
+  if (draggingNode) {
+    const wrap = document.getElementById('flowCanvasWrap');
+    const rect = wrap.getBoundingClientRect();
+    draggingNode.x = e.clientX - rect.left - dragOffset.x;
+    draggingNode.y = e.clientY - rect.top - dragOffset.y;
+    const el = document.getElementById(draggingNode.id);
+    if (el) { el.style.left = draggingNode.x + 'px'; el.style.top = draggingNode.y + 'px'; }
+    renderConnections();
+  }
+  if (connectingFrom && tempLine) {
+    const portEl = document.getElementById(`${connectingFrom.nodeId}_out_${connectingFrom.portIdx}`);
+    if (!portEl) return;
+    const wrap = document.getElementById('flowCanvasWrap');
+    const wrapRect = wrap.getBoundingClientRect();
+    const pr = portEl.getBoundingClientRect();
+    const x1 = pr.left - wrapRect.left + pr.width/2;
+    const y1 = pr.top - wrapRect.top + pr.height/2;
+    const x2 = e.clientX - wrapRect.left;
+    const y2 = e.clientY - wrapRect.top;
+    tempLine.setAttribute('d', makeCurve(x1,y1,x2,y2));
+  }
+});
+
+document.addEventListener('mouseup', (e) => {
+  if (draggingNode) { draggingNode = null; }
+  if (connectingFrom) { cancelConnect(); }
+});
+
+function initFlowEditor() {
+  // Clear and add demo nodes
+  nodes = []; connections = []; nodeCounter = 0;
+  document.getElementById('flowNodes').innerHTML = '';
+  document.getElementById('flowSvg').innerHTML = '';
+  document.getElementById('nodeConfigPanel').classList.remove('show');
+
+  // Demo: static → condition → dynamic → end
+  setTimeout(() => {
+    addNode('static', 60, 120);
+    addNode('condition', 320, 80);
+    addNode('dynamic', 320, 260);
+    addNode('end', 580, 160);
+    // demo connections
+    connections = [
+      { fromNode:'node_1', fromPort:0, label:'不感兴趣', toNode:'node_2' },
+      { fromNode:'node_2', fromPort:0, label:'满足条件', toNode:'node_4' },
+      { fromNode:'node_2', fromPort:1, label:'不满足', toNode:'node_3' },
+      { fromNode:'node_3', fromPort:0, label:'不感兴趣', toNode:'node_4' },
+    ];
+    renderConnections();
+  }, 50);
+}
+</script>
+</body>
+</html>

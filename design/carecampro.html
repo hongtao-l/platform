@@ -884,12 +884,20 @@ input[type="range"]::-moz-range-thumb {
     </div>
     
     <!-- Fixed Marketing Tip -->
-    <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="switchPage('store')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <span style="font-size:11px;color:var(--text-sub);flex:1;">Enable smart services to enjoy more features and amazing playback</span>
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;gap:8px;">
+      <div style="flex:1;display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="switchPage('store')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span style="font-size:11px;color:var(--text-sub);flex:1;">Enable smart services to enjoy more features and amazing playback</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <!-- 场景三触发按钮：消息页，云存即将届满 -->
+      <div onclick="showMarketingScene('cloud_expire')" style="display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:rgba(234,67,53,0.12);border:1px solid rgba(234,67,53,0.3);cursor:pointer;flex-shrink:0;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span style="font-size:11px;font-weight:600;color:var(--danger);">即将届满</span>
+      </div>
     </div>
-  </div>
+
+  </div><!-- /page-messages -->
 
   <!-- ===== MESSAGE DETAIL PAGE ===== -->
   <div class="page" id="page-msgdetail">
@@ -1174,9 +1182,19 @@ input[type="range"]::-moz-range-thumb {
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       </div>
       <!-- Source tabs -->
-      <div style="display:flex;padding:0 16px;gap:8px;margin-bottom:8px;" id="pbSourceTabs">
+      <div style="display:flex;padding:0 16px;gap:8px;margin-bottom:8px;align-items:center;" id="pbSourceTabs">
         <div class="pb-src-tab active" onclick="switchPbSource(this,'cloud')">Cloud</div>
         <div class="pb-src-tab" onclick="switchPbSource(this,'sd')">SD Card</div>
+        <!-- 场景二触发按钮：云回放，云存即将届满 -->
+        <div id="pbCloudPromoBtn" onclick="showMarketingScene('cloud_expire')" style="margin-left:auto;display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:rgba(234,67,53,0.12);border:1px solid rgba(234,67,53,0.3);cursor:pointer;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span style="font-size:11px;font-weight:600;color:var(--danger);">即将届满</span>
+        </div>
+        <!-- 场景一触发按钮：SD卡回放，存储将满 -->
+        <div id="pbSdPromoBtn" onclick="showMarketingScene('sd_full')" style="margin-left:auto;display:none;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:rgba(234,67,53,0.12);border:1px solid rgba(234,67,53,0.3);cursor:pointer;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span style="font-size:11px;font-weight:600;color:var(--danger);">存储将满</span>
+        </div>
       </div>
       
       <!-- Normal playback content -->
@@ -1380,6 +1398,11 @@ input[type="range"]::-moz-range-thumb {
               <div style="font-size:14px;font-weight:600;color:var(--text-main);">存储设置</div>
               <div style="font-size:12px;color:var(--text-sub);margin-top:2px;">SD卡管理</div>
             </div>
+          </div>
+          <!-- 场景四触发按钮：未插SD卡 -->
+          <div onclick="event.stopPropagation();showMarketingScene('no_sd')" style="display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:rgba(251,188,4,0.12);border:1px solid rgba(251,188,4,0.5);cursor:pointer;margin-right:8px;opacity:1;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span style="font-size:11px;font-weight:600;color:var(--warning);">未插SD卡</span>
           </div>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
@@ -1741,33 +1764,39 @@ input[type="range"]::-moz-range-thumb {
 <!-- Marketing Recommendation Modal -->
 <div class="modal-mask" id="marketingMask" onclick="hideMarketingModal()" style="position:absolute;"></div>
 <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-radius:20px 20px 0 0;padding:20px 16px 32px;z-index:900;display:none;" id="marketingModal">
-  <div style="text-align:center;margin-bottom:20px;">
-    <div style="font-size:16px;font-weight:700;color:var(--text-main);margin-bottom:8px;" id="marketingTitle">SD Card Storage Full</div>
-    <div style="font-size:13px;color:var(--text-sub);line-height:1.6;" id="marketingDesc">SD card storage capacity is insufficient. Some historical recordings will be overwritten. Enable cloud storage to automatically cycle recordings and never lose key footage.</div>
+  <!-- 图标 -->
+  <div style="width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;" id="marketingIcon">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M22 12H18L15 21 9 3 6 12H2"/></svg>
   </div>
+  <!-- 标题 & 正文 -->
+  <div style="text-align:center;margin-bottom:16px;">
+    <div style="font-size:16px;font-weight:700;color:var(--text-main);margin-bottom:8px;" id="marketingTitle"></div>
+    <div style="font-size:13px;color:var(--text-sub);line-height:1.6;" id="marketingDesc"></div>
+  </div>
+  <!-- 推荐套餐卡片 -->
   <div style="background:var(--bg);border-radius:var(--radius-card);padding:14px;margin-bottom:16px;position:relative;border:1.5px solid var(--primary);">
-    <div style="position:absolute;top:-8px;left:12px;background:var(--danger);color:#fff;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:700;">60% OFF</div>
-    <div style="font-size:12px;font-weight:600;color:var(--text-sub);margin-bottom:8px;">Recommended Plan</div>
+    <div style="position:absolute;top:-8px;left:12px;background:var(--danger);color:#fff;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:700;" id="marketingDiscount">7折</div>
+    <div style="font-size:11px;font-weight:600;color:var(--text-sub);margin-bottom:8px;">推荐套餐</div>
     <div style="display:flex;align-items:center;gap:12px;">
       <div style="flex:1;">
-        <div style="font-size:14px;font-weight:700;color:var(--text-main);">Basic Plan</div>
-        <div style="font-size:12px;color:var(--text-sub);margin-top:2px;">15-day event recording</div>
-        <div style="font-size:12px;color:var(--text-sub);">Motion & person detection</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text-main);" id="marketingPlanName"></div>
+        <div style="font-size:12px;color:var(--text-sub);margin-top:2px;" id="marketingPlanDesc"></div>
       </div>
       <div style="text-align:right;">
-        <div style="font-size:16px;font-weight:800;color:var(--primary);">$2.99</div>
-        <div style="font-size:10px;color:var(--text-sub);">/month</div>
+        <div style="font-size:16px;font-weight:800;color:var(--primary);" id="marketingPrice"></div>
+        <div style="font-size:10px;color:var(--text-sub);">/月</div>
       </div>
     </div>
     <div style="margin-top:12px;">
-      <button onclick="viewServiceDetails()" style="width:100%;padding:10px;border-radius:var(--radius-btn);background:var(--bg);border:1.5px solid var(--border);color:var(--text-main);font-size:13px;font-weight:600;cursor:pointer;">View Details</button>
+      <button onclick="switchPage('store')" style="width:100%;padding:10px;border-radius:var(--radius-btn);background:var(--bg);border:1.5px solid var(--border);color:var(--text-main);font-size:13px;font-weight:600;cursor:pointer;">查看详情</button>
     </div>
   </div>
+  <!-- 操作按钮 -->
   <div style="display:flex;gap:10px;margin-bottom:12px;">
-    <button onclick="recordMarketingAction('not_interested')" style="flex:1;padding:12px;border-radius:var(--radius-btn);background:var(--bg);border:1.5px solid var(--border);color:var(--text-sub);font-size:13px;font-weight:600;cursor:pointer;">Not Interested</button>
-    <button onclick="recordMarketingAction('buy_now')" style="flex:1;padding:12px;border-radius:var(--radius-btn);background:var(--primary);color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;">Buy Now</button>
+    <button id="marketingBtnLeft" onclick="recordMarketingAction('left')" style="flex:1;padding:12px;border-radius:var(--radius-btn);background:var(--bg);border:1.5px solid var(--border);color:var(--text-sub);font-size:13px;font-weight:600;cursor:pointer;"></button>
+    <button id="marketingBtnRight" onclick="recordMarketingAction('right')" style="flex:1;padding:12px;border-radius:var(--radius-btn);background:var(--primary);color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;"></button>
   </div>
-  <button onclick="hideMarketingModal()" style="width:100%;padding:10px;border-radius:var(--radius-btn);background:transparent;border:1.5px solid var(--border);color:var(--text-sub);font-size:13px;font-weight:600;cursor:pointer;">Close</button>
+  <button onclick="recordMarketingAction('close')" style="width:100%;padding:10px;border-radius:var(--radius-btn);background:transparent;border:1.5px solid var(--border);color:var(--text-sub);font-size:13px;font-weight:600;cursor:pointer;">关闭</button>
 </div>
 
 <!-- Delete Device Confirmation Modal -->
@@ -1917,6 +1946,10 @@ function switchPage(page) {
     // Clear timeouts for other pages
     clearTimeout(msgDetailTimeout);
     clearTimeout(marketingTimeout);
+  }
+  // Draw charts for battery stats page
+  if (page === 'battery-stats') {
+    setTimeout(draw24hChart, 50);
   }
 }
 
@@ -2081,6 +2114,12 @@ function selectPay(el) {
 function switchPbSource(el, src) {
   document.querySelectorAll('.pb-src-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
+  currentPbSource = src;
+  // 切换触发按钮显示
+  const cloudBtn = document.getElementById('pbCloudPromoBtn');
+  const sdBtn = document.getElementById('pbSdPromoBtn');
+  if (cloudBtn) cloudBtn.style.display = src === 'cloud' ? 'flex' : 'none';
+  if (sdBtn) sdBtn.style.display = src === 'sd' ? 'flex' : 'none';
   // SD card shows same content as cloud (same UI, different source label)
   const evtTitle = document.querySelector('#page-playback [style*="Events"]');
   if (evtTitle) evtTitle.textContent = src === 'sd' ? 'SD Card Events' : 'Events';
@@ -2137,6 +2176,67 @@ function togglePlayPause() {
     playBtn.style.display = 'block';
     pauseBtn.style.display = 'none';
   }
+}
+
+// ===== MARKETING SCENES =====
+const marketingScenes = {
+  sd_full: {
+    icon: '#EA4335',
+    iconSvg: '<path d="M22 12H18L15 21 9 3 6 12H2"/>',
+    title: '存储空间即将满载 (已用 92%)',
+    desc: '您的本地存储已存储约 7 天录像，空间即将耗尽。开启循环覆盖后，最早的画面将无法找回。升级 30 天云存储，摆脱容量限制，重要动态留足空间。',
+    planName: '30天循环云存储套餐',
+    planDesc: '30天循环24h录像 · 万物识别AI侦测',
+    price: '¥19.9',
+    discount: '7折',
+    btnLeft: '允许覆盖',
+    btnRight: '立即升级'
+  },
+  cloud_expire: {
+    icon: '#1A73E8',
+    iconSvg: '<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>',
+    title: '7天循环即将届满',
+    desc: '您已连续安全存储 7 天录像。明天起，系统将自动抹除第 1 天的记录以腾出空间。不想错过任何瞬间？升级至 30 天循环套餐，延长回溯时间。',
+    planName: '30天循环云存储套餐',
+    planDesc: '30天循环24h录像 · 万物识别AI侦测',
+    price: '¥19.9',
+    discount: '7折',
+    btnLeft: '允许覆盖',
+    btnRight: '立即升级'
+  },
+  no_sd: {
+    icon: '#FBBC04',
+    iconSvg: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 11h.01M12 11h.01M8 11h.01"/>',
+    title: '检测到您的设备正处于"裸奔"状态',
+    desc: '本设备未检测到存储卡。现在升级云存储，无需等待硬件，立即开始录制您的关注画面。',
+    planName: '7天循环云存储套餐',
+    planDesc: '7天循环事件录像 · 运动、人形基础AI侦测',
+    price: '¥9.9',
+    discount: '限时',
+    btnLeft: '不感兴趣',
+    btnRight: '立即购买'
+  }
+};
+
+function showMarketingScene(scene) {
+  const cfg = marketingScenes[scene];
+  if (!cfg) return;
+  // 图标
+  const iconEl = document.getElementById('marketingIcon');
+  iconEl.style.background = cfg.icon;
+  iconEl.innerHTML = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">${cfg.iconSvg}</svg>`;
+  // 文案
+  document.getElementById('marketingTitle').textContent = cfg.title;
+  document.getElementById('marketingDesc').textContent = cfg.desc;
+  // 套餐卡片
+  document.getElementById('marketingDiscount').textContent = cfg.discount;
+  document.getElementById('marketingPlanName').textContent = cfg.planName;
+  document.getElementById('marketingPlanDesc').textContent = cfg.planDesc;
+  document.getElementById('marketingPrice').textContent = cfg.price;
+  // 按钮
+  document.getElementById('marketingBtnLeft').textContent = cfg.btnLeft;
+  document.getElementById('marketingBtnRight').textContent = cfg.btnRight;
+  showMarketingModal();
 }
 
 function showMarketingModal() {
@@ -2895,16 +2995,6 @@ function draw10dChart() {
 }
 
 // init charts when battery-stats page is shown
-const _origSwitchPage = switchPage;
-// patch switchPage to draw charts
-const _patchedSwitchPage = function(page) {
-  _origSwitchPage(page);
-  if (page === 'battery-stats') {
-    setTimeout(draw24hChart, 50);
-  }
-};
-// override
-window.switchPage = _patchedSwitchPage;
 // Render all saved annotations
 Object.keys(annotations).forEach(key => {
   const savedPage = currentPage;
