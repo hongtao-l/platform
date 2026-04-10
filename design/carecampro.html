@@ -646,6 +646,9 @@ input[type="range"]::-moz-range-thumb {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           <div class="red-dot"></div>
         </div>
+        <div class="icon-btn" onclick="showAddDevicePromo()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        </div>
         <div class="avatar-btn" onclick="switchPage('profile')">J</div>
       </div>
     </div>
@@ -891,9 +894,14 @@ input[type="range"]::-moz-range-thumb {
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
       <!-- 场景三触发按钮：消息页，云存即将届满 -->
-      <div onclick="showMarketingScene('cloud_expire')" style="display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:rgba(234,67,53,0.12);border:1px solid rgba(234,67,53,0.3);cursor:pointer;flex-shrink:0;">
+      <div onclick="showMarketingScene('msg_expire')" style="display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:rgba(234,67,53,0.12);border:1px solid rgba(234,67,53,0.3);cursor:pointer;flex-shrink:0;">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <span style="font-size:11px;font-weight:600;color:var(--danger);">即将届满</span>
+      </div>
+      <!-- 消息页-无云服务 -->
+      <div onclick="showMarketingScene('msg_no_service')" style="display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:rgba(26,115,232,0.12);border:1px solid rgba(26,115,232,0.3);cursor:pointer;flex-shrink:0;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span style="font-size:11px;font-weight:600;color:var(--primary);">未激活</span>
       </div>
     </div>
 
@@ -1190,10 +1198,20 @@ input[type="range"]::-moz-range-thumb {
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           <span style="font-size:11px;font-weight:600;color:var(--danger);">即将届满</span>
         </div>
+        <!-- 云回放-未购买云服务 -->
+        <div id="pbCloudNoServiceBtn" onclick="showMarketingScene('cloud_no_service')" style="margin-left:auto;display:none;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:rgba(26,115,232,0.12);border:1px solid rgba(26,115,232,0.3);cursor:pointer;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span style="font-size:11px;font-weight:600;color:var(--primary);">未开通云存</span>
+        </div>
         <!-- 场景一触发按钮：SD卡回放，存储将满 -->
         <div id="pbSdPromoBtn" onclick="showMarketingScene('sd_full')" style="margin-left:auto;display:none;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:rgba(234,67,53,0.12);border:1px solid rgba(234,67,53,0.3);cursor:pointer;">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           <span style="font-size:11px;font-weight:600;color:var(--danger);">存储将满</span>
+        </div>
+        <!-- SD卡回放-无SD卡触发按钮 -->
+        <div id="pbSdNoCardBtn" onclick="showMarketingScene('no_sd')" style="display:none;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:rgba(251,188,4,0.12);border:1px solid rgba(251,188,4,0.5);cursor:pointer;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span style="font-size:11px;font-weight:600;color:var(--warning);">无SD卡</span>
         </div>
       </div>
       
@@ -1403,6 +1421,11 @@ input[type="range"]::-moz-range-thumb {
           <div onclick="event.stopPropagation();showMarketingScene('no_sd')" style="display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:rgba(251,188,4,0.12);border:1px solid rgba(251,188,4,0.5);cursor:pointer;margin-right:8px;opacity:1;">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             <span style="font-size:11px;font-weight:600;color:var(--warning);">未插SD卡</span>
+          </div>
+          <!-- 存储将满触发按钮 -->
+          <div onclick="event.stopPropagation();showMarketingScene('sd_full')" style="display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:rgba(234,67,53,0.12);border:1px solid rgba(234,67,53,0.3);cursor:pointer;margin-right:8px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span style="font-size:11px;font-weight:600;color:var(--danger);">存储将满</span>
           </div>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
@@ -1762,8 +1785,12 @@ input[type="range"]::-moz-range-thumb {
 </div><!-- /phone -->
 
 <!-- Marketing Recommendation Modal -->
-<div class="modal-mask" id="marketingMask" onclick="hideMarketingModal()" style="position:absolute;"></div>
-<div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-radius:20px 20px 0 0;padding:20px 16px 32px;z-index:900;display:none;" id="marketingModal">
+<div class="modal-mask" id="marketingMask" style="position:absolute;"></div>
+<div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-radius:20px 20px 0 0;padding:20px 16px 28px;z-index:900;display:none;" id="marketingModal">
+  <!-- 右上角关闭 -->
+  <div onclick="recordMarketingAction('close')" style="position:absolute;top:14px;right:16px;width:28px;height:28px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-sub)" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </div>
   <!-- 图标 -->
   <div style="width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;" id="marketingIcon">
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M22 12H18L15 21 9 3 6 12H2"/></svg>
@@ -1774,7 +1801,7 @@ input[type="range"]::-moz-range-thumb {
     <div style="font-size:13px;color:var(--text-sub);line-height:1.6;" id="marketingDesc"></div>
   </div>
   <!-- 推荐套餐卡片 -->
-  <div style="background:var(--bg);border-radius:var(--radius-card);padding:14px;margin-bottom:16px;position:relative;border:1.5px solid var(--primary);">
+  <div style="background:var(--bg);border-radius:var(--radius-card);padding:14px;margin-bottom:14px;position:relative;border:1.5px solid var(--primary);">
     <div style="position:absolute;top:-8px;left:12px;background:var(--danger);color:#fff;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:700;" id="marketingDiscount">7折</div>
     <div style="font-size:11px;font-weight:600;color:var(--text-sub);margin-bottom:8px;">推荐套餐</div>
     <div style="display:flex;align-items:center;gap:12px;">
@@ -1787,16 +1814,88 @@ input[type="range"]::-moz-range-thumb {
         <div style="font-size:10px;color:var(--text-sub);">/月</div>
       </div>
     </div>
-    <div style="margin-top:12px;">
-      <button onclick="switchPage('store')" style="width:100%;padding:10px;border-radius:var(--radius-btn);background:var(--bg);border:1.5px solid var(--border);color:var(--text-main);font-size:13px;font-weight:600;cursor:pointer;">查看详情</button>
+  </div>
+  <!-- 支付方式 -->
+  <div style="margin-bottom:14px;">
+    <div style="font-size:12px;font-weight:600;color:var(--text-sub);margin-bottom:8px;">支付方式</div>
+    <div style="display:flex;gap:8px;">
+      <div id="pay-alipay" onclick="selectPayMethod('alipay')" style="flex:1;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--radius-btn);border:1.5px solid var(--primary);background:#EFF6FF;cursor:pointer;">
+        <div style="width:22px;height:22px;border-radius:6px;background:#1677FF;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M21.4 15.6c-.3-.1-2.4-.8-4.6-1.5 1.1-1.8 1.9-3.9 2.2-6.1H21V6h-5V4h-2v2h-5V4H7v2H2v2h2.1c.3 2.2 1.1 4.3 2.2 6.1-2.2.7-4.3 1.4-4.6 1.5C.7 16.1 0 17.2 0 18.4 0 20.4 1.6 22 3.6 22c1.5 0 4.2-1.2 7.4-3.3.9.5 1.9.8 3 .8s2.1-.3 3-.8c3.2 2.1 5.9 3.3 7.4 3.3 2 0 3.6-1.6 3.6-3.6 0-1.2-.7-2.3-1.6-2.8z"/></svg>
+        </div>
+        <span style="font-size:13px;font-weight:600;color:var(--primary);">支付宝</span>
+        <div style="margin-left:auto;width:16px;height:16px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;" id="pay-alipay-check">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <div id="pay-wechat" onclick="selectPayMethod('wechat')" style="flex:1;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--radius-btn);border:1.5px solid var(--border);background:var(--bg);cursor:pointer;">
+        <div style="width:22px;height:22px;border-radius:6px;background:#07C160;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M9.5 4C5.4 4 2 6.9 2 10.5c0 2 1.1 3.8 2.8 5l-.7 2.1 2.4-1.2c.9.3 1.9.5 3 .5.2 0 .4 0 .6-.1-.1-.4-.2-.8-.2-1.3 0-3.3 3-6 6.7-6h.4C16.4 6.6 13.2 4 9.5 4zm-2 4.5c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm4 0c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1z"/><path d="M22 15.5c0-2.8-2.7-5-6-5s-6 2.2-6 5 2.7 5 6 5c.8 0 1.6-.1 2.3-.4l1.9.9-.5-1.7c1.4-1 2.3-2.3 2.3-3.8zm-8-1c-.5 0-.9-.4-.9-.9s.4-.9.9-.9.9.4.9.9-.4.9-.9.9zm4 0c-.5 0-.9-.4-.9-.9s.4-.9.9-.9.9.4.9.9-.4.9-.9.9z"/></svg>
+        </div>
+        <span style="font-size:13px;font-weight:600;color:var(--text-sub);" id="pay-wechat-label">微信</span>
+        <div style="margin-left:auto;width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border);display:none;" id="pay-wechat-check"></div>
+      </div>
     </div>
   </div>
   <!-- 操作按钮 -->
-  <div style="display:flex;gap:10px;margin-bottom:12px;">
-    <button id="marketingBtnLeft" onclick="recordMarketingAction('left')" style="flex:1;padding:12px;border-radius:var(--radius-btn);background:var(--bg);border:1.5px solid var(--border);color:var(--text-sub);font-size:13px;font-weight:600;cursor:pointer;"></button>
-    <button id="marketingBtnRight" onclick="recordMarketingAction('right')" style="flex:1;padding:12px;border-radius:var(--radius-btn);background:var(--primary);color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;"></button>
+  <button id="marketingBtnRight" onclick="recordMarketingAction('right')" style="width:100%;padding:13px;border-radius:var(--radius-btn);background:var(--primary);color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px;"></button>
+  <button id="marketingBtnLeft" onclick="recordMarketingAction('left')" style="width:100%;padding:8px;border-radius:var(--radius-btn);background:transparent;border:none;color:var(--text-sub);font-size:12px;cursor:pointer;opacity:0.6;"></button>
+</div>
+
+<!-- Add Device Promo Modal (全屏) -->
+<div style="position:absolute;inset:0;background:linear-gradient(160deg,#0F2A5E 0%,#1A73E8 60%,#4A90E2 100%);z-index:950;display:none;flex-direction:column;" id="addDevicePromoModal">
+  <!-- 返回按钮 -->
+  <div onclick="hideAddDevicePromo()" style="position:absolute;top:16px;left:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
   </div>
-  <button onclick="recordMarketingAction('close')" style="width:100%;padding:10px;border-radius:var(--radius-btn);background:transparent;border:1.5px solid var(--border);color:var(--text-sub);font-size:13px;font-weight:600;cursor:pointer;">关闭</button>
+  <!-- 内容区 -->
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px 0;">
+    <!-- 图标 -->
+    <div style="width:96px;height:96px;border-radius:28px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;margin-bottom:32px;">
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+    </div>
+    <!-- 标题 -->
+    <div style="font-size:26px;font-weight:800;color:#fff;text-align:center;margin-bottom:16px;line-height:1.3;">让守护更完整</div>
+    <!-- 描述 -->
+    <div style="font-size:15px;color:rgba(255,255,255,0.85);text-align:center;line-height:1.7;margin-bottom:40px;">设备已就绪！为你准备了 7 天滚动云存储特惠，重要瞬间不遗漏，安全随时回看</div>
+    <!-- 套餐卡片 -->
+    <div style="width:100%;background:rgba(255,255,255,0.12);border-radius:16px;padding:18px;border:1.5px solid rgba(255,255,255,0.25);margin-bottom:32px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#fff;">7天滚动云存储</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:3px;">事件录像 · 运动人形侦测 · 随时回看</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px;color:rgba(255,255,255,0.6);text-decoration:line-through;">¥19.9</div>
+          <div style="font-size:22px;font-weight:800;color:#FFD700;">¥9.9<span style="font-size:12px;font-weight:500;color:rgba(255,255,255,0.7)">/月</span></div>
+        </div>
+      </div>
+      <!-- 支付方式 -->
+      <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:8px;">支付方式</div>
+      <div style="display:flex;gap:8px;">
+        <div id="promo-pay-alipay" onclick="selectPromoPayMethod('alipay')" style="flex:1;display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.8);background:rgba(255,255,255,0.15);cursor:pointer;">
+          <div style="width:20px;height:20px;border-radius:5px;background:#1677FF;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="#fff"><path d="M21.4 15.6c-.3-.1-2.4-.8-4.6-1.5 1.1-1.8 1.9-3.9 2.2-6.1H21V6h-5V4h-2v2h-5V4H7v2H2v2h2.1c.3 2.2 1.1 4.3 2.2 6.1-2.2.7-4.3 1.4-4.6 1.5C.7 16.1 0 17.2 0 18.4 0 20.4 1.6 22 3.6 22c1.5 0 4.2-1.2 7.4-3.3.9.5 1.9.8 3 .8s2.1-.3 3-.8c3.2 2.1 5.9 3.3 7.4 3.3 2 0 3.6-1.6 3.6-3.6 0-1.2-.7-2.3-1.6-2.8z"/></svg>
+          </div>
+          <span style="font-size:12px;font-weight:600;color:#fff;">支付宝</span>
+          <div style="margin-left:auto;width:14px;height:14px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;" id="promo-alipay-check">
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#1A73E8" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+        <div id="promo-pay-wechat" onclick="selectPromoPayMethod('wechat')" style="flex:1;display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.08);cursor:pointer;">
+          <div style="width:20px;height:20px;border-radius:5px;background:#07C160;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="#fff"><path d="M9.5 4C5.4 4 2 6.9 2 10.5c0 2 1.1 3.8 2.8 5l-.7 2.1 2.4-1.2c.9.3 1.9.5 3 .5.2 0 .4 0 .6-.1-.1-.4-.2-.8-.2-1.3 0-3.3 3-6 6.7-6h.4C16.4 6.6 13.2 4 9.5 4zm-2 4.5c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm4 0c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1z"/></svg>
+          </div>
+          <span style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.7);" id="promo-wechat-label">微信</span>
+          <div style="margin-left:auto;width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.4);display:none;" id="promo-wechat-check"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 底部按钮 -->
+  <div style="padding:0 28px 48px;">
+    <button onclick="hideAddDevicePromo()" style="width:100%;padding:16px;border-radius:var(--radius-btn);background:#fff;color:var(--primary);border:none;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.2);">立即开通</button>
+  </div>
 </div>
 
 <!-- Delete Device Confirmation Modal -->
@@ -2050,7 +2149,15 @@ function selectSvcTab(el) {
   document.querySelectorAll('.svc-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   const tabName = el.textContent.trim();
-  const cfg = svcContent[tabName];
+  // 中英文 key 映射
+  const tabKeyMap = {
+    '云存储': 'Cloud Storage', '云存': 'Cloud Storage',
+    'AI智能服务': 'AI Service', 'AI Service': 'AI Service',
+    '离线监测': 'Offline Monitor', 'Offline Monitor': 'Offline Monitor',
+    '去广告': 'Ad-Free', 'Ad-Free': 'Ad-Free',
+    '流量充值': 'Data Plan', 'Data Plan': 'Data Plan'
+  };
+  const cfg = svcContent[tabKeyMap[tabName] || tabName];
   if (!cfg) return;
   // Update banner
   document.querySelector('.cloud-banner .banner-text .title').textContent = cfg.bannerTitle;
@@ -2117,9 +2224,13 @@ function switchPbSource(el, src) {
   currentPbSource = src;
   // 切换触发按钮显示
   const cloudBtn = document.getElementById('pbCloudPromoBtn');
+  const cloudNoServiceBtn = document.getElementById('pbCloudNoServiceBtn');
   const sdBtn = document.getElementById('pbSdPromoBtn');
   if (cloudBtn) cloudBtn.style.display = src === 'cloud' ? 'flex' : 'none';
+  if (cloudNoServiceBtn) cloudNoServiceBtn.style.display = src === 'cloud' ? 'flex' : 'none';
   if (sdBtn) sdBtn.style.display = src === 'sd' ? 'flex' : 'none';
+  const sdNoCardBtn = document.getElementById('pbSdNoCardBtn');
+  if (sdNoCardBtn) sdNoCardBtn.style.display = src === 'sd' ? 'flex' : 'none';
   // SD card shows same content as cloud (same UI, different source label)
   const evtTitle = document.querySelector('#page-playback [style*="Events"]');
   if (evtTitle) evtTitle.textContent = src === 'sd' ? 'SD Card Events' : 'Events';
@@ -2178,6 +2289,56 @@ function togglePlayPause() {
   }
 }
 
+function showAddDevicePromo() {
+  document.getElementById('addDevicePromoModal').style.display = 'flex';
+}
+function hideAddDevicePromo() {
+  document.getElementById('addDevicePromoModal').style.display = 'none';
+}
+function selectPromoPayMethod(method) {
+  const alipay = document.getElementById('promo-pay-alipay');
+  const wechat = document.getElementById('promo-pay-wechat');
+  const alipayCheck = document.getElementById('promo-alipay-check');
+  const wechatCheck = document.getElementById('promo-wechat-check');
+  const wechatLabel = document.getElementById('promo-wechat-label');
+  if (method === 'alipay') {
+    alipay.style.borderColor = 'rgba(255,255,255,0.8)'; alipay.style.background = 'rgba(255,255,255,0.15)';
+    alipayCheck.style.display = 'flex';
+    wechat.style.borderColor = 'rgba(255,255,255,0.3)'; wechat.style.background = 'rgba(255,255,255,0.08)';
+    wechatCheck.style.display = 'none';
+    wechatLabel.style.color = 'rgba(255,255,255,0.7)';
+  } else {
+    wechat.style.borderColor = '#07C160'; wechat.style.background = 'rgba(7,193,96,0.2)';
+    wechatCheck.style.display = 'flex'; wechatCheck.style.background = '#07C160'; wechatCheck.style.border = 'none';
+    wechatCheck.innerHTML = '<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+    wechatLabel.style.color = '#fff';
+    alipay.style.borderColor = 'rgba(255,255,255,0.3)'; alipay.style.background = 'rgba(255,255,255,0.08)';
+    alipayCheck.style.display = 'none';
+  }
+}
+
+function selectPayMethod(method) {
+  const alipay = document.getElementById('pay-alipay');
+  const wechat = document.getElementById('pay-wechat');
+  const alipayCheck = document.getElementById('pay-alipay-check');
+  const wechatCheck = document.getElementById('pay-wechat-check');
+  const wechatLabel = document.getElementById('pay-wechat-label');
+  if (method === 'alipay') {
+    alipay.style.borderColor = 'var(--primary)'; alipay.style.background = '#EFF6FF';
+    alipayCheck.style.display = 'flex';
+    wechat.style.borderColor = 'var(--border)'; wechat.style.background = 'var(--bg)';
+    wechatCheck.style.display = 'none';
+    wechatLabel.style.color = 'var(--text-sub)';
+  } else {
+    wechat.style.borderColor = '#07C160'; wechat.style.background = '#F0FDF4';
+    wechatCheck.style.display = 'flex'; wechatCheck.style.background = '#07C160'; wechatCheck.style.border = 'none';
+    wechatCheck.innerHTML = '<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+    wechatLabel.style.color = '#07C160';
+    alipay.style.borderColor = 'var(--border)'; alipay.style.background = 'var(--bg)';
+    alipayCheck.style.display = 'none';
+  }
+}
+
 // ===== MARKETING SCENES =====
 const marketingScenes = {
   sd_full: {
@@ -2190,7 +2351,7 @@ const marketingScenes = {
     price: '¥19.9',
     discount: '7折',
     btnLeft: '允许覆盖',
-    btnRight: '立即升级'
+    btnRight: '立即开通'
   },
   cloud_expire: {
     icon: '#1A73E8',
@@ -2204,6 +2365,18 @@ const marketingScenes = {
     btnLeft: '允许覆盖',
     btnRight: '立即升级'
   },
+  cloud_no_service: {
+    icon: '#1A73E8',
+    iconSvg: '<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>',
+    title: '解锁云端回放功能',
+    desc: '当前页面暂无回放记录。开启云存储，录像将加密上传至云端，即便设备被损毁或存储卡失效，重要画面依然可查、可看、可下载。',
+    planName: '7天循环云存储套餐',
+    planDesc: '7天循环事件录像 · 运动、人形基础AI侦测',
+    price: '¥9.9',
+    discount: '限时',
+    btnLeft: '不感兴趣',
+    btnRight: '立即开通'
+  },
   no_sd: {
     icon: '#FBBC04',
     iconSvg: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 11h.01M12 11h.01M8 11h.01"/>',
@@ -2214,7 +2387,31 @@ const marketingScenes = {
     price: '¥9.9',
     discount: '限时',
     btnLeft: '不感兴趣',
-    btnRight: '立即购买'
+    btnRight: '立即开通'
+  },
+  msg_no_service: {
+    icon: '#EA4335',
+    iconSvg: '<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>',
+    title: '录像功能未激活',
+    desc: '消息记录将在一天后自动失效，且目前无法查看任何关联回放。为了确保关键时刻有据可查，建议立即开通云存储。',
+    planName: '7天循环云存储套餐',
+    planDesc: '7天循环事件录像 · 运动、人形基础AI侦测',
+    price: '¥9.9',
+    discount: '限时',
+    btnLeft: '不感兴趣',
+    btnRight: '立即开通'
+  },
+  msg_expire: {
+    icon: '#1A73E8',
+    iconSvg: '<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>',
+    title: '7天循环即将届满',
+    desc: '您已连续安全存储 7 天录像。明天起，系统将自动抹除第 1 天的记录以腾出空间。不想错过任何瞬间？升级至 30 天循环套餐，延长回溯时间。',
+    planName: '30天循环云存储套餐',
+    planDesc: '30天循环24h录像 · 万物识别AI侦测',
+    price: '¥19.9',
+    discount: '7折',
+    btnLeft: '允许覆盖',
+    btnRight: '立即升级'
   }
 };
 

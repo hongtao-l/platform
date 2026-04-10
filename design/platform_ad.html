@@ -523,6 +523,7 @@ tbody tr:hover td { background: var(--gray-50); }
     <div class="form-group">
       <label class="form-label">开屏/插屏冷却间隔（s） <span class="required">*</span></label>
       <input class="input" type="number" placeholder="请输入冷却间隔秒数" style="max-width:200px" id="strategy-cooldown">
+      <div style="font-size:11px;color:var(--gray-400);margin-top:4px">0 表示不限制</div>
       <div class="form-error" id="strategy-cooldown-error">此项为必填项</div>
     </div>
   </div>
@@ -738,10 +739,10 @@ function addSlotConfig() {
     '<span style="font-size:13px;color:var(--gray-700);white-space:nowrap">\u5c55\u793a\u72b6\u6001</span>' +
     '<label class="toggle"><input type="checkbox" id="tog-' + id + '" onchange="toggleSlotDyn(\'sp-' + id + '\',this)"><span class="toggle-slider"></span></label>' +
     '<span style="font-size:13px;color:var(--gray-500)" id="tog-' + id + '-lbl">\u5df2\u5173\u95ed</span></div>' +
-    '<div id="sp-' + id + '" style="display:none;gap:10px;align-items:flex-end">' +
-    '<div style="flex:1"><label class="form-label" style="white-space:nowrap">\u9891\u6b21\u4e0a\u9650\uff08\u6b21/\u5c0f\u65f6\uff09</label><input class="input" type="number" placeholder="5"></div>' +
-    '<div style="flex:1"><label class="form-label" style="white-space:nowrap">\u5c55\u793a\u95f4\u9694\uff08s\uff09</label><input class="input" type="number" placeholder="30"></div>' +
-    '<div style="flex:1"><label class="form-label" style="white-space:nowrap">\u5237\u65b0\u95f4\u9694\uff08s\uff09</label><input class="input" type="number" placeholder="60"></div>' +
+    '<div id="sp-' + id + '" style="display:none;gap:10px;align-items:flex-start">' +
+    '<div style="flex:1"><label class="form-label" style="white-space:nowrap">\u9891\u6b21\u4e0a\u9650\uff08\u6b21/\u5c0f\u65f6\uff09</label><input class="input" type="number" placeholder="5"><div style="font-size:11px;color:var(--gray-400);margin-top:4px">0 \u8868\u793a\u4e0d\u9650\u5236</div></div>' +
+    '<div style="flex:1"><label class="form-label" style="white-space:nowrap">\u5c55\u793a\u95f4\u9694\uff08s\uff09</label><input class="input" type="number" placeholder="30"><div style="font-size:11px;color:var(--gray-400);margin-top:4px">0 \u8868\u793a\u4e0d\u9650\u5236</div></div>' +
+    '<div style="flex:1"><label class="form-label" style="white-space:nowrap">\u5237\u65b0\u95f4\u9694\uff08s\uff09</label><input class="input" type="number" placeholder="60"><div style="font-size:11px;color:var(--gray-400);margin-top:4px">0 \u8868\u793a\u4e0d\u9650\u5236</div></div>' +
     '</div></div>';
   list.appendChild(div);
 }

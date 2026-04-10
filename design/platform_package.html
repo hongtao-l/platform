@@ -70,8 +70,6 @@ tbody tr:hover td{background:var(--gray-50);}
 .form-group{margin-bottom:16px;}
 .form-label{display:block;font-size:13px;font-weight:500;color:var(--gray-700);margin-bottom:6px;}
 .required{color:var(--danger);margin-left:2px;}
-.form-error{font-size:12px;color:var(--danger);margin-top:4px;display:none;}
-.form-error.show{display:block;}
 .form-hint{font-size:12px;color:var(--gray-400);margin-top:4px;}
 .tabs{display:flex;border-bottom:1px solid var(--gray-200);padding:0 24px;background:var(--white);}
 .tab{padding:0 16px;height:44px;display:flex;align-items:center;font-size:14px;color:var(--gray-500);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;white-space:nowrap;}
@@ -87,34 +85,23 @@ tbody tr:hover td{background:var(--gray-50);}
 .drawer-footer{height:56px;padding:0 24px;border-top:1px solid var(--gray-200);display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-shrink:0;}
 .close-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;color:var(--gray-500);border:none;background:transparent;}
 .close-btn:hover{background:var(--gray-100);}
-.section-title{font-size:11px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;margin-top:20px;}
-.section-title:first-child{margin-top:0;}
+.section-label{font-size:11px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;margin-top:20px;display:block;}
+.section-label:first-child{margin-top:0;}
 .page-view{display:none;}
 .page-view.active{display:flex;flex-direction:column;height:100%;}
 .tab-content{display:none;}
 .app-info-card{background:var(--white);border:1px solid var(--gray-200);border-radius:8px;padding:20px 24px;display:flex;align-items:center;gap:20px;}
 .app-icon{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:22px;font-weight:700;flex-shrink:0;}
-.slot-config-block{border:1px solid var(--gray-200);border-radius:8px;padding:14px;margin-bottom:10px;background:var(--gray-50);}
-.slot-config-block-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.radio-group{display:flex;gap:16px;}
-.radio-item{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px;color:var(--gray-700);}
-.radio-item input{width:15px;height:15px;accent-color:var(--primary);cursor:pointer;}
-.pos-config{border:1px solid var(--gray-200);border-radius:6px;padding:12px;margin-bottom:8px;background:var(--white);}
-.pos-label{font-size:12px;font-weight:600;color:var(--gray-500);margin-bottom:8px;}
-.pos-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
-
-/* ===== FLOW EDITOR ===== */
-.fe-palette-block{border:1.5px solid var(--gray-200);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:grab;background:var(--white);transition:all .15s;user-select:none;}
-.fe-palette-block:hover{border-color:var(--primary);background:var(--primary-light);}
-.fe-palette-block:active{cursor:grabbing;}
-.fe-node{position:absolute;background:var(--white);border:2px solid var(--gray-200);border-radius:10px;min-width:196px;box-shadow:0 2px 8px rgba(0,0,0,.08);cursor:move;user-select:none;transition:border-color .15s,box-shadow .15s;}
-.fe-node:hover{border-color:var(--primary);box-shadow:0 4px 16px rgba(37,99,235,.15);}
-.fe-node.selected{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.2);}
-.fe-node-del{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--gray-400);border:none;background:transparent;opacity:0;transition:opacity .15s;flex-shrink:0;}
-.fe-node:hover .fe-node-del{opacity:1;}
-.fe-node-del:hover{background:var(--danger-light);color:var(--danger);}
-.fe-port-in{position:absolute;width:12px;height:12px;border-radius:50%;background:#64748B;border:2px solid white;top:50%;transform:translateY(-50%);left:-7px;cursor:crosshair;}
-.fe-port-out{width:10px;height:10px;border-radius:50%;background:var(--primary);border:2px solid white;cursor:crosshair;display:inline-block;flex-shrink:0;}
+.slot-block{border:1px solid var(--gray-200);border-radius:8px;padding:14px;margin-bottom:10px;background:var(--gray-50);}
+.slot-block-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.cond-block{border:1px solid var(--gray-200);border-radius:6px;padding:12px;margin-bottom:8px;background:var(--white);}
+.cond-label{font-size:12px;font-weight:600;color:var(--gray-500);margin-bottom:8px;}
+.toggle{position:relative;display:inline-block;width:36px;height:20px;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;cursor:pointer;inset:0;background:var(--gray-200);border-radius:20px;transition:.2s;}
+.toggle-slider:before{position:absolute;content:"";height:14px;width:14px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.2s;}
+.toggle input:checked+.toggle-slider{background:var(--primary);}
+.toggle input:checked+.toggle-slider:before{transform:translateX(16px);}
 </style>
 </head>
 <body>
@@ -128,17 +115,14 @@ tbody tr:hover td{background:var(--gray-50);}
   <nav class="sidebar-nav">
     <div class="nav-section-title">核心功能</div>
     <div class="nav-item active" id="nav-app" onclick="showPage('app-list')">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-      应用管理
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>应用管理
     </div>
     <div class="nav-item" id="nav-user-parent" onclick="showPage('user-segment')">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      用户管理
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>用户管理
     </div>
     <div class="nav-sub">
       <div class="nav-item" id="nav-segment" onclick="showPage('user-segment')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        套餐用户分群
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>套餐用户分群
       </div>
     </div>
   </nav>
@@ -156,9 +140,7 @@ tbody tr:hover td{background:var(--gray-50);}
     <div class="card">
       <div class="card-header">
         <span class="card-title">应用列表</span>
-        <button class="btn btn-primary btn-sm" onclick="showPage('app-edit')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>创建应用
-        </button>
+        <button class="btn btn-primary btn-sm" onclick="showPage('app-edit')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>创建应用</button>
       </div>
       <table>
         <thead><tr><th>APP名称</th><th>APPID</th><th>应用平台</th><th>应用区域</th><th>审核状态</th><th>操作</th></tr></thead>
@@ -166,7 +148,8 @@ tbody tr:hover td{background:var(--gray-50);}
           <tr>
             <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">G</div><span style="font-weight:500;color:var(--gray-900)">GameHub Pro</span></div></td>
             <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">APP_001</code></td>
-            <td><span class="badge badge-info">Android</span></td><td>东南亚</td>
+            <td><span class="badge badge-info">Android</span></td>
+            <td>东南亚</td>
             <td><span class="badge badge-success">已通过</span></td>
             <td><button class="btn btn-sm btn-secondary" onclick="showPage('app-edit')">编辑</button></td>
           </tr>
@@ -202,7 +185,6 @@ tbody tr:hover td{background:var(--gray-50);}
       <div class="tab" onclick="switchTab('tab-strategy',this)">广告策略管理</div>
       <div class="tab active" onclick="switchTab('tab-pkg-slot',this)">套餐运营位</div>
       <div class="tab" onclick="switchTab('tab-pkg-strategy',this)">套餐运营策略</div>
-      <div class="tab" onclick="switchTab('tab-pkg-strategy-v2',this)">套餐运营策略 <span style="font-size:10px;background:#7C3AED;color:#fff;padding:1px 6px;border-radius:10px;margin-left:4px;font-weight:700;">方案二</span></div>
     </div>
     <div style="flex:1;overflow-y:auto;padding:24px 32px">
       <div id="tab-version" class="tab-content"><div class="card"><div class="card-header"><span class="card-title">版本管理</span></div><div style="padding:48px;text-align:center;color:var(--gray-400)">暂无数据</div></div></div>
@@ -216,9 +198,7 @@ tbody tr:hover td{background:var(--gray-50);}
         <div class="card">
           <div class="card-header">
             <span class="card-title">套餐运营位列表</span>
-            <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-pkg-slot','add')">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加套餐运营位
-            </button>
+            <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-pkg-slot','add')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加套餐运营位</button>
           </div>
           <table>
             <thead><tr><th>运营位名称</th><th>运营位编码</th><th>创建时间</th><th>操作</th></tr></thead>
@@ -229,7 +209,8 @@ tbody tr:hover td{background:var(--gray-50);}
                 <td style="font-size:13px;color:var(--gray-500)">2026-03-20 10:00</td>
                 <td>
                   <div style="display:flex;gap:4px">
-                    <button class="btn btn-sm btn-ghost" onclick="showPage('pkg-pool')">套餐池</button>
+                    <button class="btn btn-sm btn-ghost" onclick="showPage('pkg-mgmt','pkg_slot_cloud_001','云存储推荐位')">套餐管理</button>
+                    <button class="btn btn-sm btn-ghost" onclick="showPage('pkg-funnel','pkg_slot_cloud_001','云存储推荐位')">套餐漏斗</button>
                     <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-pkg-slot','edit')">编辑</button>
                     <button class="btn btn-sm btn-danger-ghost">删除</button>
                   </div>
@@ -241,7 +222,8 @@ tbody tr:hover td{background:var(--gray-50);}
                 <td style="font-size:13px;color:var(--gray-500)">2026-03-21 14:30</td>
                 <td>
                   <div style="display:flex;gap:4px">
-                    <button class="btn btn-sm btn-ghost" onclick="showPage('pkg-pool')">套餐池</button>
+                    <button class="btn btn-sm btn-ghost" onclick="showPage('pkg-mgmt','pkg_slot_ai_001','AI服务推荐位')">套餐管理</button>
+                    <button class="btn btn-sm btn-ghost" onclick="showPage('pkg-funnel','pkg_slot_ai_001','AI服务推荐位')">套餐漏斗</button>
                     <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-pkg-slot','edit')">编辑</button>
                     <button class="btn btn-sm btn-danger-ghost">删除</button>
                   </div>
@@ -257,9 +239,7 @@ tbody tr:hover td{background:var(--gray-50);}
         <div class="card">
           <div class="card-header">
             <span class="card-title">套餐运营策略列表</span>
-            <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-pkg-strategy','add')">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加策略
-            </button>
+            <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-pkg-strategy','add')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加策略</button>
           </div>
           <table>
             <thead><tr><th>策略名称</th><th>包含运营位</th><th>全局策略</th><th>操作</th></tr></thead>
@@ -267,39 +247,14 @@ tbody tr:hover td{background:var(--gray-50);}
               <tr>
                 <td><span style="font-weight:500;color:var(--gray-900)">云存储推广策略</span></td>
                 <td><span class="badge badge-info">2 个运营位</span></td>
-                <td style="font-size:13px;color:var(--gray-500)">弹窗总数: <span style="color:var(--gray-700)">5次/7天</span> · 同类型日上限: <span style="color:var(--gray-700)">2次/天</span></td>
+                <td style="font-size:13px;color:var(--gray-500)">每日弹窗上限: <span style="color:var(--gray-700)">3次/天</span> · 同类型上限: <span style="color:var(--gray-700)">1次/天</span></td>
                 <td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-pkg-strategy','edit')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td>
               </tr>
               <tr>
-                <td><span style="font-weight:500;color:var(--gray-900)">动态匹配策略</span></td>
+                <td><span style="font-weight:500;color:var(--gray-900)">AI服务推广策略</span></td>
                 <td><span class="badge badge-info">1 个运营位</span></td>
-                <td style="font-size:13px;color:var(--gray-500)">弹窗总数: <span style="color:var(--gray-700)">3次/5天</span> · 同类型日上限: <span style="color:var(--gray-700)">1次/天</span></td>
+                <td style="font-size:13px;color:var(--gray-500)">每日弹窗上限: <span style="color:var(--gray-700)">2次/天</span> · 同类型上限: <span style="color:var(--gray-700)">1次/天</span></td>
                 <td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-pkg-strategy','edit')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <!-- TAB: 套餐运营策略 方案二 -->
-      <div id="tab-pkg-strategy-v2" class="tab-content">
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <span class="card-title">套餐运营策略列表</span>
-              <div style="font-size:12px;color:var(--gray-400);margin-top:2px;">方案二：每个运营位独立配置可视化策略流</div>
-            </div>
-            <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-pkg-strategy-v2','add')">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加策略
-            </button>
-          </div>
-          <table>
-            <thead><tr><th>策略名称</th><th>包含运营位</th><th>全局策略</th><th>操作</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><span style="font-weight:500;color:var(--gray-900)">云存储推广策略</span></td>
-                <td><span class="badge badge-info">2 个运营位</span></td>
-                <td style="font-size:13px;color:var(--gray-500)">弹窗总数: <span style="color:var(--gray-700)">5次/7天</span> · 同类型日上限: <span style="color:var(--gray-700)">2次/天</span></td>
-                <td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-pkg-strategy-v2','edit')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td>
               </tr>
             </tbody>
           </table>
@@ -309,98 +264,30 @@ tbody tr:hover td{background:var(--gray-50);}
   </div>
 </div>
 
-<!-- PAGE: 策略流编辑器 -->
-<div id="page-flow-editor" class="page-view" style="overflow:hidden;">
+<!-- PAGE: 套餐管理 -->
+<div id="page-pkg-mgmt" class="page-view">
   <div class="page-header">
     <div class="breadcrumb">
       <span class="link" onclick="showPage('app-list')">应用管理</span><span class="sep">/</span>
       <span class="link" onclick="showPage('app-edit')">GameHub Pro</span><span class="sep">/</span>
-      <span class="current">云存储推荐位 · 策略流编辑</span>
-    </div>
-    <div style="margin-left:auto;display:flex;gap:8px;">
-      <button class="btn btn-secondary" onclick="showPage('app-edit')">取消</button>
-      <button class="btn btn-primary" onclick="showPage('app-edit')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-        保存策略流
-      </button>
-    </div>
-  </div>
-  <div style="display:flex;flex:1;overflow:hidden;height:calc(100% - 56px);">
-    <!-- 左侧组件面板 -->
-    <div style="width:192px;background:var(--white);border-right:1px solid var(--gray-200);padding:16px 12px;flex-shrink:0;overflow-y:auto;">
-      <div style="font-size:11px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">策略块</div>
-      <div class="fe-palette-block" draggable="true" data-type="static" ondragstart="feDragStart(event,'static')">
-        <div style="width:26px;height:26px;border-radius:6px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;margin-bottom:5px;">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
-        </div>
-        <div style="font-size:12px;font-weight:600;color:var(--gray-700);">静态指定</div>
-        <div style="font-size:11px;color:var(--gray-400);margin-top:2px;line-height:1.4;">手动指定套餐及运营标签</div>
-      </div>
-      <div class="fe-palette-block" draggable="true" data-type="dynamic" ondragstart="feDragStart(event,'dynamic')">
-        <div style="width:26px;height:26px;border-radius:6px;background:#F0FDF4;display:flex;align-items:center;justify-content:center;margin-bottom:5px;">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
-        </div>
-        <div style="font-size:12px;font-weight:600;color:var(--gray-700);">动态匹配</div>
-        <div style="font-size:11px;color:var(--gray-400);margin-top:2px;line-height:1.4;">按场景自动推荐套餐</div>
-      </div>
-      <div style="font-size:11px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;margin:14px 0 10px;">条件块</div>
-      <div class="fe-palette-block" draggable="true" data-type="condition" ondragstart="feDragStart(event,'condition')">
-        <div style="width:26px;height:26px;border-radius:6px;background:#FFFBEB;display:flex;align-items:center;justify-content:center;margin-bottom:5px;">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <div style="font-size:12px;font-weight:600;color:var(--gray-700);">用户行为判断</div>
-        <div style="font-size:11px;color:var(--gray-400);margin-top:2px;line-height:1.4;">根据用户操作分支流转</div>
-      </div>
-      <div style="font-size:11px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;margin:14px 0 10px;">终止块</div>
-      <div class="fe-palette-block" draggable="true" data-type="end" ondragstart="feDragStart(event,'end')">
-        <div style="width:26px;height:26px;border-radius:6px;background:#FEF2F2;display:flex;align-items:center;justify-content:center;margin-bottom:5px;">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-        </div>
-        <div style="font-size:12px;font-weight:600;color:var(--gray-700);">停止推送</div>
-        <div style="font-size:11px;color:var(--gray-400);margin-top:2px;line-height:1.4;">不再推送套餐弹窗</div>
-      </div>
-    </div>
-    <!-- 画布 -->
-    <div style="flex:1;position:relative;overflow:hidden;background:#F8FAFC;" id="feCanvasWrap"
-      ondragover="event.preventDefault()" ondrop="feCanvasDrop(event)">
-      <div style="position:absolute;inset:0;background-image:radial-gradient(circle,#CBD5E1 1px,transparent 1px);background-size:24px 24px;pointer-events:none;"></div>
-      <svg id="feSvg" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;"></svg>
-      <div id="feNodes"></div>
-    </div>
-    <!-- 右侧配置面板 -->
-    <div id="feConfigPanel" style="width:260px;background:var(--white);border-left:1px solid var(--gray-200);padding:16px;flex-shrink:0;overflow-y:auto;display:none;">
-      <div style="font-size:13px;font-weight:600;color:var(--gray-900);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--gray-200);" id="feConfigTitle">节点配置</div>
-      <div id="feConfigBody"></div>
-    </div>
-  </div>
-</div>
-<div id="page-pkg-pool" class="page-view">
-  <div class="page-header">
-    <div class="breadcrumb">
-      <span class="link" onclick="showPage('app-list')">应用管理</span><span class="sep">/</span>
-      <span class="link" onclick="showPage('app-edit')">GameHub Pro</span><span class="sep">/</span>
-      <span class="current">云存储推荐位 · 套餐池</span>
+      <span id="breadcrumb-mgmt-slot" class="current">云存储推荐位 · 套餐管理</span>
     </div>
   </div>
   <div class="content">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-      <button class="btn btn-secondary" onclick="showPage('app-edit')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>返回
-      </button>
+      <button class="btn btn-secondary" onclick="showPage('app-edit')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>返回</button>
       <div>
-        <div style="font-size:15px;font-weight:600;color:var(--gray-900)">云存储推荐位</div>
-        <div style="font-size:12px;color:var(--gray-500)">运营位编码: pkg_slot_cloud_001</div>
+        <div id="mgmt-slot-name" style="font-size:15px;font-weight:600;color:var(--gray-900)">云存储推荐位</div>
+        <div id="mgmt-slot-code" style="font-size:12px;color:var(--gray-500)">运营位编码: pkg_slot_cloud_001</div>
       </div>
     </div>
     <div class="card">
       <div class="card-header">
-        <span class="card-title">套餐池</span>
-        <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-add-pkg','add')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加套餐
-        </button>
+        <span class="card-title">套餐列表</span>
+        <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-create-pkg','add')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>创建套餐</button>
       </div>
       <table>
-        <thead><tr><th style="width:48px">序号</th><th>套餐代码</th><th>套餐名称</th><th>套餐价格</th><th>套餐类型</th><th>订阅类型</th><th>操作</th></tr></thead>
+        <thead><tr><th style="width:48px">序号</th><th>套餐ID</th><th>套餐名称</th><th>套餐价格</th><th>套餐类型</th><th>订阅类型</th><th>操作</th></tr></thead>
         <tbody>
           <tr>
             <td style="color:var(--gray-400);font-size:13px">1</td>
@@ -409,7 +296,7 @@ tbody tr:hover td{background:var(--gray-50);}
             <td style="font-weight:500;color:var(--gray-900)">¥9.9/月</td>
             <td><span class="badge badge-info">云存储</span></td>
             <td><span class="badge badge-success">是</span></td>
-            <td><button class="btn btn-sm btn-danger-ghost">移除</button></td>
+            <td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-create-pkg','edit')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td>
           </tr>
           <tr>
             <td style="color:var(--gray-400);font-size:13px">2</td>
@@ -418,7 +305,7 @@ tbody tr:hover td{background:var(--gray-50);}
             <td style="font-weight:500;color:var(--gray-900)">¥19.9/月</td>
             <td><span class="badge badge-info">云存储</span></td>
             <td><span class="badge badge-success">是</span></td>
-            <td><button class="btn btn-sm btn-danger-ghost">移除</button></td>
+            <td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-create-pkg','edit')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td>
           </tr>
           <tr>
             <td style="color:var(--gray-400);font-size:13px">3</td>
@@ -427,7 +314,50 @@ tbody tr:hover td{background:var(--gray-50);}
             <td style="font-weight:500;color:var(--gray-900)">¥39.9/月</td>
             <td><span class="badge badge-info">云存储</span></td>
             <td><span class="badge badge-neutral">否</span></td>
-            <td><button class="btn btn-sm btn-danger-ghost">移除</button></td>
+            <td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-create-pkg','edit')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: 套餐漏斗 -->
+<div id="page-pkg-funnel" class="page-view">
+  <div class="page-header">
+    <div class="breadcrumb">
+      <span class="link" onclick="showPage('app-list')">应用管理</span><span class="sep">/</span>
+      <span class="link" onclick="showPage('app-edit')">GameHub Pro</span><span class="sep">/</span>
+      <span id="breadcrumb-funnel-slot" class="current">云存储推荐位 · 套餐漏斗</span>
+    </div>
+  </div>
+  <div class="content">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <button class="btn btn-secondary" onclick="showPage('app-edit')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>返回</button>
+      <div>
+        <div id="funnel-slot-name" style="font-size:15px;font-weight:600;color:var(--gray-900)">云存储推荐位</div>
+        <div id="funnel-slot-code" style="font-size:12px;color:var(--gray-500)">运营位编码: pkg_slot_cloud_001</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">漏斗列表</span>
+        <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-funnel','add')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加漏斗</button>
+      </div>
+      <table>
+        <thead><tr><th>漏斗名称</th><th>漏斗类型</th><th>创建时间</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span style="font-weight:500;color:var(--gray-900)">基础云存漏斗</span></td>
+            <td><span class="badge badge-info">价格漏斗</span></td>
+            <td style="font-size:13px;color:var(--gray-500)">2026-03-22 09:00</td>
+            <td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-funnel','edit')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td>
+          </tr>
+          <tr>
+            <td><span style="font-weight:500;color:var(--gray-900)">Pro升级漏斗</span></td>
+            <td><span class="badge badge-warning">行为漏斗</span></td>
+            <td style="font-size:13px;color:var(--gray-500)">2026-03-23 14:00</td>
+            <td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-funnel','edit')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td>
           </tr>
         </tbody>
       </table>
@@ -451,8 +381,8 @@ tbody tr:hover td{background:var(--gray-50);}
             <td style="font-weight:500;color:var(--gray-900)">12,480</td>
             <td>
               <div style="display:flex;align-items:center;gap:6px">
-                <button class="btn btn-sm btn-secondary" style="height:26px;padding:0 8px;font-size:12px" onclick="openDrawer('drawer-view-pkg-strategy')">查看</button>
-                <button class="btn btn-sm btn-secondary" style="height:26px;padding:0 8px;font-size:12px" onclick="openDrawer('drawer-bind-pkg-strategy')">绑定策略</button>
+                <button class="btn btn-sm btn-secondary" style="height:26px;padding:0 8px;font-size:12px" onclick="openDrawer('drawer-view-strategy')">查看</button>
+                <button class="btn btn-sm btn-secondary" style="height:26px;padding:0 8px;font-size:12px" onclick="openDrawer('drawer-bind-strategy')">绑定策略</button>
               </div>
             </td>
           </tr>
@@ -464,7 +394,7 @@ tbody tr:hover td{background:var(--gray-50);}
             <td>
               <div style="display:flex;align-items:center;gap:6px">
                 <span style="font-size:13px;color:var(--gray-400)">未绑定</span>
-                <button class="btn btn-sm btn-primary" style="height:26px;padding:0 10px;font-size:12px" onclick="openDrawer('drawer-bind-pkg-strategy')">绑定策略</button>
+                <button class="btn btn-sm btn-primary" style="height:26px;padding:0 10px;font-size:12px" onclick="openDrawer('drawer-bind-strategy')">绑定策略</button>
               </div>
             </td>
           </tr>
@@ -476,7 +406,7 @@ tbody tr:hover td{background:var(--gray-50);}
             <td>
               <div style="display:flex;align-items:center;gap:6px">
                 <span style="font-size:13px;color:var(--gray-400)">未绑定</span>
-                <button class="btn btn-sm btn-primary" style="height:26px;padding:0 10px;font-size:12px" onclick="openDrawer('drawer-bind-pkg-strategy')">绑定策略</button>
+                <button class="btn btn-sm btn-primary" style="height:26px;padding:0 10px;font-size:12px" onclick="openDrawer('drawer-bind-strategy')">绑定策略</button>
               </div>
             </td>
           </tr>
@@ -499,12 +429,10 @@ tbody tr:hover td{background:var(--gray-50);}
     <div class="form-group">
       <label class="form-label">运营位名称 <span class="required">*</span></label>
       <input class="input" placeholder="请输入运营位名称" id="pkg-slot-name">
-      <div class="form-error" id="pkg-slot-name-error">此项为必填项</div>
     </div>
     <div class="form-group">
       <label class="form-label">运营位编码 <span class="required">*</span></label>
-      <input class="input" placeholder="请输入运营位编码，如 pkg_slot_cloud_001" id="pkg-slot-code">
-      <div class="form-error" id="pkg-slot-code-error">此项为必填项</div>
+      <input class="input" placeholder="如 pkg_slot_cloud_001" id="pkg-slot-code">
       <div class="form-hint">编码不可重复，仅支持字母、数字和下划线</div>
     </div>
   </div>
@@ -514,67 +442,169 @@ tbody tr:hover td{background:var(--gray-50);}
   </div>
 </div>
 
-<!-- DRAWER: 添加套餐到套餐池 -->
-<div class="drawer-overlay" id="overlay-add-pkg" onclick="closeDrawer('drawer-add-pkg')"></div>
-<div class="drawer" id="drawer-add-pkg" style="width:600px">
+<!-- DRAWER: 创建/编辑套餐 -->
+<div class="drawer-overlay" id="overlay-create-pkg" onclick="closeDrawer('drawer-create-pkg')"></div>
+<div class="drawer" id="drawer-create-pkg" style="width:640px">
   <div class="drawer-header">
-    <span class="drawer-title">添加套餐</span>
-    <button class="close-btn" onclick="closeDrawer('drawer-add-pkg')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <span class="drawer-title" id="create-pkg-title">创建套餐</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-create-pkg')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
   </div>
   <div class="drawer-body">
-    <div style="font-size:13px;color:var(--gray-500);margin-bottom:12px">从 APP 下已创建的套餐中选择，支持多选</div>
-    <div style="margin-bottom:12px;position:relative">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--gray-400)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input class="input" placeholder="搜索套餐名称 / 代码" style="padding-left:34px">
+    <div class="form-group">
+      <label class="form-label">套餐名称 <span class="required">*</span></label>
+      <input class="input" placeholder="请输入套餐名称">
     </div>
-    <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden">
-      <div style="padding:10px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200)">
-        <table style="margin:0"><thead><tr><th style="width:36px"></th><th>套餐代码</th><th>套餐名称</th><th>价格</th><th>类型</th><th>订阅</th></tr></thead></table>
+    <div class="form-group">
+      <label class="form-label">推荐标题 <span class="required">*</span></label>
+      <input class="input" placeholder="请输入推荐标题">
+    </div>
+    <div class="form-group">
+      <label class="form-label">推荐文案 <span class="required">*</span></label>
+      <input class="input" placeholder="请输入推荐文案">
+    </div>
+
+    <div style="background:var(--gray-50);border-radius:8px;padding:14px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:600;color:var(--gray-900);margin-bottom:12px">选择套餐服务</div>
+      <div class="form-group">
+        <label class="form-label">应用方向 <span class="required">*</span></label>
+        <div style="display:flex;gap:20px">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="radio" name="pkg-dir" value="device" checked onchange="onPkgDirChange(this)" style="accent-color:var(--primary)"> 设备套餐</label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="radio" name="pkg-dir" value="user" onchange="onPkgDirChange(this)" style="accent-color:var(--primary)"> 用户套餐</label>
+        </div>
       </div>
-      <div style="max-height:320px;overflow-y:auto">
-        <table style="margin:0">
-          <tbody>
-            <tr style="background:#EFF6FF">
-              <td style="width:36px"><input type="checkbox" checked style="width:15px;height:15px;accent-color:var(--primary)"></td>
-              <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PKG_CLOUD_BASIC</code></td>
-              <td style="font-weight:500;color:var(--gray-900)">基础云存储套餐</td>
-              <td>¥9.9/月</td>
-              <td><span class="badge badge-info">云存储</span></td>
-              <td><span class="badge badge-success">是</span></td>
-            </tr>
-            <tr style="background:#EFF6FF">
-              <td><input type="checkbox" checked style="width:15px;height:15px;accent-color:var(--primary)"></td>
-              <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PKG_CLOUD_PRO</code></td>
-              <td style="font-weight:500;color:var(--gray-900)">Pro云存储套餐</td>
-              <td>¥19.9/月</td>
-              <td><span class="badge badge-info">云存储</span></td>
-              <td><span class="badge badge-success">是</span></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" style="width:15px;height:15px;accent-color:var(--primary)"></td>
-              <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PKG_AI_BASIC</code></td>
-              <td style="font-weight:500;color:var(--gray-900)">基础AI服务套餐</td>
-              <td>¥14.9/月</td>
-              <td><span class="badge badge-warning">AI服务</span></td>
-              <td><span class="badge badge-success">是</span></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" style="width:15px;height:15px;accent-color:var(--primary)"></td>
-              <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PKG_CLOUD_SUPER</code></td>
-              <td style="font-weight:500;color:var(--gray-900)">Super Pro云存储套餐</td>
-              <td>¥39.9/月</td>
-              <td><span class="badge badge-info">云存储</span></td>
-              <td><span class="badge badge-neutral">否</span></td>
-            </tr>
-          </tbody>
-        </table>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+        <div class="form-group" style="margin:0">
+          <label class="form-label">生效时长 <span class="required">*</span></label>
+          <select class="select" id="pkg-duration">
+            <option>7天</option><option>15天</option><option>30天</option><option>1年</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin:0">
+          <label class="form-label">套餐服务 <span class="required">*</span></label>
+          <select class="select" id="pkg-service" onchange="onPkgServiceChange(this)">
+            <option value="">请选择套餐服务</option>
+            <option value="event7">7天事件云存</option>
+            <option value="event15">15天事件云存</option>
+          </select>
+        </div>
+      </div>
+      <div id="pkg-service-detail" style="display:none;background:var(--white);border:1px solid var(--gray-200);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--gray-500)">
+        <div>套餐服务名称：<span id="svc-name" style="color:var(--gray-700)">7天事件云存</span></div>
+        <div style="margin-top:4px">服务类型：<span id="svc-type" style="color:var(--gray-700)">事件云存</span></div>
+        <div style="margin-top:4px">可用设备上限：<span style="color:var(--gray-700)">1 台</span></div>
+        <div style="margin-top:4px">平台成本：<span style="color:var(--gray-700);font-weight:600">¥8.00 / $1.20</span></div>
       </div>
     </div>
-    <div style="margin-top:10px;font-size:13px;color:var(--gray-500)">已选 <span style="color:var(--primary);font-weight:600">2</span> 个套餐（蓝色背景为已在套餐池中）</div>
+
+    <div style="background:var(--gray-50);border-radius:8px;padding:14px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:600;color:var(--gray-900);margin-bottom:12px">内购Key配置</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group" style="margin:0"><label class="form-label">Apple Key</label><input class="input" placeholder="请输入 Apple 内购商品 ID"></div>
+        <div class="form-group" style="margin:0"><label class="form-label">Google Key</label><input class="input" placeholder="请输入 Google 内购商品 ID"></div>
+      </div>
+    </div>
+
+    <div style="background:var(--gray-50);border-radius:8px;padding:14px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:600;color:var(--gray-900);margin-bottom:12px">订阅类型 <span class="required">*</span></div>
+      <div style="display:flex;gap:20px;margin-bottom:14px">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="radio" name="sub-type" value="none" onchange="onSubTypeChange(this)" style="accent-color:var(--primary)"> 非订阅</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px"><input type="radio" name="sub-type" value="sub" checked onchange="onSubTypeChange(this)" style="accent-color:var(--primary)"> 订阅制</label>
+      </div>
+      <!-- 非订阅字段 -->
+      <div id="non-sub-fields" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div class="form-group" style="margin:0"><label class="form-label">划线价/原价（¥） <span class="required">*</span></label><input class="input" type="number" placeholder="0.00"></div>
+          <div class="form-group" style="margin:0"><label class="form-label">划线价/原价（$） <span class="required">*</span></label><input class="input" type="number" placeholder="0.00"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="form-group" style="margin:0"><label class="form-label">售价（¥） <span class="required">*</span></label><input class="input" type="number" placeholder="0.00"></div>
+          <div class="form-group" style="margin:0"><label class="form-label">售价（$） <span class="required">*</span></label><input class="input" type="number" placeholder="0.00"></div>
+        </div>
+      </div>
+      <!-- 订阅制字段 -->
+      <div id="sub-fields">
+        <div class="form-group">
+          <label class="form-label">订阅文案 <span class="required">*</span></label>
+          <input class="input" placeholder="请输入面向订阅用户的展示文案">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div class="form-group" style="margin:0"><label class="form-label">划线价/原价（¥）</label><input class="input" type="number" placeholder="0.00"></div>
+          <div class="form-group" style="margin:0"><label class="form-label">划线价/原价（$）</label><input class="input" type="number" placeholder="0.00"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+          <span style="font-size:13px;color:var(--gray-700)">免费试用</span>
+          <label class="toggle"><input type="checkbox" id="free-trial-toggle" onchange="onFreeTrialChange(this)"><span class="toggle-slider"></span></label>
+        </div>
+        <div id="free-trial-fields" style="display:none;background:var(--white);border:1px solid var(--gray-200);border-radius:6px;padding:12px;margin-bottom:12px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="form-group" style="margin:0"><label class="form-label">试用周期（天） <span class="required">*</span></label><input class="input" type="number" placeholder="7"></div>
+            <div class="form-group" style="margin:0">
+              <label class="form-label">过滤条件 <span class="required">*</span></label>
+              <select class="select"><option>从未试用过此套餐</option><option>从未试用过该服务类型</option><option>不限制</option></select>
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="form-group" style="margin:0"><label class="form-label">订阅售价（¥） <span class="required">*</span></label><input class="input" type="number" placeholder="0.00"></div>
+          <div class="form-group" style="margin:0"><label class="form-label">订阅售价（$） <span class="required">*</span></label><input class="input" type="number" placeholder="0.00"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">套餐标签 <span class="required">*</span></label>
+      <select class="select"><option value="">请选择套餐标签</option><option>免费试用</option><option>限时优惠</option><option>新用户特惠</option></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">套餐描述标签 <span class="required">*</span></label>
+      <select class="select"><option value="">请选择描述标签</option><option>7天循环事件录制</option><option>7天消息回溯</option></select>
+    </div>
   </div>
   <div class="drawer-footer">
-    <button class="btn btn-secondary" onclick="closeDrawer('drawer-add-pkg')">取消</button>
-    <button class="btn btn-primary" onclick="closeDrawer('drawer-add-pkg')">确认添加</button>
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-create-pkg')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-create-pkg')">确定</button>
+  </div>
+</div>
+
+<!-- DRAWER: 添加/编辑漏斗 -->
+<div class="drawer-overlay" id="overlay-funnel" onclick="closeDrawer('drawer-funnel')"></div>
+<div class="drawer" id="drawer-funnel" style="width:560px">
+  <div class="drawer-header">
+    <span class="drawer-title" id="funnel-title">添加漏斗</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-funnel')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">漏斗名称 <span class="required">*</span></label>
+      <input class="input" placeholder="请输入漏斗名称">
+    </div>
+    <div class="form-group">
+      <label class="form-label">漏斗类型 <span class="required">*</span></label>
+      <select class="select"><option value="">请选择漏斗类型</option><option value="price">价格漏斗</option><option value="behavior">行为漏斗</option></select>
+    </div>
+    <div style="font-size:13px;font-weight:600;color:var(--gray-900);margin-bottom:10px">漏斗配置</div>
+    <div id="funnel-slots">
+      <div class="form-group">
+        <label class="form-label">漏斗位 #1 <span class="required">*</span></label>
+        <select class="select"><option value="">请选择套餐（支持模糊查询）</option><option value="PKG_CLOUD_BASIC">PKG_CLOUD_BASIC · 基础云存储套餐</option><option value="PKG_CLOUD_PRO">PKG_CLOUD_PRO · Pro云存储套餐</option><option value="PKG_CLOUD_SUPER">PKG_CLOUD_SUPER · Super Pro云存储套餐</option></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">漏斗位 #2 <span class="required">*</span></label>
+        <select class="select"><option value="">请选择套餐（支持模糊查询）</option><option value="PKG_CLOUD_BASIC">PKG_CLOUD_BASIC · 基础云存储套餐</option><option value="PKG_CLOUD_PRO">PKG_CLOUD_PRO · Pro云存储套餐</option><option value="PKG_CLOUD_SUPER">PKG_CLOUD_SUPER · Super Pro云存储套餐</option></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">漏斗位 #3 <span class="required">*</span></label>
+        <select class="select"><option value="">请选择套餐（支持模糊查询）</option><option value="PKG_CLOUD_BASIC">PKG_CLOUD_BASIC · 基础云存储套餐</option><option value="PKG_CLOUD_PRO">PKG_CLOUD_PRO · Pro云存储套餐</option><option value="PKG_CLOUD_SUPER">PKG_CLOUD_SUPER · Super Pro云存储套餐</option></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">漏斗位 #4 <span class="required">*</span></label>
+        <select class="select"><option value="">请选择套餐（支持模糊查询）</option><option value="PKG_CLOUD_BASIC">PKG_CLOUD_BASIC · 基础云存储套餐</option><option value="PKG_CLOUD_PRO">PKG_CLOUD_PRO · Pro云存储套餐</option><option value="PKG_CLOUD_SUPER">PKG_CLOUD_SUPER · Super Pro云存储套餐</option></select>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-funnel')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-funnel')">确定</button>
   </div>
 </div>
 
@@ -588,145 +618,78 @@ tbody tr:hover td{background:var(--gray-50);}
   <div class="drawer-body">
     <div class="form-group">
       <label class="form-label">策略名称 <span class="required">*</span></label>
-      <input class="input" placeholder="请输入策略名称" id="pkg-strategy-name">
+      <input class="input" placeholder="请输入策略名称">
     </div>
 
-    <div class="section-title">运营位配置 <span class="required">*</span></div>
-    <div id="pkg-slot-config-list">
-      <!-- 运营位配置块 示例 -->
-      <div class="slot-config-block">
-        <div class="slot-config-block-header">
+    <span class="section-label">运营位配置 <span class="required">*</span></span>
+    <div id="strategy-slot-list">
+      <div class="slot-block">
+        <div class="slot-block-header">
           <span style="font-size:13px;font-weight:600;color:var(--gray-700)">运营位 #1</span>
-          <button class="btn btn-sm btn-danger-ghost" style="height:26px;padding:0 8px" onclick="removePkgSlotBlock(this)">移除</button>
+          <button class="btn btn-sm btn-danger-ghost" style="height:26px;padding:0 8px" onclick="removeStrategySlot(this)">移除</button>
         </div>
         <div class="form-group" style="margin-bottom:12px">
           <label class="form-label">选择运营位 <span class="required">*</span></label>
-          <select class="select" onchange="onSlotSelect(this)">
+          <select class="select">
             <option value="">请选择运营位</option>
-            <option value="1" selected>云存储推荐位 (pkg_slot_cloud_001)</option>
-            <option value="2">AI服务推荐位 (pkg_slot_ai_001)</option>
+            <option value="cloud" selected>云存储推荐位 (pkg_slot_cloud_001)</option>
+            <option value="ai">AI服务推荐位 (pkg_slot_ai_001)</option>
           </select>
         </div>
-        <div class="form-group" style="margin-bottom:12px">
-          <label class="form-label">套餐策略 <span class="required">*</span></label>
-          <div class="radio-group">
-            <label class="radio-item"><input type="radio" name="pkg-mode-1" value="static" checked onchange="togglePkgMode(this)"> 静态指定</label>
-            <label class="radio-item"><input type="radio" name="pkg-mode-1" value="dynamic" onchange="togglePkgMode(this)"> 动态匹配</label>
+        <div style="font-size:12px;font-weight:600;color:var(--gray-500);margin-bottom:8px">套餐配置</div>
+        <div class="cond-block">
+          <div class="cond-label">条件一：未购买云存储</div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">选择漏斗 <span class="required">*</span></label>
+            <select class="select"><option value="">请选择漏斗</option><option>基础云存漏斗</option><option>Pro升级漏斗</option></select>
           </div>
         </div>
-
-        <!-- 静态指定配置 -->
-        <div class="static-config">
-          <div class="form-group" style="margin-bottom:12px">
-            <label class="form-label">套餐位数量 <span class="required">*</span></label>
-            <div class="radio-group">
-              <label class="radio-item"><input type="radio" name="pos-count-1" value="1" onchange="updatePosCount(this)"> 1个</label>
-              <label class="radio-item"><input type="radio" name="pos-count-1" value="2" checked onchange="updatePosCount(this)"> 2个</label>
-              <label class="radio-item"><input type="radio" name="pos-count-1" value="3" onchange="updatePosCount(this)"> 3个</label>
-            </div>
-          </div>
-          <div class="pos-configs">
-            <div class="pos-config" data-pos="1">
-              <div class="pos-label">1号位</div>
-              <div class="pos-row">
-                <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">套餐 <span class="required">*</span></div><select class="select" style="font-size:13px"><option value="">搜索套餐...</option><option selected>基础云存储套餐</option><option>Pro云存储套餐</option></select></div>
-                <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">运营标签</div><select class="select" style="font-size:13px"><option value="">无标签</option><option selected>折扣</option><option>新用户</option><option>免费试用</option></select></div>
-                <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">文案</div><input class="input" style="font-size:13px" placeholder="自定义文案" value="限时7折"></div>
-              </div>
-            </div>
-            <div class="pos-config" data-pos="2">
-              <div class="pos-label">2号位</div>
-              <div class="pos-row">
-                <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">套餐 <span class="required">*</span></div><select class="select" style="font-size:13px"><option value="">搜索套餐...</option><option selected>Pro云存储套餐</option></select></div>
-                <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">运营标签</div><select class="select" style="font-size:13px"><option value="">无标签</option><option>折扣</option><option selected>新用户</option></select></div>
-                <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">文案</div><input class="input" style="font-size:13px" placeholder="自定义文案" value="新用户专享"></div>
-              </div>
-            </div>
-            <div class="pos-config" data-pos="3" style="display:none">
-              <div class="pos-label">3号位</div>
-              <div class="pos-row">
-                <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">套餐 <span class="required">*</span></div><select class="select" style="font-size:13px"><option value="">搜索套餐...</option></select></div>
-                <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">运营标签</div><select class="select" style="font-size:13px"><option value="">无标签</option></select></div>
-                <div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">文案</div><input class="input" style="font-size:13px" placeholder="自定义文案"></div>
-              </div>
-            </div>
-          </div>
-          <div class="form-group" style="margin-top:12px;margin-bottom:0">
-            <label class="form-label">冷却期（小时） <span class="required">*</span></label>
-            <div style="display:flex;align-items:center;gap:8px">
-              <input class="input" type="number" placeholder="请输入小时数" style="max-width:160px" value="24">
-              <span style="font-size:12px;color:var(--gray-400)">两次弹窗的最小间隔</span>
-            </div>
+        <div class="cond-block">
+          <div class="cond-label">条件二：已购买云存储，3≤循环时长＜7</div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">选择漏斗 <span class="required">*</span></label>
+            <select class="select"><option value="">请选择漏斗</option><option>基础云存漏斗</option><option>Pro升级漏斗</option></select>
           </div>
         </div>
-
-        <!-- 动态匹配配置（默认隐藏） -->
-        <div class="dynamic-config" style="display:none">
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
-            <div class="form-group" style="margin-bottom:0">
-              <label class="form-label">触发场景 <span class="required">*</span></label>
-              <select class="select">
-                <option value="">请选择</option>
-                <option>云存循环覆盖</option>
-                <option>SD卡循环覆盖</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin-bottom:0">
-              <label class="form-label">匹配策略 <span class="required">*</span></label>
-              <select class="select">
-                <option value="">请选择</option>
-                <option>步进升级</option>
-                <option>最优折扣</option>
-                <option>历史偏好</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin-bottom:0">
-              <label class="form-label">匹配套餐类型 <span class="required">*</span></label>
-              <select class="select">
-                <option value="">请选择</option>
-                <option>云存储</option>
-                <option>AI</option>
-              </select>
-            </div>
+        <div class="cond-block">
+          <div class="cond-label">条件三：已购买云存储，7≤循环时长＜15</div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">选择漏斗 <span class="required">*</span></label>
+            <select class="select"><option value="">请选择漏斗</option><option>基础云存漏斗</option><option>Pro升级漏斗</option></select>
           </div>
         </div>
       </div>
     </div>
+    <button class="btn btn-secondary btn-sm" style="margin-bottom:20px" onclick="addStrategySlot()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加运营位</button>
 
-    <button class="btn btn-secondary btn-sm" style="margin-bottom:20px" onclick="addPkgSlotBlock()">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加运营位
-    </button>
-
-    <div class="section-title">全局策略配置 <span class="required">*</span></div>
+    <span class="section-label">全局策略配置 <span class="required">*</span></span>
     <div class="form-group">
-      <label class="form-label">弹窗总数限制 <span class="required">*</span></label>
+      <label class="form-label">每日弹窗上限（次/天） <span class="required">*</span></label>
       <div style="display:flex;align-items:center;gap:8px">
-        <input class="input" type="number" placeholder="次数" style="max-width:80px" value="5">
-        <span style="font-size:13px;color:var(--gray-500);white-space:nowrap">次 /</span>
-        <input class="input" type="number" placeholder="天数" style="max-width:80px" value="7">
-        <span style="font-size:13px;color:var(--gray-500);white-space:nowrap">天</span>
+        <input class="input" type="number" placeholder="次数" style="max-width:120px" value="3">
+        <span style="font-size:13px;color:var(--gray-500)">次 / 天</span>
       </div>
     </div>
     <div class="form-group">
-      <label class="form-label">同类型套餐弹窗日上限 <span class="required">*</span></label>
+      <label class="form-label">同类型弹窗上限（次/天） <span class="required">*</span></label>
       <div style="display:flex;align-items:center;gap:8px">
-        <input class="input" type="number" placeholder="次数" style="max-width:80px" value="2">
-        <span style="font-size:13px;color:var(--gray-500);white-space:nowrap">次 / 天</span>
+        <input class="input" type="number" placeholder="次数" style="max-width:120px" value="1">
+        <span style="font-size:13px;color:var(--gray-500)">次 / 天</span>
       </div>
     </div>
   </div>
   <div class="drawer-footer">
     <button class="btn btn-secondary" onclick="closeDrawer('drawer-pkg-strategy')">取消</button>
-    <button class="btn btn-primary" onclick="closeDrawer('drawer-pkg-strategy')">保存策略</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-pkg-strategy')">确定</button>
   </div>
 </div>
 
-<!-- DRAWER: 查看分群绑定的套餐运营策略 -->
-<div class="drawer-overlay" id="overlay-view-pkg-strategy" onclick="closeDrawer('drawer-view-pkg-strategy')"></div>
-<div class="drawer" id="drawer-view-pkg-strategy" style="width:600px">
+<!-- DRAWER: 查看绑定策略 -->
+<div class="drawer-overlay" id="overlay-view-strategy" onclick="closeDrawer('drawer-view-strategy')"></div>
+<div class="drawer" id="drawer-view-strategy" style="width:600px">
   <div class="drawer-header">
     <span class="drawer-title">查看绑定策略</span>
-    <button class="close-btn" onclick="closeDrawer('drawer-view-pkg-strategy')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <button class="close-btn" onclick="closeDrawer('drawer-view-strategy')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
   </div>
   <div class="drawer-body">
     <div style="font-size:13px;color:var(--gray-500);margin-bottom:16px">当前分群绑定的套餐运营策略（仅查看）</div>
@@ -734,39 +697,46 @@ tbody tr:hover td{background:var(--gray-50);}
       <div style="padding:12px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);display:flex;align-items:center;gap:12px">
         <div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">G</div>
         <div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--gray-900)">GameHub Pro</div><div style="font-size:12px;color:var(--gray-400)">APP_001 · Android</div></div>
-        <div style="text-align:right"><div style="font-size:13px;font-weight:500;color:var(--gray-900)">云存储推广策略</div></div>
+        <div style="font-size:13px;font-weight:500;color:var(--gray-900)">云存储推广策略</div>
       </div>
-      <div style="padding:12px 16px">
+      <div style="padding:14px 16px">
         <div style="font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">全局策略</div>
-        <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:6px;padding:10px 16px;margin-bottom:12px;font-size:13px;color:var(--gray-500)">弹窗总数限制：<span style="color:var(--gray-900);font-weight:600">5次/7天</span> · 同类型日上限：<span style="color:var(--gray-900);font-weight:600">2次/天</span></div>
+        <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--gray-500)">
+          每日弹窗上限：<span style="color:var(--gray-900);font-weight:600">3次/天</span> · 同类型上限：<span style="color:var(--gray-900);font-weight:600">1次/天</span>
+        </div>
         <div style="font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">运营位配置</div>
         <div style="border:1px solid var(--gray-200);border-radius:6px;overflow:hidden">
-          <table style="margin:0"><thead><tr><th>运营位</th><th>策略类型</th><th>配置详情</th></tr></thead>
-          <tbody>
-            <tr>
-              <td><span style="font-weight:500">云存储推荐位</span><br><span style="font-size:12px;color:var(--gray-400)">pkg_slot_cloud_001</span></td>
-              <td><span class="badge badge-info">静态指定</span></td>
-              <td style="font-size:13px;color:var(--gray-500)">1号位: 基础套餐 [折扣]<br>2号位: Pro套餐 [新用户]<br>冷却期: 24h</td>
-            </tr>
-            <tr>
-              <td><span style="font-weight:500">AI服务推荐位</span><br><span style="font-size:12px;color:var(--gray-400)">pkg_slot_ai_001</span></td>
-              <td><span class="badge badge-warning">动态匹配</span></td>
-              <td style="font-size:13px;color:var(--gray-500)">触发: 云存循环覆盖<br>策略: 步进升级<br>类型: 云存储</td>
-            </tr>
-          </tbody></table>
+          <table style="margin:0">
+            <thead><tr><th>运营位</th><th>条件</th><th>漏斗</th></tr></thead>
+            <tbody>
+              <tr>
+                <td rowspan="3" style="vertical-align:top;padding-top:12px"><span style="font-weight:500">云存储推荐位</span><br><span style="font-size:12px;color:var(--gray-400)">pkg_slot_cloud_001</span></td>
+                <td style="font-size:12px;color:var(--gray-500)">未购买云存储</td>
+                <td style="font-size:13px">基础云存漏斗</td>
+              </tr>
+              <tr>
+                <td style="font-size:12px;color:var(--gray-500)">3≤循环时长＜7</td>
+                <td style="font-size:13px">基础云存漏斗</td>
+              </tr>
+              <tr>
+                <td style="font-size:12px;color:var(--gray-500)">7≤循环时长＜15</td>
+                <td style="font-size:13px">Pro升级漏斗</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
-  <div class="drawer-footer"><button class="btn btn-secondary" onclick="closeDrawer('drawer-view-pkg-strategy')">关闭</button></div>
+  <div class="drawer-footer"><button class="btn btn-secondary" onclick="closeDrawer('drawer-view-strategy')">关闭</button></div>
 </div>
 
 <!-- DRAWER: 绑定套餐运营策略 -->
-<div class="drawer-overlay" id="overlay-bind-pkg-strategy" onclick="closeDrawer('drawer-bind-pkg-strategy')"></div>
-<div class="drawer" id="drawer-bind-pkg-strategy" style="width:600px">
+<div class="drawer-overlay" id="overlay-bind-strategy" onclick="closeDrawer('drawer-bind-strategy')"></div>
+<div class="drawer" id="drawer-bind-strategy" style="width:600px">
   <div class="drawer-header">
     <span class="drawer-title">绑定套餐运营策略</span>
-    <button class="close-btn" onclick="closeDrawer('drawer-bind-pkg-strategy')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <button class="close-btn" onclick="closeDrawer('drawer-bind-strategy')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
   </div>
   <div class="drawer-body">
     <div style="font-size:13px;color:var(--gray-500);margin-bottom:16px">勾选需要配置套餐运营策略的 APP，并为每个 APP 选择对应策略</div>
@@ -775,6 +745,7 @@ tbody tr:hover td{background:var(--gray-50);}
         <input type="checkbox" style="width:15px;height:15px;cursor:pointer">
         <span style="font-size:13px;font-weight:500;color:var(--gray-700)">全选</span>
       </div>
+      <!-- APP 1 已选 -->
       <div style="padding:12px 16px;border-bottom:1px solid var(--gray-100);display:flex;flex-direction:column;gap:10px">
         <div style="display:flex;align-items:center;gap:12px">
           <input type="checkbox" checked style="width:15px;height:15px;cursor:pointer;accent-color:var(--primary)">
@@ -782,18 +753,25 @@ tbody tr:hover td{background:var(--gray-50);}
             <div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700">G</div>
             <div><div style="font-size:13px;font-weight:500;color:var(--gray-900)">GameHub Pro</div><div style="font-size:12px;color:var(--gray-400)">APP_001 · Android</div></div>
           </div>
-          <select class="select" style="width:220px">
+          <select class="select" style="width:220px" onchange="onBindStrategySelect(this)">
             <option value="">请选择套餐运营策略</option>
             <option selected>云存储推广策略</option>
-            <option>动态匹配策略</option>
+            <option>AI服务推广策略</option>
           </select>
         </div>
-        <!-- 策略预览 -->
+        <!-- 策略详情预览 -->
         <div style="margin-left:27px;padding:12px;background:var(--primary-light);border-radius:6px;border:1px solid #BFDBFE;font-size:13px">
           <div style="font-weight:600;color:var(--gray-900);margin-bottom:6px">云存储推广策略</div>
-          <div style="color:var(--gray-500)">弹窗总数: <span style="color:var(--gray-700)">5次/7天</span> · 同类型日上限: <span style="color:var(--gray-700)">2次/天</span> · 包含 <span style="color:var(--gray-700)">2</span> 个运营位</div>
+          <div style="color:var(--gray-500);margin-bottom:8px">每日弹窗上限: <span style="color:var(--gray-700)">3次/天</span> · 同类型上限: <span style="color:var(--gray-700)">1次/天</span> · 包含 <span style="color:var(--gray-700)">2</span> 个运营位</div>
+          <div style="border-top:1px solid #BFDBFE;padding-top:8px">
+            <div style="font-size:12px;font-weight:600;color:var(--gray-500);margin-bottom:6px">运营位配置</div>
+            <div style="font-size:12px;color:var(--gray-600);display:flex;flex-direction:column;gap:4px">
+              <div>云存储推荐位：条件一→基础云存漏斗 / 条件二→基础云存漏斗 / 条件三→Pro升级漏斗</div>
+            </div>
+          </div>
         </div>
       </div>
+      <!-- APP 2 未选 -->
       <div style="padding:12px 16px;display:flex;align-items:center;gap:12px">
         <input type="checkbox" style="width:15px;height:15px;cursor:pointer">
         <div style="display:flex;align-items:center;gap:8px;flex:1">
@@ -805,23 +783,32 @@ tbody tr:hover td{background:var(--gray-50);}
     </div>
   </div>
   <div class="drawer-footer">
-    <button class="btn btn-secondary" onclick="closeDrawer('drawer-bind-pkg-strategy')">取消</button>
-    <button class="btn btn-primary" onclick="closeDrawer('drawer-bind-pkg-strategy')">确认绑定</button>
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-bind-strategy')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-bind-strategy')">确认绑定</button>
   </div>
 </div>
 
 <script>
-function showPage(name) {
+function showPage(name, slotCode, slotName) {
   document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  if (name === 'app-list' || name === 'app-edit' || name === 'pkg-pool' || name === 'flow-editor') {
+  if (['app-list','app-edit','pkg-mgmt','pkg-funnel'].includes(name)) {
     document.getElementById('nav-app').classList.add('active');
   } else if (name === 'user-segment') {
     document.getElementById('nav-segment').classList.add('active');
     document.getElementById('nav-user-parent').classList.add('active');
   }
-  if (name === 'flow-editor') feInitDemo();
+  if (name === 'pkg-mgmt' && slotCode) {
+    document.getElementById('mgmt-slot-name').textContent = slotName;
+    document.getElementById('mgmt-slot-code').textContent = '运营位编码: ' + slotCode;
+    document.getElementById('breadcrumb-mgmt-slot').textContent = slotName + ' · 套餐管理';
+  }
+  if (name === 'pkg-funnel' && slotCode) {
+    document.getElementById('funnel-slot-name').textContent = slotName;
+    document.getElementById('funnel-slot-code').textContent = '运营位编码: ' + slotCode;
+    document.getElementById('breadcrumb-funnel-slot').textContent = slotName + ' · 套餐漏斗';
+  }
 }
 
 function switchTab(tabId, el) {
@@ -845,8 +832,11 @@ function openDrawer(id, mode) {
   if (id === 'drawer-pkg-strategy') {
     document.getElementById('pkg-strategy-title').textContent = mode === 'add' ? '添加套餐运营策略' : '编辑套餐运营策略';
   }
-  if (id === 'drawer-pkg-strategy-v2') {
-    document.getElementById('pkg-strategy-v2-title').textContent = mode === 'add' ? '添加套餐运营策略' : '编辑套餐运营策略';
+  if (id === 'drawer-create-pkg') {
+    document.getElementById('create-pkg-title').textContent = mode === 'add' ? '创建套餐' : '编辑套餐';
+  }
+  if (id === 'drawer-funnel') {
+    document.getElementById('funnel-title').textContent = mode === 'add' ? '添加漏斗' : '编辑漏斗';
   }
   const overlayId = 'overlay-' + id.replace('drawer-', '');
   const overlay = document.getElementById(overlayId);
@@ -863,405 +853,97 @@ function closeDrawer(id) {
   if (drawer) drawer.classList.remove('show');
 }
 
-function updatePosCount(radio) {
-  const count = parseInt(radio.value);
-  const block = radio.closest('.slot-config-block');
-  block.querySelectorAll('.pos-configs .pos-config').forEach(pc => {
-    const pos = parseInt(pc.dataset.pos);
-    pc.style.display = pos <= count ? 'block' : 'none';
-  });
+// 套餐方向切换
+function onPkgDirChange(radio) {
+  const durSel = document.getElementById('pkg-duration');
+  const svcSel = document.getElementById('pkg-service');
+  if (radio.value === 'device') {
+    durSel.innerHTML = '<option>7天</option><option>15天</option><option>30天</option><option>1年</option>';
+    svcSel.innerHTML = '<option value="">请选择套餐服务</option><option value="event7">7天事件云存</option><option value="event15">15天事件云存</option>';
+  } else {
+    durSel.innerHTML = '<option>3个月</option><option>6个月</option>';
+    svcSel.innerHTML = '<option value="">请选择套餐服务</option><option value="sms">短信套餐</option><option value="noad">免广告-年</option>';
+  }
+  document.getElementById('pkg-service-detail').style.display = 'none';
 }
 
-function togglePkgMode(radio) {
-  const block = radio.closest('.slot-config-block');
-  const staticDiv = block.querySelector('.static-config');
-  const dynamicDiv = block.querySelector('.dynamic-config');
-  if (radio.value === 'static') {
-    staticDiv.style.display = 'block';
-    dynamicDiv.style.display = 'none';
+function onPkgServiceChange(sel) {
+  const detail = document.getElementById('pkg-service-detail');
+  const map = {
+    event7: {name:'7天事件云存', type:'事件云存'},
+    event15: {name:'15天事件云存', type:'事件云存'},
+    sms: {name:'短信套餐', type:'短信套餐'},
+    noad: {name:'免广告-年', type:'免广告'}
+  };
+  if (sel.value && map[sel.value]) {
+    document.getElementById('svc-name').textContent = map[sel.value].name;
+    document.getElementById('svc-type').textContent = map[sel.value].type;
+    detail.style.display = 'block';
   } else {
-    staticDiv.style.display = 'none';
-    dynamicDiv.style.display = 'block';
+    detail.style.display = 'none';
   }
 }
 
-let pkgSlotCounter = 1;
+// 订阅类型切换
+function onSubTypeChange(radio) {
+  document.getElementById('non-sub-fields').style.display = radio.value === 'none' ? 'block' : 'none';
+  document.getElementById('sub-fields').style.display = radio.value === 'sub' ? 'block' : 'none';
+}
 
-function addPkgSlotBlock() {
-  pkgSlotCounter++;
-  const idx = pkgSlotCounter;
-  const list = document.getElementById('pkg-slot-config-list');
+// 免费试用开关
+function onFreeTrialChange(cb) {
+  document.getElementById('free-trial-fields').style.display = cb.checked ? 'block' : 'none';
+}
+
+// 漏斗数量切换
+function onFunnelCountChange(count) {
+  document.querySelectorAll('#funnel-slots [data-funnel-pos]').forEach(el => {
+    el.style.display = parseInt(el.dataset.funnelPos) <= count ? 'block' : 'none';
+  });
+}
+
+// 策略运营位管理
+let strategySlotCnt = 1;
+function addStrategySlot() {
+  strategySlotCnt++;
+  const idx = strategySlotCnt;
+  const list = document.getElementById('strategy-slot-list');
   const block = document.createElement('div');
-  block.className = 'slot-config-block';
+  block.className = 'slot-block';
   block.innerHTML = `
-    <div class="slot-config-block-header">
+    <div class="slot-block-header">
       <span style="font-size:13px;font-weight:600;color:var(--gray-700)">运营位 #${idx}</span>
-      <button class="btn btn-sm btn-danger-ghost" style="height:26px;padding:0 8px" onclick="removePkgSlotBlock(this)">移除</button>
+      <button class="btn btn-sm btn-danger-ghost" style="height:26px;padding:0 8px" onclick="removeStrategySlot(this)">移除</button>
     </div>
     <div class="form-group" style="margin-bottom:12px">
       <label class="form-label">选择运营位 <span class="required">*</span></label>
-      <select class="select">
-        <option value="">请选择运营位</option>
-        <option value="1">云存储推荐位 (pkg_slot_cloud_001)</option>
-        <option value="2">AI服务推荐位 (pkg_slot_ai_001)</option>
-      </select>
+      <select class="select"><option value="">请选择运营位</option><option value="cloud">云存储推荐位 (pkg_slot_cloud_001)</option><option value="ai">AI服务推荐位 (pkg_slot_ai_001)</option></select>
     </div>
-    <div class="form-group" style="margin-bottom:12px">
-      <label class="form-label">套餐策略 <span class="required">*</span></label>
-      <div class="radio-group">
-        <label class="radio-item"><input type="radio" name="pkg-mode-${idx}" value="static" checked onchange="togglePkgMode(this)"> 静态指定</label>
-        <label class="radio-item"><input type="radio" name="pkg-mode-${idx}" value="dynamic" onchange="togglePkgMode(this)"> 动态匹配</label>
-      </div>
-    </div>
-    <div class="static-config">
-      <div class="form-group" style="margin-bottom:12px">
-        <label class="form-label">套餐位数量 <span class="required">*</span></label>
-        <div class="radio-group">
-          <label class="radio-item"><input type="radio" name="pos-count-${idx}" value="1" onchange="updatePosCount(this)"> 1个</label>
-          <label class="radio-item"><input type="radio" name="pos-count-${idx}" value="2" checked onchange="updatePosCount(this)"> 2个</label>
-          <label class="radio-item"><input type="radio" name="pos-count-${idx}" value="3" onchange="updatePosCount(this)"> 3个</label>
-        </div>
-      </div>
-      <div class="pos-configs">
-        <div class="pos-config" data-pos="1"><div class="pos-label">1号位</div><div class="pos-row"><div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">套餐 <span class="required">*</span></div><select class="select" style="font-size:13px"><option value="">搜索套餐...</option><option>基础云存储套餐</option><option>Pro云存储套餐</option></select></div><div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">运营标签</div><select class="select" style="font-size:13px"><option value="">无标签</option><option>折扣</option><option>新用户</option><option>免费试用</option></select></div><div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">文案</div><input class="input" style="font-size:13px" placeholder="自定义文案"></div></div></div>
-        <div class="pos-config" data-pos="2"><div class="pos-label">2号位</div><div class="pos-row"><div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">套餐 <span class="required">*</span></div><select class="select" style="font-size:13px"><option value="">搜索套餐...</option></select></div><div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">运营标签</div><select class="select" style="font-size:13px"><option value="">无标签</option></select></div><div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">文案</div><input class="input" style="font-size:13px" placeholder="自定义文案"></div></div></div>
-        <div class="pos-config" data-pos="3" style="display:none"><div class="pos-label">3号位</div><div class="pos-row"><div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">套餐 <span class="required">*</span></div><select class="select" style="font-size:13px"><option value="">搜索套餐...</option></select></div><div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">运营标签</div><select class="select" style="font-size:13px"><option value="">无标签</option></select></div><div><div style="font-size:12px;color:var(--gray-500);margin-bottom:4px">文案</div><input class="input" style="font-size:13px" placeholder="自定义文案"></div></div></div>
-      </div>
-      <div class="form-group" style="margin-top:12px;margin-bottom:0">
-        <label class="form-label">冷却期（小时） <span class="required">*</span></label>
-        <div style="display:flex;align-items:center;gap:8px">
-          <input class="input" type="number" placeholder="请输入小时数" style="max-width:160px">
-          <span style="font-size:12px;color:var(--gray-400)">两次弹窗的最小间隔</span>
-        </div>
-      </div>
-    </div>
-    <div class="dynamic-config" style="display:none">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
-        <div class="form-group" style="margin-bottom:0"><label class="form-label">触发场景 <span class="required">*</span></label><select class="select"><option value="">请选择</option><option>云存循环覆盖</option><option>SD卡循环覆盖</option></select></div>
-        <div class="form-group" style="margin-bottom:0"><label class="form-label">匹配策略 <span class="required">*</span></label><select class="select"><option value="">请选择</option><option>步进升级</option><option>最优折扣</option><option>历史偏好</option></select></div>
-        <div class="form-group" style="margin-bottom:0"><label class="form-label">匹配套餐类型 <span class="required">*</span></label><select class="select"><option value="">请选择</option><option>云存储</option><option>AI</option></select></div>
-      </div>
-    </div>
+    <div style="font-size:12px;font-weight:600;color:var(--gray-500);margin-bottom:8px">套餐配置</div>
+    <div class="cond-block"><div class="cond-label">条件一：未购买云存储</div><div class="form-group" style="margin:0"><label class="form-label">选择漏斗 <span class="required">*</span></label><select class="select"><option value="">请选择漏斗</option><option>基础云存漏斗</option><option>Pro升级漏斗</option></select></div></div>
+    <div class="cond-block"><div class="cond-label">条件二：已购买云存储，3≤循环时长＜7</div><div class="form-group" style="margin:0"><label class="form-label">选择漏斗 <span class="required">*</span></label><select class="select"><option value="">请选择漏斗</option><option>基础云存漏斗</option><option>Pro升级漏斗</option></select></div></div>
+    <div class="cond-block"><div class="cond-label">条件三：已购买云存储，7≤循环时长＜15</div><div class="form-group" style="margin:0"><label class="form-label">选择漏斗 <span class="required">*</span></label><select class="select"><option value="">请选择漏斗</option><option>基础云存漏斗</option><option>Pro升级漏斗</option></select></div></div>
   `;
   list.appendChild(block);
-  updateSlotNumbers();
+  updateStrategySlotNumbers();
 }
 
-function removePkgSlotBlock(btn) {
-  const list = document.getElementById('pkg-slot-config-list');
-  if (list.querySelectorAll('.slot-config-block').length <= 1) return;
-  btn.closest('.slot-config-block').remove();
-  updateSlotNumbers();
+function removeStrategySlot(btn) {
+  const list = document.getElementById('strategy-slot-list');
+  if (list.querySelectorAll('.slot-block').length <= 1) return;
+  btn.closest('.slot-block').remove();
+  updateStrategySlotNumbers();
 }
 
-function updateSlotNumbers() {
-  document.querySelectorAll('#pkg-slot-config-list .slot-config-block').forEach((block, i) => {
-    block.querySelector('.slot-config-block-header span').textContent = `运营位 #${i + 1}`;
+function updateStrategySlotNumbers() {
+  document.querySelectorAll('#strategy-slot-list .slot-block').forEach((b, i) => {
+    b.querySelector('.slot-block-header span').textContent = `运营位 #${i + 1}`;
   });
 }
 
-// ===== FLOW EDITOR =====
-const feNodeDefs = {
-  static:    { title:'静态指定',    color:'#2563EB', bg:'#EFF6FF', border:'#BFDBFE', icon:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/>', fields:[{l:'套餐位数量',t:'select',opts:['1个','2个','3个'],def:'2个'},{l:'1号位套餐',t:'select',opts:['基础云存储套餐','Pro云存储套餐'],def:'基础云存储套餐'},{l:'冷却期（小时）',t:'input',def:'24'}], ports:['不感兴趣','立即升级','关闭'] },
-  dynamic:   { title:'动态匹配',    color:'#16A34A', bg:'#F0FDF4', border:'#BBF7D0', icon:'<circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>', fields:[{l:'触发场景',t:'select',opts:['云存循环覆盖','SD卡循环覆盖'],def:'云存循环覆盖'},{l:'匹配策略',t:'select',opts:['步进升级','最优折扣','历史偏好'],def:'步进升级'}], ports:['不感兴趣','立即升级','关闭'] },
-  condition: { title:'用户行为判断', color:'#D97706', bg:'#FFFBEB', border:'#FDE68A', icon:'<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>', fields:[{l:'判断条件',t:'select',opts:['不感兴趣次数 ≥','关闭次数 ≥','弹窗次数 ≥'],def:'不感兴趣次数 ≥'},{l:'阈值',t:'input',def:'3'}], ports:['满足条件','不满足'] },
-  end:       { title:'停止推送',    color:'#DC2626', bg:'#FEF2F2', border:'#FECACA', icon:'<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>', fields:[], ports:[] }
-};
-let feNodes=[], feConns=[], feNodeCnt=0, feDraggingType=null, feConnFrom=null, feSelId=null, feDraggingNode=null, feDragOff={x:0,y:0}, feTempLine=null;
-
-function feDragStart(e, type){ feDraggingType=type; e.dataTransfer.effectAllowed='copy'; }
-
-function feCanvasDrop(e){
-  e.preventDefault();
-  if(!feDraggingType) return;
-  const wrap=document.getElementById('feCanvasWrap');
-  const r=wrap.getBoundingClientRect();
-  feAddNode(feDraggingType, e.clientX-r.left-98, e.clientY-r.top-40);
-  feDraggingType=null;
-}
-
-function feAddNode(type,x,y){
-  const id='fen_'+(++feNodeCnt);
-  const def=feNodeDefs[type];
-  const node={id,type,x,y,cfg:{}};
-  def.fields.forEach(f=>node.cfg[f.l]=f.def||'');
-  feNodes.push(node);
-  feRenderNode(node);
-  feRenderConns();
-}
-
-function feRenderNode(node){
-  const def=feNodeDefs[node.type];
-  const container=document.getElementById('feNodes');
-  document.getElementById(node.id)?.remove();
-  const el=document.createElement('div');
-  el.className='fe-node'; el.id=node.id;
-  el.style.left=node.x+'px'; el.style.top=node.y+'px';
-
-  let html=`<div style="padding:9px 11px 7px;border-bottom:1px solid ${def.border};background:${def.bg};border-radius:8px 8px 0 0;display:flex;align-items:center;gap:7px;">
-    <div style="width:22px;height:22px;border-radius:5px;background:${def.color}20;border:1px solid ${def.border};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="${def.color}" stroke-width="2">${def.icon}</svg>
-    </div>
-    <span style="font-size:12px;font-weight:600;color:${def.color};flex:1;">${def.title}</span>
-    <button class="fe-node-del" onclick="feDeleteNode('${node.id}')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-  </div>
-  <div style="padding:9px 11px;">`;
-  def.fields.forEach(f=>{
-    html+=`<div style="font-size:11px;color:var(--gray-400);margin-bottom:2px;">${f.l}: <span style="color:var(--gray-700);font-weight:500;">${node.cfg[f.l]}</span></div>`;
-  });
-  if(!def.fields.length) html+=`<div style="font-size:11px;color:var(--gray-400);text-align:center;">流程终止</div>`;
-  html+='</div>';
-
-  if(def.ports.length){
-    html+=`<div style="border-top:1px solid ${def.border};padding:7px 11px;display:flex;flex-direction:column;gap:3px;">`;
-    def.ports.forEach((p,i)=>{
-      html+=`<div style="display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:11px;color:var(--gray-500);">${p}</span>
-        <div class="fe-port-out" id="${node.id}_out_${i}" data-node="${node.id}" data-port="${i}" data-label="${p}"
-          onmousedown="feStartConn(event,'${node.id}',${i},'${p}')"></div>
-      </div>`;
-    });
-    html+='</div>';
-  }
-  el.innerHTML=html;
-
-  const inPort=document.createElement('div');
-  inPort.className='fe-port-in'; inPort.id=node.id+'_in';
-  inPort.onmouseup=e=>{e.stopPropagation();feFinishConn(node.id);};
-  el.appendChild(inPort);
-
-  el.addEventListener('mousedown',e=>{
-    if(e.target.classList.contains('fe-port-out')||e.target.classList.contains('fe-port-in')||e.target.classList.contains('fe-node-del')) return;
-    if(feConnFrom) return;
-    feDraggingNode=node;
-    const r=el.getBoundingClientRect();
-    feDragOff={x:e.clientX-r.left,y:e.clientY-r.top};
-    feSelect(node.id); e.preventDefault();
-  });
-  el.addEventListener('click',e=>{
-    if(e.target.classList.contains('fe-port-out')||e.target.classList.contains('fe-port-in')||e.target.classList.contains('fe-node-del')) return;
-    feSelect(node.id);
-  });
-  container.appendChild(el);
-}
-
-function feSelect(id){
-  feSelId=id;
-  document.querySelectorAll('.fe-node').forEach(n=>n.classList.remove('selected'));
-  document.getElementById(id)?.classList.add('selected');
-  feShowConfig(id);
-}
-
-function feShowConfig(id){
-  const node=feNodes.find(n=>n.id===id);
-  if(!node) return;
-  const def=feNodeDefs[node.type];
-  document.getElementById('feConfigPanel').style.display='block';
-  document.getElementById('feConfigTitle').textContent=def.title+' · 配置';
-  let html='';
-  def.fields.forEach(f=>{
-    html+=`<div class="form-group"><label class="form-label">${f.l}</label>`;
-    if(f.t==='select'){
-      html+=`<select class="select" onchange="feUpdateCfg('${id}','${f.l}',this.value)">`;
-      f.opts.forEach(o=>html+=`<option ${node.cfg[f.l]===o?'selected':''}>${o}</option>`);
-      html+='</select>';
-    } else {
-      html+=`<input class="input" value="${node.cfg[f.l]||''}" onchange="feUpdateCfg('${id}','${f.l}',this.value)">`;
-    }
-    html+='</div>';
-  });
-  if(!def.fields.length) html='<div style="font-size:13px;color:var(--gray-400)">此节点无需配置</div>';
-  document.getElementById('feConfigBody').innerHTML=html;
-}
-
-function feUpdateCfg(id,key,val){
-  const node=feNodes.find(n=>n.id===id);
-  if(node){node.cfg[key]=val;feRenderNode(node);feRenderConns();}
-}
-
-function feDeleteNode(id){
-  feNodes=feNodes.filter(n=>n.id!==id);
-  feConns=feConns.filter(c=>c.from!==id&&c.to!==id);
-  document.getElementById(id)?.remove();
-  if(feSelId===id){feSelId=null;document.getElementById('feConfigPanel').style.display='none';}
-  feRenderConns();
-}
-
-function feStartConn(e,nodeId,portIdx,label){
-  e.stopPropagation();
-  feConnFrom={nodeId,portIdx,label};
-  const svg=document.getElementById('feSvg');
-  feTempLine=document.createElementNS('http://www.w3.org/2000/svg','path');
-  feTempLine.setAttribute('stroke','#94A3B8');feTempLine.setAttribute('stroke-width','2');
-  feTempLine.setAttribute('fill','none');feTempLine.setAttribute('stroke-dasharray','5,3');
-  svg.appendChild(feTempLine);
-}
-
-function feFinishConn(toId){
-  if(!feConnFrom||feConnFrom.nodeId===toId){feCancelConn();return;}
-  if(!feConns.find(c=>c.from===feConnFrom.nodeId&&c.fromPort===feConnFrom.portIdx&&c.to===toId)){
-    feConns.push({from:feConnFrom.nodeId,fromPort:feConnFrom.portIdx,label:feConnFrom.label,to:toId});
-  }
-  feCancelConn(); feRenderConns();
-}
-
-function feCancelConn(){
-  feTempLine?.remove(); feTempLine=null; feConnFrom=null;
-}
-
-function fePortPos(nodeId,portIdx,isIn){
-  const el=document.getElementById(nodeId);
-  if(!el) return{x:0,y:0};
-  const wrap=document.getElementById('feCanvasWrap');
-  const wr=wrap.getBoundingClientRect();
-  const er=el.getBoundingClientRect();
-  if(isIn) return{x:er.left-wr.left,y:er.top-wr.top+er.height/2};
-  const pe=document.getElementById(`${nodeId}_out_${portIdx}`);
-  if(pe){const pr=pe.getBoundingClientRect();return{x:pr.left-wr.left+pr.width/2,y:pr.top-wr.top+pr.height/2};}
-  return{x:er.right-wr.left,y:er.top-wr.top+er.height/2};
-}
-
-function feCurve(x1,y1,x2,y2){const dx=Math.abs(x2-x1)*0.5;return `M${x1},${y1} C${x1+dx},${y1} ${x2-dx},${y2} ${x2},${y2}`;}
-
-function feRenderConns(){
-  const svg=document.getElementById('feSvg');
-  svg.querySelectorAll('.fe-conn,.fe-conn-lbl').forEach(e=>e.remove());
-  let defs=svg.querySelector('defs');
-  if(!defs){defs=document.createElementNS('http://www.w3.org/2000/svg','defs');svg.prepend(defs);}
-  feConns.forEach((c,i)=>{
-    const from=fePortPos(c.from,c.fromPort,false);
-    const to=fePortPos(c.to,0,true);
-    const def=feNodeDefs[feNodes.find(n=>n.id===c.from)?.type];
-    const color=def?def.color:'#94A3B8';
-    const mid=`feArrow${i}`;
-    let marker=defs.querySelector(`#${mid}`);
-    if(!marker){marker=document.createElementNS('http://www.w3.org/2000/svg','marker');marker.setAttribute('id',mid);marker.setAttribute('markerWidth','8');marker.setAttribute('markerHeight','8');marker.setAttribute('refX','6');marker.setAttribute('refY','3');marker.setAttribute('orient','auto');const poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');poly.setAttribute('points','0 0, 8 3, 0 6');poly.setAttribute('fill',color);marker.appendChild(poly);defs.appendChild(marker);}
-    const path=document.createElementNS('http://www.w3.org/2000/svg','path');
-    path.setAttribute('class','fe-conn');path.setAttribute('d',feCurve(from.x,from.y,to.x,to.y));
-    path.setAttribute('stroke',color);path.setAttribute('stroke-width','2');path.setAttribute('fill','none');
-    path.setAttribute('marker-end',`url(#${mid})`);svg.appendChild(path);
-    const mx=(from.x+to.x)/2,my=(from.y+to.y)/2;
-    const fo=document.createElementNS('http://www.w3.org/2000/svg','foreignObject');
-    fo.setAttribute('class','fe-conn-lbl');fo.setAttribute('x',mx-30);fo.setAttribute('y',my-10);fo.setAttribute('width','80');fo.setAttribute('height','20');
-    fo.innerHTML=`<div xmlns="http://www.w3.org/1999/xhtml" style="background:white;border:1px solid #E2E8F0;border-radius:4px;padding:1px 5px;font-size:10px;font-weight:600;color:${color};text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.label}</div>`;
-    svg.appendChild(fo);
-  });
-}
-
-document.addEventListener('mousemove',e=>{
-  if(feDraggingNode){
-    const wrap=document.getElementById('feCanvasWrap');
-    if(!wrap) return;
-    const r=wrap.getBoundingClientRect();
-    feDraggingNode.x=e.clientX-r.left-feDragOff.x;
-    feDraggingNode.y=e.clientY-r.top-feDragOff.y;
-    const el=document.getElementById(feDraggingNode.id);
-    if(el){el.style.left=feDraggingNode.x+'px';el.style.top=feDraggingNode.y+'px';}
-    feRenderConns();
-  }
-  if(feConnFrom&&feTempLine){
-    const pe=document.getElementById(`${feConnFrom.nodeId}_out_${feConnFrom.portIdx}`);
-    if(!pe) return;
-    const wrap=document.getElementById('feCanvasWrap');
-    if(!wrap) return;
-    const wr=wrap.getBoundingClientRect();
-    const pr=pe.getBoundingClientRect();
-    feTempLine.setAttribute('d',feCurve(pr.left-wr.left+pr.width/2,pr.top-wr.top+pr.height/2,e.clientX-wr.left,e.clientY-wr.top));
-  }
-});
-document.addEventListener('mouseup',()=>{
-  if(feDraggingNode) feDraggingNode=null;
-  if(feConnFrom) feCancelConn();
-});
-
-function feInitDemo(){
-  feNodes=[];feConns=[];feNodeCnt=0;
-  document.getElementById('feNodes').innerHTML='';
-  document.getElementById('feSvg').innerHTML='';
-  document.getElementById('feConfigPanel').style.display='none';
-  setTimeout(()=>{
-    feAddNode('static',60,100);
-    feAddNode('condition',310,60);
-    feAddNode('dynamic',310,240);
-    feAddNode('end',560,150);
-    feConns=[
-      {from:'fen_1',fromPort:0,label:'不感兴趣',to:'fen_2'},
-      {from:'fen_2',fromPort:0,label:'满足条件',to:'fen_4'},
-      {from:'fen_2',fromPort:1,label:'不满足',to:'fen_3'},
-      {from:'fen_3',fromPort:0,label:'不感兴趣',to:'fen_4'},
-    ];
-    feRenderConns();
-  },50);
+function onBindStrategySelect(sel) {
+  // 选择策略后显示详情预览（简化演示）
 }
 </script>
-<!-- DRAWER: 套餐运营策略 方案二 -->
-<div class="drawer-overlay" id="overlay-pkg-strategy-v2" onclick="closeDrawer('drawer-pkg-strategy-v2')"></div>
-<div class="drawer" id="drawer-pkg-strategy-v2" style="width:560px">
-  <div class="drawer-header">
-    <span class="drawer-title" id="pkg-strategy-v2-title">添加套餐运营策略</span>
-    <button class="close-btn" onclick="closeDrawer('drawer-pkg-strategy-v2')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-  </div>
-  <div class="drawer-body">
-    <div class="form-group">
-      <label class="form-label">策略名称 <span class="required">*</span></label>
-      <input class="input" placeholder="请输入策略名称" value="云存储推广策略">
-    </div>
-    <div class="section-title">运营位配置 <span class="required">*</span></div>
-    <div style="font-size:12px;color:var(--gray-400);margin-bottom:12px;">为每个运营位独立配置策略流，点击【配置策略流】进入可视化编辑器</div>
-    <!-- 运营位 #1 -->
-    <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden;margin-bottom:10px;">
-      <div style="padding:12px 14px;background:var(--gray-50);display:flex;align-items:center;gap:10px;">
-        <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--gray-900)">云存储推荐位</div><div style="font-size:12px;color:var(--gray-400);margin-top:2px;">pkg_slot_cloud_001</div></div>
-        <button class="btn btn-sm btn-ghost" onclick="closeDrawer('drawer-pkg-strategy-v2');showPage('flow-editor')">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          配置策略流
-        </button>
-      </div>
-      <div style="padding:10px 14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-        <div style="display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;background:#EFF6FF;border:1px solid #BFDBFE;font-size:11px;font-weight:600;color:#2563EB;">静态指定</div>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        <span style="font-size:11px;color:var(--gray-400)">不感兴趣</span>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        <div style="display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;background:#FFFBEB;border:1px solid #FDE68A;font-size:11px;font-weight:600;color:#D97706;">用户行为判断</div>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        <div style="display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;background:#FEF2F2;border:1px solid #FECACA;font-size:11px;font-weight:600;color:#DC2626;">停止推送</div>
-      </div>
-    </div>
-    <!-- 运营位 #2 -->
-    <div style="border:1px solid var(--gray-200);border-radius:8px;overflow:hidden;margin-bottom:10px;">
-      <div style="padding:12px 14px;background:var(--gray-50);display:flex;align-items:center;gap:10px;">
-        <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--gray-900)">AI服务推荐位</div><div style="font-size:12px;color:var(--gray-400);margin-top:2px;">pkg_slot_ai_001</div></div>
-        <button class="btn btn-sm btn-ghost" onclick="closeDrawer('drawer-pkg-strategy-v2');showPage('flow-editor')">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          配置策略流
-        </button>
-      </div>
-      <div style="padding:10px 14px;"><span style="font-size:12px;color:var(--gray-400)">暂未配置策略流</span></div>
-    </div>
-    <button class="btn btn-secondary btn-sm" style="margin-bottom:20px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加运营位</button>
-    <div class="section-title">全局策略配置 <span class="required">*</span></div>
-    <div class="form-group">
-      <label class="form-label">弹窗总数限制 <span class="required">*</span></label>
-      <div style="display:flex;align-items:center;gap:8px">
-        <input class="input" type="number" style="max-width:80px" value="5">
-        <span style="font-size:13px;color:var(--gray-500);white-space:nowrap">次 /</span>
-        <input class="input" type="number" style="max-width:80px" value="7">
-        <span style="font-size:13px;color:var(--gray-500);white-space:nowrap">天</span>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">同类型套餐弹窗日上限 <span class="required">*</span></label>
-      <div style="display:flex;align-items:center;gap:8px">
-        <input class="input" type="number" style="max-width:80px" value="2">
-        <span style="font-size:13px;color:var(--gray-500);white-space:nowrap">次 / 天</span>
-      </div>
-    </div>
-  </div>
-  <div class="drawer-footer">
-    <button class="btn btn-secondary" onclick="closeDrawer('drawer-pkg-strategy-v2')">取消</button>
-    <button class="btn btn-primary" onclick="closeDrawer('drawer-pkg-strategy-v2')">保存策略</button>
-  </div>
-</div>
-
 </body>
 </html>
