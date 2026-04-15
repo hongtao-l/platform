@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>套餐配置</title>
+<link rel="stylesheet" href="common.css">
+<style>
+body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+.page-view{display:none;}
+.page-view.active{display:flex;flex-direction:column;flex:1;overflow:hidden;}
+.drag-handle{cursor:grab;color:var(--gray-400);display:flex;align-items:center;}
+.drag-handle:active{cursor:grabbing;}
+.drag-row{transition:background .15s;}
+.drag-row.dragging{opacity:.5;background:var(--primary-light);}
+.drag-row.drag-over{border-top:2px solid var(--primary);}
+.textarea{border:1px solid var(--gray-200);border-radius:6px;padding:8px 12px;font-size:14px;color:var(--gray-700);background:var(--white);outline:none;width:100%;resize:vertical;min-height:60px;font-family:inherit;}
+.textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.filter-bar{background:var(--white);border:1px solid var(--gray-200);border-radius:8px;padding:16px 20px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+.filter-item{display:flex;flex-direction:column;gap:4px;}
+.filter-item label{font-size:12px;font-weight:500;color:var(--gray-500);}
+.filter-item .input,.filter-item .select{width:180px;}
+.toggle-switch-sm{position:relative;width:36px;height:20px;display:inline-block;}
+.toggle-switch-sm input{opacity:0;width:0;height:0;}
+.toggle-slider-sm{position:absolute;cursor:pointer;inset:0;background:var(--gray-200);border-radius:10px;transition:.2s;}
+.toggle-slider-sm:before{content:'';position:absolute;height:14px;width:14px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.2s;}
+.toggle-switch-sm input:checked+.toggle-slider-sm{background:var(--success);}
+.toggle-switch-sm input:checked+.toggle-slider-sm:before{transform:translateX(16px);}
+.pagination{display:flex;align-items:center;justify-content:flex-end;padding:12px 20px;gap:4px;border-top:1px solid var(--gray-100);}
+.page-btn{height:30px;min-width:30px;padding:0 8px;border:1px solid var(--gray-200);border-radius:6px;background:var(--white);color:var(--gray-700);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.page-btn:hover{background:var(--gray-50);}
+.page-btn.active{background:var(--primary);color:white;border-color:var(--primary);}
+.page-info{font-size:13px;color:var(--gray-500);margin-right:12px;}
+.section-block{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:16px;margin-bottom:16px;}
+.radio-group{display:flex;gap:16px;margin-bottom:4px;}
+.radio-item{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px;color:var(--gray-700);}
+.radio-item input[type="radio"]{width:16px;height:16px;accent-color:var(--primary);cursor:pointer;}
+.switch{position:relative;width:40px;height:22px;display:inline-block;flex-shrink:0;}
+.switch input{opacity:0;width:0;height:0;}
+.switch-slider{position:absolute;inset:0;background:var(--gray-200);border-radius:11px;cursor:pointer;transition:all .2s;}
+.switch-slider::before{content:'';position:absolute;width:18px;height:18px;left:2px;top:2px;background:var(--white);border-radius:50%;transition:all .2s;}
+.switch input:checked+.switch-slider{background:var(--primary);}
+.switch input:checked+.switch-slider::before{transform:translateX(18px);}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:12px;font-weight:500;background:var(--primary-light);color:var(--primary);margin:2px 4px 2px 0;}
+.tag .tag-close{cursor:pointer;display:flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:3px;opacity:.7;}
+.tag .tag-close:hover{opacity:1;background:rgba(37,99,235,.15);}
+.tag-container{display:flex;flex-wrap:wrap;gap:4px;min-height:32px;padding:4px 0;}
+.multi-select{position:relative;}
+.multi-select-trigger{min-height:36px;border:1px solid var(--gray-200);border-radius:6px;padding:4px 32px 4px 8px;font-size:14px;color:var(--gray-700);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;cursor:pointer;display:flex;flex-wrap:wrap;gap:4px;align-items:center;}
+.multi-select-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--white);border:1px solid var(--gray-200);border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.10);z-index:10;margin-top:4px;display:none;max-height:200px;overflow-y:auto;}
+.multi-select-dropdown.show{display:block;}
+.multi-select-option{padding:8px 12px;font-size:13px;color:var(--gray-700);cursor:pointer;display:flex;align-items:center;gap:8px;}
+.multi-select-option:hover{background:var(--gray-50);}
+.multi-select-option.selected{background:var(--primary-light);color:var(--primary);}
+.multi-select-placeholder{color:var(--gray-400);font-size:14px;}
+.service-detail{background:var(--white);border:1px solid var(--gray-200);border-radius:6px;padding:12px 16px;margin-top:8px;}
+.service-detail-row{display:flex;justify-content:space-between;padding:4px 0;font-size:13px;}
+.service-detail-label{color:var(--gray-500);}
+.service-detail-value{color:var(--gray-700);font-weight:500;}
+.price-row{display:flex;gap:12px;}
+.price-row .form-group{flex:1;}
+.price-prefix{display:flex;align-items:center;}
+.price-prefix .prefix-label{height:36px;padding:0 10px;display:flex;align-items:center;font-size:13px;font-weight:500;color:var(--gray-500);background:var(--gray-50);border:1px solid var(--gray-200);border-right:none;border-radius:6px 0 0 6px;white-space:nowrap;}
+.price-prefix .input{border-radius:0 6px 6px 0;}
+.drawer{width:640px;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:none;align-items:center;justify-content:center;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--white);border-radius:12px;width:680px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.15);}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--gray-200);}
+.modal-title{font-size:16px;font-weight:600;color:var(--gray-900);}
+.modal-body{padding:20px 24px;overflow-y:auto;flex:1;}
+.modal-body table{width:100%;border-collapse:collapse;}
+.modal-body table th{text-align:left;font-size:12px;font-weight:500;color:var(--gray-500);padding:8px 12px;border-bottom:1px solid var(--gray-200);}
+.modal-body table td{padding:12px;border-bottom:1px solid var(--gray-100);font-size:14px;color:var(--gray-700);}
+.tag-code{display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;font-family:monospace;background:var(--primary-light);color:var(--primary);font-weight:500;}
+.i18n-icon{color:var(--primary);cursor:pointer;display:inline-flex;align-items:center;}
+.link-blue{color:var(--primary);cursor:pointer;font-size:13px;font-weight:500;background:none;border:none;font-family:inherit;padding:0;}
+.link-blue:hover{text-decoration:underline;}
+.link-red{color:#EF4444;cursor:pointer;font-size:13px;font-weight:500;background:none;border:none;font-family:inherit;padding:0;}
+.link-red:hover{text-decoration:underline;}
+.add-row{display:flex;gap:8px;align-items:center;margin-bottom:16px;}
+.add-row .input{flex:1;}
+</style>
+</head>
+<body>
+
+<!-- PAGE: 套餐列表 -->
+<div id="page-pkg-list" class="page-view active">
+<div class="page-header">
+  <div class="breadcrumb">
+    <span class="link" onclick="navigateToPage('index.html')">套餐管理</span>
+    <span class="sep">/</span>
+    <span class="current">套餐配置</span>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="content">
+  <!-- 筛选栏 -->
+  <div class="filter-bar">
+    <div class="filter-item">
+      <label>套餐名称</label>
+      <input class="input" placeholder="搜索套餐名称" style="width:180px">
+    </div>
+    <div class="filter-item">
+      <label>应用方向</label>
+      <select class="select" style="width:150px"><option value="">全部</option><option>设备</option><option>用户</option></select>
+    </div>
+    <div class="filter-item">
+      <label>投放区域</label>
+      <select class="select" style="width:150px"><option value="">全部</option><option>全球通用</option><option>国内</option><option>海外</option></select>
+    </div>
+    <div class="filter-item">
+      <label>选择投放应用</label>
+      <select class="select" style="width:180px"><option value="">全部</option><option>牵心PRO</option><option>鹤梦之家</option></select>
+    </div>
+    <div style="display:flex;gap:8px;align-items:flex-end">
+      <button class="btn btn-primary btn-sm">查询</button>
+      <button class="btn btn-secondary btn-sm">重置</button>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:8px">
+      <button class="btn btn-secondary btn-sm" onclick="goToCategoryFromList()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>套餐分类
+      </button>
+      <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-config-pkg','add')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>创建套餐
+      </button>
+    </div>
+  </div>
+
+  <!-- 列表 -->
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>套餐信息</th>
+          <th>应用方向</th>
+          <th>投放区域</th>
+          <th>投放应用</th>
+          <th>投放运营位</th>
+          <th>订阅类型</th>
+          <th>平台总成本</th>
+          <th>售价</th>
+          <th>创建时间</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Row 1 -->
+        <tr>
+          <td>
+            <div><span style="font-weight:500;color:var(--gray-900)">事件录像7天</span></div>
+            <div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG20220001
+              <span class="badge badge-warning" style="margin-left:4px">热门推荐</span>
+              <span class="badge badge-info" style="margin-left:2px">销量第一</span>
+            </div>
+          </td>
+          <td>设备</td>
+          <td><span class="badge badge-neutral">全球通用</span></td>
+          <td><span style="font-size:13px">牵心PRO(2)<br>鹤梦之家(1)</span></td>
+          <td><span class="badge badge-info" style="margin-right:4px">商城位</span><span class="badge badge-warning">推荐位</span></td>
+          <td><span class="badge badge-success">订阅制</span></td>
+          <td><span style="font-weight:500">¥2.50 / $0.35</span></td>
+          <td><span style="font-weight:500">¥6.90 / $0.95</span></td>
+          <td style="font-size:13px;color:var(--gray-500)">2026-01-17</td>
+          <td><div style="display:flex;gap:4px">
+            <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-config-pkg','edit')">编辑</button>
+            <button class="btn btn-sm btn-danger-ghost">删除</button>
+          </div></td>
+        </tr>
+        <!-- Row 2 -->
+        <tr>
+          <td>
+            <div><span style="font-weight:500;color:var(--gray-900)">国内专享·极简云存</span></div>
+            <div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG20220015
+              <span class="badge badge-info" style="margin-left:4px">专订</span>
+            </div>
+          </td>
+          <td>用户</td>
+          <td><span class="badge badge-success">国内</span></td>
+          <td><span style="font-size:13px">牵心PRO(1)<br>鹤梦之家(1)</span></td>
+          <td><span class="badge badge-info">商城位</span></td>
+          <td><span class="badge badge-success">订阅制</span></td>
+          <td><span style="font-weight:500">¥15.00 / $2.20</span></td>
+          <td><span style="font-weight:500">¥59.00 / $8.50</span></td>
+          <td style="font-size:13px;color:var(--gray-500)">2026-03-20</td>
+          <td><div style="display:flex;gap:4px">
+            <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-config-pkg','edit')">编辑</button>
+            <button class="btn btn-sm btn-danger-ghost">删除</button>
+          </div></td>
+        </tr>
+        <!-- Row 3 -->
+        <tr>
+          <td>
+            <div><span style="font-weight:500;color:var(--gray-900)">Overseas-Pro</span></div>
+            <div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG20220011</div>
+          </td>
+          <td>设备</td>
+          <td><span class="badge badge-info">海外</span></td>
+          <td><span style="font-size:13px">牵心PRO(2)</span></td>
+          <td><span class="badge badge-warning">推荐位</span></td>
+          <td><span class="badge badge-success">订阅制</span></td>
+          <td><span style="font-weight:500">$3.50</span></td>
+          <td><span style="font-weight:500">$12.99</span></td>
+          <td style="font-size:13px;color:var(--gray-500)">2026-03-21</td>
+          <td><div style="display:flex;gap:4px">
+            <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-config-pkg','edit')">编辑</button>
+            <button class="btn btn-sm btn-danger-ghost">删除</button>
+          </div></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="pagination">
+      <span class="page-info">共 3 条</span>
+      <button class="page-btn">&lt;</button>
+      <button class="page-btn active">1</button>
+      <button class="page-btn">&gt;</button>
+    </div>
+  </div>
+</div>
+</div><!-- end page-pkg-list -->
+
+<!-- PAGE: 套餐分类管理 -->
+<div id="page-category" class="page-view">
+  <div class="page-header">
+    <div class="breadcrumb">
+      <span class="link" onclick="showPage('pkg-list')">套餐管理</span>
+      <span class="sep">/</span>
+      <span class="link" onclick="showPage('pkg-list')">套餐配置</span>
+      <span class="sep">/</span>
+      <span class="current">套餐分类</span>
+    </div>
+  </div>
+  <div class="content">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <button class="btn btn-secondary" onclick="backFromCategory()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>返回
+      </button>
+      <div style="font-size:15px;font-weight:600;color:var(--gray-900)">套餐分类管理</div>
+      <div style="font-size:12px;color:var(--gray-400)">拖拽行可调整排序</div>
+      <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="openDrawer('drawer-category','add')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加分类
+      </button>
+    </div>
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40px"></th>
+            <th>分类名称</th>
+            <th>分类描述</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="category-tbody">
+          <tr class="drag-row" draggable="true" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" ondrop="drop(event)" ondragend="dragEnd(event)">
+            <td><span class="drag-handle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg></span></td>
+            <td><span style="font-weight:500;color:var(--gray-900)">云存储套餐</span> <span class="i18n-icon" title="多语言配置" onclick="openI18nModal(0,'category')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span></td>
+            <td style="font-size:13px;color:var(--gray-500)">提供多种云存储方案，满足不同存储需求</td>
+            <td><div style="display:flex;gap:4px">
+              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-category','edit')">编辑</button>
+              <button class="btn btn-sm btn-danger-ghost">删除</button>
+            </div></td>
+          </tr>
+          <tr class="drag-row" draggable="true" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" ondrop="drop(event)" ondragend="dragEnd(event)">
+            <td><span class="drag-handle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg></span></td>
+            <td><span style="font-weight:500;color:var(--gray-900)">AI智能服务</span> <span class="i18n-icon" title="多语言配置" onclick="openI18nModal(1,'category')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span></td>
+            <td style="font-size:13px;color:var(--gray-500)">AI智能检测、识别等增值服务</td>
+            <td><div style="display:flex;gap:4px">
+              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-category','edit')">编辑</button>
+              <button class="btn btn-sm btn-danger-ghost">删除</button>
+            </div></td>
+          </tr>
+          <tr class="drag-row" draggable="true" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" ondrop="drop(event)" ondragend="dragEnd(event)">
+            <td><span class="drag-handle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg></span></td>
+            <td><span style="font-weight:500;color:var(--gray-900)">综合套餐</span> <span class="i18n-icon" title="多语言配置" onclick="openI18nModal(2,'category')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span></td>
+            <td style="font-size:13px;color:var(--gray-500)">多项服务打包优惠</td>
+            <td><div style="display:flex;gap:4px">
+              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-category','edit')">编辑</button>
+              <button class="btn btn-sm btn-danger-ghost">删除</button>
+            </div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- DRAWER: 添加/编辑套餐分类 -->
+<div class="drawer-overlay" id="overlay-category" onclick="closeDrawer('drawer-category')"></div>
+<div class="drawer" id="drawer-category" style="width:480px">
+  <div class="drawer-header">
+    <span class="drawer-title" id="category-drawer-title">添加分类</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-category')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">分类名称 <span class="required">*</span></label>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input class="input" placeholder="请输入分类名称" style="flex:1">
+        <span class="i18n-icon" title="多语言配置" onclick="openI18nModal(-1,'category-new')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">分类描述</label>
+      <textarea class="textarea" placeholder="请输入分类描述" rows="3"></textarea>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-category')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-category')">确定</button>
+  </div>
+</div>
+
+<!-- DRAWER: 创建/编辑套餐配置 -->
+<div class="drawer-overlay" id="overlay-config-pkg" onclick="closeDrawer('drawer-config-pkg')"></div>
+<div class="drawer" id="drawer-config-pkg">
+  <div class="drawer-header">
+    <span class="drawer-title" id="config-pkg-drawer-title">创建套餐</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-config-pkg')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <!-- 套餐名称 -->
+    <div class="form-group">
+      <label class="form-label">套餐名称 <span class="required">*</span></label>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input class="input" placeholder="请输入套餐名称" style="flex:1">
+        <span class="i18n-icon" title="多语言配置" onclick="openI18nModal(-1,'pkg-name')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+      </div>
+    </div>
+
+    <!-- 套餐分类 -->
+    <div class="form-group">
+      <div class="ms-label-row">
+        <label class="form-label">套餐分类 <span class="required">*</span></label>
+        <a class="ms-manage-link" href="#" onclick="event.preventDefault();goToCategory()">管理</a>
+      </div>
+      <select class="select">
+        <option value="">请选择套餐分类</option>
+        <option value="cloud-storage">云存储套餐</option>
+        <option value="ai-service">AI智能服务</option>
+        <option value="bundle">综合套餐</option>
+      </select>
+    </div>
+
+    <!-- 选择套餐服务 -->
+    <span class="section-label">选择套餐服务</span>
+    <div class="section-block">
+      <div class="form-group">
+        <label class="form-label">应用方向 <span class="required">*</span></label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="config-pkg-direction" value="device" checked onchange="switchDirection('device')">设备套餐</label>
+          <label class="radio-item"><input type="radio" name="config-pkg-direction" value="user" onchange="switchDirection('user')">用户套餐</label>
+        </div>
+      </div>
+      <div id="direction-device">
+        <div class="form-group">
+          <label class="form-label">生效时长 <span class="required">*</span></label>
+          <select class="select" id="device-duration">
+            <option value="">请选择生效时长</option>
+            <option value="7">7天</option><option value="15">15天</option><option value="30" selected>30天</option><option value="365">1年</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">套餐服务 <span class="required">*</span></label>
+          <select class="select" id="device-service-select" onchange="updateServiceDetail('device')">
+            <option value="">请选择套餐服务</option>
+            <option value="7day" selected>7天事件云存</option><option value="15day">15天事件云存</option>
+          </select>
+        </div>
+        <div id="device-service-detail" class="service-detail">
+          <div class="service-detail-row"><span class="service-detail-label">套餐服务名称</span><span class="service-detail-value">7天事件云存</span></div>
+          <div class="service-detail-row"><span class="service-detail-label">服务类型</span><span class="service-detail-value">事件云存</span></div>
+          <div class="service-detail-row"><span class="service-detail-label">可用设备上限</span><span class="service-detail-value">1台</span></div>
+          <div class="service-detail-row"><span class="service-detail-label">平台成本</span><span class="service-detail-value">￥8.00 / ＄1.20</span></div>
+        </div>
+      </div>
+      <div id="direction-user" style="display:none">
+        <div class="form-group">
+          <label class="form-label">生效时长 <span class="required">*</span></label>
+          <select class="select" id="user-duration">
+            <option value="">请选择生效时长</option>
+            <option value="90">3个月</option><option value="180">6个月</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">套餐服务 <span class="required">*</span></label>
+          <select class="select" id="user-service-select" onchange="updateServiceDetail('user')">
+            <option value="">请选择套餐服务</option>
+            <option value="sms">短信套餐</option><option value="adfree">免广告-年</option>
+          </select>
+        </div>
+        <div id="user-service-detail" style="display:none" class="service-detail">
+          <div class="service-detail-row"><span class="service-detail-label">套餐服务名称</span><span class="service-detail-value" id="user-svc-name">—</span></div>
+          <div class="service-detail-row"><span class="service-detail-label">服务类型</span><span class="service-detail-value" id="user-svc-type">—</span></div>
+          <div class="service-detail-row"><span class="service-detail-label">平台成本</span><span class="service-detail-value" id="user-svc-cost">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 订阅类型 -->
+    <span class="section-label">订阅类型 <span class="required">*</span></span>
+    <div class="section-block">
+      <div class="form-group">
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="config-pkg-sub-type" value="non-sub" onchange="switchSubType('non-sub')">非订阅</label>
+          <label class="radio-item"><input type="radio" name="config-pkg-sub-type" value="sub" checked onchange="switchSubType('sub')">订阅制</label>
+        </div>
+      </div>
+      <!-- 非订阅 -->
+      <div id="sub-non" style="display:none">
+        <div class="price-row">
+          <div class="form-group"><label class="form-label">划线价（¥）<span class="required">*</span></label><div class="price-prefix"><span class="prefix-label">¥</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+          <div class="form-group"><label class="form-label">划线价（$）<span class="required">*</span></label><div class="price-prefix"><span class="prefix-label">$</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+        </div>
+        <div class="price-row">
+          <div class="form-group"><label class="form-label">售价（¥）<span class="required">*</span></label><div class="price-prefix"><span class="prefix-label">¥</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+          <div class="form-group"><label class="form-label">售价（$）<span class="required">*</span></label><div class="price-prefix"><span class="prefix-label">$</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+        </div>
+      </div>
+      <!-- 订阅制（默认） -->
+      <div id="sub-yes">
+        <div class="form-group"><label class="form-label">订阅文案 <span class="required">*</span></label>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input class="input" placeholder="如：每月自动续费，可随时取消" style="flex:1">
+            <span class="i18n-icon" title="多语言配置" onclick="openI18nModal(-1,'pkg-sub-text')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+          </div>
+        </div>
+        <div class="price-row">
+          <div class="form-group"><label class="form-label">划线价（¥）</label><div class="price-prefix"><span class="prefix-label">¥</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+          <div class="form-group"><label class="form-label">划线价（$）</label><div class="price-prefix"><span class="prefix-label">$</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+        </div>
+        <div class="form-group">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <label class="form-label" style="margin-bottom:0">免费试用</label>
+            <label class="switch"><input type="checkbox" id="free-trial-switch" onchange="toggleFreeTrial()"><span class="switch-slider"></span></label>
+          </div>
+        </div>
+        <div id="free-trial-fields" style="display:none">
+          <div class="price-row">
+            <div class="form-group"><label class="form-label">试用周期（天）<span class="required">*</span></label><input class="input" type="number" min="1" placeholder="如：7"></div>
+            <div class="form-group"><label class="form-label">过滤条件 <span class="required">*</span></label>
+              <select class="select"><option value="">请选择过滤条件</option><option>从未试用过此套餐</option><option>从未试用过该服务类型</option><option>不限制</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="price-row">
+          <div class="form-group"><label class="form-label">订阅售价（¥）<span class="required">*</span></label><div class="price-prefix"><span class="prefix-label">¥</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+          <div class="form-group"><label class="form-label">订阅售价（$）<span class="required">*</span></label><div class="price-prefix"><span class="prefix-label">$</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 内购Key配置 -->
+    <span class="section-label">内购Key配置 <span style="font-size:12px;font-weight:400;color:var(--gray-400);margin-left:6px">选填，针对每个APP配置</span></span>
+    <div class="section-block">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;padding:12px 16px;background:var(--white);border:1px solid var(--gray-200);border-radius:6px">
+        <div style="flex:1">
+          <div style="font-weight:500;color:var(--gray-900);font-size:13px">牵心PRO</div>
+          <div style="font-size:11px;color:var(--gray-400);margin-top:2px">APPID: QX_PRO_001</div>
+        </div>
+        <div style="display:flex;gap:8px;flex:2">
+          <input class="input" placeholder="Google 内购 Key" style="flex:1">
+          <input class="input" placeholder="Apple 内购 Key" style="flex:1">
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--white);border:1px solid var(--gray-200);border-radius:6px">
+        <div style="flex:1">
+          <div style="font-weight:500;color:var(--gray-900);font-size:13px">鹤梦之家</div>
+          <div style="font-size:11px;color:var(--gray-400);margin-top:2px">APPID: HM_HOME_001</div>
+        </div>
+        <div style="display:flex;gap:8px;flex:2">
+          <input class="input" placeholder="Google 内购 Key" style="flex:1">
+          <input class="input" placeholder="Apple 内购 Key" style="flex:1">
+        </div>
+      </div>
+    </div>
+
+    <!-- 套餐标签 -->
+    <div class="form-group">
+      <div class="ms-label-row">
+        <label class="form-label">套餐标签</label>
+        <a class="ms-manage-link" href="#" onclick="event.preventDefault();openModal('modal-pkg-tags')">管理</a>
+      </div>
+      <div class="multi-select" id="ms-pkg-tags" data-options="免费试用,限时优惠,新用户特惠,热门推荐,销量第一,专订">
+        <div class="multi-select-trigger" onclick="focusMsInput(this)">
+          <input class="ms-input" placeholder="请选择套餐标签" oninput="filterMsOptions(this)" onfocus="openMsDropdown(this)" />
+          <span class="ms-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+        </div>
+        <div class="multi-select-dropdown" id="ms-pkg-tags-dropdown"></div>
+      </div>
+    </div>
+
+    <!-- 套餐描述标签 -->
+    <div class="form-group">
+      <div class="ms-label-row">
+        <label class="form-label">套餐描述标签</label>
+        <a class="ms-manage-link" href="#" onclick="event.preventDefault();openModal('modal-desc-tags')">管理</a>
+      </div>
+      <div class="multi-select" id="ms-desc-tags" data-options="7天循环事件录制,7天消息回溯,15天循环事件录制,AI智能检测">
+        <div class="multi-select-trigger" onclick="focusMsInput(this)">
+          <input class="ms-input" placeholder="请选择套餐描述标签" oninput="filterMsOptions(this)" onfocus="openMsDropdown(this)" />
+          <span class="ms-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+        </div>
+        <div class="multi-select-dropdown" id="ms-desc-tags-dropdown"></div>
+      </div>
+    </div>
+
+    <!-- 投放标签配置 -->
+    <span class="section-label">投放标签配置</span>
+    <div class="section-block">
+      <div class="form-group">
+        <label class="form-label">投放区域 <span class="required">*</span></label>
+        <div class="multi-select" id="ms-shelf-region" data-options="国内,海外">
+          <div class="multi-select-trigger" onclick="focusMsInput(this)">
+            <input class="ms-input" placeholder="请选择投放区域" oninput="filterMsOptions(this)" onfocus="openMsDropdown(this)" />
+            <span class="ms-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+          </div>
+          <div class="multi-select-dropdown" id="ms-shelf-region-dropdown"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">投放APP <span class="required">*</span></label>
+        <div class="multi-select" id="ms-shelf-app" data-options="牵心PRO,鹤梦之家">
+          <div class="multi-select-trigger" onclick="focusMsInput(this)">
+            <input class="ms-input" placeholder="请选择投放APP" oninput="filterMsOptions(this)" onfocus="openMsDropdown(this)" />
+            <span class="ms-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+          </div>
+          <div class="multi-select-dropdown" id="ms-shelf-app-dropdown"></div>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">投放运营位 <span class="required">*</span></label>
+        <div class="multi-select" id="ms-shelf-slot" data-options="商城位,推荐位">
+          <div class="multi-select-trigger" onclick="focusMsInput(this)">
+            <input class="ms-input" placeholder="请选择投放运营位" oninput="filterMsOptions(this)" onfocus="openMsDropdown(this)" />
+            <span class="ms-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+          </div>
+          <div class="multi-select-dropdown" id="ms-shelf-slot-dropdown"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-config-pkg')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-config-pkg')">确定</button>
+  </div>
+</div>
+
+<!-- MODAL: 管理套餐标签 -->
+<div class="modal-overlay" id="modal-pkg-tags" onclick="if(event.target===this)closeModal('modal-pkg-tags')">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">管理套餐标签</span>
+      <button class="close-btn" onclick="closeModal('modal-pkg-tags')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="add-row">
+        <input class="input" id="pkg-tag-input" placeholder="请输入标签名称">
+        <button class="btn btn-primary btn-sm" onclick="addPkgTag()">添加</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>标签名称</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="pkg-tags-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 管理标签描述 -->
+<div class="modal-overlay" id="modal-desc-tags" onclick="if(event.target===this)closeModal('modal-desc-tags')">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">管理标签描述</span>
+      <button class="close-btn" onclick="closeModal('modal-desc-tags')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="add-row">
+        <input class="input" placeholder="请输入标签描述文案">
+        <button class="btn btn-primary btn-sm" onclick="addDescTag()">添加</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>描述内容 (默认中文)</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>支持 3 天循环录像</td>
+            <td><div style="display:flex;align-items:center;gap:12px"><span class="i18n-icon" title="多语言"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span><button class="link-blue">编辑</button><button class="link-red">删除</button></div></td>
+          </tr>
+          <tr>
+            <td>支持 7 天循环录像</td>
+            <td><div style="display:flex;align-items:center;gap:12px"><span class="i18n-icon" title="多语言"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span><button class="link-blue">编辑</button><button class="link-red">删除</button></div></td>
+          </tr>
+          <tr>
+            <td>支持 30 天循环录像</td>
+            <td><div style="display:flex;align-items:center;gap:12px"><span class="i18n-icon" title="多语言"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span><button class="link-blue">编辑</button><button class="link-red">删除</button></div></td>
+          </tr>
+          <tr>
+            <td>高清画质，极速回放</td>
+            <td><div style="display:flex;align-items:center;gap:12px"><span class="i18n-icon" title="多语言"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span><button class="link-blue">编辑</button><button class="link-red">删除</button></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 多语言配置 -->
+<div class="modal-overlay" id="modal-i18n" style="z-index:300" onclick="if(event.target===this)closeI18nModal()">
+  <div class="modal" style="width:560px">
+    <div class="modal-header">
+      <span class="modal-title">多语言配置</span>
+      <button class="close-btn" onclick="closeI18nModal()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom:16px;padding:10px 14px;background:var(--gray-50);border-radius:6px;font-size:13px">
+        <span style="color:var(--gray-500)">原文（中文）：</span>
+        <span style="font-weight:500;color:var(--gray-900)" id="i18n-source-text"></span>
+      </div>
+      <table>
+        <thead><tr><th style="width:120px">语言</th><th>翻译内容</th></tr></thead>
+        <tbody id="i18n-tbody"></tbody>
+      </table>
+    </div>
+    <div style="padding:12px 24px;border-top:1px solid var(--gray-200);display:flex;justify-content:flex-end;gap:8px">
+      <button class="btn btn-secondary btn-sm" onclick="closeI18nModal()">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="closeI18nModal()">保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function navigateToPage(url) {
+  try {
+    if (window.parent && window.parent !== window && window.parent.navigateFromChild) {
+      window.parent.navigateFromChild(url);
+      return;
+    }
+  } catch(e) {}
+  window.location.href = url;
+}
+
+/* ===== Modal ===== */
+function openModal(id) {
+  var modal = document.getElementById(id);
+  if (modal) modal.classList.add('show');
+  // 收起抽屉
+  var drawer = document.getElementById('drawer-config-pkg');
+  var overlay = document.getElementById('overlay-config-pkg');
+  if (drawer) drawer.classList.remove('show');
+  if (overlay) overlay.classList.remove('show');
+}
+function closeModal(id) {
+  var modal = document.getElementById(id);
+  if (modal) modal.classList.remove('show');
+  // 恢复抽屉
+  var drawer = document.getElementById('drawer-config-pkg');
+  var overlay = document.getElementById('overlay-config-pkg');
+  if (drawer) drawer.classList.add('show');
+  if (overlay) overlay.classList.add('show');
+}
+
+/* ===== 套餐分类管理跳转 ===== */
+var categoryFrom = 'list'; // 'list' 从列表页进入, 'drawer' 从抽屉进入
+function goToCategory() {
+  categoryFrom = 'drawer';
+  closeDrawer('drawer-config-pkg');
+  showPage('category');
+}
+function goToCategoryFromList() {
+  categoryFrom = 'list';
+  showPage('category');
+}
+function backFromCategory() {
+  showPage('pkg-list');
+  if (categoryFrom === 'drawer') {
+    openDrawer('drawer-config-pkg','edit');
+  }
+  categoryFrom = 'list';
+}
+
+/* ===== 套餐标签 CRUD ===== */
+var pkgTags = ['热门推荐','新品上市','限时优惠','销量第一'];
+function renderPkgTags() {
+  var tbody = document.getElementById('pkg-tags-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  pkgTags.forEach(function(t, i) {
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>' + t + '</td>' +
+      '<td><div style="display:flex;align-items:center;gap:12px"><span class="i18n-icon" title="多语言配置" onclick="openI18nModal(' + i + ',\'pkg\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>' +
+      '<button class="link-blue" onclick="editPkgTag(' + i + ')">编辑</button><button class="link-red" onclick="deletePkgTag(' + i + ')">删除</button></div></td>';
+    tbody.appendChild(tr);
+  });
+}
+function addPkgTag() {
+  var input = document.getElementById('pkg-tag-input');
+  var val = input ? input.value.trim() : '';
+  if (!val) { alert('请输入标签名称'); return; }
+  pkgTags.push(val);
+  if (input) input.value = '';
+  renderPkgTags();
+}
+function editPkgTag(idx) {
+  var val = prompt('编辑标签名称', pkgTags[idx]);
+  if (val === null || !val.trim()) return;
+  pkgTags[idx] = val.trim();
+  renderPkgTags();
+}
+function deletePkgTag(idx) {
+  if (!confirm('确定删除标签「' + pkgTags[idx] + '」？')) return;
+  pkgTags.splice(idx, 1);
+  renderPkgTags();
+}
+
+/* ===== 多语言配置 ===== */
+var i18nLangs = ['English','日本語','한국어','Deutsch','Français','Español','Português','Italiano'];
+var i18nCurrentType = '';
+var i18nCurrentIdx = 0;
+function openI18nModal(idx, type) {
+  i18nCurrentType = type;
+  i18nCurrentIdx = idx;
+  var name = type === 'pkg' ? pkgTags[idx] : descTags[idx];
+  document.getElementById('i18n-source-text').textContent = name;
+  var tbody = document.getElementById('i18n-tbody');
+  tbody.innerHTML = '';
+  i18nLangs.forEach(function(lang) {
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td style="font-weight:500;width:120px">' + lang + '</td><td><input class="input" placeholder="请输入' + lang + '翻译" style="width:100%"></td>';
+    tbody.appendChild(tr);
+  });
+  var modal = document.getElementById('modal-i18n');
+  if (modal) modal.classList.add('show');
+}
+function closeI18nModal() {
+  var modal = document.getElementById('modal-i18n');
+  if (modal) modal.classList.remove('show');
+}
+
+/* ===== 描述标签 CRUD ===== */
+var descTags = ['支持 3 天循环录像','支持 7 天循环录像','支持 30 天循环录像','高清画质，极速回放'];
+function renderDescTags() {
+  var tbody = document.querySelector('#modal-desc-tags table tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  descTags.forEach(function(t, i) {
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>' + t + '</td>' +
+      '<td><div style="display:flex;align-items:center;gap:12px"><span class="i18n-icon" title="多语言配置" onclick="openI18nModal(' + i + ',\'desc\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>' +
+      '<button class="link-blue" onclick="editDescTag(' + i + ')">编辑</button><button class="link-red" onclick="deleteDescTag(' + i + ')">删除</button></div></td>';
+    tbody.appendChild(tr);
+  });
+}
+function addDescTag() {
+  var input = document.querySelector('#modal-desc-tags .add-row .input');
+  var val = input ? input.value.trim() : '';
+  if (!val) { alert('请输入标签描述文案'); return; }
+  descTags.push(val);
+  if (input) input.value = '';
+  renderDescTags();
+}
+function editDescTag(idx) {
+  var val = prompt('编辑描述内容', descTags[idx]);
+  if (val === null) return;
+  descTags[idx] = val;
+  renderDescTags();
+}
+function deleteDescTag(idx) {
+  if (!confirm('确定删除「' + descTags[idx] + '」？')) return;
+  descTags.splice(idx, 1);
+  renderDescTags();
+}
+
+/* ===== Drawer ===== */
+function openDrawer(id, mode) {
+  var overlayId = 'overlay-' + id.replace('drawer-', '');
+  var overlay = document.getElementById(overlayId);
+  var drawer = document.getElementById(id);
+  if (overlay) overlay.classList.add('show');
+  if (drawer) drawer.classList.add('show');
+  if (id === 'drawer-config-pkg') {
+    var t = document.getElementById('config-pkg-drawer-title');
+    if (t) t.textContent = mode === 'edit' ? '编辑套餐' : '创建套餐';
+  }
+  if (id === 'drawer-category') {
+    var ct = document.getElementById('category-drawer-title');
+    if (ct) ct.textContent = mode === 'edit' ? '编辑分类' : '添加分类';
+  }
+}
+function closeDrawer(id) {
+  var overlayId = 'overlay-' + id.replace('drawer-', '');
+  var overlay = document.getElementById(overlayId);
+  var drawer = document.getElementById(id);
+  if (overlay) overlay.classList.remove('show');
+  if (drawer) drawer.classList.remove('show');
+}
+
+/* ===== 应用方向切换 ===== */
+function switchDirection(dir) {
+  var dv = document.getElementById('direction-device');
+  var us = document.getElementById('direction-user');
+  if (dv) dv.style.display = dir === 'device' ? 'block' : 'none';
+  if (us) us.style.display = dir === 'user' ? 'block' : 'none';
+}
+
+/* ===== 套餐服务详情 ===== */
+function updateServiceDetail(type) {
+  if (type === 'device') {
+    var sel = document.getElementById('device-service-select');
+    var detail = document.getElementById('device-service-detail');
+    if (!sel || !detail) return;
+    if (!sel.value) { detail.style.display = 'none'; return; }
+    detail.style.display = 'block';
+    var data = {
+      '7day': { name:'7天事件云存', type:'事件云存', limit:'1台', cost:'￥8.00 / ＄1.20' },
+      '15day': { name:'15天事件云存', type:'事件云存', limit:'1台', cost:'￥12.00 / ＄1.80' }
+    };
+    var d = data[sel.value];
+    if (d) {
+      var rows = detail.querySelectorAll('.service-detail-value');
+      if (rows[0]) rows[0].textContent = d.name;
+      if (rows[1]) rows[1].textContent = d.type;
+      if (rows[2]) rows[2].textContent = d.limit;
+      if (rows[3]) rows[3].textContent = d.cost;
+    }
+  } else {
+    var sel2 = document.getElementById('user-service-select');
+    var detail2 = document.getElementById('user-service-detail');
+    if (!sel2 || !detail2) return;
+    if (!sel2.value) { detail2.style.display = 'none'; return; }
+    detail2.style.display = 'block';
+    var uData = {
+      'sms': { name:'短信套餐', type:'短信套餐', cost:'￥8.00 / ＄1.20' },
+      'adfree': { name:'免广告-年', type:'免广告', cost:'￥15.00 / ＄2.50' }
+    };
+    var ud = uData[sel2.value];
+    if (ud) {
+      var n = document.getElementById('user-svc-name');
+      var tp = document.getElementById('user-svc-type');
+      var c = document.getElementById('user-svc-cost');
+      if (n) n.textContent = ud.name;
+      if (tp) tp.textContent = ud.type;
+      if (c) c.textContent = ud.cost;
+    }
+  }
+}
+
+/* ===== 订阅类型切换 ===== */
+function switchSubType(type) {
+  var sn = document.getElementById('sub-non');
+  var sy = document.getElementById('sub-yes');
+  if (sn) sn.style.display = type === 'non-sub' ? 'block' : 'none';
+  if (sy) sy.style.display = type === 'sub' ? 'block' : 'none';
+}
+
+/* ===== 免费试用开关 ===== */
+function toggleFreeTrial() {
+  var sw = document.getElementById('free-trial-switch');
+  var fields = document.getElementById('free-trial-fields');
+  if (sw && fields) fields.style.display = sw.checked ? 'block' : 'none';
+}
+
+/* ===== 统一多选组件 ===== */
+var msState = {};
+function initMs(msId) {
+  if (msState[msId]) return;
+  var el = document.getElementById(msId);
+  if (!el) return;
+  var opts = (el.getAttribute('data-options') || '').split(',').filter(Boolean);
+  msState[msId] = { selected: [], options: opts };
+  renderMsDropdown(msId);
+}
+function renderMsDropdown(msId) {
+  var dd = document.getElementById(msId + '-dropdown');
+  var state = msState[msId];
+  if (!dd || !state) return;
+  dd.innerHTML = '';
+  state.options.forEach(function(opt) {
+    var div = document.createElement('div');
+    div.className = 'multi-select-option' + (state.selected.indexOf(opt) !== -1 ? ' selected' : '');
+    div.innerHTML = '<span>' + opt + '</span><span class="ms-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></span>';
+    div.onclick = function(e) { e.stopPropagation(); toggleMsOption(msId, opt); };
+    dd.appendChild(div);
+  });
+}
+function toggleMsOption(msId, value) {
+  var state = msState[msId];
+  if (!state) return;
+  var idx = state.selected.indexOf(value);
+  if (idx === -1) state.selected.push(value);
+  else state.selected.splice(idx, 1);
+  renderMsTags(msId);
+  renderMsDropdown(msId);
+}
+function removeMsTag(msId, value) {
+  var state = msState[msId];
+  if (!state) return;
+  state.selected = state.selected.filter(function(v){ return v !== value; });
+  renderMsTags(msId);
+  renderMsDropdown(msId);
+}
+function renderMsTags(msId) {
+  var el = document.getElementById(msId);
+  if (!el) return;
+  var trigger = el.querySelector('.multi-select-trigger');
+  var input = trigger.querySelector('.ms-input');
+  var icon = trigger.querySelector('.ms-search-icon');
+  var state = msState[msId];
+  trigger.querySelectorAll('.ms-tag').forEach(function(t){ t.remove(); });
+  (state.selected || []).forEach(function(v) {
+    var tag = document.createElement('span');
+    tag.className = 'ms-tag';
+    tag.innerHTML = v + '<span class="ms-tag-close" onclick="event.stopPropagation();removeMsTag(\'' + msId + '\',\'' + v.replace(/'/g,"\\'") + '\')"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg></span>';
+    trigger.insertBefore(tag, input);
+  });
+  if (input) input.placeholder = state.selected.length > 0 ? '' : el.querySelector('.ms-input').getAttribute('placeholder') || '请选择';
+}
+function focusMsInput(trigger) {
+  var input = trigger.querySelector('.ms-input');
+  if (input) input.focus();
+}
+function openMsDropdown(input) {
+  var ms = input.closest('.multi-select');
+  if (!ms) return;
+  var msId = ms.id;
+  initMs(msId);
+  var trigger = ms.querySelector('.multi-select-trigger');
+  if (trigger) trigger.classList.add('focus');
+  document.querySelectorAll('.multi-select-dropdown').forEach(function(d){ if (d.id !== msId + '-dropdown') d.classList.remove('show'); });
+  var dd = document.getElementById(msId + '-dropdown');
+  if (dd) dd.classList.add('show');
+  input.value = '';
+  filterMsOptions(input);
+}
+function filterMsOptions(input) {
+  var ms = input.closest('.multi-select');
+  if (!ms) return;
+  var dd = ms.querySelector('.multi-select-dropdown');
+  if (!dd) return;
+  var kw = (input.value || '').toLowerCase();
+  dd.querySelectorAll('.multi-select-option').forEach(function(opt) {
+    var text = (opt.querySelector('span') || opt).textContent.toLowerCase();
+    opt.style.display = (!kw || text.indexOf(kw) !== -1) ? 'flex' : 'none';
+  });
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.multi-select')) {
+    document.querySelectorAll('.multi-select-dropdown').forEach(function(d){ d.classList.remove('show'); });
+    document.querySelectorAll('.multi-select-trigger').forEach(function(t){ t.classList.remove('focus'); });
+  }
+});
+// 初始化所有多选
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.multi-select[data-options]').forEach(function(el){ initMs(el.id); });
+  renderPkgTags();
+  renderDescTags();
+});
+
+/* ===== 页面切换 ===== */
+function showPage(name) {
+  document.querySelectorAll('.page-view').forEach(function(p){ p.classList.remove('active'); });
+  var page = document.getElementById('page-' + name);
+  if (page) page.classList.add('active');
+}
+
+/* ===== 拖拽排序 ===== */
+var dragRow = null;
+function dragStart(e) {
+  dragRow = e.target.closest('tr');
+  if (dragRow) dragRow.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function dragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+}
+function dragEnter(e) {
+  e.preventDefault();
+  var row = e.target.closest('tr.drag-row');
+  if (row && row !== dragRow) row.classList.add('drag-over');
+}
+function dragLeave(e) {
+  var row = e.target.closest('tr.drag-row');
+  if (row) row.classList.remove('drag-over');
+}
+function drop(e) {
+  e.preventDefault();
+  var targetRow = e.target.closest('tr.drag-row');
+  if (!targetRow || !dragRow || targetRow === dragRow) return;
+  targetRow.classList.remove('drag-over');
+  var tbody = document.getElementById('category-tbody');
+  if (!tbody) return;
+  var rows = Array.from(tbody.querySelectorAll('tr.drag-row'));
+  var dragIdx = rows.indexOf(dragRow);
+  var targetIdx = rows.indexOf(targetRow);
+  if (dragIdx < targetIdx) {
+    tbody.insertBefore(dragRow, targetRow.nextSibling);
+  } else {
+    tbody.insertBefore(dragRow, targetRow);
+  }
+}
+function dragEnd(e) {
+  document.querySelectorAll('.drag-row').forEach(function(r){
+    r.classList.remove('dragging');
+    r.classList.remove('drag-over');
+  });
+  dragRow = null;
+}
+</script>
+</body>
+</html>

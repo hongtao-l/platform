@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商城位运营</title>
+<link rel="stylesheet" href="common.css">
+<style>
+body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+.main-layout{display:flex;flex:1;overflow:hidden;}
+.app-sidebar{width:220px;background:var(--white);border-right:1px solid var(--gray-200);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;}
+.app-sidebar-header{padding:16px;border-bottom:1px solid var(--gray-100);font-size:13px;font-weight:600;color:var(--gray-700);}
+.app-sidebar-list{flex:1;overflow-y:auto;padding:8px;}
+.app-sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--gray-600);transition:all .15s;margin-bottom:4px;}
+.app-sidebar-item:hover{background:var(--gray-50);}
+.app-sidebar-item.active{background:var(--primary-light);color:var(--primary);font-weight:500;}
+.app-sidebar-item .app-icon{width:32px;height:32px;border-radius:8px;background:var(--gray-100);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.app-sidebar-item.active .app-icon{background:var(--primary);color:white;}
+.app-sidebar-item .app-info{flex:1;min-width:0;}
+.app-sidebar-item .app-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.app-sidebar-item .app-region{font-size:11px;color:var(--gray-400);margin-top:2px;}
+.right-content{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.content{flex:1;overflow-y:auto;padding:24px 32px;}
+.page-view{display:none;}
+.page-view.active{display:flex;flex-direction:column;flex:1;overflow:hidden;}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:12px;font-weight:500;background:var(--primary-light);color:var(--primary);margin:2px 4px 2px 0;}
+.textarea{border:1px solid var(--gray-200);border-radius:6px;padding:8px 12px;font-size:14px;color:var(--gray-700);background:var(--white);outline:none;width:100%;resize:vertical;min-height:60px;font-family:inherit;}
+.textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.toggle-switch-sm{position:relative;width:36px;height:20px;display:inline-block;}
+.toggle-switch-sm input{opacity:0;width:0;height:0;}
+.toggle-slider-sm{position:absolute;cursor:pointer;inset:0;background:var(--gray-200);border-radius:10px;transition:.2s;}
+.toggle-slider-sm:before{content:'';position:absolute;height:14px;width:14px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.2s;}
+.toggle-switch-sm input:checked+.toggle-slider-sm{background:var(--success);}
+.toggle-switch-sm input:checked+.toggle-slider-sm:before{transform:translateX(16px);}
+.clickable-cell{color:var(--primary);cursor:pointer;font-weight:500;}
+.clickable-cell:hover{text-decoration:underline;}
+.btn-secondary-ghost{background:transparent;color:var(--gray-500);border:1px solid var(--gray-200);padding:4px 8px;border-radius:6px;font-size:12px;cursor:pointer;transition:all .15s;}
+.btn-secondary-ghost:hover{background:var(--gray-50);color:var(--gray-700);}
+.multi-select{position:relative;}
+.multi-select-trigger{min-height:36px;border:1px solid var(--gray-200);border-radius:6px;padding:4px 32px 4px 8px;font-size:14px;color:var(--gray-700);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;cursor:pointer;display:flex;flex-wrap:wrap;gap:4px;align-items:center;}
+.multi-select-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--white);border:1px solid var(--gray-200);border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.10);z-index:10;margin-top:4px;display:none;max-height:240px;overflow-y:auto;}
+.multi-select-dropdown.show{display:block;}
+.multi-select-option{padding:8px 12px;font-size:13px;color:var(--gray-700);cursor:pointer;display:flex;align-items:center;gap:8px;}
+.multi-select-option:hover{background:var(--gray-50);}
+.multi-select-option.selected{background:var(--primary-light);color:var(--primary);}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:none;align-items:center;justify-content:center;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--white);border-radius:12px;width:560px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.15);}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--gray-200);}
+.modal-title{font-size:16px;font-weight:600;color:var(--gray-900);}
+.modal-body{padding:20px 24px;overflow-y:auto;flex:1;}
+.step-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--gray-200);}
+.step-tab{padding:10px 20px;font-size:13px;font-weight:500;color:var(--gray-400);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;}
+.step-tab.active{color:var(--primary);border-bottom-color:var(--primary);}
+.step-tab.done{color:var(--gray-700);}
+.step-content{display:none;}
+.step-content.active{display:block;}
+.drawer{width:640px;}
+.pkg-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--gray-200);border-radius:8px;cursor:pointer;transition:all .15s;}
+.filter-chip{padding:4px 12px;border-radius:16px;font-size:12px;color:var(--gray-500);cursor:pointer;border:1px solid var(--gray-200);background:var(--white);transition:all .15s;}
+.filter-chip:hover{background:var(--gray-50);}
+.filter-chip.active{background:var(--primary);color:white;border-color:var(--primary);}
+.drag-handle{cursor:grab;color:var(--gray-400);display:flex;align-items:center;}
+.drag-handle:active{cursor:grabbing;}
+.drag-row{transition:background .15s;}
+.drag-row.dragging{opacity:.5;background:var(--primary-light);}
+.drag-row.drag-over{border-top:2px solid var(--primary);}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="breadcrumb">
+    <span class="link">运营管理</span>
+    <span class="sep">/</span>
+    <span class="current">商城位运营</span>
+  </div>
+</div>
+
+<div class="main-layout">
+  <!-- 左侧应用列表 -->
+  <div class="app-sidebar">
+    <div class="app-sidebar-header">应用列表</div>
+    <div class="app-sidebar-list">
+      <div class="app-sidebar-item active" onclick="switchApp(this,'牵心PRO')">
+        <div class="app-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+        <div class="app-info"><div class="app-name">牵心PRO</div><div class="app-region">QX_PRO_001</div></div>
+      </div>
+      <div class="app-sidebar-item" onclick="switchApp(this,'鹤梦之家')">
+        <div class="app-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+        <div class="app-info"><div class="app-name">鹤梦之家</div><div class="app-region">HM_HOME_001</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 右侧内容区 -->
+  <div class="right-content">
+    <!-- PAGE: 策略列表 -->
+    <div id="page-strategy-list" class="page-view active">
+      <div class="content">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">商城位策略列表 · <span id="current-app-name" style="color:var(--primary)">牵心PRO-国内</span></span>
+            <button class="btn btn-primary btn-sm" onclick="openAddStrategy()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加策略
+            </button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>策略名称</th>
+                <th>投放区域</th>
+                <th>投放用户分群</th>
+                <th>套餐配置</th>
+                <th>备注</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="strategy-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: 套餐配置（二级页面） -->
+    <div id="page-pkg-manage" class="page-view">
+      <div class="content">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <button class="btn btn-secondary" onclick="showPage('strategy-list')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>返回
+          </button>
+          <div>
+            <div id="pkg-manage-name" style="font-size:15px;font-weight:600;color:var(--gray-900)">默认策略</div>
+            <div style="font-size:12px;color:var(--gray-500);margin-top:2px">套餐配置 · 当前已配置 <span id="pkg-manage-count" style="color:var(--primary);font-weight:600">5</span> 个套餐 · <span style="color:var(--gray-400)">拖拽可调整分类内排序</span></div>
+          </div>
+          <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="openDrawer('drawer-select-pkg')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加套餐
+          </button>
+        </div>
+
+        <!-- 分类：云存储套餐 -->
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-header" style="background:var(--gray-50)">
+            <span class="card-title" style="font-size:14px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-right:6px;vertical-align:-2px"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>云存储套餐 <span style="font-weight:400;color:var(--gray-400);font-size:12px;margin-left:6px">3 个套餐</span></span>
+          </div>
+          <table>
+            <thead><tr>
+              <th style="width:40px"></th><th>套餐信息</th><th>应用方向</th><th>订阅类型</th><th>售价</th><th>上架状态</th><th>操作</th>
+            </tr></thead>
+            <tbody id="cat-cloud-tbody">
+              <tr class="drag-row" draggable="true" ondragstart="dStart(event)" ondragover="dOver(event)" ondragenter="dEnter(event)" ondragleave="dLeave(event)" ondrop="dDrop(event)" ondragend="dEnd(event)">
+                <td><span class="drag-handle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg></span></td>
+                <td><div><span style="font-weight:500;color:var(--gray-900)">事件录像7天</span></div><div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG20220001</div></td>
+                <td>设备</td>
+                <td><span class="badge badge-success">订阅制</span></td>
+                <td><span style="font-weight:500">¥6.90 / $0.95</span></td>
+                <td><label class="toggle-switch-sm"><input type="checkbox" checked onchange="togglePkgStatus(this)"><span class="toggle-slider-sm"></span></label></td>
+                <td><button class="btn btn-sm btn-danger-ghost">移除</button></td>
+              </tr>
+              <tr class="drag-row" draggable="true" ondragstart="dStart(event)" ondragover="dOver(event)" ondragenter="dEnter(event)" ondragleave="dLeave(event)" ondrop="dDrop(event)" ondragend="dEnd(event)">
+                <td><span class="drag-handle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg></span></td>
+                <td><div><span style="font-weight:500;color:var(--gray-900)">国内专享·极简云存</span></div><div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG20220015</div></td>
+                <td>用户</td>
+                <td><span class="badge badge-success">订阅制</span></td>
+                <td><span style="font-weight:500">¥59.00 / $8.50</span></td>
+                <td><label class="toggle-switch-sm"><input type="checkbox" checked onchange="togglePkgStatus(this)"><span class="toggle-slider-sm"></span></label></td>
+                <td><button class="btn btn-sm btn-danger-ghost">移除</button></td>
+              </tr>
+              <tr class="drag-row" draggable="true" ondragstart="dStart(event)" ondragover="dOver(event)" ondragenter="dEnter(event)" ondragleave="dLeave(event)" ondrop="dDrop(event)" ondragend="dEnd(event)">
+                <td><span class="drag-handle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg></span></td>
+                <td><div><span style="font-weight:500;color:var(--gray-900)">Overseas-Pro</span></div><div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG20220011</div></td>
+                <td>设备</td>
+                <td><span class="badge badge-success">订阅制</span></td>
+                <td><span style="font-weight:500">$12.99</span></td>
+                <td><label class="toggle-switch-sm"><input type="checkbox" onchange="togglePkgStatus(this)"><span class="toggle-slider-sm"></span></label></td>
+                <td><button class="btn btn-sm btn-danger-ghost">移除</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 分类：AI智能服务 -->
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-header" style="background:var(--gray-50)">
+            <span class="card-title" style="font-size:14px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-right:6px;vertical-align:-2px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>AI智能服务 <span style="font-weight:400;color:var(--gray-400);font-size:12px;margin-left:6px">1 个套餐</span></span>
+          </div>
+          <table>
+            <thead><tr>
+              <th style="width:40px"></th><th>套餐信息</th><th>应用方向</th><th>订阅类型</th><th>售价</th><th>上架状态</th><th>操作</th>
+            </tr></thead>
+            <tbody id="cat-ai-tbody">
+              <tr class="drag-row" draggable="true" ondragstart="dStart(event)" ondragover="dOver(event)" ondragenter="dEnter(event)" ondragleave="dLeave(event)" ondrop="dDrop(event)" ondragend="dEnd(event)">
+                <td><span class="drag-handle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg></span></td>
+                <td><div><span style="font-weight:500;color:var(--gray-900)">AI智能检测月卡</span></div><div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG20220020</div></td>
+                <td>设备</td>
+                <td><span class="badge badge-success">订阅制</span></td>
+                <td><span style="font-weight:500">¥19.90 / $2.99</span></td>
+                <td><label class="toggle-switch-sm"><input type="checkbox" checked onchange="togglePkgStatus(this)"><span class="toggle-slider-sm"></span></label></td>
+                <td><button class="btn btn-sm btn-danger-ghost">移除</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 分类：综合套餐 -->
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-header" style="background:var(--gray-50)">
+            <span class="card-title" style="font-size:14px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-right:6px;vertical-align:-2px"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>综合套餐 <span style="font-weight:400;color:var(--gray-400);font-size:12px;margin-left:6px">1 个套餐</span></span>
+          </div>
+          <table>
+            <thead><tr>
+              <th style="width:40px"></th><th>套餐信息</th><th>应用方向</th><th>订阅类型</th><th>售价</th><th>上架状态</th><th>操作</th>
+            </tr></thead>
+            <tbody id="cat-bundle-tbody">
+              <tr class="drag-row" draggable="true" ondragstart="dStart(event)" ondragover="dOver(event)" ondragenter="dEnter(event)" ondragleave="dLeave(event)" ondrop="dDrop(event)" ondragend="dEnd(event)">
+                <td><span class="drag-handle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg></span></td>
+                <td><div><span style="font-weight:500;color:var(--gray-900)">全家桶年度套餐</span></div><div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG20220025</div></td>
+                <td>用户</td>
+                <td><span class="badge badge-neutral">非订阅</span></td>
+                <td><span style="font-weight:500">¥199.00 / $29.99</span></td>
+                <td><label class="toggle-switch-sm"><input type="checkbox" checked onchange="togglePkgStatus(this)"><span class="toggle-slider-sm"></span></label></td>
+                <td><button class="btn btn-sm btn-danger-ghost">移除</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div><!-- end right-content -->
+</div><!-- end main-layout -->
+
+<!-- DRAWER: 添加策略（侧边大抽屉，步骤式） -->
+<div class="drawer-overlay" id="overlay-add-strategy" onclick="closeDrawer('drawer-add-strategy')"></div>
+<div class="drawer" id="drawer-add-strategy" style="width:720px">
+  <div class="drawer-header">
+    <span class="drawer-title">添加策略</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-add-strategy')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <!-- 步骤条 -->
+  <div style="display:flex;align-items:center;justify-content:center;padding:16px 24px;border-bottom:1px solid var(--gray-200);background:var(--gray-50)">
+    <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="goStep(1)">
+      <span id="step-num-1" style="width:28px;height:28px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">1</span>
+      <span id="step-label-1" style="font-size:13px;font-weight:500;color:var(--primary)">基础信息</span>
+    </div>
+    <div style="width:60px;height:2px;background:var(--gray-200);margin:0 16px"><div id="step-line-1" style="height:100%;width:0;background:var(--primary);transition:width .3s"></div></div>
+    <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="goStep(2)">
+      <span id="step-num-2" style="width:28px;height:28px;border-radius:50%;background:var(--gray-200);color:var(--gray-500);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">2</span>
+      <span id="step-label-2" style="font-size:13px;font-weight:500;color:var(--gray-500)">投放配置</span>
+    </div>
+  </div>
+  <div class="drawer-body">
+    <!-- STEP 1: 基础信息 -->
+    <div class="step-content active" id="step-basic">
+      <div class="form-group">
+        <label class="form-label">策略名称 <span class="required">*</span></label>
+        <input class="input" id="strategy-name-input" placeholder="请输入策略名称">
+      </div>
+      <div class="form-group">
+        <label class="form-label">备注</label>
+        <textarea class="textarea" id="strategy-remark-input" placeholder="请输入备注信息" rows="4"></textarea>
+      </div>
+    </div>
+    <!-- STEP 2: 投放配置 -->
+    <div class="step-content" id="step-deploy">
+      <div class="form-group">
+        <label class="form-label">投放区域 <span class="required">*</span></label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)" checked> 国内</label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> 海外</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">投放用户分群 <span class="required">*</span></label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)" checked> 高价值用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_high_value</span></label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> 新注册用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_new_reg</span></label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> 活跃用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_active</span></label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> 沉默用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_silent</span></label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)"> 付费用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_paid</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" id="step-prev-btn" style="display:none" onclick="prevStep()">上一步</button>
+    <span style="flex:1"></span>
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-add-strategy')">取消</button>
+    <button class="btn btn-primary" id="step-next-btn" onclick="nextStep()">下一步</button>
+    <button class="btn btn-primary" id="step-submit-btn" style="display:none" onclick="confirmAddStrategy()">提交</button>
+  </div>
+</div>
+
+<!-- DRAWER: 编辑策略 -->
+<div class="drawer-overlay" id="overlay-edit-strategy" onclick="closeDrawer('drawer-edit-strategy')"></div>
+<div class="drawer" id="drawer-edit-strategy" style="width:720px">
+  <div class="drawer-header">
+    <span class="drawer-title">编辑策略</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-edit-strategy')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <!-- 步骤条 -->
+  <div style="display:flex;align-items:center;justify-content:center;padding:16px 24px;border-bottom:1px solid var(--gray-200);background:var(--gray-50)">
+    <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="goEditStep(1)">
+      <span id="edit-step-num-1" style="width:28px;height:28px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">1</span>
+      <span id="edit-step-label-1" style="font-size:13px;font-weight:500;color:var(--primary)">基础信息</span>
+    </div>
+    <div style="width:60px;height:2px;background:var(--gray-200);margin:0 16px"><div id="edit-step-line-1" style="height:100%;width:0;background:var(--primary);transition:width .3s"></div></div>
+    <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="goEditStep(2)">
+      <span id="edit-step-num-2" style="width:28px;height:28px;border-radius:50%;background:var(--gray-200);color:var(--gray-500);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">2</span>
+      <span id="edit-step-label-2" style="font-size:13px;font-weight:500;color:var(--gray-500)">投放配置</span>
+    </div>
+  </div>
+  <div class="drawer-body">
+    <!-- STEP 1: 基础信息 -->
+    <div class="step-content active" id="edit-step-basic">
+      <div class="form-group">
+        <label class="form-label">策略名称 <span class="required">*</span></label>
+        <input class="input" id="edit-strategy-name" placeholder="请输入策略名称">
+      </div>
+      <div class="form-group">
+        <label class="form-label">备注</label>
+        <textarea class="textarea" id="edit-strategy-remark" placeholder="请输入备注信息" rows="4"></textarea>
+      </div>
+    </div>
+    <!-- STEP 2: 投放配置 -->
+    <div class="step-content" id="edit-step-deploy">
+      <div class="form-group">
+        <label class="form-label">投放区域 <span class="required">*</span></label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" id="edit-region-domestic" style="accent-color:var(--primary)"> 国内</label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" id="edit-region-overseas" style="accent-color:var(--primary)"> 海外</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">投放用户分群 <span class="required">*</span></label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" id="edit-group-high" style="accent-color:var(--primary)"> 高价值用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_high_value</span></label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" id="edit-group-new" style="accent-color:var(--primary)"> 新注册用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_new_reg</span></label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" id="edit-group-active" style="accent-color:var(--primary)"> 活跃用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_active</span></label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" id="edit-group-silent" style="accent-color:var(--primary)"> 沉默用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_silent</span></label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" id="edit-group-paid" style="accent-color:var(--primary)"> 付费用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_paid</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" id="edit-step-prev-btn" style="display:none" onclick="prevEditStep()">上一步</button>
+    <span style="flex:1"></span>
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-edit-strategy')">取消</button>
+    <button class="btn btn-primary" id="edit-step-next-btn" onclick="nextEditStep()">下一步</button>
+    <button class="btn btn-primary" id="edit-step-submit-btn" style="display:none" onclick="confirmEditStrategy()">保存</button>
+  </div>
+</div>
+
+<!-- MODAL: 投放用户分群 -->
+<div class="modal-overlay" id="modal-bind-groups" onclick="if(event.target===this)closeModal('modal-bind-groups')">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">投放用户分群</span>
+      <button class="close-btn" onclick="closeModal('modal-bind-groups')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">选择用户分群</label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px">
+            <input type="checkbox" style="accent-color:var(--primary)" checked> 高价值用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_high_value</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px">
+            <input type="checkbox" style="accent-color:var(--primary)"> 新注册用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_new_reg</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px">
+            <input type="checkbox" style="accent-color:var(--primary)"> 活跃用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_active</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px">
+            <input type="checkbox" style="accent-color:var(--primary)"> 沉默用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_silent</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px">
+            <input type="checkbox" style="accent-color:var(--primary)"> 付费用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_paid</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div style="padding:12px 24px;border-top:1px solid var(--gray-200);display:flex;justify-content:flex-end;gap:8px">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-bind-groups')">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('modal-bind-groups')">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 投放区域变更 -->
+<div class="modal-overlay" id="modal-region" onclick="if(event.target===this)closeModal('modal-region')">
+  <div class="modal" style="width:400px">
+    <div class="modal-header">
+      <span class="modal-title">投放区域</span>
+      <button class="close-btn" onclick="closeModal('modal-region')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">选择投放区域</label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px">
+            <input type="checkbox" style="accent-color:var(--primary)" checked> 国内
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px">
+            <input type="checkbox" style="accent-color:var(--primary)" checked> 海外
+          </label>
+        </div>
+      </div>
+    </div>
+    <div style="padding:12px 24px;border-top:1px solid var(--gray-200);display:flex;justify-content:flex-end;gap:8px">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-region')">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('modal-region')">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 套餐数量管理 -->
+<div class="modal-overlay" id="modal-pkg-count" onclick="if(event.target===this)closeModal('modal-pkg-count')">
+  <div class="modal" style="width:480px">
+    <div class="modal-header">
+      <span class="modal-title">套餐配置</span>
+      <button class="close-btn" onclick="closeModal('modal-pkg-count')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--gray-500);margin-bottom:12px">点击下方按钮进入套餐配置页面管理套餐</p>
+      <button class="btn btn-primary" onclick="closeModal('modal-pkg-count');showPage('pkg-manage')" style="width:100%">进入套餐配置 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- DRAWER: 选择套餐（从套餐配置模块选择） -->
+<div class="drawer-overlay" id="overlay-select-pkg" onclick="closeDrawer('drawer-select-pkg')"></div>
+<div class="drawer" id="drawer-select-pkg">
+  <div class="drawer-header">
+    <span class="drawer-title">添加套餐</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-select-pkg')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+      <select class="select" style="width:120px;flex-shrink:0">
+        <option value="">全部分类</option>
+        <option>云存储套餐</option>
+        <option>AI智能服务</option>
+        <option>综合套餐</option>
+      </select>
+      <select class="select" style="width:120px;flex-shrink:0">
+        <option value="">投放区域</option>
+        <option>全部</option>
+        <option>国内</option>
+        <option>海外</option>
+      </select>
+      <select class="select" style="width:140px;flex-shrink:0">
+        <option value="">投放APP</option>
+        <option>全部</option>
+        <option>牵心PRO</option>
+        <option>鹤梦之家</option>
+      </select>
+      <select class="select" style="width:140px;flex-shrink:0">
+        <option value="">投放运营位</option>
+        <option>全部</option>
+        <option>商城位</option>
+        <option>推荐位</option>
+      </select>
+      <div style="position:relative;flex:1;min-width:180px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--gray-400)"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input class="input" style="padding-left:32px;width:100%" placeholder="搜索套餐名称或ID">
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--gray-400);margin-bottom:12px">从套餐配置模块的套餐列表中选择</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <label style="display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--gray-200);border-radius:8px;cursor:pointer;transition:all .15s" onchange="this.style.borderColor=this.querySelector('input').checked?'var(--primary)':'var(--gray-200)';this.style.background=this.querySelector('input').checked?'var(--primary-light)':'white'">
+        <input type="checkbox" style="width:16px;height:16px;accent-color:var(--primary);flex-shrink:0">
+        <div style="flex:1"><div style="font-weight:500;color:var(--gray-900);font-size:13px">事件录像7天</div><div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG20220001 · 设备 · <span style="color:var(--primary)">云存储套餐</span> · ¥6.90/$0.95</div></div>
+      </label>
+      <label style="display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--gray-200);border-radius:8px;cursor:pointer;transition:all .15s" onchange="this.style.borderColor=this.querySelector('input').checked?'var(--primary)':'var(--gray-200)';this.style.background=this.querySelector('input').checked?'var(--primary-light)':'white'">
+        <input type="checkbox" style="width:16px;height:16px;accent-color:var(--primary);flex-shrink:0">
+        <div style="flex:1"><div style="font-weight:500;color:var(--gray-900);font-size:13px">国内专享·极简云存</div><div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG20220015 · 用户 · <span style="color:var(--primary)">云存储套餐</span> · ¥59.00</div></div>
+      </label>
+      <label style="display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--gray-200);border-radius:8px;cursor:pointer;transition:all .15s" onchange="this.style.borderColor=this.querySelector('input').checked?'var(--primary)':'var(--gray-200)';this.style.background=this.querySelector('input').checked?'var(--primary-light)':'white'">
+        <input type="checkbox" style="width:16px;height:16px;accent-color:var(--primary);flex-shrink:0">
+        <div style="flex:1"><div style="font-weight:500;color:var(--gray-900);font-size:13px">Overseas-Pro</div><div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG20220011 · 设备 · <span style="color:var(--primary)">云存储套餐</span> · $12.99</div></div>
+      </label>
+      <label style="display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--gray-200);border-radius:8px;cursor:pointer;transition:all .15s" onchange="this.style.borderColor=this.querySelector('input').checked?'var(--primary)':'var(--gray-200)';this.style.background=this.querySelector('input').checked?'var(--primary-light)':'white'">
+        <input type="checkbox" style="width:16px;height:16px;accent-color:var(--primary);flex-shrink:0">
+        <div style="flex:1"><div style="font-weight:500;color:var(--gray-900);font-size:13px">AI智能检测月卡</div><div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG20220020 · 设备 · <span style="color:var(--primary)">AI智能服务</span> · ¥19.90/$2.99</div></div>
+      </label>
+      <label style="display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--gray-200);border-radius:8px;cursor:pointer;transition:all .15s" onchange="this.style.borderColor=this.querySelector('input').checked?'var(--primary)':'var(--gray-200)';this.style.background=this.querySelector('input').checked?'var(--primary-light)':'white'">
+        <input type="checkbox" style="width:16px;height:16px;accent-color:var(--primary);flex-shrink:0">
+        <div style="flex:1"><div style="font-weight:500;color:var(--gray-900);font-size:13px">全家桶年度套餐</div><div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG20220025 · 用户 · <span style="color:var(--primary)">综合套餐</span> · ¥199.00/$29.99</div></div>
+      </label>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-select-pkg')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-select-pkg')">确定添加</button>
+  </div>
+</div>
+
+<script>
+/* ===== 策略数据 ===== */
+var strategies = [
+  {name:'默认策略', regions:['国内','海外'], groups:[], pkgCount:3, remark:'系统默认策略，兜底展示', isDefault:true},
+  {name:'高价值用户专属', regions:['国内'], groups:['高价值用户'], pkgCount:5, remark:'针对高价值用户的专属套餐推荐', isDefault:false},
+  {name:'新用户引导策略', regions:['国内','海外'], groups:['新注册用户','活跃用户'], pkgCount:2, remark:'新用户首次进入商城的引导套餐', isDefault:false}
+];
+
+function renderStrategies() {
+  var tbody = document.getElementById('strategy-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  strategies.forEach(function(s, i) {
+    var tr = document.createElement('tr');
+    if (s.isDefault) tr.style.background = '#FFFBEB';
+    var groupsHtml;
+    if (s.isDefault) {
+      groupsHtml = '<span style="font-size:13px;color:var(--gray-400)">—（默认策略不支持投放）</span>';
+    } else {
+      var groupBadges = s.groups.length === 0
+        ? '<span style="font-size:13px;color:var(--gray-400)">未绑定</span>'
+        : s.groups.map(function(g){ return '<span class="badge badge-info">' + g + '</span>'; }).join(' ');
+      groupsHtml = groupBadges;
+    }
+    var regionsHtml = (s.regions || []).map(function(r){ 
+        return '<span class="badge badge-neutral">' + r + '</span>'; 
+      }).join(' ');
+    tr.innerHTML =
+      '<td><div style="font-weight:500;color:var(--gray-900)">' + s.name + '</div>' +
+        (s.isDefault ? '<div style="font-size:11px;color:var(--gray-400);margin-top:2px">未命中分群的用户展示此策略</div>' : '') +
+      '</td>' +
+      '<td>' + regionsHtml + '</td>' +
+      '<td>' + groupsHtml + '</td>' +
+      '<td><span class="clickable-cell" onclick="onPkgCountClick(' + i + ')">' + s.pkgCount + ' 个套餐</span></td>' +
+      '<td style="font-size:13px;color:var(--gray-500)">' + s.remark + '</td>' +
+      '<td><div style="display:flex;gap:4px">' +
+        (s.isDefault ? '<button class="btn btn-sm btn-secondary-ghost" onclick="openEditStrategy(' + i + ')">编辑</button>' : '<button class="btn btn-sm btn-secondary-ghost" onclick="openEditStrategy(' + i + ')">编辑</button><button class="btn btn-sm btn-danger-ghost" onclick="deleteStrategy(' + i + ')">删除</button>') +
+      '</div></td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function onPkgCountClick(idx) {
+  document.getElementById('pkg-manage-name').textContent = strategies[idx].name;
+  document.getElementById('pkg-manage-count').textContent = strategies[idx].pkgCount;
+  showPage('pkg-manage');
+}
+
+/* ===== 添加策略 ===== */
+var currentStep = 1;
+function openAddStrategy() {
+  document.getElementById('strategy-name-input').value = '';
+  document.getElementById('strategy-remark-input').value = '';
+  currentStep = 1;
+  updateStepUI();
+  openDrawer('drawer-add-strategy');
+}
+function goStep(n) {
+  currentStep = n;
+  updateStepUI();
+}
+function nextStep() {
+  if (currentStep < 2) { currentStep++; updateStepUI(); }
+}
+function prevStep() {
+  if (currentStep > 1) { currentStep--; updateStepUI(); }
+}
+function updateStepUI() {
+  // step contents
+  document.querySelectorAll('#drawer-add-strategy .step-content').forEach(function(c){ c.classList.remove('active'); });
+  var ids = ['step-basic','step-deploy'];
+  var el = document.getElementById(ids[currentStep-1]);
+  if (el) el.classList.add('active');
+  // step indicators
+  for (var i = 1; i <= 2; i++) {
+    var num = document.getElementById('step-num-' + i);
+    var label = document.getElementById('step-label-' + i);
+    if (i < currentStep) {
+      num.style.background = 'var(--primary)'; num.style.color = 'white'; num.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>';
+      label.style.color = 'var(--primary)';
+    } else if (i === currentStep) {
+      num.style.background = 'var(--primary)'; num.style.color = 'white'; num.textContent = i;
+      label.style.color = 'var(--primary)';
+    } else {
+      num.style.background = 'var(--gray-200)'; num.style.color = 'var(--gray-500)'; num.textContent = i;
+      label.style.color = 'var(--gray-500)';
+    }
+  }
+  // progress lines
+  document.getElementById('step-line-1').style.width = currentStep > 1 ? '100%' : '0';
+  // buttons
+  document.getElementById('step-prev-btn').style.display = currentStep > 1 ? 'inline-flex' : 'none';
+  document.getElementById('step-next-btn').style.display = currentStep < 2 ? 'inline-flex' : 'none';
+  document.getElementById('step-submit-btn').style.display = currentStep === 2 ? 'inline-flex' : 'none';
+}
+function confirmAddStrategy() {
+  var name = document.getElementById('strategy-name-input').value.trim();
+  if (!name) { alert('请输入策略名称'); goStep(1); return; }
+  var remark = document.getElementById('strategy-remark-input').value.trim();
+  var newIdx = strategies.length;
+  strategies.push({name:name, regions:['国内'], groups:[], pkgCount:0, remark:remark, isDefault:false});
+  renderStrategies();
+  closeDrawer('drawer-add-strategy');
+  // 提交后自动跳转到套餐配置页面
+  document.getElementById('pkg-manage-name').textContent = name;
+  document.getElementById('pkg-manage-count').textContent = '0';
+  showPage('pkg-manage');
+}
+/* ===== 编辑策略 ===== */
+var editingIdx = -1;
+var editCurrentStep = 1;
+var editingIsDefault = false;
+function openEditStrategy(idx) {
+  editingIdx = idx;
+  editCurrentStep = 1;
+  var s = strategies[idx];
+  editingIsDefault = s.isDefault;
+  document.getElementById('edit-strategy-name').value = s.name;
+  document.getElementById('edit-strategy-remark').value = s.remark;
+  // 设置投放区域
+  document.getElementById('edit-region-domestic').checked = s.regions.indexOf('国内') >= 0;
+  document.getElementById('edit-region-overseas').checked = s.regions.indexOf('海外') >= 0;
+  // 设置用户分群
+  document.getElementById('edit-group-high').checked = s.groups.indexOf('高价值用户') >= 0;
+  document.getElementById('edit-group-new').checked = s.groups.indexOf('新注册用户') >= 0;
+  document.getElementById('edit-group-active').checked = s.groups.indexOf('活跃用户') >= 0;
+  document.getElementById('edit-group-silent').checked = s.groups.indexOf('沉默用户') >= 0;
+  document.getElementById('edit-group-paid').checked = s.groups.indexOf('付费用户') >= 0;
+  // 默认策略禁用投放区域和投放用户分群
+  var isDefault = s.isDefault;
+  document.getElementById('edit-region-domestic').disabled = isDefault;
+  document.getElementById('edit-region-overseas').disabled = isDefault;
+  document.getElementById('edit-group-high').disabled = isDefault;
+  document.getElementById('edit-group-new').disabled = isDefault;
+  document.getElementById('edit-group-active').disabled = isDefault;
+  document.getElementById('edit-group-silent').disabled = isDefault;
+  document.getElementById('edit-group-paid').disabled = isDefault;
+  // 设置禁用状态的视觉样式
+  var regionContainer = document.getElementById('edit-region-domestic').closest('.form-group');
+  var groupContainer = document.getElementById('edit-group-high').closest('.form-group');
+  if (regionContainer) regionContainer.style.opacity = isDefault ? '0.5' : '1';
+  if (groupContainer) groupContainer.style.opacity = isDefault ? '0.5' : '1';
+  updateEditStepUI();
+  openDrawer('drawer-edit-strategy');
+}
+function goEditStep(n) {
+  editCurrentStep = n;
+  updateEditStepUI();
+}
+function nextEditStep() {
+  if (editCurrentStep < 2) { editCurrentStep++; updateEditStepUI(); }
+}
+function prevEditStep() {
+  if (editCurrentStep > 1) { editCurrentStep--; updateEditStepUI(); }
+}
+function updateEditStepUI() {
+  // step contents
+  document.querySelectorAll('#drawer-edit-strategy .step-content').forEach(function(c){ c.classList.remove('active'); });
+  var ids = ['edit-step-basic','edit-step-deploy'];
+  var el = document.getElementById(ids[editCurrentStep-1]);
+  if (el) el.classList.add('active');
+  // step indicators
+  for (var i = 1; i <= 2; i++) {
+    var num = document.getElementById('edit-step-num-' + i);
+    var label = document.getElementById('edit-step-label-' + i);
+    if (i < editCurrentStep) {
+      num.style.background = 'var(--primary)'; num.style.color = 'white'; num.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>';
+      label.style.color = 'var(--primary)';
+    } else if (i === editCurrentStep) {
+      num.style.background = 'var(--primary)'; num.style.color = 'white'; num.textContent = i;
+      label.style.color = 'var(--primary)';
+    } else {
+      num.style.background = 'var(--gray-200)'; num.style.color = 'var(--gray-500)'; num.textContent = i;
+      label.style.color = 'var(--gray-500)';
+    }
+  }
+  // progress lines
+  document.getElementById('edit-step-line-1').style.width = editCurrentStep > 1 ? '100%' : '0';
+  // buttons
+  document.getElementById('edit-step-prev-btn').style.display = editCurrentStep > 1 ? 'inline-flex' : 'none';
+  document.getElementById('edit-step-next-btn').style.display = editCurrentStep < 2 ? 'inline-flex' : 'none';
+  document.getElementById('edit-step-submit-btn').style.display = editCurrentStep === 2 ? 'inline-flex' : 'none';
+}
+function confirmEditStrategy() {
+  var name = document.getElementById('edit-strategy-name').value.trim();
+  if (!name) { alert('请输入策略名称'); goEditStep(1); return; }
+  var remark = document.getElementById('edit-strategy-remark').value.trim();
+  strategies[editingIdx].name = name;
+  strategies[editingIdx].remark = remark;
+  // 只有非默认策略才能修改投放区域和投放用户分群
+  if (!editingIsDefault) {
+    var regions = [];
+    if (document.getElementById('edit-region-domestic').checked) regions.push('国内');
+    if (document.getElementById('edit-region-overseas').checked) regions.push('海外');
+    var groups = [];
+    if (document.getElementById('edit-group-high').checked) groups.push('高价值用户');
+    if (document.getElementById('edit-group-new').checked) groups.push('新注册用户');
+    if (document.getElementById('edit-group-active').checked) groups.push('活跃用户');
+    if (document.getElementById('edit-group-silent').checked) groups.push('沉默用户');
+    if (document.getElementById('edit-group-paid').checked) groups.push('付费用户');
+    strategies[editingIdx].regions = regions;
+    strategies[editingIdx].groups = groups;
+  }
+  renderStrategies();
+  closeDrawer('drawer-edit-strategy');
+}
+
+/* ===== 删除策略 ===== */
+function deleteStrategy(idx) {
+  if (!confirm('确定删除策略「' + strategies[idx].name + '」？')) return;
+  strategies.splice(idx, 1);
+  renderStrategies();
+}
+
+/* ===== 切换应用 ===== */
+function switchApp(el, name) {
+  document.querySelectorAll('.app-sidebar-item').forEach(function(i){ i.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('current-app-name').textContent = name;
+  showPage('strategy-list');
+}
+
+/* ===== 页面切换 ===== */
+function showPage(name) {
+  document.querySelectorAll('.page-view').forEach(function(p){ p.classList.remove('active'); });
+  var page = document.getElementById('page-' + name);
+  if (page) page.classList.add('active');
+}
+
+/* ===== Drawer ===== */
+function openDrawer(id) {
+  var oid = 'overlay-' + id.replace('drawer-','');
+  var overlay = document.getElementById(oid);
+  var drawer = document.getElementById(id);
+  if (overlay) overlay.classList.add('show');
+  if (drawer) drawer.classList.add('show');
+}
+function closeDrawer(id) {
+  var oid = 'overlay-' + id.replace('drawer-','');
+  var overlay = document.getElementById(oid);
+  var drawer = document.getElementById(id);
+  if (overlay) overlay.classList.remove('show');
+  if (drawer) drawer.classList.remove('show');
+}
+
+/* ===== Modal ===== */
+function openModal(id) {
+  var m = document.getElementById(id);
+  if (m) m.classList.add('show');
+}
+function closeModal(id) {
+  var m = document.getElementById(id);
+  if (m) m.classList.remove('show');
+}
+
+/* ===== Init ===== */
+document.addEventListener('DOMContentLoaded', function() {
+  renderStrategies();
+});
+
+/* ===== 套餐上架状态开关 ===== */
+function togglePkgStatus(el) {
+  // 这里可以添加状态变更的逻辑
+  console.log('套餐状态变更:', el.checked);
+}
+
+/* ===== 拖拽排序（分类内） ===== */
+var dragRow = null;
+function dStart(e) {
+  dragRow = e.target.closest('tr');
+  if (dragRow) dragRow.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function dOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+function dEnter(e) {
+  e.preventDefault();
+  var row = e.target.closest('tr.drag-row');
+  if (row && row !== dragRow && row.parentElement === dragRow.parentElement) row.classList.add('drag-over');
+}
+function dLeave(e) {
+  var row = e.target.closest('tr.drag-row');
+  if (row) row.classList.remove('drag-over');
+}
+function dDrop(e) {
+  e.preventDefault();
+  var targetRow = e.target.closest('tr.drag-row');
+  if (!targetRow || !dragRow || targetRow === dragRow) return;
+  if (targetRow.parentElement !== dragRow.parentElement) return;
+  targetRow.classList.remove('drag-over');
+  var tbody = dragRow.parentElement;
+  var rows = Array.from(tbody.querySelectorAll('tr.drag-row'));
+  var dragIdx = rows.indexOf(dragRow);
+  var targetIdx = rows.indexOf(targetRow);
+  if (dragIdx < targetIdx) tbody.insertBefore(dragRow, targetRow.nextSibling);
+  else tbody.insertBefore(dragRow, targetRow);
+}
+function dEnd(e) {
+  document.querySelectorAll('.drag-row').forEach(function(r) {
+    r.classList.remove('dragging');
+    r.classList.remove('drag-over');
+  });
+  dragRow = null;
+}
+</script>
+</body>
+</html>

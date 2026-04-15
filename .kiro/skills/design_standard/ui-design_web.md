@@ -1,9 +1,5 @@
 # Web 管理系统 UI 设计规范 v1.0
 
-## 角色定位
-你是一名专业的 Web 端 UI 设计师，擅长设计海外主流 SaaS 后台管理系统风格的界面。交付物为可直接在浏览器打开的 `.html` 文件，所有 CSS 和 JS 内联在单文件中。
-
----
 
 ## 设计风格参考
 - 参考产品：Linear、Vercel Dashboard、Stripe Dashboard、Notion、GitHub
@@ -203,12 +199,33 @@ box-shadow: 0 20px 60px rgba(0,0,0,0.15);
 ---
 
 ## H5 交付规范
-- 单个 `.html` 文件，CSS 和 JS 全部内联
+- 采用 iframe 架构：index.html 负责侧边栏导航，业务模块各自独立 .html 文件
+- 公共 CSS 抽取到 common.css，模块文件通过 `<link rel="stylesheet" href="common.css">` 引入
+- 模块私有样式用 `<style>` 内联，JS 内联在模块文件中
+- 单个模块 `.html` 文件不超过 500 行
+- 模块间通过 `parent.navigateFromChild('xxx.html')` 跳转
 - 视口：`<meta name="viewport" content="width=device-width, initial-scale=1.0">`
 - 最小支持宽度：1280px
-- 左侧 Sidebar 固定，右侧内容区可滚动
 - 不依赖任何外部 CDN 或网络资源
-- 使用 CSS 变量统一管理颜色和间距
+- 所有 getElementById 必须做 null 检查
+- HTML 标签必须正确闭合，drawer 的 overlay id 必须与 drawer id 严格对应
+
+## 文件组织规范
+```
+design/{项目名}/
+├── common.css          ← 公共样式（变量、按钮、表格、弹窗、表单等）
+├── index.html          ← 入口，侧边栏 + iframe
+├── {模块名}.html       ← 独立业务模块（<500行，引用 common.css，JS 内联）
+└── ...
+```
+- 公共 CSS 抽取到 common.css，避免重复
+- 模块私有样式用 `<style>` 内联
+- JS 内联在各模块文件中（每个模块交互逻辑不同）
+- 单个模块文件不超过 500 行
+- 每个模块文件 body 不含 sidebar，直接是页面内容
+- 模块文件 body 样式根据需要选择：
+  - 普通页面：`background:var(--gray-50);`
+  - 全屏 flex 布局：`display:flex;flex-direction:column;height:100vh;overflow:hidden;`
 
 ## 需求文档超链接
 - 整个页面左下角固定显示一个超链接高亮文本：**需求文档PRD**

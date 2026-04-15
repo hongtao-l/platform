@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>套餐漏斗 - 云存储推荐位</title>
+<link rel="stylesheet" href="common.css">
+<style>
+body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+.page-header{gap:12px;}
+.slot-info{background:var(--white);border:1px solid var(--gray-200);border-radius:8px;padding:16px 24px;display:flex;align-items:center;gap:24px;margin-bottom:20px;}
+.slot-info-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-500);}
+.slot-info-value{color:var(--gray-900);font-weight:500;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--gray-500);cursor:pointer;padding:4px 0;margin-bottom:16px;background:none;border:none;font-family:inherit;}
+.back-btn:hover{color:var(--primary);}
+.funnel-slot{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:6px;padding:12px 14px;margin-bottom:10px;}
+.funnel-slot-label{font-size:12px;font-weight:600;color:var(--gray-500);margin-bottom:8px;}
+.drawer{width:560px;}
+</style>
+</head>
+<body>
+
+<!-- Page Header -->
+<div class="page-header">
+  <div class="breadcrumb">
+    <span class="link" onclick="navigateToPage('app-list.html')">应用管理</span>
+    <span class="sep">/</span>
+    <span class="link" onclick="navigateToPage('app-edit.html')">牵心PRO-国内</span>
+    <span class="sep">/</span>
+    <span class="current">云存储推荐位 · 套餐漏斗</span>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="content">
+  <button class="back-btn" onclick="navigateToPage('app-edit.html')">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    返回运营位列表
+  </button>
+
+  <div class="slot-info">
+    <div class="slot-info-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      运营位名称：<span class="slot-info-value">云存储推荐位</span>
+    </div>
+    <div style="width:1px;height:20px;background:var(--gray-200)"></div>
+    <div class="slot-info-item">
+      运营位编码：<code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px;color:var(--gray-700);font-weight:500">pkg_slot_cloud_001</code>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">漏斗列表</span>
+      <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-funnel','add')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加漏斗
+      </button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>漏斗名称</th>
+          <th>漏斗类型</th>
+          <th>创建时间</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span style="font-weight:500;color:var(--gray-900)">基础云存漏斗</span></td>
+          <td><span class="badge badge-info">价格漏斗</span></td>
+          <td style="font-size:13px;color:var(--gray-500)">2026-03-22</td>
+          <td>
+            <div style="display:flex;gap:4px">
+              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-funnel','edit',{name:'基础云存漏斗',type:'价格漏斗'})">编辑</button>
+              <button class="btn btn-sm btn-danger-ghost">删除</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><span style="font-weight:500;color:var(--gray-900)">Pro升级漏斗</span></td>
+          <td><span class="badge badge-warning">行为漏斗</span></td>
+          <td style="font-size:13px;color:var(--gray-500)">2026-03-23</td>
+          <td>
+            <div style="display:flex;gap:4px">
+              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-funnel','edit',{name:'Pro升级漏斗',type:'行为漏斗'})">编辑</button>
+              <button class="btn btn-sm btn-danger-ghost">删除</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- DRAWER: 添加/编辑漏斗 -->
+<div class="drawer-overlay" id="overlay-funnel" onclick="closeDrawer('drawer-funnel')"></div>
+<div class="drawer" id="drawer-funnel">
+  <div class="drawer-header">
+    <span class="drawer-title" id="funnel-drawer-title">添加漏斗</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-funnel')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">漏斗名称 <span class="required">*</span></label>
+      <input class="input" id="funnel-name" placeholder="请输入漏斗名称">
+    </div>
+    <div class="form-group">
+      <label class="form-label">漏斗类型 <span class="required">*</span></label>
+      <select class="select" id="funnel-type">
+        <option value="">请选择漏斗类型</option>
+        <option value="价格漏斗">价格漏斗</option>
+        <option value="行为漏斗">行为漏斗</option>
+      </select>
+    </div>
+
+    <span class="section-label">漏斗配置（固定4个漏斗位）</span>
+
+    <div class="funnel-slot">
+      <div class="funnel-slot-label">漏斗位 #1</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div id="slot-1-selected" style="flex:1;color:var(--gray-400);font-size:14px">请选择套餐</div>
+        <button class="btn btn-secondary btn-sm" onclick="openSelectPkg(1)">选择套餐</button>
+      </div>
+    </div>
+    <div class="funnel-slot">
+      <div class="funnel-slot-label">漏斗位 #2</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div id="slot-2-selected" style="flex:1;color:var(--gray-400);font-size:14px">请选择套餐</div>
+        <button class="btn btn-secondary btn-sm" onclick="openSelectPkg(2)">选择套餐</button>
+      </div>
+    </div>
+    <div class="funnel-slot">
+      <div class="funnel-slot-label">漏斗位 #3</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div id="slot-3-selected" style="flex:1;color:var(--gray-400);font-size:14px">请选择套餐</div>
+        <button class="btn btn-secondary btn-sm" onclick="openSelectPkg(3)">选择套餐</button>
+      </div>
+    </div>
+    <div class="funnel-slot">
+      <div class="funnel-slot-label">漏斗位 #4</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div id="slot-4-selected" style="flex:1;color:var(--gray-400);font-size:14px">请选择套餐</div>
+        <button class="btn btn-secondary btn-sm" onclick="openSelectPkg(4)">选择套餐</button>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-funnel')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-funnel')">确定</button>
+  </div>
+</div>
+
+<!-- MODAL: 选择套餐 -->
+<div class="modal-overlay" id="modal-select-pkg" onclick="if(event.target===this)closeModal('modal-select-pkg')">
+  <div class="modal" style="width:640px">
+    <div class="modal-header">
+      <span class="modal-title">选择套餐</span>
+      <button class="close-btn" onclick="closeModal('modal-select-pkg')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <!-- 筛选标签 -->
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+        <select class="select" style="width:120px;flex-shrink:0">
+          <option value="">套餐分类</option>
+          <option>云存储套餐</option>
+          <option>AI智能服务</option>
+          <option>综合套餐</option>
+        </select>
+        <select class="select" style="width:120px;flex-shrink:0">
+          <option value="">投放区域</option>
+          <option>全部</option>
+          <option>国内</option>
+          <option>海外</option>
+        </select>
+        <select class="select" style="width:140px;flex-shrink:0">
+          <option value="">投放APP</option>
+          <option>全部</option>
+          <option>牵心PRO</option>
+          <option>鹤梦之家</option>
+        </select>
+        <select class="select" style="width:140px;flex-shrink:0">
+          <option value="">投放运营位</option>
+          <option>全部</option>
+          <option>商城位</option>
+          <option>推荐位</option>
+        </select>
+        <div style="position:relative;flex:1;min-width:180px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--gray-400)"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input class="input" style="padding-left:32px;width:100%" placeholder="搜索套餐名称或ID">
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--gray-400);margin-bottom:12px">选择一个套餐添加到漏斗位</div>
+      <!-- 套餐列表 -->
+      <div style="display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto">
+        <label class="pkg-select-item" onclick="selectPkgItem(this, 'PKG_CLOUD_BASIC', '基础云存储套餐')">
+          <input type="radio" name="pkg-radio" style="width:16px;height:16px;accent-color:var(--primary);flex-shrink:0">
+          <div style="flex:1"><div style="font-weight:500;color:var(--gray-900);font-size:13px">事件录像7天</div><div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG_CLOUD_BASIC · 设备 · <span style="color:var(--primary)">云存储套餐</span> · ¥6.90/$0.95</div></div>
+        </label>
+        <label class="pkg-select-item" onclick="selectPkgItem(this, 'PKG_CLOUD_PRO', 'Pro云存储套餐')">
+          <input type="radio" name="pkg-radio" style="width:16px;height:16px;accent-color:var(--primary);flex-shrink:0">
+          <div style="flex:1"><div style="font-weight:500;color:var(--gray-900);font-size:13px">国内专享·极简云存</div><div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG_CLOUD_PRO · 用户 · <span style="color:var(--primary)">云存储套餐</span> · ¥59.00</div></div>
+        </label>
+        <label class="pkg-select-item" onclick="selectPkgItem(this, 'PKG_CLOUD_SUPER', 'Super Pro云存储套餐')">
+          <input type="radio" name="pkg-radio" style="width:16px;height:16px;accent-color:var(--primary);flex-shrink:0">
+          <div style="flex:1"><div style="font-weight:500;color:var(--gray-900);font-size:13px">Overseas-Pro</div><div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG_CLOUD_SUPER · 设备 · <span style="color:var(--primary)">云存储套餐</span> · $12.99</div></div>
+        </label>
+        <label class="pkg-select-item" onclick="selectPkgItem(this, 'PKG_AI_MONTH', 'AI智能检测月卡')">
+          <input type="radio" name="pkg-radio" style="width:16px;height:16px;accent-color:var(--primary);flex-shrink:0">
+          <div style="flex:1"><div style="font-weight:500;color:var(--gray-900);font-size:13px">AI智能检测月卡</div><div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG_AI_MONTH · 设备 · <span style="color:var(--primary)">AI智能服务</span> · ¥19.90/$2.99</div></div>
+        </label>
+        <label class="pkg-select-item" onclick="selectPkgItem(this, 'PKG_BUNDLE_YEAR', '全家桶年度套餐')">
+          <input type="radio" name="pkg-radio" style="width:16px;height:16px;accent-color:var(--primary);flex-shrink:0">
+          <div style="flex:1"><div style="font-weight:500;color:var(--gray-900);font-size:13px">全家桶年度套餐</div><div style="font-size:12px;color:var(--gray-400);margin-top:2px">PKG_BUNDLE_YEAR · 用户 · <span style="color:var(--primary)">综合套餐</span> · ¥199.00/$29.99</div></div>
+        </label>
+      </div>
+    </div>
+    <div style="padding:12px 24px;border-top:1px solid var(--gray-200);display:flex;justify-content:flex-end;gap:8px">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-select-pkg')">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="confirmSelectPkg()">确定</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:none;align-items:center;justify-content:center;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--white);border-radius:12px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.15);}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--gray-200);}
+.modal-title{font-size:16px;font-weight:600;color:var(--gray-900);}
+.modal-body{padding:20px 24px;overflow-y:auto;flex:1;}
+.pkg-select-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--gray-200);border-radius:8px;cursor:pointer;transition:all .15s;}
+.pkg-select-item:hover{background:var(--gray-50);}
+.pkg-select-item.selected{border-color:var(--primary);background:var(--primary-light);}
+</style>
+
+<script>
+var currentSlotIndex = 0;
+var selectedPkgCode = '';
+var selectedPkgName = '';
+
+function navigateToPage(url) {
+  try {
+    if (window.parent && window.parent !== window && window.parent.navigateFromChild) {
+      window.parent.navigateFromChild(url);
+      return;
+    }
+  } catch(e) {}
+  window.location.href = url;
+}
+
+/* ===== Drawer ===== */
+function openDrawer(id, mode, data) {
+  var overlayId = 'overlay-' + id.replace('drawer-', '');
+  var overlay = document.getElementById(overlayId);
+  var drawer = document.getElementById(id);
+  if (!overlay || !drawer) return;
+  overlay.classList.add('show');
+  drawer.classList.add('show');
+
+  if (id === 'drawer-funnel') {
+    var title = document.getElementById('funnel-drawer-title');
+    var nameInput = document.getElementById('funnel-name');
+    var typeSelect = document.getElementById('funnel-type');
+    if (title) title.textContent = mode === 'edit' ? '编辑漏斗' : '添加漏斗';
+    if (mode === 'edit' && data) {
+      if (nameInput) nameInput.value = data.name || '';
+      if (typeSelect) typeSelect.value = data.type || '';
+    } else {
+      if (nameInput) nameInput.value = '';
+      if (typeSelect) typeSelect.value = '';
+    }
+  }
+}
+
+function closeDrawer(id) {
+  var overlayId = 'overlay-' + id.replace('drawer-', '');
+  var overlay = document.getElementById(overlayId);
+  var drawer = document.getElementById(id);
+  if (overlay) overlay.classList.remove('show');
+  if (drawer) drawer.classList.remove('show');
+}
+
+/* ===== Modal ===== */
+function openModal(id) {
+  var m = document.getElementById(id);
+  if (m) m.classList.add('show');
+}
+
+function closeModal(id) {
+  var m = document.getElementById(id);
+  if (m) m.classList.remove('show');
+}
+
+/* ===== 选择套餐 ===== */
+function openSelectPkg(slotIndex) {
+  currentSlotIndex = slotIndex;
+  selectedPkgCode = '';
+  selectedPkgName = '';
+  // 清除之前的选中状态
+  document.querySelectorAll('.pkg-select-item').forEach(function(item) {
+    item.classList.remove('selected');
+    var radio = item.querySelector('input[type="radio"]');
+    if (radio) radio.checked = false;
+  });
+  openModal('modal-select-pkg');
+}
+
+function selectPkgItem(el, code, name) {
+  // 清除其他选中状态
+  document.querySelectorAll('.pkg-select-item').forEach(function(item) {
+    item.classList.remove('selected');
+  });
+  // 设置当前选中
+  el.classList.add('selected');
+  var radio = el.querySelector('input[type="radio"]');
+  if (radio) radio.checked = true;
+  selectedPkgCode = code;
+  selectedPkgName = name;
+}
+
+function confirmSelectPkg() {
+  if (!selectedPkgCode) {
+    alert('请选择一个套餐');
+    return;
+  }
+  // 更新对应漏斗位的显示
+  var slotEl = document.getElementById('slot-' + currentSlotIndex + '-selected');
+  if (slotEl) {
+    slotEl.textContent = selectedPkgCode + ' · ' + selectedPkgName;
+    slotEl.style.color = 'var(--gray-900)';
+  }
+  closeModal('modal-select-pkg');
+}
+</script>
+</body>
+</html>

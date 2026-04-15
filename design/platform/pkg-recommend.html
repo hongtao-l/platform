@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>推荐位套餐</title>
+<link rel="stylesheet" href="common.css">
+<style>
+body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+.main-area{flex:1;display:flex;overflow:hidden;}
+.left-tree{width:200px;background:var(--white);border-right:1px solid var(--gray-200);overflow-y:auto;flex-shrink:0;padding:12px 0;}
+.tree-app{padding:0 12px;margin-bottom:2px;}
+.tree-app-header{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;color:var(--gray-900);transition:background .15s;}
+.tree-app-header:hover{background:var(--gray-50);}
+.tree-app-header .arrow{width:14px;height:14px;transition:transform .2s;color:var(--gray-400);}
+.tree-app-header.collapsed .arrow{transform:rotate(-90deg);}
+.tree-slots{padding-left:16px;}
+.tree-slot{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--gray-500);transition:all .15s;margin-bottom:1px;}
+.tree-slot:hover{background:var(--gray-50);color:var(--gray-700);}
+.tree-slot.active{background:var(--primary-light);color:var(--primary);font-weight:500;}
+.right-content{flex:1;overflow-y:auto;padding:24px 32px;}
+.textarea{border:1px solid var(--gray-200);border-radius:6px;padding:8px 12px;font-size:14px;color:var(--gray-700);background:var(--white);outline:none;width:100%;resize:vertical;min-height:60px;font-family:inherit;}
+.textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.radio-group{display:flex;gap:16px;margin-bottom:4px;}
+.radio-item{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px;color:var(--gray-700);}
+.radio-item input[type="radio"]{width:16px;height:16px;accent-color:var(--primary);cursor:pointer;}
+.service-detail{background:var(--white);border:1px solid var(--gray-200);border-radius:6px;padding:12px 16px;margin-top:8px;}
+.sd-row{display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--gray-500);}
+.sd-val{color:var(--gray-700);font-weight:500;}
+.section-block{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:16px;margin-bottom:16px;}
+.switch{position:relative;width:40px;height:22px;display:inline-block;flex-shrink:0;}
+.switch input{opacity:0;width:0;height:0;}
+.switch-slider{position:absolute;inset:0;background:var(--gray-200);border-radius:11px;cursor:pointer;transition:all .2s;}
+.switch-slider::before{content:'';position:absolute;width:18px;height:18px;left:2px;top:2px;background:var(--white);border-radius:50%;transition:all .2s;}
+.switch input:checked+.switch-slider{background:var(--primary);}
+.switch input:checked+.switch-slider::before{transform:translateX(18px);}
+.checkbox-group{display:flex;flex-wrap:wrap;gap:10px;}
+.checkbox-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--gray-700);cursor:pointer;}
+.checkbox-item input[type="checkbox"]{accent-color:var(--primary);}
+.price-row{display:flex;gap:12px;}
+.price-row .form-group{flex:1;}
+.drawer{width:640px;}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:12px;font-weight:500;background:var(--primary-light);color:var(--primary);margin:2px 4px 2px 0;}
+.tag .tag-close{cursor:pointer;display:flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:3px;opacity:.7;}
+.tag .tag-close:hover{opacity:1;background:rgba(37,99,235,.15);}
+.tag-container{display:flex;flex-wrap:wrap;gap:4px;min-height:32px;padding:4px 0;}
+.multi-select{position:relative;}
+.multi-select-trigger{min-height:36px;border:1px solid var(--gray-200);border-radius:6px;padding:4px 32px 4px 8px;font-size:14px;color:var(--gray-700);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;cursor:pointer;display:flex;flex-wrap:wrap;gap:4px;align-items:center;}
+.multi-select-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--white);border:1px solid var(--gray-200);border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.10);z-index:10;margin-top:4px;display:none;max-height:200px;overflow-y:auto;}
+.multi-select-dropdown.show{display:block;}
+.multi-select-option{padding:8px 12px;font-size:13px;color:var(--gray-700);cursor:pointer;display:flex;align-items:center;gap:8px;}
+.multi-select-option:hover{background:var(--gray-50);}
+.multi-select-option.selected{background:var(--primary-light);color:var(--primary);}
+.multi-select-placeholder{color:var(--gray-400);font-size:14px;}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="breadcrumb">
+    <span class="link">套餐管理</span>
+    <span class="sep">/</span>
+    <span class="current">推荐位套餐</span>
+  </div>
+</div>
+
+<div class="main-area">
+  <!-- 左侧 APP+推荐位树 -->
+  <div class="left-tree">
+    <div class="tree-app">
+      <div class="tree-app-header" onclick="toggleApp(this)">
+        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        <span>牵心PRO-国内</span>
+        <span style="font-size:10px;color:var(--gray-400);margin-left:auto">QX_CN_001</span>
+      </div>
+      <div class="tree-slots" id="tree-gamehub">
+        <div class="tree-slot active" onclick="selectSlot(this,'gamehub-home','牵心PRO-国内','首页推荐位')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+          <div>首页推荐位<div style="font-size:10px;color:var(--gray-400)">rec_home_001</div></div>
+        </div>
+        <div class="tree-slot" onclick="selectSlot(this,'gamehub-activity','牵心PRO-国内','活动推荐位')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+          <div>活动推荐位<div style="font-size:10px;color:var(--gray-400)">rec_event_001</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="tree-app">
+      <div class="tree-app-header collapsed" onclick="toggleApp(this)">
+        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        <span>牵心PRO-海外</span>
+        <span style="font-size:10px;color:var(--gray-400);margin-left:auto">QX_OS_001</span>
+      </div>
+      <div class="tree-slots" id="tree-shopeasy" style="display:none">
+        <div class="tree-slot" onclick="selectSlot(this,'shopeasy-mall','牵心PRO-海外','商城推荐位')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+          <div>商城推荐位<div style="font-size:10px;color:var(--gray-400)">rec_shop_001</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 右侧套餐列表 -->
+  <div class="right-content">
+    <div id="slot-title" style="font-size:16px;font-weight:600;color:var(--gray-900);margin-bottom:16px">牵心PRO-国内 · 首页推荐位</div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">套餐列表</span>
+        <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-rec-pkg','add')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>创建套餐
+        </button>
+      </div>
+      <table>
+        <thead><tr>
+          <th style="width:50px">序号</th><th>套餐ID</th><th>套餐名称</th><th>推荐标题</th><th>套餐价格</th><th>套餐类型</th><th>订阅类型</th><th>操作</th>
+        </tr></thead>
+        <tbody id="pkg-table-body">
+          <tr>
+            <td>1</td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">REC_001</code></td>
+            <td><span style="font-weight:500;color:var(--gray-900)">7天事件云存储基础版</span></td>
+            <td>安全守护首选</td>
+            <td>¥9.90 / $1.50</td>
+            <td><span class="badge badge-info">云存储</span></td>
+            <td><span class="badge badge-neutral">非订阅</span></td>
+            <td><div style="display:flex;gap:4px">
+              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-rec-pkg','edit')">编辑</button>
+              <button class="btn btn-sm btn-danger-ghost">删除</button>
+            </div></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">REC_002</code></td>
+            <td><span style="font-weight:500;color:var(--gray-900)">30天全时云存储Pro版</span></td>
+            <td>全天候守护升级</td>
+            <td>¥29.90 / $4.50</td>
+            <td><span class="badge badge-info">云存储</span></td>
+            <td><span class="badge badge-success">订阅制</span></td>
+            <td><div style="display:flex;gap:4px">
+              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-rec-pkg','edit')">编辑</button>
+              <button class="btn btn-sm btn-danger-ghost">删除</button>
+            </div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- DRAWER: 创建/编辑推荐位套餐 -->
+<div class="drawer-overlay" id="overlay-rec-pkg" onclick="closeDrawer('drawer-rec-pkg')"></div>
+<div class="drawer" id="drawer-rec-pkg">
+  <div class="drawer-header">
+    <span class="drawer-title" id="rec-pkg-title">创建套餐</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-rec-pkg')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group"><label class="form-label">套餐名称 <span class="required">*</span></label><input class="input" placeholder="请输入套餐名称"></div>
+    <div class="form-group"><label class="form-label">推荐标题 <span class="required">*</span></label><input class="input" placeholder="请输入推荐标题"></div>
+    <div class="form-group"><label class="form-label">推荐文案 <span class="required">*</span></label><textarea class="textarea" placeholder="请输入推荐文案" rows="2"></textarea></div>
+
+    <span class="section-label">选择套餐服务</span>
+    <div class="section-block">
+      <div class="form-group">
+        <label class="form-label">应用方向 <span class="required">*</span></label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="rec-dir" value="device" checked onchange="toggleRecDirection()">设备套餐</label>
+          <label class="radio-item"><input type="radio" name="rec-dir" value="user" onchange="toggleRecDirection()">用户套餐</label>
+        </div>
+      </div>
+      <div id="rec-direction-device">
+        <div class="form-group"><label class="form-label">生效时长 <span class="required">*</span></label>
+          <select class="select"><option value="">请选择</option><option>7天</option><option>15天</option><option selected>30天</option><option>1年</option></select></div>
+        <div class="form-group"><label class="form-label">套餐服务 <span class="required">*</span></label>
+          <select class="select" id="rec-device-svc" onchange="updateRecSvcDetail('device')"><option value="">请选择套餐服务</option><option value="7day" selected>7天事件云存</option><option value="15day">15天事件云存</option></select>
+          <div class="service-detail" id="rec-device-detail">
+            <div class="sd-row"><span>套餐服务名称</span><span class="sd-val">7天事件云存</span></div>
+            <div class="sd-row"><span>服务类型</span><span class="sd-val">事件云存</span></div>
+            <div class="sd-row"><span>可用设备上限</span><span class="sd-val">1台</span></div>
+            <div class="sd-row"><span>平台成本</span><span class="sd-val">￥8.00 / ＄1.20</span></div>
+          </div>
+        </div>
+      </div>
+      <div id="rec-direction-user" style="display:none">
+        <div class="form-group"><label class="form-label">生效时长 <span class="required">*</span></label>
+          <select class="select"><option value="">请选择</option><option>3个月</option><option>6个月</option></select></div>
+        <div class="form-group"><label class="form-label">套餐服务 <span class="required">*</span></label>
+          <select class="select" id="rec-user-svc" onchange="updateRecSvcDetail('user')"><option value="">请选择套餐服务</option><option value="sms">短信套餐</option><option value="adfree">免广告-年</option></select>
+          <div class="service-detail" id="rec-user-detail" style="display:none">
+            <div class="sd-row"><span>套餐服务名称</span><span class="sd-val" id="rec-user-name">—</span></div>
+            <div class="sd-row"><span>服务类型</span><span class="sd-val" id="rec-user-type">—</span></div>
+            <div class="sd-row"><span>平台成本</span><span class="sd-val" id="rec-user-cost">—</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <span class="section-label">内购Key配置</span>
+    <div class="section-block">
+      <div class="form-group"><label class="form-label">Apple Key</label><input class="input" placeholder="请输入Apple内购Key"></div>
+      <div class="form-group" style="margin-bottom:0"><label class="form-label">Google Key</label><input class="input" placeholder="请输入Google内购Key"></div>
+    </div>
+
+    <span class="section-label">订阅类型 <span class="required">*</span></span>
+    <div class="section-block">
+      <div class="form-group">
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="rec-sub" value="non" checked onchange="toggleRecSub()">非订阅</label>
+          <label class="radio-item"><input type="radio" name="rec-sub" value="sub" onchange="toggleRecSub()">订阅制</label>
+        </div>
+      </div>
+      <div id="rec-sub-non">
+        <div class="price-row">
+          <div class="form-group"><label class="form-label">划线价（¥）<span class="required">*</span></label><input class="input" type="number" min="0" placeholder="0.00"></div>
+          <div class="form-group"><label class="form-label">划线价（$）<span class="required">*</span></label><input class="input" type="number" min="0" placeholder="0.00"></div>
+        </div>
+        <div class="price-row">
+          <div class="form-group"><label class="form-label">售价（¥）<span class="required">*</span></label><input class="input" type="number" min="0" placeholder="0.00"></div>
+          <div class="form-group"><label class="form-label">售价（$）<span class="required">*</span></label><input class="input" type="number" min="0" placeholder="0.00"></div>
+        </div>
+      </div>
+      <div id="rec-sub-yes" style="display:none">
+        <div class="form-group"><label class="form-label">订阅文案 <span class="required">*</span></label><input class="input" placeholder="如：每月自动续费，可随时取消"></div>
+        <div class="price-row">
+          <div class="form-group"><label class="form-label">划线价（¥）</label><input class="input" type="number" min="0" placeholder="0.00"></div>
+          <div class="form-group"><label class="form-label">划线价（$）</label><input class="input" type="number" min="0" placeholder="0.00"></div>
+        </div>
+        <div class="form-group">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <label class="form-label" style="margin-bottom:0">免费试用</label>
+            <label class="switch"><input type="checkbox" id="rec-trial-switch" onchange="toggleRecTrial()"><span class="switch-slider"></span></label>
+          </div>
+        </div>
+        <div id="rec-trial-fields" style="display:none">
+          <div class="price-row">
+            <div class="form-group"><label class="form-label">试用周期（天）<span class="required">*</span></label><input class="input" type="number" min="1" placeholder="如：7"></div>
+            <div class="form-group"><label class="form-label">过滤条件 <span class="required">*</span></label>
+              <select class="select"><option value="">请选择</option><option>从未试用过此套餐</option><option>从未试用过该服务类型</option><option>不限制</option></select></div>
+          </div>
+        </div>
+        <div class="price-row">
+          <div class="form-group"><label class="form-label">订阅售价（¥）<span class="required">*</span></label><input class="input" type="number" min="0" placeholder="0.00"></div>
+          <div class="form-group"><label class="form-label">订阅售价（$）<span class="required">*</span></label><input class="input" type="number" min="0" placeholder="0.00"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 套餐标签 -->
+    <div class="form-group">
+      <div class="ms-label-row">
+        <label class="form-label">套餐标签</label>
+        <a class="ms-manage-link" href="#">管理</a>
+      </div>
+      <div class="multi-select" id="ms-rec-tags" data-options="免费试用,限时优惠,新用户特惠,热门推荐,销量第一,专订">
+        <div class="multi-select-trigger" onclick="focusMsInput(this)">
+          <input class="ms-input" placeholder="请选择套餐标签" oninput="filterMsOptions(this)" onfocus="openMsDropdown(this)" />
+          <span class="ms-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+        </div>
+        <div class="multi-select-dropdown" id="ms-rec-tags-dropdown"></div>
+      </div>
+    </div>
+
+    <!-- 套餐描述标签 -->
+    <div class="form-group">
+      <div class="ms-label-row">
+        <label class="form-label">套餐描述标签</label>
+        <a class="ms-manage-link" href="#">管理</a>
+      </div>
+      <div class="multi-select" id="ms-rec-desc-tags" data-options="7天循环事件录制,7天消息回溯,15天循环事件录制,AI智能检测">
+        <div class="multi-select-trigger" onclick="focusMsInput(this)">
+          <input class="ms-input" placeholder="请选择套餐描述标签" oninput="filterMsOptions(this)" onfocus="openMsDropdown(this)" />
+          <span class="ms-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+        </div>
+        <div class="multi-select-dropdown" id="ms-rec-desc-tags-dropdown"></div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-rec-pkg')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-rec-pkg')">确定</button>
+  </div>
+</div>
+
+<script>
+/* ===== 左侧树 ===== */
+function toggleApp(el) {
+  if (!el) return;
+  el.classList.toggle('collapsed');
+  var slots = el.nextElementSibling;
+  if (slots) slots.style.display = el.classList.contains('collapsed') ? 'none' : 'block';
+}
+function selectSlot(el, key, app, slot) {
+  if (!el) return;
+  document.querySelectorAll('.tree-slot').forEach(function(s){ s.classList.remove('active'); });
+  el.classList.add('active');
+  var title = document.getElementById('slot-title');
+  if (title) title.textContent = app + ' · ' + slot;
+}
+
+/* ===== Drawer ===== */
+function openDrawer(id, mode) {
+  var overlay = document.getElementById('overlay-' + id.replace('drawer-', ''));
+  var drawer = document.getElementById(id);
+  if (!overlay || !drawer) return;
+  overlay.classList.add('show');
+  drawer.classList.add('show');
+  if (id === 'drawer-rec-pkg') {
+    var t = document.getElementById('rec-pkg-title');
+    if (t) t.textContent = mode === 'add' ? '创建套餐' : '编辑套餐';
+  }
+}
+function closeDrawer(id) {
+  var overlay = document.getElementById('overlay-' + id.replace('drawer-', ''));
+  var drawer = document.getElementById(id);
+  if (overlay) overlay.classList.remove('show');
+  if (drawer) drawer.classList.remove('show');
+}
+
+/* ===== 套餐服务 ===== */
+function toggleRecDirection() {
+  var v = document.querySelector('input[name="rec-dir"]:checked');
+  if (!v) return;
+  var dv = document.getElementById('rec-direction-device');
+  var us = document.getElementById('rec-direction-user');
+  if (dv) dv.style.display = v.value === 'device' ? 'block' : 'none';
+  if (us) us.style.display = v.value === 'user' ? 'block' : 'none';
+}
+function updateRecSvcDetail(type) {
+  if (type === 'device') {
+    var sel = document.getElementById('rec-device-svc');
+    var det = document.getElementById('rec-device-detail');
+    if (!sel || !det) return;
+    if (!sel.value) { det.style.display = 'none'; return; }
+    det.style.display = 'block';
+    var data = { '7day':{n:'7天事件云存',t:'事件云存',l:'1台',c:'￥8.00 / ＄1.20'}, '15day':{n:'15天事件云存',t:'事件云存',l:'1台',c:'￥12.00 / ＄1.80'} };
+    var d = data[sel.value]; if (!d) return;
+    var vals = det.querySelectorAll('.sd-val');
+    if (vals[0]) vals[0].textContent = d.n;
+    if (vals[1]) vals[1].textContent = d.t;
+    if (vals[2]) vals[2].textContent = d.l;
+    if (vals[3]) vals[3].textContent = d.c;
+  } else {
+    var sel2 = document.getElementById('rec-user-svc');
+    var det2 = document.getElementById('rec-user-detail');
+    if (!sel2 || !det2) return;
+    if (!sel2.value) { det2.style.display = 'none'; return; }
+    det2.style.display = 'block';
+    var uData = { 'sms':{n:'短信套餐',t:'短信套餐',c:'￥8.00 / ＄1.20'}, 'adfree':{n:'免广告-年',t:'免广告',c:'￥15.00 / ＄2.50'} };
+    var ud = uData[sel2.value]; if (!ud) return;
+    var n = document.getElementById('rec-user-name');
+    var tp = document.getElementById('rec-user-type');
+    var co = document.getElementById('rec-user-cost');
+    if (n) n.textContent = ud.n;
+    if (tp) tp.textContent = ud.t;
+    if (co) co.textContent = ud.c;
+  }
+}
+
+/* ===== 订阅类型 ===== */
+function toggleRecSub() {
+  var v = document.querySelector('input[name="rec-sub"]:checked');
+  if (!v) return;
+  var sn = document.getElementById('rec-sub-non');
+  var sy = document.getElementById('rec-sub-yes');
+  if (sn) sn.style.display = v.value === 'non' ? 'block' : 'none';
+  if (sy) sy.style.display = v.value === 'sub' ? 'block' : 'none';
+}
+function toggleRecTrial() {
+  var sw = document.getElementById('rec-trial-switch');
+  var fields = document.getElementById('rec-trial-fields');
+  if (sw && fields) fields.style.display = sw.checked ? 'block' : 'none';
+}
+
+/* ===== 统一多选组件 ===== */
+var msState = {};
+function initMs(msId) {
+  if (msState[msId]) return;
+  var el = document.getElementById(msId);
+  if (!el) return;
+  var opts = (el.getAttribute('data-options') || '').split(',').filter(Boolean);
+  msState[msId] = { selected: [], options: opts };
+  renderMsDropdown(msId);
+}
+function renderMsDropdown(msId) {
+  var dd = document.getElementById(msId + '-dropdown');
+  var state = msState[msId];
+  if (!dd || !state) return;
+  dd.innerHTML = '';
+  state.options.forEach(function(opt) {
+    var div = document.createElement('div');
+    div.className = 'multi-select-option' + (state.selected.indexOf(opt) !== -1 ? ' selected' : '');
+    div.innerHTML = '<span>' + opt + '</span><span class="ms-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></span>';
+    div.onclick = function(e) { e.stopPropagation(); toggleMsOption(msId, opt); };
+    dd.appendChild(div);
+  });
+}
+function toggleMsOption(msId, value) {
+  var state = msState[msId];
+  if (!state) return;
+  var idx = state.selected.indexOf(value);
+  if (idx === -1) state.selected.push(value);
+  else state.selected.splice(idx, 1);
+  renderMsTags(msId);
+  renderMsDropdown(msId);
+}
+function removeMsTag(msId, value) {
+  var state = msState[msId];
+  if (!state) return;
+  state.selected = state.selected.filter(function(v){ return v !== value; });
+  renderMsTags(msId);
+  renderMsDropdown(msId);
+}
+function renderMsTags(msId) {
+  var el = document.getElementById(msId);
+  if (!el) return;
+  var trigger = el.querySelector('.multi-select-trigger');
+  var input = trigger.querySelector('.ms-input');
+  trigger.querySelectorAll('.ms-tag').forEach(function(t){ t.remove(); });
+  var state = msState[msId];
+  (state.selected || []).forEach(function(v) {
+    var tag = document.createElement('span');
+    tag.className = 'ms-tag';
+    tag.innerHTML = v + '<span class="ms-tag-close" onclick="event.stopPropagation();removeMsTag(\'' + msId + '\',\'' + v.replace(/'/g,"\\'") + '\')"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg></span>';
+    trigger.insertBefore(tag, input);
+  });
+  if (input) input.placeholder = state.selected.length > 0 ? '' : '请选择';
+}
+function focusMsInput(trigger) { var input = trigger.querySelector('.ms-input'); if (input) input.focus(); }
+function openMsDropdown(input) {
+  var ms = input.closest('.multi-select');
+  if (!ms) return;
+  initMs(ms.id);
+  ms.querySelector('.multi-select-trigger').classList.add('focus');
+  document.querySelectorAll('.multi-select-dropdown').forEach(function(d){ if (d.id !== ms.id + '-dropdown') d.classList.remove('show'); });
+  var dd = document.getElementById(ms.id + '-dropdown');
+  if (dd) dd.classList.add('show');
+  input.value = '';
+  filterMsOptions(input);
+}
+function filterMsOptions(input) {
+  var ms = input.closest('.multi-select');
+  if (!ms) return;
+  var dd = ms.querySelector('.multi-select-dropdown');
+  if (!dd) return;
+  var kw = (input.value || '').toLowerCase();
+  dd.querySelectorAll('.multi-select-option').forEach(function(opt) {
+    var text = (opt.querySelector('span') || opt).textContent.toLowerCase();
+    opt.style.display = (!kw || text.indexOf(kw) !== -1) ? 'flex' : 'none';
+  });
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.multi-select')) {
+    document.querySelectorAll('.multi-select-dropdown').forEach(function(d){ d.classList.remove('show'); });
+    document.querySelectorAll('.multi-select-trigger').forEach(function(t){ t.classList.remove('focus'); });
+  }
+});
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.multi-select[data-options]').forEach(function(el){ initMs(el.id); });
+});
+</script>
+</body>
+</html>

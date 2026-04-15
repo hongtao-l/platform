@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>套餐管理 - 云存储推荐位</title>
+<link rel="stylesheet" href="common.css">
+<style>
+body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+.page-header{gap:12px;}
+.section-block{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:16px;margin-bottom:16px;}
+.section-block-title{font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:12px;}
+.textarea{border:1px solid var(--gray-200);border-radius:6px;padding:8px 12px;font-size:14px;color:var(--gray-700);background:var(--white);outline:none;width:100%;resize:vertical;min-height:72px;font-family:inherit;}
+.textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.radio-group{display:flex;gap:16px;margin-bottom:4px;}
+.radio-item{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px;color:var(--gray-700);}
+.radio-item input[type="radio"]{width:16px;height:16px;accent-color:var(--primary);cursor:pointer;}
+.switch{position:relative;width:40px;height:22px;display:inline-block;flex-shrink:0;}
+.switch input{opacity:0;width:0;height:0;}
+.switch-slider{position:absolute;inset:0;background:var(--gray-200);border-radius:11px;cursor:pointer;transition:all .2s;}
+.switch-slider::before{content:'';position:absolute;width:18px;height:18px;left:2px;top:2px;background:var(--white);border-radius:50%;transition:all .2s;}
+.switch input:checked+.switch-slider{background:var(--primary);}
+.switch input:checked+.switch-slider::before{transform:translateX(18px);}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:12px;font-weight:500;background:var(--primary-light);color:var(--primary);margin:2px 4px 2px 0;}
+.tag .tag-close{cursor:pointer;display:flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:3px;opacity:.7;}
+.tag .tag-close:hover{opacity:1;background:rgba(37,99,235,.15);}
+.tag-container{display:flex;flex-wrap:wrap;gap:4px;min-height:32px;padding:4px 0;}
+.multi-select{position:relative;}
+.multi-select-trigger{min-height:36px;border:1px solid var(--gray-200);border-radius:6px;padding:4px 32px 4px 8px;font-size:14px;color:var(--gray-700);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;cursor:pointer;display:flex;flex-wrap:wrap;gap:4px;align-items:center;}
+.multi-select-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--white);border:1px solid var(--gray-200);border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.10);z-index:10;margin-top:4px;display:none;max-height:200px;overflow-y:auto;}
+.multi-select-dropdown.show{display:block;}
+.multi-select-option{padding:8px 12px;font-size:13px;color:var(--gray-700);cursor:pointer;display:flex;align-items:center;gap:8px;}
+.multi-select-option:hover{background:var(--gray-50);}
+.multi-select-option.selected{background:var(--primary-light);color:var(--primary);}
+.multi-select-placeholder{color:var(--gray-400);font-size:14px;}
+.service-detail{background:var(--white);border:1px solid var(--gray-200);border-radius:6px;padding:12px 16px;margin-top:8px;}
+.service-detail-row{display:flex;justify-content:space-between;padding:4px 0;font-size:13px;}
+.service-detail-label{color:var(--gray-500);}
+.service-detail-value{color:var(--gray-700);font-weight:500;}
+.slot-info{background:var(--white);border:1px solid var(--gray-200);border-radius:8px;padding:16px 24px;display:flex;align-items:center;gap:24px;margin-bottom:20px;}
+.slot-info-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-500);}
+.slot-info-value{color:var(--gray-900);font-weight:500;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--gray-500);cursor:pointer;padding:4px 0;margin-bottom:16px;background:none;border:none;font-family:inherit;}
+.back-btn:hover{color:var(--primary);}
+.price-row{display:flex;gap:12px;}
+.price-row .form-group{flex:1;}
+.price-prefix{display:flex;align-items:center;}
+.price-prefix .prefix-label{height:36px;padding:0 10px;display:flex;align-items:center;font-size:13px;font-weight:500;color:var(--gray-500);background:var(--gray-50);border:1px solid var(--gray-200);border-right:none;border-radius:6px 0 0 6px;white-space:nowrap;}
+.price-prefix .input{border-radius:0 6px 6px 0;}
+.drawer{width:640px;}
+</style>
+</head>
+<body>
+
+<!-- Page Header -->
+<div class="page-header">
+  <div class="breadcrumb">
+    <span class="link" onclick="navigateToPage('app-list.html')">应用管理</span>
+    <span class="sep">/</span>
+    <span class="link" onclick="navigateToPage('app-edit.html')">牵心PRO-国内</span>
+    <span class="sep">/</span>
+    <span class="current">云存储推荐位 · 套餐管理</span>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="content">
+  <button class="back-btn" onclick="navigateToPage('app-edit.html')">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    返回运营位列表
+  </button>
+
+  <div class="slot-info">
+    <div class="slot-info-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      运营位名称：<span class="slot-info-value">云存储推荐位</span>
+    </div>
+    <div style="width:1px;height:20px;background:var(--gray-200)"></div>
+    <div class="slot-info-item">
+      运营位编码：<code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px;color:var(--gray-700);font-weight:500">pkg_slot_cloud_001</code>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">套餐池列表</span>
+      <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-create-pkg','add')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>创建套餐
+      </button>
+    </div>
+    <table>
+      <thead><tr>
+        <th style="width:60px">序号</th><th>套餐ID</th><th>套餐名称</th><th>套餐价格</th><th>套餐类型</th><th>订阅类型</th><th>操作</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--gray-500)">1</td>
+          <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PKG_CLOUD_BASIC</code></td>
+          <td><span style="font-weight:500;color:var(--gray-900)">基础云存储套餐</span></td>
+          <td><span style="font-weight:600;color:var(--gray-900)">¥9.9</span><span style="font-size:12px;color:var(--gray-400)">/月</span></td>
+          <td><span class="badge badge-info">云存储</span></td>
+          <td><span class="badge badge-success">是</span></td>
+          <td><div style="display:flex;gap:4px">
+            <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-create-pkg','edit')">编辑</button>
+            <button class="btn btn-sm btn-danger-ghost">删除</button>
+          </div></td>
+        </tr>
+        <tr>
+          <td style="color:var(--gray-500)">2</td>
+          <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PKG_CLOUD_PRO</code></td>
+          <td><span style="font-weight:500;color:var(--gray-900)">Pro云存储套餐</span></td>
+          <td><span style="font-weight:600;color:var(--gray-900)">¥19.9</span><span style="font-size:12px;color:var(--gray-400)">/月</span></td>
+          <td><span class="badge badge-info">云存储</span></td>
+          <td><span class="badge badge-success">是</span></td>
+          <td><div style="display:flex;gap:4px">
+            <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-create-pkg','edit')">编辑</button>
+            <button class="btn btn-sm btn-danger-ghost">删除</button>
+          </div></td>
+        </tr>
+        <tr>
+          <td style="color:var(--gray-500)">3</td>
+          <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PKG_CLOUD_SUPER</code></td>
+          <td><span style="font-weight:500;color:var(--gray-900)">Super Pro</span></td>
+          <td><span style="font-weight:600;color:var(--gray-900)">¥39.9</span><span style="font-size:12px;color:var(--gray-400)">/月</span></td>
+          <td><span class="badge badge-info">云存储</span></td>
+          <td><span class="badge badge-neutral">否</span></td>
+          <td><div style="display:flex;gap:4px">
+            <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-create-pkg','edit')">编辑</button>
+            <button class="btn btn-sm btn-danger-ghost">删除</button>
+          </div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- DRAWER: 创建/编辑套餐 -->
+<div class="drawer-overlay" id="overlay-create-pkg" onclick="closeDrawer('drawer-create-pkg')"></div>
+<div class="drawer" id="drawer-create-pkg">
+  <div class="drawer-header">
+    <span class="drawer-title" id="pkg-drawer-title">创建套餐</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-create-pkg')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <!-- 基础信息 -->
+    <div class="form-group">
+      <label class="form-label">套餐名称 <span class="required">*</span></label>
+      <input class="input" placeholder="请输入套餐名称">
+    </div>
+    <div class="form-group">
+      <label class="form-label">推荐标题 <span class="required">*</span></label>
+      <input class="input" placeholder="请输入推荐标题">
+    </div>
+    <div class="form-group">
+      <label class="form-label">推荐文案 <span class="required">*</span></label>
+      <textarea class="textarea" placeholder="请输入推荐文案"></textarea>
+    </div>
+
+    <!-- 选择套餐服务 -->
+    <span class="section-label">选择套餐服务</span>
+    <div class="section-block">
+      <div class="form-group">
+        <label class="form-label">应用方向 <span class="required">*</span></label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="pkg-direction" value="device" checked onchange="switchDirection('device')">设备套餐</label>
+          <label class="radio-item"><input type="radio" name="pkg-direction" value="user" onchange="switchDirection('user')">用户套餐</label>
+        </div>
+      </div>
+      <div id="direction-device">
+        <div class="form-group">
+          <label class="form-label">生效时长 <span class="required">*</span></label>
+          <select class="select" id="device-duration">
+            <option value="">请选择生效时长</option>
+            <option value="7">7天</option><option value="15">15天</option><option value="30" selected>30天</option><option value="365">1年</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">套餐服务 <span class="required">*</span></label>
+          <select class="select" id="device-service-select" onchange="updateServiceDetail('device')">
+            <option value="">请选择套餐服务</option>
+            <option value="7day" selected>7天事件云存</option><option value="15day">15天事件云存</option>
+          </select>
+        </div>
+        <div id="device-service-detail" class="service-detail">
+          <div class="service-detail-row"><span class="service-detail-label">套餐服务名称</span><span class="service-detail-value">7天事件云存</span></div>
+          <div class="service-detail-row"><span class="service-detail-label">服务类型</span><span class="service-detail-value">事件云存</span></div>
+          <div class="service-detail-row"><span class="service-detail-label">可用设备上限</span><span class="service-detail-value">1台</span></div>
+          <div class="service-detail-row"><span class="service-detail-label">平台成本</span><span class="service-detail-value">￥8.00 / ＄1.20</span></div>
+        </div>
+      </div>
+      <div id="direction-user" style="display:none">
+        <div class="form-group">
+          <label class="form-label">生效时长 <span class="required">*</span></label>
+          <select class="select" id="user-duration">
+            <option value="">请选择生效时长</option>
+            <option value="90">3个月</option><option value="180">6个月</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">套餐服务 <span class="required">*</span></label>
+          <select class="select" id="user-service-select" onchange="updateServiceDetail('user')">
+            <option value="">请选择套餐服务</option>
+            <option value="sms">短信套餐</option><option value="adfree">免广告-年</option>
+          </select>
+        </div>
+        <div id="user-service-detail" style="display:none" class="service-detail">
+          <div class="service-detail-row"><span class="service-detail-label">套餐服务名称</span><span class="service-detail-value" id="user-svc-name">—</span></div>
+          <div class="service-detail-row"><span class="service-detail-label">服务类型</span><span class="service-detail-value" id="user-svc-type">—</span></div>
+          <div class="service-detail-row"><span class="service-detail-label">平台成本</span><span class="service-detail-value" id="user-svc-cost">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 内购Key配置 -->
+    <span class="section-label">内购Key配置</span>
+    <div class="section-block">
+      <div class="form-group">
+        <label class="form-label">Apple Key</label>
+        <input class="input" placeholder="请输入 Apple 内购 Key">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Google Key</label>
+        <input class="input" placeholder="请输入 Google 内购 Key">
+      </div>
+    </div>
+
+    <!-- 订阅类型 -->
+    <span class="section-label">订阅类型 <span class="required">*</span></span>
+    <div class="section-block">
+      <div class="form-group">
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="sub-type" value="non-sub" onchange="switchSubType('non-sub')">非订阅</label>
+          <label class="radio-item"><input type="radio" name="sub-type" value="sub" checked onchange="switchSubType('sub')">订阅制</label>
+        </div>
+      </div>
+      <!-- 非订阅 -->
+      <div id="sub-non" style="display:none">
+        <div class="price-row">
+          <div class="form-group"><label class="form-label">划线价（¥）<span class="required">*</span></label><div class="price-prefix"><span class="prefix-label">¥</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+          <div class="form-group"><label class="form-label">划线价（$）<span class="required">*</span></label><div class="price-prefix"><span class="prefix-label">$</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+        </div>
+        <div class="price-row">
+          <div class="form-group"><label class="form-label">售价（¥）<span class="required">*</span></label><div class="price-prefix"><span class="prefix-label">¥</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+          <div class="form-group"><label class="form-label">售价（$）<span class="required">*</span></label><div class="price-prefix"><span class="prefix-label">$</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+        </div>
+      </div>
+      <!-- 订阅制（默认） -->
+      <div id="sub-yes">
+        <div class="form-group"><label class="form-label">订阅文案 <span class="required">*</span></label><input class="input" placeholder="如：每月自动续费，可随时取消"></div>
+        <div class="price-row">
+          <div class="form-group"><label class="form-label">划线价（¥）</label><div class="price-prefix"><span class="prefix-label">¥</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+          <div class="form-group"><label class="form-label">划线价（$）</label><div class="price-prefix"><span class="prefix-label">$</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+        </div>
+        <div class="form-group">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <label class="form-label" style="margin-bottom:0">免费试用</label>
+            <label class="switch"><input type="checkbox" id="free-trial-switch" onchange="toggleFreeTrial()"><span class="switch-slider"></span></label>
+          </div>
+        </div>
+        <div id="free-trial-fields" style="display:none">
+          <div class="price-row">
+            <div class="form-group"><label class="form-label">试用周期（天）<span class="required">*</span></label><input class="input" type="number" min="1" placeholder="如：7"></div>
+            <div class="form-group"><label class="form-label">过滤条件 <span class="required">*</span></label>
+              <select class="select"><option value="">请选择过滤条件</option><option>从未试用过此套餐</option><option>从未试用过该服务类型</option><option>不限制</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="price-row">
+          <div class="form-group"><label class="form-label">订阅售价（¥）<span class="required">*</span></label><div class="price-prefix"><span class="prefix-label">¥</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+          <div class="form-group"><label class="form-label">订阅售价（$）<span class="required">*</span></label><div class="price-prefix"><span class="prefix-label">$</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 套餐标签 -->
+    <div class="form-group">
+      <label class="form-label">套餐标签 <span class="required">*</span></label>
+      <div class="multi-select" id="ms-pkg-tags">
+        <div class="multi-select-trigger" onclick="toggleMultiSelect('ms-pkg-tags')">
+          <span class="multi-select-placeholder" id="ms-pkg-tags-placeholder">请选择套餐标签</span>
+        </div>
+        <div class="multi-select-dropdown" id="ms-pkg-tags-dropdown">
+          <div class="multi-select-option" onclick="addTag('ms-pkg-tags','免费试用')">免费试用</div>
+          <div class="multi-select-option" onclick="addTag('ms-pkg-tags','限时优惠')">限时优惠</div>
+          <div class="multi-select-option" onclick="addTag('ms-pkg-tags','新用户特惠')">新用户特惠</div>
+        </div>
+      </div>
+      <div class="tag-container" id="ms-pkg-tags-tags"></div>
+    </div>
+
+    <!-- 套餐描述标签 -->
+    <div class="form-group">
+      <label class="form-label">套餐描述标签 <span class="required">*</span></label>
+      <div class="multi-select" id="ms-desc-tags">
+        <div class="multi-select-trigger" onclick="toggleMultiSelect('ms-desc-tags')">
+          <span class="multi-select-placeholder" id="ms-desc-tags-placeholder">请选择套餐描述标签</span>
+        </div>
+        <div class="multi-select-dropdown" id="ms-desc-tags-dropdown">
+          <div class="multi-select-option" onclick="addTag('ms-desc-tags','7天循环事件录制')">7天循环事件录制</div>
+          <div class="multi-select-option" onclick="addTag('ms-desc-tags','7天消息回溯')">7天消息回溯</div>
+        </div>
+      </div>
+      <div class="tag-container" id="ms-desc-tags-tags"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-create-pkg')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-create-pkg')">确定</button>
+  </div>
+</div>
+
+<script>
+function navigateToPage(url) {
+  try {
+    if (window.parent && window.parent !== window && window.parent.navigateFromChild) {
+      window.parent.navigateFromChild(url);
+      return;
+    }
+  } catch(e) {}
+  window.location.href = url;
+}
+
+/* ===== Drawer ===== */
+function openDrawer(id, mode) {
+  var overlayId = 'overlay-' + id.replace('drawer-', '');
+  var overlay = document.getElementById(overlayId);
+  var drawer = document.getElementById(id);
+  if (overlay) overlay.classList.add('show');
+  if (drawer) drawer.classList.add('show');
+  if (id === 'drawer-create-pkg') {
+    var t = document.getElementById('pkg-drawer-title');
+    if (t) t.textContent = mode === 'edit' ? '编辑套餐' : '创建套餐';
+  }
+}
+function closeDrawer(id) {
+  var overlayId = 'overlay-' + id.replace('drawer-', '');
+  var overlay = document.getElementById(overlayId);
+  var drawer = document.getElementById(id);
+  if (overlay) overlay.classList.remove('show');
+  if (drawer) drawer.classList.remove('show');
+}
+
+/* ===== 应用方向切换 ===== */
+function switchDirection(dir) {
+  var dv = document.getElementById('direction-device');
+  var us = document.getElementById('direction-user');
+  if (dv) dv.style.display = dir === 'device' ? 'block' : 'none';
+  if (us) us.style.display = dir === 'user' ? 'block' : 'none';
+}
+
+/* ===== 套餐服务详情 ===== */
+function updateServiceDetail(type) {
+  if (type === 'device') {
+    var sel = document.getElementById('device-service-select');
+    var detail = document.getElementById('device-service-detail');
+    if (!sel || !detail) return;
+    if (!sel.value) { detail.style.display = 'none'; return; }
+    detail.style.display = 'block';
+    var data = {
+      '7day': { name:'7天事件云存', type:'事件云存', limit:'1台', cost:'￥8.00 / ＄1.20' },
+      '15day': { name:'15天事件云存', type:'事件云存', limit:'1台', cost:'￥12.00 / ＄1.80' }
+    };
+    var d = data[sel.value];
+    if (d) {
+      var rows = detail.querySelectorAll('.service-detail-value');
+      if (rows[0]) rows[0].textContent = d.name;
+      if (rows[1]) rows[1].textContent = d.type;
+      if (rows[2]) rows[2].textContent = d.limit;
+      if (rows[3]) rows[3].textContent = d.cost;
+    }
+  } else {
+    var sel2 = document.getElementById('user-service-select');
+    var detail2 = document.getElementById('user-service-detail');
+    if (!sel2 || !detail2) return;
+    if (!sel2.value) { detail2.style.display = 'none'; return; }
+    detail2.style.display = 'block';
+    var uData = {
+      'sms': { name:'短信套餐', type:'短信套餐', cost:'￥8.00 / ＄1.20' },
+      'adfree': { name:'免广告-年', type:'免广告', cost:'￥15.00 / ＄2.50' }
+    };
+    var ud = uData[sel2.value];
+    if (ud) {
+      var n = document.getElementById('user-svc-name');
+      var tp = document.getElementById('user-svc-type');
+      var c = document.getElementById('user-svc-cost');
+      if (n) n.textContent = ud.name;
+      if (tp) tp.textContent = ud.type;
+      if (c) c.textContent = ud.cost;
+    }
+  }
+}
+
+/* ===== 订阅类型切换 ===== */
+function switchSubType(type) {
+  var sn = document.getElementById('sub-non');
+  var sy = document.getElementById('sub-yes');
+  if (sn) sn.style.display = type === 'non-sub' ? 'block' : 'none';
+  if (sy) sy.style.display = type === 'sub' ? 'block' : 'none';
+}
+
+/* ===== 免费试用开关 ===== */
+function toggleFreeTrial() {
+  var sw = document.getElementById('free-trial-switch');
+  var fields = document.getElementById('free-trial-fields');
+  if (sw && fields) fields.style.display = sw.checked ? 'block' : 'none';
+}
+
+/* ===== 多选 Tag ===== */
+var selectedTags = {};
+function toggleMultiSelect(msId) {
+  var dd = document.getElementById(msId + '-dropdown');
+  if (!dd) return;
+  var isOpen = dd.classList.contains('show');
+  document.querySelectorAll('.multi-select-dropdown').forEach(function(d){ d.classList.remove('show'); });
+  if (!isOpen) dd.classList.add('show');
+}
+function addTag(msId, value) {
+  if (!selectedTags[msId]) selectedTags[msId] = [];
+  if (selectedTags[msId].indexOf(value) !== -1) return;
+  selectedTags[msId].push(value);
+  renderTags(msId);
+  updatePlaceholder(msId);
+  var dd = document.getElementById(msId + '-dropdown');
+  if (dd) {
+    dd.querySelectorAll('.multi-select-option').forEach(function(opt){ if (opt.textContent === value) opt.classList.add('selected'); });
+    dd.classList.remove('show');
+  }
+}
+function removeTag(msId, value) {
+  if (!selectedTags[msId]) return;
+  selectedTags[msId] = selectedTags[msId].filter(function(v){ return v !== value; });
+  renderTags(msId);
+  updatePlaceholder(msId);
+  var dd = document.getElementById(msId + '-dropdown');
+  if (dd) dd.querySelectorAll('.multi-select-option').forEach(function(opt){ if (opt.textContent === value) opt.classList.remove('selected'); });
+}
+function renderTags(msId) {
+  var container = document.getElementById(msId + '-tags');
+  if (!container) return;
+  container.innerHTML = '';
+  (selectedTags[msId] || []).forEach(function(v) {
+    var tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.innerHTML = v + '<span class="tag-close" onclick="removeTag(\'' + msId + '\',\'' + v + '\')"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg></span>';
+    container.appendChild(tag);
+  });
+}
+function updatePlaceholder(msId) {
+  var ph = document.getElementById(msId + '-placeholder');
+  if (ph) ph.style.display = (selectedTags[msId] && selectedTags[msId].length > 0) ? 'none' : 'inline';
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.multi-select')) {
+    document.querySelectorAll('.multi-select-dropdown').forEach(function(d){ d.classList.remove('show'); });
+  }
+});
+</script>
+</body>
+</html>

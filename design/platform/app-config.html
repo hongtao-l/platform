@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>应用配置 - 牵心PRO-国内</title>
+<link rel="stylesheet" href="common.css">
+<style>
+.tab-panel{display:none;padding:24px;}
+.tab-panel.active{display:block;}
+.empty-state{text-align:center;padding:60px 20px;color:var(--gray-400);font-size:14px;}
+</style>
+</head>
+<body style="display:flex;flex-direction:column;height:100vh;overflow:hidden;">
+
+<!-- Page Header -->
+<div class="page-header">
+  <div class="breadcrumb">
+    <span class="link" onclick="navigateToPage('app-list.html')">应用管理</span>
+    <span class="sep">/</span>
+    <span class="current">牵心PRO-国内</span>
+    <span class="sep">/</span>
+    <span class="current">配置</span>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <div class="tab" data-tab="tab-adslot" onclick="switchTab('tab-adslot')">广告位配置</div>
+  <div class="tab active" data-tab="tab-recslot" onclick="switchTab('tab-recslot')">推荐位配置</div>
+</div>
+
+<!-- Tab Content Area -->
+<div style="flex:1;overflow-y:auto;">
+
+  <!-- 广告位配置 -->
+  <div class="tab-panel" id="tab-adslot">
+    <div class="empty-state">暂无数据</div>
+  </div>
+
+  <!-- 推荐位配置 -->
+  <div class="tab-panel active" id="tab-recslot">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">推荐位列表</span>
+        <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-add-slot','add')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加推荐位
+        </button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>推荐位名称</th>
+            <th>推荐位编码</th>
+            <th>创建时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span style="font-weight:500;color:var(--gray-900)">首页推荐位</span></td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">rec_home_001</code></td>
+            <td>2026-03-10</td>
+            <td>
+              <div style="display:flex;gap:4px">
+                <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-add-slot','edit',0)">编辑</button>
+                <button class="btn btn-sm btn-danger-ghost">删除</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span style="font-weight:500;color:var(--gray-900)">活动推荐位</span></td>
+            <td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">rec_event_001</code></td>
+            <td>2026-03-15</td>
+            <td>
+              <div style="display:flex;gap:4px">
+                <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-add-slot','edit',1)">编辑</button>
+                <button class="btn btn-sm btn-danger-ghost">删除</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- end tab content area -->
+
+<!-- DRAWER: 添加/编辑推荐位 -->
+<div class="drawer-overlay" id="overlay-add-slot" onclick="closeDrawer('drawer-add-slot')"></div>
+<div class="drawer" id="drawer-add-slot">
+  <div class="drawer-header">
+    <span class="drawer-title" id="drawer-add-slot-title">添加推荐位</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-add-slot')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">推荐位名称 <span class="required">*</span></label>
+      <input class="input" id="rec-slot-name" placeholder="请输入推荐位名称">
+    </div>
+    <div class="form-group">
+      <label class="form-label">推荐位编码 <span class="required">*</span></label>
+      <input class="input" id="rec-slot-code" placeholder="请输入推荐位编码">
+      <div class="form-hint">建议使用英文+下划线格式，如 rec_home_001；编码确定后如需修改请与APP端同步</div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-add-slot')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-add-slot')">确定</button>
+  </div>
+</div>
+
+<script>
+function navigateToPage(url) {
+  try {
+    if (window.parent && window.parent !== window && window.parent.navigateFromChild) {
+      window.parent.navigateFromChild(url);
+      return;
+    }
+  } catch(e) {}
+  window.location.href = url;
+}
+
+/* ===== 示例数据 ===== */
+var sampleData = [
+  { name: '首页推荐位', code: 'rec_home_001' },
+  { name: '活动推荐位', code: 'rec_event_001' }
+];
+
+/* ===== Tab 切换 ===== */
+function switchTab(tabId) {
+  var tabs = document.querySelectorAll('.tab');
+  var panels = document.querySelectorAll('.tab-panel');
+  if (!tabs || !panels) return;
+  tabs.forEach(function(t) { t.classList.remove('active'); });
+  panels.forEach(function(p) { p.classList.remove('active'); });
+  var targetTab = document.querySelector('.tab[data-tab="' + tabId + '"]');
+  var targetPanel = document.getElementById(tabId);
+  if (targetTab) targetTab.classList.add('active');
+  if (targetPanel) targetPanel.classList.add('active');
+}
+
+/* ===== Drawer 打开 ===== */
+function openDrawer(drawerId, mode, rowIndex) {
+  var overlayId = 'overlay-' + drawerId.replace('drawer-', '');
+  var overlay = document.getElementById(overlayId);
+  var drawer = document.getElementById(drawerId);
+  if (overlay) overlay.classList.add('show');
+  if (drawer) drawer.classList.add('show');
+
+  var titleEl = document.getElementById(drawerId + '-title');
+  var nameInput = document.getElementById('rec-slot-name');
+  var codeInput = document.getElementById('rec-slot-code');
+
+  if (mode === 'edit' && typeof rowIndex === 'number' && sampleData[rowIndex]) {
+    if (titleEl) titleEl.textContent = '编辑推荐位';
+    if (nameInput) nameInput.value = sampleData[rowIndex].name;
+    if (codeInput) codeInput.value = sampleData[rowIndex].code;
+  } else {
+    if (titleEl) titleEl.textContent = '添加推荐位';
+    if (nameInput) nameInput.value = '';
+    if (codeInput) codeInput.value = '';
+  }
+}
+
+/* ===== Drawer 关闭 ===== */
+function closeDrawer(drawerId) {
+  var overlayId = 'overlay-' + drawerId.replace('drawer-', '');
+  var overlay = document.getElementById(overlayId);
+  var drawer = document.getElementById(drawerId);
+  if (overlay) overlay.classList.remove('show');
+  if (drawer) drawer.classList.remove('show');
+}
+</script>
+</body>
+</html>
