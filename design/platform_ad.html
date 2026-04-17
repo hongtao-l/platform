@@ -137,7 +137,7 @@ tbody tr:hover td { background: var(--gray-50); }
       </div>
       <div class="nav-item" id="nav-noad" onclick="showPage('user-noad')">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
-        免广告用户
+        广告白名单
       </div>
     </div>
   </nav>
@@ -318,20 +318,44 @@ tbody tr:hover td { background: var(--gray-50); }
   </div>
 </div>
 
-<!-- PAGE: 免广告用户 -->
+<!-- PAGE: 广告白名单 -->
 <div id="page-user-noad" class="page-view">
-  <div class="page-header"><div class="breadcrumb"><span class="current">免广告用户</span></div></div>
+  <div class="page-header"><div class="breadcrumb"><span class="current">广告白名单</span></div></div>
   <div class="content">
-    <div class="card">
-      <div class="card-header"><span class="card-title">免广告用户列表</span><button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-noad-user')">+ 添加用户</button></div>
-      <table><thead><tr><th>用户ID</th><th>用户账号</th><th>用户分群</th><th>有效期（天）</th><th>结束时间</th><th>操作</th></tr></thead>
-      <tbody>
-        <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">UID_100234</code></td><td>user_zhang@example.com</td><td><span class="badge badge-info">高价值用户</span></td><td>365</td><td style="font-size:13px;color:var(--gray-500)">2025-01-10</td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
-        <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">UID_200891</code></td><td>user_li@example.com</td><td><span class="badge badge-warning">活跃用户</span></td><td style="color:var(--gray-400)">—</td><td><span class="badge badge-success">永久</span></td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
-        <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">UID_305672</code></td><td>user_wang@example.com</td><td><span class="badge badge-info">高价值用户</span></td><td>30</td><td style="font-size:13px;color:var(--gray-500)">2024-02-18</td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
-        <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">UID_412038</code></td><td>user_chen@example.com</td><td><span class="badge badge-neutral">沉默用户</span></td><td>90</td><td style="font-size:13px;color:var(--gray-500)">2024-04-10</td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
-      </tbody></table>
-      <div style="padding:12px 20px;border-top:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px;color:var(--gray-500)">共 4 条记录</span><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" disabled>上一页</button><button class="btn btn-sm btn-primary">1</button><button class="btn btn-sm btn-secondary" disabled>下一页</button></div></div>
+    <!-- Tabs -->
+    <div class="tabs" style="margin-bottom:16px">
+      <div class="tab active" onclick="switchWhitelistTab('product-whitelist',this)">产品白名单</div>
+      <div class="tab" onclick="switchWhitelistTab('user-whitelist',this)">用户白名单</div>
+    </div>
+    
+    <!-- 产品白名单 Tab -->
+    <div id="product-whitelist" class="whitelist-tab-content" style="display:block">
+      <div class="card">
+        <div class="card-header"><span class="card-title">产品白名单列表</span><button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-product-whitelist')">+ 添加产品</button></div>
+        <table><thead><tr><th>产品ID</th><th>产品名称</th><th>产品所属用户分群</th><th>有效期（天）</th><th>结束时间</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PID_100234</code></td><td>IPC Pro 标准版</td><td><span class="badge badge-info">免广告用户</span></td><td>365</td><td style="font-size:13px;color:var(--gray-500)">2025-01-10</td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PID_200891</code></td><td>IPC Lite 简易版</td><td><span class="badge badge-warning">免广告用户</span></td><td style="color:var(--gray-400)">—</td><td><span class="badge badge-success">永久</span></td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PID_305672</code></td><td>智能门锁标准版</td><td><span class="badge badge-info">免广告用户</span></td><td>30</td><td style="font-size:13px;color:var(--gray-500)">2024-02-18</td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PID_412038</code></td><td>智能插座Pro</td><td><span class="badge badge-neutral">免广告用户</span></td><td>90</td><td style="font-size:13px;color:var(--gray-500)">2024-04-10</td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+        </tbody></table>
+        <div style="padding:12px 20px;border-top:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px;color:var(--gray-500)">共 4 条记录</span><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" disabled>上一页</button><button class="btn btn-sm btn-primary">1</button><button class="btn btn-sm btn-secondary" disabled>下一页</button></div></div>
+      </div>
+    </div>
+    
+    <!-- 用户白名单 Tab -->
+    <div id="user-whitelist" class="whitelist-tab-content" style="display:none">
+      <div class="card">
+        <div class="card-header"><span class="card-title">用户白名单列表</span><button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-noad-user')">+ 添加用户</button></div>
+        <table><thead><tr><th>用户ID</th><th>用户账号</th><th>用户分群</th><th>有效期（天）</th><th>结束时间</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">UID_100234</code></td><td>user_zhang@example.com</td><td><span class="badge badge-info">免广告用户</span></td><td>365</td><td style="font-size:13px;color:var(--gray-500)">2025-01-10</td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">UID_200891</code></td><td>user_li@example.com</td><td><span class="badge badge-warning">免广告用户</span></td><td style="color:var(--gray-400)">—</td><td><span class="badge badge-success">永久</span></td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">UID_305672</code></td><td>user_wang@example.com</td><td><span class="badge badge-info">免广告用户</span></td><td>30</td><td style="font-size:13px;color:var(--gray-500)">2024-02-18</td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">UID_412038</code></td><td>user_chen@example.com</td><td><span class="badge badge-neutral">免广告用户</span></td><td>90</td><td style="font-size:13px;color:var(--gray-500)">2024-04-10</td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+        </tbody></table>
+        <div style="padding:12px 20px;border-top:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px;color:var(--gray-500)">共 4 条记录</span><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" disabled>上一页</button><button class="btn btn-sm btn-primary">1</button><button class="btn btn-sm btn-secondary" disabled>下一页</button></div></div>
+      </div>
     </div>
   </div>
 </div>
@@ -533,14 +557,27 @@ tbody tr:hover td { background: var(--gray-50); }
 <!-- DRAWER: 免广告用户 -->
 <div class="drawer-overlay" id="overlay-noad-user" onclick="closeDrawer('drawer-noad-user')"></div>
 <div class="drawer" id="drawer-noad-user">
-  <div class="drawer-header"><span class="drawer-title">添加免广告用户</span><button class="close-btn" onclick="closeDrawer('drawer-noad-user')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="drawer-header"><span class="drawer-title">添加用户白名单</span><button class="close-btn" onclick="closeDrawer('drawer-noad-user')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
   <div class="drawer-body">
     <div class="form-group"><label class="form-label">用户ID <span class="required">*</span></label><input class="input" placeholder="请输入用户ID"></div>
-    <div class="form-group"><label class="form-label">用户分群 <span class="required">*</span></label><select class="select"><option value="">请选择用户分群</option><option>高价值用户 (user_group_high_value)</option><option>活跃用户 (user_group_active)</option><option>沉默用户 (user_group_silent)</option></select></div>
+    <div class="form-group"><label class="form-label">用户分群 <span class="required">*</span></label><select class="select"><option value="">请选择用户分群</option><option>高价值用户 (ad_group_high_value)</option><option>活跃用户 (ad_group_active)</option><option>沉默用户 (ad_group_silent)</option></select></div>
     <div class="form-group"><label class="form-label">生效时长（天）</label><input class="input" type="number" placeholder="请输入天数，不填则永久生效" min="1"><div style="font-size:12px;color:var(--gray-400);margin-top:4px">不填则永久生效</div></div>
     <div class="form-group"><label class="form-label">备注</label><input class="input" placeholder="请输入备注（选填）"></div>
   </div>
   <div class="drawer-footer"><button class="btn btn-secondary" onclick="closeDrawer('drawer-noad-user')">取消</button><button class="btn btn-primary" onclick="closeDrawer('drawer-noad-user')">确认添加</button></div>
+</div>
+
+<!-- DRAWER: 产品白名单 -->
+<div class="drawer-overlay" id="overlay-product-whitelist" onclick="closeDrawer('drawer-product-whitelist')"></div>
+<div class="drawer" id="drawer-product-whitelist">
+  <div class="drawer-header"><span class="drawer-title">添加产品白名单</span><button class="close-btn" onclick="closeDrawer('drawer-product-whitelist')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="drawer-body">
+    <div class="form-group"><label class="form-label">产品ID <span class="required">*</span></label><input class="input" placeholder="请输入产品ID"></div>
+    <div class="form-group"><label class="form-label">产品所属用户分群 <span class="required">*</span></label><select class="select"><option value="">请选择用户分群</option><option>高价值用户 (ad_group_high_value)</option><option>活跃用户 (ad_group_active)</option><option>沉默用户 (ad_group_silent)</option></select></div>
+    <div class="form-group"><label class="form-label">生效时长（天）</label><input class="input" type="number" placeholder="请输入天数，不填则永久生效" min="1"><div style="font-size:12px;color:var(--gray-400);margin-top:4px">不填则永久生效</div></div>
+    <div class="form-group"><label class="form-label">备注</label><input class="input" placeholder="请输入备注（选填）"></div>
+  </div>
+  <div class="drawer-footer"><button class="btn btn-secondary" onclick="closeDrawer('drawer-product-whitelist')">取消</button><button class="btn btn-primary" onclick="closeDrawer('drawer-product-whitelist')">确认添加</button></div>
 </div>
 
 <!-- DRAWER: 创建/编辑分群 -->
@@ -670,6 +707,15 @@ function showTabContent(tabId) {
   document.querySelectorAll('.tab-content').forEach(function(c){ c.style.display = 'none'; });
   var el = document.getElementById(tabId);
   if (el) el.style.display = 'block';
+}
+
+// ---- Whitelist Tab Switch ----
+function switchWhitelistTab(tabId, el) {
+  document.querySelectorAll('#page-user-noad .tab').forEach(function(t){ t.classList.remove('active'); });
+  el.classList.add('active');
+  document.querySelectorAll('.whitelist-tab-content').forEach(function(c){ c.style.display = 'none'; });
+  var el2 = document.getElementById(tabId);
+  if (el2) el2.style.display = 'block';
 }
 
 // ---- Drawer ----

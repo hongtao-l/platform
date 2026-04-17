@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>产品管理</title>
+  <link rel="stylesheet" href="../platform/common.css">
+  <style>
+    body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    .cap-card { border: 1px solid var(--gray-200); border-radius: 8px; margin-bottom: 16px; }
+    .cap-card-header { padding: 12px 16px; background: var(--gray-50); border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; border-radius: 8px 8px 0 0; }
+    .cap-card-title { font-size: 14px; font-weight: 600; color: var(--gray-900); display: flex; align-items: center; gap: 8px; }
+    .cap-card-body { padding: 16px; }
+    .cap-icon { width: 20px; height: 20px; color: var(--primary); }
+    .param-row { display: flex; align-items: center; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--gray-100); }
+    .param-row:last-child { border-bottom: none; }
+    .param-label { width: 120px; font-size: 13px; color: var(--gray-600); flex-shrink: 0; }
+    .param-value { flex: 1; }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="breadcrumb">
+    <span class="link">产品管理</span>
+    <span class="sep">/</span>
+    <span class="current">产品列表</span>
+  </div>
+</div>
+
+<div class="content">
+  <!-- 筛选栏 -->
+  <div class="filter-bar">
+    <div class="search-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input class="input" placeholder="搜索产品名称或ID">
+    </div>
+    <select class="select" style="width: 140px">
+      <option value="">产品类型</option>
+      <option>IPC</option>
+      <option>门锁</option>
+      <option>传感器</option>
+    </select>
+    <select class="select" style="width: 120px">
+      <option value="">接入状态</option>
+      <option>已接入</option>
+      <option>未接入</option>
+    </select>
+    <span style="flex:1"></span>
+    <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-add-product')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+      添加产品
+    </button>
+  </div>
+
+  <!-- 产品列表 -->
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>产品ID</th>
+          <th>产品名称</th>
+          <th>产品类型</th>
+          <th>能力项数量</th>
+          <th>接入状态</th>
+          <th>创建时间</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span style="font-weight:500;color:var(--gray-900)">IPC_PRO_001</span></td>
+          <td>IPC Pro 标准版</td>
+          <td><span class="badge badge-info">IPC</span></td>
+          <td><span class="clickable-cell" onclick="openDrawer('drawer-capability')">5 项</span></td>
+          <td><span class="badge badge-success">已接入</span></td>
+          <td style="font-size:13px;color:var(--gray-500)">2026-04-10</td>
+          <td>
+            <div style="display:flex;gap:4px">
+              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-edit-product')">编辑</button>
+              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-capability')">能力配置</button>
+              <button class="btn btn-sm btn-danger-ghost">删除</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><span style="font-weight:500;color:var(--gray-900)">IPC_LITE_001</span></td>
+          <td>IPC Lite 简易版</td>
+          <td><span class="badge badge-info">IPC</span></td>
+          <td><span class="clickable-cell" onclick="openDrawer('drawer-capability')">3 项</span></td>
+          <td><span class="badge badge-success">已接入</span></td>
+          <td style="font-size:13px;color:var(--gray-500)">2026-04-12</td>
+          <td>
+            <div style="display:flex;gap:4px">
+              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-edit-product')">编辑</button>
+              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-capability')">能力配置</button>
+              <button class="btn btn-sm btn-danger-ghost">删除</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><span style="font-weight:500;color:var(--gray-900)">LOCK_001</span></td>
+          <td>智能门锁标准版</td>
+          <td><span class="badge badge-warning">门锁</span></td>
+          <td><span class="clickable-cell" onclick="openDrawer('drawer-capability')">4 项</span></td>
+          <td><span class="badge badge-neutral">未接入</span></td>
+          <td style="font-size:13px;color:var(--gray-500)">2026-04-15</td>
+          <td>
+            <div style="display:flex;gap:4px">
+              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-edit-product')">编辑</button>
+              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-capability')">能力配置</button>
+              <button class="btn btn-sm btn-danger-ghost">删除</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- DRAWER: 添加产品 -->
+<div class="drawer-overlay" id="overlay-add-product" onclick="closeDrawer('drawer-add-product')"></div>
+<div class="drawer" id="drawer-add-product">
+  <div class="drawer-header">
+    <span class="drawer-title">添加产品</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-add-product')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">产品ID <span class="required">*</span></label>
+      <input class="input" placeholder="请输入产品ID，如 IPC_PRO_001">
+      <div class="form-hint">建议使用大写字母+下划线格式</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">产品名称 <span class="required">*</span></label>
+      <input class="input" placeholder="请输入产品名称">
+    </div>
+    <div class="form-group">
+      <label class="form-label">产品类型 <span class="required">*</span></label>
+      <select class="select">
+        <option value="">请选择产品类型</option>
+        <option>IPC</option>
+        <option>门锁</option>
+        <option>传感器</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">产品描述</label>
+      <textarea class="textarea" placeholder="请输入产品描述" rows="3"></textarea>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-add-product')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-add-product')">确定</button>
+  </div>
+</div>
+
+<!-- DRAWER: 编辑产品 -->
+<div class="drawer-overlay" id="overlay-edit-product" onclick="closeDrawer('drawer-edit-product')"></div>
+<div class="drawer" id="drawer-edit-product">
+  <div class="drawer-header">
+    <span class="drawer-title">编辑产品</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-edit-product')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">产品ID</label>
+      <input class="input" value="IPC_PRO_001" disabled style="background:var(--gray-50);color:var(--gray-500)">
+    </div>
+    <div class="form-group">
+      <label class="form-label">产品名称 <span class="required">*</span></label>
+      <input class="input" value="IPC Pro 标准版">
+    </div>
+    <div class="form-group">
+      <label class="form-label">产品类型</label>
+      <input class="input" value="IPC" disabled style="background:var(--gray-50);color:var(--gray-500)">
+    </div>
+    <div class="form-group">
+      <label class="form-label">产品描述</label>
+      <textarea class="textarea" rows="3">IPC Pro 标准版，支持夜视、白光灯、红外灯等能力</textarea>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-edit-product')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-edit-product')">保存</button>
+  </div>
+</div>
+
+<!-- DRAWER: 能力项配置 -->
+<div class="drawer-overlay" id="overlay-capability" onclick="closeDrawer('drawer-capability')"></div>
+<div class="drawer" id="drawer-capability" style="width: 640px">
+  <div class="drawer-header">
+    <span class="drawer-title">能力项配置 · IPC Pro 标准版</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-capability')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <!-- 能力项：夜视模式 -->
+    <div class="cap-card">
+      <div class="cap-card-header">
+        <span class="cap-card-title">
+          <svg class="cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          夜视模式
+        </span>
+        <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="cap-card-body">
+        <div class="param-row">
+          <span class="param-label">模式类型</span>
+          <div class="param-value">
+            <select class="select" style="width: 200px">
+              <option>自动</option>
+              <option>手动</option>
+              <option>关闭</option>
+            </select>
+          </div>
+        </div>
+        <div class="param-row">
+          <span class="param-label">灵敏度</span>
+          <div class="param-value">
+            <input class="input" type="number" value="50" style="width: 120px" min="0" max="100">
+            <span style="font-size:12px;color:var(--gray-400);margin-left:8px">范围: 0-100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 能力项：白光灯 -->
+    <div class="cap-card">
+      <div class="cap-card-header">
+        <span class="cap-card-title">
+          <svg class="cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          白光灯
+        </span>
+        <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="cap-card-body">
+        <div class="param-row">
+          <span class="param-label">亮度等级</span>
+          <div class="param-value">
+            <select class="select" style="width: 200px">
+              <option>低</option>
+              <option selected>中</option>
+              <option>高</option>
+            </select>
+          </div>
+        </div>
+        <div class="param-row">
+          <span class="param-label">自动开关</span>
+          <div class="param-value">
+            <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            <span style="font-size:12px;color:var(--gray-500);margin-left:8px">根据环境光自动开关</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 能力项：红外灯 -->
+    <div class="cap-card">
+      <div class="cap-card-header">
+        <span class="cap-card-title">
+          <svg class="cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          红外灯
+        </span>
+        <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="cap-card-body">
+        <div class="param-row">
+          <span class="param-label">照射距离</span>
+          <div class="param-value">
+            <input class="input" type="number" value="15" style="width: 120px" min="5" max="30">
+            <span style="font-size:12px;color:var(--gray-400);margin-left:8px">单位: 米，范围: 5-30</span>
+          </div>
+        </div>
+        <div class="param-row">
+          <span class="param-label">自动切换</span>
+          <div class="param-value">
+            <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            <span style="font-size:12px;color:var(--gray-500);margin-left:8px">光线不足时自动开启</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 能力项：移动侦测 -->
+    <div class="cap-card">
+      <div class="cap-card-header">
+        <span class="cap-card-title">
+          <svg class="cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          移动侦测
+        </span>
+        <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="cap-card-body">
+        <div class="param-row">
+          <span class="param-label">侦测灵敏度</span>
+          <div class="param-value">
+            <select class="select" style="width: 200px">
+              <option>低</option>
+              <option selected>中</option>
+              <option>高</option>
+            </select>
+          </div>
+        </div>
+        <div class="param-row">
+          <span class="param-label">侦测区域</span>
+          <div class="param-value">
+            <button class="btn btn-secondary btn-sm">设置区域</button>
+            <span style="font-size:12px;color:var(--gray-500);margin-left:8px">已设置 2 个区域</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 能力项：云存储 -->
+    <div class="cap-card">
+      <div class="cap-card-header">
+        <span class="cap-card-title">
+          <svg class="cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+          云存储
+        </span>
+        <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="cap-card-body" style="color: var(--gray-400); font-size: 13px;">
+        开启后支持事件录像云端存储
+      </div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-capability')">取消</button>
+    <button class="btn btn-primary" onclick="closeDrawer('drawer-capability')">保存配置</button>
+  </div>
+</div>
+
+<script>
+function openDrawer(id) {
+  var overlay = document.getElementById('overlay-' + id.replace('drawer-', ''));
+  var drawer = document.getElementById(id);
+  if (overlay) overlay.classList.add('show');
+  if (drawer) drawer.classList.add('show');
+}
+
+function closeDrawer(id) {
+  var overlay = document.getElementById('overlay-' + id.replace('drawer-', ''));
+  var drawer = document.getElementById(id);
+  if (overlay) overlay.classList.remove('show');
+  if (drawer) drawer.classList.remove('show');
+}
+</script>
+
+</body>
+</html>
