@@ -332,12 +332,12 @@ tbody tr:hover td { background: var(--gray-50); }
     <div id="product-whitelist" class="whitelist-tab-content" style="display:block">
       <div class="card">
         <div class="card-header"><span class="card-title">产品白名单列表</span><button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-product-whitelist')">+ 添加产品</button></div>
-        <table><thead><tr><th>产品ID</th><th>产品名称</th><th>产品所属用户分群</th><th>有效期（天）</th><th>结束时间</th><th>操作</th></tr></thead>
+        <table><thead><tr><th>产品ID</th><th>产品名称</th><th>产品所属用户分群</th><th>操作</th></tr></thead>
         <tbody>
-          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PID_100234</code></td><td>IPC Pro 标准版</td><td><span class="badge badge-info">免广告用户</span></td><td>365</td><td style="font-size:13px;color:var(--gray-500)">2025-01-10</td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
-          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PID_200891</code></td><td>IPC Lite 简易版</td><td><span class="badge badge-warning">免广告用户</span></td><td style="color:var(--gray-400)">—</td><td><span class="badge badge-success">永久</span></td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
-          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PID_305672</code></td><td>智能门锁标准版</td><td><span class="badge badge-info">免广告用户</span></td><td>30</td><td style="font-size:13px;color:var(--gray-500)">2024-02-18</td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
-          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PID_412038</code></td><td>智能插座Pro</td><td><span class="badge badge-neutral">免广告用户</span></td><td>90</td><td style="font-size:13px;color:var(--gray-500)">2024-04-10</td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PID_100234</code></td><td>IPC Pro 标准版</td><td><span class="badge badge-info">免广告用户</span></td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PID_200891</code></td><td>IPC Lite 简易版</td><td><span class="badge badge-warning">免广告用户</span></td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PID_305672</code></td><td>智能门锁标准版</td><td><span class="badge badge-info">免广告用户</span></td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
+          <tr><td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">PID_412038</code></td><td>智能插座Pro</td><td><span class="badge badge-neutral">免广告用户</span></td><td><button class="btn btn-sm btn-danger-ghost">删除</button></td></tr>
         </tbody></table>
         <div style="padding:12px 20px;border-top:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px;color:var(--gray-500)">共 4 条记录</span><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" disabled>上一页</button><button class="btn btn-sm btn-primary">1</button><button class="btn btn-sm btn-secondary" disabled>下一页</button></div></div>
       </div>
@@ -573,9 +573,7 @@ tbody tr:hover td { background: var(--gray-50); }
   <div class="drawer-header"><span class="drawer-title">添加产品白名单</span><button class="close-btn" onclick="closeDrawer('drawer-product-whitelist')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
   <div class="drawer-body">
     <div class="form-group"><label class="form-label">产品ID <span class="required">*</span></label><input class="input" placeholder="请输入产品ID"></div>
-    <div class="form-group"><label class="form-label">产品所属用户分群 <span class="required">*</span></label><select class="select"><option value="">请选择用户分群</option><option>高价值用户 (ad_group_high_value)</option><option>活跃用户 (ad_group_active)</option><option>沉默用户 (ad_group_silent)</option></select></div>
-    <div class="form-group"><label class="form-label">生效时长（天）</label><input class="input" type="number" placeholder="请输入天数，不填则永久生效" min="1"><div style="font-size:12px;color:var(--gray-400);margin-top:4px">不填则永久生效</div></div>
-    <div class="form-group"><label class="form-label">备注</label><input class="input" placeholder="请输入备注（选填）"></div>
+    <div class="form-group"><label class="form-label">产品所属用户分群 <span class="required">*</span></label><select class="select"><option value="">请选择用户分群</option><option>免广告用户</option></select></div>
   </div>
   <div class="drawer-footer"><button class="btn btn-secondary" onclick="closeDrawer('drawer-product-whitelist')">取消</button><button class="btn btn-primary" onclick="closeDrawer('drawer-product-whitelist')">确认添加</button></div>
 </div>
