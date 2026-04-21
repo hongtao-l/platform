@@ -119,9 +119,6 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
       <button class="btn btn-secondary btn-sm">重置</button>
     </div>
     <div style="margin-left:auto;display:flex;gap:8px">
-      <button class="btn btn-secondary btn-sm" onclick="goToCategoryFromList()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>套餐分类
-      </button>
       <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-config-pkg','add')">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>创建套餐
       </button>
@@ -220,63 +217,45 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
 </div>
 </div><!-- end page-pkg-list -->
 
-<!-- PAGE: 套餐分类管理 -->
-<div id="page-category" class="page-view">
-  <div class="page-header">
-    <div class="breadcrumb">
-      <span class="link" onclick="showPage('pkg-list')">套餐管理</span>
-      <span class="sep">/</span>
-      <span class="link" onclick="showPage('pkg-list')">套餐配置</span>
-      <span class="sep">/</span>
-      <span class="current">套餐分类</span>
+<!-- MODAL: 套餐分类管理 -->
+<div class="modal-overlay" id="modal-category" onclick="if(event.target===this)closeModal('modal-category')">
+  <div class="modal" style="width:500px">
+    <div class="modal-header">
+      <span class="modal-title">套餐分类管理</span>
+      <button class="close-btn" onclick="closeModal('modal-category')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     </div>
-  </div>
-  <div class="content">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-      <button class="btn btn-secondary" onclick="backFromCategory()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>返回
-      </button>
-      <div style="font-size:15px;font-weight:600;color:var(--gray-900)">套餐分类管理</div>
-      <div style="font-size:12px;color:var(--gray-400)">拖拽行可调整排序</div>
-      <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="openDrawer('drawer-category','add')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加分类
-      </button>
-    </div>
-    <div class="card">
+    <div class="modal-body">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+        <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-category')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加分类
+        </button>
+      </div>
       <table>
         <thead>
           <tr>
-            <th style="width:40px"></th>
             <th>分类名称</th>
-            <th>分类描述</th>
-            <th>操作</th>
+            <th style="width:120px">操作</th>
           </tr>
         </thead>
-        <tbody id="category-tbody">
-          <tr class="drag-row" draggable="true" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" ondrop="drop(event)" ondragend="dragEnd(event)">
-            <td><span class="drag-handle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg></span></td>
-            <td><span style="font-weight:500;color:var(--gray-900)">云存储套餐</span> <span class="i18n-icon" title="多语言配置" onclick="openI18nModal(0,'category')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span></td>
-            <td style="font-size:13px;color:var(--gray-500)">提供多种云存储方案，满足不同存储需求</td>
+        <tbody>
+          <tr>
+            <td><span style="font-weight:500;color:var(--gray-900)">云存储套餐</span></td>
             <td><div style="display:flex;gap:4px">
-              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-category','edit')">编辑</button>
+              <button class="btn btn-sm btn-secondary-ghost" onclick="openEditCategoryModal('云存储套餐')">编辑</button>
               <button class="btn btn-sm btn-danger-ghost">删除</button>
             </div></td>
           </tr>
-          <tr class="drag-row" draggable="true" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" ondrop="drop(event)" ondragend="dragEnd(event)">
-            <td><span class="drag-handle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg></span></td>
-            <td><span style="font-weight:500;color:var(--gray-900)">AI智能服务</span> <span class="i18n-icon" title="多语言配置" onclick="openI18nModal(1,'category')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span></td>
-            <td style="font-size:13px;color:var(--gray-500)">AI智能检测、识别等增值服务</td>
+          <tr>
+            <td><span style="font-weight:500;color:var(--gray-900)">AI智能服务</span></td>
             <td><div style="display:flex;gap:4px">
-              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-category','edit')">编辑</button>
+              <button class="btn btn-sm btn-secondary-ghost" onclick="openEditCategoryModal('AI智能服务')">编辑</button>
               <button class="btn btn-sm btn-danger-ghost">删除</button>
             </div></td>
           </tr>
-          <tr class="drag-row" draggable="true" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" ondrop="drop(event)" ondragend="dragEnd(event)">
-            <td><span class="drag-handle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg></span></td>
-            <td><span style="font-weight:500;color:var(--gray-900)">综合套餐</span> <span class="i18n-icon" title="多语言配置" onclick="openI18nModal(2,'category')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span></td>
-            <td style="font-size:13px;color:var(--gray-500)">多项服务打包优惠</td>
+          <tr>
+            <td><span style="font-weight:500;color:var(--gray-900)">综合套餐</span></td>
             <td><div style="display:flex;gap:4px">
-              <button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-category','edit')">编辑</button>
+              <button class="btn btn-sm btn-secondary-ghost" onclick="openEditCategoryModal('综合套餐')">编辑</button>
               <button class="btn btn-sm btn-danger-ghost">删除</button>
             </div></td>
           </tr>
@@ -286,29 +265,43 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
   </div>
 </div>
 
-<!-- DRAWER: 添加/编辑套餐分类 -->
-<div class="drawer-overlay" id="overlay-category" onclick="closeDrawer('drawer-category')"></div>
-<div class="drawer" id="drawer-category" style="width:480px">
-  <div class="drawer-header">
-    <span class="drawer-title" id="category-drawer-title">添加分类</span>
-    <button class="close-btn" onclick="closeDrawer('drawer-category')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-  </div>
-  <div class="drawer-body">
-    <div class="form-group">
-      <label class="form-label">分类名称 <span class="required">*</span></label>
-      <div style="display:flex;align-items:center;gap:8px">
-        <input class="input" placeholder="请输入分类名称" style="flex:1">
-        <span class="i18n-icon" title="多语言配置" onclick="openI18nModal(-1,'category-new')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+<!-- MODAL: 添加分类 -->
+<div class="modal-overlay" id="modal-add-category" onclick="if(event.target===this)closeModal('modal-add-category')">
+  <div class="modal" style="width:400px">
+    <div class="modal-header">
+      <span class="modal-title">添加分类</span>
+      <button class="close-btn" onclick="closeModal('modal-add-category')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">分类名称 <span class="required">*</span></label>
+        <input class="input" id="new-category-name" placeholder="请输入分类名称">
       </div>
     </div>
-    <div class="form-group">
-      <label class="form-label">分类描述</label>
-      <textarea class="textarea" placeholder="请输入分类描述" rows="3"></textarea>
+    <div style="padding:12px 24px;border-top:1px solid var(--gray-200);display:flex;justify-content:flex-end;gap:8px">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-add-category')">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('modal-add-category')">确定</button>
     </div>
   </div>
-  <div class="drawer-footer">
-    <button class="btn btn-secondary" onclick="closeDrawer('drawer-category')">取消</button>
-    <button class="btn btn-primary" onclick="closeDrawer('drawer-category')">确定</button>
+</div>
+
+<!-- MODAL: 编辑分类 -->
+<div class="modal-overlay" id="modal-edit-category" onclick="if(event.target===this)closeModal('modal-edit-category')">
+  <div class="modal" style="width:400px">
+    <div class="modal-header">
+      <span class="modal-title">编辑分类</span>
+      <button class="close-btn" onclick="closeModal('modal-edit-category')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">分类名称 <span class="required">*</span></label>
+        <input class="input" id="edit-category-name" placeholder="请输入分类名称">
+      </div>
+    </div>
+    <div style="padding:12px 24px;border-top:1px solid var(--gray-200);display:flex;justify-content:flex-end;gap:8px">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-edit-category')">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('modal-edit-category')">保存</button>
+    </div>
   </div>
 </div>
 
@@ -327,20 +320,6 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
         <input class="input" placeholder="请输入套餐名称" style="flex:1">
         <span class="i18n-icon" title="多语言配置" onclick="openI18nModal(-1,'pkg-name')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
       </div>
-    </div>
-
-    <!-- 套餐分类 -->
-    <div class="form-group">
-      <div class="ms-label-row">
-        <label class="form-label">套餐分类 <span class="required">*</span></label>
-        <a class="ms-manage-link" href="#" onclick="event.preventDefault();goToCategory()">管理</a>
-      </div>
-      <select class="select">
-        <option value="">请选择套餐分类</option>
-        <option value="cloud-storage">云存储套餐</option>
-        <option value="ai-service">AI智能服务</option>
-        <option value="bundle">综合套餐</option>
-      </select>
     </div>
 
     <!-- 选择套餐服务 -->
@@ -506,8 +485,8 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
       </div>
     </div>
 
-    <!-- 投放标签配置 -->
-    <span class="section-label">投放标签配置</span>
+    <!-- 其他标签配置 -->
+    <span class="section-label">其他标签配置</span>
     <div class="section-block">
       <div class="form-group">
         <label class="form-label">投放区域 <span class="required">*</span></label>
@@ -529,7 +508,7 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
           <div class="multi-select-dropdown" id="ms-shelf-app-dropdown"></div>
         </div>
       </div>
-      <div class="form-group" style="margin-bottom:0">
+      <div class="form-group">
         <label class="form-label">投放运营位 <span class="required">*</span></label>
         <div class="multi-select" id="ms-shelf-slot" data-options="商城位,推荐位">
           <div class="multi-select-trigger" onclick="focusMsInput(this)">
@@ -538,6 +517,18 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
           </div>
           <div class="multi-select-dropdown" id="ms-shelf-slot-dropdown"></div>
         </div>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <div class="ms-label-row">
+          <label class="form-label">套餐分类 <span class="required">*</span></label>
+          <a class="ms-manage-link" href="#" onclick="event.preventDefault();openModal('modal-category')">管理</a>
+        </div>
+        <select class="select">
+          <option value="">请选择套餐分类</option>
+          <option value="cloud-storage">云存储套餐</option>
+          <option value="ai-service">AI智能服务</option>
+          <option value="bundle">综合套餐</option>
+        </select>
       </div>
     </div>
   </div>
@@ -669,23 +660,10 @@ function closeModal(id) {
   if (overlay) overlay.classList.add('show');
 }
 
-/* ===== 套餐分类管理跳转 ===== */
-var categoryFrom = 'list'; // 'list' 从列表页进入, 'drawer' 从抽屉进入
-function goToCategory() {
-  categoryFrom = 'drawer';
-  closeDrawer('drawer-config-pkg');
-  showPage('category');
-}
-function goToCategoryFromList() {
-  categoryFrom = 'list';
-  showPage('category');
-}
-function backFromCategory() {
-  showPage('pkg-list');
-  if (categoryFrom === 'drawer') {
-    openDrawer('drawer-config-pkg','edit');
-  }
-  categoryFrom = 'list';
+/* ===== 套餐分类管理 ===== */
+function openEditCategoryModal(name) {
+  document.getElementById('edit-category-name').value = name;
+  openModal('modal-edit-category');
 }
 
 /* ===== 套餐标签 CRUD ===== */

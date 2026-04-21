@@ -42,7 +42,6 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   Box,
-  Document,
   User,
   Setting,
   DataAnalysis,
@@ -90,24 +89,6 @@ const quickEntries = ref([
     icon: Box,
     color: '#1890FF',
     path: '/product'
-  },
-  {
-    title: '设备管理',
-    icon: Grid,
-    color: '#52C41A',
-    path: '/device'
-  },
-  {
-    title: '数据统计',
-    icon: DataAnalysis,
-    color: '#FAAD14',
-    path: '/statistics'
-  },
-  {
-    title: '系统设置',
-    icon: Setting,
-    color: '#8C8C8C',
-    path: '/settings'
   }
 ])
 

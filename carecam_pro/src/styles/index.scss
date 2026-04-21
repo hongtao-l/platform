@@ -1,0 +1,186 @@
+/* ========================================
+   全局样式 - CareCam Pro APP
+   ======================================== */
+
+@import './variables.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  color: $text-primary;
+  background-color: $bg-page;
+  line-height: $line-height;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ========================================
+   滚动条样式
+   ======================================== */
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* ========================================
+   通用工具类
+   ======================================== */
+
+// 文字省略
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// 多行省略
+.text-ellipsis-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+// Flex 布局
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========================================
+   页面容器
+   ======================================== */
+
+.page-container {
+  min-height: 100vh;
+  background-color: $bg-page;
+}
+
+/* ========================================
+   Vant 主题覆盖
+   ======================================== */
+
+// 导航栏
+.van-nav-bar {
+  --van-nav-bar-background: #{$bg-color};
+  --van-nav-bar-title-font-size: #{$font-lg};
+  --van-nav-bar-title-text-color: #{$text-primary};
+  --van-nav-bar-icon-color: #{$text-primary};
+  --van-nav-bar-arrow-size: 20px;
+}
+
+// 底部标签栏
+.van-tabbar {
+  --van-tabbar-background: #{$bg-color};
+  --van-tabbar-item-font-size: #{$font-xs};
+  --van-tabbar-item-text-color: #{$text-secondary};
+  --van-tabbar-item-active-color: #{$primary-color};
+  --van-tabbar-height: 50px;
+}
+
+// 按钮
+.van-button--primary {
+  --van-button-primary-background: #{$primary-color};
+  --van-button-primary-border-color: #{$primary-color};
+}
+
+// 单元格
+.van-cell {
+  --van-cell-background: #{$bg-color};
+  --van-cell-text-color: #{$text-primary};
+  --van-cell-value-color: #{$text-regular};
+}
+
+// 卡片
+.van-card {
+  --van-card-background: #{$bg-color};
+}
+
+// 弹出层
+.van-popup {
+  --van-popup-background: #{$bg-color};
+}
+
+// 标签页
+.van-tabs {
+  --van-tabs-nav-background: #{$bg-color};
+  --van-tabs-default-color: #{$primary-color};
+}
+
+// 开关
+.van-switch--on {
+  --van-switch-on-background: #{$primary-color};
+}
+
+// 复选框
+.van-checkbox__icon--checked {
+  --van-checkbox-checked-icon-color: #{$primary-color};
+}
+
+// 单选框
+.van-radio__icon--checked {
+  --van-radio-checked-icon-color: #{$primary-color};
+}
+
+// 进度条
+.van-progress {
+  --van-progress-color: #{$primary-color};
+}
+
+// 滑块
+.van-slider {
+  --van-slider-active-background: #{$primary-color};
+}
+
+// 标签
+.van-tag--primary {
+  --van-tag-primary-color: #{$primary-color};
+}
+
+// 徽标
+.van-badge {
+  --van-badge-background: #{$danger-color};
+}
+
+// 对话框
+.van-dialog {
+  --van-dialog-background: #{$bg-color};
+}
+
+// 选择器
+.van-picker {
+  --van-picker-background: #{$bg-color};
+}
+
+// 日期选择
+.van-date-picker {
+  --van-picker-background: #{$bg-color};
+}

@@ -98,9 +98,6 @@ import { useRoute, useRouter } from 'vue-router'
 import {
   House,
   Box,
-  Grid,
-  DataAnalysis,
-  Setting,
   Fold,
   Expand,
   Bell,
@@ -133,21 +130,6 @@ const menuList = ref([
     title: '产品管理',
     path: '/product',
     icon: Box
-  },
-  {
-    title: '设备管理',
-    path: '/device',
-    icon: Grid
-  },
-  {
-    title: '数据统计',
-    path: '/statistics',
-    icon: DataAnalysis
-  },
-  {
-    title: '系统设置',
-    path: '/settings',
-    icon: Setting
   }
 ])
 
