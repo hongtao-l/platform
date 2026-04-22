@@ -145,7 +145,7 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
     <div class="card">
       <div class="card-header"><span class="card-title">策略列表</span>
         <button class="btn btn-primary btn-sm" onclick="openDrawer('drawer-ops-strategy','add')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加策略</button></div>
-      <table><thead><tr><th>策略名称</th><th>投放区域</th><th>投放用户分群</th><th>漏斗配置</th><th>落地页URL</th><th>备注</th><th>操作</th></tr></thead>
+      <table><thead><tr><th>策略名称</th><th>投放区域</th><th>投放用户分群</th><th>漏斗配置</th><th>备注</th><th>操作</th></tr></thead>
       <tbody>
         <tr style="background:#FFFBEB">
           <td><div style="font-weight:500;color:var(--gray-900)">默认策略</div><div style="font-size:11px;color:var(--gray-400);margin-top:2px">未命中分群的用户展示此策略</div></td>
@@ -153,13 +153,11 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
           <td><span style="font-size:13px;color:var(--gray-400)">—</span></td>
           <td><div style="font-size:12px;color:var(--gray-500);line-height:1.6">条件一 → 首页基础漏斗<br>条件二 → 首页基础漏斗<br>条件三 → 首页基础漏斗</div></td>
           <td><span style="font-size:13px;color:var(--gray-400)">—</span></td>
-          <td><span style="font-size:13px;color:var(--gray-400)">—</span></td>
           <td><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-ops-strategy','edit-default')">编辑</button></td></tr>
         <tr><td><div style="font-weight:500;color:var(--gray-900)">首页推广策略</div></td>
           <td><span class="badge badge-neutral">国内</span></td>
           <td><div style="display:flex;gap:4px;flex-wrap:wrap"><span class="badge badge-info">高价值推荐用户</span><span class="badge badge-info">活跃推荐用户</span></div></td>
           <td><div style="font-size:12px;color:var(--gray-500);line-height:1.6">条件一 → 首页基础漏斗<br>条件二 → 升级推荐漏斗<br>条件三 → 首页基础漏斗</div></td>
-          <td style="font-size:12px;color:var(--primary);word-break:break-all">https://example.com/promo</td>
           <td style="font-size:13px;color:var(--gray-500)">首页推广专用</td>
           <td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openDrawer('drawer-ops-strategy','edit')">编辑</button><button class="btn btn-sm btn-danger-ghost">删除</button></div></td></tr>
       </tbody></table>
@@ -350,7 +348,6 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
     <!-- STEP 1: 基础信息 -->
     <div class="step-content active" id="ops-step-basic">
       <div class="form-group"><label class="form-label">策略名称 <span class="required">*</span></label><input class="input" id="ops-strategy-name" placeholder="请输入策略名称"></div>
-      <div class="form-group"><label class="form-label">落地页URL</label><input class="input" id="ops-landing-url" placeholder="请输入落地页URL，如 https://example.com/page"></div>
       <div class="form-group"><label class="form-label">备注</label><textarea class="textarea" id="ops-strategy-remark" placeholder="请输入备注信息" rows="4"></textarea></div>
     </div>
     <!-- STEP 2: 漏斗配置 -->
@@ -395,7 +392,6 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
   <div class="drawer-header"><span class="drawer-title" id="ops-strategy-basic-title">编辑基础信息</span><button class="close-btn" onclick="closeDrawer('drawer-ops-strategy-basic')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
   <div class="drawer-body">
     <div class="form-group"><label class="form-label">策略名称 <span class="required">*</span></label><input class="input" placeholder="请输入策略名称"></div>
-    <div class="form-group"><label class="form-label">落地页URL</label><input class="input" placeholder="请输入落地页URL，如 https://example.com/page"></div>
     <div class="form-group"><label class="form-label">备注</label><textarea class="textarea" placeholder="请输入备注信息" rows="4"></textarea></div>
   </div>
   <div class="drawer-footer"><button class="btn btn-secondary" onclick="closeDrawer('drawer-ops-strategy-basic')">取消</button><button class="btn btn-primary" onclick="closeDrawer('drawer-ops-strategy-basic')">保存</button></div>
