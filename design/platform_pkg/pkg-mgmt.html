@@ -224,17 +224,24 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
       </div>
     </div>
 
-    <!-- 订阅类型 -->
-    <span class="section-label">订阅类型 <span class="required">*</span></span>
+    <!-- 套餐定价 -->
+    <span class="section-label">套餐定价 <span class="required">*</span></span>
     <div class="section-block">
       <div class="form-group">
-        <div class="radio-group">
-          <label class="radio-item"><input type="radio" name="sub-type" value="non-sub" onchange="switchSubType('non-sub')">非订阅</label>
-          <label class="radio-item"><input type="radio" name="sub-type" value="sub" checked onchange="switchSubType('sub')">订阅制</label>
+        <div class="checkbox-group" style="display:flex;gap:24px">
+          <label class="checkbox-item" style="display:flex;align-items:center;gap:6px;cursor:pointer">
+            <input type="checkbox" id="price-non-sub" onchange="togglePriceBlock('non-sub')" style="width:16px;height:16px;accent-color:var(--primary)">
+            <span style="font-size:14px;color:var(--gray-700)">非订阅</span>
+          </label>
+          <label class="checkbox-item" style="display:flex;align-items:center;gap:6px;cursor:pointer">
+            <input type="checkbox" id="price-sub" checked onchange="togglePriceBlock('sub')" style="width:16px;height:16px;accent-color:var(--primary)">
+            <span style="font-size:14px;color:var(--gray-700)">订阅制</span>
+          </label>
         </div>
       </div>
-      <!-- 非订阅 -->
-      <div id="sub-non" style="display:none">
+      <!-- 非订阅定价 -->
+      <div id="sub-non" style="display:none;margin-top:16px;padding-top:16px;border-top:1px dashed var(--gray-200)">
+        <div style="font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:12px">非订阅定价</div>
         <div class="price-row">
           <div class="form-group"><label class="form-label">划线价（¥）<span class="required">*</span></label><div class="price-prefix"><span class="prefix-label">¥</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
           <div class="form-group"><label class="form-label">划线价（$）<span class="required">*</span></label><div class="price-prefix"><span class="prefix-label">$</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
@@ -244,8 +251,9 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
           <div class="form-group"><label class="form-label">售价（$）<span class="required">*</span></label><div class="price-prefix"><span class="prefix-label">$</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
         </div>
       </div>
-      <!-- 订阅制（默认） -->
-      <div id="sub-yes">
+      <!-- 订阅制定价（默认显示） -->
+      <div id="sub-yes" style="margin-top:16px;padding-top:16px;border-top:1px dashed var(--gray-200)">
+        <div style="font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:12px">订阅制定价</div>
         <div class="form-group"><label class="form-label">订阅文案 <span class="required">*</span></label><input class="input" placeholder="如：每月自动续费，可随时取消"></div>
         <div class="price-row">
           <div class="form-group"><label class="form-label">划线价（¥）</label><div class="price-prefix"><span class="prefix-label">¥</span><input class="input" type="number" min="0" placeholder="0.00"></div></div>
@@ -390,12 +398,16 @@ function updateServiceDetail(type) {
   }
 }
 
-/* ===== 订阅类型切换 ===== */
-function switchSubType(type) {
+/* ===== 套餐定价切换（支持多选） ===== */
+function togglePriceBlock(type) {
+  var nonSubCb = document.getElementById('price-non-sub');
+  var subCb = document.getElementById('price-sub');
   var sn = document.getElementById('sub-non');
   var sy = document.getElementById('sub-yes');
-  if (sn) sn.style.display = type === 'non-sub' ? 'block' : 'none';
-  if (sy) sy.style.display = type === 'sub' ? 'block' : 'none';
+  
+  // 根据复选框状态显示/隐藏对应区块
+  if (sn) sn.style.display = nonSubCb && nonSubCb.checked ? 'block' : 'none';
+  if (sy) sy.style.display = subCb && subCb.checked ? 'block' : 'none';
 }
 
 /* ===== 免费试用开关 ===== */

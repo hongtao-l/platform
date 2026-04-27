@@ -104,8 +104,8 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
 </div>
 
 <div class="main-layout">
-  <!-- 左侧应用列表 -->
-  <div class="app-sidebar">
+  <!-- 左侧应用列表（已隐藏） -->
+  <div class="app-sidebar" style="display:none">
     <div class="app-sidebar-header">应用列表</div>
     <div class="app-sidebar-list">
       <div class="app-sidebar-item active" onclick="switchApp(this,'牵心PRO')">
@@ -126,7 +126,7 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
       <div class="content">
         <div class="card">
           <div class="card-header">
-            <span class="card-title">商城位策略列表 · <span id="current-app-name" style="color:var(--primary)">牵心PRO-国内</span></span>
+            <span class="card-title">商城位策略列表</span>
             <button class="btn btn-primary btn-sm" onclick="openAddStrategy()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加策略
             </button>
@@ -136,6 +136,7 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
               <tr>
                 <th>策略名称</th>
                 <th>投放区域</th>
+                <th>投放APP</th>
                 <th>投放用户分群</th>
                 <th>套餐配置</th>
                 <th>备注</th>
@@ -301,6 +302,13 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
         </div>
       </div>
       <div class="form-group">
+        <label class="form-label">投放APP <span class="required">*</span></label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" id="add-app-qx" style="accent-color:var(--primary)" checked> 牵心PRO <span style="font-size:11px;color:var(--gray-400);margin-left:auto">QX_PRO_001</span></label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" id="add-app-hm" style="accent-color:var(--primary)"> 鹤梦之家 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">HM_HOME_001</span></label>
+        </div>
+      </div>
+      <div class="form-group">
         <label class="form-label">投放用户分群 <span class="required">*</span></label>
         <div style="display:flex;flex-direction:column;gap:8px">
           <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" style="accent-color:var(--primary)" checked> 高价值用户 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">ug_high_value</span></label>
@@ -359,6 +367,13 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
         <div style="display:flex;flex-direction:column;gap:8px">
           <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" id="edit-region-domestic" style="accent-color:var(--primary)"> 国内</label>
           <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" id="edit-region-overseas" style="accent-color:var(--primary)"> 海外</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">投放APP <span class="required">*</span></label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" id="edit-app-qx" style="accent-color:var(--primary)"> 牵心PRO <span style="font-size:11px;color:var(--gray-400);margin-left:auto">QX_PRO_001</span></label>
+          <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--gray-200);border-radius:6px;cursor:pointer;font-size:13px"><input type="checkbox" id="edit-app-hm" style="accent-color:var(--primary)"> 鹤梦之家 <span style="font-size:11px;color:var(--gray-400);margin-left:auto">HM_HOME_001</span></label>
         </div>
       </div>
       <div class="form-group">
@@ -736,9 +751,9 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
 <script>
 /* ===== 策略数据 ===== */
 var strategies = [
-  {name:'默认策略', regions:['国内','海外'], groups:[], pkgCount:3, remark:'系统默认策略，兜底展示', isDefault:true},
-  {name:'高价值用户专属', regions:['国内'], groups:['高价值用户'], pkgCount:5, remark:'针对高价值用户的专属套餐推荐', isDefault:false},
-  {name:'新用户引导策略', regions:['国内','海外'], groups:['新注册用户','活跃用户'], pkgCount:2, remark:'新用户首次进入商城的引导套餐', isDefault:false}
+  {name:'默认策略', regions:['国内','海外'], apps:['牵心PRO','鹤梦之家'], groups:[], pkgCount:3, remark:'系统默认策略，兜底展示', isDefault:true},
+  {name:'高价值用户专属', regions:['国内'], apps:['牵心PRO'], groups:['高价值用户'], pkgCount:5, remark:'针对高价值用户的专属套餐推荐', isDefault:false},
+  {name:'新用户引导策略', regions:['国内','海外'], apps:['牵心PRO','鹤梦之家'], groups:['新注册用户','活跃用户'], pkgCount:2, remark:'新用户首次进入商城的引导套餐', isDefault:false}
 ];
 
 function renderStrategies() {
@@ -760,11 +775,15 @@ function renderStrategies() {
     var regionsHtml = (s.regions || []).map(function(r){ 
         return '<span class="badge badge-neutral">' + r + '</span>'; 
       }).join(' ');
+    var appsHtml = (s.apps || []).map(function(a){ 
+        return '<span class="badge badge-success">' + a + '</span>'; 
+      }).join(' ');
     tr.innerHTML =
       '<td><div style="font-weight:500;color:var(--gray-900)">' + s.name + '</div>' +
         (s.isDefault ? '<div style="font-size:11px;color:var(--gray-400);margin-top:2px">未命中分群的用户展示此策略</div>' : '') +
       '</td>' +
       '<td>' + regionsHtml + '</td>' +
+      '<td>' + appsHtml + '</td>' +
       '<td>' + groupsHtml + '</td>' +
       '<td><span class="clickable-cell" onclick="onPkgCountClick(' + i + ')">' + s.pkgCount + ' 个套餐</span></td>' +
       '<td style="font-size:13px;color:var(--gray-500)">' + s.remark + '</td>' +
@@ -832,8 +851,11 @@ function confirmAddStrategy() {
   var name = document.getElementById('strategy-name-input').value.trim();
   if (!name) { alert('请输入策略名称'); goStep(1); return; }
   var remark = document.getElementById('strategy-remark-input').value.trim();
+  var apps = [];
+  if (document.getElementById('add-app-qx').checked) apps.push('牵心PRO');
+  if (document.getElementById('add-app-hm').checked) apps.push('鹤梦之家');
   var newIdx = strategies.length;
-  strategies.push({name:name, regions:['国内'], groups:[], pkgCount:0, remark:remark, isDefault:false});
+  strategies.push({name:name, regions:['国内'], apps:apps, groups:[], pkgCount:0, remark:remark, isDefault:false});
   renderStrategies();
   closeDrawer('drawer-add-strategy');
   // 提交后自动跳转到套餐配置页面
@@ -855,6 +877,9 @@ function openEditStrategy(idx) {
   // 设置投放区域
   document.getElementById('edit-region-domestic').checked = s.regions.indexOf('国内') >= 0;
   document.getElementById('edit-region-overseas').checked = s.regions.indexOf('海外') >= 0;
+  // 设置投放APP
+  document.getElementById('edit-app-qx').checked = (s.apps || []).indexOf('牵心PRO') >= 0;
+  document.getElementById('edit-app-hm').checked = (s.apps || []).indexOf('鹤梦之家') >= 0;
   // 设置用户分群
   document.getElementById('edit-group-high').checked = s.groups.indexOf('高价值用户') >= 0;
   document.getElementById('edit-group-new').checked = s.groups.indexOf('新注册用户') >= 0;
@@ -865,6 +890,8 @@ function openEditStrategy(idx) {
   var isDefault = s.isDefault;
   document.getElementById('edit-region-domestic').disabled = isDefault;
   document.getElementById('edit-region-overseas').disabled = isDefault;
+  document.getElementById('edit-app-qx').disabled = isDefault;
+  document.getElementById('edit-app-hm').disabled = isDefault;
   document.getElementById('edit-group-high').disabled = isDefault;
   document.getElementById('edit-group-new').disabled = isDefault;
   document.getElementById('edit-group-active').disabled = isDefault;
@@ -872,8 +899,10 @@ function openEditStrategy(idx) {
   document.getElementById('edit-group-paid').disabled = isDefault;
   // 设置禁用状态的视觉样式
   var regionContainer = document.getElementById('edit-region-domestic').closest('.form-group');
+  var appContainer = document.getElementById('edit-app-qx').closest('.form-group');
   var groupContainer = document.getElementById('edit-group-high').closest('.form-group');
   if (regionContainer) regionContainer.style.opacity = isDefault ? '0.5' : '1';
+  if (appContainer) appContainer.style.opacity = isDefault ? '0.5' : '1';
   if (groupContainer) groupContainer.style.opacity = isDefault ? '0.5' : '1';
   updateEditStepUI();
   openDrawer('drawer-edit-strategy');
@@ -927,6 +956,9 @@ function confirmEditStrategy() {
     var regions = [];
     if (document.getElementById('edit-region-domestic').checked) regions.push('国内');
     if (document.getElementById('edit-region-overseas').checked) regions.push('海外');
+    var apps = [];
+    if (document.getElementById('edit-app-qx').checked) apps.push('牵心PRO');
+    if (document.getElementById('edit-app-hm').checked) apps.push('鹤梦之家');
     var groups = [];
     if (document.getElementById('edit-group-high').checked) groups.push('高价值用户');
     if (document.getElementById('edit-group-new').checked) groups.push('新注册用户');
@@ -934,6 +966,7 @@ function confirmEditStrategy() {
     if (document.getElementById('edit-group-silent').checked) groups.push('沉默用户');
     if (document.getElementById('edit-group-paid').checked) groups.push('付费用户');
     strategies[editingIdx].regions = regions;
+    strategies[editingIdx].apps = apps;
     strategies[editingIdx].groups = groups;
   }
   renderStrategies();

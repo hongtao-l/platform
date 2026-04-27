@@ -1099,6 +1099,8 @@ input[type="range"]::-moz-range-thumb {
         <label for="agreeCheck">I have read and agree to the <a href="#">Cloud Service Agreement</a></label>
       </div>
       <button class="buy-btn" onclick="showPayModal()">Buy Now — $2.99/mo</button>
+      <!-- 演示挽留弹窗按钮 -->
+      <button onclick="showRetainModal()" style="width:100%;margin-top:8px;padding:10px;border-radius:10px;background:rgba(255,215,0,0.15);color:#FFD700;border:1px dashed #FFD700;font-size:12px;font-weight:600;cursor:pointer;">演示：支付取消挽留弹窗</button>
     </div>
   </div>
 
@@ -3272,6 +3274,98 @@ function renderVersionBadges(idx) {
 
 // Init version badges on load
 renderVersionBadges(0);
+</script>
+
+<!-- 支付取消/失败挽留弹窗 -->
+<div class="modal-mask" id="retainModalMask" onclick="hideRetainModal()" style="position:absolute;"></div>
+<div id="retainModal" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:320px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;padding:24px;z-index:1000;display:none;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+  <!-- 关闭按钮 -->
+  <div onclick="hideRetainModal()" style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </div>
+  
+  <!-- 提示文案 -->
+  <div style="text-align:center;margin-bottom:20px;">
+    <div style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </div>
+    <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:6px;">您有一笔待支付的订单</div>
+    <div style="display:inline-block;padding:4px 12px;background:rgba(255,215,0,0.2);border-radius:20px;font-size:13px;font-weight:600;color:#FFD700;">5折优惠</div>
+  </div>
+  
+  <!-- 套餐信息卡片 -->
+  <div style="background:rgba(255,255,255,0.15);border-radius:14px;padding:16px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.2);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <div>
+        <div style="font-size:15px;font-weight:700;color:#fff;">7天事件录制</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:2px;">云存储服务</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);text-decoration:line-through;">¥20/月</div>
+        <div style="font-size:22px;font-weight:800;color:#FFD700;">¥10<span style="font-size:12px;font-weight:500;color:rgba(255,255,255,0.8)">/月</span></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:11px;color:rgba(255,255,255,0.6);">折扣</span>
+      <span style="display:inline-block;padding:2px 8px;background:#FFD700;border-radius:4px;font-size:11px;font-weight:700;color:#764ba2;">5折</span>
+    </div>
+  </div>
+  
+  <!-- 倒计时 -->
+  <div style="text-align:center;margin-bottom:20px;">
+    <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:6px;">优惠倒计时</div>
+    <div id="retainCountdown" style="font-size:28px;font-weight:800;color:#FFD700;letter-spacing:2px;">23:59:59</div>
+  </div>
+  
+  <!-- 按钮组 -->
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    <button onclick="handleRetainPay()" style="width:100%;padding:14px;border-radius:12px;background:#FFD700;color:#764ba2;border:none;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 15px rgba(255,215,0,0.4);">立即支付</button>
+    <button onclick="hideRetainModal()" style="width:100%;padding:12px;border-radius:12px;background:transparent;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.3);font-size:13px;font-weight:500;cursor:pointer;">残忍放弃</button>
+  </div>
+</div>
+
+<script>
+// 挽留弹窗相关函数
+let retainTimer = null;
+let retainSeconds = 24 * 60 * 60; // 24小时
+
+function showRetainModal() {
+  document.getElementById('retainModalMask').style.display = 'block';
+  document.getElementById('retainModal').style.display = 'block';
+  startRetainCountdown();
+}
+
+function hideRetainModal() {
+  document.getElementById('retainModalMask').style.display = 'none';
+  document.getElementById('retainModal').style.display = 'none';
+  if (retainTimer) {
+    clearInterval(retainTimer);
+    retainTimer = null;
+  }
+}
+
+function startRetainCountdown() {
+  if (retainTimer) clearInterval(retainTimer);
+  retainTimer = setInterval(function() {
+    if (retainSeconds <= 0) {
+      clearInterval(retainTimer);
+      hideRetainModal();
+      return;
+    }
+    retainSeconds--;
+    const h = Math.floor(retainSeconds / 3600);
+    const m = Math.floor((retainSeconds % 3600) / 60);
+    const s = retainSeconds % 60;
+    document.getElementById('retainCountdown').textContent = 
+      String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  }, 1000);
+}
+
+function handleRetainPay() {
+  // 模拟支付操作
+  alert('跳转支付页面');
+  hideRetainModal();
+}
 </script>
 </body>
 </html>

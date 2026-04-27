@@ -143,22 +143,165 @@
         <!-- 枚举值配置 -->
         <template v-if="editForm.dataType === '枚举型'">
           <el-divider content-position="left">枚举值配置</el-divider>
+          <div class="enum-config-tip">
+            <el-icon><InfoFilled /></el-icon>
+            默认值及描述配置将影响APP的面板功能
+          </div>
           <div class="enum-list">
             <div
               v-for="(item, index) in editForm.enumValues"
               :key="index"
               class="enum-item"
+              :class="{ disabled: !item.enabled }"
             >
-              <el-input v-model="item.value" disabled style="width: 60px" />
-              <el-input v-model="item.label" placeholder="描述（APP显示）" style="flex: 1" />
-              <div
-                class="default-radio"
-                :class="{ active: item.isDefault }"
-                @click="setDefaultEnum(index)"
-                title="设为默认"
+              <!-- 启用/禁用复选框 -->
+              <el-checkbox
+                v-model="item.enabled"
+                @change="handleEnumEnableChange(index)"
               />
+              <el-input v-model="item.value" disabled style="width: 60px" />
+              <el-input 
+                v-model="item.label" 
+                placeholder="描述（APP显示）" 
+                style="flex: 1" 
+                :disabled="!item.enabled" 
+              />
+              <!-- 设为默认 -->
+              <template v-if="item.enabled && !item.disabledDefault">
+                <el-tag
+                  v-if="item.isDefault"
+                  type="success"
+                  size="small"
+                  effect="dark"
+                >
+                  默认值
+                </el-tag>
+                <el-button
+                  v-else
+                  type="primary"
+                  link
+                  size="small"
+                  @click="setDefaultEnum(index)"
+                >
+                  设为默认
+                </el-button>
+              </template>
             </div>
           </div>
+
+          <!-- AOV模式配置 -->
+          <template v-if="editForm.identifier === 'work_mode' && getSelectedEnumValue() === '1'">
+            <el-divider content-position="left">AOV模式配置</el-divider>
+            <div class="extra-config">
+              <el-form-item label="低功耗模式电量阈值">
+                <el-input-number
+                  v-model="editForm.enumValues[1].aovConfig.powerThreshold"
+                  :min="0"
+                  :max="100"
+                  placeholder="请输入百分比"
+                  style="width: 100%"
+                />
+                <div class="form-hint">单位：百分比（%）</div>
+              </el-form-item>
+              <el-form-item label="拍照帧率">
+                <el-input-number
+                  v-model="editForm.enumValues[1].aovConfig.frameRate"
+                  :min="0"
+                  placeholder="请输入帧率"
+                  style="width: 100%"
+                />
+                <div class="form-hint">单位：秒/帧</div>
+              </el-form-item>
+            </div>
+          </template>
+
+          <!-- 长电模式配置 -->
+          <template v-if="editForm.identifier === 'work_mode' && getSelectedEnumValue() === '2'">
+            <el-divider content-position="left">长电模式配置</el-divider>
+            <div class="extra-config">
+              <el-form-item label="低功耗模式电量阈值">
+                <el-input-number
+                  v-model="editForm.enumValues[2].longPowerConfig.powerThreshold"
+                  :min="0"
+                  :max="100"
+                  placeholder="请输入百分比"
+                  style="width: 100%"
+                />
+                <div class="form-hint">单位：百分比（%）</div>
+              </el-form-item>
+            </div>
+          </template>
+
+          <!-- 事件录制 - 仅图片配置 -->
+          <template v-if="editForm.identifier === 'event_record' && getSelectedEnumValue() === '0'">
+            <el-divider content-position="left">仅图片配置</el-divider>
+            <div class="extra-config">
+              <el-form-item label="抓图间隔">
+                <el-input-number
+                  v-model="editForm.enumValues[0].imageConfig.captureInterval"
+                  :min="0"
+                  placeholder="请输入抓图间隔"
+                  style="width: 100%"
+                />
+                <div class="form-hint">单位：毫秒（ms）</div>
+              </el-form-item>
+            </div>
+          </template>
+
+          <!-- 事件录制 - 仅视频配置 -->
+          <template v-if="editForm.identifier === 'event_record' && getSelectedEnumValue() === '1'">
+            <el-divider content-position="left">仅视频配置</el-divider>
+            <div class="extra-config">
+              <el-form-item label="录制时长">
+                <el-input-number
+                  v-model="editForm.enumValues[1].videoConfig.recordDuration"
+                  :min="0"
+                  placeholder="请输入录制时长"
+                  style="width: 100%"
+                />
+                <div class="form-hint">单位：秒（s）</div>
+              </el-form-item>
+              <el-form-item label="是否允许设备终止">
+                <el-switch
+                  v-model="editForm.enumValues[1].videoConfig.allowDeviceTerminate"
+                  active-text="允许"
+                  inactive-text="不允许"
+                />
+              </el-form-item>
+            </div>
+          </template>
+
+          <!-- 事件录制 - 图片和视频配置 -->
+          <template v-if="editForm.identifier === 'event_record' && getSelectedEnumValue() === '2'">
+            <el-divider content-position="left">图片和视频配置</el-divider>
+            <div class="extra-config">
+              <el-form-item label="抓图间隔">
+                <el-input-number
+                  v-model="editForm.enumValues[2].bothConfig.captureInterval"
+                  :min="0"
+                  placeholder="请输入抓图间隔"
+                  style="width: 100%"
+                />
+                <div class="form-hint">单位：毫秒（ms）</div>
+              </el-form-item>
+              <el-form-item label="录制时长">
+                <el-input-number
+                  v-model="editForm.enumValues[2].bothConfig.recordDuration"
+                  :min="0"
+                  placeholder="请输入录制时长"
+                  style="width: 100%"
+                />
+                <div class="form-hint">单位：秒（s）</div>
+              </el-form-item>
+              <el-form-item label="是否允许设备终止">
+                <el-switch
+                  v-model="editForm.enumValues[2].bothConfig.allowDeviceTerminate"
+                  active-text="允许"
+                  inactive-text="不允许"
+                />
+              </el-form-item>
+            </div>
+          </template>
         </template>
 
         <el-divider content-position="left">备注</el-divider>
@@ -183,7 +326,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Plus, Search, Check } from '@element-plus/icons-vue'
+import { Plus, Search, Check, Close, InfoFilled } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const route = useRoute()
@@ -196,50 +339,54 @@ const productName = ref(route.query.name || '产品配置')
 const funcList = ref([
   {
     id: 1,
-    name: '夜视模式',
-    identifier: 'night_vision',
+    name: '工作模式',
+    identifier: 'work_mode',
     dataType: '枚举型',
     enumValues: [
-      { value: 'auto', label: '自动模式', isDefault: true },
-      { value: 'manual', label: '手动模式', isDefault: false },
-      { value: 'off', label: '关闭', isDefault: false }
+      { value: '0', label: '低功耗模式', isDefault: false, enabled: true },
+      { value: '1', label: 'AOV模式', isDefault: false, enabled: true, aovConfig: { powerThreshold: '', frameRate: '' } },
+      { value: '2', label: '长电模式', isDefault: false, enabled: true, longPowerConfig: { powerThreshold: '' } },
+      { value: '3', label: '自定义模式', isDefault: false, enabled: true, disabledDefault: true }
     ],
     remark: ''
   },
   {
     id: 2,
-    name: '灯光模式',
-    identifier: 'light_mode',
+    name: '常规录制',
+    identifier: 'normal_record',
     dataType: '枚举型',
     enumValues: [
-      { value: '0', label: '全彩模式', isDefault: false },
-      { value: '1', label: '红外模式', isDefault: true },
-      { value: '2', label: '智能模式', isDefault: false },
-      { value: '3', label: '自定义模式', isDefault: false },
-      { value: '4', label: '关闭', isDefault: false }
+      { value: '0', label: '全天', isDefault: false, enabled: true },
+      { value: '1', label: '自定义时段', isDefault: false, enabled: true },
+      { value: '2', label: '关闭', isDefault: false, enabled: true }
     ],
-    remark: '支持全彩/红外/智能/自定义/关闭'
+    remark: ''
   },
   {
     id: 3,
-    name: '白光灯',
-    identifier: 'white_light',
-    dataType: '布尔型',
+    name: '事件录制',
+    identifier: 'event_record',
+    dataType: '枚举型',
+    enumValues: [
+      { value: '0', label: '仅图片', isDefault: false, enabled: true, imageConfig: { captureInterval: '' } },
+      { value: '1', label: '仅视频', isDefault: false, enabled: true, videoConfig: { recordDuration: '', allowDeviceTerminate: false } },
+      { value: '2', label: '图片和视频', isDefault: false, enabled: true, bothConfig: { captureInterval: '', recordDuration: '', allowDeviceTerminate: false } }
+    ],
     remark: ''
   },
   {
     id: 4,
-    name: '移动侦测',
-    identifier: 'motion_detect',
-    dataType: '布尔型',
-    remark: ''
-  },
-  {
-    id: 5,
-    name: '云存储',
-    identifier: 'cloud_storage',
-    dataType: '布尔型',
-    remark: ''
+    name: '灯光模式',
+    identifier: 'light_mode',
+    dataType: '枚举型',
+    enumValues: [
+      { value: '0', label: '全彩模式', isDefault: false, enabled: true },
+      { value: '1', label: '红外模式', isDefault: true, enabled: true },
+      { value: '2', label: '智能模式', isDefault: false, enabled: true },
+      { value: '3', label: '自定义模式', isDefault: false, enabled: true, disabledDefault: true },
+      { value: '4', label: '关闭', isDefault: false, enabled: true }
+    ],
+    remark: '支持全彩/红外/智能/自定义/关闭'
   }
 ])
 
@@ -248,6 +395,9 @@ const existingFuncIds = computed(() => funcList.value.map(f => f.identifier))
 
 // 标准功能点库
 const standardFuncs = ref([
+  { name: '工作模式', identifier: 'work_mode', dataType: '枚举型' },
+  { name: '常规录制', identifier: 'normal_record', dataType: '枚举型' },
+  { name: '事件录制', identifier: 'event_record', dataType: '枚举型' },
   { name: '夜视模式', identifier: 'night_vision', dataType: '枚举型' },
   { name: '灯光模式', identifier: 'light_mode', dataType: '枚举型' },
   { name: '白光灯', identifier: 'white_light', dataType: '布尔型' },
@@ -363,9 +513,27 @@ const handleEditFunc = (row) => {
 
 // 设置默认枚举值
 const setDefaultEnum = (index) => {
+  // 检查是否为禁用默认值的枚举项
+  if (editForm.enumValues[index].disabledDefault || !editForm.enumValues[index].enabled) return
+  
   editForm.enumValues.forEach((item, i) => {
     item.isDefault = i === index
   })
+}
+
+// 获取当前选中的默认枚举值
+const getSelectedEnumValue = () => {
+  const defaultItem = editForm.enumValues.find(item => item.isDefault)
+  return defaultItem?.value || null
+}
+
+// 枚举值启用/禁用变化
+const handleEnumEnableChange = (index) => {
+  const item = editForm.enumValues[index]
+  // 如果禁用，且当前是默认值，则清除默认值
+  if (!item.enabled && item.isDefault) {
+    item.isDefault = false
+  }
 }
 
 // 保存编辑
@@ -537,6 +705,22 @@ const handleDeleteFunc = (row) => {
   margin-top: 4px;
 }
 
+.enum-config-tip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--warning-light, #fffbe6);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-md);
+
+  .el-icon {
+    color: var(--warning-color, #faad14);
+  }
+}
+
 .enum-list {
   .enum-item {
     display: flex;
@@ -547,34 +731,25 @@ const handleDeleteFunc = (row) => {
     border-radius: var(--radius-sm);
     margin-bottom: var(--spacing-sm);
 
-    &:hover {
+    &:hover:not(.disabled) {
       background: var(--bg-hover);
     }
 
-    .default-radio {
-      width: 16px;
-      height: 16px;
-      border: 2px solid var(--border-color);
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: all 0.2s;
+    &.disabled {
+      opacity: 0.5;
 
-      &.active {
-        border-color: var(--primary-color);
-
-        &::after {
-          content: '';
-          width: 8px;
-          height: 8px;
-          background: var(--primary-color);
-          border-radius: 50%;
-        }
+      .el-input {
+        cursor: not-allowed;
       }
     }
   }
+}
+
+// 额外配置样式
+.extra-config {
+  padding: var(--spacing-md);
+  background: var(--bg-page);
+  border-radius: var(--radius-sm);
+  margin-top: var(--spacing-sm);
 }
 </style>

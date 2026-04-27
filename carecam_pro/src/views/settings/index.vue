@@ -102,6 +102,22 @@ const settingsItems = ref([
     action: 'ptz'
   },
   {
+    title: '工作模式',
+    desc: '低功耗、AOV、长电',
+    icon: 'flash',
+    iconColor: '#4CAF50',
+    bgColor: '#E8F5E9',
+    action: 'work_mode'
+  },
+  {
+    title: '录制模式',
+    desc: '常规录制、事件录制',
+    icon: 'video',
+    iconColor: '#2196F3',
+    bgColor: '#E3F2FD',
+    action: 'record_mode'
+  },
+  {
     title: '电池管理',
     desc: '电源设置',
     icon: 'battery-o',
@@ -136,6 +152,10 @@ const goBack = () => {
 const handleSetting = (item) => {
   if (item.action === 'battery') {
     router.push('/battery')
+  } else if (item.action === 'work_mode') {
+    router.push('/settings/work-mode')
+  } else if (item.action === 'record_mode') {
+    router.push('/settings/record-mode')
   }
 }
 

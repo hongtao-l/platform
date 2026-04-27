@@ -52,6 +52,18 @@ const routes = [
     meta: { title: '设备设置' }
   },
   {
+    path: '/settings/work-mode',
+    name: 'WorkMode',
+    component: () => import('@/views/settings/work-mode.vue'),
+    meta: { title: '工作模式' }
+  },
+  {
+    path: '/settings/record-mode',
+    name: 'RecordMode',
+    component: () => import('@/views/settings/record-mode.vue'),
+    meta: { title: '录制模式' }
+  },
+  {
     path: '/battery',
     name: 'Battery',
     component: () => import('@/views/battery/index.vue'),
