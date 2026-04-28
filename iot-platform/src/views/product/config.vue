@@ -20,21 +20,31 @@
 
       <el-table :data="funcList" stripe>
         <el-table-column type="index" label="序号" width="60" align="center" />
+        <el-table-column prop="module" label="所属模块" width="100">
+          <template #default="{ row }">
+            <el-tag type="info" size="small">{{ row.module }}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="name" label="功能名称" min-width="140">
           <template #default="{ row }">
             <span class="text-primary">{{ row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="identifier" label="功能标识" min-width="140">
+        <el-table-column prop="identifier" label="功能标识" min-width="160">
           <template #default="{ row }">
             <span class="text-muted">{{ row.identifier }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="dataType" label="数据类型" width="100">
           <template #default="{ row }">
-            <el-tag :type="row.dataType === '枚举型' ? '' : 'success'" size="small">
+            <el-tag :type="row.dataType === '枚举型' ? '' : row.dataType === '布尔型' ? 'warning' : 'success'" size="small">
               {{ row.dataType }}
             </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="remark" label="描述" min-width="180">
+          <template #default="{ row }">
+            <span class="text-muted">{{ row.remark || '-' }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="120">
@@ -139,6 +149,110 @@
           <el-input v-model="editForm.dataType" disabled />
           <div class="form-hint">根据标准功能定义，不可修改</div>
         </el-form-item>
+
+        <!-- 数值型配置 -->
+        <template v-if="editForm.dataType === '数值型'">
+          <el-divider content-position="left">数值配置</el-divider>
+          <div class="enum-config-tip">
+            <el-icon><InfoFilled /></el-icon>
+            取值范围、步长及默认值配置将影响APP的面板功能
+          </div>
+          <div class="number-config">
+            <el-form-item label="数值范围">
+              <div class="range-input-group">
+                <el-input-number
+                  v-model="editForm.numberConfig.minValue"
+                  placeholder="最小值"
+                  controls-position="right"
+                  style="width: 120px"
+                />
+                <span class="range-separator">-</span>
+                <el-input-number
+                  v-model="editForm.numberConfig.maxValue"
+                  placeholder="最大值"
+                  controls-position="right"
+                  style="width: 120px"
+                />
+              </div>
+            </el-form-item>
+            <el-row :gutter="16">
+              <el-col :span="12">
+                <el-form-item label="步长">
+                  <el-input-number
+                    v-model="editForm.numberConfig.step"
+                    :min="0.1"
+                    :precision="1"
+                    controls-position="right"
+                    placeholder="请输入步长"
+                    style="width: 100%"
+                  />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="单位">
+                  <el-input
+                    v-model="editForm.numberConfig.unit"
+                    placeholder="如：%、秒、帧等"
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-form-item label="默认值">
+              <el-input-number
+                v-model="editForm.numberConfig.defaultValue"
+                :min="editForm.numberConfig.minValue"
+                :max="editForm.numberConfig.maxValue"
+                :step="editForm.numberConfig.step"
+                controls-position="right"
+                placeholder="请输入默认值"
+                style="width: 100%"
+              />
+              <div class="form-hint">默认值需在取值范围内</div>
+            </el-form-item>
+          </div>
+        </template>
+
+        <!-- 布尔型配置 -->
+        <template v-if="editForm.dataType === '布尔型'">
+          <el-divider content-position="left">布尔配置</el-divider>
+          <div class="enum-config-tip">
+            <el-icon><InfoFilled /></el-icon>
+            默认值配置将影响APP的面板功能
+          </div>
+          <div class="bool-config">
+            <el-form-item label="默认值">
+              <div class="bool-list">
+                <div
+                  class="bool-item"
+                  :class="{ selected: editForm.boolConfig.defaultValue === true }"
+                  @click="editForm.boolConfig.defaultValue = true"
+                >
+                  <div class="bool-checkbox">
+                    <el-icon v-if="editForm.boolConfig.defaultValue === true">
+                      <Check />
+                    </el-icon>
+                  </div>
+                  <span class="bool-label">true</span>
+                  <span class="bool-desc">开启</span>
+                </div>
+                <div
+                  class="bool-item"
+                  :class="{ selected: editForm.boolConfig.defaultValue === false }"
+                  @click="editForm.boolConfig.defaultValue = false"
+                >
+                  <div class="bool-checkbox">
+                    <el-icon v-if="editForm.boolConfig.defaultValue === false">
+                      <Check />
+                    </el-icon>
+                  </div>
+                  <span class="bool-label">false</span>
+                  <span class="bool-desc">关闭</span>
+                </div>
+              </div>
+              <div class="form-hint">设置APP端该功能的默认状态</div>
+            </el-form-item>
+          </div>
+        </template>
 
         <!-- 枚举值配置 -->
         <template v-if="editForm.dataType === '枚举型'">
@@ -337,10 +451,12 @@ const productName = ref(route.query.name || '产品配置')
 
 // 功能点列表
 const funcList = ref([
+  // 工作模式模块
   {
     id: 1,
     name: '工作模式',
     identifier: 'work_mode',
+    module: '工作模式',
     dataType: '枚举型',
     enumValues: [
       { value: '0', label: '低功耗模式', isDefault: false, enabled: true },
@@ -348,36 +464,164 @@ const funcList = ref([
       { value: '2', label: '长电模式', isDefault: false, enabled: true, longPowerConfig: { powerThreshold: '' } },
       { value: '3', label: '自定义模式', isDefault: false, enabled: true, disabledDefault: true }
     ],
-    remark: ''
+    remark: '设备工作模式切换'
   },
+  {
+    id: 8,
+    name: 'AOV自动切换低功耗电量',
+    identifier: 'aov_auto_switch_power',
+    module: '工作模式',
+    dataType: '数值型',
+    numberConfig: {
+      minValue: 0,
+      maxValue: 100,
+      step: 1,
+      unit: '%',
+      defaultValue: 30
+    },
+    remark: 'AOV模式下自动切换到低功耗模式的电量阈值'
+  },
+  {
+    id: 9,
+    name: 'AOV模式拍照帧率',
+    identifier: 'aov_capture_frame_rate',
+    module: '工作模式',
+    dataType: '数值型',
+    numberConfig: {
+      minValue: 1,
+      maxValue: 10,
+      step: 1,
+      unit: '秒/帧',
+      defaultValue: 1
+    },
+    remark: 'AOV模式下的拍照帧率间隔'
+  },
+  {
+    id: 10,
+    name: '长电自动切换低功耗电量',
+    identifier: 'long_power_auto_switch_power',
+    module: '工作模式',
+    dataType: '数值型',
+    numberConfig: {
+      minValue: 0,
+      maxValue: 100,
+      step: 1,
+      unit: '%',
+      defaultValue: 20
+    },
+    remark: '长电模式下自动切换到低功耗模式的电量阈值'
+  },
+  // 录制模式模块
   {
     id: 2,
     name: '常规录制',
     identifier: 'normal_record',
+    module: '录制模式',
     dataType: '枚举型',
     enumValues: [
       { value: '0', label: '全天', isDefault: false, enabled: true },
       { value: '1', label: '自定义时段', isDefault: false, enabled: true },
       { value: '2', label: '关闭', isDefault: false, enabled: true }
     ],
-    remark: ''
+    remark: '常规录制模式设置'
   },
   {
     id: 3,
     name: '事件录制',
     identifier: 'event_record',
+    module: '录制模式',
+    dataType: '布尔型',
+    boolConfig: {
+      defaultValue: true
+    },
+    remark: '是否开启事件触发录制'
+  },
+  {
+    id: 5,
+    name: '录制媒体模式',
+    identifier: 'record_media_mode',
+    module: '录制模式',
     dataType: '枚举型',
     enumValues: [
-      { value: '0', label: '仅图片', isDefault: false, enabled: true, imageConfig: { captureInterval: '' } },
-      { value: '1', label: '仅视频', isDefault: false, enabled: true, videoConfig: { recordDuration: '', allowDeviceTerminate: false } },
-      { value: '2', label: '图片和视频', isDefault: false, enabled: true, bothConfig: { captureInterval: '', recordDuration: '', allowDeviceTerminate: false } }
+      { value: '0', label: '仅图片', isDefault: false, enabled: true },
+      { value: '1', label: '仅视频', isDefault: false, enabled: true },
+      { value: '2', label: '图片+视频', isDefault: false, enabled: true }
     ],
-    remark: ''
+    remark: '录制媒体类型选择'
   },
+  {
+    id: 6,
+    name: '录制清晰度',
+    identifier: 'record_resolution',
+    module: '录制模式',
+    dataType: '枚举型',
+    enumValues: [
+      { value: '0', label: '超清', isDefault: false, enabled: true },
+      { value: '1', label: '高清', isDefault: false, enabled: true },
+      { value: '2', label: '标清', isDefault: false, enabled: true }
+    ],
+    remark: '录制视频清晰度选择'
+  },
+  {
+    id: 7,
+    name: '抓拍清晰度',
+    identifier: 'capture_resolution',
+    module: '录制模式',
+    dataType: '枚举型',
+    enumValues: [
+      { value: '0', label: '小图', isDefault: false, enabled: true },
+      { value: '1', label: '中图', isDefault: false, enabled: true },
+      { value: '2', label: '大图', isDefault: false, enabled: true }
+    ],
+    remark: '抓拍图片清晰度选择'
+  },
+  {
+    id: 11,
+    name: '抓拍间隔',
+    identifier: 'capture_interval',
+    module: '录制模式',
+    dataType: '数值型',
+    numberConfig: {
+      minValue: 100,
+      maxValue: 10000,
+      step: 100,
+      unit: 'ms',
+      defaultValue: 500
+    },
+    remark: '事件触发时抓拍图片的时间间隔'
+  },
+  {
+    id: 12,
+    name: '事件录制时长',
+    identifier: 'event_record_duration',
+    module: '录制模式',
+    dataType: '数值型',
+    numberConfig: {
+      minValue: 5,
+      maxValue: 300,
+      step: 5,
+      unit: '秒',
+      defaultValue: 30
+    },
+    remark: '事件触发时录制的视频时长'
+  },
+  {
+    id: 13,
+    name: '自动结束事件录制开关',
+    identifier: 'auto_end_event_record',
+    module: '录制模式',
+    dataType: '布尔型',
+    boolConfig: {
+      defaultValue: true
+    },
+    remark: '是否允许设备自动结束事件录制'
+  },
+  // 灯光模式模块
   {
     id: 4,
     name: '灯光模式',
     identifier: 'light_mode',
+    module: '灯光模式',
     dataType: '枚举型',
     enumValues: [
       { value: '0', label: '全彩模式', isDefault: false, enabled: true },
@@ -395,19 +639,32 @@ const existingFuncIds = computed(() => funcList.value.map(f => f.identifier))
 
 // 标准功能点库
 const standardFuncs = ref([
-  { name: '工作模式', identifier: 'work_mode', dataType: '枚举型' },
-  { name: '常规录制', identifier: 'normal_record', dataType: '枚举型' },
-  { name: '事件录制', identifier: 'event_record', dataType: '枚举型' },
-  { name: '夜视模式', identifier: 'night_vision', dataType: '枚举型' },
-  { name: '灯光模式', identifier: 'light_mode', dataType: '枚举型' },
-  { name: '白光灯', identifier: 'white_light', dataType: '布尔型' },
-  { name: '红外灯', identifier: 'infrared_light', dataType: '布尔型' },
-  { name: '移动侦测', identifier: 'motion_detect', dataType: '布尔型' },
-  { name: '云存储', identifier: 'cloud_storage', dataType: '布尔型' },
-  { name: '双向语音', identifier: 'two_way_voice', dataType: '布尔型' },
-  { name: '消息推送', identifier: 'msg_push', dataType: '布尔型' },
-  { name: '人脸识别', identifier: 'face_recogn', dataType: '枚举型' },
-  { name: '声音检测', identifier: 'sound_detect', dataType: '布尔型' }
+  // 工作模式模块
+  { name: '工作模式', identifier: 'work_mode', module: '工作模式', dataType: '枚举型' },
+  { name: 'AOV自动切换低功耗电量', identifier: 'aov_auto_switch_power', module: '工作模式', dataType: '数值型' },
+  { name: 'AOV模式拍照帧率', identifier: 'aov_capture_frame_rate', module: '工作模式', dataType: '数值型' },
+  { name: '长电自动切换低功耗电量', identifier: 'long_power_auto_switch_power', module: '工作模式', dataType: '数值型' },
+  // 录制模式模块
+  { name: '常规录制', identifier: 'normal_record', module: '录制模式', dataType: '枚举型' },
+  { name: '事件录制', identifier: 'event_record', module: '录制模式', dataType: '布尔型' },
+  { name: '录制媒体模式', identifier: 'record_media_mode', module: '录制模式', dataType: '枚举型' },
+  { name: '录制清晰度', identifier: 'record_resolution', module: '录制模式', dataType: '枚举型' },
+  { name: '抓拍清晰度', identifier: 'capture_resolution', module: '录制模式', dataType: '枚举型' },
+  { name: '抓拍间隔', identifier: 'capture_interval', module: '录制模式', dataType: '数值型' },
+  { name: '事件录制时长', identifier: 'event_record_duration', module: '录制模式', dataType: '数值型' },
+  { name: '自动结束事件录制开关', identifier: 'auto_end_event_record', module: '录制模式', dataType: '布尔型' },
+  // 灯光模式模块
+  { name: '灯光模式', identifier: 'light_mode', module: '灯光模式', dataType: '枚举型' },
+  // 其他功能
+  { name: '夜视模式', identifier: 'night_vision', module: '其他', dataType: '枚举型' },
+  { name: '白光灯', identifier: 'white_light', module: '其他', dataType: '布尔型' },
+  { name: '红外灯', identifier: 'infrared_light', module: '其他', dataType: '布尔型' },
+  { name: '移动侦测', identifier: 'motion_detect', module: '其他', dataType: '布尔型' },
+  { name: '云存储', identifier: 'cloud_storage', module: '其他', dataType: '布尔型' },
+  { name: '双向语音', identifier: 'two_way_voice', module: '其他', dataType: '布尔型' },
+  { name: '消息推送', identifier: 'msg_push', module: '其他', dataType: '布尔型' },
+  { name: '人脸识别', identifier: 'face_recogn', module: '其他', dataType: '枚举型' },
+  { name: '声音检测', identifier: 'sound_detect', module: '其他', dataType: '布尔型' }
 ])
 
 // 添加功能点弹窗
@@ -432,8 +689,19 @@ const editFormRef = ref(null)
 const editForm = reactive({
   name: '',
   identifier: '',
+  module: '',
   dataType: '',
   enumValues: [],
+  numberConfig: {
+    minValue: 0,
+    maxValue: 100,
+    step: 1,
+    unit: '',
+    defaultValue: 0
+  },
+  boolConfig: {
+    defaultValue: true
+  },
   remark: ''
 })
 
@@ -489,8 +757,19 @@ const confirmAddFunc = () => {
         id: Date.now() + Math.random(),
         name: func.name,
         identifier: func.identifier,
+        module: func.module,
         dataType: func.dataType,
         enumValues: func.dataType === '枚举型' ? [] : undefined,
+        numberConfig: func.dataType === '数值型' ? {
+          minValue: 0,
+          maxValue: 100,
+          step: 1,
+          unit: '',
+          defaultValue: 0
+        } : undefined,
+        boolConfig: func.dataType === '布尔型' ? {
+          defaultValue: true
+        } : undefined,
         remark: ''
       })
     }
@@ -505,8 +784,19 @@ const handleEditFunc = (row) => {
   editingFunc.value = row
   editForm.name = row.name
   editForm.identifier = row.identifier
+  editForm.module = row.module
   editForm.dataType = row.dataType
   editForm.enumValues = row.enumValues ? JSON.parse(JSON.stringify(row.enumValues)) : []
+  editForm.numberConfig = row.numberConfig ? JSON.parse(JSON.stringify(row.numberConfig)) : {
+    minValue: 0,
+    maxValue: 100,
+    step: 1,
+    unit: '',
+    defaultValue: 0
+  }
+  editForm.boolConfig = row.boolConfig ? JSON.parse(JSON.stringify(row.boolConfig)) : {
+    defaultValue: true
+  }
   editForm.remark = row.remark || ''
   editDrawerVisible.value = true
 }
@@ -543,10 +833,26 @@ const saveEditFunc = () => {
     return
   }
 
+  // 数值型校验
+  if (editForm.dataType === '数值型') {
+    if (editForm.numberConfig.minValue >= editForm.numberConfig.maxValue) {
+      ElMessage.warning('最小值必须小于最大值')
+      return
+    }
+    if (editForm.numberConfig.defaultValue < editForm.numberConfig.minValue || 
+        editForm.numberConfig.defaultValue > editForm.numberConfig.maxValue) {
+      ElMessage.warning('默认值必须在取值范围内')
+      return
+    }
+  }
+
   const func = funcList.value.find(f => f.id === editingFunc.value.id)
   if (func) {
     func.name = editForm.name
+    func.module = editForm.module
     func.enumValues = editForm.enumValues
+    func.numberConfig = editForm.numberConfig
+    func.boolConfig = editForm.boolConfig
     func.remark = editForm.remark
   }
 
@@ -751,5 +1057,86 @@ const handleDeleteFunc = (row) => {
   background: var(--bg-page);
   border-radius: var(--radius-sm);
   margin-top: var(--spacing-sm);
+}
+
+// 数值型配置样式
+.number-config {
+  padding: var(--spacing-md);
+  background: var(--bg-page);
+  border-radius: var(--radius-sm);
+  margin-top: var(--spacing-sm);
+
+  .range-input-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+
+    .range-separator {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+  }
+}
+
+// 布尔型配置样式
+.bool-config {
+  padding: var(--spacing-md);
+  background: var(--bg-page);
+  border-radius: var(--radius-sm);
+  margin-top: var(--spacing-sm);
+
+  .bool-list {
+    display: flex;
+    gap: var(--spacing-md);
+
+    .bool-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      padding: var(--spacing-sm) var(--spacing-md);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        border-color: var(--primary-color);
+      }
+
+      &.selected {
+        border-color: var(--primary-color);
+        background: var(--primary-light);
+
+        .bool-checkbox {
+          background: var(--primary-color);
+          border-color: var(--primary-color);
+          color: white;
+        }
+      }
+
+      .bool-checkbox {
+        width: 18px;
+        height: 18px;
+        border: 2px solid var(--border-color);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        transition: all 0.2s;
+      }
+
+      .bool-label {
+        font-weight: 500;
+        color: var(--text-primary);
+        font-family: monospace;
+      }
+
+      .bool-desc {
+        color: var(--text-secondary);
+        font-size: var(--font-sm);
+      }
+    }
+  }
 }
 </style>
