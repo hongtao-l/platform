@@ -377,6 +377,18 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
       </div>
     </div>
 
+    <!-- 可绑定设备数 -->
+    <div id="device-bind-count" class="form-group">
+      <label class="form-label">可绑定设备数 <span class="required">*</span></label>
+      <input
+        type="number"
+        class="input"
+        placeholder="请输入可绑定设备数"
+        value="1"
+        min="1"
+      >
+    </div>
+
     <!-- 套餐定价 -->
     <span class="section-label">套餐定价 <span class="required">*</span></span>
     <div class="section-block">
@@ -1018,6 +1030,24 @@ function dragEnd(e) {
   });
   dragRow = null;
 }
+document.addEventListener('DOMContentLoaded', function() {
+    const deviceBindCount = document.getElementById('device-bind-count');
+    const appTypeRadios = document.querySelectorAll('input[name="config-pkg-direction"]');
+
+    // 初始化显示状态：默认选中「设备套餐」，显示模块
+    function updateVisibility() {
+      const isDevicePlan = document.querySelector('input[name="config-pkg-direction"][value="device"]').checked;
+      deviceBindCount.style.display = isDevicePlan ? 'block' : 'none';
+    }
+
+    // 监听单选框变化
+    appTypeRadios.forEach(radio => {
+      radio.addEventListener('change', updateVisibility);
+    });
+
+    // 初始化执行一次
+    updateVisibility();
+  });
 </script>
 </body>
 </html>
