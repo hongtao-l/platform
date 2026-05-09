@@ -54,6 +54,7 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
 .multi-select-option.selected{background:var(--primary-light);color:var(--primary);}
 .multi-select-placeholder{color:var(--gray-400);font-size:14px;}
 .service-detail{background:var(--white);border:1px solid var(--gray-200);border-radius:6px;padding:12px 16px;margin-top:8px;}
+.service-detail + .service-detail{margin-top:12px;}
 .service-detail-row{display:flex;justify-content:space-between;padding:4px 0;font-size:13px;}
 .service-detail-label{color:var(--gray-500);}
 .service-detail-value{color:var(--gray-700);font-weight:500;}
@@ -342,17 +343,15 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
         </div>
         <div class="form-group">
           <label class="form-label">套餐服务 <span class="required">*</span></label>
-          <select class="select" id="device-service-select" onchange="updateServiceDetail('device')">
-            <option value="">请选择套餐服务</option>
-            <option value="7day" selected>7天事件云存</option><option value="15day">15天事件云存</option>
-          </select>
+          <div class="multi-select" id="device-service-ms" data-options="7天事件云存,15天事件云存,30天事件云存,AI智能识别">
+            <div class="multi-select-trigger" onclick="focusMsInput(this)">
+              <span class="ms-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+              <input class="ms-input" placeholder="搜索并选择套餐服务" onclick="openMsDropdown(this)" oninput="filterMsOptions(this);updateDeviceServiceDetails()">
+            </div>
+            <div class="multi-select-dropdown" id="device-service-ms-dropdown"></div>
+          </div>
         </div>
-        <div id="device-service-detail" class="service-detail">
-          <div class="service-detail-row"><span class="service-detail-label">套餐服务名称</span><span class="service-detail-value">7天事件云存</span></div>
-          <div class="service-detail-row"><span class="service-detail-label">服务类型</span><span class="service-detail-value">事件云存</span></div>
-          <div class="service-detail-row"><span class="service-detail-label">可用设备上限</span><span class="service-detail-value">1台</span></div>
-          <div class="service-detail-row"><span class="service-detail-label">平台成本</span><span class="service-detail-value">￥8.00 / ＄1.20</span></div>
-        </div>
+        <div id="device-service-details"></div>
       </div>
       <div id="direction-user" style="display:none">
         <div class="form-group">
@@ -364,16 +363,15 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
         </div>
         <div class="form-group">
           <label class="form-label">套餐服务 <span class="required">*</span></label>
-          <select class="select" id="user-service-select" onchange="updateServiceDetail('user')">
-            <option value="">请选择套餐服务</option>
-            <option value="sms">短信套餐</option><option value="adfree">免广告-年</option>
-          </select>
+          <div class="multi-select" id="user-service-ms" data-options="短信套餐,免广告-年,专属客服,高级功能">
+            <div class="multi-select-trigger" onclick="focusMsInput(this)">
+              <span class="ms-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+              <input class="ms-input" placeholder="搜索并选择套餐服务" onclick="openMsDropdown(this)" oninput="filterMsOptions(this);updateUserServiceDetails()">
+            </div>
+            <div class="multi-select-dropdown" id="user-service-ms-dropdown"></div>
+          </div>
         </div>
-        <div id="user-service-detail" style="display:none" class="service-detail">
-          <div class="service-detail-row"><span class="service-detail-label">套餐服务名称</span><span class="service-detail-value" id="user-svc-name">—</span></div>
-          <div class="service-detail-row"><span class="service-detail-label">服务类型</span><span class="service-detail-value" id="user-svc-type">—</span></div>
-          <div class="service-detail-row"><span class="service-detail-label">平台成本</span><span class="service-detail-value" id="user-svc-cost">—</span></div>
-        </div>
+        <div id="user-service-details"></div>
       </div>
     </div>
 
@@ -824,44 +822,77 @@ function switchDirection(dir) {
 }
 
 /* ===== 套餐服务详情 ===== */
+var deviceServiceData = {
+  '7天事件云存': { name:'7天事件云存', type:'事件云存', limit:'1台', cost:'￥8.00 / ＄1.20' },
+  '15天事件云存': { name:'15天事件云存', type:'事件云存', limit:'1台', cost:'￥12.00 / ＄1.80' },
+  '30天事件云存': { name:'30天事件云存', type:'事件云存', limit:'1台', cost:'￥18.00 / ＄2.50' },
+  'AI智能识别': { name:'AI智能识别', type:'AI服务', limit:'不限', cost:'￥5.00 / ＄0.80' }
+};
+
+var userServiceData = {
+  '短信套餐': { name:'短信套餐', type:'短信套餐', cost:'￥8.00 / ＄1.20' },
+  '免广告-年': { name:'免广告-年', type:'免广告', cost:'￥15.00 / ＄2.50' },
+  '专属客服': { name:'专属客服', type:'VIP服务', cost:'￥20.00 / ＄3.00' },
+  '高级功能': { name:'高级功能', type:'功能解锁', cost:'￥10.00 / ＄1.50' }
+};
+
+function updateDeviceServiceDetails() {
+  var container = document.getElementById('device-service-details');
+  if (!container) return;
+  
+  var state = msState['device-service-ms'];
+  if (!state || !state.selected || state.selected.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+  
+  var html = '';
+  state.selected.forEach(function(serviceName, index) {
+    var data = deviceServiceData[serviceName];
+    if (!data) return;
+    
+    html += '<div class="service-detail" style="margin-top:' + (index === 0 ? '8px' : '12px') + '">';
+    html += '<div class="service-detail-row"><span class="service-detail-label">套餐服务名称</span><span class="service-detail-value">' + data.name + '</span></div>';
+    html += '<div class="service-detail-row"><span class="service-detail-label">服务类型</span><span class="service-detail-value">' + data.type + '</span></div>';
+    html += '<div class="service-detail-row"><span class="service-detail-label">可用设备上限</span><span class="service-detail-value">' + data.limit + '</span></div>';
+    html += '<div class="service-detail-row"><span class="service-detail-label">平台成本</span><span class="service-detail-value">' + data.cost + '</span></div>';
+    html += '</div>';
+  });
+  
+  container.innerHTML = html;
+}
+
+function updateUserServiceDetails() {
+  var container = document.getElementById('user-service-details');
+  if (!container) return;
+  
+  var state = msState['user-service-ms'];
+  if (!state || !state.selected || state.selected.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+  
+  var html = '';
+  state.selected.forEach(function(serviceName, index) {
+    var data = userServiceData[serviceName];
+    if (!data) return;
+    
+    html += '<div class="service-detail" style="margin-top:' + (index === 0 ? '8px' : '12px') + '">';
+    html += '<div class="service-detail-row"><span class="service-detail-label">套餐服务名称</span><span class="service-detail-value">' + data.name + '</span></div>';
+    html += '<div class="service-detail-row"><span class="service-detail-label">服务类型</span><span class="service-detail-value">' + data.type + '</span></div>';
+    html += '<div class="service-detail-row"><span class="service-detail-label">平台成本</span><span class="service-detail-value">' + data.cost + '</span></div>';
+    html += '</div>';
+  });
+  
+  container.innerHTML = html;
+}
+
+// 保留旧函数以保持兼容性
 function updateServiceDetail(type) {
   if (type === 'device') {
-    var sel = document.getElementById('device-service-select');
-    var detail = document.getElementById('device-service-detail');
-    if (!sel || !detail) return;
-    if (!sel.value) { detail.style.display = 'none'; return; }
-    detail.style.display = 'block';
-    var data = {
-      '7day': { name:'7天事件云存', type:'事件云存', limit:'1台', cost:'￥8.00 / ＄1.20' },
-      '15day': { name:'15天事件云存', type:'事件云存', limit:'1台', cost:'￥12.00 / ＄1.80' }
-    };
-    var d = data[sel.value];
-    if (d) {
-      var rows = detail.querySelectorAll('.service-detail-value');
-      if (rows[0]) rows[0].textContent = d.name;
-      if (rows[1]) rows[1].textContent = d.type;
-      if (rows[2]) rows[2].textContent = d.limit;
-      if (rows[3]) rows[3].textContent = d.cost;
-    }
+    updateDeviceServiceDetails();
   } else {
-    var sel2 = document.getElementById('user-service-select');
-    var detail2 = document.getElementById('user-service-detail');
-    if (!sel2 || !detail2) return;
-    if (!sel2.value) { detail2.style.display = 'none'; return; }
-    detail2.style.display = 'block';
-    var uData = {
-      'sms': { name:'短信套餐', type:'短信套餐', cost:'￥8.00 / ＄1.20' },
-      'adfree': { name:'免广告-年', type:'免广告', cost:'￥15.00 / ＄2.50' }
-    };
-    var ud = uData[sel2.value];
-    if (ud) {
-      var n = document.getElementById('user-svc-name');
-      var tp = document.getElementById('user-svc-type');
-      var c = document.getElementById('user-svc-cost');
-      if (n) n.textContent = ud.name;
-      if (tp) tp.textContent = ud.type;
-      if (c) c.textContent = ud.cost;
-    }
+    updateUserServiceDetails();
   }
 }
 
@@ -915,6 +946,13 @@ function toggleMsOption(msId, value) {
   else state.selected.splice(idx, 1);
   renderMsTags(msId);
   renderMsDropdown(msId);
+  
+  // 触发服务详情更新
+  if (msId === 'device-service-ms') {
+    updateDeviceServiceDetails();
+  } else if (msId === 'user-service-ms') {
+    updateUserServiceDetails();
+  }
 }
 function removeMsTag(msId, value) {
   var state = msState[msId];
