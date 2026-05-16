@@ -31,6 +31,22 @@ const routes = [
     }
   },
   {
+    path: '/abtest',
+    name: 'AbTest',
+    component: () => import('@/views/abtest/list.vue'),
+    meta: {
+      title: 'A/B Test'
+    }
+  },
+  {
+    path: '/abtest/:id',
+    name: 'AbTestDashboard',
+    component: () => import('@/views/abtest/dashboard.vue'),
+    meta: {
+      title: '实验数据看板'
+    }
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('@/views/error/404.vue'),

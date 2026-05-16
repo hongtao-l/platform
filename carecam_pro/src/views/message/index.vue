@@ -1,19 +1,19 @@
-<template>
+﻿<template>
   <div class="message-page">
     <!-- 搜索栏 -->
     <div class="search-wrap">
-      <div class="search-box">
+      <div class="search-box" @click="goToAiSearch">
         <van-icon name="search" size="17" color="#6B7280" />
         <input 
           type="text" 
           v-model="searchText" 
-          placeholder="AI 搜索 — 描述发生了什么..."
+          placeholder="AI 搜索 - 描述发生了什么..."
+          @click.stop="goToAiSearch"
         />
         <span class="ai-tag">AI</span>
         <van-icon name="audio" size="17" color="#1A73E8" />
       </div>
       
-      <!-- 日期和筛选 -->
       <div class="filter-row">
         <div class="filter-trigger" @click="showDatePicker = true">
           <van-icon name="calendar-o" size="14" color="#6B7280" />
@@ -22,16 +22,26 @@
         </div>
         <div class="filter-trigger" @click="showFilterPanel = true">
           <van-icon name="filter-o" size="14" color="#6B7280" />
-          <span>筛选</span>
-          <span v-if="filterCount > 0" class="filter-badge">{{ filterCount }}</span>
+          <span>{{ selectedDevice }}</span>
+          <van-icon name="arrow-down" size="12" color="#6B7280" />
         </div>
       </div>
     </div>
     
-    <!-- 消息列表 -->
+    <div class="msg-tabs-scroll">
+      <div class="msg-tabs">
+        <span
+          v-for="t in msgFilterTabs"
+          :key="t.key"
+          :class="['msg-tab', { active: activeMsgTab === t.key }]"
+          @click="activeMsgTab = t.key"
+        >{{ t.label }}</span>
+      </div>
+    </div>
+
     <div class="msg-list">
       <div 
-        v-for="msg in filteredMessages" 
+        v-for="msg in filteredMsgList" 
         :key="msg.id"
         class="msg-item"
         @click="goToMessageDetail(msg)"
@@ -41,26 +51,19 @@
           <div class="msg-type">{{ msg.type }}</div>
           <div class="msg-device">{{ msg.deviceName }}</div>
           <div class="msg-time">{{ msg.time }}</div>
-          <span :class="['msg-tag', `tag-${msg.tagType}`]">{{ msg.tag }}</span>
+          <span :class="['msg-tag', 'tag-' + msg.tagType]">{{ msg.tag }}</span>
         </div>
       </div>
     </div>
     
-    <!-- 底部营销提示 -->
-    <div class="bottom-tip">
-      <div class="tip-content" @click="goToStore">
-        <van-icon name="info-o" size="14" color="#1A73E8" />
-        <span>开通智能服务，畅享更多智能服务及精彩回看</span>
-        <van-icon name="arrow" size="12" color="#1A73E8" />
-      </div>
+    <div class="bottom-actions">
+      <button class="daily-btn" @click="goToDaily">
+        <van-icon name="notes-o" size="16" color="#fff" />
+        <span>消息太多？一键总结</span>
+      </button>
     </div>
     
-    <!-- 日期选择器 -->
-    <van-popup 
-      v-model:show="showDatePicker" 
-      position="bottom" 
-      round
-    >
+    <van-popup v-model:show="showDatePicker" position="bottom" round>
       <van-date-picker 
         v-model="selectedDate"
         title="选择日期"
@@ -69,50 +72,22 @@
       />
     </van-popup>
     
-    <!-- 筛选面板 -->
-    <van-popup 
-      v-model:show="showFilterPanel" 
-      position="bottom" 
-      round
-      :style="{ height: '50%' }"
-    >
+    <van-popup v-model:show="showFilterPanel" position="bottom" round :style="{ height: 'auto' }">
       <div class="filter-panel">
         <div class="panel-header">
-          <span>筛选</span>
+          <span>筛选设备</span>
           <van-icon name="cross" size="20" @click="showFilterPanel = false" />
         </div>
         
         <div class="filter-section">
-          <div class="section-title">设备</div>
           <div class="chips">
             <span 
               v-for="(device, index) in deviceOptions" 
               :key="index"
-              :class="['chip', { active: selectedDevices.includes(device) }]"
-              @click="toggleDevice(device)"
-            >
-              {{ device }}
-            </span>
+              :class="['chip', { active: selectedDevice === device }]"
+              @click="selectedDevice = device; showFilterPanel = false"
+            >{{ device }}</span>
           </div>
-        </div>
-        
-        <div class="filter-section">
-          <div class="section-title">事件类型</div>
-          <div class="chips">
-            <span 
-              v-for="(event, index) in eventOptions" 
-              :key="index"
-              :class="['chip', { active: selectedEvents.includes(event) }]"
-              @click="toggleEvent(event)"
-            >
-              {{ event }}
-            </span>
-          </div>
-        </div>
-        
-        <div class="panel-actions">
-          <van-button block plain @click="resetFilter">重置</van-button>
-          <van-button block type="primary" @click="applyFilter">应用</van-button>
         </div>
       </div>
     </van-popup>
@@ -124,371 +99,91 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-
-// 搜索
 const searchText = ref('')
-
-// 日期选择
 const showDatePicker = ref(false)
 const selectedDate = ref(['2024', '04', '20'])
 const dateLabel = ref('全部日期')
-
-// 筛选
 const showFilterPanel = ref(false)
 const deviceOptions = ['全部设备', 'Front Door', 'Backyard', 'Garage']
-const eventOptions = ['全部事件', '人形', '移动', '车辆', '声音', '包裹', '动物']
-const selectedDevices = ref(['全部设备'])
-const selectedEvents = ref(['全部事件'])
-const filterCount = ref(0)
+const selectedDevice = ref('全部设备')
 
-// 消息列表
 const messages = ref([
-  {
-    id: 1,
-    type: '检测到人形',
-    deviceName: 'Front Door',
-    time: '今天 09:38',
-    tag: '人形',
-    tagType: 'person',
-    bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)'
-  },
-  {
-    id: 2,
-    type: '检测到移动',
-    deviceName: 'Backyard',
-    time: '今天 09:20',
-    tag: '移动',
-    tagType: 'motion',
-    bgGradient: 'linear-gradient(135deg, #0d2e1a, #1a5c34)'
-  },
-  {
-    id: 3,
-    type: '检测到车辆',
-    deviceName: 'Front Door',
-    time: '今天 08:55',
-    tag: '车辆',
-    tagType: 'vehicle',
-    bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)'
-  },
-  {
-    id: 4,
-    type: '声音告警',
-    deviceName: 'Backyard',
-    time: '昨天 22:14',
-    tag: '声音',
-    tagType: 'sound',
-    bgGradient: 'linear-gradient(135deg, #0d2e1a, #1a5c34)'
-  },
-  {
-    id: 5,
-    type: '检测到人形',
-    deviceName: 'Front Door',
-    time: '昨天 20:02',
-    tag: '人形',
-    tagType: 'person',
-    bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)'
-  }
+  { id: 1, type: '奶奶出门散步', deviceName: 'Front Door', time: '今天 09:20', tag: '老人看护', tagType: 'elder', bgGradient: 'linear-gradient(135deg, #0d2e1a, #1a5c34)', isFocus: true },
+  { id: 2, type: '猫咪在客厅跑酷', deviceName: 'Front Door', time: '今天 09:38', tag: '宠物活动', tagType: 'pet', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: true },
+  { id: 3, type: '门口有人经过', deviceName: 'Front Door', time: '今天 08:55', tag: '人员经过', tagType: 'person', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: true },
+  { id: 4, type: '声音告警', deviceName: 'Backyard', time: '昨天 22:14', tag: '声音', tagType: 'sound', bgGradient: 'linear-gradient(135deg, #0d2e1a, #1a5c34)', isFocus: false },
+  { id: 5, type: '检测到车辆', deviceName: 'Front Door', time: '昨天 20:02', tag: '车辆', tagType: 'vehicle', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: false }
 ])
 
-// 筛选后的消息
-const filteredMessages = computed(() => {
-  return messages.value
+const msgFilterTabs = [
+  { key: 'all', label: '全部' },
+  { key: 'focus_elder', label: '老人看护' },
+  { key: 'focus_pet', label: '宠物活动' },
+  { key: 'focus_person', label: '人员经过' },
+  { key: 'other', label: '其他' }
+]
+const activeMsgTab = ref('all')
+
+const focusTagMap = { 'focus_elder': 'elder', 'focus_pet': 'pet', 'focus_person': 'person' }
+
+const filteredMsgList = computed(() => {
+  let list = messages.value
+  if (searchText.value.trim()) {
+    const kw = searchText.value.trim().toLowerCase()
+    list = list.filter(m => m.type.includes(kw) || m.deviceName.toLowerCase().includes(kw) || m.tag.includes(kw))
+  }
+  if (selectedDevice.value !== '全部设备') {
+    list = list.filter(m => m.deviceName === selectedDevice.value)
+  }
+  if (activeMsgTab.value === 'other') {
+    list = list.filter(m => !m.isFocus)
+  } else if (focusTagMap[activeMsgTab.value]) {
+    list = list.filter(m => m.isFocus && m.tagType === focusTagMap[activeMsgTab.value])
+  }
+  return list
 })
 
-// 日期确认
 const onDateConfirm = ({ selectedValues }) => {
-  dateLabel.value = `${selectedValues[1]}月${selectedValues[2]}日`
+  dateLabel.value = selectedValues[1] + '月' + selectedValues[2] + '日'
   showDatePicker.value = false
 }
 
-// 切换设备筛选
-const toggleDevice = (device) => {
-  if (device === '全部设备') {
-    selectedDevices.value = ['全部设备']
-  } else {
-    const index = selectedDevices.value.indexOf(device)
-    if (index > -1) {
-      selectedDevices.value.splice(index, 1)
-    } else {
-      selectedDevices.value = selectedDevices.value.filter(d => d !== '全部设备')
-      selectedDevices.value.push(device)
-    }
-  }
-}
-
-// 切换事件筛选
-const toggleEvent = (event) => {
-  if (event === '全部事件') {
-    selectedEvents.value = ['全部事件']
-  } else {
-    const index = selectedEvents.value.indexOf(event)
-    if (index > -1) {
-      selectedEvents.value.splice(index, 1)
-    } else {
-      selectedEvents.value = selectedEvents.value.filter(e => e !== '全部事件')
-      selectedEvents.value.push(event)
-    }
-  }
-}
-
-// 重置筛选
-const resetFilter = () => {
-  selectedDevices.value = ['全部设备']
-  selectedEvents.value = ['全部事件']
-  filterCount.value = 0
-}
-
-// 应用筛选
-const applyFilter = () => {
-  let count = 0
-  if (!selectedDevices.value.includes('全部设备')) {
-    count += selectedDevices.value.length
-  }
-  if (!selectedEvents.value.includes('全部事件')) {
-    count += selectedEvents.value.length
-  }
-  filterCount.value = count
-  showFilterPanel.value = false
-}
-
-// 跳转消息详情
+// 消息点击跳转日报事件详情
 const goToMessageDetail = (msg) => {
-  // 可以跳转到消息详情页
+  const name = msg.type
+  const msgs = [{
+    time: msg.time,
+    text: msg.type,
+    device: msg.deviceName,
+    bg: msg.bgGradient
+  }]
+  const listStr = encodeURIComponent(JSON.stringify(msgs))
+  router.push('/ai/daily-event?name=' + encodeURIComponent(name) + '&list=' + listStr + '&index=0')
 }
 
-// 跳转服务商城
-const goToStore = () => {
-  router.push('/store')
-}
+const goToAiSearch = () => { router.push('/ai/search') }
+const goToDaily = () => { router.push('/ai/daily') }
 </script>
 
 <style lang="scss" scoped>
-.message-page {
-  min-height: 100%;
-  background-color: $bg-page;
-  display: flex;
-  flex-direction: column;
-}
-
-.search-wrap {
-  background-color: $bg-color;
-  padding: 12px 16px;
-  border-bottom: 1px solid $border-color;
-  flex-shrink: 0;
-}
-
-.search-box {
-  background-color: $bg-page;
-  border-radius: $radius-md;
-  padding: 9px 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-  
-  input {
-    flex: 1;
-    border: none;
-    outline: none;
-    font-size: 14px;
-    color: $text-primary;
-    background-color: transparent;
-    
-    &::placeholder {
-      color: $text-secondary;
-    }
-  }
-}
-
-.ai-tag {
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-size: 10px;
-  font-weight: 700;
-  background: linear-gradient(135deg, #1A73E8, #9C27B0);
-  color: #fff;
-}
-
-.filter-row {
-  display: flex;
-  gap: 8px;
-}
-
-.filter-trigger {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: $radius-pill;
-  border: 1.5px solid $border-color;
-  background-color: $bg-page;
-  cursor: pointer;
-  
-  span {
-    font-size: 12px;
-    font-weight: 500;
-    color: $text-primary;
-  }
-  
-  .filter-badge {
-    background-color: $primary-color;
-    color: #fff;
-    border-radius: 10px;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 1px 6px;
-  }
-}
-
-.msg-list {
-  flex: 1;
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  overflow-y: auto;
-}
-
-.msg-item {
-  background-color: $bg-card;
-  border-radius: $radius-lg;
-  padding: 12px;
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  box-shadow: $shadow-card;
-}
-
-.msg-thumb {
-  width: 72px;
-  height: 54px;
-  border-radius: 10px;
-  flex-shrink: 0;
-}
-
-.msg-content {
-  flex: 1;
-}
-
-.msg-type {
-  font-size: 13px;
-  font-weight: 600;
-  color: $text-primary;
-}
-
-.msg-device {
-  font-size: 11px;
-  color: $text-secondary;
-  margin-top: 2px;
-}
-
-.msg-time {
-  font-size: 11px;
-  color: $text-secondary;
-  margin-top: 3px;
-}
-
-.msg-tag {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-size: 10px;
-  font-weight: 600;
-  margin-top: 4px;
-  
-  &.tag-person {
-    background-color: #DBEAFE;
-    color: #1D4ED8;
-  }
-  
-  &.tag-motion {
-    background-color: #FEF3C7;
-    color: #D97706;
-  }
-  
-  &.tag-vehicle {
-    background-color: #EDE9FE;
-    color: #6D28D9;
-  }
-  
-  &.tag-sound {
-    background-color: #D1FAE5;
-    color: #065F46;
-  }
-}
-
-.bottom-tip {
-  background-color: $bg-color;
-  border-top: 1px solid $border-color;
-  padding: 8px 16px;
-  flex-shrink: 0;
-  
-  .tip-content {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    
-    span {
-      flex: 1;
-      font-size: 11px;
-      color: $text-secondary;
-    }
-  }
-}
-
-.filter-panel {
-  padding: 16px;
-  
-  .panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-    
-    span {
-      font-size: 16px;
-      font-weight: 700;
-      color: $text-primary;
-    }
-  }
-  
-  .filter-section {
-    margin-bottom: 16px;
-    
-    .section-title {
-      font-size: 12px;
-      font-weight: 600;
-      color: $text-secondary;
-      margin-bottom: 8px;
-    }
-    
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    
-    .chip {
-      padding: 5px 12px;
-      border-radius: $radius-pill;
-      font-size: 12px;
-      font-weight: 500;
-      border: 1.5px solid $border-color;
-      color: $text-secondary;
-      background-color: $bg-page;
-      
-      &.active {
-        background-color: $primary-color;
-        color: #fff;
-        border-color: $primary-color;
-      }
-    }
-  }
-  
-  .panel-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-  }
-}
+.message-page { min-height: 100%; background-color: $bg-page; display: flex; flex-direction: column; }
+.search-wrap { background-color: $bg-color; padding: 12px 16px; border-bottom: 1px solid $border-color; flex-shrink: 0; }
+.search-box { background-color: $bg-page; border-radius: $radius-md; padding: 9px 14px; display: flex; align-items: center; gap: 10px; margin-bottom: 12px; input { flex: 1; border: none; outline: none; font-size: 14px; color: $text-primary; background-color: transparent; &::placeholder { color: $text-secondary; } } }
+.ai-tag { padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; background: linear-gradient(135deg, #1A73E8, #9C27B0); color: #fff; }
+.filter-row { display: flex; gap: 8px; }
+.filter-trigger { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: $radius-pill; border: 1.5px solid $border-color; background-color: $bg-page; cursor: pointer; span { font-size: 12px; font-weight: 500; color: $text-primary; white-space: nowrap; } }
+.msg-tabs-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-shrink: 0; &::-webkit-scrollbar { display: none; } }
+.msg-tabs { display: flex; gap: 8px; padding: 10px 16px; background: $bg-color; border-bottom: 1px solid $border-color; white-space: nowrap; }
+.msg-tab { padding: 4px 14px; border-radius: 14px; font-size: 12px; font-weight: 500; color: $text-secondary; background: $bg-page; border: 1px solid $border-color; cursor: pointer; &.active { background: $primary-color; color: #fff; border-color: $primary-color; } }
+.msg-list { flex: 1; padding: 12px 16px 70px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+.msg-item { background-color: $bg-card; border-radius: $radius-lg; padding: 12px; display: flex; gap: 12px; align-items: flex-start; box-shadow: $shadow-card; }
+.msg-thumb { width: 72px; height: 54px; border-radius: 10px; flex-shrink: 0; }
+.msg-content { flex: 1; }
+.msg-type { font-size: 13px; font-weight: 600; color: $text-primary; }
+.msg-device { font-size: 11px; color: $text-secondary; margin-top: 2px; }
+.msg-time { font-size: 11px; color: $text-secondary; margin-top: 3px; }
+.msg-tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; margin-top: 4px; &.tag-person { background-color: #DBEAFE; color: #1D4ED8; } &.tag-elder { background-color: #FEF3C7; color: #D97706; } &.tag-pet { background-color: #D1FAE5; color: #065F46; } &.tag-vehicle { background-color: #EDE9FE; color: #6D28D9; } &.tag-sound { background-color: #FCE4EC; color: #C62828; } }
+.bottom-actions { position: fixed; bottom: 70px; left: 0; right: 0; z-index: 10; background-color: #fff; border-top: 1px solid $border-color; padding: 10px 16px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 8px)); flex-shrink: 0; }
+.daily-btn { width: 100%; padding: 12px; border: none; border-radius: $radius-md; background: linear-gradient(135deg, #1A73E8, #9C27B0); color: #fff; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+.filter-panel { padding: 16px; .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; span { font-size: 16px; font-weight: 700; color: $text-primary; } } .filter-section { .chips { display: flex; flex-wrap: wrap; gap: 8px; } .chip { padding: 8px 16px; border-radius: $radius-pill; font-size: 13px; font-weight: 500; border: 1.5px solid $border-color; color: $text-secondary; background-color: $bg-page; cursor: pointer; &.active { background-color: $primary-color; color: #fff; border-color: $primary-color; } } } }
 </style>

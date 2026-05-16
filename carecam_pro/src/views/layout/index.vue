@@ -1,15 +1,15 @@
 <template>
   <div class="layout-container">
-    <!-- 状态栏 -->
-    <div class="status-bar">
-      <span class="time">{{ currentTime }}</span>
-      <div class="status-icons">
-        <van-icon name="wifi-o" size="15" />
-        <van-icon name="battery-o" size="15" />
-      </div>
-    </div>
+        <!-- 状态栏 -->
+        <div class="status-bar">
+          <span class="time">{{ currentTime }}</span>
+          <div class="status-icons">
+            <van-icon name="wifi-o" size="15" />
+            <van-icon name="battery-o" size="15" />
+          </div>
+        </div>
     
-    <!-- 页面内容 -->
+        <!-- 页面内容 -->
     <div class="page-content">
       <router-view v-slot="{ Component }">
         <keep-alive>
@@ -18,7 +18,7 @@
       </router-view>
     </div>
     
-    <!-- 底部导航 -->
+        <!-- 底部导航 -->
     <van-tabbar 
       v-if="showTabbar" 
       v-model="activeTab" 
@@ -30,17 +30,47 @@
       <van-tabbar-item to="/message" icon="bell" :badge="unreadCount > 0 ? unreadCount : ''">消息</van-tabbar-item>
       <van-tabbar-item to="/me" icon="user-o">我的</van-tabbar-item>
     </van-tabbar>
+
+    <!-- 全局状态切换按钮（调试用） -->
+    <div class="dev-toggle-btn" @click="showDevPanel = !showDevPanel">⚙</div>
+    
+    <transition name="slide-left">
+      <div class="dev-panel" v-show="showDevPanel">
+        <div class="dev-panel-header">
+          <span>状态切换</span>
+          <van-icon name="cross" size="16" @click="showDevPanel = false" />
+        </div>
+        <div v-for="s in devStatuses" :key="s.key" :class="['dev-option', { active: s.key === currentKey }]" @click="switchStatus(s.key)">{{ s.label }}</div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { aiStatus } from '@/store/devStatus'
 
 const route = useRoute()
 const activeTab = ref(0)
 const currentTime = ref('9:41')
 const unreadCount = ref(3)
+
+// ===== 全局状态切换（调试用） =====
+const showDevPanel = ref(false)
+const devStatuses = [
+  { key: 'not_activated', label: '未开通AI' },
+  { key: 'activated_basic', label: '已开通Basic' },
+  { key: 'activated_pro', label: '已开通Pro' }
+]
+const currentKey = computed(() => aiStatus.value)
+
+const switchStatus = (key) => {
+  aiStatus.value = key
+  showDevPanel.value = false
+}
+// =====
+
 
 // 是否显示底部导航
 const showTabbar = computed(() => {
@@ -118,6 +148,60 @@ onUnmounted(() => {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+/* 全局状态切换按钮（右侧浮动） */
+.dev-toggle-btn {
+  position: fixed;
+  right: 0;
+  top: 120px;
+  z-index: 9999;
+  width: 36px;
+  height: 36px;
+  border-radius: 18px 0 0 18px;
+  background: #1A73E8;
+  color: #fff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* 右侧滑出面板 */
+.dev-panel {
+  position: fixed;
+  right: 0;
+  top: 120px;
+  z-index: 9998;
+  background: #fff;
+  border-radius: 10px 0 0 10px;
+  padding: 12px 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  min-width: 170px;
+}
+.dev-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  span { font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 1px; }
+}
+.dev-option {
+  padding: 7px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 2px;
+  transition: background 0.15s;
+  &:hover { background: #F3F4F6; }
+  &.active { background: #1A73E8; color: #fff; }
+}
+
+.slide-left-enter-active, .slide-left-leave-active { transition: all 0.2s ease; }
+.slide-left-enter-from, .slide-left-leave-to { transform: translateX(30px); opacity: 0; }
 
 // 覆盖Vant Tabbar样式
 :deep(.van-tabbar) {

@@ -60,9 +60,15 @@
             <van-icon name="bell" size="18" />
             <span>消息</span>
           </div>
-          <div class="dev-action" @click.stop="goToPlayback(device)">
+                    <div class="dev-action" @click.stop="goToPlayback(device)">
             <van-icon name="play-circle-o" size="18" />
             <span>回放</span>
+          </div>
+          <div class="dev-action" @click.stop="goToAi(device)">
+            <van-icon name="chat-o" size="18" />
+            <span>
+              <span class="ai-tag">AI</span>
+            </span>
           </div>
           <div class="dev-action" @click.stop="goToStore(device)">
             <van-icon name="cloud-o" size="18" />
@@ -212,6 +218,10 @@ const goToPlayback = (device) => {
 
 const goToStore = (device) => {
   router.push('/store')
+}
+
+const goToAi = (device) => {
+  router.push('/ai')
 }
 
 const goToSettings = (device) => {
@@ -468,6 +478,15 @@ const goToMe = () => {
     background-color: $border-color;
     color: $text-secondary;
   }
+}
+
+.ai-tag {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #1A73E8, #9C27B0);
+  color: #fff;
 }
 
 .add-device-btn {

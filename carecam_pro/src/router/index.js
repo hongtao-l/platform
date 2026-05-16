@@ -87,6 +87,32 @@ const routes = [
     component: () => import('@/views/login/index.vue'),
     meta: { title: '登录' }
   },
+    // ===== 全能AI =====
+  {
+    path: '/ai',
+    name: 'AiHome',
+    component: () => import('@/views/ai/index.vue'),
+    meta: { title: '全能AI' }
+  },
+    {
+      path: '/ai/daily',
+      name: 'AiDaily',
+      component: () => import('@/views/ai/daily.vue'),
+      meta: { title: 'AI日报' }
+    },
+    {
+      path: '/ai/daily-event',
+      name: 'AiDailyEvent',
+      component: () => import('@/views/ai/daily-event.vue'),
+      meta: { title: '事件详情' }
+    },
+  {
+    path: '/ai/search',
+    name: 'AiSearch',
+    component: () => import('@/views/ai/search.vue'),
+    meta: { title: 'AI搜索' }
+  },
+  // ===== 404 =====
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
@@ -107,3 +133,4 @@ router.beforeEach((to, from, next) => {
 })
 
 export default router
+

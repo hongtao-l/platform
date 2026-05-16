@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生态平台 - A/B Test</title>
+<style>
+:root {
+  --primary:#2563EB;--primary-hover:#1D4ED8;--primary-light:#EFF6FF;
+  --gray-900:#0F172A;--gray-700:#334155;--gray-500:#64748B;
+  --gray-400:#94A3B8;--gray-200:#E2E8F0;--gray-100:#F1F5F9;
+  --gray-50:#F8FAFC;--white:#FFFFFF;
+  --success:#16A34A;--success-light:#F0FDF4;
+  --warning:#D97706;--warning-light:#FFFBEB;
+  --danger:#DC2626;--danger-light:#FEF2F2;
+  --info:#0284C7;--info-light:#F0F9FF;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;font-size:14px;color:var(--gray-700);background:var(--gray-50);display:flex;height:100vh;overflow:hidden;}
+
+/* ===== Sidebar ===== */
+.sidebar{width:240px;background:var(--white);border-right:1px solid var(--gray-200);display:flex;flex-direction:column;flex-shrink:0;height:100vh;}
+.sidebar-logo{height:64px;display:flex;align-items:center;padding:0 20px;border-bottom:1px solid var(--gray-200);gap:10px;}
+.logo-icon{width:32px;height:32px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-text{font-size:15px;font-weight:600;color:var(--gray-900);}
+.sidebar-nav{padding:12px 8px;flex:1;overflow-y:auto;}
+.nav-section-title{font-size:11px;font-weight:500;color:var(--gray-400);padding:8px 12px 4px;text-transform:uppercase;letter-spacing:.05em;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:0 12px;height:36px;border-radius:6px;cursor:pointer;color:var(--gray-500);font-size:14px;transition:all .15s;margin-bottom:2px;text-decoration:none;}
+.nav-item:hover{background:var(--gray-100);color:var(--gray-700);}
+.nav-item.active{background:var(--primary-light);color:var(--primary);font-weight:500;}
+
+/* ===== Main ===== */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.page-header{height:56px;background:var(--white);border-bottom:1px solid var(--gray-200);display:flex;align-items:center;padding:0 32px;flex-shrink:0;justify-content:space-between;}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--gray-500);}
+.breadcrumb .sep{color:var(--gray-400);}
+.breadcrumb .current{color:var(--gray-900);font-weight:500;}
+.content{flex:1;overflow-y:auto;padding:24px 32px;}
+
+/* ===== Card ===== */
+.card{background:var(--white);border:1px solid var(--gray-200);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:15px;font-weight:600;color:var(--gray-900);}
+
+/* ===== Table ===== */
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--gray-50);}
+th{padding:0 16px;height:40px;text-align:left;font-size:12px;font-weight:500;color:var(--gray-500);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--gray-200);white-space:nowrap;}
+td{padding:0 16px;height:44px;border-bottom:1px solid var(--gray-100);font-size:14px;color:var(--gray-700);}
+tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--gray-50);}
+td .url-text{max-width:260px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--gray-500);font-size:12px;font-family:monospace;}
+
+/* ===== Buttons ===== */
+.btn{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;}
+.btn-sm{height:30px;padding:0 10px;font-size:13px;}
+.btn-primary{background:var(--primary);color:white;}
+.btn-primary:hover{background:var(--primary-hover);}
+.btn-secondary{background:var(--white);color:var(--gray-700);border:1px solid var(--gray-200);}
+.btn-secondary:hover{background:var(--gray-50);}
+.btn-ghost{background:transparent;color:var(--primary);}
+.btn-ghost:hover{background:var(--primary-light);}
+.btn-danger-ghost{background:transparent;color:var(--danger);border:none;}
+.btn-danger-ghost:hover{background:var(--danger-light);}
+
+/* ===== Badge ===== */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:500;}
+.badge-success{background:var(--success-light);color:var(--success);}
+.badge-warning{background:var(--warning-light);color:var(--warning);}
+.badge-danger{background:var(--danger-light);color:var(--danger);}
+.badge-info{background:var(--info-light);color:var(--info);}
+.badge-neutral{background:var(--gray-100);color:var(--gray-500);}
+
+/* ===== Form ===== */
+.input{height:36px;border:1px solid var(--gray-200);border-radius:6px;padding:0 12px;font-size:14px;color:var(--gray-700);background:var(--white);outline:none;width:100%;}
+.input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.select{height:36px;border:1px solid var(--gray-200);border-radius:6px;padding:0 32px 0 12px;font-size:14px;color:var(--gray-700);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;outline:none;width:100%;cursor:pointer;appearance:none;}
+.select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:13px;font-weight:500;color:var(--gray-700);margin-bottom:6px;}
+.required{color:var(--danger);margin-left:2px;}
+.form-hint{font-size:12px;color:var(--gray-400);margin-top:4px;}
+
+/* ===== Drawer ===== */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;display:none;}
+.drawer-overlay.show{display:block;}
+.drawer{position:fixed;top:0;right:0;width:560px;height:100vh;background:var(--white);box-shadow:-20px 0 60px rgba(0,0,0,.15);z-index:101;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease;}
+.drawer.show{transform:translateX(0);}
+.drawer-header{height:56px;padding:0 24px;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.drawer-title{font-size:15px;font-weight:600;color:var(--gray-900);}
+.drawer-body{flex:1;overflow-y:auto;padding:24px;}
+.drawer-footer{height:56px;padding:0 24px;border-top:1px solid var(--gray-200);display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-shrink:0;}
+.close-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;color:var(--gray-500);border:none;background:transparent;}
+.close-btn:hover{background:var(--gray-100);}
+
+.section-label{font-size:11px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;margin-top:20px;display:block;}
+.section-label:first-child{margin-top:0;}
+
+/* ===== Slider ===== */
+.slider-wrap{display:flex;align-items:center;gap:12px;}
+.slider-wrap input[type=range]{flex:1;height:6px;-webkit-appearance:none;appearance:none;background:var(--gray-200);border-radius:3px;outline:none;}
+.slider-wrap input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--primary);cursor:pointer;}
+.slider-value{font-size:14px;font-weight:600;color:var(--primary);min-width:40px;text-align:right;}
+.slider-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--gray-400);margin-top:4px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+</style>
+</head>
+<body>
+
+<!-- ===== Sidebar ===== -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+    <span class="logo-text">生态平台</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">运营管理</div>
+    <a class="nav-item" href="ops-mall.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>商城位运营
+    </a>
+    <a class="nav-item" href="ops-recommend.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>推荐位运营
+    </a>
+    <a class="nav-item" href="ops-user-group.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>用户分群
+    </a>
+    <div class="nav-section-title">实验管理</div>
+    <a class="nav-item active">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>A/B Test
+    </a>
+  </nav>
+</aside>
+
+<!-- ===== Main ===== -->
+<div class="main">
+  <div class="page-header">
+    <div class="breadcrumb">
+      <span>运营管理</span><span class="sep">/</span>
+      <span class="current">A/B Test</span>
+    </div>
+    <button class="btn btn-primary" onclick="openDrawer('add')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+      创建实验
+    </button>
+  </div>
+
+  <div class="content">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">实验列表</span>
+      </div>
+      <table>
+        <thead>
+          <tr><th>实验名称</th><th>实验Key</th><th>目标分群</th><th>变体A/B URL</th><th>流量</th><th>状态</th><th>创建时间</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:500">全能AI落地页 v1 vs v2</td>
+            <td style="font-family:monospace;font-size:12px;color:var(--primary)">ai_landing_test_01</td>
+            <td>新注册用户</td>
+            <td>
+              <span class="url-text">/landing/ai_v1.html</span><br>
+              <span class="url-text">/landing/ai_v2.html</span>
+            </td>
+            <td>A 50% / B 50%</td>
+            <td><span class="badge badge-success">运行中</span></td>
+            <td style="color:var(--gray-500)">2026-05-14</td>
+            <td>
+              <button class="btn btn-sm btn-ghost" onclick="openDrawer('edit',0)">编辑</button>
+              <button class="btn btn-sm btn-secondary" onclick="pauseExperiment(this)">暂停</button>
+              <a class="btn btn-sm btn-ghost" href="abtest-dashboard.html">数据</a>
+              <button class="btn btn-sm btn-danger-ghost">删除</button>
+            </td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">Pro套餐文案测试</td>
+            <td style="font-family:monospace;font-size:12px;color:var(--primary)">ai_pro_copy_test</td>
+            <td>高价值用户</td>
+            <td>
+              <span class="url-text">/landing/ai_pro_v1.html</span><br>
+              <span class="url-text">/landing/ai_pro_v2.html</span>
+            </td>
+            <td>A 50% / B 50%</td>
+            <td><span class="badge badge-warning">已暂停</span></td>
+            <td style="color:var(--gray-500)">2026-05-10</td>
+            <td>
+              <button class="btn btn-sm btn-ghost" onclick="openDrawer('edit',1)">编辑</button>
+              <button class="btn btn-sm btn-primary" onclick="resumeExperiment(this)">恢复</button>
+              <a class="btn btn-sm btn-ghost" href="abtest-dashboard.html">数据</a>
+              <button class="btn btn-sm btn-danger-ghost">删除</button>
+            </td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">全量新用户落地页优化</td>
+            <td style="font-family:monospace;font-size:12px;color:var(--primary)">ai_all_new_test</td>
+            <td>全部用户</td>
+            <td>
+              <span class="url-text">/landing/ai_all_v1.html</span><br>
+              <span class="url-text">/landing/ai_all_v2.html</span>
+            </td>
+            <td>A 50% / B 50%</td>
+            <td><span class="badge badge-neutral">已结束</span></td>
+            <td style="color:var(--gray-500)">2026-04-20</td>
+            <td>
+              <button class="btn btn-sm btn-primary" onclick="applyWinner(this)">应用B(胜出)</button>
+              <a class="btn btn-sm btn-ghost" href="abtest-dashboard.html">报告</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Drawer: Create/Edit ===== -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" style="width:560px">
+  <div class="drawer-header">
+    <span class="drawer-title" id="drawerTitle">创建实验</span>
+    <button class="close-btn" onclick="closeDrawer()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <span class="section-label">基础信息</span>
+
+    <div class="form-group">
+      <label class="form-label">实验名称 <span class="required">*</span></label>
+      <input class="input" id="expName" placeholder="如：全能AI落地页v1 vs v2">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">实验Key <span class="required">*</span></label>
+      <input class="input" id="expKey" placeholder="如：ai_landing_test_01" style="font-family:monospace">
+      <span class="form-hint">系统唯一标识，创建后不可修改</span>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">目标分群 <span class="required">*</span></label>
+      <select class="select" id="expSegment">
+        <option value="all">全部用户</option>
+        <option value="new_user">新注册用户</option>
+        <option value="high_value">高价值用户</option>
+        <option value="active">活跃用户</option>
+        <option value="silent">沉默用户</option>
+      </select>
+    </div>
+
+    <span class="section-label">变体配置</span>
+
+    <div class="two-col">
+      <div class="form-group">
+        <label class="form-label">变体A URL <span class="required">*</span></label>
+        <input class="input" id="urlA" placeholder="https://xxx.com/landing/ai_v1.html" style="font-family:monospace;font-size:12px">
+      </div>
+      <div class="form-group">
+        <label class="form-label">变体B URL <span class="required">*</span></label>
+        <input class="input" id="urlB" placeholder="https://xxx.com/landing/ai_v2.html" style="font-family:monospace;font-size:12px">
+      </div>
+    </div>
+
+    <span class="section-label">流量分配</span>
+
+    <div class="form-group">
+      <label class="form-label">变体A流量占比</label>
+      <div class="slider-wrap">
+        <span style="font-size:13px;color:var(--gray-500)">B</span>
+        <input type="range" min="0" max="100" value="50" id="trafficA" oninput="updateTraffic(this.value)">
+        <span style="font-size:13px;color:var(--gray-500)">A</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;">
+        <span style="font-size:14px;font-weight:600;color:var(--primary)">A <span id="trafficAVal" style="font-size:18px">50</span>%</span>
+        <span style="font-size:14px;font-weight:600;color:var(--gray-500)">B <span id="trafficBVal" style="font-size:18px">50</span>%</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">备注</label>
+      <textarea class="input" id="expNote" rows="2" style="height:auto;padding:8px 12px;resize:none;font-family:inherit;width:100%" placeholder="实验目的和假设说明（选填）"></textarea>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="closeDrawer()">取消</button>
+    <button class="btn btn-primary" onclick="saveExperiment()">保存并启动</button>
+  </div>
+</div>
+
+<script>
+function openDrawer(mode, idx){
+  document.getElementById('drawerOverlay').classList.add('show')
+  document.getElementById('drawer').classList.add('show')
+  if(mode==='add'){
+    document.getElementById('drawerTitle').textContent='创建实验'
+    document.getElementById('expName').value=''
+    document.getElementById('expKey').value=''
+    document.getElementById('urlA').value=''
+    document.getElementById('urlB').value=''
+  }else{
+    document.getElementById('drawerTitle').textContent='编辑实验'
+    document.getElementById('expName').value='全能AI落地页 v1 vs v2'
+    document.getElementById('expKey').value='ai_landing_test_01'
+    document.getElementById('expKey').disabled=true
+    document.getElementById('urlA').value='https://xxx.com/landing/ai_v1.html'
+    document.getElementById('urlB').value='https://xxx.com/landing/ai_v2.html'
+  }
+}
+function closeDrawer(){
+  document.getElementById('drawerOverlay').classList.remove('show')
+  document.getElementById('drawer').classList.remove('show')
+  document.getElementById('expKey').disabled=false
+}
+function updateTraffic(v){
+  document.getElementById('trafficAVal').textContent=v
+  document.getElementById('trafficBVal').textContent=100-v
+}
+function saveExperiment(){
+  // show loading toast, then close
+  closeDrawer()
+  alert('实验已保存并启动')
+}
+function pauseExperiment(btn){
+  if(confirm('确定暂停该实验？暂停后所有用户将看到默认版本。')){
+    btn.textContent='已暂停';btn.disabled=true
+    btn.closest('tr').querySelector('.badge').className='badge badge-warning'
+    btn.closest('tr').querySelector('.badge').textContent='已暂停'
+  }
+}
+function resumeExperiment(btn){
+  btn.textContent='已恢复';btn.disabled=true
+  btn.closest('tr').querySelector('.badge').className='badge badge-success'
+  btn.closest('tr').querySelector('.badge').textContent='运行中'
+}
+function applyWinner(btn){
+  if(confirm('确定将变体B应用为默认配置？所有用户将立即看到该版本。')){
+    btn.textContent='已应用';btn.disabled=true
+    btn.closest('tr').querySelector('.badge').className='badge badge-info'
+    btn.closest('tr').querySelector('.badge').textContent='已应用'
+  }
+}
+</script>
+</body>
+</html>

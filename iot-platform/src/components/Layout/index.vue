@@ -14,18 +14,46 @@
 
       <!-- 菜单 -->
       <nav class="sidebar-menu">
-        <div
-          v-for="item in menuList"
-          :key="item.path"
-          class="menu-item"
-          :class="{ active: isActive(item.path) }"
-          @click="handleMenuClick(item)"
-        >
-          <el-icon class="menu-icon">
-            <component :is="item.icon" />
-          </el-icon>
-          <span v-show="!isCollapsed" class="menu-text">{{ item.title }}</span>
-        </div>
+        <template v-for="item in menuList" :key="item.path || item.title">
+          <!-- 父级菜单 -->
+          <div v-if="item.children" class="menu-parent" :class="{ collapsed: !expandedMenus[item.title] }">
+            <div class="menu-parent-title" @click="toggleParent(item.title)">
+              <el-icon class="menu-icon">
+                <component :is="item.icon" />
+              </el-icon>
+              <span v-show="!isCollapsed" class="menu-text">{{ item.title }}</span>
+              <el-icon v-show="!isCollapsed" class="menu-arrow">
+                <ArrowDown />
+              </el-icon>
+            </div>
+            <div class="menu-sub">
+              <div
+                v-for="child in item.children"
+                :key="child.path"
+                class="menu-item"
+                :class="{ active: isActive(child.path) }"
+                @click="handleMenuClick(child)"
+              >
+                <el-icon class="menu-icon" :size="16">
+                  <component :is="child.icon" />
+                </el-icon>
+                <span v-show="!isCollapsed" class="menu-text">{{ child.title }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- 普通菜单项 -->
+          <div
+            v-else
+            class="menu-item"
+            :class="{ active: isActive(item.path) }"
+            @click="handleMenuClick(item)"
+          >
+            <el-icon class="menu-icon">
+              <component :is="item.icon" />
+            </el-icon>
+            <span v-show="!isCollapsed" class="menu-text">{{ item.title }}</span>
+          </div>
+        </template>
       </nav>
 
       <!-- 折叠按钮 -->
@@ -93,7 +121,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
   House,
@@ -103,7 +131,12 @@ import {
   Bell,
   User,
   ArrowDown,
-  SwitchButton
+  SwitchButton,
+  DataAnalysis,
+  Operation,
+  ShoppingCart,
+  Star,
+  UserFilled
 } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -116,7 +149,7 @@ const isCollapsed = ref(false)
 // 用户信息
 const userInfo = ref({
   name: '管理员',
-  avatar: '' // 可设置头像URL
+  avatar: ''
 })
 
 // 菜单列表
@@ -130,18 +163,51 @@ const menuList = ref([
     title: '产品管理',
     path: '/product',
     icon: Box
+  },
+  {
+    title: '运营管理',
+    icon: Operation,
+    children: [
+      { title: '商城位运营', path: '/ops/mall', icon: ShoppingCart },
+      { title: '推荐位运营', path: '/ops/recommend', icon: Star },
+      { title: '用户分群', path: '/ops/usergroup', icon: UserFilled },
+      { title: 'A/B Test', path: '/abtest', icon: DataAnalysis }
+    ]
   }
 ])
 
+// 父级菜单展开状态
+const isChildActive = (children) => children.some(c => route.path.startsWith(c.path))
+
+const expandedMenus = reactive(
+  Object.fromEntries(
+    menuList.value
+      .filter(m => m.children)
+      .map(m => [m.title, isChildActive(m.children)])
+  )
+)
+
 // 当前菜单名称
 const currentMenu = computed(() => {
-  const item = menuList.value.find(m => route.path.startsWith(m.path))
-  return item?.title || ''
+  for (const m of menuList.value) {
+    if (m.children) {
+      const child = m.children.find(c => route.path.startsWith(c.path))
+      if (child) return child.title
+    } else if (route.path.startsWith(m.path)) {
+      return m.title
+    }
+  }
+  return ''
 })
 
 // 判断菜单是否激活
 const isActive = (path) => {
   return route.path.startsWith(path)
+}
+
+// 切换父菜单展开/收起
+const toggleParent = (title) => {
+  expandedMenus[title] = !expandedMenus[title]
 }
 
 // 点击菜单
@@ -211,6 +277,19 @@ const handleUserCommand = (command) => {
     .menu-item {
       justify-content: center;
       padding: 12px;
+    }
+
+    .menu-parent-title {
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .menu-arrow {
+      display: none;
+    }
+
+    .menu-sub .menu-item {
+      padding-left: 12px !important;
     }
 
     .menu-text {
@@ -302,6 +381,56 @@ const handleUserCommand = (command) => {
       font-size: 14px;
       margin-left: 12px;
       white-space: nowrap;
+    }
+  }
+
+  /* 父级菜单 */
+  .menu-parent {
+    .menu-parent-title {
+      display: flex;
+      align-items: center;
+      padding: 10px 16px;
+      margin: 4px 12px;
+      border-radius: 8px;
+      color: var(--text-regular);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+
+      &:hover {
+        background-color: var(--bg-hover);
+        color: var(--primary-color);
+      }
+
+      .menu-arrow {
+        margin-left: auto;
+        font-size: 12px;
+        transition: transform 0.25s ease;
+        color: var(--text-secondary);
+      }
+    }
+
+    .menu-sub {
+      overflow: hidden;
+      transition: max-height 0.25s ease;
+      max-height: 300px;
+
+      .menu-item {
+        padding-left: 48px;
+        font-size: 13px;
+        height: 36px;
+        margin: 2px 12px;
+      }
+    }
+
+    &.collapsed {
+      .menu-parent-title .menu-arrow {
+        transform: rotate(-90deg);
+      }
+
+      .menu-sub {
+        max-height: 0 !important;
+      }
     }
   }
 }
