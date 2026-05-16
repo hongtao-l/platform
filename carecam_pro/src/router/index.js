@@ -40,6 +40,18 @@ const routes = [
     meta: { title: '实时预览' }
   },
   {
+    path: '/liveview/wide-angle',
+    name: 'LiveViewWideAngle',
+    component: () => import('@/views/liveview/wide-angle.vue'),
+    meta: { title: '广角摄像机' }
+  },
+  {
+    path: '/liveview/fisheye',
+    name: 'LiveViewFisheye',
+    component: () => import('@/views/liveview/index.vue'),
+    meta: { title: '鱼眼摄像机' }
+  },
+  {
     path: '/playback',
     name: 'Playback',
     component: () => import('@/views/playback/index.vue'),

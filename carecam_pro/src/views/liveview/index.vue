@@ -16,12 +16,12 @@
           <van-icon name="setting-o" size="20" color="#fff" />
         </div>
       </div>
-      
+
       <!-- 视频占位 -->
       <div class="video-placeholder">
         <van-icon name="video" size="60" color="rgba(255,255,255,0.3)" />
       </div>
-      
+
       <!-- 底部控制 -->
       <div class="bottom-controls">
         <div class="control-item" @click="togglePlay">
@@ -37,8 +37,13 @@
           <van-icon name="phone-o" size="28" color="#fff" />
         </div>
       </div>
+
+      <!-- 悬浮设置按钮 —— 切换摄像机品类 -->
+      <div class="float-settings-btn" @click="showCameraTypes = true">
+        <van-icon name="wap-nav" size="20" color="#fff" />
+      </div>
     </div>
-    
+
     <!-- 云台控制 -->
     <div class="ptz-controls">
       <div class="ptz-title">云台控制</div>
@@ -65,6 +70,15 @@
         <span>{{ zoomLevel }}x</span>
       </div>
     </div>
+
+    <!-- 摄像机品类选择弹窗 -->
+    <van-action-sheet
+      v-model:show="showCameraTypes"
+      title="选择摄像机品类"
+      :actions="cameraTypes"
+      cancel-text="取消"
+      @select="onCameraTypeSelect"
+    />
   </div>
 </template>
 
@@ -79,6 +93,27 @@ const isPlaying = ref(true)
 
 // 变焦级别
 const zoomLevel = ref(1)
+
+// 摄像机品类选择
+const showCameraTypes = ref(false)
+const cameraTypes = [
+  { name: '标准摄像机', value: 'standard' },
+  { name: '广角摄像机', value: 'wide-angle' },
+  { name: '鱼眼摄像机', value: 'fisheye' }
+]
+
+const onCameraTypeSelect = (action) => {
+  showCameraTypes.value = false
+  const routeMap = {
+    'wide-angle': '/liveview/wide-angle',
+    'fisheye': '/liveview/fisheye',
+    'standard': '/liveview'
+  }
+  const target = routeMap[action.value]
+  if (target && target !== router.currentRoute.value.path) {
+    router.push(target)
+  }
+}
 
 // 返回
 const goBack = () => {
@@ -259,15 +294,36 @@ const ptzControl = (direction) => {
   display: flex;
   align-items: center;
   gap: 12px;
-  
+
   span {
     font-size: 12px;
     color: $text-secondary;
     min-width: 30px;
   }
-  
+
   .van-slider {
     flex: 1;
+  }
+}
+
+.float-settings-btn {
+  position: absolute;
+  right: 16px;
+  bottom: 100px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(26, 115, 232, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(26, 115, 232, 0.4);
+  cursor: pointer;
+  z-index: 15;
+  transition: all .15s;
+  &:active {
+    transform: scale(0.9);
   }
 }
 </style>

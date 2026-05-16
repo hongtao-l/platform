@@ -1,12 +1,27 @@
 <template>
   <div class="app-wrapper">
-    <div class="app-container">
+    <div class="app-container" :style="{ transform: `scale(${scale})` }">
       <router-view />
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+
+const vw = ref(window.innerWidth)
+const vh = ref(window.innerHeight)
+
+const PAD = 80
+const scale = computed(() => Math.min((vw.value - PAD) / 375, (vh.value - PAD) / 812, 1))
+
+const onResize = () => {
+  vw.value = window.innerWidth
+  vh.value = window.innerHeight
+}
+
+onMounted(() => { window.addEventListener('resize', onResize) })
+onUnmounted(() => { window.removeEventListener('resize', onResize) })
 </script>
 
 <style lang="scss">
@@ -31,35 +46,17 @@
   overflow: hidden;
   position: relative;
   border-radius: 40px;
-  box-shadow: 
+  box-shadow:
     0 0 0 12px #333,
     0 0 0 14px #1a1a1a,
     0 30px 80px rgba(0, 0, 0, 0.5);
   flex-shrink: 0;
-  
-  /* 缩放比例，让整个APP在浏览器中间显示 */
-  transform: scale(0.2);
   transform-origin: center center;
-  
-  /* 模拟手机顶部刘海 */
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 150px;
-    height: 30px;
-    background-color: #1a1a1a;
-    border-radius: 0 0 20px 20px;
-    z-index: 9999;
-  }
+
 }
 
 #app {
   width: 100%;
   height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 </style>

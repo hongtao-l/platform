@@ -47,6 +47,24 @@ const routes = [
     }
   },
   {
+    path: '/ops/mall',
+    name: 'OpsMall',
+    component: () => import('@/views/ops/mall.vue'),
+    meta: { title: '商城位运营' }
+  },
+  {
+    path: '/ops/recommend',
+    name: 'OpsRecommend',
+    component: () => import('@/views/ops/recommend.vue'),
+    meta: { title: '推荐位运营' }
+  },
+  {
+    path: '/ops/usergroup',
+    name: 'OpsUsergroup',
+    component: () => import('@/views/ops/usergroup.vue'),
+    meta: { title: '用户分群' }
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('@/views/error/404.vue'),
