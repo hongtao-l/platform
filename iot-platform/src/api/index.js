@@ -93,8 +93,49 @@ export const abtestApi = {
   }
 }
 
+// 套餐相关接口
+export const pkgApi = {
+  getList(params) {
+    return request.get('/pkg/list', params)
+  },
+  getDetail(id) {
+    return request.get(`/pkg/${id}`)
+  },
+  create(data) {
+    return request.post('/pkg', data)
+  },
+  update(id, data) {
+    return request.put(`/pkg/${id}`, data)
+  },
+  delete(id) {
+    return request.delete(`/pkg/${id}`)
+  },
+  getCategories() {
+    return request.get('/pkg/categories')
+  },
+  addCategory(data) {
+    return request.post('/pkg/category', data)
+  },
+  updateCategory(id, data) {
+    return request.put(`/pkg/category/${id}`, data)
+  },
+  deleteCategory(id) {
+    return request.delete(`/pkg/category/${id}`)
+  },
+  getTags(type) {
+    return request.get('/pkg/tags', { type })
+  },
+  addTag(data) {
+    return request.post('/pkg/tag', data)
+  },
+  deleteTag(id) {
+    return request.delete(`/pkg/tag/${id}`)
+  }
+}
+
 export default {
   userApi,
   productApi,
-  abtestApi
+  abtestApi,
+  pkgApi
 }

@@ -64,6 +64,9 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
 .price-prefix .prefix-label{height:36px;padding:0 10px;display:flex;align-items:center;font-size:13px;font-weight:500;color:var(--gray-500);background:var(--gray-50);border:1px solid var(--gray-200);border-right:none;border-radius:6px 0 0 6px;white-space:nowrap;}
 .price-prefix .input{border-radius:0 6px 6px 0;}
 .drawer{width:640px;}
+.free-tip{display:none;align-items:flex-start;gap:8px;padding:10px 14px;background:#FFF7E6;border:1px solid #FFD591;border-radius:6px;font-size:13px;color:#AD6800;line-height:1.6;margin-top:12px;}
+.free-tip-icon{flex-shrink:0;width:16px;height:16px;display:flex;align-items:center;justify-content:center;}
+.product-restrict-area{display:none;margin-top:12px;padding-top:12px;border-top:1px dashed var(--gray-200);}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:none;align-items:center;justify-content:center;}
 .modal-overlay.show{display:flex;}
 .modal{background:var(--white);border-radius:12px;width:680px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.15);}
@@ -387,6 +390,30 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
       >
     </div>
 
+    <!-- 限制产品购买 -->
+    <span class="section-label">限制产品购买</span>
+    <div class="section-block">
+      <div class="form-group" style="margin-bottom:0">
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="config-product-restrict" value="none" checked onchange="toggleProductRestrict()">不限制</label>
+          <label class="radio-item"><input type="radio" name="config-product-restrict" value="black" onchange="toggleProductRestrict()">黑名单</label>
+          <label class="radio-item"><input type="radio" name="config-product-restrict" value="white" onchange="toggleProductRestrict()">白名单</label>
+        </div>
+        <div class="product-restrict-area" id="product-restrict-area">
+          <div class="form-group">
+            <label class="form-label" id="product-restrict-label">黑名单产品</label>
+            <div class="multi-select" id="ms-product-restrict" data-options="PROD001:牵心PRO基础版,PROD002:牵心PRO高级版,PROD003:鹤梦之家标准版,PROD004:鹤梦之家旗舰版,PROD005:AI智能检测模块,PROD006:云存储7天包,PROD007:云存储30天包,PROD008:全能AI套装">
+              <div class="multi-select-trigger" onclick="focusMsInput(this)">
+                <span class="ms-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+                <input class="ms-input" placeholder="搜索并选择产品ID" onclick="openMsDropdown(this)" oninput="filterMsOptions(this)">
+              </div>
+              <div class="multi-select-dropdown" id="ms-product-restrict-dropdown"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 套餐定价 -->
     <span class="section-label">套餐定价 <span class="required">*</span></span>
     <div class="section-block">
@@ -400,7 +427,16 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
             <input type="checkbox" id="price-sub" checked onchange="togglePriceBlock('sub')" style="width:16px;height:16px;accent-color:var(--primary)">
             <span style="font-size:14px;color:var(--gray-700)">订阅制</span>
           </label>
+          <label class="checkbox-item" style="display:flex;align-items:center;gap:6px;cursor:pointer">
+            <input type="checkbox" id="price-free" onchange="toggleFreePackage()" style="width:16px;height:16px;accent-color:var(--warning)">
+            <span style="font-size:14px;color:#AD6800">免费套餐</span>
+          </label>
         </div>
+      </div>
+      <!-- 免费套餐提示 -->
+      <div class="free-tip" id="free-pkg-tip">
+        <span class="free-tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#AD6800" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></span>
+        <span>免费套餐用户无需付费，请仔细核对套餐内容和服务范围。</span>
       </div>
       <!-- 非订阅定价 -->
       <div id="sub-non" style="display:none;margin-top:16px;padding-top:16px;border-top:1px dashed var(--gray-200)">
@@ -900,12 +936,68 @@ function updateServiceDetail(type) {
 function togglePriceBlock(type) {
   var nonSubCb = document.getElementById('price-non-sub');
   var subCb = document.getElementById('price-sub');
+  var freeCb = document.getElementById('price-free');
   var sn = document.getElementById('sub-non');
   var sy = document.getElementById('sub-yes');
-  
+
+  // 如果选中非订阅或订阅制，取消免费套餐
+  if (freeCb && freeCb.checked && ((type === 'non-sub' && nonSubCb && nonSubCb.checked) || (type === 'sub' && subCb && subCb.checked))) {
+    freeCb.checked = false;
+    updateFreeTip();
+  }
+
   // 根据复选框状态显示/隐藏对应区块
   if (sn) sn.style.display = nonSubCb && nonSubCb.checked ? 'block' : 'none';
   if (sy) sy.style.display = subCb && subCb.checked ? 'block' : 'none';
+}
+
+/* ===== 免费套餐 ===== */
+function toggleFreePackage() {
+  var freeCb = document.getElementById('price-free');
+  var nonSubCb = document.getElementById('price-non-sub');
+  var subCb = document.getElementById('price-sub');
+  var sn = document.getElementById('sub-non');
+  var sy = document.getElementById('sub-yes');
+
+  if (freeCb && freeCb.checked) {
+    // 取消非订阅和订阅制
+    if (nonSubCb) nonSubCb.checked = false;
+    if (subCb) subCb.checked = false;
+    if (sn) sn.style.display = 'none';
+    if (sy) sy.style.display = 'none';
+  }
+  updateFreeTip();
+}
+
+function updateFreeTip() {
+  var freeCb = document.getElementById('price-free');
+  var tip = document.getElementById('free-pkg-tip');
+  if (tip) tip.style.display = (freeCb && freeCb.checked) ? 'flex' : 'none';
+}
+
+/* ===== 限制产品购买 ===== */
+function toggleProductRestrict() {
+  var area = document.getElementById('product-restrict-area');
+  var label = document.getElementById('product-restrict-label');
+  var black = document.querySelector('input[name="config-product-restrict"][value="black"]');
+  var white = document.querySelector('input[name="config-product-restrict"][value="white"]');
+
+  if (area) {
+    if ((black && black.checked) || (white && white.checked)) {
+      area.style.display = 'block';
+    } else {
+      area.style.display = 'none';
+      // 清空已选
+      var state = msState['ms-product-restrict'];
+      if (state) state.selected = [];
+      renderMsTags('ms-product-restrict');
+      renderMsDropdown('ms-product-restrict');
+    }
+  }
+  if (label) {
+    if (black && black.checked) label.textContent = '黑名单产品';
+    else if (white && white.checked) label.textContent = '白名单产品';
+  }
 }
 
 /* ===== 免费试用开关 ===== */

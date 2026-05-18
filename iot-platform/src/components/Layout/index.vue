@@ -136,7 +136,8 @@ import {
   Operation,
   ShoppingCart,
   Star,
-  UserFilled
+  UserFilled,
+  Present
 } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -163,6 +164,13 @@ const menuList = ref([
     title: '产品管理',
     path: '/product',
     icon: Box
+  },
+  {
+    title: '套餐管理',
+    icon: Present,
+    children: [
+      { title: '套餐配置', path: '/pkg', icon: Box }
+    ]
   },
   {
     title: '运营管理',

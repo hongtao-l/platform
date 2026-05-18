@@ -65,6 +65,18 @@ const routes = [
     meta: { title: '用户分群' }
   },
   {
+    path: '/pkg',
+    name: 'PkgList',
+    component: () => import('@/views/pkg/list.vue'),
+    meta: { title: '套餐管理' }
+  },
+  {
+    path: '/pkg/config',
+    name: 'PkgConfig',
+    component: () => import('@/views/pkg/config.vue'),
+    meta: { title: '套餐配置' }
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('@/views/error/404.vue'),

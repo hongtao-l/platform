@@ -1,120 +1,113 @@
 <template>
   <div class="page-container">
-    <!-- 顶部状态栏 -->
-    <div class="status-bar">
-      <div class="status-left">
-        <el-tag :type="statusType(experiment.status)" size="default">{{ statusLabel(experiment.status) }}</el-tag>
-        <span class="status-meta">目标分群：{{ experiment.segment }} | 流量：A {{ experiment.trafficA }}% / B {{ 100 - experiment.trafficA }}% | 已运行 {{ experiment.runDays }} 天</span>
+      <!-- 顶部状态栏 -->
+      <div class="status-bar">
+        <div class="status-bar-left">
+          <el-button size="small" @click="$router.push('/abtest')" :icon="ArrowLeft">返回</el-button>
+          <el-tag :type="statusType(experiment.status)" size="default">{{ statusLabel(experiment.status) }}</el-tag>
+          <span class="status-meta">{{ experiment.name }} | 目标分群：{{ experiment.segment }} | 流量：A {{ experiment.trafficA }}% / B {{ 100 - experiment.trafficA }}% | 已运行 {{ experiment.runDays }} 天</span>
+        </div>
+        <el-button v-if="experiment.status === 'running'" type="warning" plain size="default" @click="stopExperiment">停止实验</el-button>
       </div>
-      <el-button v-if="experiment.status === 'running'" type="warning" plain size="default" @click="stopExperiment">停止实验</el-button>
-    </div>
 
-    <!-- 指标卡片 -->
-    <div class="metric-grid">
-      <div class="metric-card" v-for="m in metrics" :key="m.label">
-        <div class="metric-label">{{ m.label }}</div>
-        <div class="metric-row">
-          <div class="metric-side">
-            <div class="metric-val val-a">{{ m.valA }}</div>
-            <div class="metric-sub">变体A</div>
+      <!-- 指标卡片 -->
+      <div class="metric-grid">
+        <div v-for="m in metrics" :key="m.label" class="metric-card">
+          <div class="metric-label">{{ m.label }}</div>
+          <div class="metric-row">
+            <div class="metric-side">
+              <div class="metric-val val-a">{{ m.valA }}</div>
+              <div class="metric-sub">变体A</div>
+            </div>
+            <div class="metric-vs">vs</div>
+            <div class="metric-side">
+              <div class="metric-val val-b">{{ m.valB }}</div>
+              <div class="metric-sub">变体B</div>
+            </div>
           </div>
-          <div class="metric-vs">vs</div>
-          <div class="metric-side">
-            <div class="metric-val val-b">{{ m.valB }}</div>
-            <div class="metric-sub">变体B</div>
+          <div :class="['metric-diff', m.diffUp ? 'up' : 'down']">
+            B {{ m.diffUp ? '+' : '' }}{{ m.diff }}
           </div>
-        </div>
-        <div :class="['metric-diff', m.diffUp ? 'up' : 'down']">
-          B {{ m.diffUp ? '+' : '' }}{{ m.diff }}
         </div>
       </div>
-    </div>
 
-    <!-- 转化漏斗 -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">转化漏斗对比</span>
-      </div>
-      <div class="card-body">
-        <div class="funnel-row">
-          <div :class="['funnel-col', { winner: experiment.winner === 'A' }]">
-            <div class="funnel-col-title">
-              <span class="dot" style="background: var(--text-secondary);" />
-              变体A
-              <el-tag v-if="experiment.winner === 'A'" type="success" size="small">胜出</el-tag>
-            </div>
-            <div class="funnel-step" v-for="(step, i) in funnelA" :key="i">
-              <span class="funnel-step-name">{{ step.name }}</span>
-              <span class="funnel-step-val">{{ step.val }}</span>
-            </div>
-            <div class="funnel-rate">转化率: <strong>{{ calcRate(funnelA) }}</strong></div>
-          </div>
-          <div :class="['funnel-col', { winner: experiment.winner === 'B' }]">
-            <div class="funnel-col-title">
-              <span class="dot" style="background: var(--primary-color);" />
-              变体B
-              <el-tag v-if="experiment.winner === 'B'" type="success" size="small">胜出</el-tag>
-            </div>
-            <div class="funnel-step" v-for="(step, i) in funnelB" :key="i">
-              <span class="funnel-step-name">{{ step.name }}</span>
-              <span class="funnel-step-val">{{ step.val }}</span>
-            </div>
-            <div class="funnel-rate">转化率: <strong>{{ calcRate(funnelB) }}</strong></div>
-          </div>
+      <!-- 转化漏斗对比 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">转化漏斗对比</span>
         </div>
+        <div class="card-body">
+          <div class="funnel-row">
+            <div :class="['funnel-col', { winner: experiment.winner === 'A' }]">
+              <div class="funnel-col-title">
+                <span class="dot dot-a" />
+                变体A
+                <el-tag v-if="experiment.winner === 'A'" type="success" size="small">胜出</el-tag>
+              </div>
+              <div v-for="(step, i) in funnelA" :key="i" class="funnel-step">
+                <span class="funnel-step-name">{{ step.name }}</span>
+                <span class="funnel-step-val">{{ step.val }}</span>
+              </div>
+              <div class="funnel-rate">转化率: <strong>{{ calcRate(funnelA) }}</strong></div>
+            </div>
+            <div :class="['funnel-col', { winner: experiment.winner === 'B' }]">
+              <div class="funnel-col-title">
+                <span class="dot dot-b" />
+                变体B
+                <el-tag v-if="experiment.winner === 'B'" type="success" size="small">胜出</el-tag>
+              </div>
+              <div v-for="(step, i) in funnelB" :key="i" class="funnel-step">
+                <span class="funnel-step-name">{{ step.name }}</span>
+                <span class="funnel-step-val">{{ step.val }}</span>
+              </div>
+              <div class="funnel-rate">转化率: <strong>{{ calcRate(funnelB) }}</strong></div>
+            </div>
+          </div>
 
-        <!-- 简单柱状图 -->
-        <div class="bar-chart">
-          <div class="bar-col" v-for="(f, fi) in funnelA" :key="'a'+fi">
-            <div class="bar-group">
-              <div
-                class="bar bar-a"
-                :style="{ height: (f.val / maxFunnel * 100) + '%' }"
-                :title="'A-' + f.name + ': ' + f.val"
-              ></div>
-              <div
-                class="bar bar-b"
-                :style="{ height: (funnelB[fi].val / maxFunnel * 100) + '%' }"
-                :title="'B-' + funnelB[fi].name + ': ' + funnelB[fi].val"
-              ></div>
+          <!-- 柱状图 -->
+          <div class="bar-chart">
+            <div v-for="(f, fi) in funnelA" :key="'a'+fi" class="bar-col">
+              <div class="bar-group">
+                <div class="bar bar-a" :style="{ height: (f.val / maxFunnel * 100) + '%' }" />
+                <div class="bar bar-b" :style="{ height: (funnelB[fi].val / maxFunnel * 100) + '%' }" />
+              </div>
+              <div class="bar-label">{{ f.nameShort }}</div>
             </div>
-            <div class="bar-label">{{ f.nameShort }}</div>
+          </div>
+          <div class="bar-legend">
+            <span><span class="legend-dot legend-dot-a" />变体A</span>
+            <span><span class="legend-dot legend-dot-b" />变体B</span>
           </div>
         </div>
-        <div class="bar-legend">
-          <span><span class="dot" style="background:var(--text-secondary);display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;"></span>变体A</span>
-          <span><span class="dot" style="background:var(--primary-color);display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;"></span>变体B</span>
-        </div>
       </div>
-    </div>
 
-    <!-- 胜出横幅 -->
-    <div v-if="experiment.winner" class="card" style="margin-bottom:0;">
-      <div class="card-header">
-        <span class="card-title">实验结果</span>
-        <span style="font-size:12px;color:var(--text-secondary);">数据更新时间：{{ lastUpdated }}</span>
-      </div>
-      <div class="card-body">
-        <div class="winner-banner">
-          <el-tag type="success" size="large" effect="dark">★ 变体{{ experiment.winner }} 胜出</el-tag>
-          <span class="winner-text">
-            转化率 <strong>{{ experiment.winner === 'B' ? '6.6%' : '4.2%' }}</strong>
-            vs {{ experiment.winner === 'B' ? 'A 4.2%' : 'B 6.6%' }}，提升
-            <strong style="color:var(--success-color)">+57.1%</strong>
-          </span>
-          <el-button type="success" style="margin-left:auto;" @click="applyWinner">应用胜出变体</el-button>
+      <!-- 胜出横幅 -->
+      <div v-if="experiment.winner" class="card">
+        <div class="card-header">
+          <span class="card-title">实验结果</span>
+          <span class="card-header-info">数据更新时间：{{ lastUpdated }}</span>
+        </div>
+        <div class="card-body">
+          <div class="winner-banner">
+            <el-tag type="success" size="large" effect="dark">★ 变体{{ experiment.winner }} 胜出</el-tag>
+            <span class="winner-text">
+              转化率 <strong>{{ experiment.winner === 'B' ? '6.6%' : '4.2%' }}</strong>
+              vs {{ experiment.winner === 'B' ? 'A 4.2%' : 'B 6.6%' }}，提升
+              <strong class="text-success">+57.1%</strong>
+            </span>
+            <el-button type="success" class="winner-btn" @click="applyWinner">应用胜出变体</el-button>
+          </div>
         </div>
       </div>
-    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
+import { ArrowLeft } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-const route = useRoute()
 const router = useRouter()
 
 const experiment = ref({
@@ -155,8 +148,7 @@ const maxFunnel = computed(() => Math.max(funnelA.value[0].val, funnelB.value[0]
 
 const calcRate = (funnel) => {
   if (!funnel.length) return '0%'
-  const rate = (funnel[funnel.length - 1].val / funnel[0].val * 100).toFixed(1)
-  return rate + '%'
+  return (funnel[funnel.length - 1].val / funnel[0].val * 100).toFixed(1) + '%'
 }
 
 const statusType = (s) => {
@@ -184,36 +176,27 @@ const applyWinner = () => {
     ElMessage.success(`变体${experiment.value.winner}已应用为默认配置`)
   }).catch(() => {})
 }
+
 </script>
 
 <style lang="scss" scoped>
-.page-container {
-  padding: var(--spacing-lg);
-}
-
+// ===== Status Bar =====
 .status-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: var(--spacing-lg);
   padding: 12px 16px;
-  background: var(--bg-card);
+  background: var(--bg-color);
   border: 1px solid var(--border-lighter);
   border-radius: var(--radius-md);
 }
 
-.status-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+.status-bar-left { display: flex; align-items: center; gap: 12px; }
 
-.status-meta {
-  font-size: 12px;
-  color: var(--text-secondary);
-}
+.status-meta { font-size: var(--font-xs); color: var(--text-secondary); }
 
-/* Metric cards */
+// ===== Metric Cards =====
 .metric-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -222,47 +205,31 @@ const applyWinner = () => {
 }
 
 .metric-card {
-  background: var(--bg-card);
+  background: var(--bg-color);
   border: 1px solid var(--border-lighter);
   border-radius: var(--radius-md);
   padding: 16px;
 }
 
 .metric-label {
-  font-size: 12px;
+  font-size: var(--font-xs);
   color: var(--text-placeholder);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-bottom: 10px;
 }
 
-.metric-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
+.metric-row { display: flex; justify-content: space-between; align-items: flex-end; }
+.metric-side { text-align: center; flex: 1; }
 
-.metric-side {
-  text-align: center;
-  flex: 1;
-}
-
-.metric-val {
-  font-size: 24px;
-  font-weight: 700;
-}
-
+.metric-val { font-size: 24px; font-weight: 700; }
 .val-a { color: var(--text-secondary); }
 .val-b { color: var(--primary-color); }
 
-.metric-sub {
-  font-size: 11px;
-  color: var(--text-placeholder);
-  margin-top: 2px;
-}
+.metric-sub { font-size: 11px; color: var(--text-placeholder); margin-top: 2px; }
 
 .metric-vs {
-  font-size: 14px;
+  font-size: var(--font-md);
   font-weight: 600;
   color: var(--text-placeholder);
   flex-shrink: 0;
@@ -272,16 +239,16 @@ const applyWinner = () => {
 .metric-diff {
   text-align: center;
   margin-top: 8px;
-  font-size: 12px;
+  font-size: var(--font-xs);
   font-weight: 600;
 
   &.up { color: var(--success-color); }
   &.down { color: var(--danger-color); }
 }
 
-/* Card */
+// ===== Card =====
 .card {
-  background: var(--bg-card);
+  background: var(--bg-color);
   border: 1px solid var(--border-lighter);
   border-radius: var(--radius-md);
   margin-bottom: var(--spacing-lg);
@@ -295,22 +262,12 @@ const applyWinner = () => {
   border-bottom: 1px solid var(--border-lighter);
 }
 
-.card-title {
-  font-size: var(--font-lg);
-  font-weight: 600;
-  color: var(--text-primary);
-}
+.card-title { font-size: var(--font-lg); font-weight: 600; color: var(--text-primary); }
+.card-header-info { font-size: var(--font-xs); color: var(--text-secondary); }
+.card-body { padding: 20px; }
 
-.card-body {
-  padding: 20px;
-}
-
-/* Funnel */
-.funnel-row {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 20px;
-}
+// ===== Funnel =====
+.funnel-row { display: flex; gap: 16px; margin-bottom: 20px; }
 
 .funnel-col {
   flex: 1;
@@ -325,20 +282,17 @@ const applyWinner = () => {
 }
 
 .funnel-col-title {
-  font-size: 14px;
+  font-size: var(--font-md);
   font-weight: 600;
   margin-bottom: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
-
-  .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
-  }
 }
+
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.dot-a { background: var(--text-secondary); }
+.dot-b { background: var(--primary-color); }
 
 .funnel-step {
   display: flex;
@@ -350,34 +304,20 @@ const applyWinner = () => {
   &:last-child { border-bottom: none; }
 }
 
-.funnel-step-name {
-  font-size: 13px;
-  color: var(--text-regular);
-}
-
-.funnel-step-val {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.funnel-col.winner .funnel-step-val {
-  color: var(--primary-color);
-}
+.funnel-step-name { font-size: var(--font-sm); color: var(--text-regular); }
+.funnel-step-val { font-size: var(--font-md); font-weight: 600; color: var(--text-primary); }
+.funnel-col.winner .funnel-step-val { color: var(--primary-color); }
 
 .funnel-rate {
-  font-size: 12px;
+  font-size: var(--font-xs);
   color: var(--text-secondary);
   margin-top: 8px;
 
   strong { color: var(--text-primary); }
 }
+.funnel-col.winner .funnel-rate { color: var(--primary-color); }
 
-.funnel-col.winner .funnel-rate {
-  color: var(--primary-color);
-}
-
-/* Bar chart */
+// ===== Bar Chart =====
 .bar-chart {
   display: flex;
   justify-content: center;
@@ -396,42 +336,21 @@ const applyWinner = () => {
   justify-content: flex-end;
 }
 
-.bar-group {
-  display: flex;
-  gap: 4px;
-  align-items: flex-end;
-  height: 100px;
-}
+.bar-group { display: flex; gap: 4px; align-items: flex-end; height: 100px; }
 
-.bar {
-  width: 32px;
-  border-radius: 4px 4px 0 0;
-  transition: height 0.3s;
-}
+.bar { width: 32px; border-radius: 4px 4px 0 0; transition: height 0.3s; }
 
-.bar-a {
-  background: linear-gradient(180deg, #bfbfbf, #8c8c8c);
-}
+.bar-a { background: linear-gradient(180deg, #bfbfbf, #8c8c8c); }
+.bar-b { background: linear-gradient(180deg, #69b1ff, #1677ff); }
 
-.bar-b {
-  background: linear-gradient(180deg, #69b1ff, #1677ff);
-}
+.bar-label { font-size: 11px; color: var(--text-secondary); margin-top: 6px; }
 
-.bar-label {
-  font-size: 11px;
-  color: var(--text-secondary);
-  margin-top: 6px;
-}
+.bar-legend { display: flex; justify-content: center; gap: 20px; margin-top: 8px; }
+.legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; }
+.legend-dot-a { background: var(--text-secondary); }
+.legend-dot-b { background: var(--primary-color); }
 
-.bar-legend {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-top: 8px;
-}
-
+// ===== Winner Banner =====
 .winner-banner {
   background: var(--success-bg);
   border: 1px solid #b7eb8f;
@@ -443,9 +362,15 @@ const applyWinner = () => {
 }
 
 .winner-text {
-  font-size: 14px;
+  font-size: var(--font-md);
   color: var(--text-regular);
 
   strong { color: var(--success-color); }
 }
+
+.winner-btn { margin-left: auto; }
+
+// ===== Utilities =====
+.text-success { color: var(--success-color); }
+.text-danger { color: var(--danger-color); }
 </style>

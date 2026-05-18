@@ -1,74 +1,68 @@
 <template>
   <div class="page-container">
-    <div class="card" style="margin-bottom: 0;">
-      <div class="card-header">
-        <span class="card-title">实验列表</span>
-        <el-button type="primary" @click="openDrawer('add')">
-          <el-icon><Plus /></el-icon>
-          创建实验
-        </el-button>
+    <div class="card">
+        <div class="card-header">
+          <span class="card-title">实验列表</span>
+          <el-button type="primary" @click="openDrawer('add')">
+            <el-icon><Plus /></el-icon>
+            创建实验
+          </el-button>
+        </div>
+        <el-table :data="experiments" stripe>
+          <el-table-column label="实验名称" min-width="180">
+            <template #default="{ row }">
+              <span class="text-medium">{{ row.name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="实验Key" width="180">
+            <template #default="{ row }">
+              <code class="key-tag">{{ row.key }}</code>
+            </template>
+          </el-table-column>
+          <!-- TODO: 目标分群和变体URL暂时隐藏 -->
+          <el-table-column label="流量" width="120">
+            <template #default="{ row }">
+              A {{ row.trafficA }}% / B {{ 100 - row.trafficA }}%
+            </template>
+          </el-table-column>
+          <el-table-column label="状态" width="100">
+            <template #default="{ row }">
+              <el-tag :type="statusType(row.status)" size="small">{{ statusLabel(row.status) }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="createdAt" label="创建时间" width="120" />
+          <el-table-column label="操作" width="300" fixed="right">
+            <template #default="{ row }">
+              <el-button
+                v-if="row.status === 'pending'"
+                size="small" text type="primary" @click="startExperiment(row)"
+              >启动</el-button>
+              <el-button
+                v-if="row.status !== 'ended'"
+                size="small" text type="primary" @click="openDrawer('edit', row)"
+              >编辑</el-button>
+              <el-button
+                v-if="row.status === 'running'"
+                size="small" text type="warning" @click="pauseExperiment(row)"
+              >暂停</el-button>
+              <el-button
+                v-if="row.status === 'paused'"
+                size="small" text type="success" @click="resumeExperiment(row)"
+              >恢复</el-button>
+              <el-button
+                size="small" text type="primary" @click="goDashboard(row)"
+              >数据</el-button>
+              <el-button
+                v-if="row.status === 'ended' && row.winner"
+                size="small" text type="success" @click="applyWinner(row)"
+              >应用{{ row.winner }}(胜出)</el-button>
+              <el-button
+                size="small" text type="danger" @click="deleteExperiment(row)"
+              >删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
-      <el-table :data="experiments" stripe>
-        <el-table-column prop="name" label="实验名称" min-width="180">
-          <template #default="{ row }">
-            <span style="font-weight: 500;">{{ row.name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="key" label="实验Key" width="180">
-          <template #default="{ row }">
-            <code style="font-size:12px;color:var(--primary-color);background:var(--primary-bg);padding:2px 6px;border-radius:4px;">{{ row.key }}</code>
-          </template>
-        </el-table-column>
-        <el-table-column prop="segment" label="目标分群" width="120" />
-        <el-table-column label="变体A/B URL" min-width="200">
-          <template #default="{ row }">
-            <div style="display:flex;flex-direction:column;gap:2px;">
-              <span class="text-ellipsis url-cell">A: {{ row.urlA }}</span>
-              <span class="text-ellipsis url-cell">B: {{ row.urlB }}</span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="流量" width="120">
-          <template #default="{ row }">
-            A {{ row.trafficA }}% / B {{ 100 - row.trafficA }}%
-          </template>
-        </el-table-column>
-        <el-table-column prop="status" label="状态" width="100">
-          <template #default="{ row }">
-            <el-tag :type="statusType(row.status)" size="small">{{ statusLabel(row.status) }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="createdAt" label="创建时间" width="120" />
-        <el-table-column label="操作" width="280" fixed="right">
-          <template #default="{ row }">
-            <el-button size="small" text type="primary" @click="openDrawer('edit', row)">编辑</el-button>
-            <el-button
-              v-if="row.status === 'running'"
-              size="small" text type="warning"
-              @click="pauseExperiment(row)"
-            >暂停</el-button>
-            <el-button
-              v-if="row.status === 'paused'"
-              size="small" text type="success"
-              @click="resumeExperiment(row)"
-            >恢复</el-button>
-            <el-button
-              size="small" text type="primary"
-              @click="goDashboard(row)"
-            >数据</el-button>
-            <el-button
-              v-if="row.status === 'ended' && row.winner"
-              size="small" text type="success"
-              @click="applyWinner(row)"
-            >应用{{ row.winner }}(胜出)</el-button>
-            <el-button
-              size="small" text type="danger"
-              @click="deleteExperiment(row)"
-            >删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
 
     <!-- 创建/编辑抽屉 -->
     <el-drawer
@@ -81,7 +75,6 @@
         ref="formRef"
         :model="form"
         :rules="rules"
-        label-width="100px"
         label-position="top"
       >
         <span class="section-label">基础信息</span>
@@ -95,48 +88,21 @@
             v-model="form.key"
             placeholder="如：ai_landing_test_01"
             :disabled="drawerMode === 'edit'"
-            style="font-family: monospace;"
+            class="mono-input"
           />
           <span class="form-hint">系统唯一标识，创建后不可修改</span>
         </el-form-item>
 
-        <el-form-item label="目标分群" prop="segment">
-          <el-select v-model="form.segment" style="width: 100%;">
-            <el-option label="全部用户" value="all" />
-            <el-option label="新注册用户" value="new_user" />
-            <el-option label="高价值用户" value="high_value" />
-            <el-option label="活跃用户" value="active" />
-            <el-option label="沉默用户" value="silent" />
-          </el-select>
-        </el-form-item>
-
-        <span class="section-label">变体配置</span>
-
-        <div class="two-col">
-          <el-form-item label="变体A URL" prop="urlA">
-            <el-input
-              v-model="form.urlA"
-              placeholder="https://xxx.com/landing/ai_v1.html"
-              style="font-family: monospace; font-size: 12px;"
-            />
-          </el-form-item>
-          <el-form-item label="变体B URL" prop="urlB">
-            <el-input
-              v-model="form.urlB"
-              placeholder="https://xxx.com/landing/ai_v2.html"
-              style="font-family: monospace; font-size: 12px;"
-            />
-          </el-form-item>
-        </div>
+        <!-- TODO: 目标分群和变体URL暂时隐藏，后续开放 -->
 
         <span class="section-label">流量分配</span>
 
         <el-form-item label="变体A流量占比">
-          <div class="slider-wrap">
-            <span class="slider-end">B</span>
-            <el-slider v-model="form.trafficA" :min="0" :max="100" style="flex:1;" />
-            <span class="slider-end">A</span>
+          <div class="slider-labels">
+            <span>B 端</span>
+            <span>A 端</span>
           </div>
+          <el-slider v-model="form.trafficA" :min="0" :max="100" />
           <div class="traffic-display">
             <span class="traffic-a">A <strong>{{ form.trafficA }}</strong>%</span>
             <span class="traffic-b">B <strong>{{ 100 - form.trafficA }}</strong>%</span>
@@ -207,6 +173,18 @@ const experiments = ref([
     status: 'ended',
     createdAt: '2026-04-20',
     winner: 'B'
+  },
+  {
+    id: 4,
+    name: '沉默用户触达实验',
+    key: 'ai_silent_test',
+    segment: '沉默用户',
+    urlA: 'https://xxx.com/landing/ai_silent_v1.html',
+    urlB: 'https://xxx.com/landing/ai_silent_v2.html',
+    trafficA: 50,
+    status: 'pending',
+    createdAt: '2026-05-16',
+    winner: null
   }
 ])
 
@@ -232,18 +210,16 @@ const rules = {
     { required: true, message: '请输入实验Key', trigger: 'blur' },
     { pattern: /^[a-z0-9_]+$/, message: '仅支持小写字母、数字、下划线', trigger: 'blur' }
   ],
-  segment: [{ required: true, message: '请选择目标分群', trigger: 'change' }],
-  urlA: [{ required: true, message: '请输入变体A URL', trigger: 'blur' }],
-  urlB: [{ required: true, message: '请输入变体B URL', trigger: 'blur' }]
+  // segment/urlA/urlB 校验暂时隐藏
 }
 
 const statusType = (s) => {
-  const map = { running: 'success', paused: 'warning', ended: 'info' }
+  const map = { running: 'success', paused: 'warning', ended: 'info', pending: '' }
   return map[s] || 'info'
 }
 
 const statusLabel = (s) => {
-  const map = { running: '运行中', paused: '已暂停', ended: '已结束' }
+  const map = { running: '运行中', paused: '已暂停', ended: '已结束', pending: '待启动' }
   return map[s] || s
 }
 
@@ -265,7 +241,7 @@ const openDrawer = (mode, row) => {
     editingId.value = row.id
     form.name = row.name
     form.key = row.key
-    form.segment = row.segment
+    form.segment = segmentValue(row.segment)
     form.urlA = row.urlA
     form.urlB = row.urlB
     form.trafficA = row.trafficA
@@ -279,7 +255,6 @@ const saveExperiment = async () => {
   if (!valid) return
 
   saving.value = true
-  // 模拟保存
   setTimeout(() => {
     if (drawerMode.value === 'add') {
       experiments.value.unshift({
@@ -317,6 +292,20 @@ const saveExperiment = async () => {
 const segmentLabel = (key) => {
   const map = { all: '全部用户', new_user: '新注册用户', high_value: '高价值用户', active: '活跃用户', silent: '沉默用户' }
   return map[key] || key
+}
+
+const segmentValue = (label) => {
+  const map = { '全部用户': 'all', '新注册用户': 'new_user', '高价值用户': 'high_value', '活跃用户': 'active', '沉默用户': 'silent' }
+  return map[label] || 'new_user'
+}
+
+const startExperiment = (row) => {
+  ElMessageBox.confirm('确定启动该实验？启动后用户将被分流到变体A/B。', '启动实验', {
+    confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning'
+  }).then(() => {
+    row.status = 'running'
+    ElMessage.success('实验已启动')
+  }).catch(() => {})
 }
 
 const pauseExperiment = (row) => {
@@ -357,32 +346,31 @@ const goDashboard = (row) => {
 </script>
 
 <style lang="scss" scoped>
-.page-container {
-  padding: var(--spacing-lg);
+// ===== Table =====
+.text-medium { font-weight: 500; color: var(--text-primary); }
+
+.key-tag {
+  font-size: var(--font-xs);
+  color: var(--primary-color);
+  background: var(--primary-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border-lighter);
-}
-
-.card-title {
-  font-size: var(--font-lg);
-  font-weight: 600;
-  color: var(--text-primary);
-}
+.url-stack { display: flex; flex-direction: column; gap: 2px; }
 
 .url-cell {
-  font-size: 12px;
+  font-size: var(--font-xs);
   color: var(--text-secondary);
   font-family: monospace;
   max-width: 220px;
   display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+// ===== Drawer Form =====
 .section-label {
   display: block;
   font-size: 11px;
@@ -393,51 +381,41 @@ const goDashboard = (row) => {
   margin-bottom: 8px;
   margin-top: 16px;
 
-  &:first-child {
-    margin-top: 0;
-  }
+  &:first-child { margin-top: 0; }
 }
 
-.two-col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
-.form-hint {
-  font-size: 12px;
-  color: var(--text-placeholder);
-  margin-top: 4px;
-  display: block;
-}
+.form-hint { font-size: var(--font-xs); color: var(--text-placeholder); margin-top: 4px; display: block; }
 
-.slider-wrap {
+// ===== Slider =====
+.slider-labels {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-
-  .slider-end {
-    font-size: 13px;
-    color: var(--text-secondary);
-    flex-shrink: 0;
-  }
+  justify-content: space-between;
+  font-size: var(--font-xs);
+  color: var(--text-placeholder);
+  margin-bottom: 4px;
 }
 
 .traffic-display {
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
-  font-size: 14px;
-
-  .traffic-a {
-    color: var(--primary-color);
-    strong { font-size: 18px; }
-  }
-
-  .traffic-b {
-    color: var(--text-secondary);
-    strong { font-size: 18px; }
-  }
+  margin-top: 4px;
+  font-size: var(--font-md);
 }
+
+.traffic-a {
+  color: var(--primary-color);
+  strong { font-size: 18px; }
+}
+
+.traffic-b {
+  color: var(--text-secondary);
+  strong { font-size: 18px; }
+}
+
+// ===== Utilities =====
+.w-full { width: 100%; }
+.mono-input :deep(.el-input__inner) { font-family: monospace; }
+.mono-input-sm :deep(.el-input__inner) { font-family: monospace; font-size: 12px; }
 </style>

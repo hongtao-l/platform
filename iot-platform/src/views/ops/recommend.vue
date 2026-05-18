@@ -186,14 +186,28 @@
     <!-- Drawer: Add/Edit Strategy (3-step wizard) -->
     <el-drawer v-model="strategyDrawerVisible" :title="strategyDrawerTitle" size="720px">
       <div class="step-bar">
-        <div v-for="s in 3" :key="s" class="step-item" :class="{ active: strategyStep >= s, current: strategyStep === s }" @click="strategyStep = s">
+        <div class="step-item" :class="{ active: strategyStep >= 1, current: strategyStep === 1 }" @click="strategyStep = 1">
           <span class="step-num">
-            <svg v-if="strategyStep > s" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
-            <template v-else>{{ s }}</template>
+            <svg v-if="strategyStep > 1" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+            <template v-else>1</template>
           </span>
-          <span class="step-label">{{ stepLabels[s-1] }}</span>
+          <span class="step-label">{{ stepLabels[0] }}</span>
         </div>
-        <div class="step-line"><div class="step-line-fill" :style="{ width: strategyStep > 1 ? (strategyStep > 2 ? '100%' : '50%') : '0' }"></div></div>
+        <div class="step-line"><div class="step-line-fill" :style="{ width: strategyStep >= 2 ? '100%' : '0' }"></div></div>
+        <div class="step-item" :class="{ active: strategyStep >= 2, current: strategyStep === 2 }" @click="strategyStep = 2">
+          <span class="step-num">
+            <svg v-if="strategyStep > 2" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+            <template v-else>2</template>
+          </span>
+          <span class="step-label">{{ stepLabels[1] }}</span>
+        </div>
+        <div class="step-line"><div class="step-line-fill" :style="{ width: strategyStep >= 3 ? '100%' : '0' }"></div></div>
+        <div class="step-item" :class="{ active: strategyStep >= 3, current: strategyStep === 3 }" @click="strategyStep = 3">
+          <span class="step-num">
+            <template>3</template>
+          </span>
+          <span class="step-label">{{ stepLabels[2] }}</span>
+        </div>
       </div>
 
       <div v-show="strategyStep === 1" class="step-content">

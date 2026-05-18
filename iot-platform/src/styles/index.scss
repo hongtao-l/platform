@@ -693,6 +693,180 @@ body {
   color: var(--primary-color) !important;
 }
 
+// ===== 套餐配置 =====
+.section-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-placeholder, #9CA3AF);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  margin-top: 16px;
+
+  &:first-child { margin-top: 0; }
+}
+
+.section-block {
+  background: var(--bg-page, #F5F7FA);
+  border: 1px solid var(--border-lighter, #F0F0F0);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.form-hint {
+  font-size: var(--font-xs, 12px);
+  color: var(--text-placeholder, #9CA3AF);
+  margin-top: 4px;
+  display: block;
+}
+
+// 价格输入行
+.price-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+// 货币前缀输入框
+.price-prefix {
+  display: flex;
+  align-items: center;
+
+  .prefix-label {
+    height: 36px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary, #666);
+    background: var(--bg-page, #F5F7FA);
+    border: 1px solid var(--border-color, #D9D9D9);
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+    white-space: nowrap;
+  }
+
+  .input, .el-input {
+    border-radius: 0 6px 6px 0;
+  }
+}
+
+// 免费套餐提示
+.free-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #FFF7E6;
+  border: 1px solid #FFD591;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #AD6800;
+  line-height: 1.6;
+  margin-top: 12px;
+}
+
+// 多语言图标
+.i18n-icon {
+  color: var(--primary-color);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+// 服务详情卡片
+.service-detail {
+  background: var(--bg-card, #FFFFFF);
+  border: 1px solid var(--border-lighter, #F0F0F0);
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-top: 8px;
+}
+
+.service-detail + .service-detail {
+  margin-top: 12px;
+}
+
+.service-detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.service-detail-label {
+  color: var(--text-secondary, #666);
+}
+
+.service-detail-value {
+  color: var(--text-primary, #333);
+  font-weight: 500;
+}
+
+// 产品限制区域
+.product-restrict-area {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-color, #D9D9D9);
+}
+
+// 内购Key配置项
+.iap-app-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 12px 16px;
+  background: var(--bg-card, #FFFFFF);
+  border: 1px solid var(--border-lighter, #F0F0F0);
+  border-radius: 6px;
+
+  .iap-app-info {
+    flex: 1;
+
+    .iap-app-name {
+      font-weight: 500;
+      color: var(--text-primary, #333);
+      font-size: 13px;
+    }
+
+    .iap-app-id {
+      font-size: 11px;
+      color: var(--text-placeholder, #9CA3AF);
+      margin-top: 2px;
+    }
+  }
+
+  .iap-keys {
+    display: flex;
+    gap: 8px;
+    flex: 2;
+  }
+}
+
+// 标签管理链接行
+.ms-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.ms-manage-link {
+  font-size: 12px;
+  color: var(--primary-color);
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
 // 分割线
 .el-divider {
   --el-border-color: var(--border-lighter);
@@ -702,3 +876,4 @@ body {
   background-color: var(--bg-card);
   color: var(--text-secondary);
 }
+

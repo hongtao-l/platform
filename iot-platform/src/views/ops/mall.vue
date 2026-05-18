@@ -134,14 +134,20 @@
     <!-- Drawer: Add Strategy (2-step) -->
     <el-drawer v-model="addDrawerVisible" title="添加策略" size="720px">
       <div class="step-bar">
-        <div v-for="s in 2" :key="s" class="step-item" :class="{ active: addStep >= s, current: addStep === s }" @click="addStep = s">
+        <div class="step-item" :class="{ active: addStep >= 1, current: addStep === 1 }" @click="addStep = 1">
           <span class="step-num">
-            <svg v-if="addStep > s" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
-            <template v-else>{{ s }}</template>
+            <svg v-if="addStep > 1" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+            <template v-else>1</template>
           </span>
-          <span class="step-label">{{ ['基础信息', '投放配置'][s-1] }}</span>
+          <span class="step-label">基础信息</span>
         </div>
-        <div class="step-line"><div class="step-line-fill" :style="{ width: addStep > 1 ? '100%' : '0' }"></div></div>
+        <div class="step-line"><div class="step-line-fill" :style="{ width: addStep >= 2 ? '100%' : '0' }"></div></div>
+        <div class="step-item" :class="{ active: addStep >= 2, current: addStep === 2 }" @click="addStep = 2">
+          <span class="step-num">
+            <template>2</template>
+          </span>
+          <span class="step-label">投放配置</span>
+        </div>
       </div>
 
       <div v-show="addStep === 1" class="step-content">
@@ -192,14 +198,20 @@
     <!-- Drawer: Edit Strategy (2-step) -->
     <el-drawer v-model="editDrawerVisible" title="编辑策略" size="720px">
       <div class="step-bar">
-        <div v-for="s in 2" :key="s" class="step-item" :class="{ active: editStep >= s, current: editStep === s }" @click="editStep = s">
+        <div class="step-item" :class="{ active: editStep >= 1, current: editStep === 1 }" @click="editStep = 1">
           <span class="step-num">
-            <svg v-if="editStep > s" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
-            <template v-else>{{ s }}</template>
+            <svg v-if="editStep > 1" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+            <template v-else>1</template>
           </span>
-          <span class="step-label">{{ ['基础信息', '投放配置'][s-1] }}</span>
+          <span class="step-label">基础信息</span>
         </div>
-        <div class="step-line"><div class="step-line-fill" :style="{ width: editStep > 1 ? '100%' : '0' }"></div></div>
+        <div class="step-line"><div class="step-line-fill" :style="{ width: editStep >= 2 ? '100%' : '0' }"></div></div>
+        <div class="step-item" :class="{ active: editStep >= 2, current: editStep === 2 }" @click="editStep = 2">
+          <span class="step-num">
+            <template>2</template>
+          </span>
+          <span class="step-label">投放配置</span>
+        </div>
       </div>
 
       <div v-show="editStep === 1" class="step-content">
