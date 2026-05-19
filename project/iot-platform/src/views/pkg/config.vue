@@ -19,13 +19,6 @@
         </div>
       </el-form-item>
 
-      <el-form-item label="国内落地页URL">
-        <el-input v-model="form.lpUrlCn" placeholder="请输入国内落地页URL" />
-      </el-form-item>
-      <el-form-item label="海外落地页URL">
-        <el-input v-model="form.lpUrlEn" placeholder="请输入海外落地页URL" />
-      </el-form-item>
-
       <!-- ===== 选择套餐服务 ===== -->
       <span class="section-label">选择套餐服务</span>
       <div class="section-block">
@@ -259,6 +252,17 @@
             </el-form-item>
           </div>
         </div>
+      </div>
+
+      <!-- ===== 套餐介绍 ===== -->
+      <span class="section-label">套餐介绍 <span style="font-size:12px;font-weight:400;color:var(--text-placeholder);margin-left:6px">非必填</span></span>
+      <div class="section-block">
+        <el-form-item label="国内落地页URL">
+          <el-input v-model="form.lpUrlCn" placeholder="请输入国内落地页URL，如：https://www.example.com/cn/package/xxx" />
+        </el-form-item>
+        <el-form-item label="海外落地页URL" style="margin-bottom:0">
+          <el-input v-model="form.lpUrlEn" placeholder="请输入海外落地页URL，如：https://www.example.com/en/package/xxx" />
+        </el-form-item>
       </div>
 
       <!-- ===== 内购Key配置 ===== -->

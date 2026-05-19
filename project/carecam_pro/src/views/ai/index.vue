@@ -5,14 +5,12 @@
         <van-icon name="arrow-left" size="18" />
       </div>
       <h2>{{ isActivated ? '全能AI配置' : '全能AI' }}</h2>
-      <div v-if="isActivated" class="header-right" @click="showPay = true">
-        <van-icon name="shopping-cart-o" size="18" />
-      </div>
     </div>
 
     <!-- ===== 未开通态 ===== -->
     <template v-if="!isActivated">
       <div class="scroll-content">
+        <!-- 顶部 Banner -->
         <div class="hero-banner">
           <div class="hero-icon">🤖</div>
           <div class="hero-text">
@@ -26,20 +24,59 @@
           <div class="cap-card"><div class="cap-icon">🔍</div><div class="cap-name">AI搜索</div><div class="cap-desc">快速查找</div></div>
         </div>
 
+        <!-- 套餐选择 -->
         <div class="section-title">选择套餐</div>
-        <div class="plan-row">
-          <div :class="['plan-card', { selected: selectedPlan === 'basic' }]" @click="selectedPlan = 'basic'">
-            <div class="plan-name">全能AI</div><div class="plan-price">¥9.9 <span>/月</span></div>
-            <div class="plan-feats"><div class="feat">✓ AI消息推送</div><div class="feat">✓ AI日报（5次免费/月）</div><div class="feat">✓ 关注事件管理</div></div>
+        <div class="plan-cards">
+          <div
+            :class="['plan-card', { selected: selectedPlan === 'monthly' }]"
+            @click="selectedPlan = 'monthly'"
+          >
+            <div class="plan-card-name">全能AI套餐</div>
+            <div class="plan-card-price">¥9.9 <span>/月</span></div>
+            <div class="plan-card-tag">连续订阅</div>
+            <div class="plan-feats">
+              <div class="feat">✓ AI消息推送</div>
+              <div class="feat">✓ AI日报</div>
+              <div class="feat">✓ AI搜索</div>
+              <div class="feat">✓ 关注事件管理</div>
+            </div>
           </div>
-          <div :class="['plan-card', 'pro', { selected: selectedPlan === 'pro' }]" @click="selectedPlan = 'pro'">
-            <div class="plan-badge">推荐</div>
-            <div class="plan-name">全能AI Pro</div><div class="plan-price">¥19.9 <span>/月</span></div>
-            <div class="plan-feats"><div class="feat">✓ AI消息推送</div><div class="feat">✓ AI日报（20次免费/月）</div><div class="feat">✓ AI搜索</div><div class="feat">✓ 关注事件管理</div></div>
+          <div
+            :class="['plan-card', { selected: selectedPlan === 'yearly' }]"
+            @click="selectedPlan = 'yearly'"
+          >
+            <div class="plan-card-name">全能AI套餐</div>
+            <div class="plan-card-price">¥99 <span>/年</span></div>
+            <div class="plan-card-tag yearly">买断制</div>
+            <div class="plan-feats">
+              <div class="feat">✓ AI消息推送</div>
+              <div class="feat">✓ AI日报</div>
+              <div class="feat">✓ AI搜索</div>
+              <div class="feat">✓ 关注事件管理</div>
+            </div>
+          </div>
+        </div>
+        <div v-if="selectedPlan === 'monthly'" class="renew-hint">
+          连续订阅套餐，到期自动按9.9元/月自动续费，可随时取消
+        </div>
+
+        <!-- 支付方式 -->
+        <div class="section-title">支付方式</div>
+        <div class="pay-methods">
+          <div :class="['pay-method', { selected: payMethod === 'wechat' }]" @click="payMethod = 'wechat'">
+            <div class="pay-m-icon" style="background:#07C160"><van-icon name="wechat" size="18" color="#fff" /></div>
+            <span>微信支付</span>
+            <div class="pay-radio" :class="{ checked: payMethod === 'wechat' }"></div>
+          </div>
+          <div :class="['pay-method', { selected: payMethod === 'alipay' }]" @click="payMethod = 'alipay'">
+            <div class="pay-m-icon" style="background:#1677FF"><van-icon name="alipay" size="18" color="#fff" /></div>
+            <span>支付宝</span>
+            <div class="pay-radio" :class="{ checked: payMethod === 'alipay' }"></div>
           </div>
         </div>
 
         <!-- 功能介绍 -->
+        <div class="section-title">服务介绍</div>
         <div class="intro-section">
           <div class="intro-item">
             <div class="intro-icon">🤖</div>
@@ -71,12 +108,22 @@
           </div>
         </div>
 
-        <div class="first-tip">🎉 首月特惠 <strong>¥3.9</strong>，限新用户</div>
-        <div style="height:20px"></div>
+        <div style="height:100px"></div>
       </div>
+
+      <!-- 底部固定栏 -->
       <div class="bottom-bar">
-        <div class="price-area"><span class="price">{{ selectedPlan === 'basic' ? '¥9.9' : '¥19.9' }}</span><span class="period">/月</span></div>
-        <button class="btn-buy" @click="showPay = true">立即开通</button>
+        <div class="agreement-row" @click="agreed = !agreed">
+          <div class="agreement-checkbox" :class="{ checked: agreed }">
+            <van-icon v-if="agreed" name="success" size="12" color="#fff" />
+          </div>
+          <span class="agreement-text">
+            已阅读并同意<span class="agreement-link" @click.stop>{{ agreementText }}</span>
+          </span>
+        </div>
+        <button class="btn-buy" @click="handleBuyClick">
+          立即开通 {{ selectedPlan === 'monthly' ? '¥9.9' : '¥99' }}
+        </button>
       </div>
     </template>
 
@@ -85,16 +132,13 @@
       <div class="scroll-content config">
         <div class="status-card">
           <div class="status-top">
-            <div><div class="status-plan">{{ planType === 'basic' ? '全能AI' : '全能AI Pro' }}</div><div class="status-date">有效期至 {{ validUntil }}</div></div>
-            <div class="remain-area"><div class="remain-num">{{ remainReports }}</div><div class="remain-label">剩余日报</div></div>
-          </div>
-          <div v-if="planType === 'basic'" class="upgrade-row" @click="showUpgrade = true">
-            <span>升级Pro解锁AI搜索和更多日报次数</span><van-icon name="arrow" size="14" color="#1A73E8" />
+            <div><div class="status-plan">全能AI</div><div class="status-date">有效期至 {{ validUntil }}</div></div>
+            <div class="remain-area"><div class="remain-num">✓</div><div class="remain-label">守护中</div></div>
           </div>
         </div>
 
         <div class="config-section">
-          <div class="config-section-title"><span>关注事件管理</span><span class="add-btn" @click="openAddEvent">+ 添加</span></div>
+          <div class="config-section-title"><span>关注事件管理</span><span class="add-btn" @click="openAddEvent">+ 添加{{ events.length }}/{{ maxEvents }}</span></div>
           <div class="config-toggle">
             <span>智能推送</span>
             <van-switch v-model="smartPush" size="22" />
@@ -111,29 +155,10 @@
       </div>
     </template>
 
-    <!-- 支付弹窗 -->
-    <van-popup v-model:show="showPay" position="bottom" round>
-      <div class="pay-popup">
-        <div class="popup-header"><h3>{{ isActivated ? '续费' : '确认开通' }}</h3><van-icon name="cross" size="20" @click="showPay = false" /></div>
-        <div class="pay-amount">{{ selectedPlan === 'basic' ? '¥9.9' : '¥19.9' }}</div>
-        <div class="pay-plan">/月 · {{ selectedPlan === 'basic' ? '全能AI' : '全能AI Pro' }}</div>
-        <div class="pay-devices" v-if="!isActivated">已选设备：{{ selectedDevices.length }} 台</div>
-        <div class="pay-options">
-          <div :class="['pay-option', { selected: payMethod === 'wechat' }]" @click="payMethod = 'wechat'"><div class="pay-icon" style="background:#07C160"><van-icon name="wechat" size="18" color="#fff" /></div><span>微信支付</span><div class="radio"></div></div>
-          <div :class="['pay-option', { selected: payMethod === 'alipay' }]" @click="payMethod = 'alipay'"><div class="pay-icon" style="background:#1677FF"><van-icon name="alipay" size="18" color="#fff" /></div><span>支付宝</span><div class="radio"></div></div>
-        </div>
-        <van-button block type="primary" @click="handlePayAndActivate">{{ isActivated ? '确认续费' : '确认支付' }}</van-button>
-      </div>
-    </van-popup>
-
-    <!-- 升级弹窗 -->
-    <van-popup v-model:show="showUpgrade" position="bottom" round :style="{ height: '40%' }">
-      <div class="upgrade-popup">
-        <div class="popup-header"><h3>升级全能AI Pro</h3><van-icon name="cross" size="20" @click="showUpgrade = false" /></div>
-        <div class="upgrade-feats"><div class="ufeat">🔓 解锁 AI 搜索功能</div><div class="ufeat">📋 日报免费次数升级至 20次/月</div><div class="ufeat">📊 更详细的关注事件分析</div></div>
-        <van-button block type="primary" @click="handleUpgrade">立即升级 — ¥19.9/月</van-button>
-      </div>
-    </van-popup>
+    <!-- 协议确认弹窗 -->
+    <van-dialog v-model:show="showAgreementDialog" title="提示" show-cancel-button cancel-text="取消" confirm-text="同意" @confirm="agreeAndPay">
+      <div class="agreement-dialog-content">请先阅读并同意{{ agreementText }}</div>
+    </van-dialog>
 
     <!-- 添加/编辑关注弹窗 -->
     <van-dialog v-model:show="showAddDialog" title="关注事件" show-cancel-button @confirm="saveEvent">
@@ -148,27 +173,50 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { aiStatus } from '@/store/devStatus'
+import { showToast } from 'vant'
 
 const router = useRouter()
+const route = useRoute()
 const goBack = () => router.back()
 
-// 从全局store读取调试状态
-const isActivated = computed(() => aiStatus.value !== 'not_activated')
-const planType = computed(() => {
-  if (aiStatus.value === 'activated_pro') return 'pro'
-  return 'basic'
-})
-const remainReports = computed(() => {
-  if (aiStatus.value === 'activated_pro') return 20
-  return 5
+// 从全局store读取调试状态；query.show=activate 强制显示服务介绍开通页
+const isActivated = computed(() => {
+  if (route.query.show === 'activate') return false
+  return aiStatus.value !== 'not_activated'
 })
 
-const selectedPlan = ref('basic')
+// 套餐选择：monthly | yearly
+const selectedPlan = ref('monthly')
+
+// 支付方式
 const payMethod = ref('wechat')
-const showPay = ref(false)
-const showUpgrade = ref(false)
+
+// 协议
+const agreed = ref(false)
+const showAgreementDialog = ref(false)
+
+const agreementText = computed(() => {
+  return selectedPlan.value === 'monthly'
+    ? '《云服务协议（含自动续费协议）》'
+    : '《云服务协议》'
+})
+
+const handleBuyClick = () => {
+  if (!agreed.value) {
+    showAgreementDialog.value = true
+    return
+  }
+  // 已同意 → 执行购买流程
+}
+
+const agreeAndPay = () => {
+  agreed.value = true
+  showAgreementDialog.value = false
+  // 执行购买流程
+}
+
 const validUntil = ref('2026-05-28')
 
 // 智能推送
@@ -180,15 +228,19 @@ const editingIndex = ref(-1)
 const editingName = ref('')
 const editingDesc = ref('')
 
+const maxEvents = 10
 const events = reactive([
-  { name: '人员经过', desc: '关注到家门口有人经过的事件', enabled: true },
-  { name: '宠物活动', desc: '猫咪和狗狗在客厅的活动', enabled: true },
-  { name: '告警', desc: '检测到异常入侵或告警', enabled: true }
+  { name: '儿童守护', desc: '小孩哭喊、跌倒、出门', enabled: true },
+  { name: '包裹送达', desc: '快递或者外卖送达', enabled: true },
+  { name: '厨房守护', desc: '厨房异常烟雾、明火', enabled: true },
+  { name: '宠物守护', desc: '宠物乱拉乱尿、吃饭、喝水', enabled: true }
 ])
 
-const selectedDevices = ref(['frontdoor', 'backyard', 'garage'])
-
 const openAddEvent = () => {
+  if (events.length >= maxEvents) {
+    showToast('最多添加10个关注事件')
+    return
+  }
   editingIndex.value = -1; editingName.value = ''; editingDesc.value = ''; showAddDialog.value = true
 }
 const openEditEvent = (i) => {
@@ -202,11 +254,6 @@ const saveEvent = () => {
   else events.push(evt)
   editingIndex.value = -1; editingName.value = ''; editingDesc.value = ''
 }
-
-// 注意：支付后或升级后，通过dev面板切换状态来控制
-// 这里只是模拟UI交互
-const handlePayAndActivate = () => { showPay.value = false }
-const handleUpgrade = () => { showUpgrade.value = false }
 </script>
 
 <style lang="scss" scoped>
@@ -227,10 +274,25 @@ const handleUpgrade = () => { showUpgrade.value = false }
 .intro-text { flex: 1; }
 .intro-title { font-size: 14px; font-weight: 600; color: $text-primary; }
 .intro-desc { font-size: 12px; color: $text-secondary; margin-top: 3px; line-height: 1.5; }
-.plan-row { padding: 0 16px; display: flex; gap: 10px; margin-bottom: 20px; }
-.plan-card { flex: 1; background: $bg-card; border-radius: $radius-lg; padding: 14px 12px; border: 2px solid $border-color; position: relative; transition: border-color 0.2s; cursor: pointer; &.selected { border-color: $primary-color; background: $primary-bg; } &.pro { &.selected { border-color: #9C27B0; background: #F3E8FF; .plan-price { color: #9C27B0; } } .plan-badge { position: absolute; top: -1px; left: 12px; padding: 2px 8px; border-radius: 0 0 8px 8px; background: linear-gradient(135deg, #9C27B0, #7B1FA2); color: #fff; font-size: 10px; font-weight: 700; } .plan-price { color: #9C27B0; } } .plan-name { font-size: 14px; font-weight: 700; color: $text-primary; margin-top: 4px; } .plan-price { font-size: 20px; font-weight: 800; color: $primary-color; margin-top: 6px; span { font-size: 11px; font-weight: 500; color: $text-secondary; } } .plan-feats { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; .feat { font-size: 11px; color: $text-secondary; } } }
-.first-tip { margin: 0 16px; padding: 10px 14px; background: #FFF8E1; border-radius: $radius-md; font-size: 12px; color: #92400E; text-align: center; strong { font-size: 16px; } }
-.bottom-bar { flex-shrink: 0; background: $bg-color; padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 8px)); border-top: 1px solid $border-color; display: flex; align-items: center; gap: 12px; .price-area { .price { font-size: 22px; font-weight: 800; color: $danger-color; } .period { font-size: 13px; color: $text-secondary; } } .btn-buy { flex: 1; padding: 13px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 16px; font-weight: 700; cursor: pointer; } }
+/* 套餐卡片 */
+.plan-cards { padding: 0 16px; display: flex; gap: 10px; margin-bottom: 8px; }
+.plan-card { flex: 1; background: $bg-card; border-radius: $radius-lg; padding: 16px 14px; border: 2px solid $border-color; cursor: pointer; transition: all 0.2s; &.selected { border-color: $primary-color; background: $primary-bg; } }
+.plan-card-name { font-size: 14px; font-weight: 700; color: $text-primary; }
+.plan-card-price { font-size: 22px; font-weight: 800; color: $primary-color; margin-top: 6px; span { font-size: 11px; font-weight: 500; color: $text-secondary; } }
+.plan-card-tag { display: inline-block; margin-top: 6px; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 8px; background: #DBEAFE; color: #1D4ED8; &.yearly { background: #D1FAE5; color: #065F46; } }
+.plan-feats { margin-top: 12px; display: flex; flex-direction: column; gap: 4px; .feat { font-size: 11px; color: $text-secondary; } }
+.plan-radio { display: none; }
+.renew-hint { margin: 0 16px 8px; font-size: 11px; color: $text-secondary; line-height: 1.4; }
+
+/* 支付方式 */
+.pay-methods { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.pay-method { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: $bg-card; border: 2px solid $border-color; border-radius: $radius-md; cursor: pointer; transition: border-color 0.2s; &.selected { border-color: $primary-color; } span { flex: 1; font-size: 13px; font-weight: 600; color: $text-primary; } }
+.pay-m-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.pay-radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid $border-color; flex-shrink: 0; &.checked { border-color: $primary-color; background: $primary-color; position: relative; &::after { content: ''; position: absolute; top: 3px; left: 5px; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); } } }
+
+/* 底部栏 */
+.bottom-bar { flex-shrink: 0; background: $bg-color; padding: 10px 16px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 8px)); border-top: 1px solid $border-color; .agreement-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; cursor: pointer; } .agreement-checkbox { width: 16px; height: 16px; border-radius: 3px; border: 1.5px solid #9CA3AF; display: flex; align-items: center; justify-content: center; flex-shrink: 0; &.checked { background: $primary-color; border-color: $primary-color; } } .agreement-text { font-size: 11px; color: $text-secondary; } .agreement-link { color: $primary-color; } .btn-buy { width: 100%; padding: 12px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 15px; font-weight: 700; cursor: pointer; } }
+.agreement-dialog-content { padding: 20px; font-size: 14px; color: $text-primary; text-align: center; }
 
 .config { padding: 16px; }
 .status-card { background: $bg-card; border-radius: $radius-lg; overflow: hidden; box-shadow: $shadow-card; margin-bottom: 16px; }
@@ -250,15 +312,6 @@ const handleUpgrade = () => { showUpgrade.value = false }
 .event-name { font-size: 13px; font-weight: 600; color: $text-primary; }
 .event-keywords { font-size: 11px; color: $text-secondary; margin-top: 2px; }
 
-.pay-popup, .upgrade-popup { padding: 20px 16px 32px; }
-.popup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; h3 { font-size: 16px; font-weight: 700; color: $text-primary; } }
-.pay-amount { font-size: 32px; font-weight: 800; color: $primary-color; }
-.pay-plan { font-size: 13px; color: $text-secondary; margin-bottom: 4px; }
-.pay-devices { font-size: 12px; color: $text-secondary; margin-bottom: 20px; }
-.pay-options { margin-bottom: 16px; }
-.pay-option { display: flex; align-items: center; gap: 12px; padding: 14px 12px; border: 2px solid $border-color; border-radius: $radius-md; margin-bottom: 10px; transition: border-color 0.2s; cursor: pointer; &.selected { border-color: $primary-color; } .pay-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; } span { flex: 1; font-size: 14px; font-weight: 600; color: $text-primary; } .radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid $border-color; display: flex; align-items: center; justify-content: center; } &.selected .radio { border-color: $primary-color; background: $primary-color; &::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #fff; } } }
-.upgrade-feats { margin-bottom: 20px; }
-.ufeat { padding: 10px 0; font-size: 14px; color: $text-primary; border-bottom: 1px solid $border-color; }
 .edit-dialog { padding: 16px; }
 .edit-field { margin-bottom: 14px; }
 .edit-label { font-size: 13px; font-weight: 600; color: $text-primary; margin-bottom: 6px; }

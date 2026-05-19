@@ -5,41 +5,40 @@
         <van-icon name="arrow-left" size="18" />
       </div>
       <h2>AI日报</h2>
-      <div class="header-right" v-if="hasHistory" @click.stop="openHistory">
+      <div class="header-right" v-if="hasHistory && isActivated" @click.stop="openHistory">
         <van-icon name="clock-o" size="18" />
       </div>
     </div>
 
-    <!-- ====== 未开通态 ====== -->
+    <!-- 日期选择 — 始终可见 -->
+    <div class="date-bar">
+      <van-icon name="arrow-left" size="16" color="#1A73E8" @click="prevDay" />
+      <div class="date-display" @click="showDatePicker = true">{{ displayDate }}</div>
+      <van-icon name="arrow" size="16" color="#1A73E8" @click="nextDay" />
+    </div>
+
+    <!-- 设备筛选 — 始终可见 -->
+    <div class="device-filter-bar">
+      <span
+        v-for="(d, i) in deviceOptions"
+        :key="i"
+        :class="['dev-filter-chip', { active: selectedDevice === d }]"
+        @click="onDeviceChange(d)"
+      >{{ d }}</span>
+    </div>
+
+    <!-- 当前设备未开通 → 内联引导提示 -->
     <template v-if="!isActivated">
-      <div class="not-activated">
-        <div class="na-icon">📋</div>
-        <div class="na-title">AI日报</div>
-        <div class="na-desc">每日自动生成图文报告，AI总结家中动态，一目了然</div>
-        <button class="na-btn" @click="goToAiHome">立即开通全能AI</button>
+      <div class="not-activated-inline">
+        <div class="na-inline-icon">📋</div>
+        <div class="na-inline-title">AI日报</div>
+        <div class="na-inline-desc">每日自动生成图文报告，AI总结家中动态，一目了然</div>
+        <button class="na-inline-btn" @click="goToAiHome">立即开通全能AI</button>
       </div>
     </template>
 
-    <!-- ====== 已开通态 ====== -->
+    <!-- 已开通 → 日报内容 -->
     <template v-else>
-      <!-- 日期选择 -->
-      <div class="date-bar">
-        <van-icon name="arrow-left" size="16" color="#1A73E8" @click="prevDay" />
-        <div class="date-display" @click="showDatePicker = true">{{ displayDate }}</div>
-        <van-icon name="arrow" size="16" color="#1A73E8" @click="nextDay" />
-      </div>
-
-      <!-- 设备筛选 -->
-      <div class="device-filter-bar">
-        <span
-          v-for="(d, i) in deviceOptions"
-          :key="i"
-          :class="['dev-filter-chip', { active: selectedDevice === d }]"
-          @click="selectedDevice = d"
-        >{{ d }}</span>
-      </div>
-
-      <!-- ===== 日报生成区域 ===== -->
       <div class="scroll-area" ref="scrollArea">
         <!-- 生成中态 -->
         <template v-if="isGenerating">
@@ -170,17 +169,16 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { aiStatus } from '@/store/devStatus'
+import { aiStatus, deviceAiStatus, defaultActivatedDevice, isDeviceActivated } from '@/store/devStatus'
 
 const router = useRouter()
 const goBack = () => router.back()
-const goToAiHome = () => router.push('/ai')
+const goToAiHome = () => router.push('/ai?show=activate')
 
-const isActivated = computed(() => aiStatus.value !== 'not_activated')
-const planType = computed(() => {
-  if (aiStatus.value === 'activated_pro') return 'pro'
-  return 'basic'
-})
+// 全局已开通 + 当前设备已开通 → true
+const isActivated = computed(() =>
+  aiStatus.value !== 'not_activated' && isDeviceActivated(selectedDevice.value)
+)
 
 // 日期
 const today = new Date()
@@ -225,14 +223,16 @@ const genStep = ref(0)
 const dailyGenerated = ref(false)
 const isEmptyDate = ref(false)
 
-const remainFree = computed(() => {
-  if (planType.value === 'pro') return 20
-  return 5
-})
+const remainFree = computed(() => 5)
 
 // 设备筛选
-const deviceOptions = ['Front Door', 'Backyard', 'Garage']
-const selectedDevice = ref('Front Door')
+const deviceOptions = Object.keys(deviceAiStatus.value)
+const selectedDevice = ref(defaultActivatedDevice.value)
+
+const onDeviceChange = (device) => {
+  selectedDevice.value = device
+  resetDaily()
+}
 
 // 日报数据 — 使用全能AI配置的关注事件
 const focusEvents = ref([
@@ -335,12 +335,12 @@ const handleGenerate = () => {
 .ai-header { background: $bg-color; padding: 12px 16px; border-bottom: 1px solid $border-color; display: flex; align-items: center; gap: 12px; flex-shrink: 0; h2 { font-size: 18px; font-weight: 700; color: $text-primary; flex: 1; } }
 .back-btn, .header-right { width: 32px; height: 32px; border-radius: 50%; background: $bg-page; display: flex; align-items: center; justify-content: center; color: $text-secondary; flex-shrink: 0; }
 
-/* 未开通态 */
-.not-activated { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; }
-.na-icon { font-size: 56px; margin-bottom: 16px; }
-.na-title { font-size: 18px; font-weight: 700; color: $text-primary; }
-.na-desc { font-size: 13px; color: $text-secondary; margin-top: 8px; text-align: center; max-width: 260px; line-height: 1.5; }
-.na-btn { margin-top: 24px; padding: 12px 32px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 15px; font-weight: 600; cursor: pointer; }
+/* 内联未开通引导 */
+.not-activated-inline { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; }
+.na-inline-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.6; }
+.na-inline-title { font-size: 16px; font-weight: 700; color: $text-primary; }
+.na-inline-desc { font-size: 12px; color: $text-secondary; margin-top: 6px; text-align: center; max-width: 260px; line-height: 1.5; }
+.na-inline-btn { margin-top: 20px; padding: 10px 28px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 14px; font-weight: 600; cursor: pointer; }
 
 /* 日期栏 */
 .date-bar { background: $bg-color; padding: 10px 16px; display: flex; align-items: center; justify-content: center; gap: 12px; flex-shrink: 0; border-bottom: 1px solid $border-color; }

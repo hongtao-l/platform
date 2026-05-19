@@ -7,43 +7,52 @@
       <h2>AI搜索</h2>
     </div>
 
-    <!-- ====== 未开通态 ====== -->
+    <!-- 设备筛选 — 始终可见 -->
+    <div class="device-filter-bar">
+      <span
+        v-for="(d, i) in deviceOptions"
+        :key="i"
+        :class="['dev-filter-chip', { active: selectedDevice === d }]"
+        @click="onDeviceChange(d)"
+      >{{ d }}</span>
+    </div>
+
+    <!-- 搜索输入区 — 始终可见 -->
+    <div class="search-input-area">
+      <div class="search-input-box">
+        <input
+          v-model="queryText"
+          class="search-input"
+          placeholder="描述你想搜索的事件…"
+          @keyup.enter="doSearch"
+        />
+        <van-icon
+          v-if="queryText"
+          name="close"
+          size="16"
+          color="#9CA3AF"
+          class="search-clear"
+          @click="clearSearch"
+        />
+        <button class="search-btn" @click="doSearch">搜索</button>
+      </div>
+      <div class="search-examples">
+        👉 试试："奶奶今天出门了吗" "猫咪上午在干嘛"
+      </div>
+    </div>
+
+    <!-- 当前设备未开通 → 内联引导提示 -->
     <template v-if="!isActivated">
-      <div class="not-activated">
-        <div class="na-icon">🔍</div>
-        <div class="na-title">AI搜索</div>
-        <div class="na-desc">用自然语言搜索事件记录，快速定位关键片段</div>
-        <button class="na-btn" @click="goToAiHome">立即开通全能AI</button>
+      <div class="not-activated-inline">
+        <div class="na-inline-icon">🔍</div>
+        <div class="na-inline-title">AI搜索</div>
+        <div class="na-inline-desc">用自然语言搜索事件记录，快速定位关键片段</div>
+        <button class="na-inline-btn" @click="goToAiHome">立即开通全能AI</button>
       </div>
     </template>
 
-    <!-- ====== 已开通态 ====== -->
+    <!-- 已开通 → 搜索结果 / 猜你想搜 / 空态 -->
     <template v-else>
-      <!-- 搜索输入区 -->
-      <div class="search-input-area">
-        <div class="search-input-box">
-          <input
-            v-model="queryText"
-            class="search-input"
-            placeholder="描述你想搜索的事件…"
-            @keyup.enter="doSearch"
-          />
-          <van-icon
-            v-if="queryText"
-            name="close"
-            size="16"
-            color="#9CA3AF"
-            class="search-clear"
-            @click="clearSearch"
-          />
-          <button class="search-btn" @click="doSearch">搜索</button>
-        </div>
-        <div class="search-examples">
-          👉 试试："奶奶今天出门了吗" "猫咪上午在干嘛"
-        </div>
-      </div>
-
-      <!-- 猜你想搜 -->
       <div class="guess-section" v-if="!hasSearched">
         <div class="guess-title">猜你想搜</div>
         <div class="guess-tags">
@@ -56,7 +65,6 @@
         </div>
       </div>
 
-      <!-- 搜索结果 -->
       <div class="result-list" v-if="hasSearched">
         <div class="result-count">共找到 {{ searchResults.length }} 条相关事件</div>
         <div
@@ -75,8 +83,7 @@
         <div style="height:20px"></div>
       </div>
 
-      <!-- 未搜索时显示提示 -->
-      <div class="empty-hint" v-else>
+      <div class="empty-hint" v-if="!hasSearched">
         <div class="empty-icon">🔍</div>
         <div class="empty-text">输入描述，AI帮你快速找到相关事件</div>
       </div>
@@ -88,14 +95,25 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { aiStatus } from '@/store/devStatus'
+import { aiStatus, deviceAiStatus, defaultActivatedDevice, isDeviceActivated } from '@/store/devStatus'
 
 const router = useRouter()
 const goBack = () => router.back()
 
-const isActivated = computed(() => aiStatus.value !== 'not_activated')
+// 全局已开通 + 当前设备已开通 → true
+const isActivated = computed(() =>
+  aiStatus.value !== 'not_activated' && isDeviceActivated(selectedDevice.value)
+)
 
-const goToAiHome = () => router.push('/ai')
+const goToAiHome = () => router.push('/ai?show=activate')
+
+// 设备选择
+const deviceOptions = Object.keys(deviceAiStatus.value)
+const selectedDevice = ref(defaultActivatedDevice.value)
+
+const onDeviceChange = (device) => {
+  selectedDevice.value = device
+}
 
 // 搜索
 const queryText = ref('')
@@ -155,12 +173,16 @@ const openDetail = (r) => {
 .ai-header { background: $bg-color; padding: 12px 16px; border-bottom: 1px solid $border-color; display: flex; align-items: center; gap: 12px; flex-shrink: 0; h2 { font-size: 18px; font-weight: 700; color: $text-primary; flex: 1; } }
 .back-btn { width: 32px; height: 32px; border-radius: 50%; background: $bg-page; display: flex; align-items: center; justify-content: center; color: $text-secondary; flex-shrink: 0; }
 
-/* 未开通态 */
-.not-activated { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; }
-.na-icon { font-size: 56px; margin-bottom: 16px; }
-.na-title { font-size: 18px; font-weight: 700; color: $text-primary; }
-.na-desc { font-size: 13px; color: $text-secondary; margin-top: 8px; text-align: center; max-width: 260px; line-height: 1.5; }
-.na-btn { margin-top: 24px; padding: 12px 32px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 15px; font-weight: 600; cursor: pointer; }
+/* 内联未开通引导 */
+.not-activated-inline { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; }
+.na-inline-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.6; }
+.na-inline-title { font-size: 16px; font-weight: 700; color: $text-primary; }
+.na-inline-desc { font-size: 12px; color: $text-secondary; margin-top: 6px; text-align: center; max-width: 260px; line-height: 1.5; }
+.na-inline-btn { margin-top: 20px; padding: 10px 28px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+/* 设备筛选 */
+.device-filter-bar { background: $bg-color; padding: 8px 16px; display: flex; gap: 6px; flex-shrink: 0; border-bottom: 1px solid $border-color; overflow-x: auto; }
+.dev-filter-chip { flex-shrink: 0; padding: 4px 12px; border-radius: 14px; font-size: 11px; font-weight: 500; color: $text-secondary; background: $bg-page; border: 1px solid $border-color; cursor: pointer; transition: all 0.15s; white-space: nowrap; &.active { background: $primary-color; color: #fff; border-color: $primary-color; } }
 
 /* 搜索区 */
 .search-input-area { padding: 16px; flex-shrink: 0; }

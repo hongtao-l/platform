@@ -67,15 +67,8 @@
           <div class="dev-action" @click.stop="goToAi(device)">
             <van-icon name="chat-o" size="18" />
             <span>
-              <span class="ai-tag">AI</span>
-            </span>
-          </div>
-          <div class="dev-action" @click.stop="goToStore(device)">
-            <van-icon name="cloud-o" size="18" />
-            <span>
-              <span :class="['cloud-tag', { inactive: !device.cloudPlan }]">
-                {{ device.cloudPlan || '免费版' }}
-              </span>
+              <span v-if="isDeviceActivated(device.name)" class="ai-active-text">AI守护中</span>
+              <span v-else class="ai-tag">AI</span>
             </span>
           </div>
           <div class="dev-action" @click.stop="goToSettings(device)">
@@ -122,6 +115,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { isDeviceActivated } from '@/store/devStatus'
 
 const router = useRouter()
 
@@ -216,12 +210,12 @@ const goToPlayback = (device) => {
   router.push('/playback')
 }
 
-const goToStore = (device) => {
-  router.push('/store')
-}
-
 const goToAi = (device) => {
-  router.push('/ai')
+  if (isDeviceActivated(device.name)) {
+    router.push('/ai')
+  } else {
+    router.push('/ai?show=activate')
+  }
 }
 
 const goToSettings = (device) => {
@@ -466,19 +460,6 @@ const goToMe = () => {
   }
 }
 
-.cloud-tag {
-  font-size: 9px;
-  font-weight: 700;
-  padding: 1px 5px;
-  border-radius: 6px;
-  background: linear-gradient(135deg, #1A73E8, #4A90E2);
-  color: #fff;
-  
-  &.inactive {
-    background-color: $border-color;
-    color: $text-secondary;
-  }
-}
 
 .ai-tag {
   font-size: 9px;
@@ -487,6 +468,13 @@ const goToMe = () => {
   border-radius: 6px;
   background: linear-gradient(135deg, #1A73E8, #9C27B0);
   color: #fff;
+}
+
+.ai-active-text {
+  font-size: 9px;
+  font-weight: 600;
+  color: $success-color;
+  white-space: nowrap;
 }
 
 .add-device-btn {

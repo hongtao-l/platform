@@ -11,7 +11,6 @@
           @click.stop="goToAiSearch"
         />
         <span class="ai-tag">AI</span>
-        <van-icon name="audio" size="17" color="#1A73E8" />
       </div>
       
       <div class="filter-row">
@@ -28,20 +27,23 @@
       </div>
     </div>
     
-    <div class="msg-tabs-scroll">
-      <div class="msg-tabs">
-        <span
-          v-for="t in msgFilterTabs"
-          :key="t.key"
-          :class="['msg-tab', { active: activeMsgTab === t.key }]"
-          @click="activeMsgTab = t.key"
-        >{{ t.label }}</span>
+    <div class="msg-tabs-bar">
+      <div class="msg-tabs-scroll" @wheel="onTabsWheel">
+        <div class="msg-tabs">
+          <span
+            v-for="t in msgFilterTabs"
+            :key="t.key"
+            :class="['msg-tab', { active: activeMsgTab === t.key }]"
+            @click="activeMsgTab = t.key"
+          >{{ t.label }}</span>
+        </div>
       </div>
+      <span class="msg-focus" @click="handleFocusClick">+关注</span>
     </div>
 
     <div class="msg-list">
-      <div 
-        v-for="msg in filteredMsgList" 
+      <div
+        v-for="msg in filteredMsgList"
         :key="msg.id"
         class="msg-item"
         @click="goToMessageDetail(msg)"
@@ -95,17 +97,18 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { aiStatus, isDeviceActivated } from '@/store/devStatus'
 
 const router = useRouter()
 const searchText = ref('')
 const showDatePicker = ref(false)
 const selectedDate = ref(['2024', '04', '20'])
-const dateLabel = ref('全部日期')
+const dateLabel = ref('4月20日')
 const showFilterPanel = ref(false)
-const deviceOptions = ['全部设备', 'Front Door', 'Backyard', 'Garage']
-const selectedDevice = ref('全部设备')
+const deviceOptions = ['Front Door', 'Backyard', 'Garage']
+const selectedDevice = ref('Front Door')
 
 const messages = ref([
   { id: 1, type: '奶奶出门散步', deviceName: 'Front Door', time: '今天 09:20', tag: '老人看护', tagType: 'elder', bgGradient: 'linear-gradient(135deg, #0d2e1a, #1a5c34)', isFocus: true },
@@ -115,14 +118,26 @@ const messages = ref([
   { id: 5, type: '检测到车辆', deviceName: 'Front Door', time: '昨天 20:02', tag: '车辆', tagType: 'vehicle', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: false }
 ])
 
-const msgFilterTabs = [
-  { key: 'all', label: '全部' },
-  { key: 'focus_elder', label: '老人看护' },
-  { key: 'focus_pet', label: '宠物活动' },
-  { key: 'focus_person', label: '人员经过' },
-  { key: 'other', label: '其他' }
-]
+const msgFilterTabs = computed(() => {
+  if (isDeviceActivated(selectedDevice.value)) {
+    return [
+      { key: 'all', label: '全部' },
+      { key: 'focus_elder', label: '老人看护' },
+      { key: 'focus_pet', label: '宠物活动' },
+      { key: 'focus_person', label: '人员经过' },
+      { key: 'other', label: '其他' }
+    ]
+  }
+  return [
+    { key: 'all', label: '全部' },
+    { key: 'motion', label: '运动侦测' },
+    { key: 'person_detect', label: '人形侦测' }
+  ]
+})
 const activeMsgTab = ref('all')
+
+// 切换设备时重置标签选择
+watch(selectedDevice, () => { activeMsgTab.value = 'all' })
 
 const focusTagMap = { 'focus_elder': 'elder', 'focus_pet': 'pet', 'focus_person': 'person' }
 
@@ -132,9 +147,7 @@ const filteredMsgList = computed(() => {
     const kw = searchText.value.trim().toLowerCase()
     list = list.filter(m => m.type.includes(kw) || m.deviceName.toLowerCase().includes(kw) || m.tag.includes(kw))
   }
-  if (selectedDevice.value !== '全部设备') {
-    list = list.filter(m => m.deviceName === selectedDevice.value)
-  }
+  list = list.filter(m => m.deviceName === selectedDevice.value)
   if (activeMsgTab.value === 'other') {
     list = list.filter(m => !m.isFocus)
   } else if (focusTagMap[activeMsgTab.value]) {
@@ -146,6 +159,21 @@ const filteredMsgList = computed(() => {
 const onDateConfirm = ({ selectedValues }) => {
   dateLabel.value = selectedValues[1] + '月' + selectedValues[2] + '日'
   showDatePicker.value = false
+}
+
+// 标签栏鼠标滚轮横向滚动
+const onTabsWheel = (e) => {
+  e.preventDefault()
+  e.currentTarget.scrollLeft += e.deltaY
+}
+
+// "+关注"按钮点击
+const handleFocusClick = () => {
+  if (isDeviceActivated(selectedDevice.value)) {
+    router.push('/ai')
+  } else {
+    router.push('/ai?show=activate')
+  }
 }
 
 // 消息点击跳转日报事件详情
@@ -172,9 +200,11 @@ const goToDaily = () => { router.push('/ai/daily') }
 .ai-tag { padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; background: linear-gradient(135deg, #1A73E8, #9C27B0); color: #fff; }
 .filter-row { display: flex; gap: 8px; }
 .filter-trigger { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: $radius-pill; border: 1.5px solid $border-color; background-color: $bg-page; cursor: pointer; span { font-size: 12px; font-weight: 500; color: $text-primary; white-space: nowrap; } }
-.msg-tabs-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-shrink: 0; &::-webkit-scrollbar { display: none; } }
-.msg-tabs { display: flex; gap: 8px; padding: 10px 16px; background: $bg-color; border-bottom: 1px solid $border-color; white-space: nowrap; }
+.msg-tabs-bar { display: flex; align-items: center; background: $bg-color; border-bottom: 1px solid $border-color; }
+.msg-tabs-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; flex: 1; &::-webkit-scrollbar { display: none; } }
+.msg-tabs { display: flex; gap: 8px; padding: 10px 0 10px 16px; white-space: nowrap; }
 .msg-tab { padding: 4px 14px; border-radius: 14px; font-size: 12px; font-weight: 500; color: $text-secondary; background: $bg-page; border: 1px solid $border-color; cursor: pointer; &.active { background: $primary-color; color: #fff; border-color: $primary-color; } }
+.msg-focus { flex-shrink: 0; padding: 4px 14px; margin: 6px 12px 6px 8px; border-radius: 14px; font-size: 12px; font-weight: 600; color: $primary-color; background: $primary-bg; border: 1px solid $primary-color; cursor: pointer; white-space: nowrap; }
 .msg-list { flex: 1; padding: 12px 16px 70px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
 .msg-item { background-color: $bg-card; border-radius: $radius-lg; padding: 12px; display: flex; gap: 12px; align-items: flex-start; box-shadow: $shadow-card; }
 .msg-thumb { width: 72px; height: 54px; border-radius: 10px; flex-shrink: 0; }
