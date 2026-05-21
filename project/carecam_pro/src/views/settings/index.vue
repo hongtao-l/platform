@@ -6,8 +6,39 @@
         <van-icon name="arrow-left" size="18" />
       </div>
       <h2>设备设置</h2>
+      <van-icon name="info-o" size="18" color="#999" @click="showDeviceInfo = true" />
     </div>
-    
+
+    <!-- 设备基础信息卡片 -->
+    <div class="device-info-card">
+      <div class="device-thumb">
+        <div class="cam-bg">
+          <van-icon name="video" size="36" color="rgba(255,255,255,0.3)" />
+        </div>
+        <div class="cam-overlay"></div>
+        <div class="cam-name">{{ deviceName }}</div>
+        <span :class="['status-dot', deviceStatus]">● {{ deviceStatus === 'online' ? '在线' : '离线' }}</span>
+      </div>
+      <div class="device-meta">
+        <div class="meta-row">
+          <span class="meta-label">设备名称</span>
+          <span class="meta-value">{{ deviceName }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">设备ID</span>
+          <span class="meta-value mono">{{ deviceId || '--' }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">固件版本</span>
+          <span class="meta-value">v2.1.0</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">信号强度</span>
+          <span class="meta-value"><van-icon name="wifi" size="14" /> 强</span>
+        </div>
+      </div>
+    </div>
+
     <!-- 设置项列表 -->
     <div class="settings-list">
       <div class="settings-item" v-for="(item, index) in settingsItems" :key="index" @click="handleSetting(item)">
@@ -44,9 +75,15 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
+const route = useRoute()
+
+const deviceName = ref(route.query.deviceName || 'Front Door')
+const deviceId = ref(route.query.deviceId || '')
+const deviceStatus = ref('online')
+const showDeviceInfo = ref(false)
 
 // 删除确认
 const showDeleteConfirm = ref(false)
@@ -196,6 +233,85 @@ const deleteDevice = () => {
   align-items: center;
   justify-content: center;
   color: $text-primary;
+}
+
+.device-info-card {
+  background: $bg-color;
+  margin: 12px 16px;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  overflow: hidden;
+}
+
+.device-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+}
+
+.cam-bg {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0d1b3e, #1a3a6e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cam-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.5));
+}
+
+.cam-name {
+  position: absolute;
+  bottom: 28px;
+  left: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.status-dot {
+  position: absolute;
+  bottom: 8px;
+  left: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #fff;
+
+  &.online { color: #16A34A; }
+  &.offline { color: #999; }
+}
+
+.device-meta {
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.meta-label {
+  color: $text-secondary;
+}
+
+.meta-value {
+  color: $text-primary;
+  font-weight: 500;
+
+  &.mono {
+    font-family: monospace;
+    font-size: 11px;
+  }
 }
 
 .settings-list {

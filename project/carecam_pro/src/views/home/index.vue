@@ -116,6 +116,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { isDeviceActivated } from '@/store/devStatus'
+import { resolveDeviceRoute } from '@/utils/deviceType'
 
 const router = useRouter()
 
@@ -136,18 +137,18 @@ const familyGroups = ref([
 // 设备列表
 const devices = ref([
   {
-    id: 'frontdoor',
-    name: 'Front Door',
+    id: 'cam001',
+    name: '标准摄像机',
     status: 'online',
-    isShared: true,
+    isShared: false,
     cloudPlan: '',
-    unreadCount: 2,
+    unreadCount: 3,
     bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)',
     group: '入口'
   },
   {
-    id: 'backyard',
-    name: 'Backyard',
+    id: 'cam002',
+    name: '广角摄像机',
     status: 'online',
     isShared: false,
     cloudPlan: 'Pro',
@@ -156,12 +157,12 @@ const devices = ref([
     group: '后院'
   },
   {
-    id: 'garage',
-    name: 'Garage',
-    status: 'offline',
+    id: 'cam003',
+    name: '多目摄像机',
+    status: 'online',
     isShared: false,
     cloudPlan: '',
-    unreadCount: 0,
+    unreadCount: 1,
     bgGradient: 'linear-gradient(135deg, #1a1a1a, #333)',
     group: '客厅'
   }
@@ -203,7 +204,8 @@ const goToMessage = (device) => {
 }
 
 const goToLiveView = (device) => {
-  router.push('/liveview')
+  const route = resolveDeviceRoute(device.name)
+  router.push({ path: route, query: { deviceId: device.id, deviceName: device.name } })
 }
 
 const goToPlayback = (device) => {
@@ -219,7 +221,7 @@ const goToAi = (device) => {
 }
 
 const goToSettings = (device) => {
-  router.push('/settings')
+  router.push({ path: '/settings', query: { deviceId: device.id, deviceName: device.name } })
 }
 
 const goToMe = () => {

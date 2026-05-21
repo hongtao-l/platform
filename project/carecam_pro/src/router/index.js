@@ -46,10 +46,10 @@ const routes = [
     meta: { title: '广角摄像机' }
   },
   {
-    path: '/liveview/fisheye',
-    name: 'LiveViewFisheye',
-    component: () => import('@/views/liveview/index.vue'),
-    meta: { title: '鱼眼摄像机' }
+    path: '/liveview/multi',
+    name: 'LiveViewMulti',
+    component: () => import('@/views/liveview/multi.vue'),
+    meta: { title: '多目摄像机' }
   },
   {
     path: '/playback',

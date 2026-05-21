@@ -1,329 +1,225 @@
 <template>
   <div class="liveview-page">
-    <!-- 视频区域 -->
-    <div class="video-container">
-      <!-- 顶部控制 -->
-      <div class="top-controls">
-        <div class="back-btn" @click="goBack">
-          <van-icon name="arrow-left" size="22" color="#fff" />
-        </div>
-        <span class="device-name">Front Door</span>
-        <div class="signal-strength">
-          <van-icon name="wifi" size="16" color="#fff" />
-          <span>强</span>
-        </div>
-        <div class="settings-btn" @click="goToSettings">
-          <van-icon name="setting-o" size="20" color="#fff" />
-        </div>
-      </div>
+    <!-- 顶部栏 -->
+    <TopBar
+      :device-name="deviceName"
+      @back="goBack"
+      @settings="goToSettings"
+    />
 
-      <!-- 视频占位 -->
-      <div class="video-placeholder">
-        <van-icon name="video" size="60" color="rgba(255,255,255,0.3)" />
-      </div>
+    <!-- 视频画面区：16:9 全宽 -->
+    <div class="video-stage">
+      <div class="video-panel">
+        <div class="video-placeholder">
+          <van-icon name="video" size="56" color="rgba(255,255,255,0.2)" />
+          <span class="video-hint">实时画面</span>
+        </div>
 
-      <!-- 底部控制 -->
-      <div class="bottom-controls">
-        <div class="control-item" @click="togglePlay">
-          <van-icon :name="isPlaying ? 'pause-circle-o' : 'play-circle-o'" size="28" color="#fff" />
+        <!-- 画面底部控件 -->
+        <div class="video-overlay">
+          <div class="quality-switch">
+            <span
+              v-for="q in qualities"
+              :key="q.key"
+              class="quality-item"
+              :class="{ active: currentQuality === q.key }"
+              @click="switchQuality(q.key)"
+            >{{ q.label }}</span>
+          </div>
+          <van-icon
+            name="expand-o"
+            size="20"
+            color="#fff"
+            class="fullscreen-btn"
+            @click="toggleFullscreen"
+          />
         </div>
-        <div class="control-item" @click="startRecord">
-          <van-icon name="video-o" size="28" color="#fff" />
-        </div>
-        <div class="control-item" @click="takeScreenshot">
-          <van-icon name="photograph" size="28" color="#fff" />
-        </div>
-        <div class="control-item" @click="startCall">
-          <van-icon name="phone-o" size="28" color="#fff" />
-        </div>
-      </div>
-
-      <!-- 悬浮设置按钮 —— 切换摄像机品类 -->
-      <div class="float-settings-btn" @click="showCameraTypes = true">
-        <van-icon name="wap-nav" size="20" color="#fff" />
       </div>
     </div>
 
-    <!-- 云台控制 -->
-    <div class="ptz-controls">
-      <div class="ptz-title">云台控制</div>
-      <div class="ptz-pad">
-        <div class="ptz-btn up" @click="ptzControl('up')">
-          <van-icon name="arrow-up" size="20" />
-        </div>
-        <div class="ptz-btn left" @click="ptzControl('left')">
-          <van-icon name="arrow-left" size="20" />
-        </div>
-        <div class="ptz-center">
-          <van-icon name="plus" size="20" />
-        </div>
-        <div class="ptz-btn right" @click="ptzControl('right')">
-          <van-icon name="arrow-right" size="20" />
-        </div>
-        <div class="ptz-btn down" @click="ptzControl('down')">
-          <van-icon name="arrow-down" size="20" />
-        </div>
-      </div>
-      <div class="zoom-control">
-        <span>变焦</span>
-        <van-slider v-model="zoomLevel" :min="1" :max="10" />
-        <span>{{ zoomLevel }}x</span>
-      </div>
+    <!-- 底部功能区 -->
+    <div class="bottom-area">
+      <PTZPanel
+        :visible="ptzActive"
+        v-model:zoom-level="zoomLevel"
+        @ptz="onPtz"
+        @ptz-stop="onPtzStop"
+        @ptz-center="onPtzCenter"
+        @zoom="onZoom"
+      />
+      <BottomToolbar
+        :buttons="toolbarButtons"
+        @action="onToolbarAction"
+      />
     </div>
 
-    <!-- 摄像机品类选择弹窗 -->
-    <van-action-sheet
-      v-model:show="showCameraTypes"
-      title="选择摄像机品类"
-      :actions="cameraTypes"
-      cancel-text="取消"
-      @select="onCameraTypeSelect"
+    <!-- 子设备面板 -->
+    <SubDevicePanel
+      v-model:visible="showSubDevices"
+      :devices="subDevices"
+      @detail="onSubDeviceDetail"
     />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import TopBar from '@/components/LiveView/TopBar.vue'
+import BottomToolbar from '@/components/LiveView/BottomToolbar.vue'
+import PTZPanel from '@/components/LiveView/PTZPanel.vue'
+import SubDevicePanel from '@/components/LiveView/SubDevicePanel.vue'
 
 const router = useRouter()
+const route = useRoute()
 
-// 播放状态
-const isPlaying = ref(true)
+// 设备信息
+const deviceName = ref(route.query.deviceName || '标准摄像机')
+const deviceId = ref(route.query.deviceId || '')
 
-// 变焦级别
-const zoomLevel = ref(1)
-
-// 摄像机品类选择
-const showCameraTypes = ref(false)
-const cameraTypes = [
-  { name: '标准摄像机', value: 'standard' },
-  { name: '广角摄像机', value: 'wide-angle' },
-  { name: '鱼眼摄像机', value: 'fisheye' }
+// 视频状态
+const isFullscreen = ref(false)
+const currentQuality = ref('hd')
+const qualities = [
+  { key: 'sd', label: '标清' },
+  { key: 'hd', label: '高清' },
+  { key: 'uhd', label: '超清' }
 ]
 
-const onCameraTypeSelect = (action) => {
-  showCameraTypes.value = false
-  const routeMap = {
-    'wide-angle': '/liveview/wide-angle',
-    'fisheye': '/liveview/fisheye',
-    'standard': '/liveview'
+// PTZ 状态
+const ptzActive = ref(false)
+const zoomLevel = ref(1)
+
+// 子设备
+const showSubDevices = ref(false)
+const subDevices = ref([
+  { id: 'sub1', name: '温湿度传感器', type: 'temp_humidity', category: 'temp_humidity', online: true, value: '26°C / 58%', unit: '' },
+  { id: 'sub2', name: '门磁', type: 'door', category: 'door', online: false, lastUpdate: '12:30' },
+])
+
+const isRecording = ref(false)
+const lightOn = ref(false)
+
+// 工具栏按钮
+const toolbarButtons = computed(() => [
+  { key: 'intercom', label: '对讲', icon: 'phone-o', active: false },
+  { key: 'ptz', label: '云台', icon: 'guide-o', active: ptzActive.value },
+  { key: 'playback', label: '回放', icon: 'clock-o', active: false },
+  { key: 'more', label: '更多', icon: 'more-o', active: false },
+  { key: 'record', label: '录制', icon: 'video-o', active: isRecording.value, extra: true },
+  { key: 'subdevice', label: '子设备', icon: 'apps-o', active: false, extra: true },
+  { key: 'snapshot', label: '截图', icon: 'photograph', active: false, extra: true },
+  { key: 'light', label: '补光', icon: 'bulb-o', active: lightOn.value, extra: true },
+])
+
+// PTZ 操作
+function onPtz(dir) { console.log('PTZ:', dir) }
+function onPtzStop() { console.log('PTZ stop') }
+function onPtzCenter() { console.log('PTZ center') }
+function onZoom(level) { console.log('Zoom:', level) }
+
+function switchQuality(key) { currentQuality.value = key }
+function toggleFullscreen() { isFullscreen.value = !isFullscreen.value }
+
+function onToolbarAction(key) {
+  switch (key) {
+    case 'ptz': ptzActive.value = !ptzActive.value; break
+    case 'subdevice': showSubDevices.value = true; break
+    case 'record': isRecording.value = !isRecording.value; break
+    case 'light': lightOn.value = !lightOn.value; break
+    case 'playback': router.push({ path: '/playback', query: { deviceId: deviceId.value, deviceName: deviceName.value } }); break
+    case 'intercom': console.log('Intercom'); break
+    case 'snapshot': console.log('Snapshot'); break
   }
-  const target = routeMap[action.value]
-  if (target && target !== router.currentRoute.value.path) {
-    router.push(target)
-  }
 }
 
-// 返回
-const goBack = () => {
-  router.back()
-}
-
-// 跳转设置
-const goToSettings = () => {
-  router.push('/settings')
-}
-
-// 切换播放
-const togglePlay = () => {
-  isPlaying.value = !isPlaying.value
-}
-
-// 开始录像
-const startRecord = () => {
-  // 录像逻辑
-}
-
-// 截图
-const takeScreenshot = () => {
-  // 截图逻辑
-}
-
-// 开始通话
-const startCall = () => {
-  // 通话逻辑
-}
-
-// 云台控制
-const ptzControl = (direction) => {
-  console.log('PTZ:', direction)
-}
+function onSubDeviceDetail(dev) { console.log('Sub device detail:', dev) }
+function goBack() { router.back() }
+function goToSettings() { router.push({ path: '/settings', query: { deviceId: deviceId.value, deviceName: deviceName.value } }) }
 </script>
 
 <style lang="scss" scoped>
 .liveview-page {
-  min-height: 100%;
-  background-color: #000;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  background: #000;
+  overflow: hidden;
 }
 
-.video-container {
+.video-stage {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  position: relative;
+  align-items: center;
+  overflow: hidden;
 }
 
-.top-controls {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  z-index: 10;
-  
-  .device-name {
-    flex: 1;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 600;
-  }
-  
-  .signal-strength {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    
-    span {
-      color: #fff;
-      font-size: 11px;
-    }
-  }
-  
-  .settings-btn {
-    cursor: pointer;
-  }
+.video-panel {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  background: #000;
 }
 
 .video-placeholder {
-  flex: 1;
-  background: linear-gradient(135deg, #0d1b3e, #1a3a6e);
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0d1b3e 0%, #1a3a6e 40%, #0f2744 70%, #162d50 100%);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.bottom-controls {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 24px;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 12px 24px;
-  border-radius: $radius-pill;
-}
-
-.control-item {
-  cursor: pointer;
-}
-
-.ptz-controls {
-  background-color: $bg-color;
-  padding: 16px;
-  
-  .ptz-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: $text-primary;
-    margin-bottom: 12px;
-  }
-}
-
-.ptz-pad {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
   gap: 8px;
-  width: 150px;
-  height: 150px;
-  margin: 0 auto 16px;
 }
 
-.ptz-btn {
-  background-color: $bg-page;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  
-  &:active {
-    background-color: $primary-bg;
-  }
-  
-  &.up {
-    grid-column: 2;
-    grid-row: 1;
-  }
-  
-  &.left {
-    grid-column: 1;
-    grid-row: 2;
-  }
-  
-  &.right {
-    grid-column: 3;
-    grid-row: 2;
-  }
-  
-  &.down {
-    grid-column: 2;
-    grid-row: 3;
-  }
+.video-hint {
+  font-size: 12px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 1px;
 }
 
-.ptz-center {
-  grid-column: 2;
-  grid-row: 2;
-  background-color: $primary-color;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-}
-
-.zoom-control {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  span {
-    font-size: 12px;
-    color: $text-secondary;
-    min-width: 30px;
-  }
-
-  .van-slider {
-    flex: 1;
-  }
-}
-
-.float-settings-btn {
+.video-overlay {
   position: absolute;
-  right: 16px;
-  bottom: 100px;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(26, 115, 232, 0.85);
-  backdrop-filter: blur(8px);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px 14px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 16px rgba(26, 115, 232, 0.4);
+  justify-content: space-between;
+  background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%, transparent 100%);
+}
+
+.quality-switch {
+  display: flex;
+  gap: 4px;
+  background: rgba(0,0,0,0.45);
+  border-radius: 6px;
+  padding: 3px;
+}
+
+.quality-item {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  padding: 3px 10px;
+  border-radius: 4px;
   cursor: pointer;
-  z-index: 15;
   transition: all .15s;
-  &:active {
-    transform: scale(0.9);
+
+  &.active {
+    color: #fff;
+    background: rgba(26,115,232,0.6);
   }
+}
+
+.fullscreen-btn {
+  cursor: pointer;
+  opacity: 0.7;
+  &:active { opacity: 1; }
+}
+
+.bottom-area {
+  flex-shrink: 0;
+  background: #1A1A2E;
 }
 </style>
