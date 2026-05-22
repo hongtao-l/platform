@@ -59,6 +59,12 @@ const routes = [
     meta: { title: '推荐位运营' }
   },
   {
+    path: '/ops/activity',
+    name: 'OpsActivity',
+    component: () => import('@/views/ops/activity.vue'),
+    meta: { title: '活动位运营' }
+  },
+  {
     path: '/ops/usergroup',
     name: 'OpsUsergroup',
     component: () => import('@/views/ops/usergroup.vue'),

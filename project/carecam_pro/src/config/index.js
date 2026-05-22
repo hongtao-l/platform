@@ -25,6 +25,7 @@ export default {
   storageKeys: {
     token: 'carecam_token',
     userInfo: 'carecam_user_info',
-    language: 'carecam_language'
+    language: 'carecam_language',
+    activityDismissCache: 'carecam_activity_dismiss'
   }
 }

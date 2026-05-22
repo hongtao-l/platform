@@ -106,11 +106,46 @@ function onToolbarAction(key) {
   }
 }
 
-function onSubDeviceDetail(dev) { console.log('Sub device detail:', dev) }
+function onSubDeviceDetail(dev) {
+  const routeMap = {
+    temp_humidity: '/subdevice/temp-humidity',
+    door: '/subdevice/door',
+    smoke: '/subdevice/smoke',
+    gas: '/subdevice/gas',
+    remote: '/subdevice/remote',
+    emergency_button: '/subdevice/emergency-button',
+    co_detector: '/subdevice/co-detector',
+    water_sensor: '/subdevice/water-sensor',
+    doorbell: '/subdevice/doorbell',
+    env_detector: '/subdevice/env-detector',
+    infrared_beam: '/subdevice/infrared-beam',
+    vibration: '/subdevice/vibration',
+    glass_break: '/subdevice/glass-break',
+    fall_detector: '/subdevice/fall-detector'
+  }
+  const path = routeMap[dev.category]
+  if (path) {
+    router.push({ path, query: { deviceId: dev.id, deviceName: dev.name } })
+  } else {
+    console.log('Sub device detail:', dev.name, dev.category)
+  }
+}
 
 const subDevices = ref([
   { id: 'sub1', name: '温湿度传感器', type: 'temp_humidity', category: 'temp_humidity', online: true, value: '26°C / 58%', unit: '' },
-  { id: 'sub2', name: '毫米波雷达', type: 'radar', category: 'radar', online: true, value: '有人', unit: '' },
+  { id: 'sub2', name: '门磁', type: 'door', category: 'door', online: false, lastUpdate: '12:30' },
+  { id: 'sub3', name: '烟雾传感器', type: 'smoke', category: 'smoke', online: true, value: '正常', unit: '' },
+  { id: 'sub4', name: '燃气传感器', type: 'gas', category: 'gas', online: true, value: '正常', unit: '' },
+  { id: 'sub5', name: '遥控器', type: 'remote', category: 'remote', online: true, value: '已配对', unit: '' },
+  { id: 'sub6', name: '紧急按钮', type: 'emergency_button', category: 'emergency_button', online: true, value: '待命', unit: '' },
+  { id: 'sub7', name: '一氧化碳探测器', type: 'co_detector', category: 'co_detector', online: true, value: '安全', unit: '' },
+  { id: 'sub8', name: '水浸传感器', type: 'water_sensor', category: 'water_sensor', online: true, value: '正常', unit: '' },
+  { id: 'sub9', name: '环境探测器', type: 'env_detector', category: 'env_detector', online: true, value: '优', unit: '' },
+  { id: 'sub10', name: '红外对射', type: 'infrared_beam', category: 'infrared_beam', online: true, value: '正常', unit: '' },
+  { id: 'sub11', name: '震动传感器', type: 'vibration', category: 'vibration', online: false, lastUpdate: '08:15' },
+  { id: 'sub12', name: '玻璃破碎探测器', type: 'glass_break', category: 'glass_break', online: true, value: '正常', unit: '' },
+  { id: 'sub13', name: '跌倒探测器', type: 'fall_detector', category: 'fall_detector', online: true, value: '正常', unit: '' },
+  { id: 'sub14', name: '门铃', type: 'doorbell', category: 'doorbell', online: true, value: '待机', unit: '' },
 ])
 
 const goBack = () => router.back()

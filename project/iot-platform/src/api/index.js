@@ -133,9 +133,66 @@ export const pkgApi = {
   }
 }
 
+// 活动位运营相关接口
+export const activityApi = {
+  // 活动策略
+  getList(params) {
+    return request.get('/activity/strategy/list', params)
+  },
+  getDetail(id) {
+    return request.get(`/activity/strategy/${id}`)
+  },
+  create(data) {
+    return request.post('/activity/strategy', data)
+  },
+  update(id, data) {
+    return request.put(`/activity/strategy/${id}`, data)
+  },
+  delete(id) {
+    return request.delete(`/activity/strategy/${id}`)
+  },
+
+  // 状态流转
+  submitForReview(id) {
+    return request.post(`/activity/strategy/${id}/submit`)
+  },
+  cancelReview(id) {
+    return request.post(`/activity/strategy/${id}/cancel-review`)
+  },
+  review(id, data) {
+    return request.post(`/activity/strategy/${id}/review`, data)
+  },
+  pause(id) {
+    return request.post(`/activity/strategy/${id}/pause`)
+  },
+  resume(id) {
+    return request.post(`/activity/strategy/${id}/resume`)
+  },
+  end(id) {
+    return request.post(`/activity/strategy/${id}/end`)
+  },
+  copy(id) {
+    return request.post(`/activity/strategy/${id}/copy`)
+  },
+
+  // 活动套餐关联
+  getPackages(id) {
+    return request.get(`/activity/strategy/${id}/packages`)
+  },
+  updatePackages(id, data) {
+    return request.put(`/activity/strategy/${id}/packages`, data)
+  },
+
+  // 活动媒资上传
+  uploadMedia(id, data) {
+    return request.upload(`/activity/strategy/${id}/media`, data)
+  }
+}
+
 export default {
   userApi,
   productApi,
   abtestApi,
-  pkgApi
+  pkgApi,
+  activityApi
 }

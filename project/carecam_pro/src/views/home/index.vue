@@ -20,8 +20,8 @@
     
     <!-- 家庭分组标签 -->
     <div class="family-bar">
-      <div 
-        v-for="(group, index) in familyGroups" 
+      <div
+        v-for="(group, index) in familyGroups"
         :key="index"
         :class="['family-chip', { active: activeGroup === index }]"
         @click="activeGroup = index"
@@ -29,7 +29,10 @@
         {{ group.name }}
       </div>
     </div>
-    
+
+    <!-- 活动横幅轮播 -->
+    <ActivityBanner />
+
     <!-- 设备列表 -->
     <div class="device-list">
       <div 
@@ -109,6 +112,15 @@
         </div>
       </div>
     </van-popup>
+
+    <!-- 活动悬浮按钮 -->
+    <ActivityFab />
+
+    <!-- 活动启动弹窗 -->
+    <ActivityPopup />
+
+    <!-- 演示控制面板 -->
+    <ActivityDemoPanel />
   </div>
 </template>
 
@@ -117,8 +129,14 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { isDeviceActivated } from '@/store/devStatus'
 import { resolveDeviceRoute } from '@/utils/deviceType'
+import { useActivityStore } from '@/store/activity'
+import ActivityBanner from '@/components/ActivityBanner.vue'
+import ActivityFab from '@/components/ActivityFab.vue'
+import ActivityPopup from '@/components/ActivityPopup.vue'
+import ActivityDemoPanel from '@/components/ActivityDemoPanel.vue'
 
 const router = useRouter()
+const activityStore = useActivityStore()
 
 // 用户信息
 const userInitial = ref('J')
@@ -165,6 +183,36 @@ const devices = ref([
     unreadCount: 1,
     bgGradient: 'linear-gradient(135deg, #1a1a1a, #333)',
     group: '客厅'
+  },
+  {
+    id: 'cam004',
+    name: '门铃',
+    status: 'online',
+    isShared: false,
+    cloudPlan: '',
+    unreadCount: 2,
+    bgGradient: 'linear-gradient(135deg, #1e1b0d, #4a3a1e)',
+    group: '入口'
+  },
+  {
+    id: 'cam005',
+    name: '一氧化碳探测器',
+    status: 'online',
+    isShared: false,
+    cloudPlan: 'Pro',
+    unreadCount: 0,
+    bgGradient: 'linear-gradient(135deg, #1e0d0d, #4a1e1e)',
+    group: '客厅'
+  },
+  {
+    id: 'cam006',
+    name: '红外对射',
+    status: 'sleep',
+    isShared: false,
+    cloudPlan: '',
+    unreadCount: 0,
+    bgGradient: 'linear-gradient(135deg, #0d1e1a, #1e4a3a)',
+    group: '后院'
   }
 ])
 
@@ -227,6 +275,7 @@ const goToSettings = (device) => {
 const goToMe = () => {
   router.push('/me')
 }
+
 </script>
 
 <style lang="scss" scoped>

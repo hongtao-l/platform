@@ -178,6 +178,7 @@ const menuList = ref([
     children: [
       { title: '商城位运营', path: '/ops/mall', icon: ShoppingCart },
       { title: '推荐位运营', path: '/ops/recommend', icon: Star },
+      { title: '活动位运营', path: '/ops/activity', icon: Present },
       { title: '用户分群', path: '/ops/usergroup', icon: UserFilled },
       { title: 'A/B Test', path: '/abtest', icon: DataAnalysis }
     ]

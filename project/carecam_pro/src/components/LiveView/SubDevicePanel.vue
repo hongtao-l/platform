@@ -63,10 +63,26 @@ const props = defineProps({
 defineEmits(['update:visible', 'detail'])
 
 const DEVICE_GROUPS = {
+  // 环境传感器
   temp_humidity: { name: '环境传感器', icon: '🌡' },
+  env_detector: { name: '环境传感器', icon: '🌿' },
+  water_sensor: { name: '环境传感器', icon: '💧' },
+  // 安防传感器
   smoke: { name: '安防传感器', icon: '🚨' },
+  gas: { name: '安防传感器', icon: '🔥' },
+  co_detector: { name: '安防传感器', icon: '☠️' },
   door: { name: '安防传感器', icon: '🚪' },
   radar: { name: '安防传感器', icon: '📡' },
+  infrared_beam: { name: '安防传感器', icon: '👁' },
+  vibration: { name: '安防传感器', icon: '📳' },
+  glass_break: { name: '安防传感器', icon: '💥' },
+  fall_detector: { name: '安防传感器', icon: '🦽' },
+  emergency_button: { name: '安防传感器', icon: '🆘' },
+  // 门禁设备
+  doorbell: { name: '门禁设备', icon: '🔔' },
+  // 控制设备
+  remote: { name: '控制设备', icon: '🎮' },
+  // 兜底
   other: { name: '其他', icon: '📟' }
 }
 

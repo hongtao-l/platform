@@ -52,6 +52,12 @@ const routes = [
     meta: { title: '多目摄像机' }
   },
   {
+    path: '/liveview/other',
+    name: 'LiveViewOther',
+    component: () => import('@/views/liveview/other.vue'),
+    meta: { title: '设备预览' }
+  },
+  {
     path: '/playback',
     name: 'Playback',
     component: () => import('@/views/playback/index.vue'),
@@ -92,6 +98,91 @@ const routes = [
     name: 'BatteryStats',
     component: () => import('@/views/battery/stats.vue'),
     meta: { title: '运行统计' }
+  },
+  // ===== 子设备详情 =====
+  {
+    path: '/subdevice/temp-humidity',
+    name: 'SubDeviceTempHumidity',
+    component: () => import('@/views/subdevice/TempHumidity.vue'),
+    meta: { title: '温湿度传感器' }
+  },
+  {
+    path: '/subdevice/door',
+    name: 'SubDeviceDoor',
+    component: () => import('@/views/subdevice/Door.vue'),
+    meta: { title: '门磁传感器' }
+  },
+  {
+    path: '/subdevice/smoke',
+    name: 'SubDeviceSmoke',
+    component: () => import('@/views/subdevice/Smoke.vue'),
+    meta: { title: '烟雾传感器' }
+  },
+  {
+    path: '/subdevice/gas',
+    name: 'SubDeviceGas',
+    component: () => import('@/views/subdevice/Gas.vue'),
+    meta: { title: '燃气传感器' }
+  },
+  {
+    path: '/subdevice/remote',
+    name: 'SubDeviceRemote',
+    component: () => import('@/views/subdevice/Remote.vue'),
+    meta: { title: '遥控器' }
+  },
+  {
+    path: '/subdevice/emergency-button',
+    name: 'SubDeviceEmergencyButton',
+    component: () => import('@/views/subdevice/EmergencyButton.vue'),
+    meta: { title: '紧急按钮' }
+  },
+  {
+    path: '/subdevice/co-detector',
+    name: 'SubDeviceCODetector',
+    component: () => import('@/views/subdevice/CODetector.vue'),
+    meta: { title: '一氧化碳探测器' }
+  },
+  {
+    path: '/subdevice/water-sensor',
+    name: 'SubDeviceWaterSensor',
+    component: () => import('@/views/subdevice/WaterSensor.vue'),
+    meta: { title: '水浸传感器' }
+  },
+  {
+    path: '/subdevice/doorbell',
+    name: 'SubDeviceDoorbell',
+    component: () => import('@/views/subdevice/Doorbell.vue'),
+    meta: { title: '门铃' }
+  },
+  {
+    path: '/subdevice/env-detector',
+    name: 'SubDeviceEnvDetector',
+    component: () => import('@/views/subdevice/EnvDetector.vue'),
+    meta: { title: '环境探测器' }
+  },
+  {
+    path: '/subdevice/infrared-beam',
+    name: 'SubDeviceInfraredBeam',
+    component: () => import('@/views/subdevice/InfraredBeam.vue'),
+    meta: { title: '红外对射' }
+  },
+  {
+    path: '/subdevice/vibration',
+    name: 'SubDeviceVibration',
+    component: () => import('@/views/subdevice/Vibration.vue'),
+    meta: { title: '震动传感器' }
+  },
+  {
+    path: '/subdevice/glass-break',
+    name: 'SubDeviceGlassBreak',
+    component: () => import('@/views/subdevice/GlassBreak.vue'),
+    meta: { title: '玻璃破碎探测器' }
+  },
+  {
+    path: '/subdevice/fall-detector',
+    name: 'SubDeviceFallDetector',
+    component: () => import('@/views/subdevice/FallDetector.vue'),
+    meta: { title: '跌倒探测器' }
   },
   {
     path: '/login',
