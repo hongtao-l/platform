@@ -79,7 +79,7 @@
                 <template #default="{ row }">
                   <div>
                     <div class="text-medium">{{ row.name }}</div>
-                    <div v-if="row.isDefault" class="default-strategy-hint">未命中分群的用户展示此策略</div>
+                    <div v-if="row.isDefault" class="default-strategy-hint">未命中策略的用户展示此策略</div>
                   </div>
                 </template>
               </el-table-column>
@@ -387,13 +387,22 @@ const confirmPkgSelect = () => {
 // Strategies
 const strategies = ref([
   {
-    name: '默认策略', isDefault: true, regions: ['国内', '海外'], groups: [],
+    name: '国内默认策略', isDefault: true, regions: ['国内'], groups: [],
     funnels: [
       { condition: '条件一', funnel: '首页基础漏斗' },
       { condition: '条件二', funnel: '首页基础漏斗' },
       { condition: '条件三', funnel: '首页基础漏斗' }
     ],
-    remark: '—'
+    remark: '国内默认策略，兜底展示'
+  },
+  {
+    name: '海外默认策略', isDefault: true, regions: ['海外'], groups: [],
+    funnels: [
+      { condition: '条件一', funnel: '首页基础漏斗' },
+      { condition: '条件二', funnel: '首页基础漏斗' },
+      { condition: '条件三', funnel: '首页基础漏斗' }
+    ],
+    remark: '海外默认策略，兜底展示'
   },
   {
     name: '首页推广策略', isDefault: false, regions: ['国内'],
@@ -437,7 +446,7 @@ const openStrategyDrawer = (mode, row) => {
     isDefaultEdit.value = row.isDefault
     strategyForm.name = row.name
     strategyForm.remark = row.remark === '—' ? '' : row.remark
-    strategyForm.regions = row.isDefault ? ['国内', '海外'] : [...row.regions]
+    strategyForm.regions = [...row.regions]
     strategyForm.groups = [...row.groups]
     strategyForm.conditions.forEach((c, i) => {
       c.funnel = row.funnels[i]?.funnel || ''

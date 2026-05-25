@@ -14,7 +14,7 @@
             <template #default="{ row }">
               <div class="strategy-name-cell">
                 <div class="strategy-name">{{ row.name }}</div>
-                <div v-if="row.isDefault" class="strategy-default-hint">未命中分群的用户展示此策略</div>
+                <div v-if="row.isDefault" class="strategy-default-hint">未命中策略的用户展示此策略</div>
               </div>
             </template>
           </el-table-column>
@@ -403,7 +403,8 @@ const pkgManageIdx = ref(-1)
 
 // Strategies
 const strategies = ref([
-  { id: 0, name: '默认策略', regions: ['国内', '海外'], apps: ['牵心PRO', '鹤梦之家'], groups: [], pkgCount: 3, remark: '系统默认策略，兜底展示', isDefault: true },
+  { id: 0, name: '国内默认策略', regions: ['国内'], apps: ['牵心PRO', '鹤梦之家'], groups: [], pkgCount: 3, remark: '国内默认策略，兜底展示', isDefault: true },
+  { id: -1, name: '海外默认策略', regions: ['海外'], apps: ['牵心PRO', '鹤梦之家'], groups: [], pkgCount: 3, remark: '海外默认策略，兜底展示', isDefault: true },
   { id: 1, name: '高价值用户专属', regions: ['国内'], apps: ['牵心PRO'], groups: ['高价值用户'], pkgCount: 5, remark: '针对高价值用户的专属套餐推荐' },
   { id: 2, name: '新用户引导策略', regions: ['国内', '海外'], apps: ['牵心PRO', '鹤梦之家'], groups: ['新注册用户', '活跃用户', '付费用户'], pkgCount: 2, remark: '新用户首次进入商城的引导套餐' }
 ])

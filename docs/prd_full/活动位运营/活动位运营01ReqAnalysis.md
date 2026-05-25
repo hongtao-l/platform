@@ -24,10 +24,10 @@
 
 | 术语 | 说明 |
 |------|------|
-| **活动位** | App 内用于展示营销活动的固定/动态位置，如首页 banner、启动弹窗、侧边栏入口等 |
+| **活动位** | App 内用于展示营销活动的固定/动态位置，如首页 banner、启动弹窗等 |
 | **活动策略** | 定义一套完整的活动投放规则：什么时候、在哪个位置、向哪些用户、展示什么内容 |
 | **活动周期** | 活动生效的时间范围 [startTime, endTime]，超期自动下线 |
-| **活动位置** | 活动展示的具体位置类型：banner（横幅）、popup（弹窗）、floating（悬浮）、sidebar（侧边栏） |
+| **活动位置** | 活动展示的具体位置类型：banner（横幅）、popup（弹窗）、floating（悬浮） |
 | **活动媒资** | 活动展示所需的图片/视频素材，不同位置有不同尺寸规格 |
 | **活动套餐** | 活动关联的套餐（复用商城位套餐体系），活动期间可进行套餐促销 |
 | **活动链接** | 用户点击活动后跳转的目标 URL（H5 活动页 / 原生页面路由） |
@@ -59,7 +59,6 @@
 | `slot_banner` | 首页Banner | 750×400 | 全宽横幅轮播 |
 | `slot_popup` | 启动弹窗 | 600×800 | 应用启动时弹出 |
 | `slot_floating` | 悬浮按钮 | 120×120 | 页面右下角悬浮 |
-| `slot_sidebar` | 侧边栏入口 | 200×200 | 个人中心侧边栏 |
 
 ### 5.3 活动状态流转
 ```
@@ -126,7 +125,7 @@
   status: String,       // draft | active | paused | ended | expired
   startTime: String,    // 活动开始时间 ISO-8601
   endTime: String,      // 活动结束时间 ISO-8601
-  position: String,     // 投放位置 slot_banner | slot_popup | slot_floating | slot_sidebar
+  position: String,     // 投放位置 slot_banner | slot_popup | slot_floating
   regions: [String],    // ['国内'] | ['海外'] | ['国内','海外']
   apps: [String],       // ['牵心PRO'] | ['鹤梦之家'] | ['牵心PRO','鹤梦之家']
   userGroups: [String], // 用户分群ID数组
@@ -216,11 +215,6 @@
 6. 用户点击 → 跳转链接
 7. 悬浮按钮右上角有关闭按钮（×），点击后当天隐藏
 8. 无有效悬浮活动时不渲染
-
-### S08: 侧边栏入口
-1. 在"我的"页面或侧边栏中展示
-2. 展示 `position=slot_sidebar` 的有效活动入口
-3. 用户点击 → 跳转活动链接
 
 ## 12. APP侧业务规则
 

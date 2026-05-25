@@ -107,15 +107,15 @@ const showDatePicker = ref(false)
 const selectedDate = ref(['2024', '04', '20'])
 const dateLabel = ref('4月20日')
 const showFilterPanel = ref(false)
-const deviceOptions = ['Front Door', 'Backyard', 'Garage']
-const selectedDevice = ref('Front Door')
+const deviceOptions = ['标准摄像机', '广角摄像机', '多目摄像机', '门铃', '一氧化碳探测器']
+const selectedDevice = ref('标准摄像机')
 
 const messages = ref([
-  { id: 1, type: '奶奶出门散步', deviceName: 'Front Door', time: '今天 09:20', tag: '老人看护', tagType: 'elder', bgGradient: 'linear-gradient(135deg, #0d2e1a, #1a5c34)', isFocus: true },
-  { id: 2, type: '猫咪在客厅跑酷', deviceName: 'Front Door', time: '今天 09:38', tag: '宠物活动', tagType: 'pet', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: true },
-  { id: 3, type: '门口有人经过', deviceName: 'Front Door', time: '今天 08:55', tag: '人员经过', tagType: 'person', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: true },
-  { id: 4, type: '声音告警', deviceName: 'Backyard', time: '昨天 22:14', tag: '声音', tagType: 'sound', bgGradient: 'linear-gradient(135deg, #0d2e1a, #1a5c34)', isFocus: false },
-  { id: 5, type: '检测到车辆', deviceName: 'Front Door', time: '昨天 20:02', tag: '车辆', tagType: 'vehicle', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: false }
+  { id: 1, type: '奶奶出门散步', deviceName: '标准摄像机', time: '今天 09:20', tag: '老人看护', tagType: 'elder', bgGradient: 'linear-gradient(135deg, #0d2e1a, #1a5c34)', isFocus: true },
+  { id: 2, type: '猫咪在客厅跑酷', deviceName: '标准摄像机', time: '今天 09:38', tag: '宠物活动', tagType: 'pet', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: true },
+  { id: 3, type: '门口有人经过', deviceName: '标准摄像机', time: '今天 08:55', tag: '人员经过', tagType: 'person', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: true },
+  { id: 4, type: '声音告警', deviceName: '广角摄像机', time: '昨天 22:14', tag: '声音', tagType: 'sound', bgGradient: 'linear-gradient(135deg, #0d2e1a, #1a5c34)', isFocus: false },
+  { id: 5, type: '检测到车辆', deviceName: '标准摄像机', time: '昨天 20:02', tag: '车辆', tagType: 'vehicle', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: false }
 ])
 
 const msgFilterTabs = computed(() => {

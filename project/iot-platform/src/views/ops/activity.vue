@@ -13,7 +13,6 @@
         <el-option label="Banner" value="slot_banner" />
         <el-option label="弹窗" value="slot_popup" />
         <el-option label="悬浮" value="slot_floating" />
-        <el-option label="侧边栏" value="slot_sidebar" />
       </el-select>
       <el-select v-model="filterRegion" placeholder="全部区域" size="small" style="width:120px" clearable @change="applyFilter">
         <el-option label="国内" value="国内" />
@@ -44,9 +43,14 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="投放位置" width="100">
+          <el-table-column label="投放位置" width="110">
             <template #default="{ row }">
               <span :class="['pos-tag', 'pos-' + row.position]">{{ positionLabels[row.position] }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="活动位编码" width="130">
+            <template #default="{ row }">
+              <code class="code-tag">{{ posSpecs[row.position]?.code }}</code>
             </template>
           </el-table-column>
           <el-table-column label="活动周期" width="180">
@@ -241,6 +245,7 @@
               >
                 <div class="pos-icon">{{ pos.icon }}</div>
                 <div class="pos-name">{{ pos.label }}</div>
+                <div class="pos-code">{{ pos.code }}</div>
                 <div class="pos-spec">{{ pos.spec }}</div>
               </div>
             </div>
@@ -375,6 +380,7 @@
               >
                 <div class="pos-icon">{{ pos.icon }}</div>
                 <div class="pos-name">{{ pos.label }}</div>
+                <div class="pos-code">{{ pos.code }}</div>
                 <div class="pos-spec">{{ pos.spec }}</div>
               </div>
             </div>
@@ -466,7 +472,7 @@
         </div>
         <div class="review-section">
           <div class="review-label">投放位置</div>
-          <div class="review-value">{{ positionLabels[detailStrategy.position] }} ({{ posSpecs[detailStrategy.position]?.spec }})</div>
+          <div class="review-value">{{ positionLabels[detailStrategy.position] }}（{{ posSpecs[detailStrategy.position]?.spec }}）<br /><code class="code-tag">{{ posSpecs[detailStrategy.position]?.code }}</code></div>
         </div>
         <div v-if="detailStrategy.position === 'slot_popup' && detailStrategy.popupFrequency" class="review-section">
           <div class="review-label">弹窗频率</div>
@@ -569,16 +575,15 @@ const pkgManageIdx = ref(-1)
 
 // ===== Position Data =====
 const positionOptions = [
-  { value: 'slot_banner', label: '首页Banner', icon: '🏞️', spec: '750 × 400' },
-  { value: 'slot_popup', label: '启动弹窗', icon: '📢', spec: '600 × 800' },
-  { value: 'slot_floating', label: '悬浮按钮', icon: '🔘', spec: '120 × 120' },
-  { value: 'slot_sidebar', label: '侧边栏入口', icon: '📋', spec: '200 × 200' }
+  { value: 'slot_banner', code: 'ACT_SLOT_BANNER', label: '首页Banner', icon: '🏞️', spec: '750 × 400' },
+  { value: 'slot_popup', code: 'ACT_SLOT_POPUP', label: '启动弹窗', icon: '📢', spec: '600 × 800' },
+  { value: 'slot_floating', code: 'ACT_SLOT_FLOATING', label: '悬浮按钮', icon: '🔘', spec: '120 × 120' }
 ]
 
-const posSpecs = Object.fromEntries(positionOptions.map(p => [p.value, { name: p.label, spec: p.spec }]))
+const posSpecs = Object.fromEntries(positionOptions.map(p => [p.value, { name: p.label, spec: p.spec, code: p.code }]))
 
 const positionLabels = {
-  slot_banner: 'Banner', slot_popup: '弹窗', slot_floating: '悬浮', slot_sidebar: '侧边栏'
+  slot_banner: 'Banner', slot_popup: '弹窗', slot_floating: '悬浮'
 }
 
 const freqOptions = [
@@ -630,15 +635,7 @@ const strategies = ref([
     remark: '五一特惠'
   },
   {
-    id: 'AS004', name: '鹤梦侧边栏入口', status: 'draft',
-    startTime: '', endTime: '',
-    position: 'slot_sidebar', regions: ['海外'], apps: ['鹤梦之家'],
-    groups: ['高价值用户'], activityUrl: 'https://m.example.com/sidebar',
-    popupFrequency: '', packages: [], pkgCount: 0,
-    remark: '待确认活动周期'
-  },
-  {
-    id: 'AS005', name: '双11预售弹窗', status: 'draft',
+    id: 'AS004', name: '双11预售弹窗', status: 'draft',
     startTime: '2026-11-01T00:00', endTime: '2026-11-11T23:59',
     position: 'slot_popup', regions: ['国内', '海外'], apps: ['牵心PRO', '鹤梦之家'],
     groups: ['高价值用户', '活跃用户', '付费用户'], activityUrl: 'https://m.example.com/double11',
@@ -1044,15 +1041,22 @@ onUnmounted(() => {
   font-weight: 500;
   color: #fff;
 }
+
+.code-tag {
+  font-size: 11px;
+  background: var(--gray-100);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--text-regular);
+}
 .pos-slot_banner { background: #2563EB; }
 .pos-slot_popup { background: #EA580C; }
 .pos-slot_floating { background: #16A34A; }
-.pos-slot_sidebar { background: #7C3AED; }
 
 // ===== Position Cards =====
 .position-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
 
@@ -1073,10 +1077,12 @@ onUnmounted(() => {
 
   .pos-icon { font-size: 28px; margin-bottom: 6px; line-height: 1; }
   .pos-name { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+  .pos-code { font-size: 10px; color: var(--gray-400); font-family: monospace; margin-bottom: 2px; }
   .pos-spec { font-size: 11px; color: var(--gray-400); }
 
   &.selected {
     .pos-name { color: var(--primary-color); }
+    .pos-code { color: var(--primary-color); opacity: 0.7; }
     .pos-spec { color: var(--primary-color); }
   }
 }

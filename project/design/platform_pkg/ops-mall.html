@@ -751,7 +751,8 @@ body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
 <script>
 /* ===== 策略数据 ===== */
 var strategies = [
-  {name:'默认策略', regions:['国内','海外'], apps:['牵心PRO','鹤梦之家'], groups:[], pkgCount:3, remark:'系统默认策略，兜底展示', isDefault:true},
+  {name:'国内默认策略', regions:['国内'], apps:['牵心PRO','鹤梦之家'], groups:[], pkgCount:3, remark:'国内默认策略，兜底展示', isDefault:true},
+  {name:'海外默认策略', regions:['海外'], apps:['牵心PRO','鹤梦之家'], groups:[], pkgCount:3, remark:'海外默认策略，兜底展示', isDefault:true},
   {name:'高价值用户专属', regions:['国内'], apps:['牵心PRO'], groups:['高价值用户'], pkgCount:5, remark:'针对高价值用户的专属套餐推荐', isDefault:false},
   {name:'新用户引导策略', regions:['国内','海外'], apps:['牵心PRO','鹤梦之家'], groups:['新注册用户','活跃用户'], pkgCount:2, remark:'新用户首次进入商城的引导套餐', isDefault:false}
 ];
@@ -780,7 +781,7 @@ function renderStrategies() {
       }).join(' ');
     tr.innerHTML =
       '<td><div style="font-weight:500;color:var(--gray-900)">' + s.name + '</div>' +
-        (s.isDefault ? '<div style="font-size:11px;color:var(--gray-400);margin-top:2px">未命中分群的用户展示此策略</div>' : '') +
+        (s.isDefault ? '<div style="font-size:11px;color:var(--gray-400);margin-top:2px">未命中策略的用户展示此策略</div>' : '') +
       '</td>' +
       '<td>' + regionsHtml + '</td>' +
       '<td>' + appsHtml + '</td>' +

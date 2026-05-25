@@ -5,9 +5,13 @@ export const aiStatus = ref('activated')
 
 // 各设备 AI 开通状态映射 (deviceName → true/false)
 export const deviceAiStatus = ref({
-  'Front Door': true,
-  'Backyard': false,
-  'Garage': false
+  '标准摄像机': true,
+  '广角摄像机': false,
+  '多目摄像机': false,
+  '门铃': false,
+  '一氧化碳探测器': false,
+  '烟雾探测器': false,
+  '水浸探测器': false
 })
 
 // 检查指定设备是否已开通全能AI
@@ -23,5 +27,5 @@ export const activatedDevices = computed(() => {
 // 获取默认选中的设备（优先已开通的第一个）
 export const defaultActivatedDevice = computed(() => {
   const activated = activatedDevices.value
-  return activated.length > 0 ? activated[0] : 'Front Door'
+  return activated.length > 0 ? activated[0] : '标准摄像机'
 })
