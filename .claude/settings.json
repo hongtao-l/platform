@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tasklist)",
+      "Bash(curl -s -X POST \"https://open.feishu.cn/open-apis/bot/v2/hook/4c1a7798-7279-43eb-ba9a-7129579781ca\" -H \"Content-Type: application/json\" -d '{\"msg_type\":\"text\",\"content\":{\"text\":\"Claude Code 飞书通知测试 ✅\\\\n\\\\n任务完成，推送通道正常工作。\"}}')",
+      "Bash(node -e ' *)",
+      "Bash(node \"C:/Users/LHT/.feicod/hooks/notify.js\" --file \"C:/Users/LHT/.feicod/tmp-notify.json\")",
+      "Bash(node -e \"const fs=require\\('fs'\\);fs.writeFileSync\\('C:/Users/LHT/.feicod/tmp-notify.json',JSON.stringify\\({hook_event_name:'Stop',cwd:'d:\\\\\\\\\\\\\\\\Tool\\\\\\\\\\\\\\\\kiro project',session_id:'create-product-' + Date.now\\(\\),last_assistant_message:'创建产品功能已实现：弹窗表单（产品ID/名称/类目/开发方式/描述）+ productApi.create 对接。点击development页「创建产品」按钮即可创建。'}\\)\\)\")"
+    ]
+  }
+}

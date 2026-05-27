@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物模型管理</title>
+<link rel="stylesheet" href="common.css">
+<style>
+body{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+.main-layout{display:flex;flex:1;overflow:hidden;}
+.right-content{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.content{flex:1;overflow-y:auto;padding:24px 32px;}
+.page-view{display:none;}
+.page-view.active{display:flex;flex-direction:column;flex:1;overflow:hidden;}
+
+/* 左栏模块列表 */
+.module-sidebar{width:260px;background:var(--white);border-right:1px solid var(--gray-200);display:flex;flex-direction:column;flex-shrink:0;}
+.module-sidebar-header{display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--gray-100);}
+.module-sidebar-title{font-size:14px;font-weight:600;color:var(--gray-900);}
+.module-sidebar-list{flex:1;overflow-y:auto;padding:8px;}
+.module-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--gray-600);transition:all .15s;margin-bottom:2px;position:relative;}
+.module-item:hover{background:var(--gray-50);}
+.module-item.active{background:var(--primary-light);color:var(--primary);font-weight:500;}
+.module-item .module-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.module-item .module-id{font-size:11px;color:var(--gray-400);margin-left:8px;flex-shrink:0;}
+.module-item .module-actions{display:none;gap:4px;margin-left:8px;}
+.module-item:hover .module-actions{display:flex;}
+.module-item-all{padding:10px 12px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--gray-700);cursor:pointer;border-radius:8px;margin-bottom:4px;}
+.module-item-all:hover{background:var(--gray-50);}
+.module-item-all.active{background:var(--primary-light);color:var(--primary);}
+
+/* 右栏 */
+.capability-right{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.capability-right .content{padding:20px 24px;}
+
+/* 筛选芯片 */
+.filter-chips{display:flex;gap:8px;margin-bottom:16px;align-items:center;}
+.filter-chip{padding:5px 16px;border-radius:16px;font-size:12px;color:var(--gray-500);cursor:pointer;border:1px solid var(--gray-200);background:var(--white);transition:all .15s;}
+.filter-chip:hover{background:var(--gray-50);}
+.filter-chip.active{background:var(--primary);color:white;border-color:var(--primary);}
+
+/* 步骤条 */
+.step-bar{display:flex;align-items:center;justify-content:center;padding:16px 24px;border-bottom:1px solid var(--gray-200);background:var(--gray-50);}
+.step-item{display:flex;align-items:center;gap:8px;cursor:pointer;}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--gray-200);color:var(--gray-500);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;transition:all .2s;}
+.step-num.active{background:var(--primary);color:white;}
+.step-num.done{background:var(--primary);color:white;}
+.step-label{font-size:13px;font-weight:500;color:var(--gray-500);transition:all .2s;}
+.step-label.active{color:var(--primary);}
+.step-line{width:60px;height:2px;background:var(--gray-200);margin:0 16px;transition:all .3s;}
+.step-line.done{background:var(--primary);}
+.step-content{display:none;}
+.step-content.active{display:block;}
+
+/* 能力类型标签 */
+.type-tag{display:inline-flex;padding:3px 8px;border-radius:4px;font-size:12px;font-weight:500;}
+.type-tag.prop{background:#EFF6FF;color:#2563EB;}
+.type-tag.svc{background:#F0FDF4;color:#16A34A;}
+.type-tag.evt{background:#FFFBEB;color:#D97706;}
+
+/* 枚举值编辑 */
+.enum-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px 12px;background:var(--gray-50);border-radius:6px;}
+.enum-row .enum-name{flex:1;}
+.enum-row .enum-val{width:100px;}
+.btn-icon-sm{width:28px;height:28px;padding:0;border:1px solid var(--gray-200);border-radius:6px;background:var(--white);color:var(--gray-400);cursor:pointer;font-size:16px;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;}
+.btn-icon-sm:hover{background:var(--gray-50);color:var(--gray-700);}
+.btn-icon-sm.danger:hover{background:#FEF2F2;color:#DC2626;border-color:#FECACA;}
+
+/* 参数配置区 */
+.param-section{margin-bottom:16px;}
+.param-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.param-section-title{font-size:13px;font-weight:500;color:var(--gray-700);}
+.param-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--gray-200);border-radius:6px;margin-bottom:6px;}
+.param-item .param-name{flex:1;font-size:13px;color:var(--gray-900);}
+.param-item .param-meta{font-size:11px;color:var(--gray-400);}
+
+/* 确认预览卡片 */
+.preview-card{padding:16px;background:var(--gray-50);border-radius:8px;border:1px solid var(--gray-200);}
+.preview-row{display:flex;margin-bottom:8px;font-size:13px;}
+.preview-row:last-child{margin-bottom:0;}
+.preview-label{width:80px;color:var(--gray-500);flex-shrink:0;}
+.preview-value{color:var(--gray-900);font-weight:500;}
+
+/* 能力表格内小标签 */
+.inline-tag{display:inline-flex;padding:2px 6px;border-radius:3px;font-size:11px;margin:1px 2px;}
+.inline-tag.enum-item{background:var(--gray-100);color:var(--gray-600);}
+
+/* 数据定义预览 */
+.data-def{font-size:12px;color:var(--gray-500);line-height:1.6;}
+
+/* 返回按钮行 */
+.back-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="breadcrumb">
+    <span class="link">运营管理</span>
+    <span class="sep">/</span>
+    <span class="current" id="breadcrumb-current">物模型管理</span>
+  </div>
+</div>
+
+<div class="main-layout">
+  <div class="right-content">
+
+    <!-- ==================== PAGE 1: 类目列表 ==================== -->
+    <div id="page-category" class="page-view active">
+      <div class="content">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">设备类目</span>
+            <button class="btn btn-primary btn-sm" onclick="openAddCategory()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加类目
+            </button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>类目名称</th>
+                <th>标识符</th>
+                <th>能力模块</th>
+                <th>标准能力</th>
+                <th>描述</th>
+                <th style="width:140px">操作</th>
+              </tr>
+            </thead>
+            <tbody id="category-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PAGE 2: 能力管理 ==================== -->
+    <div id="page-capability" class="page-view">
+      <!-- 左栏：能力模块 -->
+      <div class="module-sidebar">
+        <div class="module-sidebar-header">
+          <span class="module-sidebar-title">能力模块</span>
+          <button class="btn btn-sm btn-primary" style="padding:4px 8px;font-size:12px" onclick="openAddModule()">+ 添加</button>
+        </div>
+        <div class="module-sidebar-list" id="module-list">
+          <div class="module-item-all active" onclick="selectModule('all')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
+            全部
+          </div>
+        </div>
+      </div>
+      <!-- 右栏：能力列表 -->
+      <div class="capability-right">
+        <div class="content">
+          <div class="back-row">
+            <button class="btn btn-secondary" onclick="goBackToCategory()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>返回类目
+            </button>
+            <span style="font-size:15px;font-weight:600" id="current-category-name">IPC摄像机</span>
+          </div>
+          <div class="card" style="flex:1;display:flex;flex-direction:column">
+            <div class="card-header">
+              <div style="display:flex;align-items:center;gap:16px">
+                <span class="card-title">标准能力</span>
+                <div class="filter-chips" style="margin-bottom:0">
+                  <span class="filter-chip active" onclick="filterByType('all', this)">全部</span>
+                  <span class="filter-chip" onclick="filterByType('prop', this)">属性</span>
+                  <span class="filter-chip" onclick="filterByType('svc', this)">服务</span>
+                  <span class="filter-chip" onclick="filterByType('evt', this)">事件</span>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="openAddCapability()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>添加标准能力
+              </button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>能力名称</th>
+                  <th>标识符</th>
+                  <th>能力类型</th>
+                  <th>数据类型</th>
+                  <th>读写模式</th>
+                  <th>描述</th>
+                  <th style="width:120px">操作</th>
+                </tr>
+              </thead>
+              <tbody id="capability-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end right-content -->
+</div><!-- end main-layout -->
+
+<!-- ==================== DIALOG: 添加/编辑类目 ==================== -->
+<div class="modal-overlay" id="modal-category" onclick="if(event.target===this)closeModal('modal-category')">
+  <div class="modal" style="width:480px">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-category-title">添加类目</span>
+      <button class="close-btn" onclick="closeModal('modal-category')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">类目名称 <span class="required">*</span></label>
+        <input class="input" id="input-cat-name" placeholder="请输入类目名称（最多40字符）" maxlength="40">
+      </div>
+      <div class="form-group">
+        <label class="form-label">标识符 <span class="required">*</span></label>
+        <input class="input" id="input-cat-id" placeholder="例如 ipc_camera" maxlength="40">
+        <div style="font-size:11px;color:var(--gray-400);margin-top:4px">字母开头，仅允许字母、数字、下划线</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">描述</label>
+        <textarea class="textarea" id="input-cat-desc" placeholder="请输入描述（最多200字符）" maxlength="200" rows="3"></textarea>
+      </div>
+    </div>
+    <div style="padding:12px 24px;border-top:1px solid var(--gray-200);display:flex;justify-content:flex-end;gap:8px">
+      <button class="btn btn-secondary" onclick="closeModal('modal-category')">取消</button>
+      <button class="btn btn-primary" onclick="confirmCategory()">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DIALOG: 添加/编辑模块 ==================== -->
+<div class="modal-overlay" id="modal-module" onclick="if(event.target===this)closeModal('modal-module')">
+  <div class="modal" style="width:480px">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-module-title">添加能力模块</span>
+      <button class="close-btn" onclick="closeModal('modal-module')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">模块名称 <span class="required">*</span></label>
+        <input class="input" id="input-mod-name" placeholder="请输入模块名称">
+      </div>
+      <div class="form-group">
+        <label class="form-label">模块标识 <span class="required">*</span></label>
+        <input class="input" id="input-mod-id" placeholder="例如 work_mode_module">
+        <div style="font-size:11px;color:var(--gray-400);margin-top:4px">字母开头，仅允许字母、数字、下划线</div>
+      </div>
+    </div>
+    <div style="padding:12px 24px;border-top:1px solid var(--gray-200);display:flex;justify-content:flex-end;gap:8px">
+      <button class="btn btn-secondary" onclick="closeModal('modal-module')">取消</button>
+      <button class="btn btn-primary" onclick="confirmModule()">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DRAWER: 添加/编辑能力（3步） ==================== -->
+<div class="drawer-overlay" id="overlay-drawer-cap" onclick="closeDrawer('drawer-cap')"></div>
+<div class="drawer" id="drawer-cap" style="width:720px">
+  <div class="drawer-header">
+    <span class="drawer-title" id="drawer-cap-title">添加标准能力</span>
+    <button class="close-btn" onclick="closeDrawer('drawer-cap')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="step-bar">
+    <div class="step-item" onclick="goCapStep(1)">
+      <span class="step-num active" id="cap-step-num-1">1</span>
+      <span class="step-label active" id="cap-step-label-1">基础信息</span>
+    </div>
+    <div class="step-line" id="cap-step-line-1"></div>
+    <div class="step-item" onclick="goCapStep(2)">
+      <span class="step-num" id="cap-step-num-2">2</span>
+      <span class="step-label" id="cap-step-label-2">数据定义</span>
+    </div>
+    <div class="step-line" id="cap-step-line-2"></div>
+    <div class="step-item" onclick="goCapStep(3)">
+      <span class="step-num" id="cap-step-num-3">3</span>
+      <span class="step-label" id="cap-step-label-3">确认提交</span>
+    </div>
+  </div>
+  <div class="drawer-body">
+
+    <!-- STEP 1: 基础信息 -->
+    <div class="step-content active" id="cap-step-1">
+      <div class="form-group">
+        <label class="form-label">能力类型 <span class="required">*</span></label>
+        <div style="display:flex;gap:8px">
+          <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border:2px solid var(--primary);border-radius:8px;cursor:pointer;background:var(--primary-light)" id="cap-type-card-prop" onclick="selectCapType('prop')">
+            <input type="radio" name="capType" value="prop" style="display:none" checked>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="4"/><path d="M7 12h10M12 7v10"/></svg>
+            <span style="font-weight:500;color:#2563EB">属性</span>
+          </label>
+          <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border:2px solid var(--gray-200);border-radius:8px;cursor:pointer;transition:all .15s" id="cap-type-card-svc" onclick="selectCapType('svc')">
+            <input type="radio" name="capType" value="svc" style="display:none">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span style="font-weight:500;color:#64748B">服务</span>
+          </label>
+          <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border:2px solid var(--gray-200);border-radius:8px;cursor:pointer;transition:all .15s" id="cap-type-card-evt" onclick="selectCapType('evt')">
+            <input type="radio" name="capType" value="evt" style="display:none">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span style="font-weight:500;color:#64748B">事件</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">能力名称 <span class="required">*</span></label>
+        <input class="input" id="input-cap-name" placeholder="请输入能力名称（2-50字符）" maxlength="50">
+      </div>
+      <div class="form-group">
+        <label class="form-label">标识符 <span class="required">*</span></label>
+        <input class="input" id="input-cap-id" placeholder="例如 work_mode" maxlength="40">
+        <div style="font-size:11px;color:var(--gray-400);margin-top:4px">字母开头，仅允许字母、数字、下划线，全局唯一</div>
+      </div>
+      <div class="form-group" id="cap-data-type-group">
+        <label class="form-label">数据类型 <span class="required">*</span></label>
+        <select class="select" id="select-cap-datatype" style="width:100%" onchange="onDataTypeChange()">
+          <option value="enum">枚举型 (Enum)</option>
+          <option value="int">数值型 (Int)</option>
+          <option value="boolean">布尔型 (Boolean)</option>
+          <option value="string">字符串 (String)</option>
+        </select>
+      </div>
+      <div class="form-group" id="cap-access-mode-group">
+        <label class="form-label">读写模式</label>
+        <select class="select" id="select-cap-access" style="width:100%">
+          <option value="rw">读写 (Read/Write)</option>
+          <option value="ro">只读 (Read Only)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">描述</label>
+        <textarea class="textarea" id="input-cap-desc" placeholder="请输入能力描述" rows="2"></textarea>
+      </div>
+    </div>
+
+    <!-- STEP 2: 数据定义 (动态内容) -->
+    <div class="step-content" id="cap-step-2">
+      <div id="data-def-content"></div>
+    </div>
+
+    <!-- STEP 3: 确认预览 -->
+    <div class="step-content" id="cap-step-3">
+      <div class="preview-card" id="preview-content"></div>
+    </div>
+
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" id="cap-prev-btn" style="display:none" onclick="prevCapStep()">上一步</button>
+    <span style="flex:1"></span>
+    <button class="btn btn-secondary" onclick="closeDrawer('drawer-cap')">取消</button>
+    <button class="btn btn-primary" id="cap-next-btn" onclick="nextCapStep()">下一步</button>
+    <button class="btn btn-primary" id="cap-submit-btn" style="display:none" onclick="confirmCapability()">提交</button>
+  </div>
+</div>
+
+<!-- ==================== DIALOG: 参数编辑（服务/事件） ==================== -->
+<div class="modal-overlay" id="modal-param" onclick="if(event.target===this)closeModal('modal-param')">
+  <div class="modal" style="width:480px">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-param-title">添加参数</span>
+      <button class="close-btn" onclick="closeModal('modal-param')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">参数名称 <span class="required">*</span></label>
+        <input class="input" id="input-param-name" placeholder="请输入参数名称">
+      </div>
+      <div class="form-group">
+        <label class="form-label">参数标识 <span class="required">*</span></label>
+        <input class="input" id="input-param-id" placeholder="例如 result">
+      </div>
+      <div class="form-group">
+        <label class="form-label">数据类型 <span class="required">*</span></label>
+        <select class="select" id="select-param-type" style="width:100%">
+          <option value="int">Int (数字)</option>
+          <option value="string">String (字符串)</option>
+          <option value="boolean">Boolean (布尔)</option>
+          <option value="enum">Enum (枚举)</option>
+        </select>
+      </div>
+    </div>
+    <div style="padding:12px 24px;border-top:1px solid var(--gray-200);display:flex;justify-content:flex-end;gap:8px">
+      <button class="btn btn-secondary" onclick="closeModal('modal-param')">取消</button>
+      <button class="btn btn-primary" onclick="confirmParam()">确定</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== 数据定义 ===== */
+var categories = [
+  {
+    id: 1, name: 'IPC摄像机', identifier: 'ipc_camera',
+    descr: 'IPC摄像机设备类目，包含视频监控、事件侦测相关能力',
+    modules: [
+      {
+        id: 101, name: '工作模式模块', identifier: 'work_mode_module',
+        capabilities: [
+          { id: 1001, capType: 'prop', name: '工作模式', identifier: 'work_mode', descr: '设备工作模式切换（低功耗/AOV/长电/自定义）',
+            dataDef: { dataType: 'enum', accessMode: 'rw', enumValues: [{name:'低功耗模式',val:0},{name:'AOV模式',val:1},{name:'长电模式',val:2},{name:'自定义模式',val:3}], defaultVal: '0' } },
+          { id: 1002, capType: 'prop', name: 'AOV拍照帧率', identifier: 'aov_capture_frame_rate', descr: 'AOV模式下拍照的时间间隔',
+            dataDef: { dataType: 'int', accessMode: 'rw', min: 1, max: 10, step: 1, unit: '秒/帧', defaultVal: '1' } },
+          { id: 1003, capType: 'prop', name: 'AOV切换低功耗电量', identifier: 'aov_auto_switch_power', descr: 'AOV模式下自动切换到低功耗的电量阈值',
+            dataDef: { dataType: 'int', accessMode: 'rw', min: 0, max: 100, step: 1, unit: '%', defaultVal: '30' } }
+        ]
+      },
+      {
+        id: 102, name: '录制模式模块', identifier: 'record_mode_module',
+        capabilities: [
+          { id: 2001, capType: 'prop', name: '常规录制', identifier: 'normal_record', descr: '常规录制模式设置（全天/自定义/关闭）',
+            dataDef: { dataType: 'enum', accessMode: 'rw', enumValues: [{name:'全天',val:0},{name:'自定义时段',val:1},{name:'关闭',val:2}], defaultVal: '0' } },
+          { id: 2002, capType: 'prop', name: '事件录制', identifier: 'event_record', descr: '是否开启事件触发录制',
+            dataDef: { dataType: 'boolean', accessMode: 'rw', trueLabel: '开启', falseLabel: '关闭', defaultVal: '1' } },
+          { id: 2003, capType: 'prop', name: '录制清晰度', identifier: 'record_resolution', descr: '录制视频清晰度等级',
+            dataDef: { dataType: 'enum', accessMode: 'rw', enumValues: [{name:'超清',val:0},{name:'高清',val:1},{name:'标清',val:2}], defaultVal: '1' } },
+          { id: 2004, capType: 'prop', name: '抓拍间隔', identifier: 'capture_interval', descr: '事件触发时连续抓拍的时间间隔',
+            dataDef: { dataType: 'int', accessMode: 'rw', min: 100, max: 10000, step: 100, unit: 'ms', defaultVal: '500' } },
+          { id: 2005, capType: 'prop', name: '事件录制时长', identifier: 'event_record_duration', descr: '事件触发后单次录制时长',
+            dataDef: { dataType: 'int', accessMode: 'rw', min: 5, max: 300, step: 5, unit: '秒', defaultVal: '30' } },
+          { id: 2006, capType: 'svc', name: '格式化存储', identifier: 'format_storage', descr: '远程格式化设备存储卡',
+            dataDef: { dataType: 'service', inputParams: [], outputParams: [{name:'操作结果',identifier:'result',type:'boolean'}] } }
+        ]
+      },
+      {
+        id: 103, name: '灯光模式模块', identifier: 'light_mode_module',
+        capabilities: [
+          { id: 3001, capType: 'prop', name: '灯光模式', identifier: 'light_mode', descr: '灯光模式切换（全彩/红外/智能/自定义/关闭）',
+            dataDef: { dataType: 'enum', accessMode: 'rw', enumValues: [{name:'全彩模式',val:0},{name:'红外模式',val:1},{name:'智能模式',val:2},{name:'自定义模式',val:3},{name:'关闭',val:4}], defaultVal: '1' } }
+        ]
+      },
+      {
+        id: 104, name: '事件侦测模块', identifier: 'event_detect_module',
+        capabilities: [
+          { id: 4001, capType: 'evt', name: '移动侦测', identifier: 'motion_detect', descr: '设备检测到物体移动时上报告警事件',
+            dataDef: { dataType: 'event', eventType: 'alarm', outputParams: [] } },
+          { id: 4002, capType: 'evt', name: '电量不足告警', identifier: 'low_battery', descr: '设备电量低于阈值时上报',
+            dataDef: { dataType: 'event', eventType: 'alarm', outputParams: [{name:'当前电量',identifier:'battery',type:'int'}] } },
+          { id: 4003, capType: 'evt', name: '设备上线通知', identifier: 'device_online', descr: '设备从离线变为在线时上报',
+            dataDef: { dataType: 'event', eventType: 'info', outputParams: [] } }
+        ]
+      }
+    ]
+  },
+  {
+    id: 2, name: '智能门铃', identifier: 'smart_doorbell',
+    descr: '智能门铃设备类目，包含门铃呼叫、门锁联动相关能力',
+    modules: [
+      { id: 201, name: '门铃设置模块', identifier: 'bell_setting_module',
+        capabilities: [
+          { id: 5001, capType: 'prop', name: '门铃音量', identifier: 'bell_volume', descr: '门铃音量大小设置',
+            dataDef: { dataType: 'int', accessMode: 'rw', min: 0, max: 100, step: 5, unit: '%', defaultVal: '50' } },
+          { id: 5002, capType: 'prop', name: '门铃铃声', identifier: 'bell_ringtone', descr: '门铃铃声选择',
+            dataDef: { dataType: 'enum', accessMode: 'rw', enumValues: [{name:'经典铃声',val:0},{name:'柔和铃声',val:1},{name:'轻快铃声',val:2}], defaultVal: '0' } },
+          { id: 5003, capType: 'svc', name: '远程开门', identifier: 'remote_unlock', descr: '远程控制门锁开启',
+            dataDef: { dataType: 'service', inputParams: [], outputParams: [{name:'开门结果',identifier:'result',type:'boolean'}] } },
+          { id: 5004, capType: 'evt', name: '门铃呼叫', identifier: 'bell_ring', descr: '访客按下门铃时上报',
+            dataDef: { dataType: 'event', eventType: 'info', outputParams: [] } }
+        ]
+      }
+    ]
+  },
+  {
+    id: 3, name: '传感安防', identifier: 'sensor_security',
+    descr: '传感器和安防设备类目，包含环境监测和安防告警能力',
+    modules: [
+      { id: 301, name: '安防侦测模块', identifier: 'security_detect_module',
+        capabilities: [
+          { id: 6001, capType: 'prop', name: '告警灵敏度', identifier: 'alarm_sensitivity', descr: '安防告警的触发灵敏度',
+            dataDef: { dataType: 'enum', accessMode: 'rw', enumValues: [{name:'高',val:0},{name:'中',val:1},{name:'低',val:2}], defaultVal: '1' } },
+          { id: 6002, capType: 'evt', name: '烟雾告警', identifier: 'smoke_alarm', descr: '检测到烟雾时上报',
+            dataDef: { dataType: 'event', eventType: 'alarm', outputParams: [] } },
+          { id: 6003, capType: 'evt', name: '水浸告警', identifier: 'water_leak', descr: '检测到水浸时上报',
+            dataDef: { dataType: 'event', eventType: 'alarm', outputParams: [] } }
+        ]
+      }
+    ]
+  }
+];
+
+var currentCategoryId = null;
+var currentModuleId = 'all';
+var currentFilterType = 'all';
+var editingCapId = null;
+var capStep = 1;
+var tempCapData = {};
+var editingModuleId = null;
+var editingCategoryId = null;
+var tempParams = {}; // {input: [], output: []}
+var editingParamTarget = null; // 'input' | 'output'
+var editingParamIdx = -1;
+
+/* ===== 页面切换 ===== */
+function showPage(name) {
+  document.querySelectorAll('.page-view').forEach(function(p){ p.classList.remove('active'); });
+  var page = document.getElementById('page-' + name);
+  if (page) page.classList.add('active');
+}
+
+function enterCapability(catId) {
+  currentCategoryId = catId;
+  currentModuleId = 'all';
+  currentFilterType = 'all';
+  var cat = categories.find(function(c) { return c.id === catId; });
+  document.getElementById('current-category-name').textContent = cat ? cat.name : '';
+  document.getElementById('breadcrumb-current').textContent = '物模型管理 / 能力管理';
+  renderModules();
+  renderCapabilities();
+  updateFilterChips();
+  showPage('capability');
+}
+
+function goBackToCategory() {
+  document.getElementById('breadcrumb-current').textContent = '物模型管理';
+  showPage('category');
+}
+
+/* ===== 类目 CRUD ===== */
+function renderCategories() {
+  var tbody = document.getElementById('category-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  categories.forEach(function(cat) {
+    var totalCap = 0;
+    (cat.modules || []).forEach(function(m) { totalCap += (m.capabilities || []).length; });
+    var tr = document.createElement('tr');
+    tr.style.cursor = 'pointer';
+    tr.onclick = function(e) {
+      if (e.target.closest('button')) return;
+      enterCapability(cat.id);
+    };
+    tr.innerHTML =
+      '<td><div style="font-weight:500;color:var(--primary);cursor:pointer">' + cat.name + '</div></td>' +
+      '<td><span style="font-size:13px;color:var(--gray-500)">' + cat.identifier + '</span></td>' +
+      '<td>' + cat.modules.length + ' 个</td>' +
+      '<td>' + totalCap + ' 个</td>' +
+      '<td style="font-size:13px;color:var(--gray-500);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + cat.descr + '</td>' +
+      '<td><div style="display:flex;gap:4px" onclick="event.stopPropagation()">' +
+        '<button class="btn btn-sm btn-secondary-ghost" onclick="openEditCategory(' + cat.id + ')">编辑</button>' +
+        '<button class="btn btn-sm btn-danger-ghost" onclick="deleteCategory(' + cat.id + ')">删除</button>' +
+      '</div></td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function openAddCategory() {
+  editingCategoryId = null;
+  document.getElementById('modal-category-title').textContent = '添加类目';
+  document.getElementById('input-cat-name').value = '';
+  document.getElementById('input-cat-id').value = '';
+  document.getElementById('input-cat-desc').value = '';
+  openModal('modal-category');
+}
+
+function openEditCategory(catId) {
+  var cat = categories.find(function(c) { return c.id === catId; });
+  if (!cat) return;
+  editingCategoryId = catId;
+  document.getElementById('modal-category-title').textContent = '编辑类目';
+  document.getElementById('input-cat-name').value = cat.name;
+  document.getElementById('input-cat-id').value = cat.identifier;
+  document.getElementById('input-cat-desc').value = cat.descr;
+  openModal('modal-category');
+}
+
+function confirmCategory() {
+  var name = document.getElementById('input-cat-name').value.trim();
+  var identifier = document.getElementById('input-cat-id').value.trim();
+  var descr = document.getElementById('input-cat-desc').value.trim();
+  if (!name) { alert('请输入类目名称'); return; }
+  if (!identifier) { alert('请输入标识符'); return; }
+  if (editingCategoryId) {
+    var cat = categories.find(function(c) { return c.id === editingCategoryId; });
+    if (cat) { cat.name = name; cat.identifier = identifier; cat.descr = descr; }
+  } else {
+    var newId = Math.max.apply(null, categories.map(function(c){return c.id;}).concat([0])) + 1;
+    categories.push({ id: newId, name: name, identifier: identifier, descr: descr, modules: [] });
+  }
+  renderCategories();
+  closeModal('modal-category');
+}
+
+function deleteCategory(catId) {
+  var cat = categories.find(function(c) { return c.id === catId; });
+  if (!cat) return;
+  var total = 0;
+  cat.modules.forEach(function(m) { total += m.capabilities.length; });
+  if (!confirm('确定删除类目「' + cat.name + '」？\n将同步删除其下 ' + cat.modules.length + ' 个能力模块和 ' + total + ' 个标准能力。')) return;
+  categories = categories.filter(function(c) { return c.id !== catId; });
+  renderCategories();
+}
+
+/* ===== 模块 CRUD ===== */
+function renderModules() {
+  var cat = categories.find(function(c) { return c.id === currentCategoryId; });
+  if (!cat) return;
+  var container = document.getElementById('module-list');
+  var html = '<div class="module-item-all' + (currentModuleId === 'all' ? ' active' : '') + '" onclick="selectModule(\'all\')">' +
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>全部</div>';
+  cat.modules.forEach(function(mod) {
+    var activeClass = currentModuleId === mod.id ? ' active' : '';
+    html += '<div class="module-item' + activeClass + '" onclick="selectModule(' + mod.id + ')">' +
+      '<span class="module-name">' + mod.name + '</span>' +
+      '<span class="module-id">' + mod.identifier + '</span>' +
+      '<span class="module-actions">' +
+        '<button class="btn-icon-sm" onclick="event.stopPropagation();openEditModule(' + mod.id + ')" title="编辑"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
+        '<button class="btn-icon-sm danger" onclick="event.stopPropagation();deleteModule(' + mod.id + ')" title="删除"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>' +
+      '</span></div>';
+  });
+  container.innerHTML = html;
+}
+
+function selectModule(modId) {
+  currentModuleId = modId;
+  renderModules();
+  renderCapabilities();
+}
+
+function openAddModule() {
+  editingModuleId = null;
+  document.getElementById('modal-module-title').textContent = '添加能力模块';
+  document.getElementById('input-mod-name').value = '';
+  document.getElementById('input-mod-id').value = '';
+  openModal('modal-module');
+}
+
+function openEditModule(modId) {
+  var cat = categories.find(function(c) { return c.id === currentCategoryId; });
+  if (!cat) return;
+  var mod = cat.modules.find(function(m) { return m.id === modId; });
+  if (!mod) return;
+  editingModuleId = modId;
+  document.getElementById('modal-module-title').textContent = '编辑能力模块';
+  document.getElementById('input-mod-name').value = mod.name;
+  document.getElementById('input-mod-id').value = mod.identifier;
+  openModal('modal-module');
+}
+
+function confirmModule() {
+  var name = document.getElementById('input-mod-name').value.trim();
+  var identifier = document.getElementById('input-mod-id').value.trim();
+  if (!name) { alert('请输入模块名称'); return; }
+  if (!identifier) { alert('请输入模块标识'); return; }
+  var cat = categories.find(function(c) { return c.id === currentCategoryId; });
+  if (!cat) return;
+  if (editingModuleId) {
+    var mod = cat.modules.find(function(m) { return m.id === editingModuleId; });
+    if (mod) { mod.name = name; mod.identifier = identifier; }
+  } else {
+    var newId = Math.max.apply(null, cat.modules.map(function(m){return m.id;}).concat([0])) + 1;
+    cat.modules.push({ id: newId, name: name, identifier: identifier, capabilities: [] });
+  }
+  renderModules();
+  closeModal('modal-module');
+}
+
+function deleteModule(modId) {
+  var cat = categories.find(function(c) { return c.id === currentCategoryId; });
+  if (!cat) return;
+  var mod = cat.modules.find(function(m) { return m.id === modId; });
+  if (!mod) return;
+  if (!confirm('确定删除模块「' + mod.name + '」？模块下的 ' + mod.capabilities.length + ' 个能力将同步删除。')) return;
+  cat.modules = cat.modules.filter(function(m) { return m.id !== modId; });
+  if (currentModuleId === modId) currentModuleId = 'all';
+  renderModules();
+  renderCapabilities();
+}
+
+/* ===== 能力表格 ===== */
+function getFilteredCapabilities() {
+  var cat = categories.find(function(c) { return c.id === currentCategoryId; });
+  if (!cat) return [];
+  var allCaps = [];
+  cat.modules.forEach(function(mod) {
+    if (currentModuleId !== 'all' && mod.id !== currentModuleId) return;
+    mod.capabilities.forEach(function(cap) {
+      cap._moduleName = mod.name;
+      cap._moduleId = mod.id;
+      allCaps.push(cap);
+    });
+  });
+  if (currentFilterType !== 'all') {
+    allCaps = allCaps.filter(function(c) { return c.capType === currentFilterType; });
+  }
+  return allCaps;
+}
+
+function renderCapabilities() {
+  var tbody = document.getElementById('capability-tbody');
+  if (!tbody) return;
+  var caps = getFilteredCapabilities();
+  tbody.innerHTML = '';
+  if (caps.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--gray-400)">暂无数据</td></tr>';
+    return;
+  }
+  caps.forEach(function(cap) {
+    var typeTag = '', dataDefHtml = '', accessHtml = '';
+    if (cap.capType === 'prop') {
+      typeTag = '<span class="type-tag prop">属性</span>';
+      var dd = cap.dataDef;
+      if (dd.dataType === 'enum') {
+        dataDefHtml = '枚举型 <span style="font-size:11px;color:var(--gray-400)">' + dd.enumValues.length + ' 项</span>';
+      } else if (dd.dataType === 'int') {
+        dataDefHtml = '数值型 <span style="font-size:11px;color:var(--gray-400)">' + dd.min + '~' + dd.max + (dd.unit ? ' ' + dd.unit : '') + '</span>';
+      } else if (dd.dataType === 'boolean') {
+        dataDefHtml = '布尔型';
+      } else if (dd.dataType === 'string') {
+        dataDefHtml = '字符串';
+      }
+      accessHtml = dd.accessMode === 'rw' ? '<span style="color:#16A34A">读写</span>' : '<span style="color:#F59E0B">只读</span>';
+    } else if (cap.capType === 'svc') {
+      typeTag = '<span class="type-tag svc">服务</span>';
+      dataDefHtml = '服务';
+      var dd = cap.dataDef;
+      var iCount = (dd.inputParams || []).length;
+      var oCount = (dd.outputParams || []).length;
+      dataDefHtml += ' <span style="font-size:11px;color:var(--gray-400)">入参:' + iCount + ' 出参:' + oCount + '</span>';
+      accessHtml = '<span style="color:var(--gray-400)">—</span>';
+    } else {
+      typeTag = '<span class="type-tag evt">事件</span>';
+      var dd2 = cap.dataDef;
+      dataDefHtml = dd2.eventType === 'alarm' ? '告警' : (dd2.eventType === 'fault' ? '故障' : '信息');
+      var oCount2 = (dd2.outputParams || []).length;
+      if (oCount2 > 0) dataDefHtml += ' <span style="font-size:11px;color:var(--gray-400)">出参:' + oCount2 + '</span>';
+      accessHtml = '<span style="color:var(--gray-400)">—</span>';
+    }
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td><div style="font-weight:500;color:var(--gray-900)">' + cap.name + '</div></td>' +
+      '<td><span style="font-size:13px;color:var(--gray-500)">' + cap.identifier + '</span></td>' +
+      '<td>' + typeTag + '</td>' +
+      '<td>' + dataDefHtml + '</td>' +
+      '<td>' + accessHtml + '</td>' +
+      '<td style="font-size:13px;color:var(--gray-500);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + cap.descr + '</td>' +
+      '<td><div style="display:flex;gap:4px">' +
+        '<button class="btn btn-sm btn-secondary-ghost" onclick="openEditCapability(' + cap.id + ')">编辑</button>' +
+        '<button class="btn btn-sm btn-danger-ghost" onclick="deleteCapability(' + cap.id + ')">删除</button>' +
+      '</div></td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function filterByType(type, el) {
+  currentFilterType = type;
+  updateFilterChips();
+  renderCapabilities();
+}
+
+function updateFilterChips() {
+  var chips = document.querySelectorAll('#page-capability .filter-chip');
+  chips.forEach(function(c) {
+    c.classList.remove('active');
+    var t = c.getAttribute('onclick');
+    if (t && t.indexOf("'" + currentFilterType + "'") >= 0) c.classList.add('active');
+  });
+}
+
+/* ===== 能力 CRUD ===== */
+function openAddCapability() {
+  editingCapId = null;
+  capStep = 1;
+  tempCapData = { capType: 'prop', dataType: 'enum', accessMode: 'rw' };
+  tempParams = { input: [], output: [] };
+  document.getElementById('drawer-cap-title').textContent = '添加标准能力';
+  document.getElementById('select-cap-datatype').value = 'enum';
+  resetCapFormForType();
+  updateCapStepUI();
+  openDrawer('drawer-cap');
+}
+
+function openEditCapability(capId) {
+  var cap = findCapability(capId);
+  if (!cap) return;
+  editingCapId = capId;
+  capStep = 1;
+  var dd = cap.dataDef;
+  tempCapData = {
+    capType: cap.capType,
+    name: cap.name,
+    identifier: cap.identifier,
+    descr: cap.descr
+  };
+  if (cap.capType === 'prop') {
+    tempCapData.dataType = dd.dataType;
+    tempCapData.accessMode = dd.accessMode;
+    tempCapData.enumValues = dd.enumValues ? JSON.parse(JSON.stringify(dd.enumValues)) : [];
+    tempCapData.min = dd.min; tempCapData.max = dd.max; tempCapData.step = dd.step; tempCapData.unit = dd.unit;
+    tempCapData.trueLabel = dd.trueLabel; tempCapData.falseLabel = dd.falseLabel;
+    tempCapData.maxLength = dd.limit;
+    tempCapData.defaultVal = dd.defaultVal;
+  } else if (cap.capType === 'svc') {
+    tempCapData.dataType = 'service';
+    tempParams.input = JSON.parse(JSON.stringify(dd.inputParams || []));
+    tempParams.output = JSON.parse(JSON.stringify(dd.outputParams || []));
+  } else {
+    tempCapData.dataType = 'event';
+    tempCapData.eventType = dd.eventType || 'alarm';
+    tempParams.output = JSON.parse(JSON.stringify(dd.outputParams || []));
+  }
+  document.getElementById('drawer-cap-title').textContent = '编辑标准能力';
+  syncFormFromTemp();
+  updateCapStepUI();
+  openDrawer('drawer-cap');
+}
+
+function findCapability(capId) {
+  for (var i = 0; i < categories.length; i++) {
+    var mods = categories[i].modules || [];
+    for (var j = 0; j < mods.length; j++) {
+      var caps = mods[j].capabilities || [];
+      for (var k = 0; k < caps.length; k++) {
+        if (caps[k].id === capId) return caps[k];
+      }
+    }
+  }
+  return null;
+}
+
+function deleteCapability(capId) {
+  var cap = findCapability(capId);
+  if (!cap) return;
+  if (!confirm('确定删除能力「' + cap.name + '」？')) return;
+  var cat = categories.find(function(c) { return c.id === currentCategoryId; });
+  if (!cat) return;
+  cat.modules.forEach(function(mod) {
+    mod.capabilities = mod.capabilities.filter(function(c) { return c.id !== capId; });
+  });
+  renderCapabilities();
+}
+
+/* ===== 能力类型选择 ===== */
+function selectCapType(type) {
+  tempCapData.capType = type;
+  var cards = {
+    prop: document.getElementById('cap-type-card-prop'),
+    svc: document.getElementById('cap-type-card-svc'),
+    evt: document.getElementById('cap-type-card-evt')
+  };
+  Object.keys(cards).forEach(function(k) {
+    var activeStroke = k === 'prop' ? '#2563EB' : (k === 'svc' ? '#16A34A' : '#D97706');
+    if (k === type) {
+      cards[k].style.borderColor = 'var(--primary)';
+      cards[k].style.background = 'var(--primary-light)';
+      cards[k].querySelector('span').style.color = 'var(--primary)';
+      cards[k].querySelector('svg').setAttribute('stroke', activeStroke);
+    } else {
+      cards[k].style.borderColor = 'var(--gray-200)';
+      cards[k].style.background = 'var(--white)';
+      cards[k].querySelector('span').style.color = '#64748B';
+      cards[k].querySelector('svg').setAttribute('stroke', '#64748B');
+    }
+  });
+  // Show/hide data type fields
+  var dtGroup = document.getElementById('cap-data-type-group');
+  var amGroup = document.getElementById('cap-access-mode-group');
+  if (type === 'prop') {
+    dtGroup.style.display = '';
+    amGroup.style.display = '';
+    tempCapData.dataType = document.getElementById('select-cap-datatype').value;
+  } else if (type === 'svc') {
+    dtGroup.style.display = 'none';
+    amGroup.style.display = 'none';
+    tempCapData.dataType = 'service';
+    tempParams.input = tempParams.input || [];
+    tempParams.output = tempParams.output || [];
+  } else {
+    dtGroup.style.display = 'none';
+    amGroup.style.display = 'none';
+    tempCapData.dataType = 'event';
+    tempCapData.eventType = tempCapData.eventType || 'alarm';
+    tempParams.output = tempParams.output || [];
+  }
+}
+
+/* ===== 步骤导航 ===== */
+function goCapStep(n) { capStep = n; updateCapStepUI(); }
+function nextCapStep() {
+  if (capStep === 1) { saveStep1Data(); capStep = 2; renderStep2(); }
+  else if (capStep === 2) { saveStep2Data(); capStep = 3; renderStep3(); }
+  updateCapStepUI();
+}
+function prevCapStep() {
+  if (capStep > 1) { capStep--; if (capStep === 1) syncFormFromTemp(); }
+  updateCapStepUI();
+}
+function updateCapStepUI() {
+  var steps = document.querySelectorAll('#drawer-cap .step-content');
+  steps.forEach(function(s) { s.classList.remove('active'); });
+  var el = document.getElementById('cap-step-' + capStep);
+  if (el) el.classList.add('active');
+  for (var i = 1; i <= 3; i++) {
+    var num = document.getElementById('cap-step-num-' + i);
+    var label = document.getElementById('cap-step-label-' + i);
+    num.classList.remove('active', 'done');
+    label.classList.remove('active');
+    if (i < capStep) { num.classList.add('done'); num.textContent = ''; num.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>'; }
+    else if (i === capStep) { num.classList.add('active'); num.textContent = i; label.classList.add('active'); }
+    else { num.textContent = i; }
+  }
+  document.getElementById('cap-step-line-1').classList.toggle('done', capStep > 1);
+  document.getElementById('cap-step-line-2').classList.toggle('done', capStep > 2);
+  document.getElementById('cap-prev-btn').style.display = capStep > 1 ? 'inline-flex' : 'none';
+  document.getElementById('cap-next-btn').style.display = capStep < 3 ? 'inline-flex' : 'none';
+  document.getElementById('cap-submit-btn').style.display = capStep === 3 ? 'inline-flex' : 'none';
+}
+
+function saveStep1Data() {
+  tempCapData.name = document.getElementById('input-cap-name').value;
+  tempCapData.identifier = document.getElementById('input-cap-id').value;
+  tempCapData.descr = document.getElementById('input-cap-desc').value;
+  if (tempCapData.capType === 'prop') {
+    tempCapData.dataType = document.getElementById('select-cap-datatype').value;
+    tempCapData.accessMode = document.getElementById('select-cap-access').value;
+  }
+}
+
+function saveStep2Data() {
+  if (tempCapData.capType === 'prop') {
+    var dt = tempCapData.dataType;
+    if (dt === 'enum') {
+      var rows = document.querySelectorAll('#data-def-content .enum-row');
+      tempCapData.enumValues = [];
+      rows.forEach(function(r) {
+        var nameEl = r.querySelector('.enum-name input');
+        var valEl = r.querySelector('.enum-val input');
+        if (nameEl && valEl) tempCapData.enumValues.push({ name: nameEl.value, val: parseInt(valEl.value) || 0 });
+      });
+      tempCapData.defaultVal = document.getElementById('enum-default-val').value;
+    } else if (dt === 'int') {
+      tempCapData.min = parseInt(document.getElementById('int-min').value) || 0;
+      tempCapData.max = parseInt(document.getElementById('int-max').value) || 100;
+      tempCapData.step = parseInt(document.getElementById('int-step').value) || 1;
+      tempCapData.unit = document.getElementById('int-unit').value;
+      tempCapData.defaultVal = document.getElementById('int-default').value;
+    } else if (dt === 'boolean') {
+      tempCapData.trueLabel = document.getElementById('bool-true-label').value || '开启';
+      tempCapData.falseLabel = document.getElementById('bool-false-label').value || '关闭';
+      tempCapData.defaultVal = document.querySelector('input[name="bool-default"]:checked') ? document.querySelector('input[name="bool-default"]:checked').value : '1';
+    } else if (dt === 'string') {
+      tempCapData.maxLength = parseInt(document.getElementById('str-limit').value) || 64;
+      tempCapData.defaultVal = document.getElementById('str-default').value;
+    }
+  } else if (tempCapData.capType === 'evt') {
+    var evtRadios = document.getElementsByName('eventType');
+    evtRadios.forEach(function(r) { if (r.checked) tempCapData.eventType = r.value; });
+  }
+}
+
+function syncFormFromTemp() {
+  document.getElementById('input-cap-name').value = tempCapData.name || '';
+  document.getElementById('input-cap-id').value = tempCapData.identifier || '';
+  document.getElementById('input-cap-desc').value = tempCapData.descr || '';
+  selectCapType(tempCapData.capType || 'prop');
+  if (tempCapData.capType === 'prop') {
+    document.getElementById('select-cap-datatype').value = tempCapData.dataType || 'enum';
+    document.getElementById('select-cap-access').value = tempCapData.accessMode || 'rw';
+  }
+}
+
+function resetCapFormForType() {
+  document.getElementById('input-cap-name').value = '';
+  document.getElementById('input-cap-id').value = '';
+  document.getElementById('input-cap-desc').value = '';
+  selectCapType(tempCapData.capType || 'prop');
+}
+
+function onDataTypeChange() {
+  tempCapData.dataType = document.getElementById('select-cap-datatype').value;
+}
+
+/* ===== Step 2: 数据定义渲染 ===== */
+function renderStep2() {
+  var container = document.getElementById('data-def-content');
+  var type = tempCapData.capType;
+  if (type === 'prop') {
+    var dt = tempCapData.dataType;
+    if (dt === 'enum') renderEnumEditor(container);
+    else if (dt === 'int') renderIntEditor(container);
+    else if (dt === 'boolean') renderBooleanEditor(container);
+    else if (dt === 'string') renderStringEditor(container);
+  } else if (type === 'svc') {
+    renderServiceEditor(container);
+  } else if (type === 'evt') {
+    renderEventEditor(container);
+  }
+}
+
+function renderEnumEditor(container) {
+  var vals = tempCapData.enumValues || [{name:'',val:0}];
+  var html = '<div class="form-group"><label class="form-label">枚举值定义 <span class="required">*</span></label>';
+  html += '<div id="enum-list">';
+  vals.forEach(function(ev, i) {
+    html += '<div class="enum-row">' +
+      '<input class="input enum-name" value="' + ev.name + '" placeholder="名称（如：低功耗模式）" style="flex:1">' +
+      '<input class="input enum-val" type="number" value="' + ev.val + '" placeholder="值" style="width:100px">' +
+      '<button class="btn-icon-sm danger" onclick="removeEnumRow(this)">×</button></div>';
+  });
+  html += '</div>';
+  html += '<button class="btn btn-sm btn-secondary" style="margin-top:8px" onclick="addEnumRow()">+ 添加枚举值</button></div>';
+  html += '<div class="form-group"><label class="form-label">默认值</label>' +
+    '<input class="input" id="enum-default-val" value="' + (tempCapData.defaultVal || '') + '" placeholder="请输入默认枚举值的 Value"></div>';
+  container.innerHTML = html;
+}
+
+function addEnumRow() {
+  var list = document.getElementById('enum-list');
+  var div = document.createElement('div');
+  div.className = 'enum-row';
+  div.innerHTML = '<input class="input enum-name" placeholder="名称" style="flex:1">' +
+    '<input class="input enum-val" type="number" value="0" style="width:100px">' +
+    '<button class="btn-icon-sm danger" onclick="removeEnumRow(this)">×</button>';
+  list.appendChild(div);
+}
+
+function removeEnumRow(btn) {
+  var row = btn.closest('.enum-row');
+  if (row) row.remove();
+}
+
+function renderIntEditor(container) {
+  var html = '<div class="form-group"><label class="form-label">取值范围 <span class="required">*</span></label>' +
+    '<div style="display:flex;align-items:center;gap:8px">' +
+    '<input class="input" type="number" id="int-min" value="' + (tempCapData.min || 0) + '" placeholder="最小值" style="flex:1">' +
+    '<span style="color:var(--gray-400)">~</span>' +
+    '<input class="input" type="number" id="int-max" value="' + (tempCapData.max || 100) + '" placeholder="最大值" style="flex:1"></div></div>' +
+    '<div class="form-group"><label class="form-label">步长</label>' +
+    '<input class="input" type="number" id="int-step" value="' + (tempCapData.step || 1) + '" placeholder="步长" style="width:150px"></div>' +
+    '<div class="form-group"><label class="form-label">单位</label>' +
+    '<input class="input" id="int-unit" value="' + (tempCapData.unit || '') + '" placeholder="例如：%、°C、ms" style="width:150px"></div>' +
+    '<div class="form-group"><label class="form-label">默认值</label>' +
+    '<input class="input" type="number" id="int-default" value="' + (tempCapData.defaultVal || '') + '" placeholder="请输入默认值"></div>';
+  container.innerHTML = html;
+}
+
+function renderBooleanEditor(container) {
+  var tl = tempCapData.trueLabel || '开启';
+  var fl = tempCapData.falseLabel || '关闭';
+  var dv = tempCapData.defaultVal || '1';
+  var html = '<div class="form-group"><label class="form-label">布尔值标签</label>' +
+    '<div style="display:flex;gap:12px;margin-bottom:8px">' +
+    '<div style="flex:1"><span style="font-size:12px;color:var(--gray-500)">true 标签</span>' +
+    '<input class="input" id="bool-true-label" value="' + tl + '" placeholder="开启" style="margin-top:4px"></div>' +
+    '<div style="flex:1"><span style="font-size:12px;color:var(--gray-500)">false 标签</span>' +
+    '<input class="input" id="bool-false-label" value="' + fl + '" placeholder="关闭" style="margin-top:4px"></div></div></div>' +
+    '<div class="form-group"><label class="form-label">默认值</label>' +
+    '<div style="display:flex;gap:16px">' +
+    '<label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">' +
+    '<input type="radio" name="bool-default" value="1" ' + (dv === '1' ? 'checked' : '') + '> ' + tl + ' (true)</label>' +
+    '<label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">' +
+    '<input type="radio" name="bool-default" value="0" ' + (dv === '0' ? 'checked' : '') + '> ' + fl + ' (false)</label></div></div>';
+  container.innerHTML = html;
+}
+
+function renderStringEditor(container) {
+  var html = '<div class="form-group"><label class="form-label">最大长度（字节） <span class="required">*</span></label>' +
+    '<input class="input" type="number" id="str-limit" value="' + (tempCapData.maxLength || 64) + '" placeholder="64" style="width:150px"></div>' +
+    '<div class="form-group"><label class="form-label">默认值</label>' +
+    '<input class="input" id="str-default" value="' + (tempCapData.defaultVal || '') + '" placeholder="请输入默认值"></div>';
+  container.innerHTML = html;
+}
+
+function renderServiceEditor(container) {
+  var html = '';
+  // Input params
+  html += '<div class="param-section"><div class="param-section-header">' +
+    '<span class="param-section-title">输入参数</span>' +
+    '<button class="btn btn-sm btn-secondary" onclick="openAddParam(\'input\')">+ 添加参数</button></div>';
+  html += '<div id="svc-input-params">';
+  if (tempParams.input && tempParams.input.length > 0) {
+    tempParams.input.forEach(function(p, i) { html += renderParamItem('input', p, i); });
+  } else {
+    html += '<div style="font-size:12px;color:var(--gray-400);padding:8px 0">暂无输入参数</div>';
+  }
+  html += '</div></div>';
+  // Output params
+  html += '<div class="param-section"><div class="param-section-header">' +
+    '<span class="param-section-title">输出参数</span>' +
+    '<button class="btn btn-sm btn-secondary" onclick="openAddParam(\'output\')">+ 添加参数</button></div>';
+  html += '<div id="svc-output-params">';
+  if (tempParams.output && tempParams.output.length > 0) {
+    tempParams.output.forEach(function(p, i) { html += renderParamItem('output', p, i); });
+  } else {
+    html += '<div style="font-size:12px;color:var(--gray-400);padding:8px 0">暂无输出参数</div>';
+  }
+  html += '</div></div>';
+  container.innerHTML = html;
+}
+
+function renderEventEditor(container) {
+  var et = tempCapData.eventType || 'alarm';
+  var html = '<div class="form-group"><label class="form-label">事件类型 <span class="required">*</span></label>' +
+    '<div style="display:flex;gap:12px">' +
+    '<label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;padding:8px 16px;border:1px solid ' + (et==='info'?'var(--primary)':'var(--gray-200)') + ';border-radius:8px;background:' + (et==='info'?'var(--primary-light)':'') + '">' +
+    '<input type="radio" name="eventType" value="info" ' + (et==='info'?'checked':'') + '> 信息 (Info)</label>' +
+    '<label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;padding:8px 16px;border:1px solid ' + (et==='alarm'?'var(--primary)':'var(--gray-200)') + ';border-radius:8px;background:' + (et==='alarm'?'var(--primary-light)':'') + '">' +
+    '<input type="radio" name="eventType" value="alarm" ' + (et==='alarm'?'checked':'') + '> 告警 (Alarm)</label>' +
+    '<label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;padding:8px 16px;border:1px solid ' + (et==='fault'?'var(--primary)':'var(--gray-200)') + ';border-radius:8px;background:' + (et==='fault'?'var(--primary-light)':'') + '">' +
+    '<input type="radio" name="eventType" value="fault" ' + (et==='fault'?'checked':'') + '> 故障 (Fault)</label></div></div>';
+  html += '<div class="param-section"><div class="param-section-header">' +
+    '<span class="param-section-title">输出参数</span>' +
+    '<button class="btn btn-sm btn-secondary" onclick="openAddParam(\'output\')">+ 添加参数</button></div>';
+  html += '<div id="svc-output-params">';
+  if (tempParams.output && tempParams.output.length > 0) {
+    tempParams.output.forEach(function(p, i) { html += renderParamItem('output', p, i); });
+  } else {
+    html += '<div style="font-size:12px;color:var(--gray-400);padding:8px 0">暂无输出参数</div>';
+  }
+  html += '</div></div>';
+  container.innerHTML = html;
+}
+
+function renderParamItem(target, p, i) {
+  var typeMap = { 'int': 'Int', 'string': 'String', 'boolean': 'Boolean', 'enum': 'Enum' };
+  return '<div class="param-item">' +
+    '<span class="param-name">' + p.name + '</span>' +
+    '<span class="param-meta">' + p.identifier + ' · ' + (typeMap[p.type] || p.type) + '</span>' +
+    '<button class="btn-icon-sm" onclick="openEditParam(\'' + target + '\',' + i + ')" title="编辑"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
+    '<button class="btn-icon-sm danger" onclick="removeParam(\'' + target + '\',' + i + ')" title="删除"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>';
+}
+
+function openAddParam(target) {
+  editingParamTarget = target;
+  editingParamIdx = -1;
+  document.getElementById('modal-param-title').textContent = '添加' + (target === 'input' ? '输入' : '输出') + '参数';
+  document.getElementById('input-param-name').value = '';
+  document.getElementById('input-param-id').value = '';
+  document.getElementById('select-param-type').value = 'boolean';
+  openModal('modal-param');
+}
+
+function openEditParam(target, idx) {
+  editingParamTarget = target;
+  editingParamIdx = idx;
+  var p = tempParams[target][idx];
+  document.getElementById('modal-param-title').textContent = '编辑' + (target === 'input' ? '输入' : '输出') + '参数';
+  document.getElementById('input-param-name').value = p.name;
+  document.getElementById('input-param-id').value = p.identifier;
+  document.getElementById('select-param-type').value = p.type;
+  openModal('modal-param');
+}
+
+function removeParam(target, idx) {
+  tempParams[target].splice(idx, 1);
+  renderStep2();
+}
+
+function confirmParam() {
+  var name = document.getElementById('input-param-name').value.trim();
+  var id = document.getElementById('input-param-id').value.trim();
+  var type = document.getElementById('select-param-type').value;
+  if (!name || !id) { alert('请填写完整参数信息'); return; }
+  var param = { name: name, identifier: id, type: type };
+  if (editingParamIdx >= 0) {
+    tempParams[editingParamTarget][editingParamIdx] = param;
+  } else {
+    tempParams[editingParamTarget].push(param);
+  }
+  closeModal('modal-param');
+  renderStep2();
+}
+
+/* ===== Step 3: 确认预览 ===== */
+function renderStep3() {
+  var container = document.getElementById('preview-content');
+  var html = '<div class="preview-row"><span class="preview-label">能力类型</span><span class="preview-value">';
+  if (tempCapData.capType === 'prop') html += '<span class="type-tag prop">属性</span>';
+  else if (tempCapData.capType === 'svc') html += '<span class="type-tag svc">服务</span>';
+  else html += '<span class="type-tag evt">事件</span>';
+  html += '</span></div>';
+  html += '<div class="preview-row"><span class="preview-label">能力名称</span><span class="preview-value">' + (tempCapData.name || '—') + '</span></div>';
+  html += '<div class="preview-row"><span class="preview-label">标识符</span><span class="preview-value">' + (tempCapData.identifier || '—') + '</span></div>';
+  html += '<div class="preview-row"><span class="preview-label">描述</span><span class="preview-value" style="font-weight:400">' + (tempCapData.descr || '—') + '</span></div>';
+  if (tempCapData.capType === 'prop') {
+    html += '<div class="preview-row"><span class="preview-label">数据类型</span><span class="preview-value">' + tempCapData.dataType + '</span></div>';
+    html += '<div class="preview-row"><span class="preview-label">读写模式</span><span class="preview-value">' + (tempCapData.accessMode === 'rw' ? '读写' : '只读') + '</span></div>';
+    if (tempCapData.dataType === 'enum') {
+      html += '<div class="preview-row"><span class="preview-label">枚举项</span><span class="preview-value">';
+      (tempCapData.enumValues || []).forEach(function(ev) { html += '<span class="inline-tag enum-item">' + ev.name + ' (' + ev.val + ')</span>'; });
+      html += '</span></div>';
+    } else if (tempCapData.dataType === 'int') {
+      html += '<div class="preview-row"><span class="preview-label">范围</span><span class="preview-value">' + tempCapData.min + ' ~ ' + tempCapData.max + (tempCapData.unit ? ' ' + tempCapData.unit : '') + ' (步长: ' + tempCapData.step + ')</span></div>';
+    }
+    html += '<div class="preview-row"><span class="preview-label">默认值</span><span class="preview-value">' + (tempCapData.defaultVal || '—') + '</span></div>';
+  } else if (tempCapData.capType === 'svc') {
+    html += '<div class="preview-row"><span class="preview-label">输入参数</span><span class="preview-value">' + (tempParams.input.length || 0) + ' 个</span></div>';
+    html += '<div class="preview-row"><span class="preview-label">输出参数</span><span class="preview-value">' + (tempParams.output.length || 0) + ' 个</span></div>';
+  } else {
+    html += '<div class="preview-row"><span class="preview-label">事件类型</span><span class="preview-value">' + (tempCapData.eventType || 'alarm') + '</span></div>';
+  }
+  container.innerHTML = html;
+}
+
+/* ===== 确认提交 ===== */
+function confirmCapability() {
+  saveStep1Data();
+  saveStep2Data();
+  if (!tempCapData.name) { alert('请输入能力名称'); capStep = 1; updateCapStepUI(); return; }
+  if (!tempCapData.identifier) { alert('请输入标识符'); capStep = 1; updateCapStepUI(); return; }
+  if (tempCapData.capType === 'prop' && tempCapData.dataType === 'enum') {
+    var evs = tempCapData.enumValues || [];
+    evs = evs.filter(function(ev) { return ev.name; });
+    if (evs.length < 1) { alert('枚举值至少需要一个有效条目'); capStep = 2; updateCapStepUI(); return; }
+    tempCapData.enumValues = evs;
+  }
+  var cat = categories.find(function(c) { return c.id === currentCategoryId; });
+  if (!cat) return;
+
+  var capDef = buildCapDef();
+  if (editingCapId) {
+    var existing = findCapability(editingCapId);
+    if (existing) {
+      existing.capType = capDef.capType;
+      existing.name = capDef.name;
+      existing.identifier = capDef.identifier;
+      existing.descr = capDef.descr;
+      existing.dataDef = capDef.dataDef;
+    }
+  } else {
+    var selModId = currentModuleId !== 'all' ? currentModuleId : (cat.modules[0] ? cat.modules[0].id : null);
+    if (!selModId) { alert('请先创建能力模块'); return; }
+    var mod = cat.modules.find(function(m) { return m.id === selModId; });
+    if (!mod) return;
+    var newId = Date.now();
+    mod.capabilities.push({ id: newId, capType: capDef.capType, name: capDef.name, identifier: capDef.identifier, descr: capDef.descr, dataDef: capDef.dataDef });
+  }
+  renderCapabilities();
+  renderCategories();
+  closeDrawer('drawer-cap');
+}
+
+function buildCapDef() {
+  var d = { capType: tempCapData.capType, name: tempCapData.name, identifier: tempCapData.identifier, descr: tempCapData.descr, dataDef: {} };
+  if (tempCapData.capType === 'prop') {
+    d.dataDef = { dataType: tempCapData.dataType, accessMode: tempCapData.accessMode, defaultVal: tempCapData.defaultVal };
+    var dt = tempCapData.dataType;
+    if (dt === 'enum') d.dataDef.enumValues = tempCapData.enumValues;
+    else if (dt === 'int') { d.dataDef.min = tempCapData.min; d.dataDef.max = tempCapData.max; d.dataDef.step = tempCapData.step; d.dataDef.unit = tempCapData.unit; }
+    else if (dt === 'boolean') { d.dataDef.trueLabel = tempCapData.trueLabel; d.dataDef.falseLabel = tempCapData.falseLabel; }
+    else if (dt === 'string') d.dataDef.limit = tempCapData.maxLength;
+  } else if (tempCapData.capType === 'svc') {
+    d.dataDef = { dataType: 'service', inputParams: tempParams.input, outputParams: tempParams.output };
+  } else {
+    d.dataDef = { dataType: 'event', eventType: tempCapData.eventType || 'alarm', outputParams: tempParams.output };
+  }
+  return d;
+}
+
+/* ===== Drawer / Modal helpers ===== */
+function openDrawer(id) {
+  var overlay = document.getElementById('overlay-' + id);
+  var drawer = document.getElementById(id);
+  if (overlay) overlay.classList.add('show');
+  if (drawer) drawer.classList.add('show');
+}
+function closeDrawer(id) {
+  var overlay = document.getElementById('overlay-' + id);
+  var drawer = document.getElementById(id);
+  if (overlay) overlay.classList.remove('show');
+  if (drawer) drawer.classList.remove('show');
+}
+function openModal(id) {
+  var m = document.getElementById(id);
+  if (m) m.classList.add('show');
+}
+function closeModal(id) {
+  var m = document.getElementById(id);
+  if (m) m.classList.remove('show');
+}
+
+/* ===== Init ===== */
+document.addEventListener('DOMContentLoaded', function() {
+  renderCategories();
+});
+</script>
+</body>
+</html>

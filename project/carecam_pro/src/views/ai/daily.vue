@@ -10,13 +10,6 @@
       </div>
     </div>
 
-    <!-- 日期选择 — 始终可见 -->
-    <div class="date-bar">
-      <van-icon name="arrow-left" size="16" color="#1A73E8" @click="prevDay" />
-      <div class="date-display" @click="showDatePicker = true">{{ displayDate }}</div>
-      <van-icon name="arrow" size="16" color="#1A73E8" @click="nextDay" />
-    </div>
-
     <!-- 设备筛选 — 始终可见 -->
     <div class="device-filter-bar">
       <span
@@ -41,7 +34,7 @@
     <template v-else>
       <div class="scroll-area" ref="scrollArea">
         <!-- 生成中态 -->
-        <template v-if="isGenerating">
+        <template v-if="dailyStatus === 'generating'">
           <div class="generating-indicator">
             <div class="gen-step" :class="{ done: genStep >= 1 }">
               <div class="gen-dot"></div>
@@ -62,7 +55,7 @@
         </template>
 
         <!-- 已生成态 -->
-        <template v-else-if="dailyGenerated">
+        <template v-else-if="dailyStatus === 'done'">
           <!-- 各关注事件数量汇总（含时间线消息） -->
           <div class="section-card">
             <div class="section-title">📊 事件汇总</div>
@@ -70,29 +63,29 @@
               v-for="(evt, i) in focusEvents"
               :key="i"
               class="focus-summary"
-              @click="openEventDetail(evt)"
+              :class="{ 'focus-summary-other': evt.name === '其他' }"
+              @click="evt.name !== '其他' && openEventDetail(evt)"
             >
               <div class="focus-summary-top">
                 <span class="focus-summary-name">{{ evt.name }}</span>
                 <span class="focus-summary-count">{{ evt.count }} 件</span>
               </div>
-              <div class="focus-summary-msg">{{ evt.latestMsg }}</div>
-              <!-- 时间线消息：最多3条 -->
+              <!-- 时间线：最早 → ... → 最晚 -->
               <div class="focus-timeline">
-                <div
-                  v-for="(m, j) in getPreviewMsgs(evt.name)"
-                  :key="j"
-                  class="ft-item"
-                >
+                <div class="ft-item">
                   <div class="ft-dot"></div>
-                  <div class="ft-time">{{ m.time }}</div>
-                  <div class="ft-text">{{ m.text }}</div>
+                  <div class="ft-time">{{ getTimelineMsgs(evt.name).first.time }}</div>
+                  <div class="ft-text">{{ getTimelineMsgs(evt.name).first.text }}</div>
                 </div>
-                <!-- 省略号 -->
-                <div class="ft-item ft-ellipsis" v-if="shouldShowEllipsis(evt.name)">
+                <div class="ft-item ft-ellipsis" v-if="getTimelineMsgs(evt.name).hasMiddle">
                   <div class="ft-dot ft-dot-empty"></div>
                   <div class="ft-time"></div>
                   <div class="ft-text">…</div>
+                </div>
+                <div class="ft-item">
+                  <div class="ft-dot"></div>
+                  <div class="ft-time">{{ getTimelineMsgs(evt.name).last.time }}</div>
+                  <div class="ft-text">{{ getTimelineMsgs(evt.name).last.text }}</div>
                 </div>
               </div>
             </div>
@@ -111,49 +104,38 @@
         <template v-else>
           <div class="empty-state">
             <div class="empty-icon">📋</div>
-            <div class="empty-text">{{ isEmptyDate ? '该日期暂无日报' : '生成一份日报，一目了然' }}</div>
-            <div class="empty-sub" v-if="!isEmptyDate">点击下方按钮生成 {{ displayDate }} 的日报</div>
+            <div class="empty-text">今日日报尚未生成</div>
+            <div class="empty-sub">点击下方按钮生成今日日报</div>
           </div>
         </template>
       </div>
 
       <!-- 底部：生成日报按钮 / 免费用完引导 -->
-      <div class="bottom-bar-daily" v-if="!isGenerating">
+      <div class="bottom-bar-daily" v-if="dailyStatus !== 'generating'">
         <template v-if="remainFree > 0">
           <button class="btn-generate" @click="handleGenerate">
-            {{ dailyGenerated ? '重新生成' : '生成日报' }} · 剩余{{ remainFree }}次
+            {{ dailyStatus === 'done' ? '重新生成' : '生成日报' }} · 剩余{{ remainFree }}次
           </button>
         </template>
         <template v-else>
-          <div class="no-free-hint">本月免费次数已用完</div>
-          <button class="btn-buy" @click="goToAiHome">开通套餐获取更多次数</button>
+          <div class="no-free-hint">今日生成次数已用完（每日最多{{ maxDailyGen }}次），明天自动重置</div>
         </template>
       </div>
-    </template>
 
-    <!-- 日期选择弹窗 -->
-    <van-popup v-model:show="showDatePicker" position="bottom" round>
-      <van-date-picker
-        v-model="selectedDate"
-        title="选择日期"
-        :min-date="minDate"
-        :max-date="maxDate"
-        @confirm="onDateConfirm"
-        @cancel="showDatePicker = false"
-      />
-    </van-popup>
+      <div class="ai-disclaimer">本功能由AI大模型提供，个别结果可能存在误差</div>
+    </template>
 
     <!-- 历史报告弹窗 -->
     <van-popup v-model:show="showHistory" position="bottom" round :style="{ height: '50%' }" lock-scroll>
       <div class="history-popup">
         <div class="popup-header">
-          <h3>历史日报</h3>
+          <h3>历史日报（近7日）</h3>
           <van-icon name="cross" size="20" @click.stop="closeHistory" />
         </div>
         <div
           v-for="(h, i) in historyList"
           :key="i"
-          :class="['history-item', { active: h.date === selectedDateStr }]"
+          :class="['history-item', { active: h.date === todayStr }]"
           @click.stop="loadHistory(h)"
         >
           <div class="history-date">{{ h.date }}</div>
@@ -167,67 +149,48 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { aiStatus, deviceAiStatus, defaultActivatedDevice, isDeviceActivated } from '@/store/devStatus'
 
 const router = useRouter()
 const goBack = () => router.back()
-const goToAiHome = () => router.push('/ai?show=activate')
-
 // 全局已开通 + 当前设备已开通 → true
 const isActivated = computed(() =>
   aiStatus.value !== 'not_activated' && isDeviceActivated(selectedDevice.value)
 )
 
-// 日期
+// 日期 — 仅支持今日
 const today = new Date()
-const displayYear = ref(today.getFullYear())
-const displayMonth = ref(today.getMonth() + 1)
-const displayDay = ref(today.getDate())
-const selectedDate = ref([String(today.getFullYear()), String(today.getMonth() + 1).padStart(2, '0'), String(today.getDate()).padStart(2, '0')])
-const showDatePicker = ref(false)
-const showHistory = ref(false)
-const minDate = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
-const maxDate = today
+const todayStr = computed(() => `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`)
 
-const displayDate = computed(() => `${displayYear.value}年${displayMonth.value}月${displayDay.value}日`)
-const selectedDateStr = computed(() => `${displayYear.value}-${String(displayMonth.value).padStart(2, '0')}-${String(displayDay.value).padStart(2, '0')}`)
-
-const prevDay = () => {
-  const d = new Date(displayYear.value, displayMonth.value - 1, displayDay.value - 1)
-  displayYear.value = d.getFullYear()
-  displayMonth.value = d.getMonth() + 1
-  displayDay.value = d.getDate()
-  resetDaily()
-}
-const nextDay = () => {
-  const d = new Date(displayYear.value, displayMonth.value - 1, displayDay.value + 1)
-  if (d > today) return
-  displayYear.value = d.getFullYear()
-  displayMonth.value = d.getMonth() + 1
-  displayDay.value = d.getDate()
-  resetDaily()
-}
-const onDateConfirm = ({ selectedValues }) => {
-  displayYear.value = parseInt(selectedValues[0])
-  displayMonth.value = parseInt(selectedValues[1])
-  displayDay.value = parseInt(selectedValues[2])
-  showDatePicker.value = false
-  resetDaily()
-}
-
-// 日报状态
-const isGenerating = ref(false)
+// 日报状态: 'idle' | 'generating' | 'done'
+const dailyStatus = ref('idle')
 const genStep = ref(0)
-const dailyGenerated = ref(false)
-const isEmptyDate = ref(false)
+const showHistory = ref(false)
 
-const remainFree = computed(() => 5)
-
-// 设备筛选
+// 设备筛选（必须在 genCountKey/todayGenCount 之前定义，因为 loadGenCount 会引用 selectedDevice）
 const deviceOptions = Object.keys(deviceAiStatus.value)
 const selectedDevice = ref(defaultActivatedDevice.value)
+
+// 每日生成次数限制（最多3次），基于当天日期+设备维度计数
+const maxDailyGen = 3
+const genCountKey = computed(() => `ai_daily_gen_${todayStr.value}_${selectedDevice.value}`)
+const autoGenKey = computed(() => `ai_daily_auto_${todayStr.value}_${selectedDevice.value}`)
+
+function loadGenCount() {
+  try {
+    const raw = localStorage.getItem(genCountKey.value)
+    return raw ? parseInt(raw, 10) : 0
+  } catch { return 0 }
+}
+const todayGenCount = ref(loadGenCount())
+
+watch(selectedDevice, () => {
+  todayGenCount.value = loadGenCount()
+})
+
+const remainFree = computed(() => Math.max(0, maxDailyGen - todayGenCount.value))
 
 const onDeviceChange = (device) => {
   selectedDevice.value = device
@@ -236,26 +199,33 @@ const onDeviceChange = (device) => {
 
 // 日报数据 — 使用全能AI配置的关注事件
 const focusEvents = ref([
-  { name: '人员经过', count: 3, latestMsg: '🚶 门口有人经过，检测到人脸' },
-  { name: '宠物活动', count: 5, latestMsg: '🐱 猫咪在客厅跑酷，活力满满' },
-  { name: '告警', count: 1, latestMsg: '🔔 后窗异常移动，已AI过滤' }
+  { name: '人员经过', count: 3 },
+  { name: '宠物活动', count: 5 },
+  { name: '告警', count: 1 },
+  { name: '其他', count: 4 }
 ])
 
 const eventMsgMap = {
   '人员经过': [
-    { time: '07:45', text: '🚶 奶奶出门买菜经过门口', bg: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)' },
-    { time: '10:00', text: '🚶 快递员在门口放下包裹', bg: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)' },
-    { time: '11:20', text: '🚶 奶奶买菜回家经过门口', bg: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)' }
+    { time: '07:45', text: '🚶 奶奶出门买菜经过门口' },
+    { time: '10:00', text: '🚶 快递员在门口放下包裹' },
+    { time: '11:20', text: '🚶 奶奶买菜回家经过门口' }
   ],
   '宠物活动': [
-    { time: '06:20', text: '🐱 猫咪在客厅跑酷', bg: 'linear-gradient(135deg, #0d2e1a, #1a5c34)' },
-    { time: '08:30', text: '🐱 猫咪在厨房吃猫粮', bg: 'linear-gradient(135deg, #0d2e1a, #1a5c34)' },
-    { time: '10:15', text: '🐱 猫咪在阳台晒太阳', bg: 'linear-gradient(135deg, #0d2e1a, #1a5c34)' },
-    { time: '14:00', text: '🐱 猫咪从沙发跳到茶几', bg: 'linear-gradient(135deg, #0d2e1a, #1a5c34)' },
-    { time: '16:30', text: '🐱 猫咪抓沙发被抓拍', bg: 'linear-gradient(135deg, #0d2e1a, #1a5c34)' }
+    { time: '06:20', text: '🐱 猫咪在客厅跑酷' },
+    { time: '08:30', text: '🐱 猫咪在厨房吃猫粮' },
+    { time: '10:15', text: '🐱 猫咪在阳台晒太阳' },
+    { time: '14:00', text: '🐱 猫咪从沙发跳到茶几' },
+    { time: '16:30', text: '🐱 猫咪抓沙发被抓拍' }
   ],
   '告警': [
-    { time: '03:12', text: '🔔 后窗有异常移动，AI识别为树枝', bg: 'linear-gradient(135deg, #3a1a1a, #6e1a1a)' }
+    { time: '03:12', text: '🔔 后窗有异常移动，AI识别为树枝' }
+  ],
+  '其他': [
+    { time: '09:15', text: '📦 快递员在门口放置包裹' },
+    { time: '11:30', text: '📦 快递车进入小区配送' },
+    { time: '14:45', text: '📦 快递员按门铃送件上门' },
+    { time: '17:00', text: '📦 快递员在门口放下包裹后离开' }
   ]
 }
 
@@ -267,23 +237,33 @@ const openEventDetail = (evt) => {
   router.push(`/ai/daily-event?name=${encodeURIComponent(evt.name)}&list=${listStr}&index=0`)
 }
 
-// 每个关注事件最多展示 3 条：第1条、省略号、最后1条
-const getPreviewMsgs = (name) => {
+// 每个关注事件取最早(first)和最晚(last)一条，中间用省略号
+function getTimelineMsgs(name) {
   const msgs = eventMsgMap[name] || []
-  if (msgs.length <= 3) return msgs
-  return [msgs[0], msgs[msgs.length - 1]]
-}
-const shouldShowEllipsis = (name) => {
-  const msgs = eventMsgMap[name] || []
-  return msgs.length > 3
+  return {
+    first: msgs[0] || { time: '', text: '' },
+    last: msgs.length > 1 ? msgs[msgs.length - 1] : (msgs[0] || { time: '', text: '' }),
+    hasMiddle: msgs.length > 2
+  }
 }
 
-const historyList = ref([
-  { date: '2026-04-27', summary: '奶奶出门2次，猫咪很活跃' },
-  { date: '2026-04-26', summary: '一切正常，奶奶生活规律' },
-  { date: '2026-04-25', summary: '猫咪特别活跃，运动量满分' },
-  { date: '2026-04-24', summary: '奶奶今天在家一天没有出门' }
-])
+const allHistory = [
+  { date: '2026-05-27', summary: '奶奶出门2次，猫咪很活跃' },
+  { date: '2026-05-26', summary: '一切正常，奶奶生活规律' },
+  { date: '2026-05-25', summary: '猫咪特别活跃，运动量满分' },
+  { date: '2026-05-24', summary: '奶奶今天在家一天没有出门' },
+  { date: '2026-05-23', summary: '快递较多，奶奶取快递3次' },
+  { date: '2026-05-22', summary: '一切正常，天气晴朗' },
+  { date: '2026-05-21', summary: '猫咪抓沙发5次，比较活跃' }
+]
+
+// 仅展示近7日
+const historyList = computed(() => {
+  const sevenAgo = new Date(today)
+  sevenAgo.setDate(sevenAgo.getDate() - 7)
+  const cutoff = `${sevenAgo.getFullYear()}-${String(sevenAgo.getMonth() + 1).padStart(2, '0')}-${String(sevenAgo.getDate()).padStart(2, '0')}`
+  return allHistory.filter(h => h.date >= cutoff && h.date <= todayStr.value)
+})
 
 const hasHistory = computed(() => historyList.value.length > 0)
 
@@ -295,27 +275,52 @@ const closeHistory = () => {
   showHistory.value = false
 }
 
+// 每日20:00自动生成（次数允许时，按设备本地时区）
+const shouldAutoGen = computed(() => {
+  const now = new Date()
+  const hour = now.getHours()
+  return hour >= 20 && remainFree.value > 0 && dailyStatus.value === 'idle'
+})
+
+onMounted(() => {
+  // 检查今日是否已自动生成过
+  try {
+    const autoDone = localStorage.getItem(autoGenKey.value)
+    if (!autoDone && shouldAutoGen.value) {
+      localStorage.setItem(autoGenKey.value, '1')
+      handleGenerate()
+    }
+  } catch {}
+})
+
+// 离开页面时重置次数，方便演示
+onUnmounted(() => {
+  try {
+    localStorage.removeItem(genCountKey.value)
+    localStorage.removeItem(autoGenKey.value)
+  } catch {}
+})
+
 const loadHistory = (h) => {
   showHistory.value = false
-  const parts = h.date.split('-')
-  displayYear.value = parseInt(parts[0])
-  displayMonth.value = parseInt(parts[1])
-  displayDay.value = parseInt(parts[2])
-  dailyGenerated.value = true
+  dailyStatus.value = 'done'
 }
 
 const resetDaily = () => {
-  dailyGenerated.value = false
-  isGenerating.value = false
+  dailyStatus.value = 'idle'
   genStep.value = 0
-  isEmptyDate.value = false
 }
 
 // 生成日报（模拟逐步生成）
 const handleGenerate = () => {
-  isGenerating.value = true
-  dailyGenerated.value = false
+  if (remainFree.value <= 0) return
+
+  dailyStatus.value = 'generating'
   genStep.value = 0
+
+  // 生成时立即扣减次数
+  todayGenCount.value++
+  try { localStorage.setItem(genCountKey.value, String(todayGenCount.value)) } catch {}
 
   // 模拟逐步生成
   setTimeout(() => { genStep.value = 1 }, 800)
@@ -323,8 +328,7 @@ const handleGenerate = () => {
   setTimeout(() => {
     genStep.value = 3
     setTimeout(() => {
-      isGenerating.value = false
-      dailyGenerated.value = true
+      dailyStatus.value = 'done'
     }, 500)
   }, 2800)
 }
@@ -342,9 +346,6 @@ const handleGenerate = () => {
 .na-inline-desc { font-size: 12px; color: $text-secondary; margin-top: 6px; text-align: center; max-width: 260px; line-height: 1.5; }
 .na-inline-btn { margin-top: 20px; padding: 10px 28px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 14px; font-weight: 600; cursor: pointer; }
 
-/* 日期栏 */
-.date-bar { background: $bg-color; padding: 10px 16px; display: flex; align-items: center; justify-content: center; gap: 12px; flex-shrink: 0; border-bottom: 1px solid $border-color; }
-.date-display { font-size: 15px; font-weight: 700; color: $text-primary; cursor: pointer; padding: 4px 12px; }
 /* 设备筛选 */
 .device-filter-bar { background: $bg-color; padding: 8px 16px; display: flex; gap: 6px; flex-shrink: 0; border-bottom: 1px solid $border-color; overflow-x: auto; }
 .dev-filter-chip { flex-shrink: 0; padding: 4px 12px; border-radius: 14px; font-size: 11px; font-weight: 500; color: $text-secondary; background: $bg-page; border: 1px solid $border-color; cursor: pointer; transition: all 0.15s; white-space: nowrap; &.active { background: $primary-color; color: #fff; border-color: $primary-color; } }
@@ -361,11 +362,10 @@ const handleGenerate = () => {
 .section-title { font-size: 14px; font-weight: 700; color: $text-primary; margin-bottom: 12px; }
 
 .focus-summary { margin-bottom: 12px; border-bottom: 1px solid $border-light; padding-bottom: 10px; cursor: pointer; &:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; } }
+.focus-summary-other { cursor: default; opacity: 0.85; }
 .focus-summary-top { display: flex; justify-content: space-between; align-items: center; }
 .focus-summary-name { font-size: 13px; font-weight: 600; color: $text-primary; }
 .focus-summary-count { font-size: 12px; color: $primary-color; font-weight: 600; }
-.focus-summary-msg { font-size: 12px; color: $text-secondary; margin-top: 4px; line-height: 1.4; }
-
 /* 每个关注事件下的时间线消息 */
 .focus-timeline { margin-top: 8px; padding-left: 4px; border-left: 2px solid $border-color; }
 .ft-item { display: flex; align-items: baseline; gap: 6px; margin-bottom: 6px; position: relative; &:last-child { margin-bottom: 0; } }
@@ -387,6 +387,9 @@ const handleGenerate = () => {
 .btn-generate { width: 100%; padding: 12px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 15px; font-weight: 600; cursor: pointer; }
 .no-free-hint { font-size: 12px; color: $text-secondary; text-align: center; margin-bottom: 8px; }
 .btn-buy { width: 100%; padding: 12px; background: $bg-card; color: $primary-color; border: 1.5px solid $primary-color; border-radius: $radius-md; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+/* AI免责声明 */
+.ai-disclaimer { text-align: center; font-size: 11px; color: $text-placeholder; padding: 8px 16px; padding-bottom: calc(8px + env(safe-area-inset-bottom, 8px)); flex-shrink: 0; }
 
 /* 历史弹窗 */
 .history-popup { padding: 20px 16px 32px; }

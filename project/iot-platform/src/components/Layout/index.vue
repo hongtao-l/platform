@@ -137,7 +137,10 @@ import {
   ShoppingCart,
   Star,
   UserFilled,
-  Present
+  Present,
+  Cpu,
+  SetUp,
+  Grid
 } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -161,9 +164,19 @@ const menuList = ref([
     icon: House
   },
   {
+    title: '物模型管理',
+    icon: Cpu,
+    children: [
+      { title: '能力库', path: '/thing-model/capability', icon: SetUp },
+      { title: 'IOT类目', path: '/thing-model/category', icon: Grid }
+    ]
+  },
+  {
     title: '产品管理',
-    path: '/product',
-    icon: Box
+    icon: Box,
+    children: [
+      { title: '产品开发', path: '/product/development', icon: Box }
+    ]
   },
   {
     title: '套餐管理',

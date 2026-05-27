@@ -261,22 +261,25 @@
           </el-form-item>
           <el-form-item label="投放区域" required>
             <div class="checkbox-group">
-              <label class="checkbox-item"><el-checkbox v-model="addForm.regions" label="国内" />国内</label>
-              <label class="checkbox-item"><el-checkbox v-model="addForm.regions" label="海外" />海外</label>
+              <el-checkbox v-for="r in regionOptions" :key="r.value" v-model="addForm.regions" :label="r.value" class="checkbox-item">
+                {{ r.label }}
+              </el-checkbox>
             </div>
           </el-form-item>
           <el-form-item label="投放APP" required>
             <div class="checkbox-group">
-              <label class="checkbox-item"><el-checkbox v-model="addForm.apps" label="牵心PRO" />牵心PRO <span class="checkbox-hint">QX_PRO_001</span></label>
-              <label class="checkbox-item"><el-checkbox v-model="addForm.apps" label="鹤梦之家" />鹤梦之家 <span class="checkbox-hint">HM_HOME_001</span></label>
+              <el-checkbox v-for="a in appOptions" :key="a.value" v-model="addForm.apps" :label="a.value" class="checkbox-item">
+                {{ a.label }}
+                <span class="checkbox-hint">{{ a.code }}</span>
+              </el-checkbox>
             </div>
           </el-form-item>
           <el-form-item label="投放用户分群" required>
             <div class="checkbox-group">
-              <label v-for="g in userGroups" :key="g.name" class="checkbox-item">
-                <el-checkbox v-model="addForm.groups" :label="g.name" />{{ g.name }}
+              <el-checkbox v-for="g in userGroups" :key="g.code" v-model="addForm.groups" :label="g.name" class="checkbox-item">
+                {{ g.name }}
                 <span class="checkbox-hint">{{ g.code }}</span>
-              </label>
+              </el-checkbox>
             </div>
           </el-form-item>
         </el-form>
@@ -396,22 +399,25 @@
           </el-form-item>
           <el-form-item label="投放区域" required>
             <div class="checkbox-group">
-              <label class="checkbox-item"><el-checkbox v-model="editForm.regions" label="国内" />国内</label>
-              <label class="checkbox-item"><el-checkbox v-model="editForm.regions" label="海外" />海外</label>
+              <el-checkbox v-for="r in regionOptions" :key="r.value" v-model="editForm.regions" :label="r.value" class="checkbox-item">
+                {{ r.label }}
+              </el-checkbox>
             </div>
           </el-form-item>
           <el-form-item label="投放APP" required>
             <div class="checkbox-group">
-              <label class="checkbox-item"><el-checkbox v-model="editForm.apps" label="牵心PRO" />牵心PRO</label>
-              <label class="checkbox-item"><el-checkbox v-model="editForm.apps" label="鹤梦之家" />鹤梦之家</label>
+              <el-checkbox v-for="a in appOptions" :key="a.value" v-model="editForm.apps" :label="a.value" class="checkbox-item">
+                {{ a.label }}
+                <span class="checkbox-hint">{{ a.code }}</span>
+              </el-checkbox>
             </div>
           </el-form-item>
           <el-form-item label="投放用户分群" required>
             <div class="checkbox-group">
-              <label v-for="g in userGroups" :key="g.name" class="checkbox-item">
-                <el-checkbox v-model="editForm.groups" :label="g.name" />{{ g.name }}
+              <el-checkbox v-for="g in userGroups" :key="g.code" v-model="editForm.groups" :label="g.name" class="checkbox-item">
+                {{ g.name }}
                 <span class="checkbox-hint">{{ g.code }}</span>
-              </label>
+              </el-checkbox>
             </div>
           </el-form-item>
         </el-form>
@@ -590,6 +596,16 @@ const freqOptions = [
   { value: 'always', label: '每次启动' },
   { value: 'once_daily', label: '每天一次' },
   { value: 'once_weekly', label: '每周一次' }
+]
+
+const regionOptions = [
+  { value: '国内', label: '国内' },
+  { value: '海外', label: '海外' }
+]
+
+const appOptions = [
+  { value: '牵心PRO', label: '牵心PRO', code: 'QX_PRO_001' },
+  { value: '鹤梦之家', label: '鹤梦之家', code: 'HM_HOME_001' }
 ]
 
 const userGroups = [

@@ -18,9 +18,13 @@ const routes = [
     path: '/product',
     name: 'Product',
     component: () => import('@/views/product/index.vue'),
-    meta: {
-      title: '产品管理'
-    }
+    meta: { title: '产品管理' }
+  },
+  {
+    path: '/product/development',
+    name: 'ProductDevelopment',
+    component: () => import('@/views/product/development.vue'),
+    meta: { title: '产品开发' }
   },
   {
     path: '/product/config',
@@ -69,6 +73,18 @@ const routes = [
     name: 'OpsUsergroup',
     component: () => import('@/views/ops/usergroup.vue'),
     meta: { title: '用户分群' }
+  },
+  {
+    path: '/thing-model/capability',
+    name: 'ThingModelCapability',
+    component: () => import('@/views/iot/thing-model/capability.vue'),
+    meta: { title: '能力库' }
+  },
+  {
+    path: '/thing-model/category',
+    name: 'ThingModelCategory',
+    component: () => import('@/views/iot/thing-model/category.vue'),
+    meta: { title: 'IOT类目' }
   },
   {
     path: '/pkg',

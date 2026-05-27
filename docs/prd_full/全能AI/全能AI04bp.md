@@ -5,6 +5,7 @@
 | 修订时间 | 修订内容 | 修订人 |
 |------|------|------|
 | 2026-05-25 | 初稿 | Kiro |
+| 2026-05-27 | AI日报埋点更新：移除selected_date参数，新增daily_auto_generate和daily_generate_limit事件 | Kiro |
 
 ---
 
@@ -58,7 +59,7 @@
 | 服务介绍开通页 | 页面加载完成，首屏可见 | user_id, source（入口来源：home_ai_btn / msg_focus / ai_search_inline / ai_daily_inline） |
 | AI配置页 | 页面加载完成 | user_id, activated_device_count（已激活设备数） |
 | AI搜索页 | 页面加载完成 | user_id, device_id, device_activated（是否已激活） |
-| AI日报页 | 页面加载完成 | user_id, device_id, device_activated, selected_date |
+| AI日报页 | 页面加载完成 | user_id, device_id, device_activated（仅当日，无需日期参数） |
 | 消息页 | 页面加载完成 | user_id, device_id, device_activated |
 
 #### 2.1.2 点击/交互埋点
@@ -75,10 +76,12 @@
 | ai_search_input | 用户执行AI搜索 | AI搜索页 | device_id, query_length（搜索文本长度） | P0 |
 | guess_click | 用户点击"猜你想搜"标签 | AI搜索页 | device_id, guess_text | P1 |
 | search_result_click | 用户点击搜索结果 | AI搜索页 | device_id, result_index（结果序号） | P1 |
-| daily_generate_click | 用户点击"生成日报" | AI日报页 | device_id, selected_date | P0 |
-| daily_regenerate_click | 用户点击"重新生成" | AI日报页 | device_id, selected_date | P1 |
+| daily_generate_click | 用户点击"生成日报" | AI日报页 | device_id, remain_free（剩余次数） | P0 |
+| daily_regenerate_click | 用户点击"重新生成" | AI日报页 | device_id, remain_free | P1 |
 | daily_history_open | 用户打开历史日报弹窗 | AI日报页 | device_id | P1 |
 | daily_history_select | 用户选择某条历史日报 | 历史日报弹窗 | device_id, history_date | P1 |
+| daily_auto_generate | 每日20:00自动触发生成（按设备本地时区） | AI日报页 | device_id | P1 |
+| daily_generate_limit | 次数用完，无法生成 | AI日报页 | device_id, gen_count（当前次数） | P1 |
 | focus_event_add | 用户添加关注事件 | AI配置页 | event_name, current_count（当前事件数） | P0 |
 | focus_event_edit | 用户编辑关注事件 | AI配置页 | event_name | P1 |
 | focus_event_delete | 用户删除关注事件 | AI配置页 | event_name | P1 |
@@ -242,12 +245,15 @@ POST /api/ai/event
 | 点击猜你想搜 | guess_click 上报 | 抓包验证 |
 | 执行AI搜索 | ai_search_input 上报 | 抓包验证 |
 | 点击搜索结果 | search_result_click 上报 | 抓包验证 |
-| 进入AI日报页 | 页面浏览埋点，含 selected_date | 抓包验证 |
-| 点击生成日报 | daily_generate_click 上报 | 抓包验证 |
+| 进入AI日报页 | 页面浏览埋点（仅当日，无日期参数） | 抓包验证 |
+| 点击生成日报 | daily_generate_click 上报，含剩余次数 | 抓包验证 |
 | 生成日报成功/失败 | 成功无错误事件；失败验证日报生成成功率指标 | 抓包 + 看板 |
+| 20:00自动生成 | daily_auto_generate 上报（按设备本地时区） | 抓包验证 |
+| 次数用完无法生成 | daily_generate_limit 上报 | 抓包 + 看板 |
 | 点击重新生成 | daily_regenerate_click 上报 | 抓包验证 |
 | 打开历史日报 | daily_history_open 上报 | 抓包验证 |
 | 选择历史日报 | daily_history_select 上报 | 抓包验证 |
+| 离开页面次数重置 | 再次进入后 remain_free 恢复为3 | 抓包验证 |
 | 添加关注事件 | focus_event_add 上报，含 current_count | 抓包验证 |
 | 编辑/删除/启停关注事件 | 对应事件上报 | 抓包验证 |
 | 切换智能推送 | smart_push_toggle 上报 | 抓包验证 |

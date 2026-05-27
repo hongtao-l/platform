@@ -1,1675 +1,827 @@
 <template>
-  <div class="product-config-page">
-    <!-- 面包屑导航 -->
-    <div class="page-header">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/product' }">产品管理</el-breadcrumb-item>
-        <el-breadcrumb-item>{{ productName }}</el-breadcrumb-item>
-      </el-breadcrumb>
+  <div class="page-container config-page">
+    <!-- 顶部区域 -->
+    <div class="top-bar card">
+      <div class="top-left">
+        <el-button @click="handleBack" :icon="ArrowLeft">返回产品列表</el-button>
+        <span class="product-title">{{ productName }}</span>
+        <el-button size="small" text type="primary" @click="handleEditProduct">
+          <el-icon><Edit /></el-icon>编辑
+        </el-button>
+      </div>
+      <div class="top-meta">
+        <span v-for="m in metaList" :key="m.label" class="meta-item">
+          <span class="meta-label">{{ m.label }}</span>
+          <span class="meta-value">{{ m.value }}</span>
+        </span>
+      </div>
     </div>
 
-    <!-- 功能点列表 -->
-    <div class="func-list card">
-      <div class="card-header">
-        <span class="card-title">已选功能点 ({{ funcList.length }}项)</span>
-        <div class="card-actions">
-          <!-- 布局切换按钮 -->
-          <el-button-group>
-            <el-button 
-              :type="viewMode === 'list' ? 'primary' : 'default'" 
-              @click="viewMode = 'list'"
+    <!-- Tab 切换栏 -->
+    <div class="tab-bar card" style="margin-top:12px">
+      <div
+        v-for="tab in tabs"
+        :key="tab.key"
+        class="tab-item"
+        :class="{ active: activeTab === tab.key }"
+        @click="activeTab = tab.key"
+      >
+        {{ tab.label }}
+      </div>
+    </div>
+
+    <!-- Tab 1: 功能定义与配置 -->
+    <div v-show="activeTab === 'funcConfig'" class="func-config card" style="margin-top:12px">
+      <!-- 设备能力配置选项：左模块列表 + 右配置区 -->
+      <div class="config-section">
+        <div class="section-title">设备能力配置</div>
+        <div class="config-split">
+          <!-- 左侧模块列表 -->
+          <div class="config-left">
+            <div
+              v-for="group in configGroups"
+              :key="group.key"
+              class="config-left-item"
+              :class="{ active: selectedGroup === group.key }"
+              @click="selectedGroup = group.key"
             >
-              <el-icon><List /></el-icon>
-              列表
-            </el-button>
-            <el-button 
-              :type="viewMode === 'module' ? 'primary' : 'default'" 
-              @click="viewMode = 'module'"
-            >
-              <el-icon><Grid /></el-icon>
-              模块
-            </el-button>
-          </el-button-group>
-          <el-button type="primary" @click="handleAddFunc">
-            <el-icon><Plus /></el-icon>
-            添加功能
-          </el-button>
+              <span class="left-item-label">{{ group.label }}</span>
+              <el-icon class="left-item-arrow"><ArrowRight /></el-icon>
+            </div>
+          </div>
+          <!-- 右侧选中模块的配置内容 -->
+          <div class="config-right">
+            <template v-for="group in configGroups" :key="group.key">
+              <div v-show="selectedGroup === group.key" class="config-group-panel">
+                <div class="config-right-title">{{ group.label }}</div>
+                <div v-for="item in group.items" :key="item.key" class="config-row">
+                  <span class="config-label">{{ item.label }}</span>
+                  <template v-if="item.type === 'switch'">
+                    <el-switch v-model="item.value" size="small" />
+                  </template>
+                  <template v-else-if="item.type === 'checkbox'">
+                    <el-checkbox-group v-model="item.value" size="small">
+                      <el-checkbox v-for="opt in item.options" :key="opt" :label="opt" :value="opt" />
+                    </el-checkbox-group>
+                  </template>
+                  <template v-else-if="item.type === 'placeholder'">
+                    <span class="placeholder-text">待补充</span>
+                  </template>
+                </div>
+              </div>
+            </template>
+          </div>
         </div>
       </div>
+      <!-- 标准能力列表 -->
+      <div class="capability-section">
+        <div class="panel-header">
+          <span class="section-title" style="margin-bottom:0">标准能力列表</span>
+          <el-button type="primary" size="small" @click="openCapabilityDialog">
+            <el-icon><Plus /></el-icon>添加标准能力
+          </el-button>
+        </div>
+        <el-table v-if="capabilityList.length" :data="capabilityList" stripe>
+          <el-table-column label="类型" width="80" align="center">
+            <template #default="{ row }">
+              <el-tag :type="capTypeTag(row.capType)" size="small">{{ capTypeLabel(row.capType) }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="能力名称" min-width="120">
+            <template #default="{ row }">
+              <span class="cell-name">{{ row.name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="数据定义" min-width="200">
+            <template #default="{ row }">
+              <span class="cell-desc">{{ dataDefSummary(row.dataDef) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="描述" min-width="140">
+            <template #default="{ row }">
+              <span class="cell-desc">{{ row.descr }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="所属模块" width="130" align="center">
+            <template #default="{ row }">
+              <span class="cell-text">{{ row.moduleName }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="120" align="center" fixed="right">
+            <template #default="{ row, $index }">
+              <el-button size="small" text type="primary" @click="editCapability(row, $index)">编辑</el-button>
+              <el-button size="small" text type="danger" @click="removeCapability($index)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div v-else class="empty-state">暂无数据</div>
+      </div>
+    </div>
 
-      <!-- 列表模式 -->
-      <el-table v-if="viewMode === 'list'" :data="funcList" stripe>
-        <el-table-column type="index" label="序号" width="60" align="center" />
-        <el-table-column prop="module" label="所属模块" width="100">
+    <!-- Tab 2: 算法联动配置 -->
+    <div v-show="activeTab === 'algoConfig'" class="card" style="margin-top:12px;overflow:hidden">
+      <div class="card-header">
+        <span class="card-title">算法联动配置</span>
+      </div>
+      <el-table :data="algoList" stripe>
+        <el-table-column label="ID（AlloTTip）" width="120" align="center">
           <template #default="{ row }">
-            <el-tag type="info" size="small">{{ row.module }}</el-tag>
+            <span class="cell-id">{{ row.alloTTip }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="功能名称" min-width="140">
+        <el-table-column label="算法名称" min-width="160">
           <template #default="{ row }">
-            <span class="text-primary">{{ row.name }}</span>
+            <span class="cell-name">{{ row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="identifier" label="功能标识" min-width="160">
+        <el-table-column label="描述" min-width="200">
           <template #default="{ row }">
-            <span class="text-muted">{{ row.identifier }}</span>
+            <span class="cell-desc">{{ row.descr }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="funcType" label="类型" width="80">
+        <el-table-column label="是否支持" width="100" align="center">
           <template #default="{ row }">
-            <el-tag :type="row.funcType === '属性' ? 'primary' : row.funcType === '服务' ? 'success' : 'warning'" size="small">
-              {{ row.funcType }}
-            </el-tag>
+            <el-switch v-model="row.supported" size="small" />
           </template>
         </el-table-column>
-        <el-table-column prop="dataType" label="数据类型" width="100">
+        <el-table-column label="算法配置" width="100" align="center">
           <template #default="{ row }">
-            <template v-if="row.funcType === '属性'">
-              <el-tag :type="row.dataType === '枚举型' ? '' : row.dataType === '布尔型' ? 'warning' : 'success'" size="small">
-                {{ row.dataType }}
-              </el-tag>
-            </template>
-            <template v-else>
-              <span class="text-muted">-</span>
-            </template>
+            <el-button size="small" text type="primary" :disabled="!row.supported" @click="openAlgoConfig(row)">
+              配置
+            </el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="remark" label="描述" min-width="180">
+        <el-table-column label="关联事件" width="100" align="center">
           <template #default="{ row }">
-            <span class="text-muted">{{ row.remark || '-' }}</span>
+            <el-button size="small" text type="primary" :disabled="!row.supported" @click="openEventLink(row)">
+              编辑
+            </el-button>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="120">
+        <el-table-column label="操作" width="80" align="center">
           <template #default="{ row }">
-            <el-button type="primary" link @click="handleEditFunc(row)">编辑</el-button>
-            <el-button type="danger" link @click="handleDeleteFunc(row)">删除</el-button>
+            <el-button size="small" text type="primary" @click="openAlgoConfig(row)">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
+    </div>
 
-      <!-- 模块展示模式 -->
-      <div v-else class="module-view">
-        <div class="module-sidebar">
-          <div
-            v-for="module in moduleList"
-            :key="module"
-            class="module-item"
-            :class="{ active: selectedModule === module }"
-            @click="selectedModule = module"
-          >
-            <span class="module-name">{{ module }}</span>
-            <span class="module-count">{{ getModuleFuncCount(module) }}</span>
-          </div>
-        </div>
-        <div class="module-content">
-          <el-table :data="getModuleFuncList()" stripe>
-            <el-table-column type="index" label="序号" width="60" align="center" />
-            <el-table-column prop="name" label="功能名称" min-width="140">
-              <template #default="{ row }">
-                <span class="text-primary">{{ row.name }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="identifier" label="功能标识" min-width="160">
-              <template #default="{ row }">
-                <span class="text-muted">{{ row.identifier }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="funcType" label="类型" width="80">
-              <template #default="{ row }">
-                <el-tag :type="row.funcType === '属性' ? 'primary' : row.funcType === '服务' ? 'success' : 'warning'" size="small">
-                  {{ row.funcType }}
-                </el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="dataType" label="数据类型" width="100">
-              <template #default="{ row }">
-                <template v-if="row.funcType === '属性'">
-                  <el-tag :type="row.dataType === '枚举型' ? '' : row.dataType === '布尔型' ? 'warning' : 'success'" size="small">
-                    {{ row.dataType }}
-                  </el-tag>
-                </template>
-                <template v-else>
-                  <span class="text-muted">-</span>
-                </template>
-              </template>
-            </el-table-column>
-            <el-table-column prop="remark" label="描述" min-width="180">
-              <template #default="{ row }">
-                <span class="text-muted">{{ row.remark || '-' }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" width="120">
-              <template #default="{ row }">
-                <el-button type="primary" link @click="handleEditFunc(row)">编辑</el-button>
-                <el-button type="danger" link @click="handleDeleteFunc(row)">删除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
+    <!-- Tab 3: 语音助手 -->
+    <div v-show="activeTab === 'voiceConfig'" class="card" style="margin-top:12px;overflow:hidden">
+      <div class="card-header">
+        <span class="card-title">语音助手</span>
       </div>
-    </div>
-
-    <!-- 返回按钮 -->
-    <div class="page-footer">
-      <el-button @click="handleBack">返回列表</el-button>
-    </div>
-
-    <!-- 添加功能点弹窗 -->
-    <el-dialog
-      v-model="addFuncDialogVisible"
-      title="添加标准功能点"
-      width="720px"
-      :close-on-click-modal="false"
-    >
-      <!-- 搜索框 -->
-      <div class="search-input">
-        <el-input
-          v-model="funcSearchKeyword"
-          placeholder="搜索功能点名称或标识"
-          clearable
-          @input="handleFuncSearch"
-        >
-          <template #prefix>
-            <el-icon><Search /></el-icon>
+      <el-table :data="voiceList" stripe>
+        <el-table-column label="AlloTType" width="120" align="center">
+          <template #default="{ row }">
+            <span class="cell-id">{{ row.alloTType }}</span>
           </template>
-        </el-input>
-      </div>
+        </el-table-column>
+        <el-table-column label="语音平台" min-width="160">
+          <template #default="{ row }">
+            <span class="cell-name">{{ row.platform }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="功能描述" min-width="200">
+          <template #default="{ row }">
+            <span class="cell-desc">{{ row.descr }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否支持" width="120" align="center">
+          <template #default="{ row }">
+            <el-switch v-model="row.supported" size="small" />
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
-      <!-- 功能点列表 -->
-      <div class="func-grid">
-        <div
-          v-for="func in filteredStandardFuncs"
-          :key="func.identifier"
-          class="func-card"
-          :class="{
-            selected: selectedFuncs.includes(func.identifier),
-            disabled: existingFuncIds.includes(func.identifier)
-          }"
-          @click="toggleFuncSelect(func)"
-        >
-          <div class="func-checkbox">
-            <el-icon v-if="selectedFuncs.includes(func.identifier) || existingFuncIds.includes(func.identifier)">
-              <Check />
-            </el-icon>
+    <!-- 底部操作按钮 -->
+    <div class="bottom-bar">
+      <el-button v-if="activeTab !== tabs[0].key" @click="prevTab">上一步</el-button>
+      <div class="bottom-right">
+        <el-button @click="skipTab">跳过</el-button>
+        <el-button v-if="activeTab !== tabs[tabs.length-1].key" type="primary" @click="saveNext">
+          保存，下一步
+        </el-button>
+        <el-button v-else type="primary" @click="finishDev">开发完成</el-button>
+      </div>
+    </div>
+
+    <!-- 添加标准能力弹窗（穿梭框） -->
+    <el-dialog v-model="capDialogVisible" title="添加标准能力" width="780px" top="5vh" :close-on-click-modal="false">
+      <el-transfer
+        v-model="selectedCapKeys"
+        :data="transferData"
+        :titles="['能力库', '已选择']"
+        :props="{ key: 'key', label: 'label' }"
+        filterable
+        :filter-method="transferFilter"
+        filter-placeholder="搜索能力名称"
+        style="display:flex;justify-content:center"
+      >
+        <template #default="{ option }">
+          <div class="transfer-item">
+            <el-tag :type="capTypeTag(option.capType)" size="small" style="margin-right:6px">{{ capTypeLabel(option.capType) }}</el-tag>
+            <span>{{ option.name }}</span>
+            <span class="transfer-meta">{{ option.moduleName }}</span>
           </div>
-          <div class="func-info">
-            <div class="func-name">{{ func.name }}</div>
-            <div class="func-meta">
-              <span>标识: {{ func.identifier }}</span>
-              <span>类型: {{ func.dataType }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 已选择提示 -->
-      <div class="selected-tip">
-        已选择: {{ selectedFuncs.length }} 个功能点
-        <span v-if="selectedFuncs.length > 0">
-          ({{ getSelectedFuncNames() }})
-        </span>
-      </div>
-
+        </template>
+      </el-transfer>
       <template #footer>
-        <el-button @click="addFuncDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="confirmAddFunc">确定添加</el-button>
+        <el-button @click="capDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmAddCapabilities">确定添加</el-button>
       </template>
     </el-dialog>
 
-    <!-- 编辑功能点抽屉 -->
-    <el-drawer
-      v-model="editDrawerVisible"
-      :title="'编辑功能点 - ' + editingFunc?.name"
-      size="480px"
-      :close-on-click-modal="false"
-    >
-      <el-form
-        ref="editFormRef"
-        :model="editForm"
-        label-width="80px"
-        label-position="top"
-      >
-        <el-form-item label="功能名称" prop="name">
-          <el-input v-model="editForm.name" placeholder="请输入功能名称" />
+    <!-- 编辑能力弹窗 -->
+    <el-dialog v-model="editCapDialogVisible" title="编辑能力" width="600px" top="5vh" :close-on-click-modal="false">
+      <el-form v-if="editingCap" label-width="80px">
+        <el-form-item label="能力名称">
+          <el-input v-model="editingCap.name" placeholder="请输入能力名称" />
         </el-form-item>
-
-        <el-form-item label="功能标识">
-          <el-input v-model="editForm.identifier" disabled />
-          <div class="form-hint">功能点唯一标识，不可修改</div>
-        </el-form-item>
-
-        <el-form-item label="类型">
-          <el-input v-model="editForm.funcType" disabled />
-          <div class="form-hint">功能点类型，不可修改</div>
-        </el-form-item>
-
-        <el-form-item v-if="editForm.funcType === '属性'" label="数据类型">
-          <el-input v-model="editForm.dataType" disabled />
-          <div class="form-hint">根据标准功能定义，不可修改</div>
-        </el-form-item>
-
-        <!-- 数值型配置 -->
-        <template v-if="editForm.dataType === '数值型'">
-          <el-divider content-position="left">数值配置</el-divider>
-          <div class="enum-config-tip">
-            <el-icon><InfoFilled /></el-icon>
-            取值范围、步长及默认值配置将影响APP的面板功能
-          </div>
-          <div class="number-config">
-            <el-form-item label="数值范围">
-              <div class="range-input-group">
-                <el-input-number
-                  v-model="editForm.numberConfig.minValue"
-                  placeholder="最小值"
-                  controls-position="right"
-                  style="width: 120px"
-                />
-                <span class="range-separator">-</span>
-                <el-input-number
-                  v-model="editForm.numberConfig.maxValue"
-                  placeholder="最大值"
-                  controls-position="right"
-                  style="width: 120px"
-                />
-              </div>
-            </el-form-item>
-            <el-row :gutter="16">
-              <el-col :span="12">
-                <el-form-item label="步长">
-                  <el-input-number
-                    v-model="editForm.numberConfig.step"
-                    :min="0.1"
-                    :precision="1"
-                    controls-position="right"
-                    placeholder="请输入步长"
-                    style="width: 100%"
-                  />
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="单位">
-                  <el-input
-                    v-model="editForm.numberConfig.unit"
-                    placeholder="如：%、秒、帧等"
-                  />
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-form-item label="默认值">
-              <el-input-number
-                v-model="editForm.numberConfig.defaultValue"
-                :min="editForm.numberConfig.minValue"
-                :max="editForm.numberConfig.maxValue"
-                :step="editForm.numberConfig.step"
-                controls-position="right"
-                placeholder="请输入默认值"
-                style="width: 100%"
-              />
-              <div class="form-hint">默认值需在取值范围内</div>
-            </el-form-item>
-          </div>
-        </template>
-
-        <!-- 布尔型配置 -->
-        <template v-if="editForm.dataType === '布尔型'">
-          <el-divider content-position="left">布尔配置</el-divider>
-          <div class="enum-config-tip">
-            <el-icon><InfoFilled /></el-icon>
-            默认值配置将影响APP的面板功能
-          </div>
-          <div class="bool-config">
-            <div class="bool-list">
-              <div class="bool-item">
-                <el-input value="true" disabled style="width: 100px" />
-                <el-input value="开启" disabled style="flex: 1" />
-                <el-tag
-                  v-if="editForm.boolConfig.defaultValue === true"
-                  type="success"
-                  size="small"
-                  effect="dark"
-                >
-                  默认值
-                </el-tag>
-                <el-button
-                  v-else
-                  type="primary"
-                  link
-                  size="small"
-                  @click="editForm.boolConfig.defaultValue = true"
-                >
-                  设为默认
-                </el-button>
-              </div>
-              <div class="bool-item">
-                <el-input value="false" disabled style="width: 100px" />
-                <el-input value="关闭" disabled style="flex: 1" />
-                <el-tag
-                  v-if="editForm.boolConfig.defaultValue === false"
-                  type="success"
-                  size="small"
-                  effect="dark"
-                >
-                  默认值
-                </el-tag>
-                <el-button
-                  v-else
-                  type="primary"
-                  link
-                  size="small"
-                  @click="editForm.boolConfig.defaultValue = false"
-                >
-                  设为默认
-                </el-button>
-              </div>
-            </div>
-          </div>
-        </template>
-
-        <!-- 事件型配置 -->
-        <template v-if="editForm.dataType === '事件型'">
-          <el-divider content-position="left">事件配置</el-divider>
-          <div class="enum-config-tip">
-            <el-icon><InfoFilled /></el-icon>
-            勾选设备支持的侦测告警事件类型
-          </div>
-          <div class="event-config">
-            <el-table :data="editForm.eventConfig.events" stripe size="small">
-                <el-table-column label="选择" width="60" align="center">
-                  <template #default="{ row }">
-                    <el-checkbox v-model="row.enabled" />
-                  </template>
-                </el-table-column>
-                <el-table-column prop="id" label="事件ID" min-width="140">
-                  <template #default="{ row }">
-                    <span class="text-muted">{{ row.id }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column prop="label" label="事件描述" min-width="120">
-                  <template #default="{ row }">
-                    <span>{{ row.label }}</span>
-                  </template>
-                </el-table-column>
-              </el-table>
-              <div class="form-hint">已选择 {{ editForm.eventConfig.events.filter(e => e.enabled).length }} 种事件类型</div>
-          </div>
-        </template>
-
-        <!-- 数组型配置 -->
-        <template v-if="editForm.dataType === '数组型'">
-          <el-divider content-position="left">数组配置</el-divider>
-          <div class="enum-config-tip">
-            <el-icon><InfoFilled /></el-icon>
-            数组元素类型及描述配置
-          </div>
-          <div class="array-config">
-            <el-form-item label="元素类型">
-              <el-input v-model="editForm.arrayConfig.itemType" placeholder="如：坐标点、字符串等" />
-            </el-form-item>
-            <el-form-item label="描述">
-              <el-input
-                v-model="editForm.arrayConfig.description"
-                type="textarea"
-                :rows="2"
-                placeholder="描述数组元素的用途"
-              />
-            </el-form-item>
-          </div>
-        </template>
-
-        <!-- 枚举值配置 -->
-        <template v-if="editForm.dataType === '枚举型'">
-          <el-divider content-position="left">枚举值配置</el-divider>
-          <div class="enum-config-tip">
-            <el-icon><InfoFilled /></el-icon>
-            默认值及描述配置将影响APP的面板功能
-          </div>
-          <div class="enum-list">
-            <div
-              v-for="(item, index) in editForm.enumValues"
-              :key="index"
-              class="enum-item"
-            >
-              <el-input v-model="item.value" placeholder="枚举值" style="width: 100px" />
-              <el-input 
-                v-model="item.label" 
-                placeholder="描述（APP显示）" 
-                style="flex: 1" 
-              />
-              <!-- 设为默认 -->
-              <template v-if="!item.disabledDefault">
-                <el-tag
-                  v-if="item.isDefault"
-                  type="success"
-                  size="small"
-                  effect="dark"
-                >
-                  默认值
-                </el-tag>
-                <el-button
-                  v-else
-                  type="primary"
-                  link
-                  size="small"
-                  @click="setDefaultEnum(index)"
-                >
-                  设为默认
-                </el-button>
-              </template>
-              <!-- 删除按钮 -->
-              <el-button
-                type="danger"
-                link
-                size="small"
-                @click="removeEnumValue(index)"
-              >
-                删除
-              </el-button>
-            </div>
-            <!-- 添加枚举值按钮 -->
-            <el-button type="primary" link @click="addEnumValue">
-              <el-icon><Plus /></el-icon>
-              添加枚举值
-            </el-button>
-          </div>
-
-          <!-- AOV模式配置 -->
-          <template v-if="editForm.identifier === 'work_mode' && getSelectedEnumValue() === '1'">
-            <el-divider content-position="left">AOV模式配置</el-divider>
-            <div class="extra-config">
-              <el-form-item label="低功耗模式电量阈值">
-                <el-input-number
-                  v-model="editForm.enumValues[1].aovConfig.powerThreshold"
-                  :min="0"
-                  :max="100"
-                  placeholder="请输入百分比"
-                  style="width: 100%"
-                />
-                <div class="form-hint">单位：百分比（%）</div>
-              </el-form-item>
-              <el-form-item label="拍照帧率">
-                <el-input-number
-                  v-model="editForm.enumValues[1].aovConfig.frameRate"
-                  :min="0"
-                  placeholder="请输入帧率"
-                  style="width: 100%"
-                />
-                <div class="form-hint">单位：秒/帧</div>
-              </el-form-item>
-            </div>
-          </template>
-
-          <!-- 长电模式配置 -->
-          <template v-if="editForm.identifier === 'work_mode' && getSelectedEnumValue() === '2'">
-            <el-divider content-position="left">长电模式配置</el-divider>
-            <div class="extra-config">
-              <el-form-item label="低功耗模式电量阈值">
-                <el-input-number
-                  v-model="editForm.enumValues[2].longPowerConfig.powerThreshold"
-                  :min="0"
-                  :max="100"
-                  placeholder="请输入百分比"
-                  style="width: 100%"
-                />
-                <div class="form-hint">单位：百分比（%）</div>
-              </el-form-item>
-            </div>
-          </template>
-
-          <!-- 事件录制 - 仅图片配置 -->
-          <template v-if="editForm.identifier === 'event_record' && getSelectedEnumValue() === '0'">
-            <el-divider content-position="left">仅图片配置</el-divider>
-            <div class="extra-config">
-              <el-form-item label="抓图间隔">
-                <el-input-number
-                  v-model="editForm.enumValues[0].imageConfig.captureInterval"
-                  :min="0"
-                  placeholder="请输入抓图间隔"
-                  style="width: 100%"
-                />
-                <div class="form-hint">单位：毫秒(ms)</div>
-              </el-form-item>
-            </div>
-          </template>
-
-          <!-- 事件录制 - 仅视频配置 -->
-          <template v-if="editForm.identifier === 'event_record' && getSelectedEnumValue() === '1'">
-            <el-divider content-position="left">仅视频配置</el-divider>
-            <div class="extra-config">
-              <el-form-item label="录制时长">
-                <el-input-number
-                  v-model="editForm.enumValues[1].videoConfig.recordDuration"
-                  :min="0"
-                  placeholder="请输入录制时长"
-                  style="width: 100%"
-                />
-                <div class="form-hint">单位：秒（s）</div>
-              </el-form-item>
-              <el-form-item label="是否允许设备终止">
-                <el-switch
-                  v-model="editForm.enumValues[1].videoConfig.allowDeviceTerminate"
-                  active-text="允许"
-                  inactive-text="不允许"
-                />
-              </el-form-item>
-            </div>
-          </template>
-
-          <!-- 事件录制 - 图片和视频配置 -->
-          <template v-if="editForm.identifier === 'event_record' && getSelectedEnumValue() === '2'">
-            <el-divider content-position="left">图片和视频配置</el-divider>
-            <div class="extra-config">
-              <el-form-item label="抓图间隔">
-                <el-input-number
-                  v-model="editForm.enumValues[2].bothConfig.captureInterval"
-                  :min="0"
-                  placeholder="请输入抓图间隔"
-                  style="width: 100%"
-                />
-                <div class="form-hint">单位：毫秒（ms）</div>
-              </el-form-item>
-              <el-form-item label="录制时长">
-                <el-input-number
-                  v-model="editForm.enumValues[2].bothConfig.recordDuration"
-                  :min="0"
-                  placeholder="请输入录制时长"
-                  style="width: 100%"
-                />
-                <div class="form-hint">单位：秒（s）</div>
-              </el-form-item>
-              <el-form-item label="是否允许设备终止">
-                <el-switch
-                  v-model="editForm.enumValues[2].bothConfig.allowDeviceTerminate"
-                  active-text="允许"
-                  inactive-text="不允许"
-                />
-              </el-form-item>
-            </div>
-          </template>
-        </template>
-
-        <el-divider content-position="left">备注</el-divider>
-        <el-form-item>
-          <el-input
-            v-model="editForm.remark"
-            type="textarea"
-            :rows="3"
-            placeholder="非必填，可记录功能点说明"
-          />
+        <el-form-item label="描述">
+          <el-input v-model="editingCap.descr" type="textarea" :rows="2" placeholder="请输入描述" />
         </el-form-item>
       </el-form>
-
       <template #footer>
-        <el-button @click="editDrawerVisible = false">取消</el-button>
-        <el-button type="primary" @click="saveEditFunc">保存</el-button>
+        <el-button @click="editCapDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="saveEditCap">保存</el-button>
       </template>
-    </el-drawer>
+    </el-dialog>
+
+    <!-- 算法配置弹窗 -->
+    <el-dialog v-model="algoConfigVisible" :title="'算法配置 - ' + editingAlgo?.name" width="560px" top="5vh" :close-on-click-modal="false">
+      <el-form v-if="editingAlgo" label-width="100px">
+        <el-form-item label="算法参数">
+          <el-input v-model="editingAlgo.params" type="textarea" :rows="4" placeholder="请输入算法参数配置（JSON格式）" />
+        </el-form-item>
+        <el-form-item label="阈值设置">
+          <el-input-number v-model="editingAlgo.threshold" :min="0" :max="100" placeholder="灵敏度阈值" style="width:200px" />
+          <span style="margin-left:8px;color:var(--text-secondary);font-size:13px">%</span>
+        </el-form-item>
+        <el-form-item label="启用时段">
+          <el-select v-model="editingAlgo.timeRange" placeholder="选择时段" style="width:200px">
+            <el-option label="全天" value="all" />
+            <el-option label="仅白天" value="day" />
+            <el-option label="仅夜间" value="night" />
+            <el-option label="自定义" value="custom" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="algoConfigVisible = false">取消</el-button>
+        <el-button type="primary" @click="saveAlgoConfig">保存</el-button>
+      </template>
+    </el-dialog>
+
+    <!-- 关联事件弹窗 -->
+    <el-dialog v-model="eventLinkVisible" :title="'关联事件 - ' + editingAlgo?.name" width="560px" top="5vh" :close-on-click-modal="false">
+      <el-checkbox-group v-if="editingAlgo" v-model="editingAlgo.linkedEvents">
+        <div v-for="evt in eventOptions" :key="evt.id" class="event-check-item">
+          <el-checkbox :label="evt.id" :value="evt.id">
+            <span style="font-weight:500">{{ evt.name }}</span>
+            <span style="color:var(--text-secondary);margin-left:8px;font-size:13px">{{ evt.descr }}</span>
+          </el-checkbox>
+        </div>
+      </el-checkbox-group>
+      <template #footer>
+        <el-button @click="eventLinkVisible = false">取消</el-button>
+        <el-button type="primary" @click="saveEventLink">保存</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Plus, Search, Check, Close, InfoFilled, List, Grid } from '@element-plus/icons-vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { Plus, ArrowLeft, Edit, ArrowRight } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 
 const route = useRoute()
 const router = useRouter()
 
-// 产品名称
-const productName = ref(route.query.name || '产品配置')
+const productName = ref(route.query.name || '更新后的产品名_987988')
+const productId = ref(route.query.id || 'IPC_PRO_001')
 
-// 视图模式
-const viewMode = ref('list')
-const selectedModule = ref('')
+// ===== 产品元信息 =====
+const metaList = [
+  { label: '产品ID', value: productId },
+  { label: '产品型号', value: 'IPC-X200' },
+  { label: '产品类目', value: 'IPC摄像机' },
+  { label: '联网方式', value: 'WiFi / 有线' }
+]
 
-// 功能点列表
-const funcList = ref([
-  // 工作模式模块
+// ===== Tab =====
+const tabs = [
+  { key: 'funcConfig', label: '功能定义与配置' },
+  { key: 'algoConfig', label: '算法联动配置' },
+  { key: 'voiceConfig', label: '语音助手' }
+]
+const activeTab = ref('funcConfig')
+
+// ===== Tab 1: 左侧配置项 =====
+const configGroups = reactive([
   {
-    id: 1,
-    name: '工作模式',
-    identifier: 'work_mode',
-    module: '工作模式',
-    funcType: '属性',
-    dataType: '枚举型',
-    enumValues: [
-      { value: '0', label: '超低功耗模式', isDefault: false, enabled: true },
-      { value: '1', label: '低功耗模式', isDefault: false, enabled: true },
-      { value: '2', label: 'AOV模式', isDefault: false, enabled: true, aovConfig: { powerThreshold: '', frameRate: '' } },
-      { value: '3', label: '长电模式', isDefault: false, enabled: true, longPowerConfig: { powerThreshold: '' } },
-      { value: '4', label: '自定义模式', isDefault: false, enabled: true, disabledDefault: true }
-    ],
-    remark: '设备工作模式切换'
+    key: 'network', label: '联网方式',
+    items: [
+      { key: 'net_wired', label: '有线', type: 'checkbox', value: ['有线'], options: ['有线', 'WiFi', '移动网络', 'AP'] }
+    ]
   },
   {
-    id: 8,
-    name: 'AOV自动切换低功耗电量',
-    identifier: 'aov_auto_switch_power',
-    module: '工作模式',
-    funcType: '属性',
-    dataType: '数值型',
-    numberConfig: {
-      minValue: 0,
-      maxValue: 100,
-      step: 1,
-      unit: '%',
-      defaultValue: 30
-    },
-    remark: 'AOV模式下自动切换到低功耗模式的电量阈值'
+    key: 'intercom', label: '对讲设置',
+    items: [
+      { key: 'voice', label: '声音', type: 'switch', value: true },
+      { key: 'smartink', label: 'Smartink', type: 'switch', value: false },
+      { key: 'qr_add', label: '摄像机识别二维码添加', type: 'switch', value: true },
+      { key: 'lan', label: '局域网', type: 'switch', value: true },
+      { key: 'app_scan', label: 'APP扫码添加', type: 'switch', value: true },
+      { key: 'ble_add', label: '蓝牙添加', type: 'switch', value: false }
+    ]
   },
   {
-    id: 9,
-    name: 'AOV模式拍照帧率',
-    identifier: 'aov_capture_frame_rate',
-    module: '工作模式',
-    funcType: '属性',
-    dataType: '数值型',
-    numberConfig: {
-      minValue: 1,
-      maxValue: 10,
-      step: 1,
-      unit: '秒/帧',
-      defaultValue: 1
-    },
-    remark: 'AOV模式下的拍照帧率间隔'
+    key: 'storage', label: '存储设置',
+    items: [{ key: 'storage_cfg', label: '存储配置', type: 'placeholder' }]
   },
   {
-    id: 10,
-    name: '长电自动切换低功耗电量',
-    identifier: 'long_power_auto_switch_power',
-    module: '工作模式',
-    funcType: '属性',
-    dataType: '数值型',
-    numberConfig: {
-      minValue: 0,
-      maxValue: 100,
-      step: 1,
-      unit: '%',
-      defaultValue: 20
-    },
-    remark: '长电模式下自动切换到低功耗模式的电量阈值'
-  },
-  // 录制模式模块
-  {
-    id: 2,
-    name: '常规录制',
-    identifier: 'normal_record',
-    module: '录制模式',
-    funcType: '属性',
-    dataType: '枚举型',
-    enumValues: [
-      { value: '0', label: '全天', isDefault: false, enabled: true },
-      { value: '1', label: '自定义时段', isDefault: false, enabled: true },
-      { value: '2', label: '关闭', isDefault: false, enabled: true }
-    ],
-    remark: '常规录制模式设置'
+    key: 'battery', label: '电池设置',
+    items: [{ key: 'battery_cfg', label: '电池配置', type: 'placeholder' }]
   },
   {
-    id: 3,
-    name: '事件录制',
-    identifier: 'event_record',
-    module: '录制模式',
-    funcType: '属性',
-    dataType: '布尔型',
-    boolConfig: {
-      defaultValue: true
-    },
-    remark: '是否开启事件触发录制'
+    key: 'workMode', label: '工作模式',
+    items: [{ key: 'work_mode_cfg', label: '工作模式配置', type: 'placeholder' }]
   },
   {
-    id: 5,
-    name: '录制媒体模式',
-    identifier: 'record_media_mode',
-    module: '录制模式',
-    funcType: '属性',
-    dataType: '枚举型',
-    enumValues: [
-      { value: '0', label: '仅图片', isDefault: false, enabled: true },
-      { value: '1', label: '仅视频', isDefault: false, enabled: true },
-      { value: '2', label: '图片+视频', isDefault: false, enabled: true }
-    ],
-    remark: '录制媒体类型选择'
+    key: 'wakeup', label: '唤醒能力',
+    items: [{ key: 'wakeup_cfg', label: '唤醒配置', type: 'placeholder' }]
   },
   {
-    id: 6,
-    name: '录制清晰度',
-    identifier: 'record_resolution',
-    module: '录制模式',
-    funcType: '属性',
-    dataType: '枚举型',
-    enumValues: [
-      { value: '0', label: '超清', isDefault: false, enabled: true },
-      { value: '1', label: '高清', isDefault: false, enabled: true },
-      { value: '2', label: '标清', isDefault: false, enabled: true }
-    ],
-    remark: '录制视频清晰度选择'
+    key: 'ota', label: 'OTA能力',
+    items: [{ key: 'ota_cfg', label: 'OTA配置', type: 'placeholder' }]
   },
   {
-    id: 7,
-    name: '抓拍清晰度',
-    identifier: 'capture_resolution',
-    module: '录制模式',
-    funcType: '属性',
-    dataType: '枚举型',
-    enumValues: [
-      { value: '0', label: '小图', isDefault: false, enabled: true },
-      { value: '1', label: '中图', isDefault: false, enabled: true },
-      { value: '2', label: '大图', isDefault: false, enabled: true }
-    ],
-    remark: '抓拍图片清晰度选择'
+    key: 'indicator', label: '指示灯',
+    items: [{ key: 'indicator_switch', label: '指示灯', type: 'switch', value: true }]
   },
   {
-    id: 11,
-    name: '抓拍间隔',
-    identifier: 'capture_interval',
-    module: '录制模式',
-    funcType: '属性',
-    dataType: '数值型',
-    numberConfig: {
-      minValue: 100,
-      maxValue: 10000,
-      step: 100,
-      unit: 'ms',
-      defaultValue: 500
-    },
-    remark: '事件触发时抓拍图片的时间间隔'
+    key: 'alarmRecord', label: '报警录制',
+    items: [{ key: 'alarm_record_switch', label: '报警录制', type: 'switch', value: true }]
   },
   {
-    id: 12,
-    name: '事件录制时长',
-    identifier: 'event_record_duration',
-    module: '录制模式',
-    funcType: '属性',
-    dataType: '数值型',
-    numberConfig: {
-      minValue: 5,
-      maxValue: 300,
-      step: 5,
-      unit: '秒',
-      defaultValue: 30
-    },
-    remark: '事件触发时录制的视频时长'
-  },
-  {
-    id: 13,
-    name: '自动结束事件录制开关',
-    identifier: 'auto_end_event_record',
-    module: '录制模式',
-    funcType: '属性',
-    dataType: '布尔型',
-    boolConfig: {
-      defaultValue: true
-    },
-    remark: '是否允许设备自动结束事件录制'
-  },
-  // 灯光模式模块
-  {
-    id: 4,
-    name: '灯光模式',
-    identifier: 'light_mode',
-    module: '灯光模式',
-    funcType: '属性',
-    dataType: '枚举型',
-    enumValues: [
-      { value: '0', label: '全彩模式', isDefault: false, enabled: true },
-      { value: '1', label: '红外模式', isDefault: true, enabled: true },
-      { value: '2', label: '智能模式', isDefault: false, enabled: true },
-      { value: '3', label: '自定义模式', isDefault: false, enabled: true, disabledDefault: true },
-      { value: '4', label: '关闭', isDefault: false, enabled: true }
-    ],
-    remark: '支持全彩/红外/智能/自定义/关闭'
-  },
-  // 侦测告警模块
-  {
-    id: 14,
-    name: '侦测告警',
-    identifier: 'detect_alarm',
-    module: '侦测告警',
-    funcType: '事件',
-    dataType: '事件型',
-    eventConfig: {
-      events: [
-        { id: '100001', label: '运动侦测', enabled: true },
-        { id: '100002', label: '人形侦测', enabled: true },
-        { id: '100003', label: '宠物侦测', enabled: false },
-        { id: '100004', label: '火焰侦测', enabled: false },
-        { id: '100005', label: '哭声侦测', enabled: false },
-        { id: '100006', label: '鱼类侦测', enabled: false }
-      ]
-    },
-    remark: '设备支持的侦测告警事件类型'
-  },
-  // 运动侦测模块
-  {
-    id: 15,
-    name: '运动侦测开关',
-    identifier: 'motion_detect_switch',
-    module: '运动侦测',
-    funcType: '属性',
-    dataType: '布尔型',
-    boolConfig: { defaultValue: true },
-    remark: '是否开启运动侦测功能'
-  },
-  {
-    id: 16,
-    name: '运动侦测灵敏度',
-    identifier: 'motion_detect_sensitivity',
-    module: '运动侦测',
-    funcType: '属性',
-    dataType: '枚举型',
-    enumValues: [
-      { value: '0', label: '最低档', isDefault: false, enabled: true },
-      { value: '1', label: '低档', isDefault: false, enabled: true },
-      { value: '2', label: '中档', isDefault: true, enabled: true },
-      { value: '3', label: '高档', isDefault: false, enabled: true },
-      { value: '4', label: '最高档', isDefault: false, enabled: true }
-    ],
-    remark: '运动侦测灵敏度等级'
-  },
-  {
-    id: 17,
-    name: '运动侦测区域设置',
-    identifier: 'motion_detect_area',
-    module: '运动侦测',
-    funcType: '属性',
-    dataType: '数组型',
-    arrayConfig: { itemType: '坐标点', description: '侦测区域坐标点集合' },
-    remark: '运动侦测区域坐标设置'
-  },
-  {
-    id: 18,
-    name: '运动侦测定时设置',
-    identifier: 'motion_detect_schedule',
-    module: '运动侦测',
-    funcType: '属性',
-    dataType: '枚举型',
-    enumValues: [
-      { value: '0', label: '全天', isDefault: true, enabled: true },
-      { value: '1', label: '定时侦测', isDefault: false, enabled: true, disabledDefault: true }
-    ],
-    remark: '运动侦测时间设置'
-  },
-  {
-    id: 19,
-    name: '运动侦测声音告警开关',
-    identifier: 'motion_detect_sound_alarm',
-    module: '运动侦测',
-    funcType: '属性',
-    dataType: '布尔型',
-    boolConfig: { defaultValue: false },
-    remark: '是否开启运动侦测声音告警'
-  },
-  {
-    id: 20,
-    name: '运动侦测AI追踪开关',
-    identifier: 'motion_detect_ai_track',
-    module: '运动侦测',
-    funcType: '属性',
-    dataType: '布尔型',
-    boolConfig: { defaultValue: false },
-    remark: '是否开启运动侦测AI追踪'
-  },
-  // 人形侦测模块
-  {
-    id: 21,
-    name: '人形侦测开关',
-    identifier: 'human_detect_switch',
-    module: '人形侦测',
-    funcType: '属性',
-    dataType: '布尔型',
-    boolConfig: { defaultValue: true },
-    remark: '是否开启人形侦测功能'
-  },
-  {
-    id: 22,
-    name: '人形侦测灵敏度',
-    identifier: 'human_detect_sensitivity',
-    module: '人形侦测',
-    funcType: '属性',
-    dataType: '枚举型',
-    enumValues: [
-      { value: '0', label: '最低档', isDefault: false, enabled: true },
-      { value: '1', label: '低档', isDefault: false, enabled: true },
-      { value: '2', label: '中档', isDefault: true, enabled: true },
-      { value: '3', label: '高档', isDefault: false, enabled: true },
-      { value: '4', label: '最高档', isDefault: false, enabled: true }
-    ],
-    remark: '人形侦测灵敏度等级'
-  },
-  {
-    id: 23,
-    name: '人形侦测区域设置',
-    identifier: 'human_detect_area',
-    module: '人形侦测',
-    funcType: '属性',
-    dataType: '数组型',
-    arrayConfig: { itemType: '坐标点', description: '侦测区域坐标点集合' },
-    remark: '人形侦测区域坐标设置'
-  },
-  {
-    id: 24,
-    name: '人形侦测定时设置',
-    identifier: 'human_detect_schedule',
-    module: '人形侦测',
-    funcType: '属性',
-    dataType: '枚举型',
-    enumValues: [
-      { value: '0', label: '全天', isDefault: true, enabled: true },
-      { value: '1', label: '定时侦测', isDefault: false, enabled: true, disabledDefault: true }
-    ],
-    remark: '人形侦测时间设置'
-  },
-  {
-    id: 25,
-    name: '人形侦测声音告警开关',
-    identifier: 'human_detect_sound_alarm',
-    module: '人形侦测',
-    funcType: '属性',
-    dataType: '布尔型',
-    boolConfig: { defaultValue: false },
-    remark: '是否开启人形侦测声音告警'
-  },
-  {
-    id: 26,
-    name: '人形侦测AI追踪开关',
-    identifier: 'human_detect_ai_track',
-    module: '人形侦测',
-    funcType: '属性',
-    dataType: '布尔型',
-    boolConfig: { defaultValue: false },
-    remark: '是否开启人形侦测AI追踪'
-  },
-  // 宠物侦测模块
-  {
-    id: 27,
-    name: '宠物侦测开关',
-    identifier: 'pet_detect_switch',
-    module: '宠物侦测',
-    funcType: '属性',
-    dataType: '布尔型',
-    boolConfig: { defaultValue: false },
-    remark: '是否开启宠物侦测功能'
-  },
-  {
-    id: 28,
-    name: '宠物侦测灵敏度',
-    identifier: 'pet_detect_sensitivity',
-    module: '宠物侦测',
-    funcType: '属性',
-    dataType: '枚举型',
-    enumValues: [
-      { value: '0', label: '最低档', isDefault: false, enabled: true },
-      { value: '1', label: '低档', isDefault: false, enabled: true },
-      { value: '2', label: '中档', isDefault: true, enabled: true },
-      { value: '3', label: '高档', isDefault: false, enabled: true },
-      { value: '4', label: '最高档', isDefault: false, enabled: true }
-    ],
-    remark: '宠物侦测灵敏度等级'
-  },
-  {
-    id: 29,
-    name: '宠物侦测区域设置',
-    identifier: 'pet_detect_area',
-    module: '宠物侦测',
-    funcType: '属性',
-    dataType: '数组型',
-    arrayConfig: { itemType: '坐标点', description: '侦测区域坐标点集合' },
-    remark: '宠物侦测区域坐标设置'
-  },
-  {
-    id: 30,
-    name: '宠物侦测定时设置',
-    identifier: 'pet_detect_schedule',
-    module: '宠物侦测',
-    funcType: '属性',
-    dataType: '枚举型',
-    enumValues: [
-      { value: '0', label: '全天', isDefault: true, enabled: true },
-      { value: '1', label: '定时侦测', isDefault: false, enabled: true, disabledDefault: true }
-    ],
-    remark: '宠物侦测时间设置'
-  },
-  {
-    id: 31,
-    name: '宠物侦测声音告警开关',
-    identifier: 'pet_detect_sound_alarm',
-    module: '宠物侦测',
-    funcType: '属性',
-    dataType: '布尔型',
-    boolConfig: { defaultValue: false },
-    remark: '是否开启宠物侦测声音告警'
-  },
-  {
-    id: 32,
-    name: '宠物侦测自定义声音告警音频',
-    identifier: 'pet_detect_custom_audio',
-    module: '宠物侦测',
-    funcType: '服务',
-    dataType: '服务型',
-    remark: '上传自定义声音告警音频'
-  },
-  {
-    id: 33,
-    name: '宠物侦测AI追踪开关',
-    identifier: 'pet_detect_ai_track',
-    module: '宠物侦测',
-    funcType: '属性',
-    dataType: '布尔型',
-    boolConfig: { defaultValue: false },
-    remark: '是否开启宠物侦测AI追踪'
+    key: 'irLight', label: '红外灯',
+    items: [{ key: 'ir_light_switch', label: '红外灯', type: 'switch', value: true }]
   }
 ])
 
-// 已存在的功能ID列表
-const existingFuncIds = computed(() => funcList.value.map(f => f.identifier))
+// 默认选中第一个模块
+const selectedGroup = ref(configGroups[0].key)
 
-// 模块列表
-const moduleList = computed(() => {
-  const modules = [...new Set(funcList.value.map(f => f.module))]
-  return modules
-})
-
-// 获取模块功能点数量
-const getModuleFuncCount = (module) => {
-  return funcList.value.filter(f => f.module === module).length
-}
-
-// 获取模块功能点列表
-const getModuleFuncList = () => {
-  return funcList.value.filter(f => f.module === selectedModule.value)
-}
-
-// 标准功能点库
-const standardFuncs = ref([
-  // 工作模式模块
-  { name: '工作模式', identifier: 'work_mode', module: '工作模式', funcType: '属性', dataType: '枚举型' },
-  { name: 'AOV自动切换低功耗电量', identifier: 'aov_auto_switch_power', module: '工作模式', funcType: '属性', dataType: '数值型' },
-  { name: 'AOV模式拍照帧率', identifier: 'aov_capture_frame_rate', module: '工作模式', funcType: '属性', dataType: '数值型' },
-  { name: '长电自动切换低功耗电量', identifier: 'long_power_auto_switch_power', module: '工作模式', funcType: '属性', dataType: '数值型' },
-  // 录制模式模块
-  { name: '常规录制', identifier: 'normal_record', module: '录制模式', funcType: '属性', dataType: '枚举型' },
-  { name: '事件录制', identifier: 'event_record', module: '录制模式', funcType: '属性', dataType: '布尔型' },
-  { name: '录制媒体模式', identifier: 'record_media_mode', module: '录制模式', funcType: '属性', dataType: '枚举型' },
-  { name: '录制清晰度', identifier: 'record_resolution', module: '录制模式', funcType: '属性', dataType: '枚举型' },
-  { name: '抓拍清晰度', identifier: 'capture_resolution', module: '录制模式', funcType: '属性', dataType: '枚举型' },
-  { name: '抓拍间隔', identifier: 'capture_interval', module: '录制模式', funcType: '属性', dataType: '数值型' },
-  { name: '事件录制时长', identifier: 'event_record_duration', module: '录制模式', funcType: '属性', dataType: '数值型' },
-  { name: '自动结束事件录制开关', identifier: 'auto_end_event_record', module: '录制模式', funcType: '属性', dataType: '布尔型' },
-  // 灯光模式模块
-  { name: '灯光模式', identifier: 'light_mode', module: '灯光模式', funcType: '属性', dataType: '枚举型' },
-  // 侦测告警模块
-  { name: '侦测告警', identifier: 'detect_alarm', module: '侦测告警', funcType: '事件', dataType: '事件型' },
-  // 运动侦测模块
-  { name: '运动侦测开关', identifier: 'motion_detect_switch', module: '运动侦测', funcType: '属性', dataType: '布尔型' },
-  { name: '运动侦测灵敏度', identifier: 'motion_detect_sensitivity', module: '运动侦测', funcType: '属性', dataType: '枚举型' },
-  { name: '运动侦测区域设置', identifier: 'motion_detect_area', module: '运动侦测', funcType: '属性', dataType: '数组型' },
-  { name: '运动侦测定时设置', identifier: 'motion_detect_schedule', module: '运动侦测', funcType: '属性', dataType: '枚举型' },
-  { name: '运动侦测声音告警开关', identifier: 'motion_detect_sound_alarm', module: '运动侦测', funcType: '属性', dataType: '布尔型' },
-  { name: '运动侦测AI追踪开关', identifier: 'motion_detect_ai_track', module: '运动侦测', funcType: '属性', dataType: '布尔型' },
-  // 人形侦测模块
-  { name: '人形侦测开关', identifier: 'human_detect_switch', module: '人形侦测', funcType: '属性', dataType: '布尔型' },
-  { name: '人形侦测灵敏度', identifier: 'human_detect_sensitivity', module: '人形侦测', funcType: '属性', dataType: '枚举型' },
-  { name: '人形侦测区域设置', identifier: 'human_detect_area', module: '人形侦测', funcType: '属性', dataType: '数组型' },
-  { name: '人形侦测定时设置', identifier: 'human_detect_schedule', module: '人形侦测', funcType: '属性', dataType: '枚举型' },
-  { name: '人形侦测声音告警开关', identifier: 'human_detect_sound_alarm', module: '人形侦测', funcType: '属性', dataType: '布尔型' },
-  { name: '人形侦测AI追踪开关', identifier: 'human_detect_ai_track', module: '人形侦测', funcType: '属性', dataType: '布尔型' },
-  // 宠物侦测模块
-  { name: '宠物侦测开关', identifier: 'pet_detect_switch', module: '宠物侦测', funcType: '属性', dataType: '布尔型' },
-  { name: '宠物侦测灵敏度', identifier: 'pet_detect_sensitivity', module: '宠物侦测', funcType: '属性', dataType: '枚举型' },
-  { name: '宠物侦测区域设置', identifier: 'pet_detect_area', module: '宠物侦测', funcType: '属性', dataType: '数组型' },
-  { name: '宠物侦测定时设置', identifier: 'pet_detect_schedule', module: '宠物侦测', funcType: '属性', dataType: '枚举型' },
-  { name: '宠物侦测声音告警开关', identifier: 'pet_detect_sound_alarm', module: '宠物侦测', funcType: '属性', dataType: '布尔型' },
-  { name: '宠物侦测自定义声音告警音频', identifier: 'pet_detect_custom_audio', module: '宠物侦测', funcType: '服务', dataType: '服务型' },
-  { name: '宠物侦测AI追踪开关', identifier: 'pet_detect_ai_track', module: '宠物侦测', funcType: '属性', dataType: '布尔型' },
-  // 其他功能
-  { name: '夜视模式', identifier: 'night_vision', module: '其他', funcType: '属性', dataType: '枚举型' },
-  { name: '白光灯', identifier: 'white_light', module: '其他', funcType: '属性', dataType: '布尔型' },
-  { name: '红外灯', identifier: 'infrared_light', module: '其他', funcType: '属性', dataType: '布尔型' },
-  { name: '移动侦测', identifier: 'motion_detect', module: '其他', funcType: '属性', dataType: '布尔型' },
-  { name: '云存储', identifier: 'cloud_storage', module: '其他', funcType: '属性', dataType: '布尔型' },
-  { name: '双向语音', identifier: 'two_way_voice', module: '其他', funcType: '属性', dataType: '布尔型' },
-  { name: '消息推送', identifier: 'msg_push', module: '其他', funcType: '属性', dataType: '布尔型' },
-  { name: '人脸识别', identifier: 'face_recogn', module: '其他', funcType: '属性', dataType: '枚举型' },
-  { name: '声音检测', identifier: 'sound_detect', module: '其他', funcType: '属性', dataType: '布尔型' }
+// ===== Tab 1: 右侧能力列表 =====
+const capabilityList = ref([
+  {
+    id: 1, capType: 'prop', name: '工作模式', identifier: 'work_mode',
+    descr: '设备工作模式切换（低功耗/AOV/长电/自定义）',
+    dataDef: { dataType: 'enum', accessMode: 'rw', enumValues: [{ name: '低功耗模式', val: 0 }, { name: 'AOV模式', val: 1 }, { name: '长电模式', val: 2 }, { name: '自定义模式', val: 3 }] },
+    moduleName: '工作模式模块'
+  },
+  {
+    id: 2, capType: 'prop', name: '灯光模式', identifier: 'light_mode',
+    descr: '灯光模式切换（全彩/红外/智能/自定义/关闭）',
+    dataDef: { dataType: 'enum', accessMode: 'rw', enumValues: [{ name: '全彩模式', val: 0 }, { name: '红外模式', val: 1 }, { name: '智能模式', val: 2 }, { name: '自定义模式', val: 3 }, { name: '关闭', val: 4 }] },
+    moduleName: '灯光模式模块'
+  },
+  {
+    id: 3, capType: 'prop', name: '常规录制', identifier: 'normal_record',
+    descr: '常规录制模式设置（全天/自定义/关闭）',
+    dataDef: { dataType: 'enum', accessMode: 'rw', enumValues: [{ name: '全天', val: 0 }, { name: '自定义时段', val: 1 }, { name: '关闭', val: 2 }] },
+    moduleName: '录制模式模块'
+  },
+  {
+    id: 4, capType: 'evt', name: '移动侦测', identifier: 'motion_detect',
+    descr: '设备检测到物体移动时上报告警事件',
+    dataDef: { dataType: 'event', eventType: 'alarm', outputParams: [] },
+    moduleName: '事件侦测模块'
+  },
+  {
+    id: 5, capType: 'svc', name: '格式化存储', identifier: 'format_storage',
+    descr: '远程格式化设备存储卡',
+    dataDef: { dataType: 'service', inputParams: [], outputParams: [{ name: '操作结果', identifier: 'result', dataType: 'boolean' }] },
+    moduleName: '录制模式模块'
+  }
 ])
 
-// 添加功能点弹窗
-const addFuncDialogVisible = ref(false)
-const funcSearchKeyword = ref('')
-const selectedFuncs = ref([])
+const capTypeMap = { prop: '属性', svc: '服务', evt: '事件' }
+const capTypeTagMap = { prop: '', svc: 'success', evt: 'warning' }
+function capTypeLabel(t) { return capTypeMap[t] || t }
+function capTypeTag(t) { return capTypeTagMap[t] || '' }
 
-// 过滤后的标准功能点
-const filteredStandardFuncs = computed(() => {
-  if (!funcSearchKeyword.value) return standardFuncs.value
-  const keyword = funcSearchKeyword.value.toLowerCase()
-  return standardFuncs.value.filter(func =>
-    func.name.toLowerCase().includes(keyword) ||
-    func.identifier.toLowerCase().includes(keyword)
-  )
-})
-
-// 编辑功能点抽屉
-const editDrawerVisible = ref(false)
-const editingFunc = ref(null)
-const editFormRef = ref(null)
-const editForm = reactive({
-  name: '',
-  identifier: '',
-  module: '',
-  funcType: '',
-  dataType: '',
-  enumValues: [],
-  numberConfig: {
-    minValue: 0,
-    maxValue: 100,
-    step: 1,
-    unit: '',
-    defaultValue: 0
-  },
-  boolConfig: {
-    defaultValue: true
-  },
-  eventConfig: {
-    events: []
-  },
-  arrayConfig: {
-    itemType: '',
-    description: ''
-  },
-  remark: ''
-})
-
-// 返回列表
-const handleBack = () => {
-  router.push('/product')
+function dataDefSummary(dd) {
+  if (!dd) return '—'
+  if (dd.dataType === 'enum' && dd.enumValues) return '枚举: ' + dd.enumValues.map(e => e.name).join(' / ')
+  if (dd.dataType === 'boolean') return '布尔型'
+  if (dd.dataType === 'int') return `整数 (${dd.min || 0}~${dd.max || 100}${dd.unit ? ' ' + dd.unit : ''})`
+  if (dd.dataType === 'event') return '事件' + (dd.eventType ? ` (${dd.eventType})` : '')
+  if (dd.dataType === 'service') return '服务' + (dd.inputParams?.length || dd.outputParams?.length ? ` (入参${dd.inputParams?.length||0}/出参${dd.outputParams?.length||0})` : '')
+  return dd.dataType || '—'
 }
 
-// 打开添加功能点弹窗
-const handleAddFunc = () => {
-  selectedFuncs.value = []
-  funcSearchKeyword.value = ''
-  addFuncDialogVisible.value = true
+// ===== 能力库穿梭框 =====
+const capDialogVisible = ref(false)
+const selectedCapKeys = ref([])
+
+const libCapabilities = [
+  { capType: 'prop', name: '录像开关', identifier: 'record_switch', descr: '控制设备录像功能的启用与关闭', dataDef: { dataType: 'boolean' }, moduleName: '录制模式模块' },
+  { capType: 'prop', name: '夜视模式', identifier: 'night_vision', descr: '夜视模式切换（自动/强制/关闭）', dataDef: { dataType: 'enum', accessMode: 'rw', enumValues: [{ name: '自动', val: 0 }, { name: '强制', val: 1 }, { name: '关闭', val: 2 }] }, moduleName: '基础设置模块' },
+  { capType: 'prop', name: '音量控制', identifier: 'volume', descr: '设备扬声器音量调节', dataDef: { dataType: 'int', accessMode: 'rw', min: 0, max: 100, step: 1, unit: '%' }, moduleName: '对讲模块' },
+  { capType: 'svc', name: '远程重启', identifier: 'remote_reboot', descr: '远程控制设备重新启动', dataDef: { dataType: 'service', inputParams: [], outputParams: [{ name: '重启结果', identifier: 'result', dataType: 'boolean' }] }, moduleName: '系统管理模块' },
+  { capType: 'evt', name: '电量不足告警', identifier: 'low_battery', descr: '设备电量低于阈值时上报', dataDef: { dataType: 'event', eventType: 'alarm', outputParams: [{ name: '当前电量', identifier: 'battery', dataType: 'int', min: 0, max: 100, unit: '%' }] }, moduleName: '事件侦测模块' },
+  { capType: 'svc', name: '云台控制', identifier: 'ptz_control', descr: '控制设备云台旋转/倾斜', dataDef: { dataType: 'service', inputParams: [{ name: '方向', identifier: 'direction', dataType: 'enum', enumValues: [{ name: '上', val: 0 }, { name: '下', val: 1 }, { name: '左', val: 2 }, { name: '右', val: 3 }] }], outputParams: [] }, moduleName: '云台模块' },
+  { capType: 'prop', name: '人脸识别', identifier: 'face_detect', descr: '是否启用人脸检测与识别功能', dataDef: { dataType: 'boolean' }, moduleName: 'AI算法模块' },
+  { capType: 'prop', name: '声音检测', identifier: 'sound_detect', descr: '检测异常声音并触发告警', dataDef: { dataType: 'boolean' }, moduleName: '事件侦测模块' },
+  { capType: 'svc', name: '固件升级', identifier: 'firmware_upgrade', descr: '远程触发设备固件OTA升级', dataDef: { dataType: 'service', inputParams: [{ name: '固件URL', identifier: 'firmware_url', dataType: 'string' }], outputParams: [{ name: '升级状态', identifier: 'status', dataType: 'enum', enumValues: [{ name: '成功', val: 0 }, { name: '失败', val: 1 }] }] }, moduleName: '系统管理模块' },
+  { capType: 'prop', name: '隐私模式', identifier: 'privacy_mode', descr: '隐私模式开关（关闭摄像头画面）', dataDef: { dataType: 'boolean' }, moduleName: '基础设置模块' }
+]
+
+const existingCapIds = computed(() => capabilityList.value.map(c => c.identifier))
+
+const transferData = computed(() =>
+  libCapabilities
+    .filter(c => !existingCapIds.value.includes(c.identifier))
+    .map(c => ({
+      key: c.identifier,
+      label: `${c.name} [${c.moduleName}]`,
+      name: c.name,
+      capType: c.capType,
+      moduleName: c.moduleName,
+      descr: c.descr,
+      dataDef: c.dataDef,
+      identifier: c.identifier
+    }))
+)
+
+function transferFilter(query, item) {
+  return item.label.toLowerCase().includes(query.toLowerCase())
 }
 
-// 搜索功能点
-const handleFuncSearch = () => {
-  // 搜索逻辑已通过 computed 实现
+function openCapabilityDialog() {
+  selectedCapKeys.value = []
+  capDialogVisible.value = true
 }
 
-// 切换功能点选择
-const toggleFuncSelect = (func) => {
-  // 已存在的功能点不可选择
-  if (existingFuncIds.value.includes(func.identifier)) return
-
-  const index = selectedFuncs.value.indexOf(func.identifier)
-  if (index > -1) {
-    selectedFuncs.value.splice(index, 1)
-  } else {
-    selectedFuncs.value.push(func.identifier)
-  }
-}
-
-// 获取已选择的功能点名称
-const getSelectedFuncNames = () => {
-  return selectedFuncs.value.map(id => {
-    const func = standardFuncs.value.find(f => f.identifier === id)
-    return func?.name
-  }).filter(Boolean).join('、')
-}
-
-// 确认添加功能点
-const confirmAddFunc = () => {
-  if (selectedFuncs.value.length === 0) {
-    ElMessage.warning('请选择要添加的功能点')
-    return
-  }
-
-  selectedFuncs.value.forEach(identifier => {
-    const func = standardFuncs.value.find(f => f.identifier === identifier)
-    if (func) {
-      funcList.value.push({
-        id: Date.now() + Math.random(),
-        name: func.name,
-        identifier: func.identifier,
-        module: func.module,
-        funcType: func.funcType,
-        dataType: func.dataType,
-        enumValues: func.dataType === '枚举型' ? [] : undefined,
-        numberConfig: func.dataType === '数值型' ? {
-          minValue: 0,
-          maxValue: 100,
-          step: 1,
-          unit: '',
-          defaultValue: 0
-        } : undefined,
-        boolConfig: func.dataType === '布尔型' ? {
-          defaultValue: true
-        } : undefined,
-        eventConfig: func.dataType === '事件型' ? {
-          events: []
-        } : undefined,
-        arrayConfig: func.dataType === '数组型' ? {
-          itemType: '',
-          description: ''
-        } : undefined,
-        remark: ''
-      })
-    }
+function confirmAddCapabilities() {
+  if (!selectedCapKeys.value.length) { ElMessage.warning('请选择要添加的能力'); return }
+  selectedCapKeys.value.forEach(key => {
+    const c = libCapabilities.find(c => c.identifier === key)
+    if (!c) return
+    capabilityList.value.push({
+      id: Date.now() + Math.random(),
+      capType: c.capType, name: c.name, identifier: c.identifier,
+      descr: c.descr, dataDef: JSON.parse(JSON.stringify(c.dataDef)),
+      moduleName: c.moduleName
+    })
   })
-
-  ElMessage.success(`成功添加 ${selectedFuncs.value.length} 个功能点`)
-  addFuncDialogVisible.value = false
+  ElMessage.success(`已添加 ${selectedCapKeys.value.length} 项能力`)
+  capDialogVisible.value = false
 }
 
-// 编辑功能点
-const handleEditFunc = (row) => {
-  editingFunc.value = row
-  editForm.name = row.name
-  editForm.identifier = row.identifier
-  editForm.module = row.module
-  editForm.funcType = row.funcType
-  editForm.dataType = row.dataType
-  editForm.enumValues = row.enumValues ? JSON.parse(JSON.stringify(row.enumValues)) : []
-  editForm.numberConfig = row.numberConfig ? JSON.parse(JSON.stringify(row.numberConfig)) : {
-    minValue: 0,
-    maxValue: 100,
-    step: 1,
-    unit: '',
-    defaultValue: 0
-  }
-  editForm.boolConfig = row.boolConfig ? JSON.parse(JSON.stringify(row.boolConfig)) : {
-    defaultValue: true
-  }
-  editForm.eventConfig = row.eventConfig ? JSON.parse(JSON.stringify(row.eventConfig)) : {
-    events: []
-  }
-  editForm.arrayConfig = row.arrayConfig ? JSON.parse(JSON.stringify(row.arrayConfig)) : {
-    itemType: '',
-    description: ''
-  }
-  editForm.remark = row.remark || ''
-  editDrawerVisible.value = true
+// ===== 能力编辑 =====
+const editCapDialogVisible = ref(false)
+const editingCap = ref(null)
+const editingCapIdx = ref(-1)
+
+function editCapability(row, idx) {
+  editingCap.value = { name: row.name, descr: row.descr }
+  editingCapIdx.value = idx
+  editCapDialogVisible.value = true
 }
 
-// 设置默认枚举值
-const setDefaultEnum = (index) => {
-  // 检查是否为禁用默认值的枚举项
-  if (editForm.enumValues[index].disabledDefault) return
-
-  editForm.enumValues.forEach((item, i) => {
-    item.isDefault = i === index
-  })
+function saveEditCap() {
+  const cap = capabilityList.value[editingCapIdx.value]
+  if (cap) {
+    cap.name = editingCap.value.name
+    cap.descr = editingCap.value.descr
+  }
+  ElMessage.success('已保存')
+  editCapDialogVisible.value = false
 }
 
-// 添加枚举值
-const addEnumValue = () => {
-  const newIndex = editForm.enumValues.length
-  editForm.enumValues.push({
-    value: String(newIndex),
-    label: '',
-    isDefault: false,
-    enabled: true
-  })
+function removeCapability(idx) {
+  capabilityList.value.splice(idx, 1)
+  ElMessage.success('已删除')
 }
 
-// 删除枚举值
-const removeEnumValue = (index) => {
-  if (editForm.enumValues.length > 1) {
-    editForm.enumValues.splice(index, 1)
-  } else {
-    ElMessage.warning('至少保留一个枚举值')
+// ===== Tab 2: 算法联动配置 =====
+const algoList = ref([
+  { alloTTip: 1013, name: '事件记录', descr: '记录设备触发的事件', supported: true, params: '', threshold: 50, timeRange: 'all', linkedEvents: [] },
+  { alloTTip: 1000, name: '人形/运动检测', descr: '检测画面中的人形或移动物体', supported: true, params: '', threshold: 60, timeRange: 'all', linkedEvents: [] },
+  { alloTTip: 1088, name: '车牌识别', descr: '自动读取并识别车牌信息', supported: false, params: '', threshold: 70, timeRange: 'day', linkedEvents: [] },
+  { alloTTip: 1003, name: 'PIR红外检测', descr: '基于红外热释电的人体活动监测', supported: true, params: '', threshold: 40, timeRange: 'night', linkedEvents: [] },
+  { alloTTip: 1090, name: '客流统计', descr: '进入/出去行为识别与计数', supported: false, params: '', threshold: 50, timeRange: 'all', linkedEvents: [] },
+  { alloTTip: 1093, name: '离线监控', descr: '设备断电或离线时的状态监测', supported: true, params: '', threshold: 30, timeRange: 'all', linkedEvents: [] },
+  { alloTTip: 1095, name: '智能告警-儿童检测', descr: '综合全天候的儿童看护识别', supported: false, params: '', threshold: 60, timeRange: 'all', linkedEvents: [] },
+  { alloTTip: 1096, name: '智能告警服务', descr: '基于多维参数的综合告警策略', supported: true, params: '', threshold: 50, timeRange: 'all', linkedEvents: [] },
+  { alloTTip: 1103, name: '智能告警-老人看护', descr: '针对老年用户的异常行为识别', supported: false, params: '', threshold: 60, timeRange: 'all', linkedEvents: [] },
+  { alloTTip: 1104, name: '智能告警-厨房监测', descr: '全方位监测厨房油烟和火情', supported: true, params: '', threshold: 70, timeRange: 'all', linkedEvents: [] },
+  { alloTTip: 1105, name: '智能告警-家门检测', descr: '门口落扇、门磁检测等安防预警', supported: true, params: '', threshold: 50, timeRange: 'all', linkedEvents: [] },
+  { alloTTip: 1106, name: '智能告警-宠物检测', descr: '整合宠物的多项健康活动和活动指标', supported: false, params: '', threshold: 50, timeRange: 'all', linkedEvents: [] },
+  { alloTTip: 1108, name: 'GPS信息处理', descr: '设备地理位置定位与上报', supported: true, params: '', threshold: 0, timeRange: 'all', linkedEvents: [] },
+  { alloTTip: 1109, name: '包裹侦测', descr: '检测门口或指定区域堆放的包裹', supported: false, params: '', threshold: 50, timeRange: 'day', linkedEvents: [] },
+  { alloTTip: 1111, name: '鱼类检测', descr: '针对水族箱场景的特征识别', supported: false, params: '', threshold: 40, timeRange: 'all', linkedEvents: [] }
+])
+
+const eventOptions = [
+  { id: 'evt_motion', name: '移动侦测', descr: '物体移动触发' },
+  { id: 'evt_human', name: '人形侦测', descr: '检测到人形触发' },
+  { id: 'evt_smoke', name: '烟雾告警', descr: '检测到烟雾触发' },
+  { id: 'evt_battery', name: '电量不足', descr: '电量低于阈值触发' },
+  { id: 'evt_online', name: '设备上线', descr: '设备从离线变为在线' },
+  { id: 'evt_tamper', name: '防拆告警', descr: '设备被拆卸触发' },
+  { id: 'evt_sound', name: '声音异常', descr: '检测到异常声音触发' },
+  { id: 'evt_water', name: '水浸告警', descr: '检测到水浸触发' }
+]
+
+const algoConfigVisible = ref(false)
+const editingAlgo = ref(null)
+
+function openAlgoConfig(row) {
+  editingAlgo.value = row
+  algoConfigVisible.value = true
+}
+
+function saveAlgoConfig() {
+  ElMessage.success('算法配置已保存')
+  algoConfigVisible.value = false
+}
+
+const eventLinkVisible = ref(false)
+
+function openEventLink(row) {
+  editingAlgo.value = row
+  eventLinkVisible.value = true
+}
+
+function saveEventLink() {
+  ElMessage.success('关联事件已保存')
+  eventLinkVisible.value = false
+}
+
+// ===== Tab 3: 语音助手 =====
+const voiceList = ref([
+  { alloTType: 1063, platform: 'ALEXA', descr: 'Amazon Alexa 语音助手，支持语音控制设备基本功能', supported: true },
+  { alloTType: 1063, platform: 'GOOGLE_HOME', descr: 'Google Home 语音助手，支持语音控制设备基本功能', supported: false }
+])
+
+// ===== 底部导航 =====
+const tabKeys = computed(() => tabs.map(t => t.key))
+
+function prevTab() {
+  const idx = tabKeys.value.indexOf(activeTab.value)
+  if (idx > 0) activeTab.value = tabKeys.value[idx - 1]
+}
+
+function skipTab() {
+  const idx = tabKeys.value.indexOf(activeTab.value)
+  if (idx < tabKeys.value.length - 1) {
+    activeTab.value = tabKeys.value[idx + 1]
+    ElMessage.info('已跳过当前步骤')
   }
 }
 
-// 获取当前选中的默认枚举值
-const getSelectedEnumValue = () => {
-  const defaultItem = editForm.enumValues.find(item => item.isDefault)
-  return defaultItem?.value || null
+function saveNext() {
+  const idx = tabKeys.value.indexOf(activeTab.value)
+  if (idx < tabKeys.value.length - 1) {
+    activeTab.value = tabKeys.value[idx + 1]
+    ElMessage.success('已保存，进入下一步')
+  }
 }
 
-// 保存编辑
-const saveEditFunc = () => {
-  if (!editForm.name.trim()) {
-    ElMessage.warning('请输入功能名称')
-    return
-  }
-
-  // 数值型校验
-  if (editForm.dataType === '数值型') {
-    if (editForm.numberConfig.minValue >= editForm.numberConfig.maxValue) {
-      ElMessage.warning('最小值必须小于最大值')
-      return
-    }
-    if (editForm.numberConfig.defaultValue < editForm.numberConfig.minValue || 
-        editForm.numberConfig.defaultValue > editForm.numberConfig.maxValue) {
-      ElMessage.warning('默认值必须在取值范围内')
-      return
-    }
-  }
-
-  const func = funcList.value.find(f => f.id === editingFunc.value.id)
-  if (func) {
-    func.name = editForm.name
-    func.module = editForm.module
-    func.funcType = editForm.funcType
-    func.enumValues = editForm.enumValues
-    func.numberConfig = editForm.numberConfig
-    func.boolConfig = editForm.boolConfig
-    func.eventConfig = editForm.eventConfig
-    func.arrayConfig = editForm.arrayConfig
-    func.remark = editForm.remark
-  }
-
-  ElMessage.success('保存成功')
-  editDrawerVisible.value = false
+function finishDev() {
+  ElMessage.success('产品配置已完成，即将返回产品列表')
+  setTimeout(() => router.push('/product/development'), 1200)
 }
 
-// 删除功能点
-const handleDeleteFunc = (row) => {
-  ElMessageBox.confirm(`确定要删除功能点 "${row.name}" 吗？`, '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(() => {
-    const index = funcList.value.findIndex(f => f.id === row.id)
-    if (index > -1) {
-      funcList.value.splice(index, 1)
-    }
-    ElMessage.success('删除成功')
-  }).catch(() => {})
+function handleBack() {
+  router.push('/product/development')
+}
+
+function handleEditProduct() {
+  ElMessage.info('编辑产品基础信息')
 }
 </script>
 
 <style lang="scss" scoped>
-.product-config-page {
-  padding: var(--spacing-lg);
-  min-height: calc(100vh - 56px);
+.config-page {
+  padding-bottom: 80px;
+}
 
-  .page-header {
-    margin-bottom: var(--spacing-lg);
-  }
-
-  .func-list {
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: var(--spacing-md) var(--spacing-lg);
-      border-bottom: 1px solid var(--border-lighter);
-
-      .card-title {
-        font-size: var(--font-lg);
-        font-weight: 600;
-        color: var(--text-primary);
-      }
-
-      .card-actions {
-        display: flex;
-        gap: var(--spacing-md);
-      }
-    }
-
-    .text-primary {
+// ===== 顶部 =====
+.top-bar {
+  padding: 16px var(--spacing-lg);
+  .top-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    .product-title {
+      font-size: 18px;
+      font-weight: 600;
       color: var(--text-primary);
-      font-weight: 500;
-    }
-
-    .text-muted {
-      color: var(--text-secondary);
     }
   }
-
-  // 模块视图样式
-  .module-view {
+  .top-meta {
     display: flex;
-    min-height: 400px;
-
-    .module-sidebar {
-      width: 180px;
-      border-right: 1px solid var(--border-lighter);
-      padding: var(--spacing-sm);
-
-      .module-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: var(--spacing-sm) var(--spacing-md);
-        border-radius: var(--radius-sm);
-        cursor: pointer;
-        transition: all 0.2s;
-        margin-bottom: var(--spacing-xs);
-
-        &:hover {
-          background: var(--bg-hover);
-        }
-
-        &.active {
-          background: var(--primary-light);
-          color: var(--primary-color);
-
-          .module-count {
-            background: var(--primary-color);
-            color: white;
-          }
-        }
-
-        .module-name {
-          font-weight: 500;
-        }
-
-        .module-count {
-          font-size: var(--font-xs);
-          padding: 2px 8px;
-          background: var(--bg-page);
-          border-radius: 10px;
-          color: var(--text-secondary);
-        }
-      }
+    flex-wrap: wrap;
+    gap: 4px 24px;
+    .meta-item {
+      font-size: 13px;
+      .meta-label { color: var(--text-secondary); margin-right: 6px; }
+      .meta-value { color: var(--text-regular); }
     }
-
-    .module-content {
-      flex: 1;
-      padding: var(--spacing-md);
-    }
-  }
-
-  .page-footer {
-    margin-top: var(--spacing-lg);
-    text-align: right;
   }
 }
 
-// 添加功能点弹窗样式
-.search-input {
-  margin-bottom: var(--spacing-md);
-}
-
-.func-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-md);
-  max-height: 400px;
-  overflow-y: auto;
-  padding: var(--spacing-xs);
-
-  .func-card {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-md);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
+// ===== Tab 栏 =====
+.tab-bar {
+  display: flex;
+  padding: 0;
+  overflow: hidden;
+  .tab-item {
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
     cursor: pointer;
+    border-bottom: 2px solid transparent;
     transition: all 0.2s;
-
-    &:hover:not(.disabled) {
-      border-color: var(--primary-color);
-      box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
-    }
-
-    &.selected {
-      border-color: var(--primary-color);
-      background: var(--primary-light);
-    }
-
-    &.disabled {
-      background: var(--bg-disabled);
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
-
-    .func-checkbox {
-      width: 18px;
-      height: 18px;
-      border: 2px solid var(--border-color);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      color: white;
-      font-size: 12px;
-    }
-
-    &.selected .func-checkbox,
-    &.disabled .func-checkbox {
-      background: var(--primary-color);
-      border-color: var(--primary-color);
-    }
-
-    .func-info {
-      flex: 1;
-
-      .func-name {
-        font-size: var(--font-md);
-        font-weight: 500;
-        color: var(--text-primary);
-        margin-bottom: 4px;
-      }
-
-      .func-meta {
-        font-size: var(--font-xs);
-        color: var(--text-secondary);
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
+    &:hover { color: var(--primary-color); }
+    &.active {
+      color: var(--primary-color);
+      border-bottom-color: var(--primary-color);
+      background: var(--primary-bg);
     }
   }
 }
 
-.selected-tip {
-  margin-top: var(--spacing-md);
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--primary-light);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-sm);
-  color: var(--primary-color);
+// ===== 设备能力配置：左模块列表 + 右配置区 =====
+.config-section {
+  padding: 16px var(--spacing-lg);
+  border-bottom: 1px solid var(--border-lighter);
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-lighter);
+  }
 }
 
-// 编辑抽屉样式
-.form-hint {
-  font-size: var(--font-xs);
-  color: var(--text-secondary);
-  margin-top: 4px;
+.config-split {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border-lighter);
+  border-radius: 6px;
+  overflow: hidden;
 }
 
-.enum-config-tip {
+.config-left {
+  width: 180px;
+  flex-shrink: 0;
+  background: var(--bg-page);
+  border-right: 1px solid var(--border-lighter);
+}
+
+.config-left-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--warning-light, #fffbe6);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-xs);
-  color: var(--text-secondary);
-  margin-bottom: var(--spacing-md);
-
-  .el-icon {
-    color: var(--warning-color, #faad14);
+  justify-content: space-between;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text-regular);
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-lighter);
+  transition: background 0.15s;
+  &:last-child { border-bottom: none; }
+  &:hover { background: var(--primary-bg); }
+  &.active {
+    color: var(--primary-color);
+    font-weight: 500;
+    background: #fff;
+    border-right: 2px solid var(--primary-color);
+    margin-right: -1px;
+  }
+  .left-item-arrow {
+    font-size: 12px;
+    color: var(--text-placeholder);
+  }
+  &.active .left-item-arrow {
+    color: var(--primary-color);
   }
 }
 
-.enum-list {
-  .enum-item {
+.config-right {
+  flex: 1;
+  min-height: 260px;
+  background: #fff;
+}
+
+.config-group-panel {
+  padding: 16px 20px;
+}
+
+.config-right-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-lighter);
+}
+
+.config-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border-lighter);
+  &:last-child { border-bottom: none; }
+  .config-label {
+    font-size: 13px;
+    color: var(--text-regular);
+    min-width: 140px;
+  }
+  .placeholder-text {
+    font-size: 12px;
+    color: var(--text-placeholder);
+  }
+}
+
+.capability-section {
+  padding: 16px var(--spacing-lg);
+  .panel-header {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--bg-page);
-    border-radius: var(--radius-sm);
-    margin-bottom: var(--spacing-sm);
-
-    &:hover {
-      background: var(--bg-hover);
-    }
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
   }
 }
 
-// 额外配置样式
-.extra-config {
-  padding: var(--spacing-md);
-  background: var(--bg-page);
-  border-radius: var(--radius-sm);
-  margin-top: var(--spacing-sm);
-}
-
-// 数值型配置样式
-.number-config {
-  padding: var(--spacing-md);
-  background: var(--bg-page);
-  border-radius: var(--radius-sm);
-  margin-top: var(--spacing-sm);
-
-  .range-input-group {
+// ===== 底部栏 =====
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: var(--sidebar-width);
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border-lighter);
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+  z-index: 100;
+  .bottom-right {
     display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-
-    .range-separator {
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
+    gap: 12px;
   }
 }
 
-// 布尔型配置样式
-.bool-config {
-  padding: var(--spacing-md);
-  background: var(--bg-page);
-  border-radius: var(--radius-sm);
-  margin-top: var(--spacing-sm);
+// ===== 通用 =====
+.cell-name { font-weight: 500; color: var(--text-primary); font-size: 13px; }
+.cell-id { font-size: 13px; color: var(--text-secondary); font-family: monospace; }
+.cell-desc { font-size: 13px; color: var(--text-secondary); }
+.cell-text { font-size: 13px; color: var(--text-regular); }
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  color: var(--text-placeholder);
+  font-size: var(--font-md);
+}
 
-  .bool-list {
-    .bool-item {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-sm);
-      padding: var(--spacing-sm) var(--spacing-md);
-      background: var(--bg-page);
-      border-radius: var(--radius-sm);
-      margin-bottom: var(--spacing-sm);
+// ===== 事件关联 =====
+.event-check-item {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-lighter);
+  &:last-child { border-bottom: none; }
+}
 
-      &:hover {
-        background: var(--bg-hover);
-      }
-    }
+// ===== 穿梭框 =====
+.transfer-item {
+  display: flex;
+  align-items: center;
+  .transfer-meta {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text-placeholder);
   }
 }
 
-// 事件型配置样式
-.event-config {
-  padding: var(--spacing-md);
-  background: var(--bg-page);
-  border-radius: var(--radius-sm);
-  margin-top: var(--spacing-sm);
-}
-
-// 数组型配置样式
-.array-config {
-  padding: var(--spacing-md);
-  background: var(--bg-page);
-  border-radius: var(--radius-sm);
-  margin-top: var(--spacing-sm);
-}
+// 底部栏适配侧边栏宽度（默认220px，侧边栏折叠后由Layout组件控制）
 </style>
