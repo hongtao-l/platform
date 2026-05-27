@@ -110,9 +110,10 @@
         </template>
       </div>
 
-      <!-- 底部：生成日报按钮 / 免费用完引导 -->
+      <!-- 底部：生成日报按钮 / 次数用完提示 -->
       <div class="bottom-bar-daily" v-if="dailyStatus !== 'generating'">
-        <template v-if="remainFree > 0">
+        <!-- idle 状态始终可生成（未生成过不限制） -->
+        <template v-if="dailyStatus === 'idle' || remainFree > 0">
           <button class="btn-generate" @click="handleGenerate">
             {{ dailyStatus === 'done' ? '重新生成' : '生成日报' }} · 剩余{{ remainFree }}次
           </button>
@@ -149,7 +150,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { aiStatus, deviceAiStatus, defaultActivatedDevice, isDeviceActivated } from '@/store/devStatus'
 
@@ -283,6 +284,13 @@ const shouldAutoGen = computed(() => {
 })
 
 onMounted(() => {
+  // 刷新/进入页面时重置次数，方便演示
+  try {
+    localStorage.removeItem(genCountKey.value)
+    localStorage.removeItem(autoGenKey.value)
+  } catch {}
+  todayGenCount.value = 0
+
   // 检查今日是否已自动生成过
   try {
     const autoDone = localStorage.getItem(autoGenKey.value)
@@ -290,14 +298,6 @@ onMounted(() => {
       localStorage.setItem(autoGenKey.value, '1')
       handleGenerate()
     }
-  } catch {}
-})
-
-// 离开页面时重置次数，方便演示
-onUnmounted(() => {
-  try {
-    localStorage.removeItem(genCountKey.value)
-    localStorage.removeItem(autoGenKey.value)
   } catch {}
 })
 
@@ -313,7 +313,8 @@ const resetDaily = () => {
 
 // 生成日报（模拟逐步生成）
 const handleGenerate = () => {
-  if (remainFree.value <= 0) return
+  // idle 状态始终允许生成（未生成过不限制）；非 idle 状态检查剩余次数
+  if (dailyStatus.value !== 'idle' && remainFree.value <= 0) return
 
   dailyStatus.value = 'generating'
   genStep.value = 0

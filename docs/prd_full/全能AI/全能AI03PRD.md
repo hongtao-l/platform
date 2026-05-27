@@ -8,6 +8,7 @@
 | 2026-05-19 | 单套餐方案落地：移除Pro/Basic/AB实验，增加设备级激活、内联引导、AI守护中状态 | Kiro |
 | 2026-05-20 | 重新生成：按新PRD规范整合全流程产出，纯业务视角 | Kiro |
 | 2026-05-27 | AI日报落地更新：移除日期筛选仅当日；每日最多3次；20:00自动生成（按设备本地时区）；事件汇总最早→…→最晚+其他；历史近7日；免责声明；离开重置次数；不指定具体套餐价格（由运营配置） | Kiro |
+| 2026-05-27 | 埋点精简为11个核心事件，公共参数对齐项目标准7项格式 | Kiro |
 
 ---
 
@@ -626,73 +627,115 @@
 
 ### 10.2 埋点事件清单
 
-#### 10.2.1 页面浏览埋点
+| 事件ID | 事件名称 | 触发时机 | event_type | 优先级 |
+|------|------|------|------|------|
+| page_view_landing | 落地页浏览 | 服务介绍开通页加载完成 | 0（普通） | P0 |
+| plan_select | 套餐选择 | 用户点击选择套餐卡片 | 0（普通） | P0 |
+| pay_start | 支付调起 | 调起微信/支付宝支付 | 1（额外参数） | P0 |
+| pay_success | 支付成功 | 收到支付成功回调 | 1（额外参数） | P0 |
+| pay_fail | 支付失败 | 支付失败或取消 | 2（错误） | P0 |
+| ai_search_input | AI搜索执行 | 用户输入并执行AI搜索 | 0（普通） | P0 |
+| daily_generate_click | 日报生成 | 用户点击"生成日报" | 0（普通） | P0 |
+| focus_event_add | 关注事件添加 | 用户添加新的关注事件 | 0（普通） | P0 |
+| home_ai_entry_click | 首页AI入口 | 点击首页设备卡片AI按钮 | 0（普通） | P1 |
+| inline_guide_click | 内联引导点击 | 点击内联引导"立即开通全能AI" | 0（普通） | P1 |
+| smart_push_toggle | 智能推送开关 | 切换智能推送总开关 | 0（普通） | P1 |
 
-| 页面名称 | 触发时机 | 上报参数 |
-|------|------|------|
-| 服务介绍开通页 | 页面加载完成，首屏可见 | user_id, source（入口来源：home_ai_btn / msg_focus / ai_search_inline / ai_daily_inline） |
-| AI配置页 | 页面加载完成 | user_id, activated_device_count（已激活设备数） |
-| AI搜索页 | 页面加载完成 | user_id, device_id, device_activated（是否已激活） |
-| AI日报页 | 页面加载完成 | user_id, device_id, device_activated（仅当日，无需日期参数） |
-| 消息页 | 页面加载完成 | user_id, device_id, device_activated |
+### 10.3 公共参数（所有事件必带）
 
-#### 10.2.2 点击/交互埋点
+| 参数 | 类型 | 必填 | 说明 | 示例值 |
+|------|------|------|------|------|
+| event_type | String | 是 | 0=普通事件，1=额外参数事件，2=错误事件 | "0" |
+| event_id | String | 是 | 事件ID（对应10.2中的事件ID） | "plan_select" |
+| event_time | Int64 | 是 | 事件发生时间戳(ms) | 1716192000000 |
+| user_id | String | 是 | 用户唯一标识 | "usr_123456" |
+| session_id | String | 是 | 会话ID | "sess_abc123" |
+| os_type | String | 是 | iOS / Android | "Android" |
+| app_version | String | 是 | APP版本号 | "2.1.0" |
 
-| 事件名称 | 触发时机 | 所属页面 | 上报参数 |
+### 10.4 业务参数（按事件）
+
+**page_view_landing**：
+
+| 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| plan_select | 用户点击选择套餐卡片 | 服务介绍开通页 | plan_type（monthly/yearly） |
-| pay_method_select | 用户切换支付方式 | 服务介绍开通页 | pay_method（wechat/alipay） |
-| agreement_toggle | 用户勾选/取消协议 | 服务介绍开通页 | action（check/uncheck） |
-| pay_click | 用户点击"立即开通" | 服务介绍开通页 | plan_type, pay_method, agreement_checked |
-| agreement_dialog_show | 协议确认弹窗弹出 | 服务介绍开通页 | — |
-| agreement_dialog_agree | 点击弹窗"同意" | 协议确认弹窗 | — |
-| agreement_dialog_cancel | 点击弹窗"取消" | 协议确认弹窗 | — |
-| ai_search_input | 用户执行AI搜索 | AI搜索页 | device_id, query_text（脱敏后的搜索文本长度） |
-| guess_click | 用户点击"猜你想搜"标签 | AI搜索页 | device_id, guess_text |
-| search_result_click | 用户点击搜索结果 | AI搜索页 | device_id, result_index（结果序号） |
-| daily_generate_click | 用户点击"生成日报" | AI日报页 | device_id, remain_free（剩余次数） |
-| daily_regenerate_click | 用户点击"重新生成" | AI日报页 | device_id, remain_free |
-| daily_history_open | 用户打开历史日报弹窗 | AI日报页 | device_id |
-| daily_history_select | 用户选择某条历史日报 | 历史日报弹窗 | device_id, history_date |
-| daily_auto_generate | 每日8:00自动触发生成 | AI日报页 | device_id |
-| daily_generate_limit | 次数用完无法生成 | AI日报页 | device_id, gen_count |
-| focus_event_add | 用户添加关注事件 | AI配置页 | event_name, current_count（当前事件数） |
-| focus_event_edit | 用户编辑关注事件 | AI配置页 | event_name |
-| focus_event_delete | 用户删除关注事件 | AI配置页 | event_name |
-| focus_event_toggle | 用户启停关注事件 | AI配置页 | event_name, action（enable/disable） |
-| smart_push_toggle | 用户切换智能推送开关 | AI配置页 | action（on/off） |
-| device_switch | 用户在AI子页面切换设备 | AI搜索/AI日报/消息 | from_device, to_device, page |
-| msg_filter_tab_click | 用户点击消息筛选标签 | 消息页 | device_id, tab_key, device_activated |
-| focus_btn_click | 用户点击"+关注" | 消息页 | device_id, device_activated |
-| home_ai_entry_click | 用户点击首页设备卡片AI入口 | 首页 | device_id, device_activated |
-| inline_guide_click | 用户点击内联引导"立即开通全能AI" | AI搜索/AI日报 | page, device_id |
+| source | String | 是 | 入口来源：home_ai_btn / msg_focus / ai_search_inline / ai_daily_inline |
 
-#### 10.2.3 业务转化埋点
+**plan_select**：
 
-| 转化节点 | 触发时机 | 上报参数 |
-|------|------|------|
-| pay_start | 调起支付 | plan_type, pay_method, amount |
-| pay_success | 收到支付成功回调 | plan_type, amount, order_id |
-| pay_fail | 支付失败或取消 | plan_type, fail_reason（insufficient_balance / user_cancel / network_error / other） |
-| activation_complete | 开通完成（含支付成功后激活） | plan_type, activated_device_id |
-
-#### 10.2.4 埋点公共参数
-
-所有埋点事件必须携带以下公共参数：
-
-| 字段名 | 字段类型 | 说明 | 示例值 |
+| 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| user_id | string | 用户唯一标识 | "u_123456" |
-| device_id | string | 当前操作关联的设备标识 | "frontdoor" |
-| timestamp | long | 事件发生时间戳（毫秒） | 1716192000000 |
-| app_version | string | APP版本号 | "1.2.0" |
-| platform | string | 操作系统 | "ios" / "android" |
+| plan_type | String | 是 | 套餐类型：monthly / yearly |
+
+**pay_start**：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| plan_type | String | 是 | 套餐类型 |
+| pay_method | String | 是 | 支付方式：wechat / alipay |
+| amount | Number | 是 | 支付金额（分） |
+
+**pay_success**：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| plan_type | String | 是 | 套餐类型 |
+| amount | Number | 是 | 实际支付金额（分） |
+| order_id | String | 是 | 订单ID |
+
+**pay_fail**：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| plan_type | String | 是 | 套餐类型 |
+| fail_reason | String | 是 | 失败原因：insufficient_balance / user_cancel / network_error / other |
+
+**ai_search_input**：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| device_id | String | 是 | 当前设备ID |
+| query_length | Number | 是 | 搜索文本长度（字符数） |
+
+**daily_generate_click**：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| device_id | String | 是 | 当前设备ID |
+| remain_free | Number | 是 | 剩余可生成次数 |
+
+**focus_event_add**：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| event_name | String | 是 | 添加的关注事件名称 |
+| current_count | Number | 是 | 添加后当前关注事件总数 |
+
+**home_ai_entry_click**：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| device_id | String | 是 | 当前设备ID |
+| device_activated | Boolean | 是 | 当前设备是否已激活 |
+
+**inline_guide_click**：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| page | String | 是 | 来源页面：ai_search / ai_daily |
+| device_id | String | 是 | 当前设备ID |
+
+**smart_push_toggle**：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| action | String | 是 | 操作：on / off |
 
 ---
 
-### 10.3 数据看板
+### 10.5 数据看板
 
-#### 10.3.1 看板概览
+#### 10.5.1 看板概览
 
 **看板名称**：全能AI运营看板
 
@@ -700,7 +743,7 @@
 
 **目标查看人群**：产品经理、运营经理、管理层
 
-#### 10.3.2 看板布局
+#### 10.5.2 看板布局
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -737,7 +780,7 @@
 └─────────────────────────────────────────────┘
 ```
 
-#### 10.3.3 报表需求
+#### 10.5.3 报表需求
 
 | 报表名称 | 报表类型 | 数据维度 | 刷新频率 | 接收人 |
 |------|------|------|------|------|
@@ -746,7 +789,7 @@
 | 转化漏斗周报 | 周报 | 各入口来源 → 支付成功的分步转化 | 每周一9:00 | 产品经理、运营 |
 | 功能使用月报 | 月报 | 搜索使用率、日报生成率、关注事件分布、设备激活率 | 每月1日 | 管理层 |
 
-#### 10.3.4 告警规则
+#### 10.5.4 告警规则
 
 | 告警名称 | 触发条件 | 告警级别 | 通知方式 |
 |------|------|------|------|
