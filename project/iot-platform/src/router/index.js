@@ -87,6 +87,12 @@ const routes = [
     meta: { title: 'IOT类目' }
   },
   {
+    path: '/thing-model/category/:id/capabilities',
+    name: 'ThingModelCategoryCapabilities',
+    component: () => import('@/views/iot/thing-model/category-capability.vue'),
+    meta: { title: '类目能力详情' }
+  },
+  {
     path: '/pkg',
     name: 'PkgList',
     component: () => import('@/views/pkg/list.vue'),

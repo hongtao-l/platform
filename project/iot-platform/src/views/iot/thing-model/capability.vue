@@ -1,117 +1,96 @@
 <template>
   <div class="page-container" style="display:flex;flex-direction:column;height:calc(100vh - 56px)">
-    <!-- 顶部：类目选择器 -->
-    <div class="top-bar">
-      <span class="top-label">类目：</span>
-      <el-select v-model="currentCategoryId" placeholder="请选择类目" style="width:240px" @change="onCategoryChange">
-        <el-option v-for="c in store.categories" :key="c.id" :label="c.name" :value="c.id" />
-      </el-select>
-      <span v-if="store.categories.length === 0" class="empty-hint">
-        暂无类目，请先在 <router-link to="/thing-model/category">IOT类目</router-link> 中创建
-      </span>
-    </div>
-
-    <!-- 主体：左栏模块 + 右栏能力 -->
-    <div class="main-layout" v-if="currentCategory">
-      <!-- 左栏：模块列表 -->
-      <div class="module-sidebar">
-        <div class="module-sidebar-header">
-          <span class="module-sidebar-title">能力模块</span>
-          <el-button size="small" type="primary" text @click="openAddModule">+ 添加</el-button>
-        </div>
-        <div class="module-list">
-          <div
-            :class="['module-item-all', { active: currentModuleId === 'all' }]"
-            @click="currentModuleId = 'all'"
-          >
-            全部
-          </div>
-          <div
-            v-for="m in currentCategory.modules"
-            :key="m.id"
-            :class="['module-item', { active: currentModuleId === m.id }]"
-            @click="currentModuleId = m.id"
-          >
-            <span class="module-name">{{ m.name }}</span>
-            <span class="module-ident">{{ m.identifier }}</span>
-            <span class="module-actions" @click.stop>
-              <el-button size="small" text @click="openEditModule(m)"><el-icon><Edit /></el-icon></el-button>
-              <el-button size="small" text type="danger" @click="handleDeleteModule(m)"><el-icon><Delete /></el-icon></el-button>
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 右栏：能力表格 -->
-      <div class="capability-right">
-        <div class="card" style="flex:1;display:flex;flex-direction:column">
-          <div class="card-header">
-            <div class="header-left">
-              <span class="card-title">标准能力</span>
-              <div class="filter-chips">
-                <span :class="['filter-chip', { active: filterType === 'all' }]" @click="filterType = 'all'">全部</span>
-                <span :class="['filter-chip', { active: filterType === 'prop' }]" @click="filterType = 'prop'">属性</span>
-                <span :class="['filter-chip', { active: filterType === 'svc' }]" @click="filterType = 'svc'">服务</span>
-                <span :class="['filter-chip', { active: filterType === 'evt' }]" @click="filterType = 'evt'">事件</span>
+    <!-- 主体：标签页 -->
+    <el-tabs v-model="activeMainTab" class="main-tabs">
+      <el-tab-pane label="标准能力" name="capability">
+        <div class="main-layout">
+          <!-- 左栏：模块列表 -->
+          <div class="module-sidebar">
+            <div class="module-sidebar-header">
+              <span class="module-sidebar-title">能力模块</span>
+              <el-button size="small" type="primary" text @click="openAddModule">+ 添加</el-button>
+            </div>
+            <div class="module-list">
+              <div
+                :class="['module-item-all', { active: currentModuleId === 'all' }]"
+                @click="currentModuleId = 'all'"
+              >
+                全部
+              </div>
+              <div
+                v-for="m in store.modules"
+                :key="m.id"
+                :class="['module-item', { active: currentModuleId === m.id }]"
+                @click="currentModuleId = m.id"
+              >
+                <span class="module-name">{{ m.name }}</span>
+                <span class="module-ident">{{ m.identifier }}</span>
+                <span class="module-actions" @click.stop>
+                  <el-button size="small" text @click="openEditModule(m)"><el-icon><Edit /></el-icon></el-button>
+                  <el-button size="small" text type="danger" @click="handleDeleteModule(m)"><el-icon><Delete /></el-icon></el-button>
+                </span>
               </div>
             </div>
-            <el-button type="primary" size="small" @click="openAddCapability">
-              <el-icon><Plus /></el-icon>添加标准能力
-            </el-button>
           </div>
-          <el-table :data="filteredCapabilities" stripe>
-            <el-table-column label="类型" width="80" align="center">
-              <template #default="{ row }">
-                <span :class="['type-tag', typeTagCls(row.capType)]">{{ typeLabel(row.capType) }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="能力名称" min-width="120">
-              <template #default="{ row }">
-                <span class="cell-name">{{ row.name }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="能力标识" width="170" align="center">
-              <template #default="{ row }">
-                <span class="cell-id">{{ row.identifier }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="数据类型" width="100" align="center">
-              <template #default="{ row }">
-                <span class="cell-datatype">{{ dataTypeLabel(row) }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="数据定义" min-width="200" show-overflow-tooltip>
-              <template #default="{ row }">
-                <span class="cell-def">{{ dataDefDetail(row) }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="描述" min-width="140" show-overflow-tooltip>
-              <template #default="{ row }">
-                <span class="cell-desc">{{ row.descr }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="所属模块" width="130" align="center">
-              <template #default="{ row }">
-                <span class="cell-module">{{ row._moduleName }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" width="150" fixed="right">
-              <template #default="{ row }">
-                <div style="white-space:nowrap;display:flex;gap:4px">
-                <el-button size="small" text type="primary" @click="openEditCapability(row)">编辑</el-button>
-                <el-button size="small" text type="danger" @click="handleDeleteCapability(row)">删除</el-button>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-      </div>
-    </div>
 
-    <!-- 无类目空状态 -->
-    <div v-else class="empty-state">
-      <p>暂无类目，请先在 <router-link to="/thing-model/category">IOT类目</router-link> 中创建设备类目</p>
-    </div>
+          <!-- 右栏：能力表格 -->
+          <div class="capability-right">
+            <div class="card" style="flex:1;display:flex;flex-direction:column">
+              <div class="card-header">
+                <el-button type="primary" size="small" @click="openAddCapability">
+                  <el-icon><Plus /></el-icon>添加标准能力
+                </el-button>
+              </div>
+              <el-table :data="filteredCapabilities" stripe>
+                <el-table-column label="类型" width="80" align="center">
+                  <template #default="{ row }">
+                    <span :class="['type-tag', typeTagCls(row.capType)]">{{ typeLabel(row.capType) }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="能力名称" min-width="120">
+                  <template #default="{ row }">
+                    <span class="cell-name">{{ row.name }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="能力标识" width="170" align="center">
+                  <template #default="{ row }">
+                    <span class="cell-id">{{ row.identifier }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="数据类型" width="100" align="center">
+                  <template #default="{ row }">
+                    <span class="cell-datatype">{{ dataTypeLabel(row) }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="数据定义" min-width="200" show-overflow-tooltip>
+                  <template #default="{ row }">
+                    <span class="cell-def">{{ dataDefDetail(row) }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="描述" min-width="140" show-overflow-tooltip>
+                  <template #default="{ row }">
+                    <span class="cell-desc">{{ row.descr }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="所属模块" width="130" align="center">
+                  <template #default="{ row }">
+                    <span class="cell-module">{{ row._moduleName }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" width="150" fixed="right">
+                  <template #default="{ row }">
+                    <div style="white-space:nowrap;display:flex;gap:4px">
+                    <el-button size="small" text type="primary" @click="openEditCapability(row)">编辑</el-button>
+                    <el-button size="small" text type="danger" @click="handleDeleteCapability(row)">删除</el-button>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
 
     <!-- 添加/编辑模块弹窗 -->
     <el-dialog v-model="moduleDialogVisible" :title="moduleDialogTitle" width="480px" :close-on-click-modal="false">
@@ -120,8 +99,8 @@
           <el-input v-model="moduleForm.name" placeholder="请输入模块名称" />
         </el-form-item>
         <el-form-item label="模块标识" prop="identifier">
-          <el-input v-model="moduleForm.identifier" placeholder="例如 work_mode_module" />
-          <span class="form-hint">字母开头，仅允许字母、数字、下划线</span>
+          <el-input v-model="moduleForm.identifier" placeholder="例如 WorkModeModule" />
+          <span class="form-hint">字母开头，仅允许字母、数字、下划线，全局唯一</span>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -137,6 +116,7 @@
       width="860px"
       :close-on-click-modal="false"
       top="3vh"
+      class="cap-dialog"
     >
       <el-form ref="capFormRef" label-width="100px">
         <!-- 能力类型 -->
@@ -158,7 +138,7 @@
           <el-input v-model="capForm.name" placeholder="请输入能力名称（2-50字符）" maxlength="50" />
         </el-form-item>
         <el-form-item label="标识符" required>
-          <el-input v-model="capForm.identifier" placeholder="例如 work_mode" maxlength="40" />
+          <el-input v-model="capForm.identifier" placeholder="例如 WorkMode" maxlength="40" />
           <span class="form-hint">字母开头，仅允许字母、数字、下划线，全局唯一</span>
         </el-form-item>
 
@@ -429,32 +409,17 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { Plus, Edit, Delete } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   store, addModule, updateModule, removeModule,
   addCapability, updateCapability, removeCapability,
-  findCapability, isModuleIdentifierUnique, isCapIdentifierUnique
+  isModuleIdentifierUnique, isCapIdentifierUnique
 } from './data'
 
-// ===== 类目选择 =====
-const currentCategoryId = ref(store.categories[0]?.id || null)
-const currentCategory = computed(() => store.categories.find(c => c.id === currentCategoryId.value))
-
-watch(() => store.categories.length, () => {
-  if (!currentCategoryId.value && store.categories.length > 0) {
-    currentCategoryId.value = store.categories[0].id
-  }
-  if (!store.categories.find(c => c.id === currentCategoryId.value)) {
-    currentCategoryId.value = store.categories[0]?.id || null
-  }
-})
-
-function onCategoryChange() {
-  currentModuleId.value = 'all'
-  filterType.value = 'all'
-}
+// ===== 主标签页 =====
+const activeMainTab = ref('capability')
 
 // ===== 模块 =====
 const currentModuleId = ref('all')
@@ -489,15 +454,15 @@ function openEditModule(mod) {
 function handleModuleConfirm() {
   moduleFormRef.value?.validate((valid) => {
     if (!valid) return
-    if (!isModuleIdentifierUnique(currentCategoryId.value, moduleForm.identifier, editingModuleId.value || undefined)) {
+    if (!isModuleIdentifierUnique(moduleForm.identifier, editingModuleId.value || undefined)) {
       ElMessage.warning('模块标识已存在，请更换')
       return
     }
     if (editingModuleId.value) {
-      updateModule(currentCategoryId.value, editingModuleId.value, { ...moduleForm })
+      updateModule(editingModuleId.value, { ...moduleForm })
       ElMessage.success('编辑成功')
     } else {
-      addModule(currentCategoryId.value, { ...moduleForm })
+      addModule({ ...moduleForm })
       ElMessage.success('添加成功')
     }
     moduleDialogVisible.value = false
@@ -505,33 +470,32 @@ function handleModuleConfirm() {
 }
 
 function handleDeleteModule(mod) {
+  const capCount = store.capabilities.filter(c => c.moduleId === mod.id).length
   ElMessageBox.confirm(
-    `确定删除模块「${mod.name}」？模块下的 ${mod.capabilities.length} 个能力将同步删除。`,
+    `确定删除模块「${mod.name}」？模块下的 ${capCount} 个能力将同步删除。`,
     '删除确认',
     { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }
   ).then(() => {
-    removeModule(currentCategoryId.value, mod.id)
+    removeModule(mod.id)
     if (currentModuleId.value === mod.id) currentModuleId.value = 'all'
     ElMessage.success('已删除')
   }).catch(() => {})
 }
 
 // ===== 能力列表 =====
-const filterType = ref('all')
-
 const filteredCapabilities = computed(() => {
-  if (!currentCategory.value) return []
-  let list = []
-  currentCategory.value.modules.forEach(mod => {
-    if (currentModuleId.value !== 'all' && mod.id !== currentModuleId.value) return
-    mod.capabilities.forEach(cap => {
-      list.push({ ...cap, _moduleName: mod.name, _moduleId: mod.id })
-    })
-  })
-  if (filterType.value !== 'all') {
-    list = list.filter(c => c.capType === filterType.value)
+  let list = store.capabilities
+  if (currentModuleId.value !== 'all') {
+    list = list.filter(cap => cap.moduleId === currentModuleId.value)
   }
-  return list
+  return list.map(cap => {
+    const mod = store.modules.find(m => m.id === cap.moduleId)
+    return {
+      ...cap,
+      _moduleName: mod ? mod.name : '—',
+      _moduleId: cap.moduleId
+    }
+  })
 })
 
 // ===== 标签与展示 =====
@@ -588,7 +552,6 @@ function dataDefDetail(cap) {
 const dialogVisible = ref(false)
 const capFormRef = ref(null)
 const editingCapId = ref(null)
-const editingCapModuleId = ref(null)
 const dialogTitle = computed(() => editingCapId.value ? '编辑标准能力' : '添加标准能力')
 
 const capTypeOptions = [
@@ -660,14 +623,13 @@ function resetDataDefForType() {
 function onDataTypeChange() { capForm.defaultVal = '' }
 
 function openAddCapability() {
-  editingCapId.value = null; editingCapModuleId.value = null
+  editingCapId.value = null
   resetCapForm()
   dialogVisible.value = true
 }
 
 function openEditCapability(cap) {
   editingCapId.value = cap.id
-  editingCapModuleId.value = cap._moduleId || currentModuleId.value
   const dd = cap.dataDef
   capForm.capType = cap.capType
   capForm.name = cap.name; capForm.identifier = cap.identifier; capForm.descr = cap.descr
@@ -694,9 +656,17 @@ function handleDeleteCapability(cap) {
     '删除确认',
     { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }
   ).then(() => {
-    removeCapability(currentCategoryId.value, cap.id)
+    removeCapability(cap.id)
     ElMessage.success('已删除')
   }).catch(() => {})
+}
+
+function capFormModuleId() {
+  if (editingCapId.value) {
+    return store.capabilities.find(c => c.id === editingCapId.value)?.moduleId
+  }
+  if (currentModuleId.value !== 'all') return currentModuleId.value
+  return store.modules[0]?.id
 }
 
 function handleCapabilityConfirm() {
@@ -704,7 +674,7 @@ function handleCapabilityConfirm() {
   if (!capForm.identifier || !capForm.identifier.trim()) { ElMessage.warning('请输入标识符'); return }
   if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(capForm.identifier)) { ElMessage.warning('标识符格式不合法'); return }
 
-  if (!isCapIdentifierUnique(currentCategoryId.value, capForm.identifier, editingCapId.value || undefined)) {
+  if (!isCapIdentifierUnique(capForm.identifier, editingCapId.value || undefined)) {
     ElMessage.warning('能力标识符已存在，请更换'); return
   }
 
@@ -721,6 +691,7 @@ function handleCapabilityConfirm() {
   }
 
   const item = {
+    moduleId: capFormModuleId(),
     capType: capForm.capType,
     name: capForm.name.trim(),
     identifier: capForm.identifier.trim(),
@@ -729,13 +700,10 @@ function handleCapabilityConfirm() {
   }
 
   if (editingCapId.value) {
-    const found = findCapability(editingCapId.value)
-    if (found) updateCapability(currentCategoryId.value, found.module.id, editingCapId.value, item)
+    updateCapability(editingCapId.value, item)
     ElMessage.success('编辑成功')
   } else {
-    const modId = currentModuleId.value !== 'all' ? currentModuleId.value : (currentCategory.value?.modules[0]?.id)
-    if (!modId) { ElMessage.warning('请先创建能力模块'); return }
-    addCapability(currentCategoryId.value, modId, item)
+    addCapability(item)
     ElMessage.success('添加成功')
   }
   dialogVisible.value = false
@@ -851,18 +819,26 @@ function handleParamConfirm() {
 </script>
 
 <style lang="scss" scoped>
-// 顶部栏
-.top-bar {
+// 主标签页
+.main-tabs {
+  flex: 1;
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: var(--bg-card);
-  border-bottom: 1px solid var(--border-lighter);
-  flex-shrink: 0;
+  flex-direction: column;
+  overflow: hidden;
+  :deep(.el-tabs__header) {
+    margin: 0;
+    padding: 0 24px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-lighter);
+  }
+  :deep(.el-tabs__content) {
+    flex: 1;
+    overflow: hidden;
+  }
+  :deep(.el-tab-pane) {
+    height: 100%;
+  }
 }
-.top-label { font-size: var(--font-md); font-weight: 500; color: var(--text-primary); }
-.empty-hint { font-size: var(--font-sm); color: var(--text-placeholder); margin-left: 12px; }
 
 // 主布局
 .main-layout {
@@ -944,19 +920,6 @@ function handleParamConfirm() {
   gap: 16px;
 }
 
-.filter-chips { display: flex; gap: 8px; }
-.filter-chip {
-  padding: 4px 14px;
-  border-radius: 14px;
-  font-size: 12px;
-  color: var(--text-secondary);
-  cursor: pointer;
-  border: 1px solid var(--border-light);
-  transition: all .15s;
-  &:hover { background: var(--bg-hover); }
-  &.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
-}
-
 // 类型标签
 .type-tag {
   display: inline-flex;
@@ -978,16 +941,20 @@ function handleParamConfirm() {
 
 // 类型卡片
 .type-cards { display: flex; gap: 8px; }
+
+// 弹窗整体间距
 .type-card {
-  padding: 8px 24px;
-  border: 2px solid var(--border-light);
-  border-radius: 8px;
+  padding: 0 12px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--el-border-radius-base);
   cursor: pointer;
-  font-size: var(--font-md);
+  font-size: 12px;
+  line-height: 26px;
   font-weight: 500;
   color: var(--text-secondary);
+  background: var(--bg-body);
   transition: all .15s;
-  &:hover { border-color: var(--primary-hover); }
+  &:hover { border-color: var(--primary-hover); color: var(--primary-color); }
   &.active { border-color: var(--primary-color); background: var(--primary-bg); color: var(--primary-color); }
 }
 
@@ -1025,5 +992,15 @@ function handleParamConfirm() {
   justify-content: center;
   color: var(--text-placeholder);
   font-size: var(--font-md);
+}
+</style>
+
+<style lang="scss">
+// 弹窗样式（非 scoped，因 el-dialog 被 teleport 到 body）
+.cap-dialog {
+  .el-dialog__body { padding-top: 20px; }
+  .el-dialog__header { padding-bottom: 12px; }
+  .el-form-item { margin-bottom: 18px; }
+  .el-divider { margin: 24px 0 20px; }
 }
 </style>

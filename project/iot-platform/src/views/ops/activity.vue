@@ -9,11 +9,6 @@
         <el-option label="已结束" value="ended" />
         <el-option label="已过期" value="expired" />
       </el-select>
-      <el-select v-model="filterPosition" placeholder="全部位置" size="small" style="width:120px" clearable @change="applyFilter">
-        <el-option label="Banner" value="slot_banner" />
-        <el-option label="弹窗" value="slot_popup" />
-        <el-option label="悬浮" value="slot_floating" />
-      </el-select>
       <el-select v-model="filterRegion" placeholder="全部区域" size="small" style="width:120px" clearable @change="applyFilter">
         <el-option label="国内" value="国内" />
         <el-option label="海外" value="海外" />
@@ -30,9 +25,12 @@
       <div class="card">
         <div class="card-header">
           <span class="card-title">活动位策略列表</span>
-          <el-button type="primary" size="small" @click="openAddStrategy">
-            <el-icon><Plus /></el-icon>添加活动
-          </el-button>
+          <div>
+            <el-button size="small" @click="currentPage = 'address-config'">活动配置</el-button>
+            <el-button type="primary" size="small" @click="openAddStrategy">
+              <el-icon><Plus /></el-icon>添加活动
+            </el-button>
+          </div>
         </div>
         <el-table :data="filteredStrategies" stripe>
           <el-table-column label="活动名称" min-width="160">
@@ -43,21 +41,17 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="投放位置" width="110">
+          <el-table-column label="弹窗频率" width="110">
             <template #default="{ row }">
-              <span :class="['pos-tag', 'pos-' + row.position]">{{ positionLabels[row.position] }}</span>
+              <span class="cell-muted">每 {{ row.popupInterval }} 小时</span>
             </template>
           </el-table-column>
-          <el-table-column label="活动位编码" width="130">
-            <template #default="{ row }">
-              <code class="code-tag">{{ posSpecs[row.position]?.code }}</code>
-            </template>
-          </el-table-column>
-          <el-table-column label="活动周期" width="180">
+          <el-table-column label="活动周期" width="220">
             <template #default="{ row }">
               <div v-if="row.startTime">
                 <div class="period-text">{{ formatDate(row.startTime) }}</div>
                 <div class="period-sub">至 {{ formatDate(row.endTime) }}</div>
+
               </div>
               <span v-else class="cell-muted">待定</span>
             </template>
@@ -65,11 +59,6 @@
           <el-table-column label="活动状态" width="100">
             <template #default="{ row }">
               <span :class="['status-tag', 'status-' + row.status]">{{ statusMap[row.status]?.label }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="套餐配置" width="100">
-            <template #default="{ row }">
-              <span class="clickable-cell" @click="enterPkgManage(row)">{{ row.pkgCount }} 个套餐</span>
             </template>
           </el-table-column>
           <el-table-column label="投放区域" width="100">
@@ -118,73 +107,43 @@
       </div>
     </div>
 
-    <!-- ===== Page: Package Management ===== -->
-    <div v-show="currentPage === 'pkg-manage'" class="ops-panel" style="padding:0">
+    <!-- ===== Page: Address Config ===== -->
+    <div v-show="currentPage === 'address-config'" class="ops-panel" style="padding:0">
       <div class="pkg-manage-header">
         <div class="pkg-manage-left">
           <el-button @click="currentPage = 'strategy-list'">
             <el-icon><ArrowLeft /></el-icon>返回
           </el-button>
           <div>
-            <div class="pkg-manage-title">{{ pkgManageName }}</div>
+            <div class="pkg-manage-title">活动地址配置</div>
             <div class="pkg-manage-subtitle">
-              套餐配置 · 当前已配置 <span class="pkg-count">{{ pkgManagePackages.length }}</span> 个套餐 · <span class="color-gray-400">拖拽可调整排序</span>
+              管理活动跳转地址列表 · 当前共 <span class="pkg-count">{{ activityAddresses.length }}</span> 条
             </div>
           </div>
         </div>
         <div class="pkg-manage-actions">
-          <el-button type="primary" size="small" @click="openAddPackages">
-            <el-icon><Plus /></el-icon>添加套餐
+          <el-button type="primary" size="small" @click="openAddAddress">
+            <el-icon><Plus /></el-icon>添加地址
           </el-button>
         </div>
       </div>
 
       <div class="card">
-        <el-table :data="pkgManagePackages" stripe row-key="id" :row-class-name="getPkgRowClass" @row-dragend="onPkgDragEnd">
-          <el-table-column width="50" align="center">
-            <template #default="{ $index }">
-              <span
-                class="drag-handle"
-                :class="{ 'drag-active': dragFromIdx === $index }"
-                draggable="true"
-                @dragstart="onPkgDragStart($event, $index)"
-                @dragover.prevent="onPkgDragOver($event, $index)"
-                @drop="onPkgDrop($event, $index)"
-                @dragend="onPkgDragEnd"
-              >
-                <i class="drag-dot" v-for="n in 9" :key="n" />
-              </span>
-            </template>
-          </el-table-column>
-          <el-table-column label="套餐信息" min-width="200">
+        <el-table :data="activityAddresses" stripe>
+          <el-table-column label="地址名称" min-width="200">
             <template #default="{ row }">
-              <div class="pkg-info-cell">
-                <div class="pkg-info-name">{{ row.name }}</div>
-                <div class="pkg-info-id">{{ row.id }}</div>
-              </div>
+              <span class="strategy-name">{{ row.name }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="应用方向" width="100">
-            <template #default="{ row }">{{ row.direction }}</template>
-          </el-table-column>
-          <el-table-column label="订阅类型" width="100">
+          <el-table-column label="H5地址" min-width="280">
             <template #default="{ row }">
-              <el-tag :type="row.subType === '订阅制' ? 'success' : 'info'" size="small">{{ row.subType }}</el-tag>
+              <span class="cell-muted">{{ row.url }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="售价" width="140">
-            <template #default="{ row }">
-              <span class="price-cell">{{ row.price }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="上架状态" width="100">
-            <template #default="{ row }">
-              <el-switch v-model="row.enabled" size="small" />
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" width="100">
-            <template #default="{ $index }">
-              <el-button size="small" text type="danger" @click="removePkgFromManage($index)">移除</el-button>
+          <el-table-column label="操作" width="150">
+            <template #default="{ row, $index }">
+              <el-button size="small" text type="primary" @click="openEditAddress(row)">编辑</el-button>
+              <el-button size="small" text type="danger" @click="deleteAddress(row, $index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -236,28 +195,9 @@
       <!-- Step 2: 投放配置 -->
       <div v-show="addStep === 2" class="step-content">
         <el-form label-position="top">
-          <el-form-item label="投放位置" required>
-            <div class="position-grid">
-              <div
-                v-for="pos in positionOptions" :key="pos.value"
-                :class="['pos-card', { selected: addForm.position === pos.value }]"
-                @click="addForm.position = pos.value; addForm.popupFrequency = pos.value === 'slot_popup' ? 'once_daily' : ''"
-              >
-                <div class="pos-icon">{{ pos.icon }}</div>
-                <div class="pos-name">{{ pos.label }}</div>
-                <div class="pos-code">{{ pos.code }}</div>
-                <div class="pos-spec">{{ pos.spec }}</div>
-              </div>
-            </div>
-          </el-form-item>
-          <el-form-item v-if="addForm.position === 'slot_popup'" label="弹窗频率">
-            <div class="freq-radio">
-              <span
-                v-for="f in freqOptions" :key="f.value"
-                :class="['freq-item', { active: addForm.popupFrequency === f.value }]"
-                @click="addForm.popupFrequency = f.value"
-              >{{ f.label }}</span>
-            </div>
+          <el-form-item label="弹窗频率（小时）" required>
+            <el-input-number v-model="addForm.popupInterval" :min="1" :max="720" :step="1" style="width:200px" />
+            <span class="form-hint" style="margin-left:8px">每 N 小时弹出 1 次，建议 6-48 小时</span>
           </el-form-item>
           <el-form-item label="投放区域" required>
             <div class="checkbox-group">
@@ -288,37 +228,11 @@
       <!-- Step 3: 活动内容 -->
       <div v-show="addStep === 3" class="step-content">
         <el-form label-position="top">
-          <el-form-item label="活动媒资" required>
-            <el-upload
-              class="upload-zone"
-              drag
-              :auto-upload="false"
-              :limit="1"
-              :on-change="onAddMediaChange"
-              :file-list="addForm.mediaFileList"
-              accept="image/*"
-            >
-              <div class="upload-content">
-                <el-icon class="upload-icon-el"><PictureFilled /></el-icon>
-                <div class="upload-text">点击或拖拽上传活动素材</div>
-                <div class="upload-spec">规格要求：{{ posSpecs[addForm.position]?.spec }} px（{{ posSpecs[addForm.position]?.name }}位置）</div>
-              </div>
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="活动链接" required>
-            <el-input v-model="addForm.activityUrl" placeholder="https://m.example.com/activity 或 carecam://..." />
-            <div class="form-hint">支持 http/https 链接及 App 内部路由 scheme</div>
-          </el-form-item>
-          <el-form-item label="关联活动套餐（选填）">
-            <div class="pkg-tags">
-              <el-tag
-                v-for="pkg in addForm.packages" :key="pkg.id"
-                size="small" type="primary" closable class="pkg-tag-item"
-                @close="removeAddPkg(pkg.id)"
-              >{{ pkg.name }}</el-tag>
-              <span v-if="!addForm.packages.length" class="cell-muted">暂无关联套餐</span>
-            </div>
-            <el-button size="small" style="margin-top:8px" @click="openAddPkgForStrategy">+ 选择套餐</el-button>
+          <el-form-item label="活动地址" required>
+            <el-select v-model="addForm.addressId" placeholder="请选择活动跳转地址" style="width:100%">
+              <el-option v-for="addr in activityAddresses" :key="addr.id" :label="`${addr.name} (${addr.url})`" :value="addr.id" />
+            </el-select>
+            <div class="form-hint" style="margin-top:4px">在「活动配置」中管理地址列表</div>
           </el-form-item>
         </el-form>
       </div>
@@ -374,28 +288,9 @@
 
       <div v-show="editStep === 2" class="step-content">
         <el-form label-position="top">
-          <el-form-item label="投放位置" required>
-            <div class="position-grid">
-              <div
-                v-for="pos in positionOptions" :key="pos.value"
-                :class="['pos-card', { selected: editForm.position === pos.value }]"
-                @click="editForm.position = pos.value"
-              >
-                <div class="pos-icon">{{ pos.icon }}</div>
-                <div class="pos-name">{{ pos.label }}</div>
-                <div class="pos-code">{{ pos.code }}</div>
-                <div class="pos-spec">{{ pos.spec }}</div>
-              </div>
-            </div>
-          </el-form-item>
-          <el-form-item v-if="editForm.position === 'slot_popup'" label="弹窗频率">
-            <div class="freq-radio">
-              <span
-                v-for="f in freqOptions" :key="f.value"
-                :class="['freq-item', { active: editForm.popupFrequency === f.value }]"
-                @click="editForm.popupFrequency = f.value"
-              >{{ f.label }}</span>
-            </div>
+          <el-form-item label="弹窗频率（小时）" required>
+            <el-input-number v-model="editForm.popupInterval" :min="1" :max="720" :step="1" style="width:200px" />
+            <span class="form-hint" style="margin-left:8px">每 N 小时弹出 1 次</span>
           </el-form-item>
           <el-form-item label="投放区域" required>
             <div class="checkbox-group">
@@ -425,25 +320,10 @@
 
       <div v-show="editStep === 3" class="step-content">
         <el-form label-position="top">
-          <el-form-item label="活动媒资">
-            <el-upload
-              class="upload-zone"
-              drag
-              :auto-upload="false"
-              :limit="1"
-              :on-change="onEditMediaChange"
-              :file-list="editForm.mediaFileList"
-              accept="image/*"
-            >
-              <div class="upload-content">
-                <el-icon class="upload-icon-el"><PictureFilled /></el-icon>
-                <div class="upload-text">点击更换活动素材</div>
-                <div class="upload-spec">规格要求：{{ posSpecs[editForm.position]?.spec }} px</div>
-              </div>
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="活动链接" required>
-            <el-input v-model="editForm.activityUrl" placeholder="https://m.example.com/activity" />
+          <el-form-item label="活动地址" required>
+            <el-select v-model="editForm.addressId" placeholder="请选择活动跳转地址" style="width:100%">
+              <el-option v-for="addr in activityAddresses" :key="addr.id" :label="`${addr.name} (${addr.url})`" :value="addr.id" />
+            </el-select>
           </el-form-item>
         </el-form>
       </div>
@@ -474,15 +354,14 @@
         </div>
         <div class="review-section">
           <div class="review-label">活动周期</div>
-          <div class="review-value">{{ detailStrategy.startTime ? formatDate(detailStrategy.startTime) + ' ~ ' + formatDate(detailStrategy.endTime) : '待定' }}</div>
+          <div class="review-value">{{ detailStrategy.startTime ? formatDate(detailStrategy.startTime) + ' ~ ' + formatDate(detailStrategy.endTime) : '待定' }}</div>        </div>
+        <div class="review-section">
+          <div class="review-label">弹窗频率</div>
+          <div class="review-value">每 {{ detailStrategy.popupInterval }} 小时 1 次</div>
         </div>
         <div class="review-section">
-          <div class="review-label">投放位置</div>
-          <div class="review-value">{{ positionLabels[detailStrategy.position] }}（{{ posSpecs[detailStrategy.position]?.spec }}）<br /><code class="code-tag">{{ posSpecs[detailStrategy.position]?.code }}</code></div>
-        </div>
-        <div v-if="detailStrategy.position === 'slot_popup' && detailStrategy.popupFrequency" class="review-section">
-          <div class="review-label">弹窗频率</div>
-          <div class="review-value">{{ freqOptions.find(f => f.value === detailStrategy.popupFrequency)?.label || detailStrategy.popupFrequency }}</div>
+          <div class="review-label">活动地址</div>
+          <div class="review-value">{{ getAddressName(detailStrategy.addressId) }}<br /><span class="cell-muted">{{ getAddressUrl(detailStrategy.addressId) }}</span></div>
         </div>
         <div class="review-section">
           <div class="review-label">投放区域</div>
@@ -497,14 +376,6 @@
           <div class="review-value">{{ detailStrategy.groups.join('、') }}</div>
         </div>
         <div class="review-section">
-          <div class="review-label">活动链接</div>
-          <div class="review-value">{{ detailStrategy.activityUrl || '未配置' }}</div>
-        </div>
-        <div class="review-section">
-          <div class="review-label">关联套餐</div>
-          <div class="review-value">{{ detailStrategy.pkgCount }} 个</div>
-        </div>
-        <div class="review-section">
           <div class="review-label">备注</div>
           <div class="review-value">{{ detailStrategy.remark || '无' }}</div>
         </div>
@@ -515,88 +386,42 @@
       </template>
     </el-drawer>
 
-    <!-- ===== Dialog: Add Packages (Transfer) ===== -->
-    <el-dialog v-model="addPkgVisible" title="选择关联套餐" width="900px" top="5vh">
-      <div class="transfer-container">
-        <div class="transfer-panel">
-          <div class="transfer-panel-header">
-            <span>可选套餐</span>
-            <span class="transfer-selected-count">已选 <span class="count-num">{{ selectedPkgIds.length }}</span> 个</span>
-          </div>
-          <div class="transfer-panel-body">
-            <label
-              v-for="pkg in allPkgList" :key="pkg.id"
-              :class="['transfer-pkg-item', { selected: selectedPkgIds.includes(pkg.id) }]"
-            >
-              <el-checkbox :model-value="selectedPkgIds.includes(pkg.id)" @change="togglePkgSelect(pkg.id)" />
-              <div class="transfer-pkg-info">
-                <div class="transfer-pkg-name">{{ pkg.name }}</div>
-                <div class="transfer-pkg-meta">{{ pkg.id }} · {{ pkg.direction }} · <span class="transfer-pkg-cat">{{ pkg.category }}</span> · {{ pkg.price }}</div>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div class="transfer-actions">
-          <el-button size="small" :disabled="!selectedPkgIds.length" @click="addSelectedPkgs">
-            <el-icon><ArrowRight /></el-icon>
-          </el-button>
-          <el-button size="small" @click="removeSelectedPkgs">
-            <el-icon><ArrowLeft /></el-icon>
-          </el-button>
-        </div>
-
-        <div class="transfer-panel">
-          <div class="transfer-panel-header">
-            <span>已选套餐</span>
-          </div>
-          <div class="transfer-panel-body">
-            <template v-if="tempStrategyPkgs.length">
-              <div v-for="pkg in tempStrategyPkgs" :key="pkg.id" class="transfer-tag">
-                {{ pkg.name }}<span class="transfer-tag-close" @click="removeTempPkg(pkg.id)">×</span>
-              </div>
-            </template>
-            <div v-else class="transfer-empty">暂未选择套餐</div>
-          </div>
-        </div>
-      </div>
-
+    <!-- ===== Dialog: Add/Edit Address ===== -->
+    <el-dialog v-model="addressDialogVisible" :title="addressDialogTitle" width="500px" :close-on-click-modal="false">
+      <el-form ref="addressFormRef" :model="addressForm" label-width="80px">
+        <el-form-item label="地址名称" required>
+          <el-input v-model="addressForm.name" placeholder="例如：618大促活动页" maxlength="30" />
+        </el-form-item>
+        <el-form-item label="H5地址" required>
+          <el-input v-model="addressForm.url" placeholder="https://m.example.com/activity/618" />
+        </el-form-item>
+      </el-form>
       <template #footer>
-        <el-button @click="addPkgVisible = false">取消</el-button>
-        <el-button type="primary" @click="confirmAddPackages">确定</el-button>
+        <el-button @click="addressDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmAddress">确定</el-button>
       </template>
     </el-dialog>
+
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
-import { Plus, ArrowLeft, ArrowRight, PictureFilled } from '@element-plus/icons-vue'
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
+import { Plus, ArrowLeft } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 
 // ===== Page State =====
 const currentPage = ref('strategy-list')
-const pkgManageName = ref('')
-const pkgManageIdx = ref(-1)
 
-// ===== Position Data =====
-const positionOptions = [
-  { value: 'slot_banner', code: 'ACT_SLOT_BANNER', label: '首页Banner', icon: '🏞️', spec: '750 × 400' },
-  { value: 'slot_popup', code: 'ACT_SLOT_POPUP', label: '启动弹窗', icon: '📢', spec: '600 × 800' },
-  { value: 'slot_floating', code: 'ACT_SLOT_FLOATING', label: '悬浮按钮', icon: '🔘', spec: '120 × 120' }
-]
-
-const posSpecs = Object.fromEntries(positionOptions.map(p => [p.value, { name: p.label, spec: p.spec, code: p.code }]))
-
-const positionLabels = {
-  slot_banner: 'Banner', slot_popup: '弹窗', slot_floating: '悬浮'
+// ===== Address helpers =====
+const getAddressName = (id) => {
+  const addr = activityAddresses.value.find(a => a.id === id)
+  return addr ? addr.name : '—'
 }
-
-const freqOptions = [
-  { value: 'always', label: '每次启动' },
-  { value: 'once_daily', label: '每天一次' },
-  { value: 'once_weekly', label: '每周一次' }
-]
+const getAddressUrl = (id) => {
+  const addr = activityAddresses.value.find(a => a.id === id)
+  return addr ? addr.url : ''
+}
 
 const regionOptions = [
   { value: '国内', label: '国内' },
@@ -627,42 +452,48 @@ const statusMap = {
 // ===== Strategies =====
 const strategies = ref([
   {
-    id: 'AS001', name: '618大促Banner活动', status: 'active',
+    id: 'AS001', name: '618大促弹窗活动', status: 'active',
     startTime: '2026-06-01T00:00', endTime: '2026-06-18T23:59',
-    position: 'slot_banner', regions: ['国内'], apps: ['牵心PRO'],
-    groups: ['高价值用户', '活跃用户'], activityUrl: 'https://m.example.com/activity/618',
-    popupFrequency: '', packages: [], pkgCount: 3,
-    remark: '618大促首页Banner'
+    regions: ['国内'], apps: ['牵心PRO'],
+    groups: ['高价值用户', '活跃用户'], addressId: 'ADDR001',
+    popupInterval: 24,
+    remark: '618大促首页弹窗'
   },
   {
     id: 'AS002', name: '新用户专享弹窗', status: 'active',
     startTime: '2026-05-20T00:00', endTime: '2026-06-20T23:59',
-    position: 'slot_popup', regions: ['国内', '海外'], apps: ['牵心PRO', '鹤梦之家'],
-    groups: ['新注册用户'], activityUrl: 'https://m.example.com/new-user',
-    popupFrequency: 'once_daily', packages: [], pkgCount: 2,
+    regions: ['国内', '海外'], apps: ['牵心PRO', '鹤梦之家'],
+    groups: ['新注册用户'], addressId: 'ADDR002',
+    popupInterval: 12,
     remark: '新用户首次打开App展示'
   },
   {
-    id: 'AS003', name: '五一悬浮活动', status: 'expired',
+    id: 'AS003', name: '五一弹窗活动', status: 'expired',
     startTime: '2026-04-28T00:00', endTime: '2026-05-05T23:59',
-    position: 'slot_floating', regions: ['国内'], apps: ['牵心PRO'],
-    groups: ['活跃用户', '付费用户'], activityUrl: 'https://m.example.com/mayday',
-    popupFrequency: '', packages: [], pkgCount: 1,
+    regions: ['国内'], apps: ['牵心PRO'],
+    groups: ['活跃用户', '付费用户'], addressId: 'ADDR003',
+    popupInterval: 24,
     remark: '五一特惠'
   },
   {
     id: 'AS004', name: '双11预售弹窗', status: 'draft',
     startTime: '2026-11-01T00:00', endTime: '2026-11-11T23:59',
-    position: 'slot_popup', regions: ['国内', '海外'], apps: ['牵心PRO', '鹤梦之家'],
-    groups: ['高价值用户', '活跃用户', '付费用户'], activityUrl: 'https://m.example.com/double11',
-    popupFrequency: 'always', packages: [], pkgCount: 4,
+    regions: ['国内', '海外'], apps: ['牵心PRO', '鹤梦之家'],
+    groups: ['高价值用户', '活跃用户', '付费用户'], addressId: 'ADDR001',
+    popupInterval: 6,
     remark: '双11大促预售'
   }
 ])
 
+// ===== Activity Addresses =====
+const activityAddresses = ref([
+  { id: 'ADDR001', name: '618大促活动页', url: 'https://m.example.com/activity/618' },
+  { id: 'ADDR002', name: '新用户专享页', url: 'https://m.example.com/new-user' },
+  { id: 'ADDR003', name: '五一特惠页', url: 'https://m.example.com/mayday' }
+])
+
 // ===== Filters =====
 const filterStatus = ref('')
-const filterPosition = ref('')
 const filterRegion = ref('')
 const filterApp = ref('')
 const filterSearch = ref('')
@@ -681,7 +512,6 @@ const applyFilter = () => {
   })
 
   if (filterStatus.value) list = list.filter(s => s.status === filterStatus.value)
-  if (filterPosition.value) list = list.filter(s => s.position === filterPosition.value)
   if (filterRegion.value) list = list.filter(s => s.regions.includes(filterRegion.value))
   if (filterApp.value) list = list.filter(s => s.apps.includes(filterApp.value))
   if (filterSearch.value) {
@@ -696,89 +526,13 @@ const formatDate = (isoStr) => {
   return isoStr.replace('T', ' ').substring(0, 16)
 }
 
-// ===== Package Management State =====
-const pkgManagePackages = ref([])
-
-// All available packages pool (simulates backend data)
-const allPkgsPool = [
-  { id: 'PKG001', name: '事件录像7天', direction: '设备', subType: '订阅制', price: '¥6.90', enabled: true },
-  { id: 'PKG002', name: '国内专享·极简云存', direction: '用户', subType: '订阅制', price: '¥59.00', enabled: true },
-  { id: 'PKG003', name: 'Overseas-Pro', direction: '设备', subType: '订阅制', price: '$12.99', enabled: false },
-  { id: 'PKG004', name: 'AI智能检测月卡', direction: '设备', subType: '订阅制', price: '¥19.90', enabled: true },
-  { id: 'PKG005', name: '全家桶年度套餐', direction: '用户', subType: '非订阅', price: '¥199.00', enabled: true }
-]
-
-const enterPkgManage = (row) => {
-  pkgManageName.value = row.name
-  pkgManageIdx.value = row.id
-  // Load strategy's packages (or default set for demo)
-  pkgManagePackages.value = allPkgsPool.map(p => ({ ...p }))
-  currentPage.value = 'pkg-manage'
-}
-
-const removePkgFromManage = (idx) => {
-  pkgManagePackages.value.splice(idx, 1)
-  syncStrategyPkgCount()
-}
-
-const syncStrategyPkgCount = () => {
-  const s = strategies.value.find(s => s.id === pkgManageIdx.value)
-  if (s) s.pkgCount = pkgManagePackages.value.length
-}
-
-// ===== Drag and Drop =====
-const dragFromIdx = ref(-1)
-const dragOverIdx = ref(-1)
-
-const getPkgRowClass = ({ rowIndex }) => {
-  if (rowIndex === dragFromIdx.value) return 'row-dragging'
-  if (rowIndex === dragOverIdx.value) return 'row-drag-over'
-  return ''
-}
-
-const onPkgDragStart = (e, idx) => {
-  dragFromIdx.value = idx
-  if (e.dataTransfer) {
-    e.dataTransfer.effectAllowed = 'move'
-    e.dataTransfer.setData('text/plain', String(idx))
-  }
-}
-
-const onPkgDragOver = (e, idx) => {
-  dragOverIdx.value = idx
-  if (e.dataTransfer) {
-    e.dataTransfer.dropEffect = 'move'
-  }
-}
-
-const onPkgDrop = (e, idx) => {
-  const list = pkgManagePackages.value
-  const from = dragFromIdx.value
-  if (from === idx || from === -1) {
-    dragFromIdx.value = -1
-    dragOverIdx.value = -1
-    return
-  }
-  const item = list.splice(from, 1)[0]
-  list.splice(idx, 0, item)
-  dragFromIdx.value = -1
-  dragOverIdx.value = -1
-  syncStrategyPkgCount()
-}
-
-const onPkgDragEnd = () => {
-  dragFromIdx.value = -1
-  dragOverIdx.value = -1
-}
-
 // ===== Add Strategy =====
 const addDrawerVisible = ref(false)
 const addStep = ref(1)
 const addForm = reactive({
   name: '', startTime: '', endTime: '', remark: '',
-  position: 'slot_banner', regions: ['国内'], apps: ['牵心PRO'],
-  groups: [], activityUrl: '', popupFrequency: '',
-  packages: [], mediaFileList: []
+  regions: ['国内'], apps: ['牵心PRO'],
+  groups: [], addressId: '', popupInterval: 24
 })
 
 const openAddStrategy = () => {
@@ -787,34 +541,18 @@ const openAddStrategy = () => {
   addForm.startTime = ''
   addForm.endTime = ''
   addForm.remark = ''
-  addForm.position = 'slot_banner'
   addForm.regions = ['国内']
   addForm.apps = ['牵心PRO']
   addForm.groups = []
-  addForm.activityUrl = ''
-  addForm.popupFrequency = ''
-  addForm.packages = []
-  addForm.mediaFileList = []
+  addForm.addressId = ''
+  addForm.popupInterval = 24
   addDrawerVisible.value = true
-}
-
-const onAddMediaChange = (file) => {
-  addForm.mediaFileList = [file]
-}
-
-const removeAddPkg = (pkgId) => {
-  addForm.packages = addForm.packages.filter(p => p.id !== pkgId)
-}
-
-const openAddPkgForStrategy = () => {
-  tempStrategyPkgs.value = [...addForm.packages]
-  openAddPackages()
 }
 
 const confirmAddStrategy = () => {
   if (!addForm.name.trim()) { addStep.value = 1; return }
   if (addForm.startTime && addForm.endTime && addForm.endTime <= addForm.startTime) { addStep.value = 1; return }
-  if (!addForm.activityUrl.trim()) { addStep.value = 3; return }
+  if (!addForm.addressId) { addStep.value = 3; return }
   if (!addForm.regions.length) { addStep.value = 2; return }
   if (!addForm.apps.length) { addStep.value = 2; return }
   if (!addForm.groups.length) { addStep.value = 2; return }
@@ -823,11 +561,10 @@ const confirmAddStrategy = () => {
   strategies.value.push({
     id, name: addForm.name, status: 'draft',
     startTime: addForm.startTime, endTime: addForm.endTime,
-    position: addForm.position, regions: [...addForm.regions],
+    regions: [...addForm.regions],
     apps: [...addForm.apps], groups: [...addForm.groups],
-    activityUrl: addForm.activityUrl,
-    popupFrequency: addForm.position === 'slot_popup' ? addForm.popupFrequency : '',
-    packages: [...addForm.packages], pkgCount: addForm.packages.length,
+    addressId: addForm.addressId,
+    popupInterval: addForm.popupInterval,
     remark: addForm.remark
   })
   addDrawerVisible.value = false
@@ -840,9 +577,8 @@ const editStep = ref(1)
 const editingId = ref('')
 const editForm = reactive({
   name: '', startTime: '', endTime: '', remark: '',
-  position: 'slot_banner', regions: [], apps: [],
-  groups: [], activityUrl: '', popupFrequency: '',
-  mediaFileList: []
+  regions: [], apps: [],
+  groups: [], addressId: '', popupInterval: 24
 })
 
 const openEditStrategy = (row) => {
@@ -852,18 +588,12 @@ const openEditStrategy = (row) => {
   editForm.startTime = row.startTime
   editForm.endTime = row.endTime
   editForm.remark = row.remark
-  editForm.position = row.position
   editForm.regions = [...row.regions]
   editForm.apps = [...row.apps]
   editForm.groups = [...row.groups]
-  editForm.activityUrl = row.activityUrl
-  editForm.popupFrequency = row.popupFrequency || ''
-  editForm.mediaFileList = []
+  editForm.addressId = row.addressId || ''
+  editForm.popupInterval = row.popupInterval || 24
   editDrawerVisible.value = true
-}
-
-const onEditMediaChange = (file) => {
-  editForm.mediaFileList = [file]
 }
 
 const confirmEditStrategy = () => {
@@ -873,12 +603,11 @@ const confirmEditStrategy = () => {
   s.startTime = editForm.startTime
   s.endTime = editForm.endTime
   s.remark = editForm.remark
-  s.position = editForm.position
   s.regions = [...editForm.regions]
   s.apps = [...editForm.apps]
   s.groups = [...editForm.groups]
-  s.activityUrl = editForm.activityUrl
-  s.popupFrequency = editForm.position === 'slot_popup' ? editForm.popupFrequency : ''
+  s.addressId = editForm.addressId
+  s.popupInterval = editForm.popupInterval
   editDrawerVisible.value = false
   applyFilter()
 }
@@ -893,7 +622,6 @@ const checkConflict = (strategy) => {
   return strategies.value.filter(s => {
     if (s.id === strategy.id) return false
     if (s.status !== 'active') return false
-    if (s.position !== strategy.position) return false
     const hasRegion = s.regions.some(r => strategy.regions.includes(r))
     if (!hasRegion) return false
     const hasApp = s.apps.some(a => strategy.apps.includes(a))
@@ -910,7 +638,7 @@ const publishStrategy = async (row) => {
     const names = conflicts.map(s => `「${s.name}(${s.id})」`).join('、')
     try {
       await ElMessageBox.confirm(
-        `检测到与以下进行中活动存在投放冲突：${names}。同一用户在同一APP同一区域的同一位置不可同时存在两个进行中活动。确定仍要发布吗？`,
+        `检测到与以下进行中活动存在投放冲突：${names}。同一用户在同一APP同一区域不可同时存在两个进行中活动。确定仍要发布吗？`,
         '冲突预警',
         { confirmButtonText: '仍要发布', cancelButtonText: '取消', type: 'warning' }
       )
@@ -930,6 +658,43 @@ const copyStrategy = (row) => {
   applyFilter()
 }
 
+// ===== Address CRUD =====
+const addressDialogVisible = ref(false)
+const editingAddressId = ref(null)
+const addressForm = reactive({ name: '', url: '' })
+
+const addressDialogTitle = computed(() => editingAddressId.value ? '编辑活动地址' : '添加活动地址')
+
+function openAddAddress() {
+  editingAddressId.value = null
+  addressForm.name = ''
+  addressForm.url = ''
+  addressDialogVisible.value = true
+}
+
+function openEditAddress(row) {
+  editingAddressId.value = row.id
+  addressForm.name = row.name
+  addressForm.url = row.url
+  addressDialogVisible.value = true
+}
+
+function confirmAddress() {
+  if (!addressForm.name.trim() || !addressForm.url.trim()) return
+  if (editingAddressId.value) {
+    const addr = activityAddresses.value.find(a => a.id === editingAddressId.value)
+    if (addr) { addr.name = addressForm.name; addr.url = addressForm.url }
+  } else {
+    const id = 'ADDR' + String(activityAddresses.value.length + 1).padStart(3, '0')
+    activityAddresses.value.push({ id, name: addressForm.name, url: addressForm.url })
+  }
+  addressDialogVisible.value = false
+}
+
+function deleteAddress(row, index) {
+  activityAddresses.value.splice(index, 1)
+}
+
 // ===== Detail Drawer =====
 const detailDrawerVisible = ref(false)
 const detailStrategy = ref(null)
@@ -937,68 +702,6 @@ const detailStrategy = ref(null)
 const openDetailDrawer = (row) => {
   detailStrategy.value = row
   detailDrawerVisible.value = true
-}
-
-// ===== Package Transfer =====
-const addPkgVisible = ref(false)
-const selectedPkgIds = ref([])
-const tempStrategyPkgs = ref([])
-
-const allPkgList = [
-  { id: 'PKG001', name: '事件录像7天', direction: '设备', category: '云存储套餐', price: '¥6.90' },
-  { id: 'PKG002', name: '国内专享·极简云存', direction: '用户', category: '云存储套餐', price: '¥59.00' },
-  { id: 'PKG003', name: 'Overseas-Pro', direction: '设备', category: '云存储套餐', price: '$12.99' },
-  { id: 'PKG004', name: 'AI智能检测月卡', direction: '设备', category: 'AI智能服务', price: '¥19.90' },
-  { id: 'PKG005', name: '全家桶年度套餐', direction: '用户', category: '综合套餐', price: '¥199.00' }
-]
-
-const openAddPackages = () => {
-  selectedPkgIds.value = []
-  tempStrategyPkgs.value = []
-  addPkgVisible.value = true
-}
-
-const togglePkgSelect = (id) => {
-  const idx = selectedPkgIds.value.indexOf(id)
-  if (idx === -1) selectedPkgIds.value.push(id)
-  else selectedPkgIds.value.splice(idx, 1)
-}
-
-const addSelectedPkgs = () => {
-  for (const id of selectedPkgIds.value) {
-    if (!tempStrategyPkgs.value.find(p => p.id === id)) {
-      const pkg = allPkgList.find(p => p.id === id)
-      if (pkg) tempStrategyPkgs.value.push({ ...pkg })
-    }
-  }
-  selectedPkgIds.value = []
-}
-
-const removeSelectedPkgs = () => {
-  tempStrategyPkgs.value = tempStrategyPkgs.value.filter(p => !selectedPkgIds.value.includes(p.id))
-  selectedPkgIds.value = []
-}
-
-const removeTempPkg = (pkgId) => {
-  tempStrategyPkgs.value = tempStrategyPkgs.value.filter(p => p.id !== pkgId)
-}
-
-const confirmAddPackages = () => {
-  if (currentPage.value === 'pkg-manage') {
-    for (const pkg of tempStrategyPkgs.value) {
-      if (!pkgManagePackages.value.find(p => p.id === pkg.id)) {
-        pkgManagePackages.value.push({ ...pkg, subType: '订阅制', enabled: true })
-      }
-    }
-    syncStrategyPkgCount()
-  } else {
-    for (const pkg of tempStrategyPkgs.value) {
-      if (!addForm.packages.find(p => p.id === pkg.id)) {
-        addForm.packages.push({ ...pkg })
-      }
-    }
-  }
-  addPkgVisible.value = false
 }
 
 // ===== Auto-expire check =====
@@ -1065,65 +768,6 @@ onUnmounted(() => {
   border-radius: 4px;
   color: var(--text-regular);
 }
-.pos-slot_banner { background: #2563EB; }
-.pos-slot_popup { background: #EA580C; }
-.pos-slot_floating { background: #16A34A; }
-
-// ===== Position Cards =====
-.position-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.pos-card {
-  border: 2px solid var(--gray-200);
-  border-radius: 10px;
-  padding: 14px 12px;
-  text-align: center;
-  cursor: pointer;
-  transition: all .2s;
-
-  &:hover { border-color: var(--gray-400); }
-
-  &.selected {
-    border-color: var(--primary-color);
-    background: var(--primary-light);
-  }
-
-  .pos-icon { font-size: 28px; margin-bottom: 6px; line-height: 1; }
-  .pos-name { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
-  .pos-code { font-size: 10px; color: var(--gray-400); font-family: monospace; margin-bottom: 2px; }
-  .pos-spec { font-size: 11px; color: var(--gray-400); }
-
-  &.selected {
-    .pos-name { color: var(--primary-color); }
-    .pos-code { color: var(--primary-color); opacity: 0.7; }
-    .pos-spec { color: var(--primary-color); }
-  }
-}
-
-// ===== Frequency Radio =====
-.freq-radio { display: flex; gap: 8px; }
-
-.freq-item {
-  padding: 8px 16px;
-  border: 1.5px solid var(--gray-200);
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: var(--font-sm);
-  color: var(--text-regular);
-  transition: all .15s;
-
-  &:hover { background: var(--bg-hover); }
-
-  &.active {
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-    background: var(--primary-light);
-  }
-}
-
 // ===== Date Row =====
 .date-row {
   display: flex;
@@ -1135,29 +779,6 @@ onUnmounted(() => {
 .date-sep { color: var(--gray-400); font-size: var(--font-md); flex-shrink: 0; }
 
 .form-error { color: var(--danger-color); font-size: var(--font-xs); margin-top: 4px; }
-
-// ===== Upload Zone =====
-.upload-zone {
-  width: 100%;
-}
-
-.upload-content {
-  padding: 16px;
-  text-align: center;
-}
-
-.upload-icon-el {
-  font-size: 32px;
-  color: var(--gray-400);
-  margin-bottom: 8px;
-}
-
-.upload-text { font-size: var(--font-sm); color: var(--text-secondary); }
-.upload-spec { font-size: var(--font-xs); color: var(--gray-400); margin-top: 4px; }
-
-// ===== Package Tags =====
-.pkg-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.pkg-tag-item { margin-bottom: 4px; }
 
 // ===== Package Management =====
 .pkg-manage-header {
@@ -1173,51 +794,6 @@ onUnmounted(() => {
 .pkg-manage-subtitle { font-size: var(--font-xs); color: var(--text-secondary); margin-top: 2px; }
 .pkg-count { color: var(--primary-color); font-weight: 600; }
 
-.pkg-info-cell {
-  .pkg-info-name { font-weight: 500; color: var(--text-primary); }
-  .pkg-info-id { font-size: var(--font-xs); color: var(--gray-400); margin-top: 2px; }
-}
-
-.price-cell { font-weight: 500; }
-
-// ===== Drag Handle =====
-.drag-handle {
-  cursor: grab;
-  display: inline-grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-  padding: 4px;
-  border-radius: 4px;
-  transition: all .15s;
-  user-select: none;
-
-  &:hover { background: var(--primary-light); }
-  &.drag-active { cursor: grabbing; background: var(--primary-light); }
-}
-
-.drag-dot {
-  display: block;
-  width: 4px;
-  height: 4px;
-  border-radius: 1px;
-  background: var(--primary-color);
-  font-style: normal;
-}
-
-// Drag row visual states
-:deep(.row-dragging) {
-  opacity: 0.5;
-  background: var(--primary-light) !important;
-
-  td { border-bottom: 2px dashed var(--primary-color) !important; }
-}
-
-:deep(.row-drag-over) {
-  td {
-    border-top: 3px solid var(--primary-color) !important;
-  }
-}
-
 // ===== Review =====
 .review-body { padding: 0; }
 
@@ -1232,14 +808,6 @@ onUnmounted(() => {
 .review-value {
   font-size: var(--font-md);
   color: var(--text-primary);
-}
-
-// ===== Transfer =====
-.transfer-selected-count {
-  font-weight: 400;
-  color: var(--gray-400);
-
-  .count-num { color: var(--primary-color); font-weight: 600; }
 }
 
 // ===== Utilities =====

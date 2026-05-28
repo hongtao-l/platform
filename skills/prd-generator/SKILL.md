@@ -48,8 +48,67 @@
 - 每个实体的关键属性
 
 ## 四、核心业务流程
-- 主要业务流程的步骤描述
-- 可附流程图说明各节点和分支
+
+使用 **Mermaid 图表**直观展示核心业务流程，包含以下三种图：
+
+### 流程图（必选）
+展示业务节点和分支：
+
+```mermaid
+flowchart TD
+    A[用户操作] --> B{判断条件}
+    B -->|是| C[执行动作A]
+    B -->|否| D[执行动作B]
+    C --> E[结果]
+    D --> E
+```
+
+### 全局时序图（必选）
+展示全链路角色协作关系（运营/设计/开发/后台/APP等），体现从策划到上线的完整流程：
+
+```mermaid
+sequenceDiagram
+    participant OP as 运营
+    participant UI as UI设计
+    participant DEV as 开发
+    participant Admin as 管理后台
+    participant APP as APP端
+
+    OP->>OP: 策划方案
+    OP->>UI: 提出设计需求
+    UI-->>OP: 交付设计稿
+    OP->>DEV: 提供设计稿+需求
+    DEV-->>OP: 交付产物
+    OP->>Admin: 登录后台配置
+    Admin-->>OP: 配置完成
+    OP->>Admin: 发布
+    APP->>Admin: 拉取配置
+    Admin-->>APP: 返回数据
+    APP-->>OP: 终端展示
+```
+
+### 局部队列时序图（按需）
+聚焦单个子流程（如 APP 拉取→展示→点击→关闭），展示角色间的请求/响应交互顺序：
+
+```mermaid
+sequenceDiagram
+    participant U as 用户
+    participant A as APP
+    participant S as 后台服务
+    U->>A: 打开APP
+    A->>S: 请求数据
+    S-->>A: 返回数据
+    A-->>U: 展示页面
+    U->>A: 点击操作
+    A->>S: 提交请求
+    S-->>A: 返回结果
+    A-->>U: 展示结果
+```
+
+- 流程图说明各节点和分支
+- 全局时序图体现全链路业务协作
+- 局部队列时序图聚焦单个交互细节
+- 复杂流程可同时附三种图表
 
 ## 五、业务规则
 - 所有业务约束规则（如：数量限制、权限控制、状态流转）
