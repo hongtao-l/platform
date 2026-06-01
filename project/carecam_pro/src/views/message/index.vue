@@ -104,8 +104,8 @@ import { aiStatus, isDeviceActivated } from '@/store/devStatus'
 const router = useRouter()
 const searchText = ref('')
 const showDatePicker = ref(false)
-const selectedDate = ref(['2024', '04', '20'])
-const dateLabel = ref('4月20日')
+const selectedDate = ref(['2024', '04', '25'])
+const dateLabel = ref('4月25日')
 const showFilterPanel = ref(false)
 const deviceOptions = ['标准摄像机', '广角摄像机', '多目摄像机', '门铃', '一氧化碳探测器']
 const selectedDevice = ref('标准摄像机')

@@ -30,8 +30,9 @@
       </div>
     </div>
 
-    <!-- 活动横幅轮播 -->
+    <!-- 活动横幅轮播
     <ActivityBanner />
+    -->
 
     <!-- 设备列表 -->
     <div class="device-list">
@@ -113,8 +114,9 @@
       </div>
     </van-popup>
 
-    <!-- 活动悬浮按钮 -->
+    <!-- 活动悬浮按钮
     <ActivityFab />
+    -->
 
     <!-- 活动启动弹窗 -->
     <ActivityPopup />
@@ -183,36 +185,6 @@ const devices = ref([
     unreadCount: 1,
     bgGradient: 'linear-gradient(135deg, #1a1a1a, #333)',
     group: '客厅'
-  },
-  {
-    id: 'cam004',
-    name: '门铃',
-    status: 'online',
-    isShared: false,
-    cloudPlan: '',
-    unreadCount: 2,
-    bgGradient: 'linear-gradient(135deg, #1e1b0d, #4a3a1e)',
-    group: '入口'
-  },
-  {
-    id: 'cam005',
-    name: '一氧化碳探测器',
-    status: 'online',
-    isShared: false,
-    cloudPlan: 'Pro',
-    unreadCount: 0,
-    bgGradient: 'linear-gradient(135deg, #1e0d0d, #4a1e1e)',
-    group: '客厅'
-  },
-  {
-    id: 'cam006',
-    name: '红外对射',
-    status: 'sleep',
-    isShared: false,
-    cloudPlan: '',
-    unreadCount: 0,
-    bgGradient: 'linear-gradient(135deg, #0d1e1a, #1e4a3a)',
-    group: '后院'
   }
 ])
 

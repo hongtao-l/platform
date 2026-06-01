@@ -124,7 +124,9 @@ export const store = reactive({
   categories: JSON.parse(JSON.stringify(initialCategories)),
   modules: JSON.parse(JSON.stringify(initialModules)),
   capabilities: JSON.parse(JSON.stringify(initialCapabilities)),
-  categoryCaps: JSON.parse(JSON.stringify(initialCategoryCaps))
+  categoryCaps: JSON.parse(JSON.stringify(initialCategoryCaps)),
+  customModules: [],       // 企业自定义模块
+  customCapabilities: []   // 企业自定义能力
 })
 
 // ===== 类目操作 =====
@@ -232,6 +234,53 @@ export function isModuleIdentifierUnique(identifier, excludeModuleId) {
   for (const mod of store.modules) {
     if (excludeModuleId && mod.id === excludeModuleId) continue
     if (mod.identifier === identifier) return false
+  }
+  return true
+}
+
+// ===== 自定义模块操作 =====
+export function addCustomModule(item) {
+  store.customModules.push({ id: nextId(), name: item.name, identifier: item.identifier })
+}
+
+export function updateCustomModule(id, item) {
+  const mod = store.customModules.find(m => m.id === id)
+  if (mod) { mod.name = item.name; mod.identifier = item.identifier }
+}
+
+export function removeCustomModule(id) {
+  store.customModules = store.customModules.filter(m => m.id !== id)
+  store.customCapabilities = store.customCapabilities.filter(c => c.moduleId !== id)
+}
+
+export function isCustomModuleIdentifierUnique(identifier, excludeModuleId) {
+  for (const mod of store.customModules) {
+    if (excludeModuleId && mod.id === excludeModuleId) continue
+    if (mod.identifier === identifier) return false
+  }
+  return true
+}
+
+// ===== 自定义能力操作 =====
+export function addCustomCapability(item) {
+  const capId = nextId()
+  store.customCapabilities.push({ id: capId, moduleId: item.moduleId, capType: item.capType, name: item.name, identifier: item.identifier, descr: item.descr, dataDef: item.dataDef })
+  return capId
+}
+
+export function updateCustomCapability(capId, item) {
+  const cap = store.customCapabilities.find(c => c.id === capId)
+  if (cap) { cap.moduleId = item.moduleId; cap.capType = item.capType; cap.name = item.name; cap.identifier = item.identifier; cap.descr = item.descr; cap.dataDef = item.dataDef }
+}
+
+export function removeCustomCapability(capId) {
+  store.customCapabilities = store.customCapabilities.filter(c => c.id !== capId)
+}
+
+export function isCustomCapIdentifierUnique(identifier, excludeCapId) {
+  for (const cap of store.customCapabilities) {
+    if (excludeCapId && cap.id === excludeCapId) continue
+    if (cap.identifier === identifier) return false
   }
   return true
 }
