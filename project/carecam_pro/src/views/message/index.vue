@@ -50,10 +50,11 @@
       >
         <div class="msg-thumb" :style="{ background: msg.bgGradient }"></div>
         <div class="msg-content">
-          <div class="msg-type">{{ msg.type }}</div>
-          <div class="msg-device">{{ msg.deviceName }}</div>
-          <div class="msg-time">{{ msg.time }}</div>
-          <span :class="['msg-tag', 'tag-' + msg.tagType]">{{ msg.tag }}</span>
+          <div class="msg-summary">{{ msg.summary }}</div>
+          <div class="msg-meta">
+            <span :class="['msg-tag', 'tag-' + msg.tagType]">{{ msg.eventName }}</span>
+            <span class="msg-time">{{ msg.time }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -111,11 +112,11 @@ const deviceOptions = ['标准摄像机', '广角摄像机', '多目摄像机', 
 const selectedDevice = ref('标准摄像机')
 
 const messages = ref([
-  { id: 1, type: '奶奶出门散步', deviceName: '标准摄像机', time: '今天 09:20', tag: '老人看护', tagType: 'elder', bgGradient: 'linear-gradient(135deg, #0d2e1a, #1a5c34)', isFocus: true },
-  { id: 2, type: '猫咪在客厅跑酷', deviceName: '标准摄像机', time: '今天 09:38', tag: '宠物活动', tagType: 'pet', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: true },
-  { id: 3, type: '门口有人经过', deviceName: '标准摄像机', time: '今天 08:55', tag: '人员经过', tagType: 'person', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: true },
-  { id: 4, type: '声音告警', deviceName: '广角摄像机', time: '昨天 22:14', tag: '声音', tagType: 'sound', bgGradient: 'linear-gradient(135deg, #0d2e1a, #1a5c34)', isFocus: false },
-  { id: 5, type: '检测到车辆', deviceName: '标准摄像机', time: '昨天 20:02', tag: '车辆', tagType: 'vehicle', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: false }
+  { id: 1, summary: '奶奶从后门走出，身穿蓝色外套，手拿拐杖，状态正常', eventName: '老人看护', time: '今天 09:20', tagType: 'elder', bgGradient: 'linear-gradient(135deg, #0d2e1a, #1a5c34)', isFocus: true, deviceName: '标准摄像机' },
+  { id: 2, summary: '猫咪在客厅追逐玩具，活力充沛，持续约5分钟', eventName: '宠物活动', time: '今天 09:38', tagType: 'pet', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: true, deviceName: '标准摄像机' },
+  { id: 3, summary: '快递员在门口放置包裹后离开', eventName: '人员经过', time: '今天 08:55', tagType: 'person', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: true, deviceName: '标准摄像机' },
+  { id: 4, summary: '检测到异常响声，持续约3秒', eventName: '声音侦测', time: '昨天 22:14', tagType: 'sound', bgGradient: 'linear-gradient(135deg, #0d2e1a, #1a5c34)', isFocus: false, deviceName: '标准摄像机' },
+  { id: 5, summary: '一辆白色轿车驶入车道，停留约2分钟后离开', eventName: '车辆侦测', time: '昨天 20:02', tagType: 'vehicle', bgGradient: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)', isFocus: false, deviceName: '标准摄像机' }
 ])
 
 const msgFilterTabs = computed(() => {
@@ -145,7 +146,7 @@ const filteredMsgList = computed(() => {
   let list = messages.value
   if (searchText.value.trim()) {
     const kw = searchText.value.trim().toLowerCase()
-    list = list.filter(m => m.type.includes(kw) || m.deviceName.toLowerCase().includes(kw) || m.tag.includes(kw))
+    list = list.filter(m => m.eventName.includes(kw) || m.summary.includes(kw))
   }
   list = list.filter(m => m.deviceName === selectedDevice.value)
   if (activeMsgTab.value === 'other') {
@@ -178,15 +179,14 @@ const handleFocusClick = () => {
 
 // 消息点击跳转日报事件详情
 const goToMessageDetail = (msg) => {
-  const name = msg.type
   const msgs = [{
     time: msg.time,
-    text: msg.type,
-    device: msg.deviceName,
+    text: msg.summary,
+    eventName: msg.eventName,
     bg: msg.bgGradient
   }]
   const listStr = encodeURIComponent(JSON.stringify(msgs))
-  router.push('/ai/daily-event?name=' + encodeURIComponent(name) + '&list=' + listStr + '&index=0')
+  router.push('/ai/daily-event?name=' + encodeURIComponent(msg.eventName) + '&list=' + listStr + '&index=0')
 }
 
 const goToAiSearch = () => { router.push('/ai/search') }
@@ -206,13 +206,13 @@ const goToDaily = () => { router.push('/ai/daily') }
 .msg-tab { padding: 4px 14px; border-radius: 14px; font-size: 12px; font-weight: 500; color: $text-secondary; background: $bg-page; border: 1px solid $border-color; cursor: pointer; &.active { background: $primary-color; color: #fff; border-color: $primary-color; } }
 .msg-focus { flex-shrink: 0; padding: 4px 14px; margin: 6px 12px 6px 8px; border-radius: 14px; font-size: 12px; font-weight: 600; color: $primary-color; background: $primary-bg; border: 1px solid $primary-color; cursor: pointer; white-space: nowrap; }
 .msg-list { flex: 1; padding: 12px 16px 70px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
-.msg-item { background-color: $bg-card; border-radius: $radius-lg; padding: 12px; display: flex; gap: 12px; align-items: flex-start; box-shadow: $shadow-card; }
+.msg-item { background-color: $bg-card; border-radius: $radius-lg; padding: 12px; display: flex; gap: 12px; box-shadow: $shadow-card; cursor: pointer; &:active { transform: scale(0.98); } }
 .msg-thumb { width: 72px; height: 54px; border-radius: 10px; flex-shrink: 0; }
 .msg-content { flex: 1; }
-.msg-type { font-size: 13px; font-weight: 600; color: $text-primary; }
-.msg-device { font-size: 11px; color: $text-secondary; margin-top: 2px; }
-.msg-time { font-size: 11px; color: $text-secondary; margin-top: 3px; }
-.msg-tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; margin-top: 4px; &.tag-person { background-color: #DBEAFE; color: #1D4ED8; } &.tag-elder { background-color: #FEF3C7; color: #D97706; } &.tag-pet { background-color: #D1FAE5; color: #065F46; } &.tag-vehicle { background-color: #EDE9FE; color: #6D28D9; } &.tag-sound { background-color: #FCE4EC; color: #C62828; } }
+.msg-summary { font-size: 13px; font-weight: 500; color: $text-primary; line-height: 1.4; margin-bottom: 6px; }
+.msg-meta { display: flex; justify-content: space-between; align-items: center; }
+.msg-time { font-size: 11px; color: $text-secondary; }
+.msg-tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; &.tag-person { background-color: #DBEAFE; color: #1D4ED8; } &.tag-elder { background-color: #FEF3C7; color: #D97706; } &.tag-pet { background-color: #D1FAE5; color: #065F46; } &.tag-vehicle { background-color: #EDE9FE; color: #6D28D9; } &.tag-sound { background-color: #FCE4EC; color: #C62828; } }
 .bottom-actions { position: fixed; bottom: 70px; left: 0; right: 0; z-index: 10; background-color: #fff; border-top: 1px solid $border-color; padding: 10px 16px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 8px)); flex-shrink: 0; }
 .daily-btn { width: 100%; padding: 12px; border: none; border-radius: $radius-md; background: linear-gradient(135deg, #1A73E8, #9C27B0); color: #fff; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
 .filter-panel { padding: 16px; .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; span { font-size: 16px; font-weight: 700; color: $text-primary; } } .filter-section { .chips { display: flex; flex-wrap: wrap; gap: 8px; } .chip { padding: 8px 16px; border-radius: $radius-pill; font-size: 13px; font-weight: 500; border: 1.5px solid $border-color; color: $text-secondary; background-color: $bg-page; cursor: pointer; &.active { background-color: $primary-color; color: #fff; border-color: $primary-color; } } } }

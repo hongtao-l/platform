@@ -81,7 +81,13 @@
 **消息（Message）**
 - 摄像头检测到的事件记录
 - 分为关注事件（AI识别）和基础事件（运动/人形侦测）
-- 携带设备、时间、事件类型、标签等信息
+- 每条消息包含以下内容：
+
+| 字段 | 说明 | 示例 |
+|------|------|------|
+| 摘要描述 | AI 生成的事件一句话描述，概括画面中发生的内容 | 「检测到老人在客厅活动，步态平稳」 |
+| 事件名称 | 匹配的关注事件名称或基础事件名称 | 「老人看护」 |
+| 发生时间 | 事件发生的精确时间 | 「2026-06-03 18:42」 |
 
 ### 3.2 实体关系
 
@@ -315,6 +321,27 @@
 | 厨房守护 | 厨房异常烟雾、明火 |
 | 宠物守护 | 宠物乱拉乱尿、吃饭、喝水 |
 
+**默认关注事件多语言翻译**：
+
+| 语言 | 儿童守护 | Child Protection | 包裹送达 | Package Delivery | 厨房守护 | Kitchen Guard | 宠物守护 | Pet Guard |
+|------|------|------|------|------|------|------|------|------|
+| 中文简体 | 儿童守护 | 小孩哭喊、跌倒、出门 | 包裹送达 | 快递或者外卖送达 | 厨房守护 | 厨房异常烟雾、明火 | 宠物守护 | 宠物乱拉乱尿、吃饭、喝水 |
+| 英语 (en) | Child Protection | Child crying, falling, going out | Package Delivery | Express or food delivery arrived | Kitchen Guard | Abnormal kitchen smoke, open flame | Pet Guard | Pet peeing, pooping, eating, drinking |
+| 中文繁体 (zh-Hant) | 兒童守護 | 小孩哭喊、跌倒、出門 | 包裹送達 | 快遞或者外賣送達 | 廚房守護 | 廚房異常煙霧、明火 | 寵物守護 | 寵物亂拉亂尿、吃飯、喝水 |
+| 法语 (fr) | Protection Enfant | Enfant qui pleure, tombe, sort | Livraison Colis | Arrivée express ou livraison repas | Surveillance Cuisine | Fumée anormale, flamme nue | Surveillance Animaux | Animal qui urine, défèque, mange, boit |
+| 日语 (ja) | 子供見守り | 子供の泣き声、転倒、外出 | 荷物の配達 | 宅配便または出前が届く | キッチン見守り | キッチンの異常な煙、裸火 | ペット見守り | ペットの排泄、食事、飲水 |
+| 西班牙语 (es) | Protección Infantil | Niño llorando, cayendo, saliendo | Entrega Paquetes | Llegada de mensajería o comida | Vigilancia Cocina | Humo anormal, llama abierta | Vigilancia Mascotas | Mascota orinando, defecando, comiendo, bebiendo |
+| 韩语 (ko) | 어린이 보호 | 어린이 울음, 넘어짐, 외출 | 택배 배달 | 택배 또는 음식 배달 도착 | 주방 보호 | 주방 이상 연기, 화기 | 반려동물 보호 | 반려동물 배변, 식사, 음수 |
+| 德语 (de) | Kinderschutz | Kind weint, stürzt, geht hinaus | Paketzustellung | Express- oder Essenslieferung | Küchenschutz | Abnormaler Rauch, offenes Feuer | Haustierschutz | Haustier uriniert, kotet, frisst, trinkt |
+| 意大利语 (it) | Protezione Bambini | Bambino che piange, cade, esce | Consegna Pacchi | Arrivo corriere o cibo | Protezione Cucina | Fumo anomalo, fiamma libera | Protezione Animali | Animale che urina, defeca, mangia, beve |
+| 俄语 (ru) | Защита детей | Ребенок плачет, падает, выходит | Доставка посылок | Прибытие курьера или еды | Защита кухни | Аномальный дым, открытый огонь | Защита питомцев | Питомец мочится, испражняется, ест, пьет |
+| 葡萄牙语 (pt) | Proteção Infantil | Criança chorando, caindo, saindo | Entrega Encomendas | Chegada de entrega ou comida | Proteção Cozinha | Fumaça anormal, chama aberta | Proteção Pets | Animal urinando, defecando, comendo, bebendo |
+| 越南语 (vi) | Bảo Vệ Trẻ Em | Trẻ em khóc, ngã, ra ngoài | Giao Hàng | Giao hàng nhanh hoặc đồ ăn đến | Bảo Vệ Bếp | Khói bất thường, lửa trong bếp | Bảo Vệ Thú Cưng | Thú cưng đi vệ sinh, ăn, uống |
+| 泰语 (th) | การดูแลเด็ก | เด็กร้องไห้, หกล้ม, ออกไปข้างนอก | การจัดส่งพัสดุ | พัสดุหรืออาหารมาส่ง | การดูแลครัว | ควันผิดปกติ, เปลวไฟในครัว | การดูแลสัตว์เลี้ยง | สัตว์เลี้ยงขับถ่าย, กิน, ดื่ม |
+| 土耳其语 (tr) | Çocuk Koruma | Çocuk ağlaması, düşme, dışarı çıkma | Kargo Teslimatı | Kargo veya yemek teslimatı geldi | Mutfak Koruma | Anormal duman, açık alev | Evcil Hayvan Koruma | Evcil hayvan tuvalet, yemek, su içme |
+| 波斯语 (fa) | محافظت از کودک | گریه کودک، زمین خوردن، بیرون رفتن | تحویل بسته | رسیدن پیک یا غذای بیرون‌بر | محافظت از آشپزخانه | دود غیرعادی، شعله باز | محافظت از حیوان خانگی | ادرار و مدفوع، غذا خوردن، آب نوشیدن |
+| 印尼语 (id) | Perlindungan Anak | Anak menangis, jatuh, keluar rumah | Pengiriman Paket | Kurir atau pesanan makanan tiba | Perlindungan Dapur | Asap tidak normal, api terbuka | Perlindungan Hewan | Hewan pipis, pup, makan, minum |
+
 - 每个事件条目包含：事件名称、事件描述、启停开关、编辑按钮、删除按钮
 - "添加"按钮显示当前数量/上限（如"添加 4/10"）
 - 点击添加 → 弹出输入弹窗（关注名称 + 事件描述）
@@ -348,7 +375,7 @@
 
 **内容区 — 已激活设备**
 - 搜索前：显示"猜你想搜"推荐标签（如"奶奶今天出门了吗""猫咪上午在干嘛""门口有快递""晚上有人经过"），点击标签自动填入并搜索
-- 搜索后：显示"共找到 N 条相关事件"，结果列表（缩略图 + 事件类型 + 设备名 + 时间 + 描述）
+- 搜索后：显示"共找到 N 条相关事件"，结果列表每条消息包含：摘要描述、事件名称、发生时间
 - 搜索结果可点击进入事件详情
 
 **内容区 — 未激活设备**
@@ -453,6 +480,15 @@
 - 固定在标签栏右侧
 - 已激活设备 → 跳转全能AI配置页
 - 未激活设备 → 跳转服务介绍开通页
+
+**消息列表条目**
+- 每条消息展示：
+
+| 内容 | 位置 | 说明 |
+|------|------|------|
+| 摘要描述 | 第一行 | AI 生成的画面内容一句话描述 |
+| 事件名称 | 第二行左侧 | 匹配的关注事件或基础事件名称 |
+| 发生时间 | 第二行右侧 | 事件触发时间，格式 HH:mm（今日）或 MM-DD HH:mm（更早） |
 
 #### 交互说明
 - 切换设备：自动重置筛选标签为"全部"

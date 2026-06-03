@@ -75,9 +75,11 @@
         >
           <div class="result-thumb" :style="{ background: r.bg }"></div>
           <div class="result-info">
-            <div class="result-type">{{ r.type }}</div>
-            <div class="result-device">{{ r.device }} · {{ r.time }}</div>
-            <div class="result-desc">{{ r.desc }}</div>
+            <div class="result-summary">{{ r.summary }}</div>
+            <div class="result-meta">
+              <span class="result-event-name">{{ r.eventName }}</span>
+              <span class="result-time">{{ r.time }}</span>
+            </div>
           </div>
         </div>
         <div style="height:20px"></div>
@@ -121,17 +123,15 @@ const hasSearched = ref(false)
 
 const searchResults = ref([
   {
-    type: '👴 奶奶出门散步',
-    device: 'Backyard',
+    summary: '奶奶从后门走出，身穿蓝色外套，手拿拐杖，状态正常',
+    eventName: '老人看护',
     time: '今天 09:20',
-    desc: '奶奶从后门走出，身穿蓝色外套，手拿拐杖，状态正常',
     bg: 'linear-gradient(135deg, #0d2e1a, #1a5c34)'
   },
   {
-    type: '👴 奶奶回家',
-    device: 'Front Door',
+    summary: '奶奶回到家中，手里提着菜袋，看起来精神不错',
+    eventName: '老人看护',
     time: '今天 11:05',
-    desc: '奶奶回到家中，手里提着菜袋，看起来精神不错',
     bg: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)'
   }
 ])
@@ -156,15 +156,14 @@ const clearSearch = () => {
 }
 
 const openDetail = (r) => {
-  // 跳转到日报事件详情页面
   const msgs = [{
     time: r.time,
-    text: r.desc,
-    device: r.device,
+    text: r.summary,
+    eventName: r.eventName,
     bg: r.bg
   }]
   const listStr = encodeURIComponent(JSON.stringify(msgs))
-  router.push('/ai/daily-event?name=' + encodeURIComponent(r.type) + '&list=' + listStr + '&index=0')
+  router.push('/ai/daily-event?name=' + encodeURIComponent(r.eventName) + '&list=' + listStr + '&index=0')
 }
 </script>
 
@@ -204,9 +203,10 @@ const openDetail = (r) => {
 .result-item { background: $bg-card; border-radius: $radius-lg; padding: 12px; display: flex; gap: 12px; margin-bottom: 10px; box-shadow: $shadow-card; cursor: pointer; &:active { transform: scale(0.98); } }
 .result-thumb { width: 72px; height: 54px; border-radius: 10px; flex-shrink: 0; }
 .result-info { flex: 1; }
-.result-type { font-size: 13px; font-weight: 600; color: $text-primary; }
-.result-device { font-size: 11px; color: $text-secondary; margin-top: 2px; }
-.result-desc { font-size: 12px; color: $text-secondary; margin-top: 4px; line-height: 1.4; }
+.result-summary { font-size: 13px; font-weight: 500; color: $text-primary; line-height: 1.4; margin-bottom: 6px; }
+.result-meta { display: flex; justify-content: space-between; align-items: center; }
+.result-event-name { font-size: 11px; color: $primary-color; background: $primary-bg; padding: 2px 8px; border-radius: 10px; }
+.result-time { font-size: 11px; color: $text-secondary; }
 
 /* 空态 */
 .empty-hint { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
