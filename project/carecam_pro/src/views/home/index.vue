@@ -3,7 +3,10 @@
     <!-- 顶部栏 -->
     <div class="home-topbar">
       <div class="left">
-        <h2>我的家</h2>
+        <div class="title-row">
+          <h2>我的家</h2>
+          <span v-if="isCrossRegion" class="cross-region-icon" :title="t('crossRegionTip')">✈️</span>
+        </div>
         <p>{{ deviceStatusText }}</p>
       </div>
       <div class="right">
@@ -132,6 +135,8 @@ import { useRouter } from 'vue-router'
 import { isDeviceActivated } from '@/store/devStatus'
 import { resolveDeviceRoute } from '@/utils/deviceType'
 import { useActivityStore } from '@/store/activity'
+import { useRegion } from '@/composables/useRegion'
+import { t } from '@/utils/i18n'
 import ActivityBanner from '@/components/ActivityBanner.vue'
 import ActivityFab from '@/components/ActivityFab.vue'
 import ActivityPopup from '@/components/ActivityPopup.vue'
@@ -139,6 +144,7 @@ import ActivityDemoPanel from '@/components/ActivityDemoPanel.vue'
 
 const router = useRouter()
 const activityStore = useActivityStore()
+const { isCrossRegion } = useRegion()
 
 // 用户信息
 const userInitial = ref('J')
@@ -265,12 +271,24 @@ const goToMe = () => {
   border-bottom: 1px solid $border-color;
   
   .left {
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     h2 {
       font-size: 18px;
       font-weight: 700;
       color: $text-primary;
     }
-    
+
+    .cross-region-icon {
+      font-size: 14px;
+      cursor: help;
+      opacity: 0.8;
+    }
+
     p {
       font-size: 12px;
       color: $text-secondary;

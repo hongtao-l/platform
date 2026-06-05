@@ -3,6 +3,8 @@
     <!-- 主体：标签页 -->
     <el-tabs v-model="activeMainTab" class="main-tabs">
       <el-tab-pane label="标准能力" name="capability">
+        <el-tabs v-model="activeSubTab" class="sub-tabs">
+          <el-tab-pane label="能力池" name="pool">
         <div class="main-layout">
           <!-- 左栏：模块列表 -->
           <div class="module-sidebar">
@@ -89,6 +91,11 @@
             </div>
           </div>
         </div>
+          </el-tab-pane>
+          <el-tab-pane label="事件库" name="event">
+            <EventPanel />
+          </el-tab-pane>
+        </el-tabs>
       </el-tab-pane>
       <el-tab-pane label="自定义能力" name="custom">
         <div class="main-layout">
@@ -238,6 +245,8 @@
               <el-option label="数值型 (Int)" value="int" />
               <el-option label="布尔型 (Boolean)" value="boolean" />
               <el-option label="字符串 (String)" value="string" />
+              <el-option label="数组型 (Array)" value="array" />
+              <el-option label="结构体型 (Struct)" value="struct" />
             </el-select>
           </el-form-item>
           <el-form-item label="读写模式">
@@ -321,6 +330,58 @@
           </el-form-item>
           <el-form-item label="默认值">
             <el-input v-model="capForm.defaultVal" placeholder="请输入默认值" />
+          </el-form-item>
+        </template>
+
+        <!-- 数组型编辑器 -->
+        <template v-if="capForm.capType === 'prop' && capForm.dataType === 'array'">
+          <el-form-item label="元素类型" required>
+            <el-select v-model="capForm.elementType" style="width:100%">
+              <el-option label="Int (数字)" value="int" />
+              <el-option label="String (字符串)" value="string" />
+              <el-option label="Struct (结构体)" value="struct" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="最大长度" required>
+            <el-input-number v-model="capForm.arrayMaxLength" :min="1" :max="1000" style="width:150px" />
+          </el-form-item>
+          <template v-if="capForm.elementType === 'struct'">
+            <el-form-item label="元素结构体字段">
+              <div style="width:100%">
+                <div class="param-list">
+                  <div v-for="(f, i) in capForm.fields" :key="i" class="param-item">
+                    <div class="param-info">
+                      <span class="param-name">{{ f.name || '未命名' }}</span>
+                      <span class="param-meta">{{ f.identifier }} · {{ paramTypeLabel(f.dataType) }}</span>
+                    </div>
+                    <el-button size="small" text @click="openEditStructField(i)"><el-icon><Edit /></el-icon></el-button>
+                    <el-button size="small" text type="danger" @click="capForm.fields.splice(i, 1)"><el-icon><Delete /></el-icon></el-button>
+                  </div>
+                  <div v-if="!capForm.fields.length" class="param-empty">暂无字段</div>
+                </div>
+                <el-button size="small" style="margin-top:8px" @click="openAddStructField">+ 添加字段</el-button>
+              </div>
+            </el-form-item>
+          </template>
+        </template>
+
+        <!-- 结构体型编辑器 -->
+        <template v-if="capForm.capType === 'prop' && capForm.dataType === 'struct'">
+          <el-form-item label="结构体字段">
+            <div style="width:100%">
+              <div class="param-list">
+                <div v-for="(f, i) in capForm.fields" :key="i" class="param-item">
+                  <div class="param-info">
+                    <span class="param-name">{{ f.name || '未命名' }}</span>
+                    <span class="param-meta">{{ f.identifier }} · {{ paramTypeLabel(f.dataType) }}</span>
+                  </div>
+                  <el-button size="small" text @click="openEditStructField(i)"><el-icon><Edit /></el-icon></el-button>
+                  <el-button size="small" text type="danger" @click="capForm.fields.splice(i, 1)"><el-icon><Delete /></el-icon></el-button>
+                </div>
+                <div v-if="!capForm.fields.length" class="param-empty">暂无字段</div>
+              </div>
+              <el-button size="small" style="margin-top:8px" @click="openAddStructField">+ 添加字段</el-button>
+            </div>
           </el-form-item>
         </template>
 
@@ -414,6 +475,7 @@
             <el-option label="String (字符串)" value="string" />
             <el-option label="Boolean (布尔)" value="boolean" />
             <el-option label="Enum (枚举)" value="enum" />
+            <el-option label="Array (数组)" value="array" />
           </el-select>
         </el-form-item>
 
@@ -487,6 +549,22 @@
             <el-input v-model="paramForm.defaultVal" placeholder="请输入默认枚举值的 Value" />
           </el-form-item>
         </template>
+
+        <!-- Array 定义 -->
+        <template v-if="paramForm.dataType === 'array'">
+          <el-form-item label="元素类型" required>
+            <el-select v-model="paramForm.elementType" style="width:100%">
+              <el-option label="Int (数字)" value="int" />
+              <el-option label="String (字符串)" value="string" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="最大长度">
+            <el-input-number v-model="paramForm.arrayMaxLength" :min="1" :max="1000" style="width:150px" />
+          </el-form-item>
+          <el-form-item label="默认值">
+            <el-input v-model="paramForm.defaultVal" placeholder="请输入默认值（逗号分隔）" />
+          </el-form-item>
+        </template>
       </el-form>
       <template #footer>
         <el-button @click="paramDialogVisible = false">取消</el-button>
@@ -500,6 +578,9 @@
 import { ref, reactive, computed, watch } from 'vue'
 import { Plus, Edit, Delete } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import EventPanel from './EventPanel.vue'
+
+const activeSubTab = ref('pool')
 import {
   store, addModule, updateModule, removeModule,
   addCapability, updateCapability, removeCapability,
@@ -628,7 +709,7 @@ function paramTypeLabel(t) { return paramTypeMap[t] || t }
 
 function dataTypeLabel(cap) {
   if (cap.capType === 'prop') {
-    const m = { enum: '枚举型', int: '数值型', boolean: '布尔型', string: '字符串' }
+    const m = { enum: '枚举型', int: '数值型', boolean: '布尔型', string: '字符串', array: '数组型', struct: '结构体型' }
     return m[cap.dataDef.dataType] || ''
   }
   if (cap.capType === 'svc') return '服务'
@@ -653,6 +734,13 @@ function dataDefDetail(cap) {
     }
     if (dd.dataType === 'string') {
       return `最大${dd.limit || dd.maxLength || 64}字节`
+    }
+    if (dd.dataType === 'array') {
+      const et = { int: 'Int', string: 'String', struct: 'Struct' }[dd.elementType] || dd.elementType || '—'
+      return `元素${et}, 最大${dd.maxLength || 100}项`
+    }
+    if (dd.dataType === 'struct') {
+      return `${(dd.fields || []).length} 个字段`
     }
   }
   if (cap.capType === 'svc') {
@@ -697,6 +785,7 @@ const capForm = reactive({
   min: 0, max: 100, step: 1, unit: '',
   trueLabel: '开启', falseLabel: '关闭',
   maxLength: 64,
+  elementType: 'int', arrayMaxLength: 100, fields: [],
   eventType: 'alarm',
   inputParams: [], outputParams: []
 })
@@ -708,8 +797,8 @@ function resetCapForm() {
   capForm.enumValues = [{ name: '', val: 0 }]; capForm.defaultVal = ''
   capForm.min = 0; capForm.max = 100; capForm.step = 1; capForm.unit = ''
   capForm.trueLabel = '开启'; capForm.falseLabel = '关闭'
-  capForm.maxLength = 64; capForm.eventType = 'alarm'
-  capForm.inputParams = []; capForm.outputParams = []
+  capForm.maxLength = 64; capForm.elementType = 'int'; capForm.arrayMaxLength = 100; capForm.fields = []
+  capForm.eventType = 'alarm'; capForm.inputParams = []; capForm.outputParams = []
 }
 
 function onCapTypeChange(type) {
@@ -732,7 +821,7 @@ function resetDataDefForType() {
     capForm.enumValues = [{ name: '', val: 0 }]; capForm.defaultVal = ''
     capForm.min = 0; capForm.max = 100; capForm.step = 1; capForm.unit = ''
     capForm.trueLabel = '开启'; capForm.falseLabel = '关闭'
-    capForm.maxLength = 64
+    capForm.maxLength = 64; capForm.elementType = 'int'; capForm.arrayMaxLength = 100; capForm.fields = []
   } else if (capForm.capType === 'svc') {
     capForm.inputParams = []; capForm.outputParams = []
   } else {
@@ -760,6 +849,8 @@ function openEditCapability(cap) {
     capForm.min = dd.min || 0; capForm.max = dd.max || 100; capForm.step = dd.step || 1; capForm.unit = dd.unit || ''
     capForm.trueLabel = dd.trueLabel || '开启'; capForm.falseLabel = dd.falseLabel || '关闭'
     capForm.maxLength = dd.limit || 64
+    capForm.elementType = dd.elementType || 'int'; capForm.arrayMaxLength = dd.maxLength || 100
+    capForm.fields = dd.fields ? JSON.parse(JSON.stringify(dd.fields)) : []
   } else if (cap.capType === 'svc') {
     capForm.inputParams = JSON.parse(JSON.stringify(dd.inputParams || []))
     capForm.outputParams = JSON.parse(JSON.stringify(dd.outputParams || []))
@@ -855,6 +946,11 @@ function buildDataDef() {
       dd.trueLabel = capForm.trueLabel; dd.falseLabel = capForm.falseLabel
     } else if (capForm.dataType === 'string') {
       dd.limit = capForm.maxLength
+    } else if (capForm.dataType === 'array') {
+      dd.elementType = capForm.elementType; dd.maxLength = capForm.arrayMaxLength
+      if (capForm.elementType === 'struct') dd.fields = capForm.fields.filter(f => f.name.trim())
+    } else if (capForm.dataType === 'struct') {
+      dd.fields = capForm.fields.filter(f => f.name.trim())
     }
     return dd
   }
@@ -874,7 +970,7 @@ const paramForm = reactive({
   name: '', identifier: '', dataType: 'boolean',
   defaultVal: '',
   min: 0, max: 100, step: 1, unit: '',
-  maxLength: 64,
+  maxLength: 64, elementType: 'int', arrayMaxLength: 10,
   trueLabel: '是', falseLabel: '否',
   enumValues: [{ name: '', val: 0 }]
 })
@@ -883,7 +979,7 @@ function resetParamForm() {
   paramForm.name = ''; paramForm.identifier = ''; paramForm.dataType = 'boolean'
   paramForm.defaultVal = ''
   paramForm.min = 0; paramForm.max = 100; paramForm.step = 1; paramForm.unit = ''
-  paramForm.maxLength = 64
+  paramForm.maxLength = 64; paramForm.elementType = 'int'; paramForm.arrayMaxLength = 10
   paramForm.trueLabel = '是'; paramForm.falseLabel = '否'
   paramForm.enumValues = [{ name: '', val: 0 }]
 }
@@ -893,6 +989,7 @@ function onParamDataTypeChange() {
 }
 
 const paramDialogTitle = computed(() => {
+  if (editingParamTarget.value === 'field') return editingParamIdx.value >= 0 ? '编辑结构体字段' : '添加结构体字段'
   const prefix = editingParamTarget.value === 'input' ? '输入' : '输出'
   return editingParamIdx.value >= 0 ? `编辑${prefix}参数` : `添加${prefix}参数`
 })
@@ -914,6 +1011,11 @@ function openEditParam(target, idx) {
     paramForm.min = 0; paramForm.max = 100; paramForm.step = 1; paramForm.unit = ''
   }
   paramForm.maxLength = p.maxLength || 64
+  if (p.dataType === 'array') {
+    paramForm.elementType = p.elementType || 'int'; paramForm.arrayMaxLength = p.maxLength || 10
+  } else {
+    paramForm.elementType = 'int'; paramForm.arrayMaxLength = 10
+  }
   paramForm.trueLabel = p.trueLabel || '是'; paramForm.falseLabel = p.falseLabel || '否'
   paramForm.enumValues = p.enumValues ? JSON.parse(JSON.stringify(p.enumValues)) : [{ name: '', val: 0 }]
   paramDialogVisible.value = true
@@ -934,6 +1036,8 @@ function buildParam() {
     p.trueLabel = paramForm.trueLabel; p.falseLabel = paramForm.falseLabel
   } else if (paramForm.dataType === 'enum') {
     p.enumValues = paramForm.enumValues.filter(ev => ev.name.trim())
+  } else if (paramForm.dataType === 'array') {
+    p.elementType = paramForm.elementType; p.maxLength = paramForm.arrayMaxLength
   }
   return p
 }
@@ -942,14 +1046,47 @@ function handleParamConfirm() {
   if (!paramForm.name.trim() || !paramForm.identifier.trim()) {
     ElMessage.warning('请填写完整参数信息'); return
   }
-  const key = editingParamTarget.value + 'Params'
   const param = buildParam()
-  if (editingParamIdx.value >= 0) {
-    capForm[key][editingParamIdx.value] = param
+  if (editingParamTarget.value === 'field') {
+    if (editingParamIdx.value >= 0) {
+      capForm.fields[editingParamIdx.value] = param
+    } else {
+      capForm.fields.push(param)
+    }
   } else {
-    capForm[key].push(param)
+    const key = editingParamTarget.value + 'Params'
+    if (editingParamIdx.value >= 0) {
+      capForm[key][editingParamIdx.value] = param
+    } else {
+      capForm[key].push(param)
+    }
   }
   paramDialogVisible.value = false
+}
+
+function openAddStructField() {
+  editingParamTarget.value = 'field'; editingParamIdx.value = -1
+  resetParamForm()
+  paramDialogVisible.value = true
+}
+
+function openEditStructField(idx) {
+  editingParamTarget.value = 'field'; editingParamIdx.value = idx
+  const f = capForm.fields[idx]
+  paramForm.name = f.name; paramForm.identifier = f.identifier; paramForm.dataType = f.dataType || 'boolean'
+  paramForm.defaultVal = f.defaultVal || ''
+  if (f.dataType === 'int') {
+    paramForm.min = f.min || 0; paramForm.max = f.max || 100; paramForm.step = f.step || 1; paramForm.unit = f.unit || ''
+  }
+  paramForm.maxLength = f.maxLength || 64
+  if (f.dataType === 'array') {
+    paramForm.elementType = f.elementType || 'int'; paramForm.arrayMaxLength = f.maxLength || 10
+  } else {
+    paramForm.elementType = 'int'; paramForm.arrayMaxLength = 10
+  }
+  paramForm.trueLabel = f.trueLabel || '是'; paramForm.falseLabel = f.falseLabel || '否'
+  paramForm.enumValues = f.enumValues ? JSON.parse(JSON.stringify(f.enumValues)) : [{ name: '', val: 0 }]
+  paramDialogVisible.value = true
 }
 </script>
 
@@ -972,6 +1109,20 @@ function handleParamConfirm() {
   }
   :deep(.el-tab-pane) {
     height: 100%;
+  }
+}
+
+.sub-tabs {
+  height: 100%;
+  :deep(.el-tabs__header) {
+    margin: 0;
+    padding: 0 24px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-lighter);
+  }
+  :deep(.el-tabs__content) {
+    flex: 1;
+    overflow: hidden;
   }
 }
 

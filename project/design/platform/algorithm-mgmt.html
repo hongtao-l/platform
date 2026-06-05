@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>算法管理 - 生态平台</title>
+<style>
+:root {
+  --primary: #2563EB; --primary-hover: #1D4ED8; --primary-light: #EFF6FF;
+  --gray-900: #0F172A; --gray-700: #334155; --gray-500: #64748B;
+  --gray-400: #94A3B8; --gray-200: #E2E8F0; --gray-100: #F1F5F9;
+  --gray-50: #F8FAFC; --white: #FFFFFF;
+  --success: #16A34A; --success-light: #F0FDF4;
+  --warning: #D97706; --warning-light: #FFFBEB;
+  --danger: #DC2626; --danger-light: #FEF2F2;
+  --info: #0284C7; --info-light: #F0F9FF;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; font-size: 14px; color: var(--gray-700); background: var(--gray-50); display: flex; height: 100vh; overflow: hidden; }
+
+/* Sidebar */
+.sidebar { width: 240px; background: var(--white); border-right: 1px solid var(--gray-200); display: flex; flex-direction: column; flex-shrink: 0; height: 100vh; }
+.sidebar-logo { height: 64px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--gray-200); gap: 10px; }
+.logo-icon { width: 32px; height: 32px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.logo-text { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+.sidebar-nav { padding: 12px 8px; flex: 1; overflow-y: auto; }
+.nav-section-title { font-size: 11px; font-weight: 500; color: var(--gray-400); padding: 8px 12px 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 0 12px; height: 36px; border-radius: 6px; cursor: pointer; color: var(--gray-500); font-size: 14px; transition: all 0.15s; margin-bottom: 2px; }
+.nav-item:hover { background: var(--gray-100); color: var(--gray-700); }
+.nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 500; }
+.nav-sub .nav-item { font-size: 13px; height: 32px; padding-left: 36px; }
+
+/* Main */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.page-header { height: 56px; background: var(--white); border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; padding: 0 32px; flex-shrink: 0; }
+.breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gray-500); }
+.breadcrumb .current { color: var(--gray-900); font-weight: 500; }
+.content { flex: 1; overflow-y: auto; padding: 24px 32px; }
+
+/* Tabs */
+.tabs { display: flex; border-bottom: 1px solid var(--gray-200); padding: 0 24px; background: var(--white); }
+.tab { padding: 0 16px; height: 44px; display: flex; align-items: center; font-size: 14px; color: var(--gray-500); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; white-space: nowrap; }
+.tab:hover { color: var(--gray-700); }
+.tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 500; }
+
+/* Card & Table */
+.card { background: var(--white); border: 1px solid var(--gray-200); border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.card-header { padding: 16px 20px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; }
+.card-title { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: var(--gray-50); }
+th { padding: 0 16px; height: 40px; text-align: left; font-size: 12px; font-weight: 500; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid var(--gray-200); white-space: nowrap; }
+td { padding: 0 16px; height: 44px; border-bottom: 1px solid var(--gray-100); font-size: 14px; color: var(--gray-700); }
+tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--gray-50); }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; border: none; transition: all 0.15s; white-space: nowrap; }
+.btn-sm { height: 30px; padding: 0 10px; font-size: 13px; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-primary:disabled { background: var(--gray-200); color: var(--gray-400); cursor: not-allowed; }
+.btn-secondary { background: var(--white); color: var(--gray-700); border: 1px solid var(--gray-200); }
+.btn-secondary:hover { background: var(--gray-50); }
+.btn-ghost { background: transparent; color: var(--primary); }
+.btn-ghost:hover { background: var(--primary-light); }
+.btn-danger-ghost { background: transparent; color: var(--danger); border: none; }
+.btn-danger-ghost:hover { background: var(--danger-light); }
+.btn-xs { height: 26px; padding: 0 8px; font-size: 12px; }
+
+/* Badges */
+.badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+.badge-info { background: var(--info-light); color: var(--info); }
+.badge-neutral { background: var(--gray-100); color: var(--gray-500); }
+.badge-success { background: var(--success-light); color: var(--success); }
+.badge-warning { background: var(--warning-light); color: var(--warning); }
+
+/* Form */
+.input { height: 36px; border: 1px solid var(--gray-200); border-radius: 6px; padding: 0 12px; font-size: 14px; color: var(--gray-700); background: var(--white); outline: none; width: 100%; }
+.input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
+.input:disabled { background: var(--gray-50); color: var(--gray-500); cursor: not-allowed; }
+.select { height: 36px; border: 1px solid var(--gray-200); border-radius: 6px; padding: 0 32px 0 12px; font-size: 14px; color: var(--gray-700); background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center; outline: none; width: 100%; cursor: pointer; appearance: none; }
+.select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
+textarea.input { height: auto; padding: 8px 12px; resize: vertical; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; line-height: 1.5; }
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 13px; font-weight: 500; color: var(--gray-700); margin-bottom: 6px; }
+.required { color: var(--danger); margin-left: 2px; }
+.form-error { font-size: 12px; color: var(--danger); margin-top: 4px; display: none; }
+.form-error.show { display: block; }
+.input.error, .select.error { border-color: var(--danger); }
+.form-hint { font-size: 11px; color: var(--gray-400); margin-top: 4px; }
+.section-title { font-size: 11px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; margin-top: 20px; }
+.section-title:first-child { margin-top: 0; }
+
+/* Drawer */
+.drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; display: none; }
+.drawer-overlay.show { display: block; }
+.drawer { position: fixed; top: 0; right: 0; height: 100vh; background: var(--white); box-shadow: -20px 0 60px rgba(0,0,0,0.15); z-index: 101; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.25s ease; }
+.drawer.show { transform: translateX(0); }
+.drawer-header { height: 56px; padding: 0 24px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.drawer-title { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+.drawer-body { flex: 1; overflow-y: auto; padding: 24px; }
+.drawer-footer { height: 56px; padding: 0 24px; border-top: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-shrink: 0; }
+.close-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; cursor: pointer; color: var(--gray-500); border: none; background: transparent; }
+.close-btn:hover { background: var(--gray-100); }
+
+/* Capability checkboxes */
+.cap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cap-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; color: var(--gray-700); transition: background 0.15s; }
+.cap-item:hover { background: var(--gray-50); }
+.cap-item input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; accent-color: var(--primary); }
+
+/* DetectType sub-table */
+.sub-table { width: 100%; border: 1px solid var(--gray-200); border-radius: 6px; overflow: hidden; margin-top: 8px; }
+.sub-table table { margin: 0; }
+.sub-table th { height: 32px; font-size: 11px; background: var(--gray-50); }
+.sub-table td { height: 36px; font-size: 13px; }
+.sub-table .input { height: 30px; font-size: 13px; border-radius: 4px; }
+
+/* Shuttle / Transfer */
+.shuttle { display: flex; gap: 12px; align-items: stretch; }
+.shuttle-panel { flex: 1; border: 1px solid var(--gray-200); border-radius: 6px; display: flex; flex-direction: column; min-height: 200px; max-height: 260px; }
+.shuttle-panel-header { padding: 8px 12px; border-bottom: 1px solid var(--gray-200); font-size: 12px; font-weight: 500; color: var(--gray-500); background: var(--gray-50); flex-shrink: 0; }
+.shuttle-panel-body { flex: 1; overflow-y: auto; padding: 4px 0; }
+.shuttle-item { display: flex; align-items: center; gap: 8px; padding: 6px 12px; cursor: pointer; font-size: 13px; transition: background 0.1s; }
+.shuttle-item:hover { background: var(--gray-50); }
+.shuttle-item input[type="checkbox"] { width: 14px; height: 14px; cursor: pointer; accent-color: var(--primary); }
+.shuttle-item.selected { background: var(--primary-light); }
+.shuttle-search { padding: 8px 12px; border-bottom: 1px solid var(--gray-100); }
+
+/* Pagination */
+.pagination { padding: 12px 20px; border-top: 1px solid var(--gray-100); display: flex; align-items: center; justify-content: space-between; }
+.pagination-info { font-size: 13px; color: var(--gray-500); }
+.pagination-btns { display: flex; gap: 4px; }
+
+/* Empty state */
+.empty-state { padding: 48px 24px; text-align: center; color: var(--gray-400); }
+.empty-state p { font-size: 14px; margin-top: 12px; }
+
+/* Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; display: none; }
+.modal-overlay.show { display: block; }
+.modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.95); background: var(--white); border-radius: 10px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); z-index: 201; display: none; flex-direction: column; opacity: 0; transition: all 0.2s ease; }
+.modal.show { display: flex; opacity: 1; transform: translate(-50%,-50%) scale(1); }
+.modal-header { height: 56px; padding: 0 24px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.modal-title { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+.modal-body { padding: 24px; overflow-y: auto; }
+.modal-footer { height: 56px; padding: 0 24px; border-top: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-shrink: 0; }
+
+/* Toast */
+.toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 300; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 500; box-shadow: 0 4px 16px rgba(0,0,0,0.12); display: none; }
+.toast.show { display: block; animation: toastIn 0.3s ease; }
+.toast-success { background: var(--success); color: white; }
+.toast-error { background: var(--danger); color: white; }
+@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+/* Unsaved confirm */
+.unsaved-toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 250; background: var(--white); border-radius: 8px; padding: 20px 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.18); display: none; flex-direction: column; gap: 12px; min-width: 320px; }
+.unsaved-toast.show { display: flex; }
+.unsaved-toast p { font-size: 14px; color: var(--gray-700); }
+.unsaved-toast-btns { display: flex; justify-content: flex-end; gap: 8px; }
+
+/* Page view */
+.page-view { display: none; }
+.page-view.active { display: flex; flex-direction: column; height: 100%; }
+
+/* Multilingual input */
+.lang-input-group { display: flex; gap: 8px; align-items: flex-start; }
+.lang-select { width: 130px; flex-shrink: 0; }
+.lang-input-wrapper { flex: 1; }
+
+/* Pill tags */
+.pill-list { display: flex; gap: 4px; flex-wrap: wrap; }
+.pill { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 500; background: var(--info-light); color: var(--info); }
+.pill-more { background: var(--gray-100); color: var(--gray-500); cursor: pointer; }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+    <span class="logo-text">生态平台</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">设备管理</div>
+    <div class="nav-item" id="nav-device" onclick="showPage('device-list')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      设备列表
+    </div>
+    <div class="nav-item" id="nav-firmware" onclick="showPage('device-list')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      固件管理
+    </div>
+    <div class="nav-item active" id="nav-algorithm" onclick="showPage('algorithm-mgmt')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      算法管理
+    </div>
+  </nav>
+</aside>
+
+<main class="main">
+
+<!-- PAGE: 算法管理 -->
+<div id="page-algorithm-mgmt" class="page-view active">
+  <div class="page-header"><div class="breadcrumb"><span class="current">算法管理</span></div></div>
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active" onclick="switchAlgorithmTab('tab-algorithm', this)">算法库</div>
+      <div class="tab" onclick="switchAlgorithmTab('tab-event', this)">事件库</div>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:24px 32px">
+
+      <!-- ========== TAB: 算法库 ========== -->
+      <div id="tab-algorithm" style="display:block">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">算法列表</span>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div style="position:relative">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--gray-400)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input class="input" placeholder="搜索 AlgorithmID / 名称" style="width:240px;padding-left:34px" oninput="filterAlgoTable(this.value)">
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="openAlgoDrawer('add')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                添加算法
+              </button>
+            </div>
+          </div>
+          <div id="algo-table-wrap">
+            <table>
+              <thead><tr><th>AlgorithmID</th><th>图标</th><th>算法名称</th><th>能力标签</th><th>关联事件</th><th>引用设备</th><th>操作</th></tr></thead>
+              <tbody id="algo-tbody"></tbody>
+            </table>
+            <div id="algo-empty" class="empty-state" style="display:none">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--gray-300)"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+              <p>暂无算法，点击添加</p>
+              <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="openAlgoDrawer('add')">添加算法</button>
+            </div>
+          </div>
+          <div class="pagination">
+            <span class="pagination-info" id="algo-pagination-info">共 <b id="algo-total">0</b> 条记录</span>
+            <div class="pagination-btns">
+              <button class="btn btn-sm btn-secondary" disabled>上一页</button>
+              <button class="btn btn-sm btn-primary">1</button>
+              <button class="btn btn-sm btn-secondary" disabled>下一页</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== TAB: 事件库 ========== -->
+      <div id="tab-event" style="display:none">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">事件列表</span>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div style="position:relative">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--gray-400)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input class="input" placeholder="搜索 EventID / 名称" style="width:240px;padding-left:34px" oninput="filterEventTable(this.value)">
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="openEventDrawer('add')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                添加事件
+              </button>
+            </div>
+          </div>
+          <div id="event-table-wrap">
+            <table>
+              <thead><tr><th>EventID</th><th>事件名称</th><th>备注</th><th>推送文案</th><th>引用算法数</th><th>操作</th></tr></thead>
+              <tbody id="event-tbody"></tbody>
+            </table>
+            <div id="event-empty" class="empty-state" style="display:none">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--gray-300)"><path d="M13 2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+              <p>暂无事件，点击添加</p>
+              <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="openEventDrawer('add')">添加事件</button>
+            </div>
+          </div>
+          <div class="pagination">
+            <span class="pagination-info" id="event-pagination-info">共 <b id="event-total">0</b> 条记录</span>
+            <div class="pagination-btns">
+              <button class="btn btn-sm btn-secondary" disabled>上一页</button>
+              <button class="btn btn-sm btn-primary">1</button>
+              <button class="btn btn-sm btn-secondary" disabled>下一页</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- ========== DRAWER: 算法编辑 ========== -->
+<div class="drawer-overlay" id="overlay-drawer-algorithm" onclick="confirmCloseAlgoDrawer()"></div>
+<div class="drawer" id="drawer-algorithm" style="width:720px">
+  <div class="drawer-header">
+    <span class="drawer-title" id="algo-drawer-title">添加算法</span>
+    <button class="close-btn" onclick="confirmCloseAlgoDrawer()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <!-- 基本信息 -->
+    <div class="section-title">基本信息</div>
+    <div class="form-group">
+      <label class="form-label">AlgorithmID <span class="required">*</span></label>
+      <input class="input" id="algo-id" placeholder="PascalCase，如 motion_detection">
+      <div class="form-error" id="algo-id-error">此项为必填项</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">算法名称（中文） <span class="required">*</span></label>
+      <div class="lang-input-group">
+        <select class="select lang-select" id="algo-name-lang">
+          <option value="zh">中文简体</option>
+          <option value="en">English</option>
+          <option value="ja">日本語</option>
+          <option value="ko">한국어</option>
+        </select>
+        <div class="lang-input-wrapper">
+          <input class="input" id="algo-name-zh" placeholder="请输入中文名称">
+        </div>
+      </div>
+      <div class="form-error" id="algo-name-error">至少填写中文名称</div>
+    </div>
+    <div style="display:flex;gap:16px">
+      <div class="form-group" style="flex:1">
+        <label class="form-label">图标</label>
+        <input class="input" id="algo-icon" placeholder="icon name 或 URL">
+      </div>
+      <div class="form-group" style="width:120px">
+        <label class="form-label">排序</label>
+        <input class="input" type="number" id="algo-sort" placeholder="0" value="0">
+      </div>
+    </div>
+
+    <!-- 能力配置 -->
+    <div class="section-title">能力配置</div>
+    <div class="cap-grid">
+      <label class="cap-item"><input type="checkbox" id="cap-switch" checked> 开关</label>
+      <label class="cap-item"><input type="checkbox" id="cap-sensitivity"> 灵敏度</label>
+      <label class="cap-item"><input type="checkbox" id="cap-schedule"> 定时侦测</label>
+      <label class="cap-item"><input type="checkbox" id="cap-detectarea" checked> 自定义侦测区域</label>
+      <label class="cap-item"><input type="checkbox" id="cap-soundalarm"> 声音告警</label>
+      <label class="cap-item"><input type="checkbox" id="cap-alarmrepeat"> 告警循环次数</label>
+      <label class="cap-item"><input type="checkbox" id="cap-customaudio"> 自定义音频</label>
+      <label class="cap-item"><input type="checkbox" id="cap-lightalarm"> 灯光告警</label>
+    </div>
+    <div style="margin-top:12px">
+      <label class="cap-item" style="display:inline-flex">
+        <input type="checkbox" id="cap-detecttype" onchange="toggleDetectType()"> 侦测类型（子类型配置）
+      </label>
+      <div id="detecttype-config" style="display:none">
+        <div class="sub-table">
+          <table>
+            <thead><tr><th style="width:40%">Key</th><th style="width:40%">Value（中文）</th><th style="width:20%">操作</th></tr></thead>
+            <tbody id="detecttype-tbody"></tbody>
+          </table>
+        </div>
+        <button class="btn btn-xs btn-secondary" style="margin-top:8px" onclick="addDetectTypeRow()">+ 添加子类型</button>
+      </div>
+    </div>
+
+    <!-- 关联事件 -->
+    <div class="section-title">关联事件</div>
+    <div class="shuttle">
+      <div class="shuttle-panel">
+        <div class="shuttle-panel-header">可选事件</div>
+        <div class="shuttle-search">
+          <input class="input" placeholder="搜索事件..." style="height:30px;font-size:13px" oninput="filterShuttleLeft(this.value)">
+        </div>
+        <div class="shuttle-panel-body" id="shuttle-left"></div>
+      </div>
+      <div class="shuttle-panel">
+        <div class="shuttle-panel-header">已选事件 (<span id="shuttle-right-count">0</span>)</div>
+        <div class="shuttle-panel-body" id="shuttle-right"></div>
+      </div>
+    </div>
+
+    <!-- 扩展属性 -->
+    <div class="section-title">扩展属性（JSON）</div>
+    <div class="form-group" style="margin-bottom:0">
+      <textarea class="input" id="algo-extended" rows="4" placeholder='{ "StatLine": { "type": "number" } }'></textarea>
+      <div class="form-hint">非通用能力项的 Key-Value 兜底方案，如客流统计的特殊字段</div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="confirmCloseAlgoDrawer()">取消</button>
+    <button class="btn btn-primary" id="algo-save-btn" onclick="saveAlgorithm()">保存</button>
+  </div>
+</div>
+
+<!-- ========== DRAWER: 事件编辑 ========== -->
+<div class="drawer-overlay" id="overlay-drawer-event" onclick="confirmCloseEventDrawer()"></div>
+<div class="drawer" id="drawer-event" style="width:560px">
+  <div class="drawer-header">
+    <span class="drawer-title" id="event-drawer-title">添加事件</span>
+    <button class="close-btn" onclick="confirmCloseEventDrawer()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">EventID <span class="required">*</span></label>
+      <input class="input" type="number" id="event-id" placeholder="请输入事件ID，如 100000">
+      <div class="form-error" id="event-id-error">此项为必填项</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">事件名称（中文） <span class="required">*</span></label>
+      <div class="lang-input-group">
+        <select class="select lang-select">
+          <option value="zh">中文简体</option>
+          <option value="en">English</option>
+          <option value="ja">日本語</option>
+          <option value="ko">한국어</option>
+        </select>
+        <div class="lang-input-wrapper">
+          <input class="input" id="event-name-zh" placeholder="请输入中文名称">
+        </div>
+      </div>
+      <div class="form-error" id="event-name-error">至少填写中文名称</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">备注</label>
+      <input class="input" id="event-remark" placeholder="内部备注（选填）">
+    </div>
+    <div class="form-group">
+      <label class="form-label">推送文案（中文） <span class="required">*</span></label>
+      <div class="lang-input-group">
+        <select class="select lang-select">
+          <option value="zh">中文简体</option>
+          <option value="en">English</option>
+        </select>
+        <div class="lang-input-wrapper">
+          <input class="input" id="event-push-zh" placeholder="APP 收到事件时展示的推送文案">
+        </div>
+      </div>
+      <div class="form-error" id="event-push-error">至少填写中文推送文案</div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-secondary" onclick="confirmCloseEventDrawer()">取消</button>
+    <button class="btn btn-primary" id="event-save-btn" onclick="saveEvent()">保存</button>
+  </div>
+</div>
+
+<!-- ========== MODAL: 删除确认 ========== -->
+<div class="modal-overlay" id="overlay-modal-delete" onclick="closeModal('modal-delete')"></div>
+<div class="modal" id="modal-delete" style="width:420px">
+  <div class="modal-header">
+    <span class="modal-title" id="delete-modal-title">确认删除</span>
+    <button class="close-btn" onclick="closeModal('modal-delete')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="modal-body">
+    <p id="delete-modal-msg" style="font-size:14px;color:var(--gray-700);line-height:1.6"></p>
+    <div id="delete-modal-warning" style="display:none;margin-top:12px;padding:10px 14px;background:var(--warning-light);border-radius:6px;display:none;align-items:flex-start;gap:8px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--warning);flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="delete-modal-warning-text" style="font-size:13px;color:var(--warning)"></span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" onclick="closeModal('modal-delete')">取消</button>
+    <button class="btn btn-primary" id="delete-modal-confirm" onclick="confirmDelete()">确定</button>
+  </div>
+</div>
+
+<!-- ========== MODAL: 未保存确认 ========== -->
+<div class="modal-overlay" id="overlay-modal-unsaved" onclick="dismissUnsaved()"></div>
+<div class="modal" id="modal-unsaved" style="width:380px">
+  <div class="modal-header">
+    <span class="modal-title">提示</span>
+    <button class="close-btn" onclick="dismissUnsaved()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="modal-body">
+    <p style="font-size:14px;color:var(--gray-700)">未保存的内容将丢失，确定关闭吗？</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" onclick="dismissUnsaved()">取消</button>
+    <button class="btn btn-primary" id="unsaved-confirm-btn" onclick="forceCloseDrawer()">确定关闭</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ DATA STORE ============
+var algorithms = [
+  { id:1, algorithmId:'motion_detection', nameZh:'运动侦测', nameEn:'Motion Detection', icon:'🏃', sort:1, caps:{Switch:true,Sensitivity:true,Schedule:true,DetectArea:true,SoundAlarm:false,AlarmRepeatCnt:false,CustomAudio:false,LightAlarm:false,DetectType:{}}, eventIds:[100000], extended:'', refCount:1280 },
+  { id:2, algorithmId:'human_detection', nameZh:'人形侦测', nameEn:'Human Detection', icon:'🚶', sort:2, caps:{Switch:true,Sensitivity:true,Schedule:true,DetectArea:true,SoundAlarm:true,AlarmRepeatCnt:true,CustomAudio:false,LightAlarm:true,DetectType:{}}, eventIds:[100001], extended:'', refCount:960 },
+  { id:3, algorithmId:'vehicle_detection', nameZh:'车辆侦测', nameEn:'Vehicle Detection', icon:'🚗', sort:3, caps:{Switch:true,Sensitivity:true,Schedule:true,DetectArea:true,SoundAlarm:false,AlarmRepeatCnt:false,CustomAudio:false,LightAlarm:false,DetectType:{}}, eventIds:[100002], extended:'', refCount:540 },
+  { id:4, algorithmId:'sound_detection', nameZh:'声音侦测', nameEn:'Sound Detection', icon:'🔊', sort:4, caps:{Switch:true,Sensitivity:true,Schedule:false,DetectArea:false,SoundAlarm:true,AlarmRepeatCnt:true,CustomAudio:true,LightAlarm:false,DetectType:{}}, eventIds:[100003], extended:'', refCount:720 },
+  { id:5, algorithmId:'cry_detection', nameZh:'哭声侦测', nameEn:'Cry Detection', icon:'😢', sort:5, caps:{Switch:true,Sensitivity:true,Schedule:false,DetectArea:false,SoundAlarm:true,AlarmRepeatCnt:false,CustomAudio:false,LightAlarm:false,DetectType:{}}, eventIds:[100004], extended:'', refCount:310 },
+  { id:6, algorithmId:'smoke_detection', nameZh:'烟火侦测', nameEn:'Smoke & Fire Detection', icon:'🔥', sort:6, caps:{Switch:true,Sensitivity:true,Schedule:true,DetectArea:true,SoundAlarm:true,AlarmRepeatCnt:true,CustomAudio:false,LightAlarm:true,DetectType:{}}, eventIds:[100005], extended:'', refCount:180 },
+  { id:7, algorithmId:'pet_detection', nameZh:'宠物侦测', nameEn:'Pet Detection', icon:'🐕', sort:7, caps:{Switch:true,Sensitivity:true,Schedule:false,DetectArea:true,SoundAlarm:false,AlarmRepeatCnt:false,CustomAudio:false,LightAlarm:false,DetectType:{}}, eventIds:[100006], extended:'', refCount:420 },
+  { id:8, algorithmId:'face_detection', nameZh:'人脸侦测', nameEn:'Face Detection', icon:'👤', sort:8, caps:{Switch:true,Sensitivity:true,Schedule:true,DetectArea:true,SoundAlarm:true,AlarmRepeatCnt:false,CustomAudio:false,LightAlarm:false,DetectType:{}}, eventIds:[100007], extended:'', refCount:650 },
+  { id:9, algorithmId:'package_detection', nameZh:'包裹侦测', nameEn:'Package Detection', icon:'📦', sort:9, caps:{Switch:true,Sensitivity:false,Schedule:false,DetectArea:true,SoundAlarm:true,AlarmRepeatCnt:false,CustomAudio:false,LightAlarm:false,DetectType:{}}, eventIds:[], extended:'', refCount:95 },
+  { id:10, algorithmId:'line_crossing', nameZh:'越线侦测', nameEn:'Line Crossing', icon:'🚧', sort:10, caps:{Switch:true,Sensitivity:true,Schedule:true,DetectArea:true,SoundAlarm:true,AlarmRepeatCnt:false,CustomAudio:false,LightAlarm:false,DetectType:{}}, eventIds:[], extended:'', refCount:230 },
+  { id:11, algorithmId:'area_intrusion', nameZh:'区域入侵', nameEn:'Area Intrusion', icon:'🚫', sort:11, caps:{Switch:true,Sensitivity:true,Schedule:true,DetectArea:true,SoundAlarm:true,AlarmRepeatCnt:true,CustomAudio:false,LightAlarm:true,DetectType:{}}, eventIds:[], extended:'', refCount:175 },
+  { id:12, algorithmId:'loitering', nameZh:'徘徊侦测', nameEn:'Loitering Detection', icon:'🔄', sort:12, caps:{Switch:true,Sensitivity:true,Schedule:true,DetectArea:true,SoundAlarm:false,AlarmRepeatCnt:false,CustomAudio:false,LightAlarm:false,DetectType:{}}, eventIds:[], extended:'', refCount:88 },
+  { id:13, algorithmId:'crowd_detection', nameZh:'客流统计', nameEn:'People Flow Statistics', icon:'📊', sort:13, caps:{Switch:true,Sensitivity:false,Schedule:false,DetectArea:false,SoundAlarm:false,AlarmRepeatCnt:false,CustomAudio:false,LightAlarm:false,DetectType:{}}, eventIds:[], extended:'{"StatLine":{"type":"number","label":"统计线"},"ReportInterval":{"type":"number","label":"上报间隔(s)"}}', refCount:320 },
+  { id:14, algorithmId:'temperature_detection', nameZh:'温度侦测', nameEn:'Temperature Detection', icon:'🌡️', sort:14, caps:{Switch:true,Sensitivity:true,Schedule:false,DetectArea:false,SoundAlarm:true,AlarmRepeatCnt:false,CustomAudio:false,LightAlarm:false,DetectType:{}}, eventIds:[], extended:'', refCount:45 },
+  { id:15, algorithmId:'pir_detection', nameZh:'PIR侦测', nameEn:'PIR Detection', icon:'📡', sort:15, caps:{Switch:true,Sensitivity:true,Schedule:true,DetectArea:false,SoundAlarm:false,AlarmRepeatCnt:false,CustomAudio:false,LightAlarm:false,DetectType:{motion:'运动',human:'人形',vehicle:'车辆',pet:'宠物'}}, eventIds:[100000,100001,100002,100006], extended:'', refCount:1560 }
+];
+
+var events = [
+  { id:1, eventId:100000, nameZh:'移动侦测事件', nameEn:'Motion Detection Event', remark:'设备检测到移动物体', pushZh:'您的设备检测到移动物体', pushEn:'Your device detected motion', refCount:2 },
+  { id:2, eventId:100001, nameZh:'人形侦测事件', nameEn:'Human Detection Event', remark:'设备检测到人形', pushZh:'您的设备检测到人形活动', pushEn:'Your device detected a person', refCount:2 },
+  { id:3, eventId:100002, nameZh:'车辆侦测事件', nameEn:'Vehicle Detection Event', remark:'设备检测到车辆', pushZh:'您的设备检测到车辆', pushEn:'Your device detected a vehicle', refCount:2 },
+  { id:4, eventId:100003, nameZh:'声音侦测事件', nameEn:'Sound Detection Event', remark:'设备检测到异常声音', pushZh:'您的设备检测到异常声音', pushEn:'Your device detected abnormal sound', refCount:1 },
+  { id:5, eventId:100004, nameZh:'哭声侦测事件', nameEn:'Cry Detection Event', remark:'设备检测到婴儿哭声', pushZh:'您的设备检测到哭声', pushEn:'Your device detected crying', refCount:1 },
+  { id:6, eventId:100005, nameZh:'烟火侦测事件', nameEn:'Smoke & Fire Event', remark:'设备检测到烟雾或火焰', pushZh:'您的设备检测到烟火警报', pushEn:'Your device detected smoke or fire', refCount:1 },
+  { id:7, eventId:100006, nameZh:'宠物侦测事件', nameEn:'Pet Detection Event', remark:'设备检测到宠物活动', pushZh:'您的设备检测到宠物活动', pushEn:'Your device detected pet activity', refCount:2 },
+  { id:8, eventId:100007, nameZh:'人脸侦测事件', nameEn:'Face Detection Event', remark:'设备检测到人脸', pushZh:'您的设备检测到人脸', pushEn:'Your device detected a face', refCount:1 }
+];
+
+var algoNextId = 16;
+var eventNextId = 9;
+var _deleteTarget = null; // {type:'algo'|'event', data:...}
+var _pendingCloseDrawer = null; // drawer id to close after unsaved confirm
+var _editingAlgoId = null; // null = add mode
+var _editingEventId = null;
+var _detectTypeCounter = 0;
+var _dirty = false; // track unsaved changes
+
+// ============ RENDER ============
+function getCapLabels(caps) {
+  var map = {Switch:'开关',Sensitivity:'灵敏度',Schedule:'定时侦测',DetectArea:'自定义区域',SoundAlarm:'声音告警',AlarmRepeatCnt:'告警循环次数',CustomAudio:'自定义音频',LightAlarm:'灯光告警'};
+  var labels = [];
+  for (var k in map) { if (caps[k]) labels.push(map[k]); }
+  if (caps.DetectType && Object.keys(caps.DetectType).length > 0) labels.push('侦测类型');
+  return labels;
+}
+
+function renderAlgoTable(filter) {
+  var list = algorithms;
+  if (filter) {
+    var kw = filter.toLowerCase();
+    list = list.filter(function(a){ return a.algorithmId.toLowerCase().indexOf(kw) !== -1 || a.nameZh.indexOf(filter) !== -1; });
+  }
+  var tbody = document.getElementById('algo-tbody');
+  var empty = document.getElementById('algo-empty');
+  var wrap = document.getElementById('algo-table-wrap').querySelector('table');
+  document.getElementById('algo-total').textContent = list.length;
+
+  if (list.length === 0) {
+    wrap.style.display = 'none';
+    empty.style.display = 'block';
+  } else {
+    wrap.style.display = '';
+    empty.style.display = 'none';
+    tbody.innerHTML = list.map(function(a){
+      var caps = getCapLabels(a.caps);
+      var pills = caps.slice(0,5).map(function(c){ return '<span class="pill">'+c+'</span>'; }).join('');
+      if (caps.length > 5) pills += '<span class="pill pill-more" title="'+caps.slice(5).join(', ')+'">+'+ (caps.length-5) +'</span>';
+      return '<tr>'+
+        '<td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">'+a.algorithmId+'</code></td>'+
+        '<td><span style="font-size:18px">'+a.icon+'</span></td>'+
+        '<td><span style="font-weight:500;color:var(--gray-900)">'+a.nameZh+'</span></td>'+
+        '<td><div class="pill-list">'+pills+'</div></td>'+
+        '<td>'+(a.eventIds.length > 0 ? '<span class="badge badge-info">'+a.eventIds.length+' 个</span>' : '<span style="color:var(--gray-400)">—</span>')+'</td>'+
+        '<td>'+(a.refCount > 0 ? '<span style="font-weight:500">'+a.refCount.toLocaleString()+'</span>' : '<span style="color:var(--gray-400)">0</span>')+'</td>'+
+        '<td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openAlgoDrawer(\'edit\','+a.id+')">编辑</button><button class="btn btn-sm btn-danger-ghost" onclick="deleteAlgorithm('+a.id+')">删除</button></div></td>'+
+        '</tr>';
+    }).join('');
+  }
+}
+
+function renderEventTable(filter) {
+  var list = events;
+  if (filter) {
+    var kw = filter.toLowerCase();
+    list = list.filter(function(e){ return String(e.eventId).indexOf(kw) !== -1 || e.nameZh.indexOf(filter) !== -1; });
+  }
+  var tbody = document.getElementById('event-tbody');
+  var empty = document.getElementById('event-empty');
+  var wrap = document.getElementById('event-table-wrap').querySelector('table');
+  document.getElementById('event-total').textContent = list.length;
+
+  if (list.length === 0) {
+    wrap.style.display = 'none';
+    empty.style.display = 'block';
+  } else {
+    wrap.style.display = '';
+    empty.style.display = 'none';
+    tbody.innerHTML = list.map(function(e){
+      return '<tr>'+
+        '<td><code style="font-size:12px;background:var(--gray-100);padding:2px 6px;border-radius:4px">'+e.eventId+'</code></td>'+
+        '<td><span style="font-weight:500;color:var(--gray-900)">'+e.nameZh+'</span></td>'+
+        '<td><span style="color:var(--gray-500)">'+e.remark+'</span></td>'+
+        '<td><span style="color:var(--gray-500)">'+e.pushZh+'</span></td>'+
+        '<td>'+(e.refCount > 0 ? '<span class="badge badge-info">'+e.refCount+' 个</span>' : '<span style="color:var(--gray-400)">0</span>')+'</td>'+
+        '<td><div style="display:flex;gap:4px"><button class="btn btn-sm btn-secondary" onclick="openEventDrawer(\'edit\','+e.id+')">编辑</button><button class="btn btn-sm btn-danger-ghost" onclick="deleteEvent('+e.id+')">删除</button></div></td>'+
+        '</tr>';
+    }).join('');
+  }
+}
+
+// Update event reference counts
+function updateEventRefCounts() {
+  var counts = {};
+  algorithms.forEach(function(a){
+    (a.eventIds||[]).forEach(function(eid){
+      counts[eid] = (counts[eid]||0) + 1;
+    });
+  });
+  events.forEach(function(e){ e.refCount = counts[e.eventId] || 0; });
+}
+
+// ============ ALGORITHM DRAWER ============
+function openAlgoDrawer(mode, algoId) {
+  _dirty = true;
+  _editingAlgoId = algoId || null;
+  _detectTypeCounter = 0;
+  document.getElementById('algo-drawer-title').textContent = mode === 'edit' ? '编辑算法' : '添加算法';
+
+  // Reset form
+  document.getElementById('algo-id').value = '';
+  document.getElementById('algo-id').disabled = false;
+  document.getElementById('algo-name-zh').value = '';
+  document.getElementById('algo-icon').value = '';
+  document.getElementById('algo-sort').value = '0';
+  document.getElementById('algo-extended').value = '';
+  document.querySelectorAll('#drawer-algorithm .form-error').forEach(function(el){ el.classList.remove('show'); });
+  document.querySelectorAll('#drawer-algorithm .input.error').forEach(function(el){ el.classList.remove('error'); });
+
+  // Reset capabilities
+  var capIds = ['switch','sensitivity','schedule','detectarea','soundalarm','alarmrepeat','customaudio','lightalarm','detecttype'];
+  capIds.forEach(function(c){ document.getElementById('cap-'+c).checked = false; });
+  document.getElementById('detecttype-config').style.display = 'none';
+  document.getElementById('detecttype-tbody').innerHTML = '';
+
+  // Reset shuttle
+  renderShuttle([]);
+
+  // Edit mode: fill data
+  if (mode === 'edit') {
+    var algo = algorithms.find(function(a){ return a.id === algoId; });
+    if (algo) {
+      document.getElementById('algo-id').value = algo.algorithmId;
+      document.getElementById('algo-name-zh').value = algo.nameZh;
+      document.getElementById('algo-icon').value = algo.icon;
+      document.getElementById('algo-sort').value = algo.sort;
+      document.getElementById('algo-extended').value = algo.extended;
+      if (algo.caps.Switch) document.getElementById('cap-switch').checked = true;
+      if (algo.caps.Sensitivity) document.getElementById('cap-sensitivity').checked = true;
+      if (algo.caps.Schedule) document.getElementById('cap-schedule').checked = true;
+      if (algo.caps.DetectArea) document.getElementById('cap-detectarea').checked = true;
+      if (algo.caps.SoundAlarm) document.getElementById('cap-soundalarm').checked = true;
+      if (algo.caps.AlarmRepeatCnt) document.getElementById('cap-alarmrepeat').checked = true;
+      if (algo.caps.CustomAudio) document.getElementById('cap-customaudio').checked = true;
+      if (algo.caps.LightAlarm) document.getElementById('cap-lightalarm').checked = true;
+      if (algo.caps.DetectType && Object.keys(algo.caps.DetectType).length > 0) {
+        document.getElementById('cap-detecttype').checked = true;
+        document.getElementById('detecttype-config').style.display = 'block';
+        var dt = algo.caps.DetectType;
+        for (var k in dt) { addDetectTypeRow(k, dt[k]); }
+      }
+      renderShuttle(algo.eventIds);
+    }
+  }
+
+  openDrawer('drawer-algorithm');
+}
+
+function toggleDetectType() {
+  var checked = document.getElementById('cap-detecttype').checked;
+  document.getElementById('detecttype-config').style.display = checked ? 'block' : 'none';
+  if (checked && document.getElementById('detecttype-tbody').children.length === 0) {
+    addDetectTypeRow();
+  }
+  _dirty = true;
+}
+
+function addDetectTypeRow(key, value) {
+  _detectTypeCounter++;
+  var tbody = document.getElementById('detecttype-tbody');
+  var tr = document.createElement('tr');
+  tr.innerHTML =
+    '<td><input class="input" value="'+(key||'')+'" placeholder="Key"></td>'+
+    '<td><input class="input" value="'+(value||'')+'" placeholder="中文值"></td>'+
+    '<td><button class="btn btn-xs btn-danger-ghost" onclick="this.closest(\'tr\').remove();_dirty=true">删除</button></td>';
+  tbody.appendChild(tr);
+}
+
+// ============ EVENT SHUTTLE ============
+function renderShuttle(selectedIds) {
+  var left = document.getElementById('shuttle-left');
+  var right = document.getElementById('shuttle-right');
+  var selSet = {};
+  (selectedIds||[]).forEach(function(id){ selSet[id] = true; });
+
+  left.innerHTML = events.map(function(e){
+    return '<label class="shuttle-item'+(selSet[e.eventId]?' selected':'')+'"><input type="checkbox" value="'+e.eventId+'" '+(selSet[e.eventId]?'checked':'')+' onchange="toggleShuttleItem(this, '+e.eventId+')"><span>'+e.eventId+' — '+e.nameZh+'</span></label>';
+  }).join('');
+
+  right.innerHTML = events.filter(function(e){ return selSet[e.eventId]; }).map(function(e){
+    return '<label class="shuttle-item selected"><input type="checkbox" value="'+e.eventId+'" checked onchange="toggleShuttleItem(this, '+e.eventId+')"><span>'+e.eventId+' — '+e.nameZh+'</span></label>';
+  }).join('');
+
+  document.getElementById('shuttle-right-count').textContent = Object.keys(selSet).length;
+}
+
+function toggleShuttleItem(cb, eventId) {
+  _dirty = true;
+  var currentIds = getSelectedEventIds();
+  var selSet = {};
+  currentIds.forEach(function(id){ selSet[id] = true; });
+  if (cb.checked) { selSet[eventId] = true; }
+  else { delete selSet[eventId]; }
+  renderShuttle(Object.keys(selSet).map(Number));
+}
+
+function getSelectedEventIds() {
+  var ids = [];
+  document.querySelectorAll('#shuttle-left input[type="checkbox"]:checked, #shuttle-right input[type="checkbox"]:checked').forEach(function(cb){
+    var v = parseInt(cb.value);
+    if (ids.indexOf(v) === -1) ids.push(v);
+  });
+  return ids;
+}
+
+function filterShuttleLeft(kw) {
+  var low = kw.toLowerCase();
+  document.querySelectorAll('#shuttle-left .shuttle-item').forEach(function(item){
+    var text = item.textContent.toLowerCase();
+    item.style.display = text.indexOf(low) !== -1 ? '' : 'none';
+  });
+}
+
+// ============ SAVE ALGORITHM ============
+function saveAlgorithm() {
+  var algoId = document.getElementById('algo-id').value.trim();
+  var nameZh = document.getElementById('algo-name-zh').value.trim();
+  var hasError = false;
+
+  // Clear errors
+  document.querySelectorAll('#drawer-algorithm .form-error').forEach(function(el){ el.classList.remove('show'); });
+  document.querySelectorAll('#drawer-algorithm .input.error').forEach(function(el){ el.classList.remove('error'); });
+
+  if (!algoId) {
+    document.getElementById('algo-id-error').classList.add('show');
+    document.getElementById('algo-id').classList.add('error');
+    hasError = true;
+  } else {
+    // Check uniqueness
+    var dup = algorithms.find(function(a){ return a.algorithmId === algoId && a.id !== _editingAlgoId; });
+    if (dup) {
+      document.getElementById('algo-id-error').textContent = 'AlgorithmID 已存在';
+      document.getElementById('algo-id-error').classList.add('show');
+      document.getElementById('algo-id').classList.add('error');
+      hasError = true;
+    }
+  }
+
+  if (!nameZh) {
+    document.getElementById('algo-name-error').classList.add('show');
+    document.getElementById('algo-name-zh').classList.add('error');
+    hasError = true;
+  }
+
+  if (hasError) return;
+
+  // Collect detect types
+  var detectType = {};
+  document.querySelectorAll('#detecttype-tbody tr').forEach(function(tr){
+    var inputs = tr.querySelectorAll('input');
+    var k = inputs[0].value.trim();
+    var v = inputs[1].value.trim();
+    if (k && v) detectType[k] = v;
+  });
+
+  var caps = {
+    Switch: document.getElementById('cap-switch').checked,
+    Sensitivity: document.getElementById('cap-sensitivity').checked,
+    Schedule: document.getElementById('cap-schedule').checked,
+    DetectArea: document.getElementById('cap-detectarea').checked,
+    SoundAlarm: document.getElementById('cap-soundalarm').checked,
+    AlarmRepeatCnt: document.getElementById('cap-alarmrepeat').checked,
+    CustomAudio: document.getElementById('cap-customaudio').checked,
+    LightAlarm: document.getElementById('cap-lightalarm').checked,
+    DetectType: detectType
+  };
+
+  var eventIds = getSelectedEventIds();
+  var icon = document.getElementById('algo-icon').value.trim();
+  var sort = parseInt(document.getElementById('algo-sort').value) || 0;
+  var extended = document.getElementById('algo-extended').value.trim();
+
+  if (_editingAlgoId) {
+    // Update existing
+    var algo = algorithms.find(function(a){ return a.id === _editingAlgoId; });
+    if (algo) {
+      algo.algorithmId = algoId;
+      algo.nameZh = nameZh;
+      algo.icon = icon;
+      algo.sort = sort;
+      algo.caps = caps;
+      algo.eventIds = eventIds;
+      algo.extended = extended;
+    }
+  } else {
+    // Add new
+    algorithms.push({
+      id: algoNextId++,
+      algorithmId: algoId,
+      nameZh: nameZh, nameEn: '',
+      icon: icon, sort: sort,
+      caps: caps, eventIds: eventIds,
+      extended: extended, refCount: 0
+    });
+  }
+
+  updateEventRefCounts();
+  renderAlgoTable();
+  renderEventTable();
+  closeDrawer('drawer-algorithm');
+  _dirty = false;
+  showToast('保存成功', 'success');
+}
+
+// ============ EVENT DRAWER ============
+function openEventDrawer(mode, eventId) {
+  _dirty = true;
+  _editingEventId = eventId || null;
+  document.getElementById('event-drawer-title').textContent = mode === 'edit' ? '编辑事件' : '添加事件';
+  document.getElementById('event-id').value = '';
+  document.getElementById('event-id').disabled = false;
+  document.getElementById('event-name-zh').value = '';
+  document.getElementById('event-remark').value = '';
+  document.getElementById('event-push-zh').value = '';
+  document.querySelectorAll('#drawer-event .form-error').forEach(function(el){ el.classList.remove('show'); });
+  document.querySelectorAll('#drawer-event .input.error').forEach(function(el){ el.classList.remove('error'); });
+
+  if (mode === 'edit') {
+    var evt = events.find(function(e){ return e.id === eventId; });
+    if (evt) {
+      document.getElementById('event-id').value = evt.eventId;
+      document.getElementById('event-id').disabled = true;
+      document.getElementById('event-name-zh').value = evt.nameZh;
+      document.getElementById('event-remark').value = evt.remark;
+      document.getElementById('event-push-zh').value = evt.pushZh;
+    }
+  }
+
+  openDrawer('drawer-event');
+}
+
+function saveEvent() {
+  var eventId = parseInt(document.getElementById('event-id').value);
+  var nameZh = document.getElementById('event-name-zh').value.trim();
+  var pushZh = document.getElementById('event-push-zh').value.trim();
+  var remark = document.getElementById('event-remark').value.trim();
+  var hasError = false;
+
+  document.querySelectorAll('#drawer-event .form-error').forEach(function(el){ el.classList.remove('show'); });
+  document.querySelectorAll('#drawer-event .input.error').forEach(function(el){ el.classList.remove('error'); });
+
+  if (!eventId && eventId !== 0) {
+    document.getElementById('event-id-error').classList.add('show');
+    document.getElementById('event-id').classList.add('error');
+    hasError = true;
+  } else if (!_editingEventId) {
+    var dup = events.find(function(e){ return e.eventId === eventId; });
+    if (dup) {
+      document.getElementById('event-id-error').textContent = 'EventID 已存在';
+      document.getElementById('event-id-error').classList.add('show');
+      document.getElementById('event-id').classList.add('error');
+      hasError = true;
+    }
+  }
+
+  if (!nameZh) {
+    document.getElementById('event-name-error').classList.add('show');
+    document.getElementById('event-name-zh').classList.add('error');
+    hasError = true;
+  }
+
+  if (!pushZh) {
+    document.getElementById('event-push-error').classList.add('show');
+    document.getElementById('event-push-zh').classList.add('error');
+    hasError = true;
+  }
+
+  if (hasError) return;
+
+  if (_editingEventId) {
+    var evt = events.find(function(e){ return e.id === _editingEventId; });
+    if (evt) {
+      evt.nameZh = nameZh;
+      evt.remark = remark;
+      evt.pushZh = pushZh;
+    }
+  } else {
+    events.push({
+      id: eventNextId++,
+      eventId: eventId,
+      nameZh: nameZh, nameEn: '',
+      remark: remark,
+      pushZh: pushZh, pushEn: '',
+      refCount: 0
+    });
+  }
+
+  updateEventRefCounts();
+  renderEventTable();
+  renderAlgoTable();
+  closeDrawer('drawer-event');
+  _dirty = false;
+  showToast('保存成功', 'success');
+}
+
+// ============ DELETE ============
+function deleteAlgorithm(id) {
+  var algo = algorithms.find(function(a){ return a.id === id; });
+  if (!algo) return;
+  _deleteTarget = {type:'algo', data:algo};
+
+  document.getElementById('delete-modal-title').textContent = '确认删除';
+  document.getElementById('delete-modal-msg').textContent = '确定删除算法「'+algo.nameZh+'」？';
+  var warning = document.getElementById('delete-modal-warning');
+  var confirmBtn = document.getElementById('delete-modal-confirm');
+
+  if (algo.refCount > 0) {
+    warning.style.display = 'flex';
+    document.getElementById('delete-modal-warning-text').textContent = '有 '+algo.refCount+' 台设备正在使用该算法，不可删除';
+    confirmBtn.disabled = true;
+  } else {
+    warning.style.display = 'none';
+    confirmBtn.disabled = false;
+  }
+  openModal('modal-delete');
+}
+
+function deleteEvent(id) {
+  var evt = events.find(function(e){ return e.id === id; });
+  if (!evt) return;
+  _deleteTarget = {type:'event', data:evt};
+
+  document.getElementById('delete-modal-title').textContent = '确认删除';
+  document.getElementById('delete-modal-msg').textContent = '确定删除事件「'+evt.nameZh+'」？';
+  var warning = document.getElementById('delete-modal-warning');
+  var confirmBtn = document.getElementById('delete-modal-confirm');
+
+  if (evt.refCount > 0) {
+    warning.style.display = 'flex';
+    document.getElementById('delete-modal-warning-text').textContent = '有 '+evt.refCount+' 个算法正在引用该事件，不可删除';
+    confirmBtn.disabled = true;
+  } else {
+    warning.style.display = 'none';
+    confirmBtn.disabled = false;
+  }
+  openModal('modal-delete');
+}
+
+function confirmDelete() {
+  if (!_deleteTarget) return;
+  if (_deleteTarget.type === 'algo') {
+    var algo = _deleteTarget.data;
+    if (algo.refCount > 0) return;
+    algorithms = algorithms.filter(function(a){ return a.id !== algo.id; });
+    updateEventRefCounts();
+    renderAlgoTable();
+    renderEventTable();
+  } else if (_deleteTarget.type === 'event') {
+    var evt = _deleteTarget.data;
+    if (evt.refCount > 0) return;
+    events = events.filter(function(e){ return e.id !== evt.id; });
+    // Remove event from all algorithms
+    algorithms.forEach(function(a){
+      a.eventIds = (a.eventIds||[]).filter(function(eid){ return eid !== evt.eventId; });
+    });
+    updateEventRefCounts();
+    renderAlgoTable();
+    renderEventTable();
+  }
+  closeModal('modal-delete');
+  _deleteTarget = null;
+  showToast('删除成功', 'success');
+}
+
+// ============ UNSAVED CONFIRM ============
+function confirmCloseAlgoDrawer() {
+  if (_dirty) {
+    _pendingCloseDrawer = 'drawer-algorithm';
+    document.getElementById('unsaved-confirm-btn').onclick = function(){ forceCloseDrawer(); };
+    openModal('modal-unsaved');
+  } else {
+    closeDrawer('drawer-algorithm');
+  }
+}
+
+function confirmCloseEventDrawer() {
+  if (_dirty) {
+    _pendingCloseDrawer = 'drawer-event';
+    document.getElementById('unsaved-confirm-btn').onclick = function(){ forceCloseDrawer(); };
+    openModal('modal-unsaved');
+  } else {
+    closeDrawer('drawer-event');
+  }
+}
+
+function dismissUnsaved() {
+  closeModal('modal-unsaved');
+  _pendingCloseDrawer = null;
+}
+
+function forceCloseDrawer() {
+  closeModal('modal-unsaved');
+  if (_pendingCloseDrawer) {
+    closeDrawer(_pendingCloseDrawer);
+    _dirty = false;
+    _pendingCloseDrawer = null;
+  }
+}
+
+// ============ FILTERS ============
+function filterAlgoTable(kw) { renderAlgoTable(kw); }
+function filterEventTable(kw) { renderEventTable(kw); }
+
+// ============ NAVIGATION ============
+function showPage(name) {
+  document.querySelectorAll('.page-view').forEach(function(p){ p.classList.remove('active'); });
+  var el = document.getElementById('page-' + name);
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
+  if (name === 'algorithm-mgmt') document.getElementById('nav-algorithm').classList.add('active');
+  else if (name === 'device-list') document.getElementById('nav-device').classList.add('active');
+}
+
+function switchAlgorithmTab(tabId, el) {
+  document.querySelectorAll('#page-algorithm-mgmt .tab').forEach(function(t){ t.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('tab-algorithm').style.display = tabId === 'tab-algorithm' ? 'block' : 'none';
+  document.getElementById('tab-event').style.display = tabId === 'tab-event' ? 'block' : 'none';
+}
+
+// ============ DRAWER / MODAL HELPERS ============
+function openDrawer(id) {
+  var oid = 'overlay-' + id;
+  document.getElementById(oid).classList.add('show');
+  document.getElementById(id).classList.add('show');
+}
+
+function closeDrawer(id) {
+  var oid = 'overlay-' + id;
+  document.getElementById(oid).classList.remove('show');
+  document.getElementById(id).classList.remove('show');
+}
+
+function openModal(id) {
+  var overlay = document.getElementById('overlay-' + id);
+  var modal = document.getElementById(id);
+  if (overlay) { overlay.classList.add('show'); overlay.style.display = 'block'; }
+  if (modal) { modal.classList.add('show'); }
+}
+
+function closeModal(id) {
+  var overlay = document.getElementById('overlay-' + id);
+  var modal = document.getElementById(id);
+  if (modal) { modal.classList.remove('show'); }
+  if (overlay) { overlay.classList.remove('show'); overlay.style.display = 'none'; }
+}
+
+// ============ TOAST ============
+function showToast(msg, type) {
+  var toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'toast toast-' + (type || 'success') + ' show';
+  setTimeout(function(){ toast.classList.remove('show'); }, 2500);
+}
+
+// ============ INIT ============
+updateEventRefCounts();
+renderAlgoTable();
+renderEventTable();
+</script>
+</body>
+</html>

@@ -34,6 +34,18 @@ const routes = [
     meta: { title: '服务商城' }
   },
   {
+    path: '/my-services',
+    name: 'MyServices',
+    component: () => import('@/views/my-services/index.vue'),
+    meta: { title: '我的服务' }
+  },
+  {
+    path: '/my-services/bind',
+    name: 'MyServicesBind',
+    component: () => import('@/views/my-services/bind.vue'),
+    meta: { title: '绑定设备' }
+  },
+  {
     path: '/liveview',
     name: 'LiveView',
     component: () => import('@/views/liveview/index.vue'),

@@ -140,7 +140,8 @@ import {
   Present,
   Cpu,
   SetUp,
-  Grid
+  Grid,
+  Monitor
 } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -168,6 +169,7 @@ const menuList = ref([
     icon: Cpu,
     children: [
       { title: '能力库', path: '/thing-model/capability', icon: SetUp },
+      { title: '算法库', path: '/thing-model/algorithm', icon: Cpu },
       { title: 'IOT类目', path: '/thing-model/category', icon: Grid }
     ]
   },

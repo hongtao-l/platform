@@ -66,6 +66,29 @@
 - 子页面路由路径使用 `/module/subpage` 格式
 - 通过 `meta` 控制底部导航显隐
 
+## 共享组件规范
+
+开发前**必须先确认**项目中是否已有通用组件/样式，保持全局一致，禁止重复造轮子。
+
+### IoT 平台 (Element Plus)
+
+| 场景 | 实现 | 位置 |
+|------|------|------|
+| 多语言配置图标 | `<span class="i18n-icon">` + 地球 SVG | `src/styles/index.scss` 全局样式，`src/views/pkg/config.vue` 为参考示例 |
+| 类型标签 (属性/服务/事件) | `.type-tag` + `.type-prop`/`.type-svc`/`.type-evt` | 参考 `src/views/iot/thing-model/capability.vue` |
+
+**地球 SVG 图标代码：**
+```html
+<span class="i18n-icon" title="多语言配置" @click="openLangDialog">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+</span>
+```
+`.i18n-icon` 全局样式：`color: var(--primary-color); cursor: pointer; display: inline-flex; align-items: center; flex-shrink: 0;`
+
+### CareCam (Vant)
+
+待补充。
+
 ## 注意事项
 
 - **不要**引入新的第三方依赖，除非必要且经用户确认
@@ -73,3 +96,4 @@
 - 优先使用项目现有的 SCSS 变量和 mixin
 - 所有文案使用中文
 - 模拟数据使用 `ref`/`reactive` 定义在页面内，标注 `// TODO: 接入真实 API`
+- **实现任何通用 UI 元素前，先搜索项目中是否已有同类实现**（如多语言图标、类型标签、穿梭框等），保持全局统一

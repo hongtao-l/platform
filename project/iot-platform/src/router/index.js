@@ -93,6 +93,18 @@ const routes = [
     meta: { title: '类目能力详情' }
   },
   {
+    path: '/thing-model/algorithm',
+    name: 'ThingModelAlgorithm',
+    component: () => import('@/views/iot/thing-model/algorithm.vue'),
+    meta: { title: '算法库' }
+  },
+  {
+    path: '/thing-model/algorithm/:id/capabilities',
+    name: 'ThingModelAlgorithmCapabilities',
+    component: () => import('@/views/iot/thing-model/algorithm-capability.vue'),
+    meta: { title: '算法关联能力' }
+  },
+  {
     path: '/pkg',
     name: 'PkgList',
     component: () => import('@/views/pkg/list.vue'),

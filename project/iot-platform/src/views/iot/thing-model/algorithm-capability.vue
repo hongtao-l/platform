@@ -3,15 +3,15 @@
     <!-- 顶部标题栏 -->
     <div class="top-bar">
       <div class="top-left">
-        <el-button @click="$router.push('/thing-model/category')" :icon="ArrowLeft">返回</el-button>
+        <el-button @click="$router.push('/thing-model/algorithm')" :icon="ArrowLeft">返回</el-button>
         <div>
-          <div class="top-title">类目：{{ categoryName }}</div>
-          <div class="top-sub">共 {{ linkedCaps.length }} 个标准能力</div>
+          <div class="top-title">算法：{{ algoName }}</div>
+          <div class="top-sub">共 {{ linkedCaps.length }} 个关联能力</div>
         </div>
       </div>
       <div class="top-actions">
         <el-button type="primary" size="small" plain @click="openImportDialog">
-          <el-icon><Plus /></el-icon>导入能力
+          <el-icon><Plus /></el-icon>关联能力
         </el-button>
       </div>
     </div>
@@ -90,18 +90,19 @@
               </template>
             </el-table-column>
           </el-table>
-          <div v-if="!linkedCaps.length" class="empty-state">该类目暂无绑定能力</div>
+          <div v-if="!linkedCaps.length" class="empty-state">该算法暂无关联能力</div>
         </div>
       </div>
     </div>
 
-    <!-- 导入能力弹窗（穿梭框） -->
+    <!-- 关联能力弹窗（穿梭框） -->
     <el-dialog
       v-model="importDialogVisible"
-      title="导入能力"
+      title="关联能力"
       width="960px"
       :close-on-click-modal="false"
       top="3vh"
+      class="alg-cap-dialog"
     >
       <div class="transfer-container">
         <div class="transfer-panel">
@@ -209,7 +210,7 @@
       </template>
     </el-dialog>
 
-    <!-- 编辑能力弹窗（仅参数可编辑） -->
+    <!-- 编辑能力参数弹窗 -->
     <el-dialog
       v-model="editDialogVisible"
       title="编辑能力参数"
@@ -232,7 +233,7 @@
         <el-form-item label="标识符">
           <el-input :model-value="editCap.identifier" disabled />
         </el-form-item>
-        <!-- 属性：数据类型 + 读写模式 -->
+
         <template v-if="editCap.capType === 'prop'">
           <el-form-item label="数据类型">
             <el-select :model-value="dataTypeLabel(editCap)" disabled style="width:100%" />
@@ -247,7 +248,6 @@
 
         <el-divider>数据定义</el-divider>
 
-        <!-- 枚举型 -->
         <template v-if="editCap.capType === 'prop' && editForm.dataType === 'enum'">
           <el-form-item label="枚举值定义" required>
             <div class="enum-list">
@@ -264,7 +264,6 @@
           </el-form-item>
         </template>
 
-        <!-- 数值型 -->
         <template v-if="editCap.capType === 'prop' && editForm.dataType === 'int'">
           <el-form-item label="取值范围" required>
             <div class="range-row">
@@ -284,7 +283,6 @@
           </el-form-item>
         </template>
 
-        <!-- 布尔型 -->
         <template v-if="editCap.capType === 'prop' && editForm.dataType === 'boolean'">
           <el-form-item label="布尔值标签">
             <div class="bool-labels">
@@ -306,7 +304,6 @@
           </el-form-item>
         </template>
 
-        <!-- 字符串型 -->
         <template v-if="editCap.capType === 'prop' && editForm.dataType === 'string'">
           <el-form-item label="最大长度（字节）" required>
             <el-input-number v-model="editForm.maxLength" :min="1" :max="65535" style="width:150px" />
@@ -368,7 +365,6 @@
           </el-form-item>
         </template>
 
-        <!-- 服务 -->
         <template v-if="editCap.capType === 'svc'">
           <el-form-item label="输入参数">
             <div style="width:100%">
@@ -404,7 +400,6 @@
           </el-form-item>
         </template>
 
-        <!-- 事件 -->
         <template v-if="editCap.capType === 'evt'">
           <el-form-item label="事件类型" required>
             <div class="type-cards">
@@ -443,7 +438,7 @@
     </el-dialog>
 
     <!-- 参数编辑弹窗 -->
-    <el-dialog v-model="paramDialogVisible" :title="paramDialogTitle" width="600px" :close-on-click-modal="false">
+    <el-dialog v-model="paramDialogVisible" :title="paramDialogTitle" width="600px" :close-on-click-modal="false" class="alg-cap-dialog">
       <el-form ref="paramFormRef" :model="paramForm" label-width="100px">
         <el-form-item label="参数名称" required>
           <el-input v-model="paramForm.name" placeholder="请输入参数名称" />
@@ -452,7 +447,7 @@
           <el-input v-model="paramForm.identifier" placeholder="例如 result" />
         </el-form-item>
         <el-form-item label="数据类型" required>
-          <el-select v-model="paramForm.dataType" style="width:100%" @change="onParamDataTypeChange">
+          <el-select v-model="paramForm.dataType" style="width:100%">
             <el-option label="Int (数字)" value="int" />
             <el-option label="String (字符串)" value="string" />
             <el-option label="Boolean (布尔)" value="boolean" />
@@ -532,54 +527,50 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { Plus, ArrowLeft, Search, ArrowRight, Edit, Delete } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { store, getCategoryLinkedCapIds, linkCapToCategory, unlinkCapFromCategory, updateCapability } from './data'
+import { store, getAlgorithm, updateAlgorithm, updateCapability } from './data'
 
 const route = useRoute()
-const categoryId = Number(route.params.id)
+const algoId = Number(route.params.id)
 
-const categoryName = computed(() => {
-  const cat = store.categories.find(c => c.id === categoryId)
-  return cat ? cat.name : '未知类目'
+const algo = ref(null)
+const algoName = computed(() => {
+  if (!algo.value) return '未知算法'
+  const name = (() => { try { return JSON.parse(algo.value.algorithmName || '{}') } catch { return {} } })()
+  return name['1'] || algo.value.algorithmId || '未知算法'
 })
 
-// ===== 已关联的能力 =====
+// 已关联的能力（从算法 capabilities JSON 中解析）
 const linkedCaps = computed(() => {
-  const capIds = new Set(getCategoryLinkedCapIds(categoryId))
-  return store.capabilities.filter(c => capIds.has(c.id))
+  if (!algo.value) return []
+  const caps = (() => { try { return JSON.parse(algo.value.capabilities || '{}') } catch { return {} } })()
+  const identifiers = Object.keys(caps).filter(k => !k.startsWith('__'))
+  const allCaps = [...store.capabilities, ...store.customCapabilities]
+  return allCaps.filter(c => identifiers.includes(c.identifier)).map(cap => {
+    const mod = [...store.modules, ...store.customModules].find(m => m.id === cap.moduleId)
+    return { ...cap, _moduleName: mod?.name || '—', _moduleId: cap.moduleId }
+  })
 })
 
-// ===== 模块侧栏（仅显示有关联能力的模块） =====
+// 模块侧栏
 const displayModules = computed(() => {
   const moduleIds = new Set(linkedCaps.value.map(c => c.moduleId))
-  return store.modules.filter(m => moduleIds.has(m.id))
+  return [...store.modules, ...store.customModules].filter(m => moduleIds.has(m.id))
 })
 
 const currentModuleId = ref('all')
 
-// ===== 能力表格 =====
 const filteredCapabilities = computed(() => {
-  let list = linkedCaps.value
-  if (currentModuleId.value !== 'all') {
-    list = list.filter(cap => cap.moduleId === currentModuleId.value)
-  }
-  return list.map(cap => {
-    const mod = store.modules.find(m => m.id === cap.moduleId)
-    return {
-      ...cap,
-      _moduleName: mod ? mod.name : '—',
-      _moduleId: cap.moduleId
-    }
-  })
+  if (currentModuleId.value === 'all') return linkedCaps.value
+  return linkedCaps.value.filter(cap => cap.moduleId === currentModuleId.value)
 })
 
-// ===== 标签与展示 =====
+// ===== 标签 =====
 const typeTagMap = { prop: '属性', svc: '服务', evt: '事件' }
 const typeTagClsMap = { prop: 'type-prop', svc: 'type-svc', evt: 'type-evt' }
-
 function typeLabel(t) { return typeTagMap[t] || t }
 function typeTagCls(t) { return typeTagClsMap[t] || '' }
 
@@ -596,28 +587,20 @@ function dataTypeLabel(cap) {
 function dataDefDetail(cap) {
   if (cap.capType === 'prop') {
     const dd = cap.dataDef
-    if (dd.dataType === 'enum') {
-      return dd.enumValues.map(ev => `${ev.name}(${ev.val})`).join(', ')
-    }
+    if (dd.dataType === 'enum') return dd.enumValues.map(ev => `${ev.name}(${ev.val})`).join(', ')
     if (dd.dataType === 'int') {
       let s = `${dd.min}~${dd.max}`
       if (dd.step && dd.step !== 1) s += `, 步长${dd.step}`
       if (dd.unit) s += ` ${dd.unit}`
       return s
     }
-    if (dd.dataType === 'boolean') {
-      return `${dd.trueLabel || 'true'}/${dd.falseLabel || 'false'}`
-    }
-    if (dd.dataType === 'string') {
-      return `最大${dd.limit || dd.maxLength || 64}字节`
-    }
+    if (dd.dataType === 'boolean') return `${dd.trueLabel || 'true'}/${dd.falseLabel || 'false'}`
+    if (dd.dataType === 'string') return `最大${dd.limit || dd.maxLength || 64}字节`
     if (dd.dataType === 'array') {
       const et = { int: 'Int', string: 'String', struct: 'Struct' }[dd.elementType] || dd.elementType || '—'
       return `元素${et}, 最大${dd.maxLength || 100}项`
     }
-    if (dd.dataType === 'struct') {
-      return `${(dd.fields || []).length} 个字段`
-    }
+    if (dd.dataType === 'struct') return `${(dd.fields || []).length} 个字段`
   }
   if (cap.capType === 'svc') {
     const dd = cap.dataDef
@@ -631,7 +614,7 @@ function dataDefDetail(cap) {
   return ''
 }
 
-// ===== 导入能力（穿梭框） =====
+// ===== 关联能力 =====
 const importDialogVisible = ref(false)
 const importSelectedIds = ref([])
 const importCheckedIds = ref([])
@@ -640,34 +623,29 @@ const expandedLeftModules = ref([])
 const expandedModules = ref([])
 
 function buildModuleGroups(capList) {
+  const allMods = [...store.modules, ...store.customModules]
   const moduleMap = {}
-  const orphanCaps = []
   capList.forEach(cap => {
-    const mod = store.modules.find(m => m.id === cap.moduleId)
+    const mod = allMods.find(m => m.id === cap.moduleId)
     if (mod) {
       if (!moduleMap[cap.moduleId]) moduleMap[cap.moduleId] = { mod, caps: [] }
       moduleMap[cap.moduleId].caps.push(cap)
-    } else {
-      orphanCaps.push(cap)
     }
   })
-  const groups = store.modules
+  return allMods
     .filter(m => moduleMap[m.id]?.caps.length)
     .map(m => ({
       id: m.id,
       name: m.name + ' (' + m.identifier + ')',
       caps: moduleMap[m.id].caps
     }))
-  if (orphanCaps.length) {
-    groups.push({ id: '_other', name: '其他', caps: orphanCaps })
-  }
-  return groups
 }
 
 const importAvailableByModule = computed(() => {
-  const linkedIds = new Set(getCategoryLinkedCapIds(categoryId))
+  const linkedIds = new Set(linkedCaps.value.map(c => c.id))
   const excludedIds = new Set([...linkedIds, ...importSelectedIds.value])
-  const available = store.capabilities.filter(c => !excludedIds.has(c.id))
+  const allCaps = [...store.capabilities, ...store.customCapabilities]
+  const available = allCaps.filter(c => !excludedIds.has(c.id))
   return buildModuleGroups(available)
 })
 
@@ -708,18 +686,14 @@ function isModuleIndeterminate(mod) {
 function toggleModuleAllCheck(mod) {
   const visible = getVisibleCaps(mod)
   if (isModuleAllChecked(mod)) {
-    visible.forEach(c => {
-      importCheckedIds.value = importCheckedIds.value.filter(id => id !== c.id)
-    })
+    visible.forEach(c => { importCheckedIds.value = importCheckedIds.value.filter(id => id !== c.id) })
   } else {
-    visible.forEach(c => {
-      if (!importCheckedIds.value.includes(c.id)) importCheckedIds.value.push(c.id)
-    })
+    visible.forEach(c => { if (!importCheckedIds.value.includes(c.id)) importCheckedIds.value.push(c.id) })
   }
 }
 
 function getCapById(id) {
-  return store.capabilities.find(c => c.id === id)
+  return [...store.capabilities, ...store.customCapabilities].find(c => c.id === id)
 }
 
 const importSelectedByModule = computed(() => {
@@ -748,32 +722,61 @@ function transferToRight() {
   importCheckedIds.value = []
 }
 
-function transferToLeft() {
-  importSelectedIds.value = []
-}
-
-function removeFromSelected(id) {
-  importSelectedIds.value = importSelectedIds.value.filter(i => i !== id)
-}
+function transferToLeft() { importSelectedIds.value = [] }
+function removeFromSelected(id) { importSelectedIds.value = importSelectedIds.value.filter(i => i !== id) }
 
 function openImportDialog() {
   importSelectedIds.value = []
   importCheckedIds.value = []
   importSearchText.value = ''
   expandedModules.value = []
-  expandedLeftModules.value = store.modules.map(m => m.id)
+  expandedLeftModules.value = [...store.modules, ...store.customModules].map(m => m.id)
   importDialogVisible.value = true
 }
 
 function handleImportConfirm() {
+  if (!algo.value) return
+  const caps = (() => { try { return JSON.parse(algo.value.capabilities || '{}') } catch { return {} } })()
   importSelectedIds.value.forEach(capId => {
-    linkCapToCategory(categoryId, capId)
+    const cap = getCapById(capId)
+    if (cap && !caps[cap.identifier]) caps[cap.identifier] = true
   })
+  const capIds = Object.keys(caps).filter(k => !k.startsWith('__'))
+  updateAlgorithm({
+    id: algo.value.id,
+    capabilities: JSON.stringify(caps),
+    capabilityIds: JSON.stringify(capIds)
+  })
+  // refresh local data
+  algo.value.capabilities = JSON.stringify(caps)
+  algo.value.capabilityIds = JSON.stringify(capIds)
   ElMessage.success(`已导入 ${importSelectedIds.value.length} 个能力`)
   importDialogVisible.value = false
 }
 
-// ===== 编辑能力参数 =====
+// ===== 移除能力 =====
+function handleRemoveCap(cap) {
+  if (!algo.value) return
+  ElMessageBox.confirm(
+    `确定从该算法移除能力「${cap.name}」？能力本身不会被删除。`,
+    '移除确认',
+    { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }
+  ).then(() => {
+    const caps = (() => { try { return JSON.parse(algo.value.capabilities || '{}') } catch { return {} } })()
+    delete caps[cap.identifier]
+    const capIds = Object.keys(caps).filter(k => !k.startsWith('__'))
+    updateAlgorithm({
+      id: algo.value.id,
+      capabilities: JSON.stringify(caps),
+      capabilityIds: JSON.stringify(capIds)
+    })
+    algo.value.capabilities = JSON.stringify(caps)
+    algo.value.capabilityIds = JSON.stringify(capIds)
+    ElMessage.success('已移除')
+  }).catch(() => {})
+}
+
+// ===== 编辑能力参数（编辑池中能力 dataDef） =====
 const editDialogVisible = ref(false)
 const editCap = ref(null)
 const editForm = reactive({
@@ -792,8 +795,7 @@ const editingParamIdx = ref(-1)
 const paramForm = reactive({
   name: '', identifier: '', dataType: 'boolean',
   min: 0, max: 100, step: 1, unit: '',
-  maxLength: 64, elementType: 'int', arrayMaxLength: 10,
-  trueLabel: '是', falseLabel: '否',
+  maxLength: 64, elementType: 'int', arrayMaxLength: 10, trueLabel: '是', falseLabel: '否',
   enumValues: [{ name: '', val: 0 }]
 })
 
@@ -838,14 +840,8 @@ function resetParamForm() {
   paramForm.enumValues = [{ name: '', val: 0 }]
 }
 
-function onParamDataTypeChange() {}
-
 function buildParam() {
-  const p = {
-    name: paramForm.name.trim(),
-    identifier: paramForm.identifier.trim(),
-    dataType: paramForm.dataType
-  }
+  const p = { name: paramForm.name.trim(), identifier: paramForm.identifier.trim(), dataType: paramForm.dataType }
   if (paramForm.dataType === 'int') {
     p.min = paramForm.min; p.max = paramForm.max; p.step = paramForm.step; p.unit = paramForm.unit
   } else if (paramForm.dataType === 'string') {
@@ -972,116 +968,62 @@ function buildEditDataDef() {
   return { dataType: 'event', eventType: editForm.eventType, outputParams: editForm.outputParams }
 }
 
-function handleRemoveCap(cap) {
-  ElMessageBox.confirm(
-    `确定从该类目移除能力「${cap.name}」？能力本身不会被删除。`,
-    '移除确认',
-    { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }
-  ).then(() => {
-    unlinkCapFromCategory(categoryId, cap.id)
-    ElMessage.success('已移除')
-  }).catch(() => {})
+// ===== 加载 =====
+function loadAlgo() {
+  const res = getAlgorithm(algoId)
+  if (res.code === 0) algo.value = res.data
 }
+
+onMounted(() => { loadAlgo() })
 </script>
 
 <style lang="scss" scoped>
-// 顶部栏
 .top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 24px var(--spacing-md) 0;
-  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 0 24px var(--spacing-md) 0; flex-shrink: 0;
 }
-.top-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.top-actions {
-  display: flex;
-  gap: 8px;
-}
+.top-left { display: flex; align-items: center; gap: 12px; }
+.top-actions { display: flex; gap: 8px; }
 .top-title { font-size: 15px; font-weight: 600; color: var(--text-primary); }
 .top-sub { font-size: var(--font-xs); color: var(--text-secondary); margin-top: 2px; }
 
-// 主布局
-.main-layout {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
-  padding-top: 12px;
-}
+.main-layout { flex: 1; display: flex; overflow: hidden; padding-top: 12px; }
 
-// 模块侧栏
 .module-sidebar {
-  width: 260px;
-  background: var(--bg-card);
+  width: 260px; background: var(--bg-card);
   border-right: 1px solid var(--border-lighter);
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
+  display: flex; flex-direction: column; flex-shrink: 0;
 }
 .module-sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border-lighter);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-bottom: 1px solid var(--border-lighter);
 }
 .module-sidebar-title { font-size: var(--font-md); font-weight: 600; color: var(--text-primary); }
 .module-list { flex: 1; overflow-y: auto; padding: 8px; }
 
 .module-item-all {
-  padding: 10px 12px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-regular);
-  cursor: pointer;
-  border-radius: 8px;
-  margin-bottom: 4px;
+  padding: 10px 12px; font-size: 13px; font-weight: 500; color: var(--text-regular);
+  cursor: pointer; border-radius: 8px; margin-bottom: 4px;
   &:hover { background: var(--bg-hover); }
   &.active { background: var(--primary-bg); color: var(--primary-color); }
 }
-
 .module-item {
-  display: flex;
-  align-items: center;
-  padding: 10px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 2px;
-  transition: all .15s;
+  display: flex; align-items: center; padding: 10px 12px;
+  border-radius: 8px; cursor: pointer; margin-bottom: 2px; transition: all .15s;
   &:hover { background: var(--bg-hover); }
   &.active { background: var(--primary-bg); }
   .module-name {
-    flex: 1;
-    font-size: 13px;
-    color: var(--text-regular);
+    flex: 1; font-size: 13px; color: var(--text-regular);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     .active & { color: var(--primary-color); font-weight: 500; }
   }
-  .module-ident {
-    font-size: 11px; color: var(--text-placeholder); margin-left: 8px; flex-shrink: 0;
-  }
+  .module-ident { font-size: 11px; color: var(--text-placeholder); margin-left: 8px; flex-shrink: 0; }
 }
 
-// 能力表格区
-.capability-right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  padding: 0 24px 16px;
-}
+.capability-right { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 0 24px 16px; }
 
-// 类型标签
 .type-tag {
-  display: inline-flex;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
+  display: inline-flex; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500;
   &.type-prop { background: #EFF6FF; color: #2563EB; }
   &.type-svc { background: #F0FDF4; color: #16A34A; }
   &.type-evt { background: #FFFBEB; color: #D97706; }
@@ -1094,76 +1036,41 @@ function handleRemoveCap(cap) {
 .cell-desc { font-size: 13px; color: var(--text-secondary); }
 .cell-module { font-size: 13px; color: var(--text-regular); }
 
-// 空状态
 .empty-state {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-placeholder);
-  font-size: var(--font-md);
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  color: var(--text-placeholder); font-size: var(--font-md);
 }
 
-// 穿梭框
-.transfer-container {
-  height: 420px;
-}
-.transfer-panel-search {
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--border-lighter);
-  flex-shrink: 0;
-}
-.transfer-count {
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--text-secondary);
-}
+.transfer-container { height: 420px; }
+.transfer-panel-search { padding: 8px 12px; border-bottom: 1px solid var(--border-lighter); flex-shrink: 0; }
+.transfer-count { font-size: 12px; font-weight: 400; color: var(--text-secondary); }
 
-// 类型卡片（编辑弹窗用）
 .type-cards { display: flex; gap: 8px; }
-
-// 弹窗整体间距
 .type-card {
-  padding: 0 12px;
-  border: 1px solid var(--border-light);
-  border-radius: var(--el-border-radius-base);
-  font-size: 12px;
-  line-height: 26px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  background: var(--bg-body);
+  padding: 0 12px; border: 1px solid var(--border-light);
+  border-radius: var(--el-border-radius-base); font-size: 12px; line-height: 26px;
+  font-weight: 500; color: var(--text-secondary); background: var(--bg-body);
   &.active { border-color: var(--primary-color); background: var(--primary-bg); color: var(--primary-color); }
 }
 
-// 枚举编辑
 .enum-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
 .enum-row { display: flex; align-items: center; gap: 8px; }
-
-// 范围行
 .range-row { display: flex; align-items: center; gap: 8px; width: 100%; }
-
-// 布尔标签
 .bool-labels { display: flex; gap: 12px; width: 100%; }
-
-// 参数列表
 .param-list { width: 100%; }
 .param-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border: 1px solid var(--border-light);
-  border-radius: 6px;
-  margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+  border: 1px solid var(--border-light); border-radius: 6px; margin-bottom: 6px;
 }
 .param-info { flex: 1; min-width: 0; }
 .param-name { font-size: 13px; color: var(--text-primary); }
 .param-meta { font-size: 11px; color: var(--text-placeholder); margin-left: 8px; }
 .param-empty { font-size: 12px; color: var(--text-placeholder); padding: 8px 0; }
+.form-hint { display: block; font-size: 11px; color: var(--text-placeholder); margin-bottom: 4px; }
 </style>
 
 <style lang="scss">
-// 弹窗样式（非 scoped，因 el-dialog 被 teleport 到 body）
+.alg-cap-dialog .el-dialog__body { padding-top: 20px; }
 .cap-dialog {
   .el-dialog__body { padding-top: 20px; }
   .el-dialog__header { padding-bottom: 12px; }

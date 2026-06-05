@@ -33,8 +33,8 @@
           <span
             v-for="t in msgFilterTabs"
             :key="t.key"
-            :class="['msg-tab', { active: activeMsgTab === t.key }]"
-            @click="activeMsgTab = t.key"
+            :class="['msg-tab', { active: activeMsgTabs.has(t.key) }]"
+            @click="toggleTab(t.key)"
           >{{ t.label }}</span>
         </div>
       </div>
@@ -135,10 +135,36 @@ const msgFilterTabs = computed(() => {
     { key: 'person_detect', label: '人形侦测' }
   ]
 })
-const activeMsgTab = ref('all')
+const activeMsgTabs = ref(new Set(['all']))
+
+const toggleTab = (key) => {
+  const tabs = activeMsgTabs.value
+  if (key === 'all') {
+    // 点「全部」：如果已选中则清空只保留全部，否则全选
+    if (tabs.has('all')) {
+      activeMsgTabs.value = new Set(['all'])
+    } else {
+      activeMsgTabs.value = new Set(msgFilterTabs.value.map(t => t.key))
+    }
+    return
+  }
+  // 非全部：先移除「全部」，再 toggle 当前
+  const next = new Set(tabs)
+  next.delete('all')
+  if (next.has(key)) {
+    next.delete(key)
+  } else {
+    next.add(key)
+  }
+  // 如果全不选，回退到「全部」
+  if (next.size === 0) {
+    next.add('all')
+  }
+  activeMsgTabs.value = next
+}
 
 // 切换设备时重置标签选择
-watch(selectedDevice, () => { activeMsgTab.value = 'all' })
+watch(selectedDevice, () => { activeMsgTabs.value = new Set(['all']) })
 
 const focusTagMap = { 'focus_elder': 'elder', 'focus_pet': 'pet', 'focus_person': 'person' }
 
@@ -149,10 +175,15 @@ const filteredMsgList = computed(() => {
     list = list.filter(m => m.eventName.includes(kw) || m.summary.includes(kw))
   }
   list = list.filter(m => m.deviceName === selectedDevice.value)
-  if (activeMsgTab.value === 'other') {
-    list = list.filter(m => !m.isFocus)
-  } else if (focusTagMap[activeMsgTab.value]) {
-    list = list.filter(m => m.isFocus && m.tagType === focusTagMap[activeMsgTab.value])
+  const tabs = activeMsgTabs.value
+  if (!tabs.has('all')) {
+    list = list.filter(m => {
+      if (tabs.has('other') && !m.isFocus) return true
+      for (const t of tabs) {
+        if (focusTagMap[t] && m.isFocus && m.tagType === focusTagMap[t]) return true
+      }
+      return false
+    })
   }
   return list
 })

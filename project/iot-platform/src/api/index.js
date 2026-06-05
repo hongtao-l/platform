@@ -189,6 +189,8 @@ export const activityApi = {
   }
 }
 
+// 算法管理 & 事件 — 当前使用 Mock 数据，见 src/views/iot/thing-model/data.js
+
 export default {
   userApi,
   productApi,

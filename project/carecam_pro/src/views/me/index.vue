@@ -9,7 +9,7 @@
       </div>
       <div class="edit-btn" @click="editProfile">编辑</div>
     </div>
-    
+
     <!-- 功能菜单 -->
     <div class="menu-section">
       <div class="menu-group">
@@ -18,6 +18,14 @@
             <van-icon name="shop-o" size="18" color="#4F46E5" />
           </div>
           <span class="menu-label">服务商城</span>
+          <van-icon name="arrow" class="menu-arrow" />
+        </div>
+        <div class="menu-item" @click="goToMyServices">
+          <div class="menu-icon" style="background-color: #F5F3FF;">
+            <van-icon name="gem-o" size="18" color="#7C3AED" />
+          </div>
+          <span class="menu-label">我的服务</span>
+          <span v-if="unboundCount > 0" class="unbound-badge">待绑定</span>
           <van-icon name="arrow" class="menu-arrow" />
         </div>
         <div class="menu-item">
@@ -36,7 +44,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="menu-section">
       <div class="menu-group">
         <div class="menu-item">
@@ -62,14 +70,14 @@
         </div>
       </div>
     </div>
-    
+
     <!-- 退出登录 -->
     <div class="logout-btn" @click="showLogoutConfirm = true">退出登录</div>
-    
+
     <!-- 退出确认弹窗 -->
-    <van-dialog 
-      v-model:show="showLogoutConfirm" 
-      title="确认退出" 
+    <van-dialog
+      v-model:show="showLogoutConfirm"
+      title="确认退出"
       message="确定要退出登录吗？"
       show-cancel-button
       @confirm="logout"
@@ -78,15 +86,32 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { fetchMyServices, calcUnboundCount } from '@/mock/services'
+import { useServicesStore } from '@/composables/useServicesStore'
 
 const router = useRouter()
+const { state } = useServicesStore()
 
 // 用户信息
 const userInitial = ref('J')
 const userName = ref('John Smith')
 const userEmail = ref('john@example.com')
+
+// 待绑定套餐数
+const unboundCount = computed(() => calcUnboundCount(state.services))
+
+onMounted(async () => {
+  if (state.loaded) return
+  try {
+    const res = await fetchMyServices()
+    if (res.code === 0) {
+      state.services = res.data
+      state.loaded = true
+    }
+  } catch { /* ignore */ }
+})
 
 // 退出确认
 const showLogoutConfirm = ref(false)
@@ -99,6 +124,11 @@ const editProfile = () => {
 // 跳转服务商城
 const goToStore = () => {
   router.push('/store')
+}
+
+// 跳转我的服务
+const goToMyServices = () => {
+  router.push('/my-services')
 }
 
 // 退出登录
@@ -137,13 +167,13 @@ const logout = () => {
 
 .info {
   flex: 1;
-  
+
   .name {
     font-size: 18px;
     font-weight: 700;
     color: #fff;
   }
-  
+
   .account {
     font-size: 12px;
     color: rgba(255, 255, 255, 0.8);
@@ -178,11 +208,11 @@ const logout = () => {
   align-items: center;
   padding: 13px 16px;
   border-bottom: 1px solid $border-color;
-  
+
   &:last-child {
     border-bottom: none;
   }
-  
+
   &:active {
     background-color: $bg-page;
   }
@@ -204,6 +234,16 @@ const logout = () => {
   font-size: 14px;
   color: $text-primary;
   font-weight: 500;
+}
+
+.unbound-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #EA580C;
+  background-color: #FFF7ED;
+  padding: 2px 8px;
+  border-radius: $radius-pill;
+  margin-right: 4px;
 }
 
 .menu-arrow {

@@ -1,6 +1,6 @@
-import { reactive, computed } from 'vue'
+import { reactive } from 'vue'
 
-let _id = 0
+let _id = 100
 const nextId = () => ++_id
 
 // ===== 类目 =====
@@ -17,7 +17,8 @@ const initialModules = [
   { id: nextId(), name: '灯光模式模块', identifier: 'LightModeModule' },
   { id: nextId(), name: '事件侦测模块', identifier: 'EventDetectModule' },
   { id: nextId(), name: '门铃设置模块', identifier: 'BellSettingModule' },
-  { id: nextId(), name: '安防侦测模块', identifier: 'SecurityDetectModule' }
+  { id: nextId(), name: '安防侦测模块', identifier: 'SecurityDetectModule' },
+  { id: nextId(), name: '算法能力模块', identifier: 'AlgorithmCapModule' }
 ]
 
 // ===== 标准能力（独立池） =====
@@ -72,7 +73,40 @@ const initialCapabilities = [
   { id: nextId(), moduleId: initialModules[5].id, capType: 'evt', name: '烟雾告警', identifier: 'SmokeAlarm', descr: '检测到烟雾时上报',
     dataDef: { dataType:'event', eventType:'alarm', outputParams:[] } },
   { id: nextId(), moduleId: initialModules[5].id, capType: 'evt', name: '水浸告警', identifier: 'WaterLeak', descr: '检测到水浸时上报',
-    dataDef: { dataType:'event', eventType:'alarm', outputParams:[] } }
+    dataDef: { dataType:'event', eventType:'alarm', outputParams:[] } },
+
+  // 算法能力模块
+  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '算法开关', identifier: 'AlgorithmSwitch', descr: '控制算法是否启用',
+    dataDef: { dataType:'boolean', accessMode:'rw', trueLabel:'开启', falseLabel:'关闭', defaultVal:'1' } },
+  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '灵敏度', identifier: 'Sensitivity', descr: '算法侦测的灵敏度等级',
+    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'高',val:0},{name:'中',val:1},{name:'低',val:2}], defaultVal:'1' } },
+  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '侦测类型', identifier: 'DetectType', descr: '算法支持的侦测目标类型',
+    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'运动',val:0},{name:'人形',val:1},{name:'车辆',val:2}], defaultVal:'0' } },
+  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '定时侦测', identifier: 'ScheduledDetect', descr: '定时侦测时间段配置',
+    dataDef: { dataType:'array', elementType:'struct', accessMode:'rw', maxLength:10,
+      fields:[
+        { name:'启用', identifier:'Switch', dataType:'boolean', trueLabel:'开启', falseLabel:'关闭' },
+        { name:'开始时间', identifier:'StartTime', dataType:'string', maxLength:8 },
+        { name:'结束时间', identifier:'EndTime', dataType:'string', maxLength:8 },
+        { name:'循环周期', identifier:'WeekDays', dataType:'array', elementType:'int', maxLength:7 }
+      ] } },
+  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '区域侦测', identifier: 'ZoneDetect', descr: '侦测区域配置',
+    dataDef: { dataType:'array', elementType:'struct', accessMode:'rw', maxLength:8,
+      fields:[
+        { name:'区域名称', identifier:'Name', dataType:'string', maxLength:32 },
+        { name:'顶点X坐标', identifier:'PointsX', dataType:'array', elementType:'int', maxLength:4 },
+        { name:'顶点Y坐标', identifier:'PointsY', dataType:'array', elementType:'int', maxLength:4 }
+      ] } },
+  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '声音告警开关', identifier: 'SoundAlarmSwitch', descr: '是否开启声音告警',
+    dataDef: { dataType:'boolean', accessMode:'rw', trueLabel:'开启', falseLabel:'关闭', defaultVal:'0' } },
+  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '声音告警次数', identifier: 'SoundAlarmCount', descr: '声音告警触发次数阈值',
+    dataDef: { dataType:'int', accessMode:'rw', min:1, max:10, step:1, unit:'次', defaultVal:'3' } },
+  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '自定义告警音频', identifier: 'CustomAlarmAudio', descr: '自定义告警音频内容',
+    dataDef: { dataType:'string', accessMode:'rw', maxLength:255, defaultVal:'' } },
+  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '灯光告警开关', identifier: 'LightAlarmSwitch', descr: '是否开启灯光告警',
+    dataDef: { dataType:'boolean', accessMode:'rw', trueLabel:'开启', falseLabel:'关闭', defaultVal:'0' } },
+  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '灯光告警时长', identifier: 'LightAlarmDuration', descr: '灯光告警持续时长',
+    dataDef: { dataType:'int', accessMode:'rw', min:1, max:60, step:1, unit:'秒', defaultVal:'5' } }
 ]
 
 // ===== 类目-能力关联 =====
@@ -291,4 +325,186 @@ export function isCapIdentifierUnique(identifier, excludeCapId) {
     if (cap.identifier === identifier) return false
   }
   return true
+}
+
+// ========================================================================
+// 算法 & 事件 Mock 数据
+// ========================================================================
+
+const initialAlgorithms = [
+  {
+    id: nextId(), algorithmId: 'motion_detection', algorithmIcon: '🔍',
+    algorithmName: JSON.stringify({ '1': '移动侦测算法', '2': 'Motion Detection' }),
+    capabilities: JSON.stringify({ MotionDetect: true, AlgorithmSwitch: true, Sensitivity: true, DetectType: true, ScheduledDetect: true, ZoneDetect: true, __detectTypes: { motion: '运动', person: '人形', vehicle: '车辆' } }),
+    capabilityIds: JSON.stringify(['MotionDetect', 'AlgorithmSwitch', 'Sensitivity', 'DetectType', 'ScheduledDetect', 'ZoneDetect']),
+    eventIds: JSON.stringify([100001, 100002]),
+    referencedCount: 3
+  },
+  {
+    id: nextId(), algorithmId: 'sound_detection', algorithmIcon: '🔊',
+    algorithmName: JSON.stringify({ '1': '声音侦测算法', '2': 'Sound Detection' }),
+    capabilities: JSON.stringify({ SoundAlarm: true, AlgorithmSwitch: true, SoundAlarmSwitch: true, SoundAlarmCount: true, CustomAlarmAudio: true, LightAlarmSwitch: true, LightAlarmDuration: true }),
+    capabilityIds: JSON.stringify(['SoundAlarm', 'AlgorithmSwitch', 'SoundAlarmSwitch', 'SoundAlarmCount', 'CustomAlarmAudio', 'LightAlarmSwitch', 'LightAlarmDuration']),
+    eventIds: JSON.stringify([100003]),
+    referencedCount: 0
+  }
+]
+
+const initialEvents = [
+  { id: nextId(), eventId: 100001, eventName: JSON.stringify({ '1': '移动侦测告警', '2': 'Motion Alert' }), eventRemark: 'PIR传感器检测到移动物体时触发', pushCopy: JSON.stringify({ '1': '检测到移动物体', '2': 'Motion detected' }), referencedCount: 2 },
+  { id: nextId(), eventId: 100002, eventName: JSON.stringify({ '1': '人形识别告警', '2': 'Person Alert' }), eventRemark: 'AI人形识别到有人出现时触发', pushCopy: JSON.stringify({ '1': '发现有人活动', '2': 'Person detected' }), referencedCount: 1 },
+  { id: nextId(), eventId: 100003, eventName: JSON.stringify({ '1': '异常声音告警', '2': 'Abnormal Sound' }), eventRemark: '检测到异常声音时触发（玻璃破碎、尖叫声等）', pushCopy: JSON.stringify({ '1': '检测到异常声音', '2': 'Abnormal sound detected' }), referencedCount: 1 },
+  { id: nextId(), eventId: 100004, eventName: JSON.stringify({ '1': '灯光状态变更', '2': 'Light Status Changed' }), eventRemark: '灯光模式切换时触发', pushCopy: JSON.stringify({ '1': '灯光状态已更新', '2': 'Light status updated' }), referencedCount: 1 },
+  { id: nextId(), eventId: 100005, eventName: JSON.stringify({ '1': '低电量告警', '2': 'Low Battery' }), eventRemark: '设备电量低于阈值时触发', pushCopy: JSON.stringify({ '1': '设备电量不足，请及时充电', '2': 'Device battery low' }), referencedCount: 1 },
+  { id: nextId(), eventId: 100006, eventName: JSON.stringify({ '1': '设备上线通知', '2': 'Device Online' }), eventRemark: '设备从离线恢复在线时触发', pushCopy: JSON.stringify({ '1': '设备已重新上线', '2': 'Device is back online' }), referencedCount: 0 },
+  { id: nextId(), eventId: 100007, eventName: JSON.stringify({ '1': '门铃呼叫', '2': 'Bell Ring' }), eventRemark: '访客按下门铃时触发', pushCopy: JSON.stringify({ '1': '有人在门口', '2': 'Someone is at the door' }), referencedCount: 0 },
+  { id: nextId(), eventId: 100008, eventName: JSON.stringify({ '1': '车辆识别告警', '2': 'Vehicle Alert' }), eventRemark: 'AI识别到车辆进入监控区域', pushCopy: JSON.stringify({ '1': '检测到车辆进入', '2': 'Vehicle detected' }), referencedCount: 0 }
+]
+
+store.algorithms = JSON.parse(JSON.stringify(initialAlgorithms))
+store.events = JSON.parse(JSON.stringify(initialEvents))
+
+// ---- 算法 CRUD ----
+
+export function listAlgorithms({ page, pageSize, keyword } = {}) {
+  let list = [...store.algorithms]
+  if (keyword) {
+    const kw = keyword.toLowerCase()
+    list = list.filter(a => {
+      const name = (() => { try { return JSON.parse(a.algorithmName || '{}')['1'] || '' } catch { return '' } })()
+      return a.algorithmId.toLowerCase().includes(kw) || name.includes(kw)
+    })
+  }
+  const total = list.length
+  const p = page || 1
+  const ps = pageSize || 20
+  const start = (p - 1) * ps
+  return { code: 0, data: { list: list.slice(start, start + ps), total } }
+}
+
+export function getAlgorithm(id) {
+  const algo = store.algorithms.find(a => a.id === id)
+  if (!algo) return { code: 1, message: '算法不存在' }
+  return { code: 0, data: JSON.parse(JSON.stringify(algo)) }
+}
+
+export function addAlgorithm(data) {
+  const item = {
+    id: nextId(),
+    algorithmId: data.algorithmId,
+    algorithmIcon: data.algorithmIcon || '',
+    algorithmName: data.algorithmName || '{}',
+    capabilities: data.capabilities || '{}',
+    capabilityIds: data.capabilityIds || '[]',
+    eventIds: data.eventIds || '[]',
+    referencedCount: 0
+  }
+  store.algorithms.push(item)
+  return { code: 0 }
+}
+
+export function updateAlgorithm(data) {
+  const idx = store.algorithms.findIndex(a => a.id === data.id)
+  if (idx === -1) return { code: 1, message: '算法不存在' }
+  const cur = store.algorithms[idx]
+  if (data.algorithmId !== undefined) cur.algorithmId = data.algorithmId
+  if (data.algorithmIcon !== undefined) cur.algorithmIcon = data.algorithmIcon
+  if (data.algorithmName !== undefined) cur.algorithmName = data.algorithmName
+  if (data.capabilities !== undefined) cur.capabilities = data.capabilities
+  if (data.capabilityIds !== undefined) cur.capabilityIds = data.capabilityIds
+  if (data.eventIds !== undefined) cur.eventIds = data.eventIds
+  // 更新事件引用计数
+  _updateEventRefCounts()
+  return { code: 0 }
+}
+
+export function deleteAlgorithm(id) {
+  const idx = store.algorithms.findIndex(a => a.id === id)
+  if (idx === -1) return { code: 1, message: '算法不存在' }
+  store.algorithms.splice(idx, 1)
+  _updateEventRefCounts()
+  return { code: 0 }
+}
+
+// ---- 事件 CRUD ----
+
+export function listEvents({ page, pageSize, keyword } = {}) {
+  let list = [...store.events]
+  if (keyword) {
+    const kw = keyword.toLowerCase()
+    list = list.filter(e => {
+      const name = (() => { try { return JSON.parse(e.eventName || '{}')['1'] || '' } catch { return '' } })()
+      return String(e.eventId).includes(kw) || name.includes(kw)
+    })
+  }
+  const total = list.length
+  const p = page || 1
+  const ps = pageSize || 20
+  const start = (p - 1) * ps
+  return { code: 0, data: { list: list.slice(start, start + ps), total } }
+}
+
+export function allEvents() {
+  return { code: 0, data: { list: JSON.parse(JSON.stringify(store.events)) } }
+}
+
+export function getEvent(id) {
+  const evt = store.events.find(e => e.id === id)
+  if (!evt) return { code: 1, message: '事件不存在' }
+  return { code: 0, data: JSON.parse(JSON.stringify(evt)) }
+}
+
+export function addEvent(data) {
+  const item = {
+    id: nextId(),
+    eventId: data.eventId,
+    eventName: data.eventName || '{}',
+    eventRemark: data.eventRemark || '',
+    pushCopy: data.pushCopy || '{}',
+    referencedCount: 0
+  }
+  store.events.push(item)
+  return { code: 0 }
+}
+
+export function updateEvent(data) {
+  const idx = store.events.findIndex(e => e.id === data.id)
+  if (idx === -1) return { code: 1, message: '事件不存在' }
+  const cur = store.events[idx]
+  if (data.eventId !== undefined) cur.eventId = data.eventId
+  if (data.eventName !== undefined) cur.eventName = data.eventName
+  if (data.eventRemark !== undefined) cur.eventRemark = data.eventRemark
+  if (data.pushCopy !== undefined) cur.pushCopy = data.pushCopy
+  return { code: 0 }
+}
+
+export function deleteEvent(id) {
+  const idx = store.events.findIndex(e => e.id === id)
+  if (idx === -1) return { code: 1, message: '事件不存在' }
+  store.events.splice(idx, 1)
+  // 清理算法中对事件的引用
+  store.algorithms.forEach(a => {
+    try {
+      const eids = JSON.parse(a.eventIds || '[]')
+      a.eventIds = JSON.stringify(eids.filter(eid => eid !== store.events[idx]?.eventId))
+    } catch { /* ignore */ }
+  })
+  return { code: 0 }
+}
+
+function _updateEventRefCounts() {
+  const counts = {}
+  store.algorithms.forEach(a => {
+    try {
+      JSON.parse(a.eventIds || '[]').forEach(eid => {
+        counts[eid] = (counts[eid] || 0) + 1
+      })
+    } catch { /* ignore */ }
+  })
+  store.events.forEach(e => { e.referencedCount = counts[e.eventId] || 0 })
+  store.algorithms.forEach(a => {
+    try {
+      a.referencedCount = store.algorithms.filter(o => o !== a && o.capabilities === a.capabilities).length + 1
+    } catch { a.referencedCount = 0 }
+  })
 }
