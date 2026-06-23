@@ -87,6 +87,12 @@ const routes = [
     meta: { title: '活动位运营' }
   },
   {
+    path: '/ops/activity/pkg',
+    name: 'OpsActivityPkg',
+    component: () => import('@/views/ops/activity-pkg.vue'),
+    meta: { title: '活动套餐配置' }
+  },
+  {
     path: '/ops/usergroup',
     name: 'OpsUsergroup',
     component: () => import('@/views/ops/usergroup.vue'),

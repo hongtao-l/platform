@@ -81,6 +81,11 @@
               <span class="text-ellipsis" style="max-width:120px;display:inline-block">{{ row.remark || '—' }}</span>
             </template>
           </el-table-column>
+          <el-table-column label="套餐配置" width="110">
+            <template #default="{ row }">
+              <el-button size="small" text type="primary" @click="router.push({ path: '/ops/activity/pkg', query: { strategyId: row.id, name: row.name } })">配置</el-button>
+            </template>
+          </el-table-column>
           <el-table-column label="操作" width="200">
             <template #default="{ row, $index }">
               <template v-if="row.status === 'draft'">
@@ -407,8 +412,11 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { Plus, ArrowLeft } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
+
+const router = useRouter()
 
 // ===== Page State =====
 const currentPage = ref('strategy-list')
