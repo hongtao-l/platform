@@ -4,6 +4,7 @@
 
 | 修订时间 | 修订内容 | 修订人 |
 |------|------|------|
+| 2026-06-23 | array<struct> 元素字段不支持 array；仅第一层可选 array；元素个数替代最大长度 | Kiro |
 | 2026-06-18 | v1.0 初稿 | Kiro |
 
 ---
@@ -12,7 +13,7 @@
 
 IoT 平台物模型能力库当前支持 enum、int、boolean、string 四种属性数据类型。在实际设备协议设计中，存在定时侦测（多时段）、区域侦测（多区域+顶点坐标）、循环周期（星期集合）等数组场景，需要在能力库中新增 `array` 数据类型以支持这些场景的标准化建模。
 
-**产品目标**：属性型能力新增 array 数据类型，支持 elementType=int/string/struct，struct 和 array\<struct\> 支持字段编辑与嵌套。
+**产品目标**：属性型能力新增 array 数据类型，支持 elementType=int/string/struct；array 可嵌套 struct/int/string；struct 不再嵌套 array（仅第一层可选 array 类型）；数组型定义为元素个数。
 
 ---
 
@@ -103,12 +104,13 @@ flowchart TD
 | R01 | 数据类型扩展 | 属性型能力的数据类型从 enum/int/boolean/string 扩展为 enum/int/boolean/string/array/struct |
 | R02 | array 元素类型 | elementType 支持 int / string / struct（参数弹窗中仅支持 int / string） |
 | R03 | 默认值 | newCapability 时默认 elementType='int', arrayMaxLength=100 |
-| R04 | 字段列表 | elementType='struct' 时必须至少 1 个字段，字段本身可为任意数据类型（含 array） |
+| R04 | 字段列表 | elementType='struct' 时必须至少 1 个字段；字段类型仅支持 enum / int / boolean / string / struct（不含 array） |
 | R05 | 最大长度范围 | 1-1000，步长 1 |
 | R06 | 列表展示 | 数据类型列显示「数组型」，数据定义列显示「元素{Int/String/Struct}, 最大{N}项」 |
 | R07 | 保存校验 | 元素类型和最大长度为必填；elementType=struct 时字段列表不能为空 |
 | R08 | 编辑回填 | 编辑已有 array 能力时，完整还原 elementType、maxLength、fields |
 | R09 | 自定义能力复用 | 自定义能力添加/编辑弹窗复用标准能力的 array 编辑逻辑 |
+| R10 | 嵌套限制 | array 可嵌套 struct/int/string；struct 不能嵌套 array；仅第一层（属性 dataType）可选 array |
 
 ---
 
@@ -129,7 +131,7 @@ flowchart TD
         └── fields[]: struct 字段列表 ← elementType=Struct 时显示
             ├── 字段 item: 名称 / 标识符 / 数据类型摘要 / 编辑 / 删除
             └── 添加字段 → 参数弹窗
-                └── array 定义: elementType (Int / String) + maxLength + defaultVal
+                └── 数据类型: enum / int / boolean / string / struct（不含 array）
 ```
 
 ---
@@ -160,7 +162,7 @@ flowchart TD
 - 左侧：字段名称（`param-name`，无值时显示「未命名」） + 标识符·数据类型摘要（`param-meta`）
 - 右侧：编辑按钮（text icon）+ 删除按钮（text danger icon）
 
-**添加/编辑字段**：打开参数弹窗，支持配置字段的数据类型（含 array 嵌套）
+**添加/编辑字段**：打开参数弹窗，数据类型仅可选 enum / int / boolean / string / struct（**不含 array**）
 
 **空态**：「暂无字段」
 
@@ -193,7 +195,7 @@ flowchart TD
   "fields": [
     { "name": "启用", "identifier": "Switch", "dataType": "boolean", "trueLabel": "开启", "falseLabel": "关闭" },
     { "name": "开始时间", "identifier": "StartTime", "dataType": "string", "maxLength": 8 },
-    { "name": "循环周期", "identifier": "WeekDays", "dataType": "array", "elementType": "int", "maxLength": 7 }
+    { "name": "结束时间", "identifier": "EndTime", "dataType": "string", "maxLength": 8 }
   ]
 }
 ```
@@ -208,7 +210,8 @@ flowchart TD
 | 最大长度未填写 | 保存时校验不通过 | Toast「请填写最大长度」 |
 | struct 字段为空 | 保存时校验不通过 | Toast「请至少添加一个结构体字段」 |
 | 字段编辑中名称/标识符为空 | 参数弹窗确定时校验 | Toast「请填写参数名称和标识符」 |
-| 输入越界值 | 最大长度输入 <1 或 >1000 | 控件自动限制 |
+| 输入越界值 | 元素个数输入 <1 或 >1000 | 控件自动限制 |
+| struct 字段尝试选 array 类型 | 下拉列表中不显示 array 选项 | 仅可选 enum/int/boolean/string/struct |
 
 ---
 
@@ -232,4 +235,4 @@ flowchart TD
 
 ---
 
-*文档版本: v1.0 | 创建日期: 2026-06-18*
+*文档版本: v2.0 | 更新日期: 2026-06-23 | 创建日期: 2026-06-18*

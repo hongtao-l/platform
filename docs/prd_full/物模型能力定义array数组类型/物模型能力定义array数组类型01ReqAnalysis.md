@@ -4,6 +4,7 @@
 
 | 修订时间 | 修订内容 | 修订人 |
 |------|------|------|
+| 2026-06-23 | array\<struct\> 元素结构体字段不支持 array；仅第一层可选 array；最大长度→元素个数 | Kiro |
 | 2026-06-18 | 初稿 | Kiro |
 
 ---
@@ -15,7 +16,7 @@
 IoT 平台物模型能力库中，属性类型支持 enum、int、boolean、string 四种基础类型。但在实际设备协议设计中，存在以下场景需要数组结构：
 
 1. **定时侦测**：设备可按多个时段执行侦测，每个时段包含开始时间、结束时间、循环周期等字段。需要 `array<struct>` 类型表达。
-2. **区域侦测**：设备支持多个侦测区域，每个区域包含名称和顶点坐标。需要 `array<struct>` 类型表达，且顶点坐标本身又是 `array<int>`。
+2. **区域侦测**：设备支持多个侦测区域，每个区域包含名称和顶点坐标。需要 `array<struct>` 类型表达，顶点坐标以字符串形式存储（逗号分隔）。
 3. **循环周期**：一周内重复的星期几，如周一、周三、周五。需要 `array<int>` 类型表达。
 4. **标签列表**：设备标签、能力标签等可变长字符串集合。需要 `array<string>` 类型表达。
 
@@ -30,7 +31,7 @@ IoT 平台物模型能力库中，属性类型支持 enum、int、boolean、stri
 ### 产品目标
 
 - 属性型能力新增 `array` 数据类型，支持 elementType: int / string / struct
-- `struct` 类型和 `array<struct>` 支持字段编辑（参数弹窗），字段本身可嵌套 array
+- `array` 类型支持嵌套 struct/int/string；**struct 不能再嵌套 array 类型**（仅第一层支持选 array）
 - 能力池 mock 数据中加入 array 类型示例（定时侦测、区域侦测）
 
 ---
@@ -59,7 +60,7 @@ IoT 平台物模型能力库中，属性类型支持 enum、int、boolean、stri
 | F1 | 能力库 | 属性型容器支持 array 数据类型 | P0 | 在 enum/int/boolean/string 基础上新增 array，编辑器含元素类型选择 + 最大长度 | **核心需求** |
 | F2 | 能力库 | array 支持三种 elementType | P0 | int / string / struct，下拉切换 | — |
 | F3 | 能力库 | array\<struct\> 字段编辑 | P0 | 元素类型选 struct 时，展示字段列表编辑器（添加/编辑/删除字段） | 复用 struct 编辑器逻辑 |
-| F4 | 能力库 | struct 和 array\<struct\> 字段支持嵌套 array | P0 | struct 字段的子字段 dataType 可再选 array，支持多层嵌套 | 参数弹窗同样支持 |
+| F4 | — | — | — | **已废弃**：struct 字段不再支持嵌套 array，仅第一层可选 array 类型 | — |
 | F5 | 能力库 | 列表展示适配 array 类型 | P1 | 表格中能力行的「数据类型」列、「数据定义」列适配 array | — |
 | F6 | 算法管理 | 参数弹窗支持 array 类型 | P1 | 添加/编辑出参时，数据类型下拉增加 array 选项 | elementType: int / string（参数弹窗不涉及 struct） |
 
@@ -90,7 +91,7 @@ IoT 平台物模型能力库中，属性类型支持 enum、int、boolean、stri
 | N-001 | 添加 array\<int\> 能力 | 能力库已打开 | 1. 点击「添加标准能力」 2. 选属性类型 3. 数据类型选「数组型」 4. 元素类型选 Int 5. 设置最大长度 10 6. 填写名称/标识符后保存 | 列表新增一条能力，数据类型列显示「数组型」，数据定义列显示「元素Int, 最大10项」 | 能力列表 +1 |
 | N-002 | 添加 array\<string\> 能力 | 同上 | 同上，元素类���选 String，最大长度 20 | 数据定义列显示「元素String, 最大20项」 | 能力列表 +1 |
 | N-003 | 添加 array\<struct\> 能力 | 同上 | 1. 元素类型选 Struct 2. 添加字段「开始时间」(string) 和「结束时间」(string) 3. 保存 | 列表新增能力，数据定义列显示「元素Struct, 最大100项」 | 能力列表 +1 |
-| N-004 | struct 字段内嵌套 array | 能力弹窗已打开，dataType=struct | 1. 添加字段「循环周期」 2. 数据类型选 array 3. 元素类型选 Int 4. 保存 struct 字段 | 字段列表显示「循环周期」带「元素Int, 最大X项」摘要 | struct 字段列表 +1 |
+| N-004 | struct 字段选数据类型 | 能力弹窗已打开，dataType=struct | 1. 添加字段「循环周期」 2. 数据类型选 string 3. 保存 struct 字段 | 字段列表显示「循环周期」带「字符串」摘要 | struct 字段列表 +1 |
 
 #### 4.1.3 异常场景
 
@@ -158,9 +159,19 @@ IoT 平台物模型能力库中，属性类型支持 enum、int、boolean、stri
 属性 dataDef 扩展:
   dataType = 'array' 时新增:
     elementType: 'int' | 'string' | 'struct'   ← 元素类型
-    maxLength: number (1-1000)                   ← 最大长度
+    maxLength: number (1-1000)                   ← 元素个数
     fields?: Field[]                             ← elementType='struct' 时的字段定义
+                                                 ← fields 内 Field.dataType 仅支持:
+                                                    enum | int | boolean | string | struct
+                                                    (禁止 array，仅第一层可选)
 ```
+
+### 5.3 嵌套限制规则
+
+- **array 可嵌套** struct / int / string
+- **struct 不能嵌套** array 类型
+- **仅第一层**（属性 dataType）支持选择 array 类型
+- 数组型定义为**元素个数**（非元素长度）
 
 ---
 
@@ -170,8 +181,8 @@ IoT 平台物模型能力库中，属性类型支持 enum、int、boolean、stri
 |------|------|------|------|
 | Q01 | array\<struct\> 是否需要支持默认值？ | 暂不支持，struct 默认值复杂度高 | 待确认 |
 | Q02 | 参数弹窗中 array 是否需要支持 elementType=struct？ | 暂不支持，参数弹窗只支持 int/string 元素 | 已确认 |
-| Q03 | 字段嵌套层级是否限制？ | 不硬限制，前端递归渲染 | 已确认 |
+| Q03 | 字段嵌套层级是否限制？ | struct 不能嵌套 array；仅第一层可选 array 类型 | 已确认 |
 
 ---
 
-*文档版本: v1.0 | 创建日期: 2026-06-18*
+*文档版本: v2.0 | 更新日期: 2026-06-23 | 创建日期: 2026-06-18*

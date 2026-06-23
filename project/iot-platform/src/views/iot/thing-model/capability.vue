@@ -793,8 +793,8 @@
               <el-option label="Struct (结构体)" value="struct" />
             </el-select>
           </el-form-item>
-          <el-form-item label="最大长度" required>
-            <el-input-number v-model="capForm.arrayMaxLength" :min="1" :max="1000" style="width:150px" />
+          <el-form-item label="元素个数" required>
+            <el-input-number v-model="capForm.arrayCount" :min="1" :max="1000" style="width:150px" />
           </el-form-item>
           <template v-if="capForm.elementType === 'struct'">
             <el-form-item label="元素结构体字段">
@@ -926,7 +926,7 @@
             <el-option label="String (字符串)" value="string" />
             <el-option label="Boolean (布尔)" value="boolean" />
             <el-option label="Enum (枚举)" value="enum" />
-            <el-option label="Array (数组)" value="array" />
+            <el-option v-if="editingParamTarget !== 'field'" label="Array (数组)" value="array" />
           </el-select>
         </el-form-item>
 
@@ -1009,8 +1009,8 @@
               <el-option label="String (字符串)" value="string" />
             </el-select>
           </el-form-item>
-          <el-form-item label="最大长度">
-            <el-input-number v-model="paramForm.arrayMaxLength" :min="1" :max="1000" style="width:150px" />
+          <el-form-item label="元素个数">
+            <el-input-number v-model="paramForm.arrayCount" :min="1" :max="1000" style="width:150px" />
           </el-form-item>
           <el-form-item label="默认值">
             <el-input v-model="paramForm.defaultVal" placeholder="请输入默认值（逗号分隔）" />
@@ -1353,7 +1353,7 @@ function dataDefDetail(cap) {
     }
     if (dd.dataType === 'array') {
       const et = { int: 'Int', string: 'String', struct: 'Struct' }[dd.elementType] || dd.elementType || '—'
-      return `元素${et}, 最大${dd.maxLength || 100}项`
+      return `元素${et}, ${dd.maxLength || 100}个元素`
     }
     if (dd.dataType === 'struct') {
       return `${(dd.fields || []).length} 个字段`
@@ -1401,7 +1401,7 @@ const capForm = reactive({
   min: 0, max: 100, step: 1, unit: '',
   trueLabel: '开启', falseLabel: '关闭',
   maxLength: 64,
-  elementType: 'int', arrayMaxLength: 100, fields: [],
+  elementType: 'int', arrayCount: 100, fields: [],
   eventType: 'alarm',
   inputParams: [], outputParams: []
 })
@@ -1413,7 +1413,7 @@ function resetCapForm() {
   capForm.enumValues = [{ name: '', val: 0 }]; capForm.defaultVal = ''
   capForm.min = 0; capForm.max = 100; capForm.step = 1; capForm.unit = ''
   capForm.trueLabel = '开启'; capForm.falseLabel = '关闭'
-  capForm.maxLength = 64; capForm.elementType = 'int'; capForm.arrayMaxLength = 100; capForm.fields = []
+  capForm.maxLength = 64; capForm.elementType = 'int'; capForm.arrayCount = 100; capForm.fields = []
   capForm.eventType = 'alarm'; capForm.inputParams = []; capForm.outputParams = []
 }
 
@@ -1437,7 +1437,7 @@ function resetDataDefForType() {
     capForm.enumValues = [{ name: '', val: 0 }]; capForm.defaultVal = ''
     capForm.min = 0; capForm.max = 100; capForm.step = 1; capForm.unit = ''
     capForm.trueLabel = '开启'; capForm.falseLabel = '关闭'
-    capForm.maxLength = 64; capForm.elementType = 'int'; capForm.arrayMaxLength = 100; capForm.fields = []
+    capForm.maxLength = 64; capForm.elementType = 'int'; capForm.arrayCount = 100; capForm.fields = []
   } else if (capForm.capType === 'svc') {
     capForm.inputParams = []; capForm.outputParams = []
   } else {
@@ -1465,7 +1465,7 @@ function openEditCapability(cap) {
     capForm.min = dd.min || 0; capForm.max = dd.max || 100; capForm.step = dd.step || 1; capForm.unit = dd.unit || ''
     capForm.trueLabel = dd.trueLabel || '开启'; capForm.falseLabel = dd.falseLabel || '关闭'
     capForm.maxLength = dd.limit || 64
-    capForm.elementType = dd.elementType || 'int'; capForm.arrayMaxLength = dd.maxLength || 100
+    capForm.elementType = dd.elementType || 'int'; capForm.arrayCount = dd.maxLength || 100
     capForm.fields = dd.fields ? JSON.parse(JSON.stringify(dd.fields)) : []
   } else if (cap.capType === 'svc') {
     capForm.inputParams = JSON.parse(JSON.stringify(dd.inputParams || []))
@@ -1563,7 +1563,7 @@ function buildDataDef() {
     } else if (capForm.dataType === 'string') {
       dd.limit = capForm.maxLength
     } else if (capForm.dataType === 'array') {
-      dd.elementType = capForm.elementType; dd.maxLength = capForm.arrayMaxLength
+      dd.elementType = capForm.elementType; dd.maxLength = capForm.arrayCount
       if (capForm.elementType === 'struct') dd.fields = capForm.fields.filter(f => f.name.trim())
     } else if (capForm.dataType === 'struct') {
       dd.fields = capForm.fields.filter(f => f.name.trim())
@@ -1586,7 +1586,7 @@ const paramForm = reactive({
   name: '', identifier: '', dataType: 'boolean',
   defaultVal: '',
   min: 0, max: 100, step: 1, unit: '',
-  maxLength: 64, elementType: 'int', arrayMaxLength: 10,
+  maxLength: 64, elementType: 'int', arrayCount: 10,
   trueLabel: '是', falseLabel: '否',
   enumValues: [{ name: '', val: 0 }]
 })
@@ -1595,7 +1595,7 @@ function resetParamForm() {
   paramForm.name = ''; paramForm.identifier = ''; paramForm.dataType = 'boolean'
   paramForm.defaultVal = ''
   paramForm.min = 0; paramForm.max = 100; paramForm.step = 1; paramForm.unit = ''
-  paramForm.maxLength = 64; paramForm.elementType = 'int'; paramForm.arrayMaxLength = 10
+  paramForm.maxLength = 64; paramForm.elementType = 'int'; paramForm.arrayCount = 10
   paramForm.trueLabel = '是'; paramForm.falseLabel = '否'
   paramForm.enumValues = [{ name: '', val: 0 }]
 }
@@ -1628,9 +1628,9 @@ function openEditParam(target, idx) {
   }
   paramForm.maxLength = p.maxLength || 64
   if (p.dataType === 'array') {
-    paramForm.elementType = p.elementType || 'int'; paramForm.arrayMaxLength = p.maxLength || 10
+    paramForm.elementType = p.elementType || 'int'; paramForm.arrayCount = p.maxLength || 10
   } else {
-    paramForm.elementType = 'int'; paramForm.arrayMaxLength = 10
+    paramForm.elementType = 'int'; paramForm.arrayCount = 10
   }
   paramForm.trueLabel = p.trueLabel || '是'; paramForm.falseLabel = p.falseLabel || '否'
   paramForm.enumValues = p.enumValues ? JSON.parse(JSON.stringify(p.enumValues)) : [{ name: '', val: 0 }]
@@ -1653,7 +1653,7 @@ function buildParam() {
   } else if (paramForm.dataType === 'enum') {
     p.enumValues = paramForm.enumValues.filter(ev => ev.name.trim())
   } else if (paramForm.dataType === 'array') {
-    p.elementType = paramForm.elementType; p.maxLength = paramForm.arrayMaxLength
+    p.elementType = paramForm.elementType; p.maxLength = paramForm.arrayCount
   }
   return p
 }
@@ -1695,11 +1695,7 @@ function openEditStructField(idx) {
     paramForm.min = f.min || 0; paramForm.max = f.max || 100; paramForm.step = f.step || 1; paramForm.unit = f.unit || ''
   }
   paramForm.maxLength = f.maxLength || 64
-  if (f.dataType === 'array') {
-    paramForm.elementType = f.elementType || 'int'; paramForm.arrayMaxLength = f.maxLength || 10
-  } else {
-    paramForm.elementType = 'int'; paramForm.arrayMaxLength = 10
-  }
+  paramForm.elementType = 'int'; paramForm.arrayCount = 10
   paramForm.trueLabel = f.trueLabel || '是'; paramForm.falseLabel = f.falseLabel || '否'
   paramForm.enumValues = f.enumValues ? JSON.parse(JSON.stringify(f.enumValues)) : [{ name: '', val: 0 }]
   paramDialogVisible.value = true

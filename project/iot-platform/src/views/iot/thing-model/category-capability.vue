@@ -325,8 +325,8 @@
               <el-option label="Struct (结构体)" value="struct" />
             </el-select>
           </el-form-item>
-          <el-form-item label="最大长度" required>
-            <el-input-number v-model="editForm.arrayMaxLength" :min="1" :max="1000" style="width:150px" />
+          <el-form-item label="元素个数" required>
+            <el-input-number v-model="editForm.arrayCount" :min="1" :max="1000" style="width:150px" />
           </el-form-item>
           <template v-if="editForm.elementType === 'struct'">
             <el-form-item label="元素结构体字段">
@@ -457,7 +457,7 @@
             <el-option label="String (字符串)" value="string" />
             <el-option label="Boolean (布尔)" value="boolean" />
             <el-option label="Enum (枚举)" value="enum" />
-            <el-option label="Array (数组)" value="array" />
+            <el-option v-if="editingParamTarget !== 'field'" label="Array (数组)" value="array" />
           </el-select>
         </el-form-item>
         <el-divider>类型定义</el-divider>
@@ -515,8 +515,8 @@
               <el-option label="String (字符串)" value="string" />
             </el-select>
           </el-form-item>
-          <el-form-item label="最大长度">
-            <el-input-number v-model="paramForm.arrayMaxLength" :min="1" :max="1000" style="width:150px" />
+          <el-form-item label="元素个数">
+            <el-input-number v-model="paramForm.arrayCount" :min="1" :max="1000" style="width:150px" />
           </el-form-item>
           <el-form-item label="默认值">
             <el-input v-model="paramForm.defaultVal" placeholder="请输入默认值（逗号分隔）" />
@@ -613,7 +613,7 @@ function dataDefDetail(cap) {
     }
     if (dd.dataType === 'array') {
       const et = { int: 'Int', string: 'String', struct: 'Struct' }[dd.elementType] || dd.elementType || '—'
-      return `元素${et}, 最大${dd.maxLength || 100}项`
+      return `元素${et}, ${dd.maxLength || 100}个元素`
     }
     if (dd.dataType === 'struct') {
       return `${(dd.fields || []).length} 个字段`
@@ -779,7 +779,7 @@ const editCap = ref(null)
 const editForm = reactive({
   dataType: '', enumValues: [], min: 0, max: 100, step: 1, unit: '',
   trueLabel: '', falseLabel: '', maxLength: 64,
-  elementType: 'int', arrayMaxLength: 100, fields: [],
+  elementType: 'int', arrayCount: 100, fields: [],
   eventType: '', inputParams: [], outputParams: [],
   descr: '', accessMode: 'rw', defaultVal: ''
 })
@@ -792,7 +792,7 @@ const editingParamIdx = ref(-1)
 const paramForm = reactive({
   name: '', identifier: '', dataType: 'boolean',
   min: 0, max: 100, step: 1, unit: '',
-  maxLength: 64, elementType: 'int', arrayMaxLength: 10,
+  maxLength: 64, elementType: 'int', arrayCount: 10,
   trueLabel: '是', falseLabel: '否',
   enumValues: [{ name: '', val: 0 }]
 })
@@ -821,9 +821,9 @@ function openEditParam(target, idx) {
   }
   paramForm.maxLength = p.maxLength || 64
   if (p.dataType === 'array') {
-    paramForm.elementType = p.elementType || 'int'; paramForm.arrayMaxLength = p.maxLength || 10
+    paramForm.elementType = p.elementType || 'int'; paramForm.arrayCount = p.maxLength || 10
   } else {
-    paramForm.elementType = 'int'; paramForm.arrayMaxLength = 10
+    paramForm.elementType = 'int'; paramForm.arrayCount = 10
   }
   paramForm.trueLabel = p.trueLabel || '是'; paramForm.falseLabel = p.falseLabel || '否'
   paramForm.enumValues = p.enumValues ? JSON.parse(JSON.stringify(p.enumValues)) : [{ name: '', val: 0 }]
@@ -833,7 +833,7 @@ function openEditParam(target, idx) {
 function resetParamForm() {
   paramForm.name = ''; paramForm.identifier = ''; paramForm.dataType = 'boolean'
   paramForm.min = 0; paramForm.max = 100; paramForm.step = 1; paramForm.unit = ''
-  paramForm.maxLength = 64; paramForm.elementType = 'int'; paramForm.arrayMaxLength = 10
+  paramForm.maxLength = 64; paramForm.elementType = 'int'; paramForm.arrayCount = 10
   paramForm.trueLabel = '是'; paramForm.falseLabel = '否'
   paramForm.enumValues = [{ name: '', val: 0 }]
 }
@@ -855,7 +855,7 @@ function buildParam() {
   } else if (paramForm.dataType === 'enum') {
     p.enumValues = paramForm.enumValues.filter(ev => ev.name.trim())
   } else if (paramForm.dataType === 'array') {
-    p.elementType = paramForm.elementType; p.maxLength = paramForm.arrayMaxLength
+    p.elementType = paramForm.elementType; p.maxLength = paramForm.arrayCount
   }
   return p
 }
@@ -896,11 +896,7 @@ function openEditStructField(idx) {
     paramForm.min = f.min || 0; paramForm.max = f.max || 100; paramForm.step = f.step || 1; paramForm.unit = f.unit || ''
   }
   paramForm.maxLength = f.maxLength || 64
-  if (f.dataType === 'array') {
-    paramForm.elementType = f.elementType || 'int'; paramForm.arrayMaxLength = f.maxLength || 10
-  } else {
-    paramForm.elementType = 'int'; paramForm.arrayMaxLength = 10
-  }
+  paramForm.elementType = 'int'; paramForm.arrayCount = 10
   paramForm.trueLabel = f.trueLabel || '是'; paramForm.falseLabel = f.falseLabel || '否'
   paramForm.enumValues = f.enumValues ? JSON.parse(JSON.stringify(f.enumValues)) : [{ name: '', val: 0 }]
   paramDialogVisible.value = true
@@ -918,7 +914,7 @@ function openEditCap(cap) {
     editForm.min = dd.min || 0; editForm.max = dd.max || 100; editForm.step = dd.step || 1; editForm.unit = dd.unit || ''
     editForm.trueLabel = dd.trueLabel || '开启'; editForm.falseLabel = dd.falseLabel || '关闭'
     editForm.maxLength = dd.limit || 64
-    editForm.elementType = dd.elementType || 'int'; editForm.arrayMaxLength = dd.maxLength || 100
+    editForm.elementType = dd.elementType || 'int'; editForm.arrayCount = dd.maxLength || 100
     editForm.fields = dd.fields ? JSON.parse(JSON.stringify(dd.fields)) : []
   } else if (cap.capType === 'svc') {
     editForm.inputParams = JSON.parse(JSON.stringify(dd.inputParams || []))
@@ -959,7 +955,7 @@ function buildEditDataDef() {
     } else if (editForm.dataType === 'string') {
       dd.limit = editForm.maxLength
     } else if (editForm.dataType === 'array') {
-      dd.elementType = editForm.elementType; dd.maxLength = editForm.arrayMaxLength
+      dd.elementType = editForm.elementType; dd.maxLength = editForm.arrayCount
       if (editForm.elementType === 'struct') dd.fields = editForm.fields.filter(f => f.name.trim())
     } else if (editForm.dataType === 'struct') {
       dd.fields = editForm.fields.filter(f => f.name.trim())

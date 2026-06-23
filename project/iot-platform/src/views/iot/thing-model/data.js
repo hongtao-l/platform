@@ -88,14 +88,14 @@ const initialCapabilities = [
         { name:'启用', identifier:'Switch', dataType:'boolean', trueLabel:'开启', falseLabel:'关闭' },
         { name:'开始时间', identifier:'StartTime', dataType:'string', maxLength:8 },
         { name:'结束时间', identifier:'EndTime', dataType:'string', maxLength:8 },
-        { name:'循环周期', identifier:'WeekDays', dataType:'array', elementType:'int', maxLength:7 }
+        { name:'循环周期', identifier:'WeekDays', dataType:'string', maxLength:32 }
       ] } },
   { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '区域侦测', identifier: 'ZoneDetect', descr: '侦测区域配置',
     dataDef: { dataType:'array', elementType:'struct', accessMode:'rw', maxLength:8,
       fields:[
         { name:'区域名称', identifier:'Name', dataType:'string', maxLength:32 },
-        { name:'顶点X坐标', identifier:'PointsX', dataType:'array', elementType:'int', maxLength:4 },
-        { name:'顶点Y坐标', identifier:'PointsY', dataType:'array', elementType:'int', maxLength:4 }
+        { name:'顶点X坐标', identifier:'PointsX', dataType:'string', maxLength:64 },
+        { name:'顶点Y坐标', identifier:'PointsY', dataType:'string', maxLength:64 }
       ] } },
   { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '声音告警开关', identifier: 'SoundAlarmSwitch', descr: '是否开启声音告警',
     dataDef: { dataType:'boolean', accessMode:'rw', trueLabel:'开启', falseLabel:'关闭', defaultVal:'0' } },
