@@ -1,0 +1,167 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e7]
+      - generic [ref=e9]: IoT 平台
+    - navigation [ref=e10]:
+      - generic [ref=e11] [cursor=pointer]:
+        - img [ref=e13]
+        - generic [ref=e15]: 工作台
+      - generic [ref=e16]:
+        - generic [ref=e17] [cursor=pointer]:
+          - img [ref=e19]
+          - generic [ref=e22]: 物模型管理
+          - img [ref=e24]
+        - generic:
+          - generic [ref=e26] [cursor=pointer]:
+            - img [ref=e28]
+            - generic [ref=e33]: 能力库
+          - generic [ref=e34] [cursor=pointer]:
+            - img [ref=e36]
+            - generic [ref=e39]: 算法库
+          - generic [ref=e40] [cursor=pointer]:
+            - img [ref=e42]
+            - generic [ref=e44]: IOT类目
+      - generic [ref=e45]:
+        - generic [ref=e46] [cursor=pointer]:
+          - img [ref=e48]
+          - generic [ref=e52]: 产品管理
+          - img [ref=e54]
+        - generic [ref=e56] [cursor=pointer]:
+          - img [ref=e58]
+          - generic [ref=e62]: 产品开发
+      - generic [ref=e63]:
+        - generic [ref=e64] [cursor=pointer]:
+          - img [ref=e66]
+          - generic [ref=e71]: 套餐管理
+          - img [ref=e73]
+        - generic [ref=e75] [cursor=pointer]:
+          - img [ref=e77]
+          - generic [ref=e81]: 套餐配置
+      - generic [ref=e82]:
+        - generic [ref=e83] [cursor=pointer]:
+          - img [ref=e85]
+          - generic [ref=e87]: 运营管理
+          - img [ref=e89]
+        - generic:
+          - generic [ref=e91] [cursor=pointer]:
+            - img [ref=e93]
+            - generic [ref=e95]: 商城位运营
+          - generic [ref=e96] [cursor=pointer]:
+            - img [ref=e98]
+            - generic [ref=e100]: 推荐位运营
+          - generic [ref=e101] [cursor=pointer]:
+            - img [ref=e103]
+            - generic [ref=e108]: 活动位运营
+          - generic [ref=e109] [cursor=pointer]:
+            - img [ref=e111]
+            - generic [ref=e113]: 用户分群
+          - generic [ref=e114] [cursor=pointer]:
+            - img [ref=e116]
+            - generic [ref=e118]: A/B Test
+    - generic [ref=e120] [cursor=pointer]:
+      - img [ref=e122]
+      - generic [ref=e124]: 收起菜单
+  - generic [ref=e125]:
+    - banner [ref=e126]:
+      - navigation "面包屑" [ref=e128]:
+        - link "首页" [ref=e130]
+      - generic [ref=e131]:
+        - generic [ref=e132] [cursor=pointer]:
+          - img [ref=e134]
+          - superscript [ref=e138]: "3"
+        - button "管理员" [ref=e140] [cursor=pointer]:
+          - img [ref=e143]
+          - generic [ref=e145]: 管理员
+          - img [ref=e147]
+    - main [ref=e149]:
+      - generic [ref=e150]:
+        - generic [ref=e151]:
+          - generic [ref=e152]:
+            - button "返回" [ref=e153] [cursor=pointer]:
+              - img [ref=e155]
+              - generic [ref=e157]: 返回
+            - generic [ref=e158]: "|"
+            - generic [ref=e159]: 开发产品
+          - generic [ref=e160]:
+            - heading "test-product" [level=2] [ref=e161]
+            - button "编辑产品" [ref=e162] [cursor=pointer]:
+              - generic [ref=e163]:
+                - img [ref=e165]
+                - text: 编辑产品
+          - generic [ref=e168]:
+            - generic [ref=e169]: "产品Id: PDRSAs9HaSQzNPrG"
+            - generic [ref=e170]: "|"
+            - generic [ref=e171]: "产品型号: TEST-MODEL-388537"
+            - generic [ref=e172]: "|"
+            - generic [ref=e173]: "产品类目: UITest_Edit_285367"
+            - generic [ref=e174]: "|"
+            - generic [ref=e175]: "联网方式: -"
+        - generic [ref=e178]:
+          - tablist [ref=e182]:
+            - tab "功能定义与配置" [ref=e184]:
+              - generic [ref=e185]: 功能定义与配置
+            - tab "算法联动配置" [ref=e186]:
+              - generic [ref=e187]: 算法联动配置
+            - tab "语音助手" [active] [selected] [ref=e188] [cursor=pointer]:
+              - generic [ref=e189]: 语音助手
+          - tabpanel "语音助手" [ref=e1226]:
+            - generic [ref=e1227]:
+              - generic [ref=e1228]:
+                - button "上一步" [ref=e1229] [cursor=pointer]:
+                  - generic [ref=e1230]: 上一步
+                - button "跳过" [ref=e1231] [cursor=pointer]:
+                  - generic [ref=e1232]: 跳过
+                - button "开发完成" [ref=e1233] [cursor=pointer]:
+                  - generic [ref=e1234]:
+                    - img [ref=e1236]
+                    - text: 开发完成
+              - separator [ref=e1239]:
+                - generic [ref=e1240]:
+                  - img [ref=e1242]
+                  - generic [ref=e1244]: 语音助手配置
+              - alert [ref=e1245]:
+                - img [ref=e1247]
+                - generic [ref=e1250]: 您可以选择以下平台开通语音能力，后期可通过该平台智能音箱语音控制您的设备
+              - generic [ref=e1252]:
+                - table [ref=e1254]:
+                  - rowgroup [ref=e1260]:
+                    - row "AlloTType 语音平台 功能描述 是否支持" [ref=e1261]:
+                      - columnheader "AlloTType" [ref=e1262]:
+                        - generic [ref=e1263]: AlloTType
+                      - columnheader "语音平台" [ref=e1264]:
+                        - generic [ref=e1265]: 语音平台
+                      - columnheader "功能描述" [ref=e1266]:
+                        - generic [ref=e1267]: 功能描述
+                      - columnheader "是否支持" [ref=e1268]:
+                        - generic [ref=e1269]: 是否支持
+                - table [ref=e1274]:
+                  - rowgroup [ref=e1280]:
+                    - row "1063 ALEXA ALEXA" [ref=e1281]:
+                      - cell "1063" [ref=e1282]:
+                        - generic [ref=e1283]: "1063"
+                      - cell "ALEXA" [ref=e1284]:
+                        - generic [ref=e1285]: ALEXA
+                      - cell "ALEXA" [ref=e1286]:
+                        - generic [ref=e1287]: ALEXA
+                      - cell [ref=e1288]:
+                        - generic [ref=e1290]:
+                          - switch
+                    - row "1063 GOOGLE_HOME GOOGLE_HOME" [ref=e1293]:
+                      - cell "1063" [ref=e1294]:
+                        - generic [ref=e1295]: "1063"
+                      - cell "GOOGLE_HOME" [ref=e1296]:
+                        - generic [ref=e1297]: GOOGLE_HOME
+                      - cell "GOOGLE_HOME" [ref=e1298]:
+                        - generic [ref=e1299]: GOOGLE_HOME
+                      - cell [ref=e1300]:
+                        - generic [ref=e1302]:
+                          - switch
+        - generic [ref=e436]:
+          - button "上一步" [ref=e1224] [cursor=pointer]:
+            - generic [ref=e1225]: 上一步
+          - generic [ref=e437]:
+            - button "跳过" [ref=e438] [cursor=pointer]:
+              - generic [ref=e439]: 跳过
+            - button "开发完成" [ref=e1305] [cursor=pointer]:
+              - generic [ref=e1306]: 开发完成

@@ -131,7 +131,7 @@ onMounted(() => { fetchList() })
 </script>
 
 <style lang="scss" scoped>
-.event-panel { padding: var(--spacing-lg) 0 0 0; }
+.event-panel { padding: var(--spacing-lg); }
 .event-panel :deep(.card) { padding: var(--spacing-lg); }
 .toolbar {
   display: flex; flex-wrap: wrap; justify-content: space-between;

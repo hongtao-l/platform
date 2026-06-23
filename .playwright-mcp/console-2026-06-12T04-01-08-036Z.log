@@ -1,0 +1,650 @@
+[      64ms] [WARNING] [Vue warn]: Failed to resolve component: Setting
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[      66ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: House, __name: house, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[      67ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[      68ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: SetUp, __name: set-up, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[      69ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[      70ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Grid, __name: grid, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[      70ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[      71ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[      71ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[      72ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[      73ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Operation, __name: operation, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[      74ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: ShoppingCart, __name: shopping-cart, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[      74ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Star, __name: star, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[      75ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[      76ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: UserFilled, __name: user-filled, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[      76ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: DataAnalysis, __name: data-analysis, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     246ms] [WARNING] [Vue warn]: Failed to resolve component: Setting
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     246ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: House, __name: house, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     247ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     247ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: SetUp, __name: set-up, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     247ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     248ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Grid, __name: grid, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     248ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     248ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     249ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     249ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     249ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Operation, __name: operation, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     250ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: ShoppingCart, __name: shopping-cart, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     250ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Star, __name: star, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     250ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     251ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: UserFilled, __name: user-filled, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     251ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: DataAnalysis, __name: data-analysis, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   11576ms] [WARNING] Failed to resolve component: Setting
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. Proxy(Object) at <Index>
+at <App> [Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11577ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11578ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11578ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11578ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11579ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11579ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11580ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11581ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11581ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11581ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11582ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11582ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11582ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11583ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11583ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[   11618ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11619ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11620ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11622ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11623ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11624ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11625ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11625ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11627ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11628ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11649ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11650ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11651ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11652ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11652ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11653ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11654ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11681ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11681ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11682ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11689ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11690ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11695ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11696ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11697ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11698ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11699ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11700ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11701ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11706ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11707ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11707ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[   11708ms] [WARNING] ElementPlusError: [el-checkbox] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/checkbox.html
+
+    at debugWarn (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:5174/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:5174/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429

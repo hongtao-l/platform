@@ -1,0 +1,315 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e7]
+      - generic [ref=e9]: IoT 平台
+    - navigation [ref=e10]:
+      - generic [ref=e11] [cursor=pointer]:
+        - img [ref=e13]
+        - generic [ref=e15]: 工作台
+      - generic [ref=e16]:
+        - generic [ref=e17] [cursor=pointer]:
+          - img [ref=e19]
+          - generic [ref=e22]: 物模型管理
+          - img [ref=e24]
+        - generic:
+          - generic [ref=e26] [cursor=pointer]:
+            - img [ref=e28]
+            - generic [ref=e33]: 能力库
+          - generic [ref=e34] [cursor=pointer]:
+            - img [ref=e36]
+            - generic [ref=e39]: 算法库
+          - generic [ref=e40] [cursor=pointer]:
+            - img [ref=e42]
+            - generic [ref=e44]: IOT类目
+      - generic [ref=e45]:
+        - generic [ref=e46] [cursor=pointer]:
+          - img [ref=e48]
+          - generic [ref=e52]: 产品管理
+          - img [ref=e54]
+        - generic [ref=e56] [cursor=pointer]:
+          - img [ref=e58]
+          - generic [ref=e62]: 产品开发
+      - generic [ref=e63]:
+        - generic [ref=e64] [cursor=pointer]:
+          - img [ref=e66]
+          - generic [ref=e71]: 套餐管理
+          - img [ref=e73]
+        - generic [ref=e75] [cursor=pointer]:
+          - img [ref=e77]
+          - generic [ref=e81]: 套餐配置
+      - generic [ref=e82]:
+        - generic [ref=e83] [cursor=pointer]:
+          - img [ref=e85]
+          - generic [ref=e87]: 运营管理
+          - img [ref=e89]
+        - generic:
+          - generic [ref=e91] [cursor=pointer]:
+            - img [ref=e93]
+            - generic [ref=e95]: 商城位运营
+          - generic [ref=e96] [cursor=pointer]:
+            - img [ref=e98]
+            - generic [ref=e100]: 推荐位运营
+          - generic [ref=e101] [cursor=pointer]:
+            - img [ref=e103]
+            - generic [ref=e108]: 活动位运营
+          - generic [ref=e109] [cursor=pointer]:
+            - img [ref=e111]
+            - generic [ref=e113]: 用户分群
+          - generic [ref=e114] [cursor=pointer]:
+            - img [ref=e116]
+            - generic [ref=e118]: A/B Test
+    - generic [ref=e120] [cursor=pointer]:
+      - img [ref=e122]
+      - generic [ref=e124]: 收起菜单
+  - generic [ref=e125]:
+    - banner [ref=e126]:
+      - navigation "面包屑" [ref=e128]:
+        - link "首页" [ref=e130]
+      - generic [ref=e131]:
+        - generic [ref=e132] [cursor=pointer]:
+          - img [ref=e134]
+          - superscript [ref=e138]: "3"
+        - button "管理员" [ref=e140] [cursor=pointer]:
+          - img [ref=e143]
+          - generic [ref=e145]: 管理员
+          - img [ref=e147]
+    - main [ref=e149]:
+      - generic [ref=e150]:
+        - generic [ref=e153]:
+          - button "返回 返回" [ref=e154] [cursor=pointer]:
+            - generic "返回" [ref=e155]:
+              - img [ref=e157]
+            - generic [ref=e160]: 返回
+          - separator [ref=e161]
+          - generic [ref=e162]: 开发产品
+        - generic [ref=e163]:
+          - generic [ref=e164]:
+            - heading "智能门铃 Pro" [level=2] [ref=e165]
+            - button "编辑产品" [ref=e166] [cursor=pointer]:
+              - generic [ref=e167]:
+                - img [ref=e169]
+                - text: 编辑产品
+          - generic [ref=e172]:
+            - generic [ref=e173]: "产品Id: DOORBELL_001"
+            - generic [ref=e174]: "|"
+            - generic [ref=e175]: "产品型号: TEST-MODEL-388537"
+            - generic [ref=e176]: "|"
+            - generic [ref=e177]: "产品类目: UITest_Edit_285367"
+            - generic [ref=e178]: "|"
+            - generic [ref=e179]: "联网方式: -"
+        - generic [ref=e180]:
+          - generic [ref=e185] [cursor=pointer]: 功能定义与配置
+          - generic [ref=e191] [cursor=pointer]: 算法联动配置
+          - generic [ref=e197] [cursor=pointer]: 语音助手
+        - generic [ref=e198]:
+          - tablist [ref=e202]:
+            - tab "设备能力" [selected] [ref=e203]
+            - tab "镜头配置" [ref=e204]
+            - tab "麦克风配置" [ref=e205]
+            - tab "屏显配置" [ref=e206]
+            - tab "喇叭配置" [ref=e207]
+            - tab "云端抓图" [ref=e208]
+          - tabpanel "设备能力" [ref=e210]:
+            - generic [ref=e211]:
+              - button "上一步" [disabled] [ref=e212]:
+                - generic [ref=e213]: 上一步
+              - button "跳过" [ref=e214] [cursor=pointer]:
+                - generic [ref=e215]: 跳过
+              - button "保存,下一步" [ref=e216] [cursor=pointer]:
+                - generic [ref=e217]:
+                  - img [ref=e219]
+                  - text: 保存,下一步
+            - separator [ref=e222]:
+              - generic [ref=e223]:
+                - img [ref=e225]
+                - generic [ref=e227]: 配置选项
+            - generic [ref=e228]:
+              - radiogroup "segmented" [ref=e229]:
+                - generic [ref=e230]:
+                  - generic [ref=e231] [cursor=pointer]:
+                    - radio "联网方式" [checked]
+                    - generic [ref=e232]: 联网方式
+                  - generic [ref=e233] [cursor=pointer]:
+                    - radio "对讲设置"
+                    - generic [ref=e234]: 对讲设置
+                  - generic [ref=e235] [cursor=pointer]:
+                    - radio "存储设置"
+                    - generic [ref=e236]: 存储设置
+                  - generic [ref=e237] [cursor=pointer]:
+                    - radio "电池设置"
+                    - generic [ref=e238]: 电池设置
+                  - generic [ref=e239] [cursor=pointer]:
+                    - radio "工作模式"
+                    - generic [ref=e240]: 工作模式
+                  - generic [ref=e241] [cursor=pointer]:
+                    - radio "唤醒能力"
+                    - generic [ref=e242]: 唤醒能力
+                  - generic [ref=e243] [cursor=pointer]:
+                    - radio "OTA能力"
+                    - generic [ref=e244]: OTA能力
+                  - generic [ref=e245] [cursor=pointer]:
+                    - radio "指示灯"
+                    - generic [ref=e246]: 指示灯
+                  - generic [ref=e247] [cursor=pointer]:
+                    - radio "报警录制"
+                    - generic [ref=e248]: 报警录制
+                  - generic [ref=e249] [cursor=pointer]:
+                    - radio "红外灯"
+                    - generic [ref=e250]: 红外灯
+              - generic [ref=e256]:
+                - generic [ref=e257]:
+                  - generic [ref=e258]: 联网方式
+                  - group "联网方式" [ref=e260]:
+                    - generic [ref=e261] [cursor=pointer]:
+                      - generic [ref=e262]:
+                        - checkbox "有线"
+                      - generic [ref=e264]: 有线
+                    - generic [ref=e265] [cursor=pointer]:
+                      - generic [ref=e266]:
+                        - checkbox "WIFI"
+                      - generic [ref=e268]: WIFI
+                    - generic [ref=e269] [cursor=pointer]:
+                      - generic [ref=e270]:
+                        - checkbox "移动网络"
+                      - generic [ref=e272]: 移动网络
+                - generic [ref=e273]:
+                  - generic [ref=e274]: 配网方式
+                  - group "配网方式" [ref=e276]:
+                    - generic [ref=e277] [cursor=pointer]:
+                      - generic [ref=e278]:
+                        - checkbox "AP"
+                      - generic [ref=e280]: AP
+                    - generic [ref=e281] [cursor=pointer]:
+                      - generic [ref=e282]:
+                        - checkbox "声音"
+                      - generic [ref=e284]: 声音
+                    - generic [ref=e285] [cursor=pointer]:
+                      - generic [ref=e286]:
+                        - checkbox "smartlink"
+                      - generic [ref=e288]: smartlink
+                    - generic [ref=e289] [cursor=pointer]:
+                      - generic [ref=e290]:
+                        - checkbox "摄像机识别二维码添加"
+                      - generic [ref=e292]: 摄像机识别二维码添加
+                    - generic [ref=e293] [cursor=pointer]:
+                      - generic [ref=e294]:
+                        - checkbox "局域网"
+                      - generic [ref=e296]: 局域网
+                    - generic [ref=e297] [cursor=pointer]:
+                      - generic [ref=e298]:
+                        - checkbox "APP扫码添加"
+                      - generic [ref=e300]: APP扫码添加
+                    - generic [ref=e301] [cursor=pointer]:
+                      - generic [ref=e302]:
+                        - checkbox "蓝牙添加"
+                      - generic [ref=e304]: 蓝牙添加
+                - generic [ref=e305]:
+                  - generic [ref=e306]: 默认配网方式
+                  - generic [ref=e309] [cursor=pointer]:
+                    - generic:
+                      - combobox "默认配网方式" [ref=e311]
+                      - generic [ref=e312]: AP
+                    - img [ref=e315]
+            - generic [ref=e317]:
+              - generic [ref=e318]:
+                - heading "标准能力" [level=3] [ref=e319]:
+                  - text: 标准能力
+                  - img [ref=e321]
+                - button "添加标准能力" [ref=e323] [cursor=pointer]:
+                  - generic [ref=e324]: 添加标准能力
+              - generic [ref=e326]:
+                - table [ref=e328]:
+                  - rowgroup [ref=e338]:
+                    - row "类型 能力名称 能力标识 数据类型 数据定义 描述 所属模块 操作" [ref=e339]:
+                      - columnheader "类型" [ref=e340]:
+                        - generic [ref=e341]: 类型
+                      - columnheader "能力名称" [ref=e342]:
+                        - generic [ref=e343]: 能力名称
+                      - columnheader "能力标识" [ref=e344]:
+                        - generic [ref=e345]: 能力标识
+                      - columnheader "数据类型" [ref=e346]:
+                        - generic [ref=e347]: 数据类型
+                      - columnheader "数据定义" [ref=e348]:
+                        - generic [ref=e349]: 数据定义
+                      - columnheader "描述" [ref=e350]:
+                        - generic [ref=e351]: 描述
+                      - columnheader "所属模块" [ref=e352]:
+                        - generic [ref=e353]: 所属模块
+                      - columnheader "操作" [ref=e354]:
+                        - generic [ref=e355]: 操作
+                - table [ref=e360]:
+                  - rowgroup [ref=e370]:
+                    - 'row "属性 工作模式 work_mode enum 枚举: 低功耗模式 / AOV模式 / 长电模式 设备工作模式切换 工作模式模块 编辑 删除" [ref=e371]':
+                      - cell "属性" [ref=e372]:
+                        - generic [ref=e374]: 属性
+                      - cell "工作模式" [ref=e375]:
+                        - generic [ref=e376]: 工作模式
+                      - cell "work_mode" [ref=e377]:
+                        - generic [ref=e378]: work_mode
+                      - cell "enum" [ref=e379]:
+                        - generic [ref=e380]: enum
+                      - 'cell "枚举: 低功耗模式 / AOV模式 / 长电模式" [ref=e381]':
+                        - generic [ref=e382]: "枚举: 低功耗模式 / AOV模式 / 长电模式"
+                      - cell "设备工作模式切换" [ref=e383]:
+                        - generic [ref=e384]: 设备工作模式切换
+                      - cell "工作模式模块" [ref=e385]:
+                        - generic [ref=e386]: 工作模式模块
+                      - cell "编辑 删除" [ref=e387]:
+                        - generic [ref=e388]:
+                          - button "编辑" [ref=e389] [cursor=pointer]:
+                            - generic [ref=e390]: 编辑
+                          - button "删除" [ref=e391] [cursor=pointer]:
+                            - generic [ref=e392]: 删除
+                    - 'row "属性 灯光模式 light_mode enum 枚举: 全彩 / 红外 / 智能 / 关闭 灯光模式切换 灯光模式模块 编辑 删除" [ref=e393]':
+                      - cell "属性" [ref=e394]:
+                        - generic [ref=e396]: 属性
+                      - cell "灯光模式" [ref=e397]:
+                        - generic [ref=e398]: 灯光模式
+                      - cell "light_mode" [ref=e399]:
+                        - generic [ref=e400]: light_mode
+                      - cell "enum" [ref=e401]:
+                        - generic [ref=e402]: enum
+                      - 'cell "枚举: 全彩 / 红外 / 智能 / 关闭" [ref=e403]':
+                        - generic [ref=e404]: "枚举: 全彩 / 红外 / 智能 / 关闭"
+                      - cell "灯光模式切换" [ref=e405]:
+                        - generic [ref=e406]: 灯光模式切换
+                      - cell "灯光模式模块" [ref=e407]:
+                        - generic [ref=e408]: 灯光模式模块
+                      - cell "编辑 删除" [ref=e409]:
+                        - generic [ref=e410]:
+                          - button "编辑" [ref=e411] [cursor=pointer]:
+                            - generic [ref=e412]: 编辑
+                          - button "删除" [ref=e413] [cursor=pointer]:
+                            - generic [ref=e414]: 删除
+                    - 'row "属性 常规录制 normal_record enum 枚举: 全天 / 自定义 / 关闭 常规录制模式设置 录制模式模块 编辑 删除" [ref=e415]':
+                      - cell "属性" [ref=e416]:
+                        - generic [ref=e418]: 属性
+                      - cell "常规录制" [ref=e419]:
+                        - generic [ref=e420]: 常规录制
+                      - cell "normal_record" [ref=e421]:
+                        - generic [ref=e422]: normal_record
+                      - cell "enum" [ref=e423]:
+                        - generic [ref=e424]: enum
+                      - 'cell "枚举: 全天 / 自定义 / 关闭" [ref=e425]':
+                        - generic [ref=e426]: "枚举: 全天 / 自定义 / 关闭"
+                      - cell "常规录制模式设置" [ref=e427]:
+                        - generic [ref=e428]: 常规录制模式设置
+                      - cell "录制模式模块" [ref=e429]:
+                        - generic [ref=e430]: 录制模式模块
+                      - cell "编辑 删除" [ref=e431]:
+                        - generic [ref=e432]:
+                          - button "编辑" [ref=e433] [cursor=pointer]:
+                            - generic [ref=e434]: 编辑
+                          - button "删除" [ref=e435] [cursor=pointer]:
+                            - generic [ref=e436]: 删除
+            - generic [ref=e437]:
+              - generic [ref=e438]:
+                - generic [ref=e439]:
+                  - heading "自定义能力" [level=3] [ref=e440]:
+                    - text: 自定义能力
+                    - img [ref=e442]
+                  - text: 您所定义的每一个功能，都与固件、APP控制台面板相关
+                - button "添加自定义能力" [ref=e444] [cursor=pointer]:
+                  - generic [ref=e445]: 添加自定义能力
+              - generic [ref=e446]: 暂无数据

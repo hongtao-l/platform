@@ -1,0 +1,307 @@
+[     315ms] [WARNING] [Vue warn]: Failed to resolve component: Setting
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     327ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: House, __name: house, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     330ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     333ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: SetUp, __name: set-up, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     336ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     337ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Grid, __name: grid, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     338ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     339ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     340ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     342ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     343ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Operation, __name: operation, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     344ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: ShoppingCart, __name: shopping-cart, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     345ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Star, __name: star, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     345ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     347ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: UserFilled, __name: user-filled, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     348ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: DataAnalysis, __name: data-analysis, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     597ms] [WARNING] [Vue warn]: Failed to resolve component: Setting
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     600ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: House, __name: house, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     601ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     602ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: SetUp, __name: set-up, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     603ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     606ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Grid, __name: grid, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     607ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     608ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     609ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     612ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     615ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Operation, __name: operation, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     616ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: ShoppingCart, __name: shopping-cart, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     616ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Star, __name: star, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     618ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     619ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: UserFilled, __name: user-filled, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     620ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: DataAnalysis, __name: data-analysis, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     624ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon size=24 color="#1890FF" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     625ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Grid, __name: grid, setup: } 
+  at <ElIcon size=24 color="#52C41A" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     626ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: DataAnalysis, __name: data-analysis, setup: } 
+  at <ElIcon size=24 color="#FAAD14" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     632ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: User, __name: user, setup: } 
+  at <ElIcon size=24 color="#722ED1" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[     642ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon size=32 color="#1890FF" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38236ms] [WARNING] [Vue warn]: Failed to resolve component: Setting
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38238ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: House, __name: house, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38238ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38239ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: SetUp, __name: set-up, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38240ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38240ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Grid, __name: grid, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38241ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38241ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38243ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38244ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38245ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Operation, __name: operation, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38246ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: ShoppingCart, __name: shopping-cart, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38246ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Star, __name: star, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38247ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38247ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: UserFilled, __name: user-filled, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38247ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: DataAnalysis, __name: data-analysis, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38249ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon size=24 color="#1890FF" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) > > 
+  at <RouterView> 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38250ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Grid, __name: grid, setup: } 
+  at <ElIcon size=24 color="#52C41A" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) > > 
+  at <RouterView> 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38250ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: DataAnalysis, __name: data-analysis, setup: } 
+  at <ElIcon size=24 color="#FAAD14" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) > > 
+  at <RouterView> 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38250ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: User, __name: user, setup: } 
+  at <ElIcon size=24 color="#722ED1" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) > > 
+  at <RouterView> 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[   38251ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon size=32 color="#1890FF" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) > > 
+  at <RouterView> 
+  at <Index> 
+  at <App> @ http://localhost:3000/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203

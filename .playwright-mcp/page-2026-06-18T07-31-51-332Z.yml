@@ -1,0 +1,704 @@
+- generic [ref=e10]:
+  - generic [ref=e11]:
+    - generic [ref=e12]:
+      - img [ref=e13]
+      - generic [ref=e14]: 鹤梦云生态平台
+    - img [ref=e18] [cursor=pointer]
+  - generic [ref=e19]:
+    - generic [ref=e22]:
+      - menubar [ref=e23]:
+        - menuitem "首页" [ref=e24] [cursor=pointer]:
+          - generic [ref=e25]: 首页
+        - menuitem "企业管理" [ref=e26]:
+          - generic [ref=e27] [cursor=pointer]:
+            - generic [ref=e30]: 企业管理
+            - img [ref=e32]
+        - menuitem "物模型管理" [ref=e34]:
+          - generic [ref=e35] [cursor=pointer]:
+            - generic [ref=e38]: 物模型管理
+            - img [ref=e40]
+        - menuitem "产品管理" [expanded] [ref=e42]:
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e46]: 产品管理
+            - img [ref=e48]
+          - menu [ref=e673]:
+            - menuitem "产品开发" [ref=e674] [cursor=pointer]:
+              - generic [ref=e675]: 产品开发
+            - menuitem "产品审核" [ref=e676] [cursor=pointer]:
+              - generic [ref=e677]: 产品审核
+            - menuitem "配网单元" [active] [ref=e678] [cursor=pointer]:
+              - generic [ref=e679]: 配网单元
+            - menuitem "生态方案库" [ref=e680] [cursor=pointer]:
+              - generic [ref=e681]: 生态方案库
+            - menuitem "我的方案" [ref=e682] [cursor=pointer]:
+              - generic [ref=e683]: 我的方案
+            - menuitem "生态方案审核" [ref=e684] [cursor=pointer]:
+              - generic [ref=e685]: 生态方案审核
+            - menuitem "授权SaaS" [ref=e686] [cursor=pointer]:
+              - generic [ref=e687]: 授权SaaS
+        - menuitem "固件管理" [ref=e50] [cursor=pointer]:
+          - generic [ref=e52]: 固件管理
+        - menuitem "生产管理" [ref=e53]:
+          - generic [ref=e54] [cursor=pointer]:
+            - generic [ref=e57]: 生产管理
+            - img [ref=e59]
+        - menuitem "设备中心" [expanded] [ref=e61]:
+          - generic [ref=e62] [cursor=pointer]:
+            - generic [ref=e65]: 设备中心
+            - img [ref=e67]
+          - menu [ref=e69]:
+            - menuitem "设备管理" [ref=e70] [cursor=pointer]:
+              - generic [ref=e71]: 设备管理
+            - menuitem "固件OTA" [ref=e72] [cursor=pointer]:
+              - generic [ref=e73]: 固件OTA
+            - menuitem "设备运维" [ref=e74] [cursor=pointer]:
+              - generic [ref=e75]: 设备运维
+            - menuitem "设备调拨" [ref=e76] [cursor=pointer]:
+              - generic [ref=e77]: 设备调拨
+        - menuitem "应用服务" [ref=e78]:
+          - generic [ref=e79] [cursor=pointer]:
+            - generic [ref=e82]: 应用服务
+            - img [ref=e84]
+        - menuitem "套餐管理" [ref=e86]:
+          - generic [ref=e87] [cursor=pointer]:
+            - generic [ref=e90]: 套餐管理
+            - img [ref=e92]
+        - menuitem "4G管理" [ref=e94]:
+          - generic [ref=e95] [cursor=pointer]:
+            - generic [ref=e98]: 4G管理
+            - img [ref=e100]
+        - menuitem "订单管理" [ref=e102]:
+          - generic [ref=e103] [cursor=pointer]:
+            - generic [ref=e106]: 订单管理
+            - img [ref=e108]
+        - menuitem "费用中心" [ref=e110]:
+          - generic [ref=e111] [cursor=pointer]:
+            - generic [ref=e114]: 费用中心
+            - img [ref=e116]
+        - menuitem "平台账务" [ref=e118]:
+          - generic [ref=e119] [cursor=pointer]:
+            - generic [ref=e122]: 平台账务
+            - img [ref=e124]
+        - menuitem "设备分销" [ref=e126]:
+          - generic [ref=e127] [cursor=pointer]:
+            - generic [ref=e130]: 设备分销
+            - img [ref=e132]
+        - menuitem "设备分润" [ref=e134]:
+          - generic [ref=e135] [cursor=pointer]:
+            - generic [ref=e138]: 设备分润
+            - img [ref=e140]
+        - menuitem "全球调度" [ref=e142]:
+          - generic [ref=e143] [cursor=pointer]:
+            - generic [ref=e146]: 全球调度
+            - img [ref=e148]
+        - menuitem "运营管理" [ref=e150]:
+          - generic [ref=e151] [cursor=pointer]:
+            - generic [ref=e154]: 运营管理
+            - img [ref=e156]
+        - menuitem "日志审计" [ref=e158]:
+          - generic [ref=e159] [cursor=pointer]:
+            - generic [ref=e162]: 日志审计
+            - img [ref=e164]
+        - menuitem "客服工具" [ref=e166]:
+          - generic [ref=e167] [cursor=pointer]:
+            - generic [ref=e170]: 客服工具
+            - img [ref=e172]
+        - menuitem "权限管理" [ref=e174]:
+          - generic [ref=e175] [cursor=pointer]:
+            - generic [ref=e178]: 权限管理
+            - img [ref=e180]
+      - img [ref=e184] [cursor=pointer]
+    - generic [ref=e1309]:
+      - generic [ref=e1312]:
+        - textbox "按标题/描述模糊搜索" [ref=e1317]
+        - generic [ref=e1319]:
+          - generic [ref=e1320]: 语言
+          - generic [ref=e1323] [cursor=pointer]:
+            - generic:
+              - combobox "语言" [ref=e1325]
+              - generic [ref=e1326]: 全部
+            - img [ref=e1329]
+        - generic [ref=e1333]:
+          - generic [ref=e1335] [cursor=pointer]:
+            - generic:
+              - combobox [ref=e1337]
+              - generic [ref=e1338]: 产品名称
+            - img [ref=e1341]
+          - generic [ref=e1344]:
+            - generic:
+              - combobox [ref=e1346]
+              - generic [ref=e1347]: 可输入产品名称或产品Id查询
+        - generic [ref=e1349]:
+          - button "查询" [ref=e1350] [cursor=pointer]:
+            - generic [ref=e1351]: 查询
+          - button "重置" [ref=e1352] [cursor=pointer]:
+            - generic [ref=e1353]: 重置
+      - generic [ref=e1355]:
+        - button "+ 新增配网单元" [ref=e1357] [cursor=pointer]:
+          - generic [ref=e1358]: + 新增配网单元
+        - generic [ref=e1360]:
+          - table [ref=e1362]:
+            - rowgroup [ref=e1373]:
+              - row "ID 配网单元 语言 配网模式 优先配网模式 配置步骤 关联产品 更新时间 操作" [ref=e1374]:
+                - columnheader "ID" [ref=e1375]:
+                  - generic [ref=e1376]: ID
+                - columnheader "配网单元" [ref=e1377]:
+                  - generic [ref=e1378]: 配网单元
+                - columnheader "语言" [ref=e1379]:
+                  - generic [ref=e1380]: 语言
+                - columnheader "配网模式" [ref=e1381]:
+                  - generic [ref=e1382]: 配网模式
+                - columnheader "优先配网模式" [ref=e1383]:
+                  - generic [ref=e1384]: 优先配网模式
+                - columnheader "配置步骤" [ref=e1385]:
+                  - generic [ref=e1386]: 配置步骤
+                - columnheader "关联产品" [ref=e1387]:
+                  - generic [ref=e1388]: 关联产品
+                - columnheader "更新时间" [ref=e1389]:
+                  - generic [ref=e1390]: 更新时间
+                - columnheader "操作" [ref=e1391]:
+                  - generic [ref=e1392]: 操作
+          - table [ref=e1397]:
+            - rowgroup [ref=e1408]:
+              - row "499 33333333 中文简体 声音 - 0 步 0个 2026-06-10 16:39 编辑 删除" [ref=e1409]:
+                - cell "499" [ref=e1410]:
+                  - generic [ref=e1411]: "499"
+                - cell "33333333" [ref=e1412]:
+                  - generic [ref=e1416]: "33333333"
+                - cell "中文简体" [ref=e1417]:
+                  - generic [ref=e1420]: 中文简体
+                - cell "声音" [ref=e1421]:
+                  - generic [ref=e1424]: 声音
+                - cell "-" [ref=e1425]:
+                  - generic [ref=e1426]: "-"
+                - cell "0 步" [ref=e1427]:
+                  - generic [ref=e1430] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e1432]
+                - cell "0个" [ref=e1435]:
+                  - generic [ref=e1438] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e1440]
+                - cell "2026-06-10 16:39" [ref=e1443]:
+                  - generic [ref=e1444]: 2026-06-10 16:39
+                - cell "编辑 删除" [ref=e1445]:
+                  - generic [ref=e1446]:
+                    - button "编辑" [ref=e1447] [cursor=pointer]:
+                      - generic [ref=e1448]: 编辑
+                    - button "删除" [ref=e1449] [cursor=pointer]:
+                      - generic [ref=e1450]: 删除
+              - row "430 关联产品-992282 中文简体 AP - 0 步 0个 2026-06-08 09:46 编辑 删除" [ref=e1451]:
+                - cell "430" [ref=e1452]:
+                  - generic [ref=e1453]: "430"
+                - cell "关联产品-992282" [ref=e1454]:
+                  - generic [ref=e1458]: 关联产品-992282
+                - cell "中文简体" [ref=e1459]:
+                  - generic [ref=e1462]: 中文简体
+                - cell "AP" [ref=e1463]:
+                  - generic [ref=e1466]: AP
+                - cell "-" [ref=e1467]:
+                  - generic [ref=e1468]: "-"
+                - cell "0 步" [ref=e1469]:
+                  - generic [ref=e1472] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e1474]
+                - cell "0个" [ref=e1477]:
+                  - generic [ref=e1480] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e1482]
+                - cell "2026-06-08 09:46" [ref=e1485]:
+                  - generic [ref=e1486]: 2026-06-08 09:46
+                - cell "编辑 删除" [ref=e1487]:
+                  - generic [ref=e1488]:
+                    - button "编辑" [ref=e1489] [cursor=pointer]:
+                      - generic [ref=e1490]: 编辑
+                    - button "删除" [ref=e1491] [cursor=pointer]:
+                      - generic [ref=e1492]: 删除
+              - row "421 关联产品-019285 中文简体 AP - 0 步 0个 2026-06-08 09:45 编辑 删除" [ref=e1493]:
+                - cell "421" [ref=e1494]:
+                  - generic [ref=e1495]: "421"
+                - cell "关联产品-019285" [ref=e1496]:
+                  - generic [ref=e1500]: 关联产品-019285
+                - cell "中文简体" [ref=e1501]:
+                  - generic [ref=e1504]: 中文简体
+                - cell "AP" [ref=e1505]:
+                  - generic [ref=e1508]: AP
+                - cell "-" [ref=e1509]:
+                  - generic [ref=e1510]: "-"
+                - cell "0 步" [ref=e1511]:
+                  - generic [ref=e1514] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e1516]
+                - cell "0个" [ref=e1519]:
+                  - generic [ref=e1522] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e1524]
+                - cell "2026-06-08 09:45" [ref=e1527]:
+                  - generic [ref=e1528]: 2026-06-08 09:45
+                - cell "编辑 删除" [ref=e1529]:
+                  - generic [ref=e1530]:
+                    - button "编辑" [ref=e1531] [cursor=pointer]:
+                      - generic [ref=e1532]: 编辑
+                    - button "删除" [ref=e1533] [cursor=pointer]:
+                      - generic [ref=e1534]: 删除
+              - row "412 关联产品-707567 中文简体 AP - 0 步 0个 2026-06-05 14:29 编辑 删除" [ref=e1535]:
+                - cell "412" [ref=e1536]:
+                  - generic [ref=e1537]: "412"
+                - cell "关联产品-707567" [ref=e1538]:
+                  - generic [ref=e1542]: 关联产品-707567
+                - cell "中文简体" [ref=e1543]:
+                  - generic [ref=e1546]: 中文简体
+                - cell "AP" [ref=e1547]:
+                  - generic [ref=e1550]: AP
+                - cell "-" [ref=e1551]:
+                  - generic [ref=e1552]: "-"
+                - cell "0 步" [ref=e1553]:
+                  - generic [ref=e1556] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e1558]
+                - cell "0个" [ref=e1561]:
+                  - generic [ref=e1564] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e1566]
+                - cell "2026-06-05 14:29" [ref=e1569]:
+                  - generic [ref=e1570]: 2026-06-05 14:29
+                - cell "编辑 删除" [ref=e1571]:
+                  - generic [ref=e1572]:
+                    - button "编辑" [ref=e1573] [cursor=pointer]:
+                      - generic [ref=e1574]: 编辑
+                    - button "删除" [ref=e1575] [cursor=pointer]:
+                      - generic [ref=e1576]: 删除
+              - row "403 关联产品-883773 中文简体 AP - 0 步 0个 2026-06-05 14:15 编辑 删除" [ref=e1577]:
+                - cell "403" [ref=e1578]:
+                  - generic [ref=e1579]: "403"
+                - cell "关联产品-883773" [ref=e1580]:
+                  - generic [ref=e1584]: 关联产品-883773
+                - cell "中文简体" [ref=e1585]:
+                  - generic [ref=e1588]: 中文简体
+                - cell "AP" [ref=e1589]:
+                  - generic [ref=e1592]: AP
+                - cell "-" [ref=e1593]:
+                  - generic [ref=e1594]: "-"
+                - cell "0 步" [ref=e1595]:
+                  - generic [ref=e1598] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e1600]
+                - cell "0个" [ref=e1603]:
+                  - generic [ref=e1606] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e1608]
+                - cell "2026-06-05 14:15" [ref=e1611]:
+                  - generic [ref=e1612]: 2026-06-05 14:15
+                - cell "编辑 删除" [ref=e1613]:
+                  - generic [ref=e1614]:
+                    - button "编辑" [ref=e1615] [cursor=pointer]:
+                      - generic [ref=e1616]: 编辑
+                    - button "删除" [ref=e1617] [cursor=pointer]:
+                      - generic [ref=e1618]: 删除
+              - row "394 关联产品-077464 中文简体 AP - 0 步 0个 2026-06-05 13:52 编辑 删除" [ref=e1619]:
+                - cell "394" [ref=e1620]:
+                  - generic [ref=e1621]: "394"
+                - cell "关联产品-077464" [ref=e1622]:
+                  - generic [ref=e1626]: 关联产品-077464
+                - cell "中文简体" [ref=e1627]:
+                  - generic [ref=e1630]: 中文简体
+                - cell "AP" [ref=e1631]:
+                  - generic [ref=e1634]: AP
+                - cell "-" [ref=e1635]:
+                  - generic [ref=e1636]: "-"
+                - cell "0 步" [ref=e1637]:
+                  - generic [ref=e1640] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e1642]
+                - cell "0个" [ref=e1645]:
+                  - generic [ref=e1648] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e1650]
+                - cell "2026-06-05 13:52" [ref=e1653]:
+                  - generic [ref=e1654]: 2026-06-05 13:52
+                - cell "编辑 删除" [ref=e1655]:
+                  - generic [ref=e1656]:
+                    - button "编辑" [ref=e1657] [cursor=pointer]:
+                      - generic [ref=e1658]: 编辑
+                    - button "删除" [ref=e1659] [cursor=pointer]:
+                      - generic [ref=e1660]: 删除
+              - row "385 关联产品-949498 中文简体 AP - 0 步 0个 2026-06-05 11:26 编辑 删除" [ref=e1661]:
+                - cell "385" [ref=e1662]:
+                  - generic [ref=e1663]: "385"
+                - cell "关联产品-949498" [ref=e1664]:
+                  - generic [ref=e1668]: 关联产品-949498
+                - cell "中文简体" [ref=e1669]:
+                  - generic [ref=e1672]: 中文简体
+                - cell "AP" [ref=e1673]:
+                  - generic [ref=e1676]: AP
+                - cell "-" [ref=e1677]:
+                  - generic [ref=e1678]: "-"
+                - cell "0 步" [ref=e1679]:
+                  - generic [ref=e1682] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e1684]
+                - cell "0个" [ref=e1687]:
+                  - generic [ref=e1690] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e1692]
+                - cell "2026-06-05 11:26" [ref=e1695]:
+                  - generic [ref=e1696]: 2026-06-05 11:26
+                - cell "编辑 删除" [ref=e1697]:
+                  - generic [ref=e1698]:
+                    - button "编辑" [ref=e1699] [cursor=pointer]:
+                      - generic [ref=e1700]: 编辑
+                    - button "删除" [ref=e1701] [cursor=pointer]:
+                      - generic [ref=e1702]: 删除
+              - row "376 关联产品-607858 中文简体 AP - 0 步 0个 2026-06-05 11:19 编辑 删除" [ref=e1703]:
+                - cell "376" [ref=e1704]:
+                  - generic [ref=e1705]: "376"
+                - cell "关联产品-607858" [ref=e1706]:
+                  - generic [ref=e1710]: 关联产品-607858
+                - cell "中文简体" [ref=e1711]:
+                  - generic [ref=e1714]: 中文简体
+                - cell "AP" [ref=e1715]:
+                  - generic [ref=e1718]: AP
+                - cell "-" [ref=e1719]:
+                  - generic [ref=e1720]: "-"
+                - cell "0 步" [ref=e1721]:
+                  - generic [ref=e1724] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e1726]
+                - cell "0个" [ref=e1729]:
+                  - generic [ref=e1732] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e1734]
+                - cell "2026-06-05 11:19" [ref=e1737]:
+                  - generic [ref=e1738]: 2026-06-05 11:19
+                - cell "编辑 删除" [ref=e1739]:
+                  - generic [ref=e1740]:
+                    - button "编辑" [ref=e1741] [cursor=pointer]:
+                      - generic [ref=e1742]: 编辑
+                    - button "删除" [ref=e1743] [cursor=pointer]:
+                      - generic [ref=e1744]: 删除
+              - row "367 关联产品-598314 中文简体 AP - 0 步 0个 2026-06-05 11:17 编辑 删除" [ref=e1745]:
+                - cell "367" [ref=e1746]:
+                  - generic [ref=e1747]: "367"
+                - cell "关联产品-598314" [ref=e1748]:
+                  - generic [ref=e1752]: 关联产品-598314
+                - cell "中文简体" [ref=e1753]:
+                  - generic [ref=e1756]: 中文简体
+                - cell "AP" [ref=e1757]:
+                  - generic [ref=e1760]: AP
+                - cell "-" [ref=e1761]:
+                  - generic [ref=e1762]: "-"
+                - cell "0 步" [ref=e1763]:
+                  - generic [ref=e1766] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e1768]
+                - cell "0个" [ref=e1771]:
+                  - generic [ref=e1774] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e1776]
+                - cell "2026-06-05 11:17" [ref=e1779]:
+                  - generic [ref=e1780]: 2026-06-05 11:17
+                - cell "编辑 删除" [ref=e1781]:
+                  - generic [ref=e1782]:
+                    - button "编辑" [ref=e1783] [cursor=pointer]:
+                      - generic [ref=e1784]: 编辑
+                    - button "删除" [ref=e1785] [cursor=pointer]:
+                      - generic [ref=e1786]: 删除
+              - row "362 关联产品-449170 中文简体 AP - 0 步 0个 2026-06-05 10:40 编辑 删除" [ref=e1787]:
+                - cell "362" [ref=e1788]:
+                  - generic [ref=e1789]: "362"
+                - cell "关联产品-449170" [ref=e1790]:
+                  - generic [ref=e1794]: 关联产品-449170
+                - cell "中文简体" [ref=e1795]:
+                  - generic [ref=e1798]: 中文简体
+                - cell "AP" [ref=e1799]:
+                  - generic [ref=e1802]: AP
+                - cell "-" [ref=e1803]:
+                  - generic [ref=e1804]: "-"
+                - cell "0 步" [ref=e1805]:
+                  - generic [ref=e1808] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e1810]
+                - cell "0个" [ref=e1813]:
+                  - generic [ref=e1816] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e1818]
+                - cell "2026-06-05 10:40" [ref=e1821]:
+                  - generic [ref=e1822]: 2026-06-05 10:40
+                - cell "编辑 删除" [ref=e1823]:
+                  - generic [ref=e1824]:
+                    - button "编辑" [ref=e1825] [cursor=pointer]:
+                      - generic [ref=e1826]: 编辑
+                    - button "删除" [ref=e1827] [cursor=pointer]:
+                      - generic [ref=e1828]: 删除
+              - row "357 关联产品-156935 中文简体 AP - 0 步 0个 2026-06-05 10:03 编辑 删除" [ref=e1829]:
+                - cell "357" [ref=e1830]:
+                  - generic [ref=e1831]: "357"
+                - cell "关联产品-156935" [ref=e1832]:
+                  - generic [ref=e1836]: 关联产品-156935
+                - cell "中文简体" [ref=e1837]:
+                  - generic [ref=e1840]: 中文简体
+                - cell "AP" [ref=e1841]:
+                  - generic [ref=e1844]: AP
+                - cell "-" [ref=e1845]:
+                  - generic [ref=e1846]: "-"
+                - cell "0 步" [ref=e1847]:
+                  - generic [ref=e1850] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e1852]
+                - cell "0个" [ref=e1855]:
+                  - generic [ref=e1858] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e1860]
+                - cell "2026-06-05 10:03" [ref=e1863]:
+                  - generic [ref=e1864]: 2026-06-05 10:03
+                - cell "编辑 删除" [ref=e1865]:
+                  - generic [ref=e1866]:
+                    - button "编辑" [ref=e1867] [cursor=pointer]:
+                      - generic [ref=e1868]: 编辑
+                    - button "删除" [ref=e1869] [cursor=pointer]:
+                      - generic [ref=e1870]: 删除
+              - row "348 关联产品-001081 中文简体 AP - 0 步 0个 2026-06-05 10:01 编辑 删除" [ref=e1871]:
+                - cell "348" [ref=e1872]:
+                  - generic [ref=e1873]: "348"
+                - cell "关联产品-001081" [ref=e1874]:
+                  - generic [ref=e1878]: 关联产品-001081
+                - cell "中文简体" [ref=e1879]:
+                  - generic [ref=e1882]: 中文简体
+                - cell "AP" [ref=e1883]:
+                  - generic [ref=e1886]: AP
+                - cell "-" [ref=e1887]:
+                  - generic [ref=e1888]: "-"
+                - cell "0 步" [ref=e1889]:
+                  - generic [ref=e1892] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e1894]
+                - cell "0个" [ref=e1897]:
+                  - generic [ref=e1900] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e1902]
+                - cell "2026-06-05 10:01" [ref=e1905]:
+                  - generic [ref=e1906]: 2026-06-05 10:01
+                - cell "编辑 删除" [ref=e1907]:
+                  - generic [ref=e1908]:
+                    - button "编辑" [ref=e1909] [cursor=pointer]:
+                      - generic [ref=e1910]: 编辑
+                    - button "删除" [ref=e1911] [cursor=pointer]:
+                      - generic [ref=e1912]: 删除
+              - row "343 test配网单元 英语 声音 - 0 步 0个 2026-06-04 16:46 编辑 删除" [ref=e1913]:
+                - cell "343" [ref=e1914]:
+                  - generic [ref=e1915]: "343"
+                - cell "test配网单元" [ref=e1916]:
+                  - generic [ref=e1920]: test配网单元
+                - cell "英语" [ref=e1921]:
+                  - generic [ref=e1924]: 英语
+                - cell "声音" [ref=e1925]:
+                  - generic [ref=e1928]: 声音
+                - cell "-" [ref=e1929]:
+                  - generic [ref=e1930]: "-"
+                - cell "0 步" [ref=e1931]:
+                  - generic [ref=e1934] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e1936]
+                - cell "0个" [ref=e1939]:
+                  - generic [ref=e1942] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e1944]
+                - cell "2026-06-04 16:46" [ref=e1947]:
+                  - generic [ref=e1948]: 2026-06-04 16:46
+                - cell "编辑 删除" [ref=e1949]:
+                  - generic [ref=e1950]:
+                    - button "编辑" [ref=e1951] [cursor=pointer]:
+                      - generic [ref=e1952]: 编辑
+                    - button "删除" [ref=e1953] [cursor=pointer]:
+                      - generic [ref=e1954]: 删除
+              - row "342 234123 21341 中文简体 摄像机识别二维码 摄像机识别二维码 0 步 0个 2026-06-03 17:21 编辑 删除" [ref=e1955]:
+                - cell "342" [ref=e1956]:
+                  - generic [ref=e1957]: "342"
+                - cell "234123 21341" [ref=e1958]:
+                  - generic [ref=e1961]:
+                    - generic [ref=e1962]: "234123"
+                    - generic [ref=e1963]: "21341"
+                - cell "中文简体" [ref=e1964]:
+                  - generic [ref=e1967]: 中文简体
+                - cell "摄像机识别二维码" [ref=e1968]:
+                  - generic [ref=e1971]: 摄像机识别二维码
+                - cell "摄像机识别二维码" [ref=e1972]:
+                  - generic [ref=e1975]: 摄像机识别二维码
+                - cell "0 步" [ref=e1976]:
+                  - generic [ref=e1979] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e1981]
+                - cell "0个" [ref=e1984]:
+                  - generic [ref=e1987] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e1989]
+                - cell "2026-06-03 17:21" [ref=e1992]:
+                  - generic [ref=e1993]: 2026-06-03 17:21
+                - cell "编辑 删除" [ref=e1994]:
+                  - generic [ref=e1995]:
+                    - button "编辑" [ref=e1996] [cursor=pointer]:
+                      - generic [ref=e1997]: 编辑
+                    - button "删除" [ref=e1998] [cursor=pointer]:
+                      - generic [ref=e1999]: 删除
+              - row "341 ddddaaa 法语 SmartLink - 0 步 0个 2026-06-03 17:06 编辑 删除" [ref=e2000]:
+                - cell "341" [ref=e2001]:
+                  - generic [ref=e2002]: "341"
+                - cell "ddddaaa" [ref=e2003]:
+                  - generic [ref=e2007]: ddddaaa
+                - cell "法语" [ref=e2008]:
+                  - generic [ref=e2011]: 法语
+                - cell "SmartLink" [ref=e2012]:
+                  - generic [ref=e2015]: SmartLink
+                - cell "-" [ref=e2016]:
+                  - generic [ref=e2017]: "-"
+                - cell "0 步" [ref=e2018]:
+                  - generic [ref=e2021] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e2023]
+                - cell "0个" [ref=e2026]:
+                  - generic [ref=e2029] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e2031]
+                - cell "2026-06-03 17:06" [ref=e2034]:
+                  - generic [ref=e2035]: 2026-06-03 17:06
+                - cell "编辑 删除" [ref=e2036]:
+                  - generic [ref=e2037]:
+                    - button "编辑" [ref=e2038] [cursor=pointer]:
+                      - generic [ref=e2039]: 编辑
+                    - button "删除" [ref=e2040] [cursor=pointer]:
+                      - generic [ref=e2041]: 删除
+              - row "340 wwwww 英语 声音 - 0 步 0个 2026-06-03 10:53 编辑 删除" [ref=e2042]:
+                - cell "340" [ref=e2043]:
+                  - generic [ref=e2044]: "340"
+                - cell "wwwww" [ref=e2045]:
+                  - generic [ref=e2049]: wwwww
+                - cell "英语" [ref=e2050]:
+                  - generic [ref=e2053]: 英语
+                - cell "声音" [ref=e2054]:
+                  - generic [ref=e2057]: 声音
+                - cell "-" [ref=e2058]:
+                  - generic [ref=e2059]: "-"
+                - cell "0 步" [ref=e2060]:
+                  - generic [ref=e2063] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e2065]
+                - cell "0个" [ref=e2068]:
+                  - generic [ref=e2071] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e2073]
+                - cell "2026-06-03 10:53" [ref=e2076]:
+                  - generic [ref=e2077]: 2026-06-03 10:53
+                - cell "编辑 删除" [ref=e2078]:
+                  - generic [ref=e2079]:
+                    - button "编辑" [ref=e2080] [cursor=pointer]:
+                      - generic [ref=e2081]: 编辑
+                    - button "删除" [ref=e2082] [cursor=pointer]:
+                      - generic [ref=e2083]: 删除
+              - row "338 test 中文简体 摄像机识别二维码 - 1 步 1个 2026-06-03 10:46 编辑 删除" [ref=e2084]:
+                - cell "338" [ref=e2085]:
+                  - generic [ref=e2086]: "338"
+                - cell "test" [ref=e2087]:
+                  - generic [ref=e2091]: test
+                - cell "中文简体" [ref=e2092]:
+                  - generic [ref=e2095]: 中文简体
+                - cell "摄像机识别二维码" [ref=e2096]:
+                  - generic [ref=e2099]: 摄像机识别二维码
+                - cell "-" [ref=e2100]:
+                  - generic [ref=e2101]: "-"
+                - cell "1 步" [ref=e2102]:
+                  - generic [ref=e2105] [cursor=pointer]:
+                    - text: 1 步
+                    - img [ref=e2107]
+                - cell "1个" [ref=e2110]:
+                  - generic [ref=e2113] [cursor=pointer]:
+                    - text: 1个
+                    - img [ref=e2115]
+                - cell "2026-06-03 10:46" [ref=e2118]:
+                  - generic [ref=e2119]: 2026-06-03 10:46
+                - cell "编辑 删除" [ref=e2120]:
+                  - generic [ref=e2121]:
+                    - button "编辑" [ref=e2122] [cursor=pointer]:
+                      - generic [ref=e2123]: 编辑
+                    - button "删除" [ref=e2124] [cursor=pointer]:
+                      - generic [ref=e2125]: 删除
+              - row "333 关联产品-785420 中文简体 AP - 0 步 0个 2026-06-01 14:54 编辑 删除" [ref=e2126]:
+                - cell "333" [ref=e2127]:
+                  - generic [ref=e2128]: "333"
+                - cell "关联产品-785420" [ref=e2129]:
+                  - generic [ref=e2133]: 关联产品-785420
+                - cell "中文简体" [ref=e2134]:
+                  - generic [ref=e2137]: 中文简体
+                - cell "AP" [ref=e2138]:
+                  - generic [ref=e2141]: AP
+                - cell "-" [ref=e2142]:
+                  - generic [ref=e2143]: "-"
+                - cell "0 步" [ref=e2144]:
+                  - generic [ref=e2147] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e2149]
+                - cell "0个" [ref=e2152]:
+                  - generic [ref=e2155] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e2157]
+                - cell "2026-06-01 14:54" [ref=e2160]:
+                  - generic [ref=e2161]: 2026-06-01 14:54
+                - cell "编辑 删除" [ref=e2162]:
+                  - generic [ref=e2163]:
+                    - button "编辑" [ref=e2164] [cursor=pointer]:
+                      - generic [ref=e2165]: 编辑
+                    - button "删除" [ref=e2166] [cursor=pointer]:
+                      - generic [ref=e2167]: 删除
+              - row "324 关联产品-866413 中文简体 AP - 0 步 0个 2026-06-01 09:49 编辑 删除" [ref=e2168]:
+                - cell "324" [ref=e2169]:
+                  - generic [ref=e2170]: "324"
+                - cell "关联产品-866413" [ref=e2171]:
+                  - generic [ref=e2175]: 关联产品-866413
+                - cell "中文简体" [ref=e2176]:
+                  - generic [ref=e2179]: 中文简体
+                - cell "AP" [ref=e2180]:
+                  - generic [ref=e2183]: AP
+                - cell "-" [ref=e2184]:
+                  - generic [ref=e2185]: "-"
+                - cell "0 步" [ref=e2186]:
+                  - generic [ref=e2189] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e2191]
+                - cell "0个" [ref=e2194]:
+                  - generic [ref=e2197] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e2199]
+                - cell "2026-06-01 09:49" [ref=e2202]:
+                  - generic [ref=e2203]: 2026-06-01 09:49
+                - cell "编辑 删除" [ref=e2204]:
+                  - generic [ref=e2205]:
+                    - button "编辑" [ref=e2206] [cursor=pointer]:
+                      - generic [ref=e2207]: 编辑
+                    - button "删除" [ref=e2208] [cursor=pointer]:
+                      - generic [ref=e2209]: 删除
+              - row "315 关联产品-977024 中文简体 AP - 0 步 0个 2026-06-01 09:47 编辑 删除" [ref=e2210]:
+                - cell "315" [ref=e2211]:
+                  - generic [ref=e2212]: "315"
+                - cell "关联产品-977024" [ref=e2213]:
+                  - generic [ref=e2217]: 关联产品-977024
+                - cell "中文简体" [ref=e2218]:
+                  - generic [ref=e2221]: 中文简体
+                - cell "AP" [ref=e2222]:
+                  - generic [ref=e2225]: AP
+                - cell "-" [ref=e2226]:
+                  - generic [ref=e2227]: "-"
+                - cell "0 步" [ref=e2228]:
+                  - generic [ref=e2231] [cursor=pointer]:
+                    - text: 0 步
+                    - img [ref=e2233]
+                - cell "0个" [ref=e2236]:
+                  - generic [ref=e2239] [cursor=pointer]:
+                    - text: 0个
+                    - img [ref=e2241]
+                - cell "2026-06-01 09:47" [ref=e2244]:
+                  - generic [ref=e2245]: 2026-06-01 09:47
+                - cell "编辑 删除" [ref=e2246]:
+                  - generic [ref=e2247]:
+                    - button "编辑" [ref=e2248] [cursor=pointer]:
+                      - generic [ref=e2249]: 编辑
+                    - button "删除" [ref=e2250] [cursor=pointer]:
+                      - generic [ref=e2251]: 删除

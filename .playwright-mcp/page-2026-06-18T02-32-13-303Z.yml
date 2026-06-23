@@ -1,0 +1,215 @@
+- generic [ref=e10]:
+  - generic [ref=e11]:
+    - generic [ref=e12]:
+      - img [ref=e13]
+      - generic [ref=e14]: 鹤梦云生态平台
+    - img [ref=e18] [cursor=pointer]
+  - generic [ref=e19]:
+    - generic [ref=e22]:
+      - menubar [ref=e23]:
+        - menuitem "首页" [ref=e24] [cursor=pointer]:
+          - generic [ref=e25]: 首页
+        - menuitem "企业管理" [ref=e26]:
+          - generic [ref=e27] [cursor=pointer]:
+            - generic [ref=e30]: 企业管理
+            - img [ref=e32]
+        - menuitem "物模型管理" [ref=e34]:
+          - generic [ref=e35] [cursor=pointer]:
+            - generic [ref=e38]: 物模型管理
+            - img [ref=e40]
+        - menuitem "产品管理" [expanded] [ref=e42]:
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e46]: 产品管理
+            - img [ref=e48]
+          - menu [ref=e50]:
+            - menuitem "产品开发" [ref=e51] [cursor=pointer]:
+              - generic [ref=e52]: 产品开发
+            - menuitem "产品审核" [ref=e53] [cursor=pointer]:
+              - generic [ref=e54]: 产品审核
+            - menuitem "配网单元" [ref=e55] [cursor=pointer]:
+              - generic [ref=e56]: 配网单元
+            - menuitem "生态方案库" [ref=e57] [cursor=pointer]:
+              - generic [ref=e58]: 生态方案库
+            - menuitem "我的方案" [ref=e59] [cursor=pointer]:
+              - generic [ref=e60]: 我的方案
+            - menuitem "生态方案审核" [ref=e61] [cursor=pointer]:
+              - generic [ref=e62]: 生态方案审核
+            - menuitem "授权SaaS" [ref=e63] [cursor=pointer]:
+              - generic [ref=e64]: 授权SaaS
+        - menuitem "固件管理" [ref=e65] [cursor=pointer]:
+          - generic [ref=e67]: 固件管理
+        - menuitem "生产管理" [ref=e68]:
+          - generic [ref=e69] [cursor=pointer]:
+            - generic [ref=e72]: 生产管理
+            - img [ref=e74]
+        - menuitem "设备中心" [ref=e76]:
+          - generic [ref=e77] [cursor=pointer]:
+            - generic [ref=e80]: 设备中心
+            - img [ref=e82]
+        - menuitem "应用服务" [ref=e84]:
+          - generic [ref=e85] [cursor=pointer]:
+            - generic [ref=e88]: 应用服务
+            - img [ref=e90]
+        - menuitem "套餐管理" [ref=e92]:
+          - generic [ref=e93] [cursor=pointer]:
+            - generic [ref=e96]: 套餐管理
+            - img [ref=e98]
+        - menuitem "4G管理" [ref=e100]:
+          - generic [ref=e101] [cursor=pointer]:
+            - generic [ref=e104]: 4G管理
+            - img [ref=e106]
+        - menuitem "订单管理" [ref=e108]:
+          - generic [ref=e109] [cursor=pointer]:
+            - generic [ref=e112]: 订单管理
+            - img [ref=e114]
+        - menuitem "费用中心" [ref=e116]:
+          - generic [ref=e117] [cursor=pointer]:
+            - generic [ref=e120]: 费用中心
+            - img [ref=e122]
+        - menuitem "平台账务" [ref=e124]:
+          - generic [ref=e125] [cursor=pointer]:
+            - generic [ref=e128]: 平台账务
+            - img [ref=e130]
+        - menuitem "设备分销" [ref=e132]:
+          - generic [ref=e133] [cursor=pointer]:
+            - generic [ref=e136]: 设备分销
+            - img [ref=e138]
+        - menuitem "设备分润" [ref=e140]:
+          - generic [ref=e141] [cursor=pointer]:
+            - generic [ref=e144]: 设备分润
+            - img [ref=e146]
+        - menuitem "全球调度" [ref=e148]:
+          - generic [ref=e149] [cursor=pointer]:
+            - generic [ref=e152]: 全球调度
+            - img [ref=e154]
+        - menuitem "运营管理" [ref=e156]:
+          - generic [ref=e157] [cursor=pointer]:
+            - generic [ref=e160]: 运营管理
+            - img [ref=e162]
+        - menuitem "日志审计" [ref=e164]:
+          - generic [ref=e165] [cursor=pointer]:
+            - generic [ref=e168]: 日志审计
+            - img [ref=e170]
+        - menuitem "客服工具" [ref=e172]:
+          - generic [ref=e173] [cursor=pointer]:
+            - generic [ref=e176]: 客服工具
+            - img [ref=e178]
+        - menuitem "权限管理" [ref=e180]:
+          - generic [ref=e181] [cursor=pointer]:
+            - generic [ref=e184]: 权限管理
+            - img [ref=e186]
+      - img [ref=e190] [cursor=pointer]
+    - generic [ref=e2388]:
+      - generic [ref=e2390]:
+        - generic [ref=e2393]:
+          - button "返回 返回" [ref=e2394] [cursor=pointer]:
+            - generic "返回" [ref=e2395]:
+              - img [ref=e2397]
+            - generic [ref=e2400]: 返回
+          - separator [ref=e2401]
+          - generic [ref=e2402]: App 功能配置
+        - generic [ref=e2403]: 配置产品在 App 端的交互与展示
+      - generic [ref=e2404]:
+        - generic [ref=e2406]:
+          - generic [ref=e2407] [cursor=pointer]:
+            - generic [ref=e2408]: 安装指引
+            - generic [ref=e2409]: 引导用户完成安装
+          - generic [ref=e2410] [cursor=pointer]:
+            - generic [ref=e2411]: App 使用范围
+            - generic [ref=e2412]: 设置产品使用权限
+          - generic [ref=e2413] [cursor=pointer]:
+            - generic [ref=e2414]: 默认配置
+            - generic [ref=e2415]: App 基础交互逻辑
+        - generic [ref=e2452]:
+          - generic [ref=e2453]: 默认生效配置
+          - generic [ref=e2454]:
+            - generic [ref=e2455]: 默认分辨率
+            - radiogroup "radio-group" [ref=e2457]:
+              - generic [ref=e2458] [cursor=pointer]:
+                - radio "超清 (HD)优先采用产品最高清晰度" [checked] [ref=e2460]
+                - generic [ref=e2462]: 超清 (HD)优先采用产品最高清晰度
+              - generic [ref=e2463] [cursor=pointer]:
+                - radio "标清 (SD)采用次高清清晰度以节省流量" [ref=e2465]
+                - generic [ref=e2467]: 标清 (SD)采用次高清清晰度以节省流量
+          - generic [ref=e2468]:
+            - generic [ref=e2469]: 插值设置
+            - generic [ref=e2470]:
+              - generic [ref=e2471]:
+                - generic [ref=e2472]: 图片插值：
+                - radiogroup "radio-group" [ref=e2473]:
+                  - generic [ref=e2474] [cursor=pointer]:
+                    - radio "开启" [checked] [disabled] [ref=e2476]
+                    - generic [ref=e2478]: 开启
+                  - generic [ref=e2479] [cursor=pointer]:
+                    - radio "关闭" [disabled] [ref=e2481]
+                    - generic [ref=e2483]: 关闭
+                - generic [ref=e2484]: 尺寸：
+                - generic [ref=e2485]:
+                  - textbox "高度" [ref=e2487]
+                  - generic [ref=e2488]: H
+                - generic [ref=e2489]: ×
+                - generic [ref=e2490]:
+                  - textbox "宽度" [ref=e2492]
+                  - generic [ref=e2493]: W
+                - generic [ref=e2494]: px
+              - generic [ref=e2495]:
+                - generic [ref=e2496]: 视频插值：
+                - radiogroup "radio-group" [ref=e2497]:
+                  - generic [ref=e2498] [cursor=pointer]:
+                    - radio "开启" [checked] [ref=e2500]
+                    - generic [ref=e2502]: 开启
+                  - generic [ref=e2503] [cursor=pointer]:
+                    - radio "关闭" [ref=e2505]
+                    - generic [ref=e2507]: 关闭
+                - generic [ref=e2508]:
+                  - img [ref=e2510]
+                  - text: 视频插值开启时，图片插值将强制同步开启且不可关闭
+          - generic [ref=e2512]:
+            - generic [ref=e2513]: 全彩模式时段
+            - generic [ref=e2514]:
+              - radiogroup "radio-group" [ref=e2515]:
+                - generic [ref=e2516] [cursor=pointer]:
+                  - radio "夜间智能感知" [checked] [ref=e2518]
+                  - generic [ref=e2520]: 夜间智能感知
+                - generic [ref=e2521] [cursor=pointer]:
+                  - radio "定时开启" [ref=e2523]
+                  - generic [ref=e2525]: 定时开启
+              - generic [ref=e2526]: App设置具体时，此处只设置默认模式。
+          - generic [ref=e2527]:
+            - generic [ref=e2528]: 一键报警配置
+            - radiogroup "radio-group" [ref=e2530]:
+              - generic [ref=e2531] [cursor=pointer]:
+                - radio "启用" [ref=e2533]
+                - generic [ref=e2535]: 启用
+              - generic [ref=e2536] [cursor=pointer]:
+                - radio "禁用" [checked] [ref=e2538]
+                - generic [ref=e2540]: 禁用
+          - generic [ref=e2541]:
+            - generic [ref=e2542]: 假三目设置
+            - generic [ref=e2543]:
+              - radiogroup "radio-group" [ref=e2545]:
+                - generic [ref=e2546] [cursor=pointer]:
+                  - radio "开启" [ref=e2548]
+                  - generic [ref=e2550]: 开启
+                - generic [ref=e2551] [cursor=pointer]:
+                  - radio "关闭" [checked] [ref=e2553]
+                  - generic [ref=e2555]: 关闭
+              - generic [ref=e2556]: 用于多目产品在 App 端的混合流展示与裁剪逻辑配置。
+          - generic [ref=e2557]:
+            - generic [ref=e2558]: 灯控开关显示
+            - generic [ref=e2559]:
+              - generic [ref=e2560]:
+                - radiogroup "radio-group" [ref=e2561]:
+                  - generic [ref=e2562] [cursor=pointer]:
+                    - radio "不显示" [checked] [ref=e2564]
+                    - generic [ref=e2566]: 不显示
+                  - generic [ref=e2567] [cursor=pointer]:
+                    - radio "显示" [ref=e2569]
+                    - generic [ref=e2571]: 显示
+                - generic [ref=e2572]: 灯光控制时长：
+                - generic [ref=e2575]:
+                  - spinbutton [ref=e2576]: "43200"
+                  - generic [ref=e2577]: 秒
+              - generic [ref=e2578]: App首页是否显示灯控开关；灯光控制时长取值 0~86400 秒，默认 43200
+          - button "保存默认配置" [ref=e2580] [cursor=pointer]:
+            - generic [ref=e2581]: 保存默认配置

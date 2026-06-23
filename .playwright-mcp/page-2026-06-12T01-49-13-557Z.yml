@@ -1,0 +1,163 @@
+- generic [ref=e10]:
+  - generic [ref=e11]:
+    - generic [ref=e12]:
+      - img [ref=e13]
+      - generic [ref=e14]: 鹤梦云生态平台
+    - img [ref=e18] [cursor=pointer]
+  - generic [ref=e19]:
+    - generic [ref=e22]:
+      - menubar [ref=e23]:
+        - menuitem "首页" [ref=e24] [cursor=pointer]:
+          - generic [ref=e25]: 首页
+        - menuitem "企业管理" [ref=e26]:
+          - generic [ref=e27] [cursor=pointer]:
+            - generic [ref=e30]: 企业管理
+            - img [ref=e32]
+        - menuitem "物模型管理" [ref=e34]:
+          - generic [ref=e35] [cursor=pointer]:
+            - generic [ref=e38]: 物模型管理
+            - img [ref=e40]
+        - menuitem "产品管理" [expanded] [ref=e42]:
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e46]: 产品管理
+            - img [ref=e48]
+          - menu [ref=e396]:
+            - menuitem "产品开发" [ref=e397] [cursor=pointer]:
+              - generic [ref=e398]: 产品开发
+            - menuitem "产品审核" [ref=e399] [cursor=pointer]:
+              - generic [ref=e400]: 产品审核
+            - menuitem "配网单元" [ref=e401] [cursor=pointer]:
+              - generic [ref=e402]: 配网单元
+            - menuitem "生态方案库" [ref=e403] [cursor=pointer]:
+              - generic [ref=e404]: 生态方案库
+            - menuitem "我的方案" [ref=e405] [cursor=pointer]:
+              - generic [ref=e406]: 我的方案
+            - menuitem "生态方案审核" [ref=e407] [cursor=pointer]:
+              - generic [ref=e408]: 生态方案审核
+            - menuitem "授权SaaS" [ref=e409] [cursor=pointer]:
+              - generic [ref=e410]: 授权SaaS
+        - menuitem "固件管理" [ref=e50] [cursor=pointer]:
+          - generic [ref=e52]: 固件管理
+        - menuitem "生产管理" [ref=e53]:
+          - generic [ref=e54] [cursor=pointer]:
+            - generic [ref=e57]: 生产管理
+            - img [ref=e59]
+        - menuitem "设备中心" [expanded] [ref=e61]:
+          - generic [ref=e62] [cursor=pointer]:
+            - generic [ref=e65]: 设备中心
+            - img [ref=e67]
+          - menu [ref=e69]:
+            - menuitem "设备管理" [ref=e70] [cursor=pointer]:
+              - generic [ref=e71]: 设备管理
+            - menuitem "固件OTA" [ref=e72] [cursor=pointer]:
+              - generic [ref=e73]: 固件OTA
+            - menuitem "设备运维" [ref=e74] [cursor=pointer]:
+              - generic [ref=e75]: 设备运维
+            - menuitem "设备调拨" [ref=e76] [cursor=pointer]:
+              - generic [ref=e77]: 设备调拨
+        - menuitem "应用服务" [ref=e78]:
+          - generic [ref=e79] [cursor=pointer]:
+            - generic [ref=e82]: 应用服务
+            - img [ref=e84]
+        - menuitem "套餐管理" [ref=e86]:
+          - generic [ref=e87] [cursor=pointer]:
+            - generic [ref=e90]: 套餐管理
+            - img [ref=e92]
+        - menuitem "4G管理" [ref=e94]:
+          - generic [ref=e95] [cursor=pointer]:
+            - generic [ref=e98]: 4G管理
+            - img [ref=e100]
+        - menuitem "订单管理" [ref=e102]:
+          - generic [ref=e103] [cursor=pointer]:
+            - generic [ref=e106]: 订单管理
+            - img [ref=e108]
+        - menuitem "费用中心" [ref=e110]:
+          - generic [ref=e111] [cursor=pointer]:
+            - generic [ref=e114]: 费用中心
+            - img [ref=e116]
+        - menuitem "平台账务" [ref=e118]:
+          - generic [ref=e119] [cursor=pointer]:
+            - generic [ref=e122]: 平台账务
+            - img [ref=e124]
+        - menuitem "设备分销" [ref=e126]:
+          - generic [ref=e127] [cursor=pointer]:
+            - generic [ref=e130]: 设备分销
+            - img [ref=e132]
+        - menuitem "设备分润" [ref=e134]:
+          - generic [ref=e135] [cursor=pointer]:
+            - generic [ref=e138]: 设备分润
+            - img [ref=e140]
+        - menuitem "全球调度" [ref=e142]:
+          - generic [ref=e143] [cursor=pointer]:
+            - generic [ref=e146]: 全球调度
+            - img [ref=e148]
+        - menuitem "客服系统" [ref=e150] [cursor=pointer]:
+          - generic [ref=e152]: 客服系统
+        - menuitem "运营管理" [ref=e153]:
+          - generic [ref=e154] [cursor=pointer]:
+            - generic [ref=e157]: 运营管理
+            - img [ref=e159]
+        - menuitem "日志审计" [ref=e161]:
+          - generic [ref=e162] [cursor=pointer]:
+            - generic [ref=e164]: 日志审计
+            - img [ref=e166]
+        - menuitem "权限管理" [ref=e168]:
+          - generic [ref=e169] [cursor=pointer]:
+            - generic [ref=e172]: 权限管理
+            - img [ref=e174]
+      - img [ref=e178] [cursor=pointer]
+    - generic [ref=e1483]:
+      - generic [ref=e1485]:
+        - generic [ref=e1488]:
+          - button "返回 返回" [ref=e1489] [cursor=pointer]:
+            - generic "返回" [ref=e1490]:
+              - img [ref=e1492]
+            - generic [ref=e1495]: 返回
+          - separator [ref=e1496]
+          - generic [ref=e1497]: 开发产品
+        - generic [ref=e1498]:
+          - heading "API测试产品_388537" [level=2] [ref=e1742]
+          - generic [ref=e1500] [cursor=pointer]:
+            - img [ref=e1502]
+            - generic [ref=e1505]: 编辑产品
+        - generic [ref=e1506]:
+          - generic [ref=e1507]: "产品Id: PDRSAs9HaSQzNPrG"
+          - separator [ref=e1508]
+          - generic [ref=e1509]: "产品型号: TEST-MODEL-388537"
+          - separator [ref=e1510]
+          - generic [ref=e1511]: "产品类目: UITest_Edit_285367"
+          - separator [ref=e1512]
+          - generic [ref=e1513]: "联网方式: -"
+      - generic [ref=e1518]:
+        - generic [ref=e1523] [cursor=pointer]: 功能定义与配置
+        - generic [ref=e1529] [cursor=pointer]: 算法联动配置
+        - generic [ref=e1535] [cursor=pointer]: 语音助手
+      - generic [ref=e1538]:
+        - tablist [ref=e1542]:
+          - tab "设备能力" [ref=e1543]
+          - tab "镜头配置" [active] [selected] [ref=e1544]
+          - tab "麦克风配置" [ref=e1545]
+          - tab "屏显配置" [ref=e1546]
+          - tab "喇叭配置" [ref=e1547]
+          - tab "云端抓图" [ref=e1548]
+        - tabpanel "镜头配置" [ref=e1960]:
+          - generic [ref=e1961]:
+            - generic [ref=e1962]:
+              - button "跳过" [ref=e1963] [cursor=pointer]:
+                - generic [ref=e1964]: 跳过
+              - button "保存,下一步" [ref=e1965] [cursor=pointer]:
+                - generic [ref=e1966]: 保存,下一步
+            - generic [ref=e1967]:
+              - separator [ref=e1968]:
+                - generic [ref=e1969]:
+                  - img [ref=e1971]
+                  - text: 单目配置
+              - generic [ref=e1973]:
+                - button "切换镜头" [ref=e1975] [cursor=pointer]:
+                  - generic [ref=e1976]:
+                    - img [ref=e1978]
+                    - text: 切换镜头
+                    - img [ref=e1981]
+                - generic [ref=e1983] [cursor=pointer]:
+                  - img [ref=e1985]
+                  - generic [ref=e1987]: 添加镜头

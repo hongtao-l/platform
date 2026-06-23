@@ -1,0 +1,291 @@
+- generic [ref=e10]:
+  - generic [ref=e11]:
+    - generic [ref=e12]:
+      - img [ref=e13]
+      - generic [ref=e14]: 鹤梦云生态平台
+    - img [ref=e18] [cursor=pointer]
+  - generic [ref=e19]:
+    - generic [ref=e22]:
+      - menubar [ref=e23]:
+        - menuitem "首页" [ref=e24] [cursor=pointer]:
+          - generic [ref=e25]: 首页
+        - menuitem "企业管理" [ref=e26]:
+          - generic [ref=e27] [cursor=pointer]:
+            - generic [ref=e30]: 企业管理
+            - img [ref=e32]
+        - menuitem "物模型管理" [ref=e34]:
+          - generic [ref=e35] [cursor=pointer]:
+            - generic [ref=e38]: 物模型管理
+            - img [ref=e40]
+        - menuitem "产品管理" [expanded] [ref=e42]:
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e46]: 产品管理
+            - img [ref=e48]
+          - menu [ref=e396]:
+            - menuitem "产品开发" [ref=e397] [cursor=pointer]:
+              - generic [ref=e398]: 产品开发
+            - menuitem "产品审核" [ref=e399] [cursor=pointer]:
+              - generic [ref=e400]: 产品审核
+            - menuitem "配网单元" [ref=e401] [cursor=pointer]:
+              - generic [ref=e402]: 配网单元
+            - menuitem "生态方案库" [ref=e403] [cursor=pointer]:
+              - generic [ref=e404]: 生态方案库
+            - menuitem "我的方案" [ref=e405] [cursor=pointer]:
+              - generic [ref=e406]: 我的方案
+            - menuitem "生态方案审核" [ref=e407] [cursor=pointer]:
+              - generic [ref=e408]: 生态方案审核
+            - menuitem "授权SaaS" [ref=e409] [cursor=pointer]:
+              - generic [ref=e410]: 授权SaaS
+        - menuitem "固件管理" [ref=e50] [cursor=pointer]:
+          - generic [ref=e52]: 固件管理
+        - menuitem "生产管理" [ref=e53]:
+          - generic [ref=e54] [cursor=pointer]:
+            - generic [ref=e57]: 生产管理
+            - img [ref=e59]
+        - menuitem "设备中心" [expanded] [ref=e61]:
+          - generic [ref=e62] [cursor=pointer]:
+            - generic [ref=e65]: 设备中心
+            - img [ref=e67]
+          - menu [ref=e69]:
+            - menuitem "设备管理" [ref=e70] [cursor=pointer]:
+              - generic [ref=e71]: 设备管理
+            - menuitem "固件OTA" [ref=e72] [cursor=pointer]:
+              - generic [ref=e73]: 固件OTA
+            - menuitem "设备运维" [ref=e74] [cursor=pointer]:
+              - generic [ref=e75]: 设备运维
+            - menuitem "设备调拨" [ref=e76] [cursor=pointer]:
+              - generic [ref=e77]: 设备调拨
+        - menuitem "应用服务" [ref=e78]:
+          - generic [ref=e79] [cursor=pointer]:
+            - generic [ref=e82]: 应用服务
+            - img [ref=e84]
+        - menuitem "套餐管理" [ref=e86]:
+          - generic [ref=e87] [cursor=pointer]:
+            - generic [ref=e90]: 套餐管理
+            - img [ref=e92]
+        - menuitem "4G管理" [ref=e94]:
+          - generic [ref=e95] [cursor=pointer]:
+            - generic [ref=e98]: 4G管理
+            - img [ref=e100]
+        - menuitem "订单管理" [ref=e102]:
+          - generic [ref=e103] [cursor=pointer]:
+            - generic [ref=e106]: 订单管理
+            - img [ref=e108]
+        - menuitem "费用中心" [ref=e110]:
+          - generic [ref=e111] [cursor=pointer]:
+            - generic [ref=e114]: 费用中心
+            - img [ref=e116]
+        - menuitem "平台账务" [ref=e118]:
+          - generic [ref=e119] [cursor=pointer]:
+            - generic [ref=e122]: 平台账务
+            - img [ref=e124]
+        - menuitem "设备分销" [ref=e126]:
+          - generic [ref=e127] [cursor=pointer]:
+            - generic [ref=e130]: 设备分销
+            - img [ref=e132]
+        - menuitem "设备分润" [ref=e134]:
+          - generic [ref=e135] [cursor=pointer]:
+            - generic [ref=e138]: 设备分润
+            - img [ref=e140]
+        - menuitem "全球调度" [ref=e142]:
+          - generic [ref=e143] [cursor=pointer]:
+            - generic [ref=e146]: 全球调度
+            - img [ref=e148]
+        - menuitem "客服系统" [ref=e150] [cursor=pointer]:
+          - generic [ref=e152]: 客服系统
+        - menuitem "运营管理" [ref=e153]:
+          - generic [ref=e154] [cursor=pointer]:
+            - generic [ref=e157]: 运营管理
+            - img [ref=e159]
+        - menuitem "日志审计" [ref=e161]:
+          - generic [ref=e162] [cursor=pointer]:
+            - generic [ref=e164]: 日志审计
+            - img [ref=e166]
+        - menuitem "权限管理" [ref=e168]:
+          - generic [ref=e169] [cursor=pointer]:
+            - generic [ref=e172]: 权限管理
+            - img [ref=e174]
+      - img [ref=e178] [cursor=pointer]
+    - generic [ref=e1483]:
+      - generic [ref=e1485]:
+        - generic [ref=e1488]:
+          - button "返回 返回" [ref=e1489] [cursor=pointer]:
+            - generic "返回" [ref=e1490]:
+              - img [ref=e1492]
+            - generic [ref=e1495]: 返回
+          - separator [ref=e1496]
+          - generic [ref=e1497]: 开发产品
+        - generic [ref=e1498]:
+          - heading "API测试产品_388537" [level=2] [ref=e1742]
+          - generic [ref=e1500] [cursor=pointer]:
+            - img [ref=e1502]
+            - generic [ref=e1505]: 编辑产品
+        - generic [ref=e1506]:
+          - generic [ref=e1507]: "产品Id: PDRSAs9HaSQzNPrG"
+          - separator [ref=e1508]
+          - generic [ref=e1509]: "产品型号: TEST-MODEL-388537"
+          - separator [ref=e1510]
+          - generic [ref=e1511]: "产品类目: UITest_Edit_285367"
+          - separator [ref=e1512]
+          - generic [ref=e1513]: "联网方式: -"
+      - generic [ref=e1518]:
+        - generic [ref=e1523] [cursor=pointer]: 功能定义与配置
+        - generic [ref=e1529] [cursor=pointer]: 算法联动配置
+        - generic [ref=e1535] [cursor=pointer]: 语音助手
+      - generic [ref=e1538]:
+        - tablist [ref=e1542]:
+          - tab "设备能力" [ref=e1543]
+          - tab "镜头配置" [ref=e1544]
+          - tab "麦克风配置" [ref=e1545] [cursor=pointer]
+          - tab "屏显配置" [active] [selected] [ref=e1546]
+          - tab "喇叭配置" [ref=e1547]
+          - tab "云端抓图" [ref=e1548]
+        - tabpanel "屏显配置" [ref=e2019]:
+          - generic [ref=e2020]:
+            - generic [ref=e2021]:
+              - button "上一步" [ref=e2022] [cursor=pointer]:
+                - generic [ref=e2023]: 上一步
+              - button "跳过" [ref=e2024] [cursor=pointer]:
+                - generic [ref=e2025]: 跳过
+              - button "保存,下一步" [ref=e2026] [cursor=pointer]:
+                - img [ref=e2028]
+                - generic [ref=e2030]: 保存,下一步
+            - generic [ref=e2033]:
+              - generic [ref=e2034]: "是否有屏显:"
+              - radiogroup "是否有屏显:" [ref=e2036]:
+                - generic [ref=e2037] [cursor=pointer]:
+                  - radio "是" [checked] [ref=e2039]
+                  - generic [ref=e2041]: 是
+                - generic [ref=e2042] [cursor=pointer]:
+                  - radio "否" [ref=e2044]
+                  - generic [ref=e2046]: 否
+            - generic [ref=e2048]:
+              - generic [ref=e2049]:
+                - generic [ref=e2050]: 支持的分辨率
+                - group "支持的分辨率" [ref=e2052]:
+                  - generic [ref=e2053] [cursor=pointer]:
+                    - generic [ref=e2054]:
+                      - checkbox "1920*1080"
+                    - generic [ref=e2056]: 1920*1080
+                  - generic [ref=e2057] [cursor=pointer]:
+                    - generic [ref=e2058]:
+                      - checkbox "1280*720"
+                    - generic [ref=e2060]: 1280*720
+                  - generic [ref=e2061] [cursor=pointer]:
+                    - generic [ref=e2062]:
+                      - checkbox "640*480"
+                    - generic [ref=e2064]: 640*480
+                  - generic [ref=e2065] [cursor=pointer]:
+                    - generic [ref=e2066]:
+                      - checkbox "640*360"
+                    - generic [ref=e2068]: 640*360
+                  - generic [ref=e2069] [cursor=pointer]:
+                    - generic [ref=e2070]:
+                      - checkbox "320*240"
+                    - generic [ref=e2072]: 320*240
+              - generic [ref=e2073]:
+                - generic [ref=e2074]: 屏息时间（秒）
+                - generic [ref=e2076]:
+                  - button "减少数值" [ref=e2077] [cursor=pointer]:
+                    - img [ref=e2079]
+                  - button "增加数值" [ref=e2081] [cursor=pointer]:
+                    - img [ref=e2083]
+                  - spinbutton "屏息时间（秒）" [ref=e2087]: "0"
+              - generic [ref=e2088]:
+                - generic [ref=e2089]: 支持的解码方式
+                - group "支持的解码方式" [ref=e2091]:
+                  - generic [ref=e2092] [cursor=pointer]:
+                    - generic [ref=e2093]:
+                      - checkbox "H264"
+                    - generic [ref=e2095]: H264
+                  - generic [ref=e2096] [cursor=pointer]:
+                    - generic [ref=e2097]:
+                      - checkbox "H265"
+                    - generic [ref=e2099]: H265
+                  - generic [ref=e2100] [cursor=pointer]:
+                    - generic [ref=e2101]:
+                      - checkbox "MJPG"
+                    - generic [ref=e2103]: MJPG
+              - generic [ref=e2104]:
+                - generic [ref=e2105]: 支持的屏显类型
+                - group "支持的屏显类型" [ref=e2107]:
+                  - generic [ref=e2108] [cursor=pointer]:
+                    - generic [ref=e2109]:
+                      - checkbox "文字"
+                    - generic [ref=e2111]: 文字
+                  - generic [ref=e2112] [cursor=pointer]:
+                    - generic [ref=e2113]:
+                      - checkbox "背景图"
+                    - generic [ref=e2115]: 背景图
+                  - generic [ref=e2116] [cursor=pointer]:
+                    - generic [ref=e2117]:
+                      - checkbox "图片"
+                    - generic [ref=e2119]: 图片
+                  - generic [ref=e2120] [cursor=pointer]:
+                    - generic [ref=e2121]:
+                      - checkbox "视频"
+                    - generic [ref=e2123]: 视频
+            - generic [ref=e2124]:
+              - generic [ref=e2125]:
+                - generic [ref=e2126]:
+                  - heading "标准能力" [level=3] [ref=e2127]:
+                    - text: 标准能力
+                    - img [ref=e2129]
+                  - button "添加标准能力" [ref=e2131] [cursor=pointer]:
+                    - generic [ref=e2132]: 添加标准能力
+                - generic [ref=e2135]:
+                  - table [ref=e2137]:
+                    - rowgroup [ref=e2147]:
+                      - row "类型 能力名称 能力标识 数据类型 数据定义 描述 所属模块 操作" [ref=e2148]:
+                        - columnheader "类型" [ref=e2149]:
+                          - generic [ref=e2150]: 类型
+                        - columnheader "能力名称" [ref=e2151]:
+                          - generic [ref=e2152]: 能力名称
+                        - columnheader "能力标识" [ref=e2153]:
+                          - generic [ref=e2154]: 能力标识
+                        - columnheader "数据类型" [ref=e2155]:
+                          - generic [ref=e2156]: 数据类型
+                        - columnheader "数据定义" [ref=e2157]:
+                          - generic [ref=e2158]: 数据定义
+                        - columnheader "描述" [ref=e2159]:
+                          - generic [ref=e2160]: 描述
+                        - columnheader "所属模块" [ref=e2161]:
+                          - generic [ref=e2162]: 所属模块
+                        - columnheader "操作" [ref=e2163]:
+                          - generic [ref=e2164]: 操作
+                  - generic [ref=e2168]:
+                    - table:
+                      - rowgroup
+                    - generic [ref=e2170]: 暂无数据
+              - generic [ref=e2172]:
+                - generic [ref=e2173]:
+                  - heading "自定义能力" [level=3] [ref=e2174]:
+                    - text: 自定义能力
+                    - img [ref=e2176]
+                  - generic [ref=e2178]: 您所定义的每一个功能，都与固件、APP控制台面板相关
+                  - button "添加自定义能力" [ref=e2179] [cursor=pointer]:
+                    - generic [ref=e2180]: 添加自定义能力
+                - generic [ref=e2183]:
+                  - table [ref=e2185]:
+                    - rowgroup [ref=e2195]:
+                      - row "类型 能力名称 能力标识 数据类型 数据定义 描述 所属模块 操作" [ref=e2196]:
+                        - columnheader "类型" [ref=e2197]:
+                          - generic [ref=e2198]: 类型
+                        - columnheader "能力名称" [ref=e2199]:
+                          - generic [ref=e2200]: 能力名称
+                        - columnheader "能力标识" [ref=e2201]:
+                          - generic [ref=e2202]: 能力标识
+                        - columnheader "数据类型" [ref=e2203]:
+                          - generic [ref=e2204]: 数据类型
+                        - columnheader "数据定义" [ref=e2205]:
+                          - generic [ref=e2206]: 数据定义
+                        - columnheader "描述" [ref=e2207]:
+                          - generic [ref=e2208]: 描述
+                        - columnheader "所属模块" [ref=e2209]:
+                          - generic [ref=e2210]: 所属模块
+                        - columnheader "操作" [ref=e2211]:
+                          - generic [ref=e2212]: 操作
+                  - generic [ref=e2216]:
+                    - table:
+                      - rowgroup
+                    - generic [ref=e2218]: 暂无数据

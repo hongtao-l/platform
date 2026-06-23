@@ -1,0 +1,507 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e7]
+      - generic [ref=e9]: IoT 平台
+    - navigation [ref=e10]:
+      - generic [ref=e11] [cursor=pointer]:
+        - img [ref=e13]
+        - generic [ref=e15]: 工作台
+      - generic [ref=e16]:
+        - generic [ref=e17] [cursor=pointer]:
+          - img [ref=e19]
+          - generic [ref=e22]: 物模型管理
+          - img [ref=e24]
+        - generic:
+          - generic [ref=e26] [cursor=pointer]:
+            - img [ref=e28]
+            - generic [ref=e30]: IOT类目
+          - generic [ref=e31] [cursor=pointer]:
+            - img [ref=e33]
+            - generic [ref=e38]: 能力库
+          - generic [ref=e39] [cursor=pointer]:
+            - img [ref=e41]
+            - generic [ref=e44]: 算法库
+          - generic [ref=e45] [cursor=pointer]:
+            - img [ref=e47]
+            - generic [ref=e49]: 事件库
+      - generic [ref=e50]:
+        - generic [ref=e51] [cursor=pointer]:
+          - img [ref=e53]
+          - generic [ref=e57]: 产品管理
+          - img [ref=e59]
+        - generic:
+          - generic [ref=e61] [cursor=pointer]:
+            - img [ref=e63]
+            - generic [ref=e67]: 产品开发
+          - generic [ref=e68] [cursor=pointer]:
+            - img [ref=e70]
+            - generic [ref=e72]: 产品审核
+      - generic [ref=e73]:
+        - generic [ref=e74] [cursor=pointer]:
+          - img [ref=e76]
+          - generic [ref=e81]: 套餐管理
+          - img [ref=e83]
+        - generic [ref=e85] [cursor=pointer]:
+          - img [ref=e87]
+          - generic [ref=e91]: 套餐配置
+      - generic [ref=e92]:
+        - generic [ref=e93] [cursor=pointer]:
+          - img [ref=e95]
+          - generic [ref=e97]: 运营管理
+          - img [ref=e99]
+        - generic:
+          - generic [ref=e101] [cursor=pointer]:
+            - img [ref=e103]
+            - generic [ref=e105]: 商城位运营
+          - generic [ref=e106] [cursor=pointer]:
+            - img [ref=e108]
+            - generic [ref=e110]: 推荐位运营
+          - generic [ref=e111] [cursor=pointer]:
+            - img [ref=e113]
+            - generic [ref=e118]: 活动位运营
+          - generic [ref=e119] [cursor=pointer]:
+            - img [ref=e121]
+            - generic [ref=e123]: 用户分群
+          - generic [ref=e124] [cursor=pointer]:
+            - img [ref=e126]
+            - generic [ref=e128]: A/B Test
+    - generic [ref=e130] [cursor=pointer]:
+      - img [ref=e132]
+      - generic [ref=e134]: 收起菜单
+  - generic [ref=e135]:
+    - banner [ref=e136]:
+      - navigation "面包屑" [ref=e138]:
+        - generic [ref=e139]:
+          - link "首页" [ref=e140]
+          - text: /
+        - link "产品审核" [ref=e142]
+      - generic [ref=e143]:
+        - generic [ref=e144] [cursor=pointer]:
+          - img [ref=e146]
+          - superscript [ref=e150]: "3"
+        - button "管理员" [ref=e152] [cursor=pointer]:
+          - img [ref=e155]
+          - generic [ref=e157]: 管理员
+          - img [ref=e159]
+    - main [ref=e161]:
+      - generic [ref=e162]:
+        - generic [ref=e164]:
+          - generic [ref=e165]:
+            - generic [ref=e166]: 产品名称
+            - textbox "产品名称" [ref=e170]:
+              - /placeholder: 请输入
+          - generic [ref=e171]:
+            - generic [ref=e172]: 产品类目
+            - generic [ref=e175] [cursor=pointer]:
+              - generic:
+                - combobox "产品类目" [ref=e177]
+                - generic [ref=e178]: 请选择产品类目
+              - img [ref=e181]
+          - generic [ref=e183]:
+            - generic [ref=e184]: 产品状态
+            - generic [ref=e187] [cursor=pointer]:
+              - generic:
+                - combobox "产品状态" [ref=e189]
+                - generic [ref=e190]: 请选择
+              - img [ref=e193]
+          - generic [ref=e195]:
+            - generic [ref=e196]: 所属企业
+            - generic [ref=e199]:
+              - generic:
+                - combobox "所属企业" [ref=e201]
+                - generic [ref=e202]: 可输入企业名称或企业Id查询
+              - img [ref=e205] [cursor=pointer]
+          - generic [ref=e207]:
+            - generic [ref=e208]: 创建时间
+            - generic [ref=e210]:
+              - img [ref=e212]
+              - combobox "创建时间" [ref=e214]
+              - generic [ref=e215]: 至
+              - combobox "结束日期" [ref=e216]
+          - generic [ref=e218]:
+            - button "搜索" [ref=e219] [cursor=pointer]:
+              - generic [ref=e220]: 搜索
+            - button "重置" [ref=e221] [cursor=pointer]:
+              - generic [ref=e222]: 重置
+        - generic [ref=e223]:
+          - generic [ref=e224]:
+            - generic [ref=e225]: 自动赠送授权
+            - generic [ref=e226]:
+              - switch [checked]
+              - generic [ref=e228] [cursor=pointer]: 已关闭
+              - generic [ref=e232] [cursor=pointer]: 已开启
+            - button "配置" [ref=e233] [cursor=pointer]:
+              - generic [ref=e234]: 配置
+          - generic [ref=e236]:
+            - table [ref=e238]:
+              - rowgroup [ref=e251]:
+                - row "序号 产品信息 产品类目 产品状态 开发方式 授权单价 赠送授权 采购生产授权 所属企业 创建时间 操作" [ref=e252]:
+                  - columnheader "序号" [ref=e253]:
+                    - generic [ref=e254]: 序号
+                  - columnheader "产品信息" [ref=e255]:
+                    - generic [ref=e256]: 产品信息
+                  - columnheader "产品类目" [ref=e257]:
+                    - generic [ref=e258]: 产品类目
+                  - columnheader "产品状态" [ref=e259]:
+                    - generic [ref=e260]: 产品状态
+                  - columnheader "开发方式" [ref=e261]:
+                    - generic [ref=e262]: 开发方式
+                  - columnheader "授权单价" [ref=e263]:
+                    - generic [ref=e264]: 授权单价
+                  - columnheader "赠送授权" [ref=e265]:
+                    - generic [ref=e266]: 赠送授权
+                  - columnheader "采购生产授权" [ref=e267]:
+                    - generic [ref=e268]: 采购生产授权
+                  - columnheader "所属企业" [ref=e269]:
+                    - generic [ref=e270]: 所属企业
+                  - columnheader "创建时间" [ref=e271]:
+                    - generic [ref=e272]: 创建时间
+                  - columnheader "操作" [ref=e273]:
+                    - generic [ref=e274]: 操作
+            - table [ref=e279]:
+              - rowgroup [ref=e292]:
+                - row "1 Session基础产品_319364 PDRSAh5NV6PkRS6u UITest_Edit_285367 待审核 — 0.00 测试授权：9个 生产授权：5个 0 深圳市汇云通讯科技有限公司 DrS1623205604012 2026-06-05 14:29:34 审核 赠送授权 管理产品 删除产品" [ref=e293]:
+                  - cell "1" [ref=e294]:
+                    - generic [ref=e295]: "1"
+                  - cell "Session基础产品_319364 PDRSAh5NV6PkRS6u" [ref=e296]:
+                    - generic [ref=e298]:
+                      - generic [ref=e299] [cursor=pointer]: Session基础产品_319364
+                      - generic [ref=e300]: PDRSAh5NV6PkRS6u
+                  - cell "UITest_Edit_285367" [ref=e301]:
+                    - generic [ref=e302]: UITest_Edit_285367
+                  - cell "待审核" [ref=e303]:
+                    - generic [ref=e305]: 待审核
+                  - cell "—" [ref=e306]:
+                    - generic [ref=e307]: —
+                  - cell "0.00" [ref=e308]:
+                    - generic [ref=e309]: "0.00"
+                  - cell "测试授权：9个 生产授权：5个" [ref=e310]:
+                    - generic [ref=e311]:
+                      - text: 测试授权：9个
+                      - text: 生产授权：5个
+                  - cell "0" [ref=e312]:
+                    - generic [ref=e313]: "0"
+                  - cell "深圳市汇云通讯科技有限公司 DrS1623205604012" [ref=e314]:
+                    - generic [ref=e316]:
+                      - generic [ref=e317]: 深圳市汇云通讯科技有限公司
+                      - generic [ref=e318]: DrS1623205604012
+                  - cell "2026-06-05 14:29:34" [ref=e319]:
+                    - generic [ref=e320]: 2026-06-05 14:29:34
+                  - cell "审核 赠送授权 管理产品 删除产品" [ref=e321]:
+                    - generic [ref=e323]:
+                      - button "审核" [ref=e324] [cursor=pointer]:
+                        - generic [ref=e325]: 审核
+                      - button "赠送授权" [ref=e326] [cursor=pointer]:
+                        - generic [ref=e327]: 赠送授权
+                      - button "管理产品" [ref=e328] [cursor=pointer]:
+                        - generic [ref=e329]: 管理产品
+                      - button "删除产品" [ref=e330] [cursor=pointer]:
+                        - generic [ref=e331]: 删除产品
+                - row "2 Session基础产品_465067 PDRSAa6hsGHkqHFw UITest_Edit_285367 待审核 — 0.00 测试授权：9个 生产授权：5个 0 深圳市汇云通讯科技有限公司 DrS1623205604012 2026-06-05 14:15:27 审核 赠送授权 管理产品 删除产品" [ref=e332]:
+                  - cell "2" [ref=e333]:
+                    - generic [ref=e334]: "2"
+                  - cell "Session基础产品_465067 PDRSAa6hsGHkqHFw" [ref=e335]:
+                    - generic [ref=e337]:
+                      - generic [ref=e338] [cursor=pointer]: Session基础产品_465067
+                      - generic [ref=e339]: PDRSAa6hsGHkqHFw
+                  - cell "UITest_Edit_285367" [ref=e340]:
+                    - generic [ref=e341]: UITest_Edit_285367
+                  - cell "待审核" [ref=e342]:
+                    - generic [ref=e344]: 待审核
+                  - cell "—" [ref=e345]:
+                    - generic [ref=e346]: —
+                  - cell "0.00" [ref=e347]:
+                    - generic [ref=e348]: "0.00"
+                  - cell "测试授权：9个 生产授权：5个" [ref=e349]:
+                    - generic [ref=e350]:
+                      - text: 测试授权：9个
+                      - text: 生产授权：5个
+                  - cell "0" [ref=e351]:
+                    - generic [ref=e352]: "0"
+                  - cell "深圳市汇云通讯科技有限公司 DrS1623205604012" [ref=e353]:
+                    - generic [ref=e355]:
+                      - generic [ref=e356]: 深圳市汇云通讯科技有限公司
+                      - generic [ref=e357]: DrS1623205604012
+                  - cell "2026-06-05 14:15:27" [ref=e358]:
+                    - generic [ref=e359]: 2026-06-05 14:15:27
+                  - cell "审核 赠送授权 管理产品 删除产品" [ref=e360]:
+                    - generic [ref=e362]:
+                      - button "审核" [ref=e363] [cursor=pointer]:
+                        - generic [ref=e364]: 审核
+                      - button "赠送授权" [ref=e365] [cursor=pointer]:
+                        - generic [ref=e366]: 赠送授权
+                      - button "管理产品" [ref=e367] [cursor=pointer]:
+                        - generic [ref=e368]: 管理产品
+                      - button "删除产品" [ref=e369] [cursor=pointer]:
+                        - generic [ref=e370]: 删除产品
+                - row "3 Session基础产品_593040 PDRSAn6xygCybm5d UITest_Edit_285367 待审核 — 0.00 测试授权：9个 生产授权：5个 0 深圳市汇云通讯科技有限公司 DrS1623205604012 2026-06-05 13:52:31 审核 赠送授权 管理产品 删除产品" [ref=e371]:
+                  - cell "3" [ref=e372]:
+                    - generic [ref=e373]: "3"
+                  - cell "Session基础产品_593040 PDRSAn6xygCybm5d" [ref=e374]:
+                    - generic [ref=e376]:
+                      - generic [ref=e377] [cursor=pointer]: Session基础产品_593040
+                      - generic [ref=e378]: PDRSAn6xygCybm5d
+                  - cell "UITest_Edit_285367" [ref=e379]:
+                    - generic [ref=e380]: UITest_Edit_285367
+                  - cell "待审核" [ref=e381]:
+                    - generic [ref=e383]: 待审核
+                  - cell "—" [ref=e384]:
+                    - generic [ref=e385]: —
+                  - cell "0.00" [ref=e386]:
+                    - generic [ref=e387]: "0.00"
+                  - cell "测试授权：9个 生产授权：5个" [ref=e388]:
+                    - generic [ref=e389]:
+                      - text: 测试授权：9个
+                      - text: 生产授权：5个
+                  - cell "0" [ref=e390]:
+                    - generic [ref=e391]: "0"
+                  - cell "深圳市汇云通讯科技有限公司 DrS1623205604012" [ref=e392]:
+                    - generic [ref=e394]:
+                      - generic [ref=e395]: 深圳市汇云通讯科技有限公司
+                      - generic [ref=e396]: DrS1623205604012
+                  - cell "2026-06-05 13:52:31" [ref=e397]:
+                    - generic [ref=e398]: 2026-06-05 13:52:31
+                  - cell "审核 赠送授权 管理产品 删除产品" [ref=e399]:
+                    - generic [ref=e401]:
+                      - button "审核" [ref=e402] [cursor=pointer]:
+                        - generic [ref=e403]: 审核
+                      - button "赠送授权" [ref=e404] [cursor=pointer]:
+                        - generic [ref=e405]: 赠送授权
+                      - button "管理产品" [ref=e406] [cursor=pointer]:
+                        - generic [ref=e407]: 管理产品
+                      - button "删除产品" [ref=e408] [cursor=pointer]:
+                        - generic [ref=e409]: 删除产品
+                - row "4 Session基础产品_714235 PDRSAm77wmdQRvTC UITest_Edit_285367 待审核 — 0.00 测试授权：9个 生产授权：5个 0 深圳市汇云通讯科技有限公司 DrS1623205604012 2026-06-05 11:26:37 审核 赠送授权 管理产品 删除产品" [ref=e410]:
+                  - cell "4" [ref=e411]:
+                    - generic [ref=e412]: "4"
+                  - cell "Session基础产品_714235 PDRSAm77wmdQRvTC" [ref=e413]:
+                    - generic [ref=e415]:
+                      - generic [ref=e416] [cursor=pointer]: Session基础产品_714235
+                      - generic [ref=e417]: PDRSAm77wmdQRvTC
+                  - cell "UITest_Edit_285367" [ref=e418]:
+                    - generic [ref=e419]: UITest_Edit_285367
+                  - cell "待审核" [ref=e420]:
+                    - generic [ref=e422]: 待审核
+                  - cell "—" [ref=e423]:
+                    - generic [ref=e424]: —
+                  - cell "0.00" [ref=e425]:
+                    - generic [ref=e426]: "0.00"
+                  - cell "测试授权：9个 生产授权：5个" [ref=e427]:
+                    - generic [ref=e428]:
+                      - text: 测试授权：9个
+                      - text: 生产授权：5个
+                  - cell "0" [ref=e429]:
+                    - generic [ref=e430]: "0"
+                  - cell "深圳市汇云通讯科技有限公司 DrS1623205604012" [ref=e431]:
+                    - generic [ref=e433]:
+                      - generic [ref=e434]: 深圳市汇云通讯科技有限公司
+                      - generic [ref=e435]: DrS1623205604012
+                  - cell "2026-06-05 11:26:37" [ref=e436]:
+                    - generic [ref=e437]: 2026-06-05 11:26:37
+                  - cell "审核 赠送授权 管理产品 删除产品" [ref=e438]:
+                    - generic [ref=e440]:
+                      - button "审核" [ref=e441] [cursor=pointer]:
+                        - generic [ref=e442]: 审核
+                      - button "赠送授权" [ref=e443] [cursor=pointer]:
+                        - generic [ref=e444]: 赠送授权
+                      - button "管理产品" [ref=e445] [cursor=pointer]:
+                        - generic [ref=e446]: 管理产品
+                      - button "删除产品" [ref=e447] [cursor=pointer]:
+                        - generic [ref=e448]: 删除产品
+                - row "5 Session基础产品_660582 PDRSAs3EcgsCDHbu UITest_Edit_285367 已通过 — 0.00 测试授权：9个 生产授权：5个 0 深圳市汇云通讯科技有限公司 DrS1623205604012 2026-06-05 11:18:54 管理产品 删除产品" [ref=e449]:
+                  - cell "5" [ref=e450]:
+                    - generic [ref=e451]: "5"
+                  - cell "Session基础产品_660582 PDRSAs3EcgsCDHbu" [ref=e452]:
+                    - generic [ref=e454]:
+                      - generic [ref=e455] [cursor=pointer]: Session基础产品_660582
+                      - generic [ref=e456]: PDRSAs3EcgsCDHbu
+                  - cell "UITest_Edit_285367" [ref=e457]:
+                    - generic [ref=e458]: UITest_Edit_285367
+                  - cell "已通过" [ref=e459]:
+                    - generic [ref=e461]: 已通过
+                  - cell "—" [ref=e462]:
+                    - generic [ref=e463]: —
+                  - cell "0.00" [ref=e464]:
+                    - generic [ref=e465]: "0.00"
+                  - cell "测试授权：9个 生产授权：5个" [ref=e466]:
+                    - generic [ref=e467]:
+                      - text: 测试授权：9个
+                      - text: 生产授权：5个
+                  - cell "0" [ref=e468]:
+                    - generic [ref=e469]: "0"
+                  - cell "深圳市汇云通讯科技有限公司 DrS1623205604012" [ref=e470]:
+                    - generic [ref=e472]:
+                      - generic [ref=e473]: 深圳市汇云通讯科技有限公司
+                      - generic [ref=e474]: DrS1623205604012
+                  - cell "2026-06-05 11:18:54" [ref=e475]:
+                    - generic [ref=e476]: 2026-06-05 11:18:54
+                  - cell "管理产品 删除产品" [ref=e477]:
+                    - generic [ref=e479]:
+                      - button "管理产品" [ref=e480] [cursor=pointer]:
+                        - generic [ref=e481]: 管理产品
+                      - button "删除产品" [ref=e482] [cursor=pointer]:
+                        - generic [ref=e483]: 删除产品
+                - row "6 Session基础产品_667093 PDRSAn3QNqLBP3F9 UITest_Edit_285367 已拒绝 — 0.00 测试授权：9个 生产授权：5个 0 深圳市汇云通讯科技有限公司 DrS1623205604012 2026-06-05 11:17:03 管理产品 删除产品" [ref=e484]:
+                  - cell "6" [ref=e485]:
+                    - generic [ref=e486]: "6"
+                  - cell "Session基础产品_667093 PDRSAn3QNqLBP3F9" [ref=e487]:
+                    - generic [ref=e489]:
+                      - generic [ref=e490] [cursor=pointer]: Session基础产品_667093
+                      - generic [ref=e491]: PDRSAn3QNqLBP3F9
+                  - cell "UITest_Edit_285367" [ref=e492]:
+                    - generic [ref=e493]: UITest_Edit_285367
+                  - cell "已拒绝" [ref=e494]:
+                    - generic [ref=e496]: 已拒绝
+                  - cell "—" [ref=e497]:
+                    - generic [ref=e498]: —
+                  - cell "0.00" [ref=e499]:
+                    - generic [ref=e500]: "0.00"
+                  - cell "测试授权：9个 生产授权：5个" [ref=e501]:
+                    - generic [ref=e502]:
+                      - text: 测试授权：9个
+                      - text: 生产授权：5个
+                  - cell "0" [ref=e503]:
+                    - generic [ref=e504]: "0"
+                  - cell "深圳市汇云通讯科技有限公司 DrS1623205604012" [ref=e505]:
+                    - generic [ref=e507]:
+                      - generic [ref=e508]: 深圳市汇云通讯科技有限公司
+                      - generic [ref=e509]: DrS1623205604012
+                  - cell "2026-06-05 11:17:03" [ref=e510]:
+                    - generic [ref=e511]: 2026-06-05 11:17:03
+                  - cell "管理产品 删除产品" [ref=e512]:
+                    - generic [ref=e514]:
+                      - button "管理产品" [ref=e515] [cursor=pointer]:
+                        - generic [ref=e516]: 管理产品
+                      - button "删除产品" [ref=e517] [cursor=pointer]:
+                        - generic [ref=e518]: 删除产品
+                - row "7 Session基础产品_693322 PDRSAw37xYW6b7vP UITest_Edit_285367 待审核 — 0.00 测试授权：9个 生产授权：5个 0 深圳市汇云通讯科技有限公司 DrS1623205604012 2026-06-05 10:03:43 审核 赠送授权 管理产品 删除产品" [ref=e519]:
+                  - cell "7" [ref=e520]:
+                    - generic [ref=e521]: "7"
+                  - cell "Session基础产品_693322 PDRSAw37xYW6b7vP" [ref=e522]:
+                    - generic [ref=e524]:
+                      - generic [ref=e525] [cursor=pointer]: Session基础产品_693322
+                      - generic [ref=e526]: PDRSAw37xYW6b7vP
+                  - cell "UITest_Edit_285367" [ref=e527]:
+                    - generic [ref=e528]: UITest_Edit_285367
+                  - cell "待审核" [ref=e529]:
+                    - generic [ref=e531]: 待审核
+                  - cell "—" [ref=e532]:
+                    - generic [ref=e533]: —
+                  - cell "0.00" [ref=e534]:
+                    - generic [ref=e535]: "0.00"
+                  - cell "测试授权：9个 生产授权：5个" [ref=e536]:
+                    - generic [ref=e537]:
+                      - text: 测试授权：9个
+                      - text: 生产授权：5个
+                  - cell "0" [ref=e538]:
+                    - generic [ref=e539]: "0"
+                  - cell "深圳市汇云通讯科技有限公司 DrS1623205604012" [ref=e540]:
+                    - generic [ref=e542]:
+                      - generic [ref=e543]: 深圳市汇云通讯科技有限公司
+                      - generic [ref=e544]: DrS1623205604012
+                  - cell "2026-06-05 10:03:43" [ref=e545]:
+                    - generic [ref=e546]: 2026-06-05 10:03:43
+                  - cell "审核 赠送授权 管理产品 删除产品" [ref=e547]:
+                    - generic [ref=e549]:
+                      - button "审核" [ref=e550] [cursor=pointer]:
+                        - generic [ref=e551]: 审核
+                      - button "赠送授权" [ref=e552] [cursor=pointer]:
+                        - generic [ref=e553]: 赠送授权
+                      - button "管理产品" [ref=e554] [cursor=pointer]:
+                        - generic [ref=e555]: 管理产品
+                      - button "删除产品" [ref=e556] [cursor=pointer]:
+                        - generic [ref=e557]: 删除产品
+                - row "8 4G产品设备0601 PDRSAq8P7JguKscj 4G设备 待审核 — 0.00 测试授权：9个 生产授权：5个 0 深圳市汇云通讯科技有限公司 DrS1623205604012 2026-06-01 13:49:54 审核 赠送授权 管理产品 删除产品" [ref=e558]:
+                  - cell "8" [ref=e559]:
+                    - generic [ref=e560]: "8"
+                  - cell "4G产品设备0601 PDRSAq8P7JguKscj" [ref=e561]:
+                    - generic [ref=e563]:
+                      - generic [ref=e564] [cursor=pointer]: 4G产品设备0601
+                      - generic [ref=e565]: PDRSAq8P7JguKscj
+                  - cell "4G设备" [ref=e566]:
+                    - generic [ref=e567]: 4G设备
+                  - cell "待审核" [ref=e568]:
+                    - generic [ref=e570]: 待审核
+                  - cell "—" [ref=e571]:
+                    - generic [ref=e572]: —
+                  - cell "0.00" [ref=e573]:
+                    - generic [ref=e574]: "0.00"
+                  - cell "测试授权：9个 生产授权：5个" [ref=e575]:
+                    - generic [ref=e576]:
+                      - text: 测试授权：9个
+                      - text: 生产授权：5个
+                  - cell "0" [ref=e577]:
+                    - generic [ref=e578]: "0"
+                  - cell "深圳市汇云通讯科技有限公司 DrS1623205604012" [ref=e579]:
+                    - generic [ref=e581]:
+                      - generic [ref=e582]: 深圳市汇云通讯科技有限公司
+                      - generic [ref=e583]: DrS1623205604012
+                  - cell "2026-06-01 13:49:54" [ref=e584]:
+                    - generic [ref=e585]: 2026-06-01 13:49:54
+                  - cell "审核 赠送授权 管理产品 删除产品" [ref=e586]:
+                    - generic [ref=e588]:
+                      - button "审核" [ref=e589] [cursor=pointer]:
+                        - generic [ref=e590]: 审核
+                      - button "赠送授权" [ref=e591] [cursor=pointer]:
+                        - generic [ref=e592]: 赠送授权
+                      - button "管理产品" [ref=e593] [cursor=pointer]:
+                        - generic [ref=e594]: 管理产品
+                      - button "删除产品" [ref=e595] [cursor=pointer]:
+                        - generic [ref=e596]: 删除产品
+                - row "9 Session基础产品_226109 PDRSAz5pAvRFtDxx UITest_Edit_285367 待审核 — 0.00 测试授权：7个 生产授权：5个 0 深圳市汇云通讯科技有限公司 DrS1623205604012 2026-06-01 09:49:02 审核 赠送授权 管理产品 删除产品" [ref=e597]:
+                  - cell "9" [ref=e598]:
+                    - generic [ref=e599]: "9"
+                  - cell "Session基础产品_226109 PDRSAz5pAvRFtDxx" [ref=e600]:
+                    - generic [ref=e602]:
+                      - generic [ref=e603] [cursor=pointer]: Session基础产品_226109
+                      - generic [ref=e604]: PDRSAz5pAvRFtDxx
+                  - cell "UITest_Edit_285367" [ref=e605]:
+                    - generic [ref=e606]: UITest_Edit_285367
+                  - cell "待审核" [ref=e607]:
+                    - generic [ref=e609]: 待审核
+                  - cell "—" [ref=e610]:
+                    - generic [ref=e611]: —
+                  - cell "0.00" [ref=e612]:
+                    - generic [ref=e613]: "0.00"
+                  - cell "测试授权：7个 生产授权：5个" [ref=e614]:
+                    - generic [ref=e615]:
+                      - text: 测试授权：7个
+                      - text: 生产授权：5个
+                  - cell "0" [ref=e616]:
+                    - generic [ref=e617]: "0"
+                  - cell "深圳市汇云通讯科技有限公司 DrS1623205604012" [ref=e618]:
+                    - generic [ref=e620]:
+                      - generic [ref=e621]: 深圳市汇云通讯科技有限公司
+                      - generic [ref=e622]: DrS1623205604012
+                  - cell "2026-06-01 09:49:02" [ref=e623]:
+                    - generic [ref=e624]: 2026-06-01 09:49:02
+                  - cell "审核 赠送授权 管理产品 删除产品" [ref=e625]:
+                    - generic [ref=e627]:
+                      - button "审核" [ref=e628] [cursor=pointer]:
+                        - generic [ref=e629]: 审核
+                      - button "赠送授权" [ref=e630] [cursor=pointer]:
+                        - generic [ref=e631]: 赠送授权
+                      - button "管理产品" [ref=e632] [cursor=pointer]:
+                        - generic [ref=e633]: 管理产品
+                      - button "删除产品" [ref=e634] [cursor=pointer]:
+                        - generic [ref=e635]: 删除产品
+          - generic [ref=e637]:
+            - generic [ref=e638]: 共 9 条
+            - generic [ref=e641] [cursor=pointer]:
+              - generic:
+                - combobox [ref=e643]
+                - generic [ref=e644]: 10条/页
+              - img [ref=e647]
+            - button "上一页" [disabled] [ref=e649]:
+              - generic:
+                - img
+            - list [ref=e650]:
+              - listitem "第 1 页" [ref=e651]: "1"
+            - button "下一页" [disabled] [ref=e652]:
+              - generic:
+                - img
+            - generic [ref=e653]:
+              - generic [ref=e654]: 前往
+              - spinbutton "页" [ref=e657]: "1"
+              - generic [ref=e658]: 页

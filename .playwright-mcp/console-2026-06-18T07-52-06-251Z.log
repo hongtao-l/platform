@@ -1,0 +1,902 @@
+[    1447ms] [WARNING] [Vue warn]: Failed to resolve component: Setting
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1451ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: House, __name: house, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1452ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1453ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Grid, __name: grid, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1453ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: SetUp, __name: set-up, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1453ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1454ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Warning, __name: warning, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1454ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1455ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1455ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Checked, __name: checked, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1455ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1456ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1456ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Operation, __name: operation, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1457ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: ShoppingCart, __name: shopping-cart, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1458ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Star, __name: star, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1459ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1459ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: UserFilled, __name: user-filled, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1459ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: DataAnalysis, __name: data-analysis, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1556ms] [WARNING] [Vue warn]: Failed to resolve component: Setting
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1557ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: House, __name: house, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1558ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1559ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Grid, __name: grid, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1559ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: SetUp, __name: set-up, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1560ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1560ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Warning, __name: warning, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1560ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1561ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1561ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Checked, __name: checked, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1561ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1561ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1561ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Operation, __name: operation, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1562ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: ShoppingCart, __name: shopping-cart, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1562ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Star, __name: star, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1562ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1563ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: UserFilled, __name: user-filled, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1563ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: DataAnalysis, __name: data-analysis, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1565ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon size=24 color="#1890FF" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1565ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Grid, __name: grid, setup: } 
+  at <ElIcon size=24 color="#52C41A" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1566ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: DataAnalysis, __name: data-analysis, setup: } 
+  at <ElIcon size=24 color="#FAAD14" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1567ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: User, __name: user, setup: } 
+  at <ElIcon size=24 color="#722ED1" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    1568ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon size=32 color="#1890FF" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2493ms] [WARNING] [Vue warn]: Failed to resolve component: Setting
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2493ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: House, __name: house, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2493ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2494ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Grid, __name: grid, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2494ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: SetUp, __name: set-up, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2494ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2494ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Warning, __name: warning, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2494ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2494ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2495ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Checked, __name: checked, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2495ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2495ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2495ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Operation, __name: operation, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2495ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: ShoppingCart, __name: shopping-cart, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2495ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Star, __name: star, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2495ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2495ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: UserFilled, __name: user-filled, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2496ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: DataAnalysis, __name: data-analysis, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2867ms] [WARNING] [Vue warn]: Failed to resolve component: Setting
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2867ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: House, __name: house, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2868ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2868ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Grid, __name: grid, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2868ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: SetUp, __name: set-up, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2868ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2868ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Warning, __name: warning, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2869ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2869ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2869ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Checked, __name: checked, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2870ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2870ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2870ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Operation, __name: operation, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2870ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: ShoppingCart, __name: shopping-cart, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2870ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Star, __name: star, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2871ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2871ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: UserFilled, __name: user-filled, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    2871ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: DataAnalysis, __name: data-analysis, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[    4427ms] [WARNING] Failed to resolve component: Setting
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. Proxy(Object) at <Index>
+at <App> [Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4428ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4428ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4428ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4429ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4429ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4429ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4429ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4429ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4429ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4429ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4430ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4430ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4430ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4430ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4430ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4430ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4431ms] [WARNING] Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`.
+Component that was made reactive: [object Object] Proxy(Object) at <ElIcon>
+at <Index>
+at <App> [Object, Object, Object] @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:24297
+[    4452ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    4453ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5881ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5881ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5883ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5884ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5897ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5898ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5903ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5903ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5909ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5909ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5910ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5911ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5917ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5917ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5918ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[    5919ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[ 4660333ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:3001/@vite/client:559
+[ 4660861ms] [WARNING] [Vue warn]: Failed to resolve component: Setting
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660867ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: House, __name: house, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660870ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660873ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Grid, __name: grid, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660874ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: SetUp, __name: set-up, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660875ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660876ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Warning, __name: warning, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660877ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660878ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660879ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Checked, __name: checked, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660880ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660881ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660882ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Operation, __name: operation, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660883ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: ShoppingCart, __name: shopping-cart, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660886ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Star, __name: star, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660887ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660888ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: UserFilled, __name: user-filled, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4660888ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: DataAnalysis, __name: data-analysis, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662852ms] [WARNING] [Vue warn]: Failed to resolve component: Setting
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662857ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: House, __name: house, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662859ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662860ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Grid, __name: grid, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662862ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: SetUp, __name: set-up, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662862ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Cpu, __name: cpu, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662863ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Warning, __name: warning, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662863ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662866ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662867ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Checked, __name: checked, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662867ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662869ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Box, __name: box, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662870ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Operation, __name: operation, setup: } 
+  at <ElIcon class="menu-icon" > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662871ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: ShoppingCart, __name: shopping-cart, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662871ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Star, __name: star, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662873ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: Present, __name: present, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662875ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: UserFilled, __name: user-filled, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4662876ms] [WARNING] [Vue warn]: Vue received a Component that was made a reactive object. This can lead to unnecessary performance overhead and should be avoided by marking the component with `markRaw` or using `shallowRef` instead of `ref`. 
+Component that was made reactive:  {name: DataAnalysis, __name: data-analysis, setup: } 
+  at <ElIcon class="menu-icon" size=16 > 
+  at <Index> 
+  at <App> @ http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2203
+[ 4663006ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[ 4663015ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429:37)
+    at watch.immediate (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10473:14)
+    at callWithErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2351:19)
+    at callWithAsyncErrorHandling (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2358:17)
+    at baseWatchOptions.call (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3043:47)
+    at job (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2081:18)
+    at watch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:2116:7)
+    at doWatch (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3071:23)
+    at watch2 (http://localhost:3001/node_modules/.vite/deps/chunk-D4VKVKNE.js?v=b0937ae5:3004:10)
+    at useDeprecated (http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10472:3) @ http://localhost:3001/node_modules/.vite/deps/element-plus.js?v=b0937ae5:10429
+[ 7753958ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:3001/@vite/client:559

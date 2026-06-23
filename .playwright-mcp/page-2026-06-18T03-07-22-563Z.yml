@@ -1,0 +1,135 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e7]
+      - generic [ref=e9]: IoT 平台
+    - navigation [ref=e10]:
+      - generic [ref=e11] [cursor=pointer]:
+        - img [ref=e13]
+        - generic [ref=e15]: 工作台
+      - generic [ref=e16]:
+        - generic [ref=e17] [cursor=pointer]:
+          - img [ref=e19]
+          - generic [ref=e22]: 物模型管理
+          - img [ref=e24]
+        - generic:
+          - generic [ref=e26] [cursor=pointer]:
+            - img [ref=e28]
+            - generic [ref=e30]: IOT类目
+          - generic [ref=e31] [cursor=pointer]:
+            - img [ref=e33]
+            - generic [ref=e38]: 能力库
+          - generic [ref=e39] [cursor=pointer]:
+            - img [ref=e41]
+            - generic [ref=e44]: 算法库
+          - generic [ref=e45] [cursor=pointer]:
+            - img [ref=e47]
+            - generic [ref=e49]: 事件库
+      - generic [ref=e50]:
+        - generic [ref=e51] [cursor=pointer]:
+          - img [ref=e53]
+          - generic [ref=e57]: 产品管理
+          - img [ref=e59]
+        - generic:
+          - generic [ref=e61] [cursor=pointer]:
+            - img [ref=e63]
+            - generic [ref=e67]: 产品开发
+          - generic [ref=e68] [cursor=pointer]:
+            - img [ref=e70]
+            - generic [ref=e72]: 产品审核
+      - generic [ref=e73]:
+        - generic [ref=e74] [cursor=pointer]:
+          - img [ref=e76]
+          - generic [ref=e81]: 套餐管理
+          - img [ref=e83]
+        - generic [ref=e85] [cursor=pointer]:
+          - img [ref=e87]
+          - generic [ref=e91]: 套餐配置
+      - generic [ref=e92]:
+        - generic [ref=e93] [cursor=pointer]:
+          - img [ref=e95]
+          - generic [ref=e97]: 运营管理
+          - img [ref=e99]
+        - generic:
+          - generic [ref=e101] [cursor=pointer]:
+            - img [ref=e103]
+            - generic [ref=e105]: 商城位运营
+          - generic [ref=e106] [cursor=pointer]:
+            - img [ref=e108]
+            - generic [ref=e110]: 推荐位运营
+          - generic [ref=e111] [cursor=pointer]:
+            - img [ref=e113]
+            - generic [ref=e118]: 活动位运营
+          - generic [ref=e119] [cursor=pointer]:
+            - img [ref=e121]
+            - generic [ref=e123]: 用户分群
+          - generic [ref=e124] [cursor=pointer]:
+            - img [ref=e126]
+            - generic [ref=e128]: A/B Test
+    - generic [ref=e130] [cursor=pointer]:
+      - img [ref=e132]
+      - generic [ref=e134]: 收起菜单
+  - generic [ref=e135]:
+    - banner [ref=e136]:
+      - navigation "面包屑" [ref=e138]:
+        - link "首页" [ref=e140]
+      - generic [ref=e141]:
+        - generic [ref=e142] [cursor=pointer]:
+          - img [ref=e144]
+          - superscript [ref=e148]: "3"
+        - button "管理员" [ref=e150] [cursor=pointer]:
+          - img [ref=e153]
+          - generic [ref=e155]: 管理员
+          - img [ref=e157]
+    - main [ref=e159]:
+      - generic [ref=e160]:
+        - generic [ref=e161]:
+          - generic [ref=e164]:
+            - button "返回 返回" [ref=e165] [cursor=pointer]:
+              - generic "返回" [ref=e166]:
+                - img [ref=e168]
+              - generic [ref=e171]: 返回
+            - separator [ref=e172]
+            - generic [ref=e173]: App功能配置
+          - generic [ref=e174]: Session基础产品_319364 (PDRSAh5NV6PkRS6u)
+        - generic [ref=e176]:
+          - radiogroup "segmented" [ref=e177]:
+            - generic [ref=e178]:
+              - generic [ref=e179] [cursor=pointer]:
+                - radio "安装指引" [checked]
+                - generic [ref=e180]: 安装指引
+              - generic [ref=e181] [cursor=pointer]:
+                - radio "App使用范围"
+                - generic [ref=e182]: App使用范围
+              - generic [ref=e183] [cursor=pointer]:
+                - radio "默认配置"
+                - generic [ref=e184]: 默认配置
+          - generic [ref=e185]:
+            - generic [ref=e190]:
+              - generic [ref=e191]:
+                - generic [ref=e192]: 安装指引步骤
+                - button "添加步骤" [ref=e193] [cursor=pointer]:
+                  - generic [ref=e194]:
+                    - img [ref=e196]
+                    - text: 添加步骤
+              - generic [ref=e198]:
+                - generic [ref=e199] [cursor=pointer]:
+                  - generic [ref=e200]: "1"
+                  - textbox "步骤标题" [ref=e203]: 下载App
+                  - textbox "步骤描述" [ref=e206]: 扫描二维码或在应用商店搜索下载对应App
+                  - button [ref=e207]:
+                    - img [ref=e210]
+                - generic [ref=e212] [cursor=pointer]:
+                  - generic [ref=e213]: "2"
+                  - textbox "步骤标题" [ref=e216]: 注册账号
+                  - textbox "步骤描述" [ref=e219]: 打开App使用手机号注册并登录
+                  - button [ref=e220]:
+                    - img [ref=e223]
+                - generic [ref=e225] [cursor=pointer]:
+                  - generic [ref=e226]: "3"
+                  - textbox "步骤标题" [ref=e229]: 添加设备
+                  - textbox "步骤描述" [ref=e232]: 点击右上角"+"按钮，扫描设备二维码添加设备
+                  - button [ref=e233]:
+                    - img [ref=e236]
+            - button "保存配置" [ref=e239] [cursor=pointer]:
+              - generic [ref=e240]: 保存配置

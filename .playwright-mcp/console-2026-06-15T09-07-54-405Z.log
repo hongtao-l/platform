@@ -1,0 +1,17 @@
+[    2227ms] [LOG] 构建 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[    2227ms] [LOG] 触发同步缓存 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[    2234ms] [LOG] Proxy(Object) false false /product/develop @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[    2414ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://new-ecosystem-platform-v2.smartcloudcon.com/ecoplatformapi/user/info:0
+[    2415ms] [ERROR] Error: 登录信息失效，请稍后重试
+    at onSuccess (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:51:139407)
+    at https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:51:64859
+    at async G9 (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:51:142507)
+    at async _ee (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:51:148079) @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[    2416ms] [LOG] Error: 登录信息失效，请稍后重试
+    at onSuccess (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:51:139407)
+    at https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:51:64859
+    at async G9 (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:51:142507)
+    at async _ee (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:51:148079) 同步缓存失败 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[    2655ms] [LOG] 构建 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[    2655ms] [LOG] 触发同步缓存 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[    2656ms] [LOG] Proxy(Object) true true /login @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50

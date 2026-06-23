@@ -111,6 +111,25 @@ const routes = [
     component: () => import('@/views/battery/stats.vue'),
     meta: { title: '运行统计' }
   },
+  // ===== 时光相册 =====
+  {
+    path: '/time-album',
+    name: 'TimeAlbum',
+    component: () => import('@/views/time-album/index.vue'),
+    meta: { title: '时光相册' }
+  },
+  {
+    path: '/time-album/gallery',
+    name: 'TimeAlbumGallery',
+    component: () => import('@/views/time-album/gallery.vue'),
+    meta: { title: '时光相册' }
+  },
+  {
+    path: '/time-album/video-list',
+    name: 'TimeAlbumVideoList',
+    component: () => import('@/views/time-album/video-list.vue'),
+    meta: { title: '我的视频' }
+  },
   // ===== 子设备详情 =====
   {
     path: '/subdevice/temp-humidity',

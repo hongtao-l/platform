@@ -141,7 +141,9 @@ import {
   Cpu,
   SetUp,
   Grid,
-  Monitor
+  Monitor,
+  Warning,
+  Checked
 } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -168,16 +170,18 @@ const menuList = ref([
     title: '物模型管理',
     icon: Cpu,
     children: [
+      { title: 'IOT类目', path: '/thing-model/category', icon: Grid },
       { title: '能力库', path: '/thing-model/capability', icon: SetUp },
       { title: '算法库', path: '/thing-model/algorithm', icon: Cpu },
-      { title: 'IOT类目', path: '/thing-model/category', icon: Grid }
+      { title: '事件库', path: '/thing-model/event', icon: Warning }
     ]
   },
   {
     title: '产品管理',
     icon: Box,
     children: [
-      { title: '产品开发', path: '/product/development', icon: Box }
+      { title: '产品开发', path: '/product/development', icon: Box },
+      { title: '产品审核', path: '/product/audit', icon: Checked }
     ]
   },
   {

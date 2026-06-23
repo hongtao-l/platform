@@ -35,6 +35,24 @@ const routes = [
     }
   },
   {
+    path: '/product/audit',
+    name: 'ProductAudit',
+    component: () => import('@/views/product/audit.vue'),
+    meta: { title: '产品审核' }
+  },
+  {
+    path: '/product/audit/detail',
+    name: 'ProductAuditDetail',
+    component: () => import('@/views/product/audit/detail.vue'),
+    meta: { title: '产品详情' }
+  },
+  {
+    path: '/product/app',
+    name: 'ProductAppConfig',
+    component: () => import('@/views/product/app.vue'),
+    meta: { title: 'App功能配置' }
+  },
+  {
     path: '/abtest',
     name: 'AbTest',
     component: () => import('@/views/abtest/list.vue'),
@@ -103,6 +121,12 @@ const routes = [
     name: 'ThingModelAlgorithmCapabilities',
     component: () => import('@/views/iot/thing-model/algorithm-capability.vue'),
     meta: { title: '算法关联能力' }
+  },
+  {
+    path: '/thing-model/event',
+    name: 'ThingModelEvent',
+    component: () => import('@/views/iot/thing-model/EventPanel.vue'),
+    meta: { title: '事件库' }
   },
   {
     path: '/pkg',

@@ -153,6 +153,143 @@ const initialCategoryCaps = [
   { categoryId: initialCategories[2].id, capabilityId: initialCapabilities[12].id }  // device_online
 ]
 
+// ===== 老能力模块（能力池（老）用） =====
+const initialLegacyModules = [
+  { id: nextId(), name: '联网方式', identifier: 'NetworkModule' },
+  { id: nextId(), name: '对讲设置', identifier: 'IntercomModule' },
+  { id: nextId(), name: '存储设置', identifier: 'StorageModule' },
+  { id: nextId(), name: '电池设置', identifier: 'BatteryModule' },
+  { id: nextId(), name: '工作模式', identifier: 'WorkModeModule' },
+  { id: nextId(), name: '唤醒能力', identifier: 'WakeupModule' },
+  { id: nextId(), name: 'OTA能力', identifier: 'OtaModule' },
+  { id: nextId(), name: '指示灯', identifier: 'IndicatorModule' },
+  { id: nextId(), name: '报警录制', identifier: 'AlarmRecordModule' },
+  { id: nextId(), name: '红外灯', identifier: 'IrLightModule' },
+  { id: nextId(), name: '声音侦测', identifier: 'SoundDetectModule' },
+  { id: nextId(), name: '算法能力', identifier: 'AlgorithmModule' },
+  { id: nextId(), name: '屏显配置', identifier: 'DisplayModule' },
+  { id: nextId(), name: '喇叭配置', identifier: 'SpeakerModule' }
+]
+
+// ===== 老能力（能力池（老）用，JSON格式） =====
+const initialLegacyCapabilities = [
+  // 联网方式
+  { id: nextId(), moduleId: initialLegacyModules[0].id, identifier: 'NetType', name: '联网方式', descr: '设备支持的联网方式配置',
+    jsonContent: '{"type":"prop","dataType":"bitmap","accessMode":"rw","labels":["有线","WIFI","移动网络"]}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[0].id, identifier: 'WifiBand', name: 'WIFI频段', descr: 'WIFI频段支持',
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"ro","labels":["2.4G","5G","双频"]}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[0].id, identifier: 'SignalStrength', name: '信号强度', descr: '当前网络信号强度',
+    jsonContent: '{"type":"prop","dataType":"int","accessMode":"ro","min":0,"max":100,"unit":"%" }', createTime: '2025-01-15 10:00:00' },
+
+  // 对讲设置
+  { id: nextId(), moduleId: initialLegacyModules[1].id, identifier: 'VoiceCallType', name: '语音通话类型', descr: '设备支持的语音通话类型',
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"ro","labels":["不支持","半双工","全双工"]}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[1].id, identifier: 'VoiceCallSwitch', name: '语音对讲开关', descr: '语音对讲状态',
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","labels":["空闲","呼叫中","通话中"]}', createTime: '2025-01-15 10:00:00' },
+
+  // 存储设置
+  { id: nextId(), moduleId: initialLegacyModules[2].id, identifier: 'StorageType', name: '存储类型', descr: '设备存储类型',
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"ro","labels":["TF卡","磁盘"]}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[2].id, identifier: 'TotalCapacity', name: '总容量', descr: '存储总容量',
+    jsonContent: '{"type":"prop","dataType":"int","accessMode":"ro","min":0,"max":1048576,"unit":"MB"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[2].id, identifier: 'RemainingCapacity', name: '剩余容量', descr: '存储剩余容量',
+    jsonContent: '{"type":"prop","dataType":"int","accessMode":"ro","min":0,"max":1048576,"unit":"MB"}', createTime: '2025-01-15 10:00:00' },
+
+  // 电池设置
+  { id: nextId(), moduleId: initialLegacyModules[3].id, identifier: 'BatteryLevel', name: '电池电量', descr: '当前电池电量百分比',
+    jsonContent: '{"type":"prop","dataType":"int","accessMode":"ro","min":0,"max":100,"unit":"%"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[3].id, identifier: 'ChargeStatus', name: '充电状态', descr: '设备充电状态',
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"ro","labels":["未充电","充电中"]}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[3].id, identifier: 'WakeMode', name: '唤醒方式', descr: '设备支持的唤醒方式',
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"ro","labels":["不支持","本地唤醒","远程唤醒","本地+远程"]}', createTime: '2025-01-15 10:00:00' },
+
+  // 工作模式
+  { id: nextId(), moduleId: initialLegacyModules[4].id, identifier: 'WorkMode', name: '工作模式', descr: '设备当前工作模式',
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","labels":["超低功耗","低功耗","AOV","长电","自定义"]}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[4].id, identifier: 'AovCaptureFrameRate', name: 'AOV拍照帧率', descr: 'AOV模式下拍照帧率间隔',
+    jsonContent: '{"type":"prop","dataType":"int","accessMode":"rw","min":0,"max":10,"unit":"秒/帧"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[4].id, identifier: 'CustomModeConfig', name: '自定义模式配置', descr: '自定义工作模式时段配置',
+    jsonContent: '{"type":"prop","dataType":"struct","accessMode":"rw","fields":[{"name":"默认模式","identifier":"DefaultExecMode","dataType":"int"},{"name":"定时计划","identifier":"Plan","dataType":"array"}]}', createTime: '2025-01-15 10:00:00' },
+
+  // 唤醒能力
+  { id: nextId(), moduleId: initialLegacyModules[5].id, identifier: 'WakeOnMotion', name: '运动唤醒', descr: '检测到运动时唤醒设备',
+    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"开启","falseLabel":"关闭"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[5].id, identifier: 'WakeOnPir', name: 'PIR唤醒', descr: 'PIR传感器触发唤醒',
+    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"开启","falseLabel":"关闭"}', createTime: '2025-01-15 10:00:00' },
+
+  // OTA能力
+  { id: nextId(), moduleId: initialLegacyModules[6].id, identifier: 'OtaSwitch', name: 'OTA升级开关', descr: '是否允许OTA远程升级',
+    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"允许","falseLabel":"禁止"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[6].id, identifier: 'OtaProgress', name: '升级进度', descr: '当前OTA升级进度',
+    jsonContent: '{"type":"prop","dataType":"int","accessMode":"ro","min":0,"max":100,"unit":"%"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[6].id, identifier: 'OtaVersion', name: '固件版本', descr: '当前固件版本号',
+    jsonContent: '{"type":"prop","dataType":"string","accessMode":"ro","maxLength":32}', createTime: '2025-01-15 10:00:00' },
+
+  // 指示灯
+  { id: nextId(), moduleId: initialLegacyModules[7].id, identifier: 'StatusLightSwitch', name: '状态指示灯', descr: '状态指示灯开关',
+    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"开启","falseLabel":"关闭"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[7].id, identifier: 'IndicatorBrightness', name: '指示灯亮度', descr: '指示灯亮度级别',
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","labels":["低","中","高"]}', createTime: '2025-01-15 10:00:00' },
+
+  // 报警录制
+  { id: nextId(), moduleId: initialLegacyModules[8].id, identifier: 'AlarmRecordSwitch', name: '报警录制开关', descr: '报警触发时是否自动录制',
+    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"开启","falseLabel":"关闭"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[8].id, identifier: 'AlarmRecordDuration', name: '录制时长', descr: '报警录制持续时间',
+    jsonContent: '{"type":"prop","dataType":"int","accessMode":"rw","min":5,"max":60,"unit":"秒"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[8].id, identifier: 'AlarmRecordResolution', name: '录制清晰度', descr: '报警录制视频清晰度',
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","labels":["超清","高清","标清"]}', createTime: '2025-01-15 10:00:00' },
+
+  // 红外灯
+  { id: nextId(), moduleId: initialLegacyModules[9].id, identifier: 'IrLightSwitch', name: '红外灯开关', descr: '红外补光灯开关',
+    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"开启","falseLabel":"关闭"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[9].id, identifier: 'IrLightMode', name: '红外灯模式', descr: '红外灯工作模式',
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","labels":["自动","手动","关闭"]}', createTime: '2025-01-15 10:00:00' },
+
+  // 声音侦测
+  { id: nextId(), moduleId: initialLegacyModules[10].id, identifier: 'SoundDetectSwitch', name: '声音侦测开关', descr: '声音侦测功能开关',
+    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"开启","falseLabel":"关闭"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[10].id, identifier: 'SoundDetectSensitive', name: '侦测灵敏度', descr: '声音侦测灵敏度',
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","labels":["1档","2档","3档","4档"]}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[10].id, identifier: 'SoundEvent', name: '声音事件上报', descr: '检测到异常声音时上报告警',
+    jsonContent: '{"type":"evt","eventType":"alarm"}', createTime: '2025-01-15 10:00:00' },
+
+  // 算法能力
+  { id: nextId(), moduleId: initialLegacyModules[11].id, identifier: 'AlgorithmSwitch', name: '算法开关', descr: '算法功能总开关',
+    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"开启","falseLabel":"关闭"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[11].id, identifier: 'AlgorithmSensitivity', name: '算法灵敏度', descr: '算法整体灵敏度',
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","labels":["低","中","高"]}', createTime: '2025-01-15 10:00:00' },
+
+  // 屏显配置
+  { id: nextId(), moduleId: initialLegacyModules[12].id, identifier: 'HasDisplay', name: '是否有屏显', descr: '设备是否具备屏显模块',
+    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"是","falseLabel":"否"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[12].id, identifier: 'SupportedResolutions', name: '支持的分辨率', descr: '屏显支持的输出分辨率',
+    jsonContent: '{"type":"prop","dataType":"bitmap","accessMode":"rw","labels":["1920*1080","1280*720","640*480","640*360","320*240"]}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[12].id, identifier: 'ScreenOffTime', name: '屏息时间', descr: '无操作后自动息屏的时间',
+    jsonContent: '{"type":"prop","dataType":"int","accessMode":"rw","min":0,"max":3600,"unit":"秒"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[12].id, identifier: 'DecodeFormats', name: '支持的解码方式', descr: '屏显支持的解码格式',
+    jsonContent: '{"type":"prop","dataType":"bitmap","accessMode":"rw","labels":["H264","H265","MJPG"]}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[12].id, identifier: 'DisplayTypes', name: '支持的屏显类型', descr: '屏显支持的内容类型',
+    jsonContent: '{"type":"prop","dataType":"bitmap","accessMode":"rw","labels":["文字","背景图","图片","视频"]}', createTime: '2025-01-15 10:00:00' },
+
+  // 喇叭配置
+  { id: nextId(), moduleId: initialLegacyModules[13].id, identifier: 'HasSpeaker', name: '是否有喇叭', descr: '设备是否具备喇叭模块',
+    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"是","falseLabel":"否"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[13].id, identifier: 'EncodeFormats', name: '支持的编码方式', descr: '喇叭支持的音频编码格式',
+    jsonContent: '{"type":"prop","dataType":"bitmap","accessMode":"rw","labels":["PCM","G711A","g711u","ACC"]}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[13].id, identifier: 'VolumeAdjustable', name: '音量调节', descr: '是否支持音量调节',
+    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"支持","falseLabel":"不支持"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[13].id, identifier: 'Volume', name: '音量', descr: '喇叭音量大小',
+    jsonContent: '{"type":"prop","dataType":"int","accessMode":"rw","min":0,"max":100,"unit":"%"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[13].id, identifier: 'CustomRingtone', name: '自定义铃声', descr: '是否支持自定义铃声',
+    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"支持","falseLabel":"不支持"}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[13].id, identifier: 'BitDepth', name: '采样位深', descr: '音频采样位深度',
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","labels":["16bit","24bit"]}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[13].id, identifier: 'SampleRate', name: '采样率', descr: '音频采样率',
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","labels":["8000","16000","44100","48000"]}', createTime: '2025-01-15 10:00:00' },
+  { id: nextId(), moduleId: initialLegacyModules[13].id, identifier: 'Channels', name: '声道数', descr: '音频声道数',
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","labels":["单声道","双声道"]}', createTime: '2025-01-15 10:00:00' }
+]
+
 // ===== Reactive 存储 =====
 export const store = reactive({
   categories: JSON.parse(JSON.stringify(initialCategories)),
@@ -160,7 +297,9 @@ export const store = reactive({
   capabilities: JSON.parse(JSON.stringify(initialCapabilities)),
   categoryCaps: JSON.parse(JSON.stringify(initialCategoryCaps)),
   customModules: [],       // 企业自定义模块
-  customCapabilities: []   // 企业自定义能力
+  customCapabilities: [],  // 企业自定义能力
+  legacyModules: JSON.parse(JSON.stringify(initialLegacyModules)),
+  legacyCapabilities: JSON.parse(JSON.stringify(initialLegacyCapabilities))
 })
 
 // ===== 类目操作 =====
@@ -327,6 +466,60 @@ export function isCapIdentifierUnique(identifier, excludeCapId) {
   return true
 }
 
+// ===== 老能力模块操作 =====
+export function addLegacyModule(item) {
+  store.legacyModules.push({ id: nextId(), name: item.name, identifier: item.identifier })
+}
+
+export function updateLegacyModule(id, item) {
+  const mod = store.legacyModules.find(m => m.id === id)
+  if (mod) { mod.name = item.name; mod.identifier = item.identifier }
+}
+
+export function removeLegacyModule(id) {
+  store.legacyCapabilities = store.legacyCapabilities.filter(c => c.moduleId !== id)
+  store.legacyModules = store.legacyModules.filter(m => m.id !== id)
+}
+
+export function isLegacyModuleIdentifierUnique(identifier, excludeId) {
+  for (const mod of store.legacyModules) {
+    if (excludeId && mod.id === excludeId) continue
+    if (mod.identifier === identifier) return false
+  }
+  return true
+}
+
+// ===== 老能力操作 =====
+export function addLegacyCapability(item) {
+  const capId = nextId()
+  store.legacyCapabilities.push({
+    id: capId, moduleId: item.moduleId, identifier: item.identifier,
+    name: item.name, descr: item.descr, jsonContent: item.jsonContent,
+    createTime: item.createTime || new Date().toISOString().replace('T', ' ').slice(0, 19)
+  })
+  return capId
+}
+
+export function updateLegacyCapability(capId, item) {
+  const cap = store.legacyCapabilities.find(c => c.id === capId)
+  if (cap) {
+    cap.moduleId = item.moduleId; cap.identifier = item.identifier
+    cap.name = item.name; cap.descr = item.descr; cap.jsonContent = item.jsonContent
+  }
+}
+
+export function removeLegacyCapability(capId) {
+  store.legacyCapabilities = store.legacyCapabilities.filter(c => c.id !== capId)
+}
+
+export function isLegacyCapIdentifierUnique(identifier, excludeCapId) {
+  for (const cap of store.legacyCapabilities) {
+    if (excludeCapId && cap.id === excludeCapId) continue
+    if (cap.identifier === identifier) return false
+  }
+  return true
+}
+
 // ========================================================================
 // 算法 & 事件 Mock 数据
 // ========================================================================
@@ -446,6 +639,19 @@ export function listEvents({ page, pageSize, keyword } = {}) {
 
 export function allEvents() {
   return { code: 0, data: { list: JSON.parse(JSON.stringify(store.events)) } }
+}
+
+export function getModules() {
+  return JSON.parse(JSON.stringify(store.modules))
+}
+
+export function getCapabilitiesByIds(identifiers) {
+  if (!identifiers || !identifiers.length) return []
+  return store.capabilities.filter(c => identifiers.includes(c.identifier)).map(c => JSON.parse(JSON.stringify(c)))
+}
+
+export function getAllCapabilities() {
+  return JSON.parse(JSON.stringify(store.capabilities))
 }
 
 export function getEvent(id) {

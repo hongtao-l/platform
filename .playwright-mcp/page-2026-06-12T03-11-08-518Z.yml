@@ -1,0 +1,219 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e7]
+      - generic [ref=e9]: IoT 平台
+    - navigation [ref=e10]:
+      - generic [ref=e11] [cursor=pointer]:
+        - img [ref=e13]
+        - generic [ref=e15]: 工作台
+      - generic [ref=e16]:
+        - generic [ref=e17] [cursor=pointer]:
+          - img [ref=e19]
+          - generic [ref=e22]: 物模型管理
+          - img [ref=e24]
+        - generic:
+          - generic [ref=e26] [cursor=pointer]:
+            - img [ref=e28]
+            - generic [ref=e33]: 能力库
+          - generic [ref=e34] [cursor=pointer]:
+            - img [ref=e36]
+            - generic [ref=e39]: 算法库
+          - generic [ref=e40] [cursor=pointer]:
+            - img [ref=e42]
+            - generic [ref=e44]: IOT类目
+      - generic [ref=e45]:
+        - generic [ref=e46] [cursor=pointer]:
+          - img [ref=e48]
+          - generic [ref=e52]: 产品管理
+          - img [ref=e54]
+        - generic [ref=e56] [cursor=pointer]:
+          - img [ref=e58]
+          - generic [ref=e62]: 产品开发
+      - generic [ref=e63]:
+        - generic [ref=e64] [cursor=pointer]:
+          - img [ref=e66]
+          - generic [ref=e71]: 套餐管理
+          - img [ref=e73]
+        - generic [ref=e75] [cursor=pointer]:
+          - img [ref=e77]
+          - generic [ref=e81]: 套餐配置
+      - generic [ref=e82]:
+        - generic [ref=e83] [cursor=pointer]:
+          - img [ref=e85]
+          - generic [ref=e87]: 运营管理
+          - img [ref=e89]
+        - generic:
+          - generic [ref=e91] [cursor=pointer]:
+            - img [ref=e93]
+            - generic [ref=e95]: 商城位运营
+          - generic [ref=e96] [cursor=pointer]:
+            - img [ref=e98]
+            - generic [ref=e100]: 推荐位运营
+          - generic [ref=e101] [cursor=pointer]:
+            - img [ref=e103]
+            - generic [ref=e108]: 活动位运营
+          - generic [ref=e109] [cursor=pointer]:
+            - img [ref=e111]
+            - generic [ref=e113]: 用户分群
+          - generic [ref=e114] [cursor=pointer]:
+            - img [ref=e116]
+            - generic [ref=e118]: A/B Test
+    - generic [ref=e120] [cursor=pointer]:
+      - img [ref=e122]
+      - generic [ref=e124]: 收起菜单
+  - generic [ref=e125]:
+    - banner [ref=e126]:
+      - navigation "面包屑" [ref=e128]:
+        - link "首页" [ref=e130]
+      - generic [ref=e131]:
+        - generic [ref=e132] [cursor=pointer]:
+          - img [ref=e134]
+          - superscript [ref=e138]: "3"
+        - button "管理员" [ref=e140] [cursor=pointer]:
+          - img [ref=e143]
+          - generic [ref=e145]: 管理员
+          - img [ref=e147]
+    - main [ref=e149]:
+      - generic [ref=e719]:
+        - generic [ref=e722]:
+          - button "返回 返回" [ref=e723] [cursor=pointer]:
+            - generic "返回" [ref=e724]:
+              - img [ref=e726]
+            - generic [ref=e729]: 返回
+          - separator [ref=e730]
+          - generic [ref=e731]: 开发产品
+        - generic [ref=e732]:
+          - generic [ref=e733]:
+            - heading "智能门铃 Pro" [level=2] [ref=e734]
+            - button "编辑产品" [ref=e735] [cursor=pointer]:
+              - generic [ref=e736]:
+                - img [ref=e738]
+                - text: 编辑产品
+          - generic [ref=e741]:
+            - generic [ref=e742]: "产品Id: DOORBELL_001"
+            - generic [ref=e743]: "|"
+            - generic [ref=e744]: "产品型号: TEST-MODEL-388537"
+            - generic [ref=e745]: "|"
+            - generic [ref=e746]: "产品类目: UITest_Edit_285367"
+            - generic [ref=e747]: "|"
+            - generic [ref=e748]: "联网方式: -"
+        - generic [ref=e749]:
+          - generic [ref=e754] [cursor=pointer]: 功能定义与配置
+          - generic [ref=e760] [cursor=pointer]: 算法联动配置
+          - generic [ref=e766] [cursor=pointer]: 语音助手
+        - generic [ref=e767]:
+          - tablist [ref=e771]:
+            - tab "设备能力" [ref=e772]
+            - tab "镜头配置" [ref=e773]
+            - tab "麦克风配置" [ref=e774]
+            - tab "屏显配置" [ref=e775]
+            - tab "喇叭配置" [active] [selected] [ref=e776] [cursor=pointer]
+            - tab "云端抓图" [ref=e777]
+          - tabpanel "喇叭配置" [ref=e1022]:
+            - generic [ref=e1023]:
+              - button "上一步" [ref=e1024] [cursor=pointer]:
+                - generic [ref=e1025]: 上一步
+              - button "跳过" [ref=e1026] [cursor=pointer]:
+                - generic [ref=e1027]: 跳过
+              - button "保存,下一步" [ref=e1028] [cursor=pointer]:
+                - generic [ref=e1029]:
+                  - img [ref=e1031]
+                  - text: 保存,下一步
+            - separator [ref=e1034]:
+              - generic [ref=e1035]:
+                - img [ref=e1037]
+                - generic [ref=e1039]: 配置选项
+            - generic [ref=e1041]:
+              - generic [ref=e1042]:
+                - generic [ref=e1043]: 是否有喇叭
+                - radiogroup "是否有喇叭" [ref=e1045]:
+                  - generic [ref=e1046] [cursor=pointer]:
+                    - radio "是" [checked] [ref=e1048]
+                    - generic [ref=e1050]: 是
+                  - generic [ref=e1051] [cursor=pointer]:
+                    - radio "否" [ref=e1053]
+                    - generic [ref=e1055]: 否
+              - generic [ref=e1056]:
+                - generic [ref=e1057]: 支持的编码方式
+                - group "支持的编码方式" [ref=e1059]:
+                  - generic [ref=e1060] [cursor=pointer]:
+                    - generic [ref=e1061]:
+                      - checkbox "PCM"
+                    - generic [ref=e1063]: PCM
+                  - generic [ref=e1064] [cursor=pointer]:
+                    - generic [ref=e1065]:
+                      - checkbox "G711A"
+                    - generic [ref=e1067]: G711A
+                  - generic [ref=e1068] [cursor=pointer]:
+                    - generic [ref=e1069]:
+                      - checkbox "g711u"
+                    - generic [ref=e1071]: g711u
+                  - generic [ref=e1072] [cursor=pointer]:
+                    - generic [ref=e1073]:
+                      - checkbox "ACC"
+                    - generic [ref=e1075]: ACC
+              - generic [ref=e1076]:
+                - generic [ref=e1077]: 音量调节
+                - radiogroup "音量调节" [ref=e1079]:
+                  - generic [ref=e1080] [cursor=pointer]:
+                    - radio "支持" [ref=e1082]
+                    - generic [ref=e1084]: 支持
+                  - generic [ref=e1085] [cursor=pointer]:
+                    - radio "不支持" [checked] [ref=e1087]
+                    - generic [ref=e1089]: 不支持
+              - generic [ref=e1090]:
+                - generic [ref=e1091]: 音量
+                - generic [ref=e1093]:
+                  - button "减少数值" [ref=e1094]:
+                    - img [ref=e1096]
+                  - button "增加数值" [ref=e1098] [cursor=pointer]:
+                    - img [ref=e1100]
+                  - spinbutton "音量" [ref=e1104]: "0"
+              - generic [ref=e1105]:
+                - generic [ref=e1106]: 自定义铃声
+                - radiogroup "自定义铃声" [ref=e1108]:
+                  - generic [ref=e1109] [cursor=pointer]:
+                    - radio "支持" [ref=e1111]
+                    - generic [ref=e1113]: 支持
+                  - generic [ref=e1114] [cursor=pointer]:
+                    - radio "不支持" [checked] [ref=e1116]
+                    - generic [ref=e1118]: 不支持
+              - generic [ref=e1119]:
+                - generic [ref=e1120]: 采样位深
+                - radiogroup "采样位深" [ref=e1122]:
+                  - generic [ref=e1123] [cursor=pointer]:
+                    - radio "16bit" [checked] [ref=e1125]
+                    - generic [ref=e1127]: 16bit
+                  - generic [ref=e1128] [cursor=pointer]:
+                    - radio "24bit" [ref=e1130]
+                    - generic [ref=e1132]: 24bit
+              - generic [ref=e1133]:
+                - generic [ref=e1134]: 采样率
+                - radiogroup "采样率" [ref=e1136]:
+                  - generic [ref=e1137] [cursor=pointer]:
+                    - radio "8000 (电话音质)" [checked] [ref=e1139]
+                    - generic [ref=e1141]: 8000 (电话音质)
+                  - generic [ref=e1142] [cursor=pointer]:
+                    - radio "16000 (语音识别常用)" [ref=e1144]
+                    - generic [ref=e1146]: 16000 (语音识别常用)
+                  - generic [ref=e1147] [cursor=pointer]:
+                    - radio "44100 (CD音质)" [ref=e1149]
+                    - generic [ref=e1151]: 44100 (CD音质)
+                  - generic [ref=e1152] [cursor=pointer]:
+                    - radio "48000 (专业音频常用)" [ref=e1154]
+                    - generic [ref=e1156]: 48000 (专业音频常用)
+              - generic [ref=e1157]:
+                - generic [ref=e1158]: 声道数
+                - radiogroup "声道数" [ref=e1160]:
+                  - generic [ref=e1161] [cursor=pointer]:
+                    - radio "单声道" [checked] [ref=e1163]
+                    - generic [ref=e1165]: 单声道
+                  - generic [ref=e1166] [cursor=pointer]:
+                    - radio "双声道" [ref=e1168]
+                    - generic [ref=e1170]: 双声道
+        - generic [ref=e1017]:
+          - button "跳过" [ref=e1018] [cursor=pointer]:
+            - generic [ref=e1019]: 跳过
+          - button "保存，下一步" [ref=e1020] [cursor=pointer]:
+            - generic [ref=e1021]: 保存，下一步

@@ -91,6 +91,14 @@ const showDeleteConfirm = ref(false)
 // 设置项
 const settingsItems = ref([
   {
+    title: '时光相册',
+    desc: '智能分类、生成视频',
+    icon: 'photo-o',
+    iconColor: '#E91E63',
+    bgColor: '#FCE4EC',
+    action: 'time_album'
+  },
+  {
     title: '侦测设置',
     desc: '运动、人形、车辆',
     icon: 'eye-o',
@@ -193,6 +201,8 @@ const handleSetting = (item) => {
     router.push('/settings/work-mode')
   } else if (item.action === 'record_mode') {
     router.push('/settings/record-mode')
+  } else if (item.action === 'time_album') {
+    router.push({ path: '/time-album', query: { deviceId: deviceId.value, deviceName: deviceName.value } })
   }
 }
 
@@ -204,7 +214,8 @@ const deleteDevice = () => {
 
 <style lang="scss" scoped>
 .settings-page {
-  min-height: 100%;
+  height: 100%;
+  overflow-y: auto;
   background-color: $bg-page;
 }
 

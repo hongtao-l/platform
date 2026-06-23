@@ -1,0 +1,20 @@
+[      58ms] [LOG] 构建 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-C60cxGSy.js:50
+[      58ms] [LOG] 触发同步缓存 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-C60cxGSy.js:50
+[      64ms] [LOG] Proxy(Object) false false /product/develop @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-C60cxGSy.js:50
+[     115ms] [LOG] {code: 0, msg: ok, data: Object} 用户信息 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-C60cxGSy.js:50
+[     172ms] [LOG] 添加路由完毕 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-C60cxGSy.js:50
+[     172ms] [LOG] 注册路由Tree @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-C60cxGSy.js:50
+[     173ms] [LOG] [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object] 路由扁平化结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-C60cxGSy.js:50
+[     241ms] [LOG] 获取详情 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/develop-vtCfaT2T.js:0
+[     241ms] [LOG] Ph248WvrQnXrR 谁 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/product-wu0CGOBd.js:0
+[     242ms] [LOG] 获取联网 Ph248WvrQnXrR @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/enmu-4hL8NAdy.js:0
+[     242ms] [LOG] Ph248WvrQnXrR 谁 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/product-wu0CGOBd.js:0
+[     257ms] [LOG] undefined 解析的结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/capabilityConfig-BKODdwZU.js:0
+[     263ms] [LOG] undefined 解析的结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/capabilityConfig-BKODdwZU.js:0
+[     283ms] [LOG] undefined 解析的结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/capabilityConfig-BKODdwZU.js:0
+[     288ms] [LOG] undefined 解析的结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/capabilityConfig-BKODdwZU.js:0
+[     307ms] [LOG] undefined 解析的结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/capabilityConfig-BKODdwZU.js:0
+[     312ms] [LOG] undefined 解析的结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/capabilityConfig-BKODdwZU.js:0
+[     596ms] [LOG] WIFI（支持5GHz） 联网方式 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/develop-vtCfaT2T.js:0
+[     601ms] [LOG] Proxy(Array) 处理完毕 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/algorithmConfig-EdESXyF1.js:1
+[   94553ms] [LOG] [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object] 加载过来 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/algorithmConfig-EdESXyF1.js:1

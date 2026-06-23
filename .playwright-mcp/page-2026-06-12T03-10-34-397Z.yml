@@ -1,0 +1,491 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e7]
+      - generic [ref=e9]: IoT 平台
+    - navigation [ref=e10]:
+      - generic [ref=e11] [cursor=pointer]:
+        - img [ref=e13]
+        - generic [ref=e15]: 工作台
+      - generic [ref=e16]:
+        - generic [ref=e17] [cursor=pointer]:
+          - img [ref=e19]
+          - generic [ref=e22]: 物模型管理
+          - img [ref=e24]
+        - generic:
+          - generic [ref=e26] [cursor=pointer]:
+            - img [ref=e28]
+            - generic [ref=e33]: 能力库
+          - generic [ref=e34] [cursor=pointer]:
+            - img [ref=e36]
+            - generic [ref=e39]: 算法库
+          - generic [ref=e40] [cursor=pointer]:
+            - img [ref=e42]
+            - generic [ref=e44]: IOT类目
+      - generic [ref=e45]:
+        - generic [ref=e46] [cursor=pointer]:
+          - img [ref=e48]
+          - generic [ref=e52]: 产品管理
+          - img [ref=e54]
+        - generic [ref=e56] [cursor=pointer]:
+          - img [ref=e58]
+          - generic [ref=e62]: 产品开发
+      - generic [ref=e63]:
+        - generic [ref=e64] [cursor=pointer]:
+          - img [ref=e66]
+          - generic [ref=e71]: 套餐管理
+          - img [ref=e73]
+        - generic [ref=e75] [cursor=pointer]:
+          - img [ref=e77]
+          - generic [ref=e81]: 套餐配置
+      - generic [ref=e82]:
+        - generic [ref=e83] [cursor=pointer]:
+          - img [ref=e85]
+          - generic [ref=e87]: 运营管理
+          - img [ref=e89]
+        - generic:
+          - generic [ref=e91] [cursor=pointer]:
+            - img [ref=e93]
+            - generic [ref=e95]: 商城位运营
+          - generic [ref=e96] [cursor=pointer]:
+            - img [ref=e98]
+            - generic [ref=e100]: 推荐位运营
+          - generic [ref=e101] [cursor=pointer]:
+            - img [ref=e103]
+            - generic [ref=e108]: 活动位运营
+          - generic [ref=e109] [cursor=pointer]:
+            - img [ref=e111]
+            - generic [ref=e113]: 用户分群
+          - generic [ref=e114] [cursor=pointer]:
+            - img [ref=e116]
+            - generic [ref=e118]: A/B Test
+    - generic [ref=e120] [cursor=pointer]:
+      - img [ref=e122]
+      - generic [ref=e124]: 收起菜单
+  - generic [ref=e125]:
+    - banner [ref=e126]:
+      - navigation "面包屑" [ref=e128]:
+        - generic [ref=e129]:
+          - link "首页" [ref=e130]
+          - text: /
+        - link "产品开发" [ref=e200]
+      - generic [ref=e131]:
+        - generic [ref=e132] [cursor=pointer]:
+          - img [ref=e134]
+          - superscript [ref=e138]: "3"
+        - button "管理员" [ref=e140] [cursor=pointer]:
+          - img [ref=e143]
+          - generic [ref=e145]: 管理员
+          - img [ref=e147]
+    - main [ref=e149]:
+      - generic [ref=e201]:
+        - generic [ref=e203]:
+          - generic [ref=e204]:
+            - generic [ref=e205]: 产品名称
+            - textbox "产品名称" [ref=e209]:
+              - /placeholder: 请输入产品名称
+          - generic [ref=e210]:
+            - generic [ref=e211]: 产品状态
+            - generic [ref=e214] [cursor=pointer]:
+              - generic:
+                - combobox "产品状态" [ref=e216]
+                - generic [ref=e217]: 全部
+              - img [ref=e220]
+          - generic [ref=e222]:
+            - generic [ref=e223]: 开发方式
+            - generic [ref=e226] [cursor=pointer]:
+              - generic:
+                - combobox "开发方式" [ref=e228]
+                - generic [ref=e229]: 全部
+              - img [ref=e232]
+          - generic [ref=e234]:
+            - generic [ref=e235]: 产品类目
+            - generic [ref=e238] [cursor=pointer]:
+              - generic:
+                - combobox "产品类目" [ref=e240]
+                - generic [ref=e241]: 全部
+              - img [ref=e244]
+          - generic [ref=e246]:
+            - generic [ref=e247]: 创建时间
+            - generic [ref=e249]:
+              - img [ref=e251]
+              - combobox "创建时间" [ref=e253]
+              - generic [ref=e254]: 至
+              - combobox "结束日期" [ref=e255]
+          - generic [ref=e257]:
+            - button "搜索" [ref=e258] [cursor=pointer]:
+              - generic [ref=e259]: 搜索
+            - button "重置" [ref=e260] [cursor=pointer]:
+              - generic [ref=e261]: 重置
+        - generic [ref=e262]:
+          - img [ref=e264]
+          - generic [ref=e266]: 引用产品为只读状态，不支持编辑和发布操作。如需修改请联系来源企业获取最新版本。
+        - generic [ref=e267]:
+          - generic [ref=e268]:
+            - generic [ref=e269]: 产品列表
+            - button "创建产品" [ref=e270] [cursor=pointer]:
+              - generic [ref=e271]:
+                - img [ref=e273]
+                - text: 创建产品
+          - generic [ref=e276]:
+            - table [ref=e278]:
+              - rowgroup [ref=e291]:
+                - row "产品信息 类目 开发方式 来源企业 状态 授权信息 操作人 所属企业 创建时间 更新时间 操作" [ref=e292]:
+                  - columnheader "产品信息" [ref=e293]:
+                    - generic [ref=e294]: 产品信息
+                  - columnheader "类目" [ref=e295]:
+                    - generic [ref=e296]: 类目
+                  - columnheader "开发方式" [ref=e297]:
+                    - generic [ref=e298]: 开发方式
+                  - columnheader "来源企业" [ref=e299]:
+                    - generic [ref=e300]: 来源企业
+                  - columnheader "状态" [ref=e301]:
+                    - generic [ref=e302]: 状态
+                  - columnheader "授权信息" [ref=e303]:
+                    - generic [ref=e304]: 授权信息
+                  - columnheader "操作人" [ref=e305]:
+                    - generic [ref=e306]: 操作人
+                  - columnheader "所属企业" [ref=e307]:
+                    - generic [ref=e308]: 所属企业
+                  - columnheader "创建时间" [ref=e309]:
+                    - generic [ref=e310]: 创建时间
+                  - columnheader "更新时间" [ref=e311]:
+                    - generic [ref=e312]: 更新时间
+                  - columnheader "操作" [ref=e313]:
+                    - generic [ref=e314]: 操作
+            - table [ref=e319]:
+              - rowgroup [ref=e332]:
+                - row "IPC Pro 智能摄像机 IPC_PRO_001 IPC摄像机 标准开发 本公司 已发布 已授权 3/5 张三 本公司 2026-01-15 2026-05-20 App配置 添加固件 更多" [ref=e333]:
+                  - cell "IPC Pro 智能摄像机 IPC_PRO_001" [ref=e334]:
+                    - generic [ref=e336]:
+                      - generic [ref=e337]: IPC Pro 智能摄像机
+                      - generic [ref=e338]: IPC_PRO_001
+                  - cell "IPC摄像机" [ref=e339]:
+                    - generic [ref=e340]: IPC摄像机
+                  - cell "标准开发" [ref=e341]:
+                    - generic [ref=e342]: 标准开发
+                  - cell "本公司" [ref=e343]:
+                    - generic [ref=e344]: 本公司
+                  - cell "已发布" [ref=e345]:
+                    - generic [ref=e347]: 已发布
+                  - cell "已授权 3/5" [ref=e348]:
+                    - generic [ref=e349]: 已授权 3/5
+                  - cell "张三" [ref=e350]:
+                    - generic [ref=e351]: 张三
+                  - cell "本公司" [ref=e352]:
+                    - generic [ref=e353]: 本公司
+                  - cell "2026-01-15" [ref=e354]:
+                    - generic [ref=e355]: 2026-01-15
+                  - cell "2026-05-20" [ref=e356]:
+                    - generic [ref=e357]: 2026-05-20
+                  - cell "App配置 添加固件 更多" [ref=e358]:
+                    - generic [ref=e360]:
+                      - button "App配置" [ref=e361] [cursor=pointer]:
+                        - generic [ref=e362]: App配置
+                      - button "添加固件" [ref=e363] [cursor=pointer]:
+                        - generic [ref=e364]: 添加固件
+                      - button "更多" [ref=e366] [cursor=pointer]:
+                        - generic [ref=e367]:
+                          - text: 更多
+                          - img [ref=e369]
+                - row "智能门铃 Pro DOORBELL_001 智能门铃 自定义开发 本公司 开发中 未授权 李四 本公司 2026-03-01 2026-05-18 继续开发 添加固件 更多" [ref=e371]:
+                  - cell "智能门铃 Pro DOORBELL_001" [ref=e372]:
+                    - generic [ref=e374]:
+                      - generic [ref=e375]: 智能门铃 Pro
+                      - generic [ref=e376]: DOORBELL_001
+                  - cell "智能门铃" [ref=e377]:
+                    - generic [ref=e378]: 智能门铃
+                  - cell "自定义开发" [ref=e379]:
+                    - generic [ref=e380]: 自定义开发
+                  - cell "本公司" [ref=e381]:
+                    - generic [ref=e382]: 本公司
+                  - cell "开发中" [ref=e383]:
+                    - generic [ref=e385]: 开发中
+                  - cell "未授权" [ref=e386]:
+                    - generic [ref=e387]: 未授权
+                  - cell "李四" [ref=e388]:
+                    - generic [ref=e389]: 李四
+                  - cell "本公司" [ref=e390]:
+                    - generic [ref=e391]: 本公司
+                  - cell "2026-03-01" [ref=e392]:
+                    - generic [ref=e393]: 2026-03-01
+                  - cell "2026-05-18" [ref=e394]:
+                    - generic [ref=e395]: 2026-05-18
+                  - cell "继续开发 添加固件 更多" [ref=e396]:
+                    - generic [ref=e398]:
+                      - button "继续开发" [ref=e399] [cursor=pointer]:
+                        - generic [ref=e400]: 继续开发
+                      - button "添加固件" [ref=e401] [cursor=pointer]:
+                        - generic [ref=e402]: 添加固件
+                      - button "更多" [ref=e404] [cursor=pointer]:
+                        - generic [ref=e405]:
+                          - text: 更多
+                          - img [ref=e407]
+                - row "烟感传感器 SENSOR_001 传感安防 标准开发 合作企业A 引用产品 只读引用 王五 合作企业A 2026-02-10 2026-04-01 —" [ref=e409]:
+                  - cell "烟感传感器 SENSOR_001" [ref=e410]:
+                    - generic [ref=e412]:
+                      - generic [ref=e413]: 烟感传感器
+                      - generic [ref=e414]: SENSOR_001
+                  - cell "传感安防" [ref=e415]:
+                    - generic [ref=e416]: 传感安防
+                  - cell "标准开发" [ref=e417]:
+                    - generic [ref=e418]: 标准开发
+                  - cell "合作企业A" [ref=e419]:
+                    - generic [ref=e420]: 合作企业A
+                  - cell "引用产品" [ref=e421]:
+                    - generic [ref=e423]: 引用产品
+                  - cell "只读引用" [ref=e424]:
+                    - generic [ref=e425]: 只读引用
+                  - cell "王五" [ref=e426]:
+                    - generic [ref=e427]: 王五
+                  - cell "合作企业A" [ref=e428]:
+                    - generic [ref=e429]: 合作企业A
+                  - cell "2026-02-10" [ref=e430]:
+                    - generic [ref=e431]: 2026-02-10
+                  - cell "2026-04-01" [ref=e432]:
+                    - generic [ref=e433]: 2026-04-01
+                  - cell "—" [ref=e434]:
+                    - generic [ref=e437]: —
+                - row "IPC Lite 室内摄像机 IPC_LITE_001 IPC摄像机 标准开发 本公司 发布中 已授权 2/3 赵六 本公司 2026-04-10 2026-05-22 复制产品 添加固件 更多" [ref=e438]:
+                  - cell "IPC Lite 室内摄像机 IPC_LITE_001" [ref=e439]:
+                    - generic [ref=e441]:
+                      - generic [ref=e442]: IPC Lite 室内摄像机
+                      - generic [ref=e443]: IPC_LITE_001
+                  - cell "IPC摄像机" [ref=e444]:
+                    - generic [ref=e445]: IPC摄像机
+                  - cell "标准开发" [ref=e446]:
+                    - generic [ref=e447]: 标准开发
+                  - cell "本公司" [ref=e448]:
+                    - generic [ref=e449]: 本公司
+                  - cell "发布中" [ref=e450]:
+                    - generic [ref=e452]: 发布中
+                  - cell "已授权 2/3" [ref=e453]:
+                    - generic [ref=e454]: 已授权 2/3
+                  - cell "赵六" [ref=e455]:
+                    - generic [ref=e456]: 赵六
+                  - cell "本公司" [ref=e457]:
+                    - generic [ref=e458]: 本公司
+                  - cell "2026-04-10" [ref=e459]:
+                    - generic [ref=e460]: 2026-04-10
+                  - cell "2026-05-22" [ref=e461]:
+                    - generic [ref=e462]: 2026-05-22
+                  - cell "复制产品 添加固件 更多" [ref=e463]:
+                    - generic [ref=e465]:
+                      - button "复制产品" [ref=e466] [cursor=pointer]:
+                        - generic [ref=e467]: 复制产品
+                      - button "添加固件" [ref=e468] [cursor=pointer]:
+                        - generic [ref=e469]: 添加固件
+                      - button "更多" [ref=e471] [cursor=pointer]:
+                        - generic [ref=e472]:
+                          - text: 更多
+                          - img [ref=e474]
+                - row "智能门锁 T1 LOCK_001 智能门铃 自定义开发 合作企业B 开发中 未授权 孙七 合作企业B 2026-04-20 2026-05-19 继续开发 添加固件 更多" [ref=e476]:
+                  - cell "智能门锁 T1 LOCK_001" [ref=e477]:
+                    - generic [ref=e479]:
+                      - generic [ref=e480]: 智能门锁 T1
+                      - generic [ref=e481]: LOCK_001
+                  - cell "智能门铃" [ref=e482]:
+                    - generic [ref=e483]: 智能门铃
+                  - cell "自定义开发" [ref=e484]:
+                    - generic [ref=e485]: 自定义开发
+                  - cell "合作企业B" [ref=e486]:
+                    - generic [ref=e487]: 合作企业B
+                  - cell "开发中" [ref=e488]:
+                    - generic [ref=e490]: 开发中
+                  - cell "未授权" [ref=e491]:
+                    - generic [ref=e492]: 未授权
+                  - cell "孙七" [ref=e493]:
+                    - generic [ref=e494]: 孙七
+                  - cell "合作企业B" [ref=e495]:
+                    - generic [ref=e496]: 合作企业B
+                  - cell "2026-04-20" [ref=e497]:
+                    - generic [ref=e498]: 2026-04-20
+                  - cell "2026-05-19" [ref=e499]:
+                    - generic [ref=e500]: 2026-05-19
+                  - cell "继续开发 添加固件 更多" [ref=e501]:
+                    - generic [ref=e503]:
+                      - button "继续开发" [ref=e504] [cursor=pointer]:
+                        - generic [ref=e505]: 继续开发
+                      - button "添加固件" [ref=e506] [cursor=pointer]:
+                        - generic [ref=e507]: 添加固件
+                      - button "更多" [ref=e509] [cursor=pointer]:
+                        - generic [ref=e510]:
+                          - text: 更多
+                          - img [ref=e512]
+                - row "安防告警套装 ALARM_001 传感安防 标准开发 本公司 已发布 已授权 5/5 张三 本公司 2026-01-20 2026-05-21 App配置 添加固件 更多" [ref=e514]:
+                  - cell "安防告警套装 ALARM_001" [ref=e515]:
+                    - generic [ref=e517]:
+                      - generic [ref=e518]: 安防告警套装
+                      - generic [ref=e519]: ALARM_001
+                  - cell "传感安防" [ref=e520]:
+                    - generic [ref=e521]: 传感安防
+                  - cell "标准开发" [ref=e522]:
+                    - generic [ref=e523]: 标准开发
+                  - cell "本公司" [ref=e524]:
+                    - generic [ref=e525]: 本公司
+                  - cell "已发布" [ref=e526]:
+                    - generic [ref=e528]: 已发布
+                  - cell "已授权 5/5" [ref=e529]:
+                    - generic [ref=e530]: 已授权 5/5
+                  - cell "张三" [ref=e531]:
+                    - generic [ref=e532]: 张三
+                  - cell "本公司" [ref=e533]:
+                    - generic [ref=e534]: 本公司
+                  - cell "2026-01-20" [ref=e535]:
+                    - generic [ref=e536]: 2026-01-20
+                  - cell "2026-05-21" [ref=e537]:
+                    - generic [ref=e538]: 2026-05-21
+                  - cell "App配置 添加固件 更多" [ref=e539]:
+                    - generic [ref=e541]:
+                      - button "App配置" [ref=e542] [cursor=pointer]:
+                        - generic [ref=e543]: App配置
+                      - button "添加固件" [ref=e544] [cursor=pointer]:
+                        - generic [ref=e545]: 添加固件
+                      - button "更多" [ref=e547] [cursor=pointer]:
+                        - generic [ref=e548]:
+                          - text: 更多
+                          - img [ref=e550]
+                - row "户外球机 CAM_OUT_001 IPC摄像机 标准开发 合作企业C 引用产品 只读引用 周八 合作企业C 2026-03-15 2026-03-15 —" [ref=e552]:
+                  - cell "户外球机 CAM_OUT_001" [ref=e553]:
+                    - generic [ref=e555]:
+                      - generic [ref=e556]: 户外球机
+                      - generic [ref=e557]: CAM_OUT_001
+                  - cell "IPC摄像机" [ref=e558]:
+                    - generic [ref=e559]: IPC摄像机
+                  - cell "标准开发" [ref=e560]:
+                    - generic [ref=e561]: 标准开发
+                  - cell "合作企业C" [ref=e562]:
+                    - generic [ref=e563]: 合作企业C
+                  - cell "引用产品" [ref=e564]:
+                    - generic [ref=e566]: 引用产品
+                  - cell "只读引用" [ref=e567]:
+                    - generic [ref=e568]: 只读引用
+                  - cell "周八" [ref=e569]:
+                    - generic [ref=e570]: 周八
+                  - cell "合作企业C" [ref=e571]:
+                    - generic [ref=e572]: 合作企业C
+                  - cell "2026-03-15" [ref=e573]:
+                    - generic [ref=e574]: 2026-03-15
+                  - cell "2026-03-15" [ref=e575]:
+                    - generic [ref=e576]: 2026-03-15
+                  - cell "—" [ref=e577]:
+                    - generic [ref=e580]: —
+                - row "AI 智能分析摄像机 IPC_AI_001 IPC摄像机 自定义开发 本公司 开发中 未授权 李四 本公司 2026-05-01 2026-05-23 继续开发 添加固件 更多" [ref=e581]:
+                  - cell "AI 智能分析摄像机 IPC_AI_001" [ref=e582]:
+                    - generic [ref=e584]:
+                      - generic [ref=e585]: AI 智能分析摄像机
+                      - generic [ref=e586]: IPC_AI_001
+                  - cell "IPC摄像机" [ref=e587]:
+                    - generic [ref=e588]: IPC摄像机
+                  - cell "自定义开发" [ref=e589]:
+                    - generic [ref=e590]: 自定义开发
+                  - cell "本公司" [ref=e591]:
+                    - generic [ref=e592]: 本公司
+                  - cell "开发中" [ref=e593]:
+                    - generic [ref=e595]: 开发中
+                  - cell "未授权" [ref=e596]:
+                    - generic [ref=e597]: 未授权
+                  - cell "李四" [ref=e598]:
+                    - generic [ref=e599]: 李四
+                  - cell "本公司" [ref=e600]:
+                    - generic [ref=e601]: 本公司
+                  - cell "2026-05-01" [ref=e602]:
+                    - generic [ref=e603]: 2026-05-01
+                  - cell "2026-05-23" [ref=e604]:
+                    - generic [ref=e605]: 2026-05-23
+                  - cell "继续开发 添加固件 更多" [ref=e606]:
+                    - generic [ref=e608]:
+                      - button "继续开发" [ref=e609] [cursor=pointer]:
+                        - generic [ref=e610]: 继续开发
+                      - button "添加固件" [ref=e611] [cursor=pointer]:
+                        - generic [ref=e612]: 添加固件
+                      - button "更多" [ref=e614] [cursor=pointer]:
+                        - generic [ref=e615]:
+                          - text: 更多
+                          - img [ref=e617]
+                - row "可视门铃 Mini BELL_002 智能门铃 标准开发 本公司 已发布 已授权 1/2 赵六 本公司 2026-02-28 2026-05-17 App配置 添加固件 更多" [ref=e619]:
+                  - cell "可视门铃 Mini BELL_002" [ref=e620]:
+                    - generic [ref=e622]:
+                      - generic [ref=e623]: 可视门铃 Mini
+                      - generic [ref=e624]: BELL_002
+                  - cell "智能门铃" [ref=e625]:
+                    - generic [ref=e626]: 智能门铃
+                  - cell "标准开发" [ref=e627]:
+                    - generic [ref=e628]: 标准开发
+                  - cell "本公司" [ref=e629]:
+                    - generic [ref=e630]: 本公司
+                  - cell "已发布" [ref=e631]:
+                    - generic [ref=e633]: 已发布
+                  - cell "已授权 1/2" [ref=e634]:
+                    - generic [ref=e635]: 已授权 1/2
+                  - cell "赵六" [ref=e636]:
+                    - generic [ref=e637]: 赵六
+                  - cell "本公司" [ref=e638]:
+                    - generic [ref=e639]: 本公司
+                  - cell "2026-02-28" [ref=e640]:
+                    - generic [ref=e641]: 2026-02-28
+                  - cell "2026-05-17" [ref=e642]:
+                    - generic [ref=e643]: 2026-05-17
+                  - cell "App配置 添加固件 更多" [ref=e644]:
+                    - generic [ref=e646]:
+                      - button "App配置" [ref=e647] [cursor=pointer]:
+                        - generic [ref=e648]: App配置
+                      - button "添加固件" [ref=e649] [cursor=pointer]:
+                        - generic [ref=e650]: 添加固件
+                      - button "更多" [ref=e652] [cursor=pointer]:
+                        - generic [ref=e653]:
+                          - text: 更多
+                          - img [ref=e655]
+                - row "燃气泄漏检测器 GAS_001 传感安防 标准开发 本公司 发布中 已授权 4/5 张三 本公司 2026-04-05 2026-05-24 复制产品 添加固件 更多" [ref=e657]:
+                  - cell "燃气泄漏检测器 GAS_001" [ref=e658]:
+                    - generic [ref=e660]:
+                      - generic [ref=e661]: 燃气泄漏检测器
+                      - generic [ref=e662]: GAS_001
+                  - cell "传感安防" [ref=e663]:
+                    - generic [ref=e664]: 传感安防
+                  - cell "标准开发" [ref=e665]:
+                    - generic [ref=e666]: 标准开发
+                  - cell "本公司" [ref=e667]:
+                    - generic [ref=e668]: 本公司
+                  - cell "发布中" [ref=e669]:
+                    - generic [ref=e671]: 发布中
+                  - cell "已授权 4/5" [ref=e672]:
+                    - generic [ref=e673]: 已授权 4/5
+                  - cell "张三" [ref=e674]:
+                    - generic [ref=e675]: 张三
+                  - cell "本公司" [ref=e676]:
+                    - generic [ref=e677]: 本公司
+                  - cell "2026-04-05" [ref=e678]:
+                    - generic [ref=e679]: 2026-04-05
+                  - cell "2026-05-24" [ref=e680]:
+                    - generic [ref=e681]: 2026-05-24
+                  - cell "复制产品 添加固件 更多" [ref=e682]:
+                    - generic [ref=e684]:
+                      - button "复制产品" [ref=e685] [cursor=pointer]:
+                        - generic [ref=e686]: 复制产品
+                      - button "添加固件" [ref=e687] [cursor=pointer]:
+                        - generic [ref=e688]: 添加固件
+                      - button "更多" [ref=e690] [cursor=pointer]:
+                        - generic [ref=e691]:
+                          - text: 更多
+                          - img [ref=e693]
+          - generic [ref=e696]:
+            - generic [ref=e697]: 共 12 条
+            - generic [ref=e700] [cursor=pointer]:
+              - generic:
+                - combobox [ref=e702]
+                - generic [ref=e703]: 10条/页
+              - img [ref=e706]
+            - button "上一页" [disabled] [ref=e708]:
+              - generic:
+                - img
+            - list [ref=e709]:
+              - listitem "第 1 页" [ref=e710]: "1"
+              - listitem "第 2 页" [ref=e711] [cursor=pointer]: "2"
+            - button "下一页" [ref=e712] [cursor=pointer]:
+              - generic:
+                - img
+            - generic [ref=e713]:
+              - generic [ref=e714]: 前往
+              - spinbutton "页" [ref=e717]: "1"
+              - generic [ref=e718]: 页

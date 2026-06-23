@@ -1,0 +1,22 @@
+[      25ms] [LOG] 构建 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-B-A6Bn42.js:50
+[      25ms] [LOG] 触发同步缓存 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-B-A6Bn42.js:50
+[      29ms] [LOG] Proxy(Object) false false /device/list @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-B-A6Bn42.js:50
+[     205ms] [LOG] {code: 0, msg: ok, data: Object} 用户信息 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-B-A6Bn42.js:50
+[     483ms] [LOG] 添加路由完毕 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-B-A6Bn42.js:50
+[     483ms] [LOG] 注册路由Tree @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-B-A6Bn42.js:50
+[     484ms] [LOG] [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object] 路由扁平化结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-B-A6Bn42.js:50
+[    1452ms] [LOG] 搜索参数: {productId: , isUserBind: , firmwareVersionId: , region: 1, belongType: 0} @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/list-DgQ1x9KK.js:0
+[  101986ms] [LOG] 获取详情 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/develop-ChBhn-D8.js:0
+[  101986ms] [LOG] PDRSAs9HaSQzNPrG 谁 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/product-BdWa0NT3.js:0
+[  101988ms] [LOG] 获取联网 PDRSAs9HaSQzNPrG @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/enmu-CDY1XN9i.js:0
+[  101989ms] [LOG] PDRSAs9HaSQzNPrG 谁 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/product-BdWa0NT3.js:0
+[  102001ms] [LOG] undefined 解析的结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/capabilityConfig-CWsSh7_A.js:0
+[  102007ms] [LOG] undefined 解析的结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/capabilityConfig-CWsSh7_A.js:0
+[  102018ms] [LOG] undefined 解析的结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/capabilityConfig-CWsSh7_A.js:0
+[  102022ms] [LOG] undefined 解析的结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/capabilityConfig-CWsSh7_A.js:0
+[  102030ms] [LOG] undefined 解析的结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/capabilityConfig-CWsSh7_A.js:0
+[  102032ms] [LOG] undefined 解析的结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/capabilityConfig-CWsSh7_A.js:0
+[  102614ms] [LOG] - 联网方式 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/develop-ChBhn-D8.js:0
+[  102616ms] [LOG] Proxy(Array) 处理完毕 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/algorithmConfig-C2mB2544.js:1
+[  208174ms] [LOG] undefined 解析的结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/capabilityConfig-CWsSh7_A.js:0
+[  208180ms] [LOG] undefined 解析的结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/capabilityConfig-CWsSh7_A.js:0

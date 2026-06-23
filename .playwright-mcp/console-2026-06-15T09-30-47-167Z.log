@@ -1,0 +1,14 @@
+[    1250ms] [LOG] 构建 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[    1250ms] [LOG] 触发同步缓存 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[    1252ms] [LOG] Proxy(Object) true true /login @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[   13177ms] [LOG] 触发同步缓存 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[   13177ms] [LOG] Proxy(Object) false true /login @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[   13425ms] [LOG] {code: 0, msg: ok, data: Object} 用户信息 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[   13747ms] [LOG] 添加路由完毕 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[   13748ms] [LOG] 注册路由Tree @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[   13749ms] [LOG] [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object] 路由扁平化结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-BghKgt6c.js:50
+[   14615ms] [WARNING] 老平台登录失败，不影响主流程 TypeError: Cannot read properties of null (reading 'access_token')
+    at Proxy.d (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/legacy-login-DWq_GcqC.js:22:361)
+    at async f (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/legacy-login-DWq_GcqC.js:22:1592)
+    at async b (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/login-golu8eps.js:1:12492) @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/login-golu8eps.js:0
+[   14615ms] [LOG] 登录成功 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/login-golu8eps.js:0

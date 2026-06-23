@@ -1,0 +1,277 @@
+- generic [ref=e10]:
+  - generic [ref=e11]:
+    - generic [ref=e12]:
+      - img [ref=e13]
+      - generic [ref=e14]: 鹤梦云生态平台
+    - img [ref=e18] [cursor=pointer]
+  - generic [ref=e19]:
+    - generic [ref=e22]:
+      - menubar [ref=e23]:
+        - menuitem "首页" [ref=e24] [cursor=pointer]:
+          - generic [ref=e25]: 首页
+        - menuitem "企业管理" [ref=e26]:
+          - generic [ref=e27] [cursor=pointer]:
+            - generic [ref=e30]: 企业管理
+            - img [ref=e32]
+        - menuitem "物模型管理" [ref=e34]:
+          - generic [ref=e35] [cursor=pointer]:
+            - generic [ref=e38]: 物模型管理
+            - img [ref=e40]
+        - menuitem "产品管理" [ref=e42]:
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e46]: 产品管理
+            - img [ref=e48]
+        - menuitem "固件管理" [ref=e50] [cursor=pointer]:
+          - generic [ref=e52]: 固件管理
+        - menuitem "生产管理" [ref=e53]:
+          - generic [ref=e54] [cursor=pointer]:
+            - generic [ref=e57]: 生产管理
+            - img [ref=e59]
+        - menuitem "设备中心" [ref=e61]:
+          - generic [ref=e62] [cursor=pointer]:
+            - generic [ref=e65]: 设备中心
+            - img [ref=e67]
+        - menuitem "应用服务" [ref=e69]:
+          - generic [ref=e70] [cursor=pointer]:
+            - generic [ref=e73]: 应用服务
+            - img [ref=e75]
+        - menuitem "套餐管理" [ref=e77]:
+          - generic [ref=e78] [cursor=pointer]:
+            - generic [ref=e81]: 套餐管理
+            - img [ref=e83]
+        - menuitem "4G管理" [ref=e85]:
+          - generic [ref=e86] [cursor=pointer]:
+            - generic [ref=e89]: 4G管理
+            - img [ref=e91]
+        - menuitem "订单管理" [ref=e93]:
+          - generic [ref=e94] [cursor=pointer]:
+            - generic [ref=e97]: 订单管理
+            - img [ref=e99]
+        - menuitem "费用中心" [ref=e101]:
+          - generic [ref=e102] [cursor=pointer]:
+            - generic [ref=e105]: 费用中心
+            - img [ref=e107]
+        - menuitem "平台账务" [ref=e109]:
+          - generic [ref=e110] [cursor=pointer]:
+            - generic [ref=e113]: 平台账务
+            - img [ref=e115]
+        - menuitem "设备分销" [ref=e117]:
+          - generic [ref=e118] [cursor=pointer]:
+            - generic [ref=e121]: 设备分销
+            - img [ref=e123]
+        - menuitem "设备分润" [ref=e125]:
+          - generic [ref=e126] [cursor=pointer]:
+            - generic [ref=e129]: 设备分润
+            - img [ref=e131]
+        - menuitem "全球调度" [ref=e133]:
+          - generic [ref=e134] [cursor=pointer]:
+            - generic [ref=e137]: 全球调度
+            - img [ref=e139]
+        - menuitem "客服系统" [ref=e141] [cursor=pointer]:
+          - generic [ref=e143]: 客服系统
+        - menuitem "运营管理" [ref=e144]:
+          - generic [ref=e145] [cursor=pointer]:
+            - generic [ref=e148]: 运营管理
+            - img [ref=e150]
+        - menuitem "日志审计" [ref=e152]:
+          - generic [ref=e153] [cursor=pointer]:
+            - generic [ref=e155]: 日志审计
+            - img [ref=e157]
+        - menuitem "权限管理" [ref=e159]:
+          - generic [ref=e160] [cursor=pointer]:
+            - generic [ref=e163]: 权限管理
+            - img [ref=e165]
+      - img [ref=e169] [cursor=pointer]
+    - generic [ref=e176]:
+      - generic [ref=e178]:
+        - generic [ref=e181]:
+          - button "返回 返回" [ref=e182] [cursor=pointer]:
+            - generic "返回" [ref=e183]:
+              - img [ref=e185]
+            - generic [ref=e188]: 返回
+          - separator [ref=e189]
+          - generic [ref=e190]: 开发产品
+        - generic [ref=e191]:
+          - heading "API测试产品_388537" [level=2] [ref=e192]
+          - generic [ref=e193] [cursor=pointer]:
+            - img [ref=e195]
+            - generic [ref=e198]: 编辑产品
+        - generic [ref=e199]:
+          - generic [ref=e200]: "产品Id: PDRSAs9HaSQzNPrG"
+          - separator [ref=e201]
+          - generic [ref=e202]: "产品型号: TEST-MODEL-388537"
+          - separator [ref=e203]
+          - generic [ref=e204]: "产品类目: UITest_Edit_285367"
+          - separator [ref=e205]
+          - generic [ref=e206]: "联网方式: -"
+      - generic [ref=e207]:
+        - generic [ref=e212] [cursor=pointer]: 功能定义与配置
+        - generic [ref=e218] [cursor=pointer]: 算法联动配置
+        - generic [ref=e224] [cursor=pointer]: 语音助手
+      - generic [ref=e227]:
+        - tablist [ref=e231]:
+          - tab "设备能力" [selected] [ref=e232]
+          - tab "镜头配置" [ref=e233]
+          - tab "麦克风配置" [ref=e234]
+          - tab "屏显配置" [ref=e235]
+          - tab "喇叭配置" [ref=e236]
+          - tab "云端抓图" [ref=e237]
+        - tabpanel "设备能力" [ref=e239]:
+          - generic [ref=e240]:
+            - generic [ref=e241]:
+              - button "上一步" [disabled] [ref=e242]:
+                - generic [ref=e243]: 上一步
+              - button "跳过" [ref=e244] [cursor=pointer]:
+                - generic [ref=e245]: 跳过
+              - button "保存,下一步" [ref=e246] [cursor=pointer]:
+                - img [ref=e248]
+                - generic [ref=e250]: 保存,下一步
+            - generic [ref=e251]:
+              - separator [ref=e252]:
+                - generic [ref=e253]:
+                  - img [ref=e255]
+                  - text: 配置选项
+              - generic [ref=e257]:
+                - radiogroup "segmented" [ref=e258]:
+                  - generic [ref=e259]:
+                    - generic [ref=e260] [cursor=pointer]:
+                      - radio "联网方式" [checked]
+                      - generic [ref=e261]: 联网方式
+                    - generic [ref=e262] [cursor=pointer]:
+                      - radio "对讲设置"
+                      - generic [ref=e263]: 对讲设置
+                    - generic [ref=e264] [cursor=pointer]:
+                      - radio "存储设置"
+                      - generic [ref=e265]: 存储设置
+                    - generic [ref=e266] [cursor=pointer]:
+                      - radio "电池设置"
+                      - generic [ref=e267]: 电池设置
+                    - generic [ref=e268] [cursor=pointer]:
+                      - radio "工作模式"
+                      - generic [ref=e269]: 工作模式
+                    - generic [ref=e270] [cursor=pointer]:
+                      - radio "唤醒能力"
+                      - generic [ref=e271]: 唤醒能力
+                    - generic [ref=e272] [cursor=pointer]:
+                      - radio "OTA能力"
+                      - generic [ref=e273]: OTA能力
+                    - generic [ref=e274] [cursor=pointer]:
+                      - radio "指示灯"
+                      - generic [ref=e275]: 指示灯
+                    - generic [ref=e276] [cursor=pointer]:
+                      - radio "报警录制"
+                      - generic [ref=e277]: 报警录制
+                    - generic [ref=e278] [cursor=pointer]:
+                      - radio "红外灯"
+                      - generic [ref=e279]: 红外灯
+                - generic [ref=e286]:
+                  - generic [ref=e287]:
+                    - generic [ref=e288]: 联网方式
+                    - group "联网方式" [ref=e290]:
+                      - generic [ref=e291] [cursor=pointer]:
+                        - generic [ref=e292]:
+                          - checkbox "有线"
+                        - generic [ref=e294]: 有线
+                      - generic [ref=e295] [cursor=pointer]:
+                        - generic [ref=e296]:
+                          - checkbox "WIFI"
+                        - generic [ref=e298]: WIFI
+                      - generic [ref=e299] [cursor=pointer]:
+                        - generic [ref=e300]:
+                          - checkbox "移动网络"
+                        - generic [ref=e302]: 移动网络
+                  - generic [ref=e303]:
+                    - generic [ref=e304]: 配网方式
+                    - group "配网方式" [ref=e306]:
+                      - generic [ref=e307] [cursor=pointer]:
+                        - generic [ref=e308]:
+                          - checkbox "AP"
+                        - generic [ref=e310]: AP
+                      - generic [ref=e311] [cursor=pointer]:
+                        - generic [ref=e312]:
+                          - checkbox "声音"
+                        - generic [ref=e314]: 声音
+                      - generic [ref=e315] [cursor=pointer]:
+                        - generic [ref=e316]:
+                          - checkbox "smartlink"
+                        - generic [ref=e318]: smartlink
+                      - generic [ref=e319] [cursor=pointer]:
+                        - generic [ref=e320]:
+                          - checkbox "摄像机识别二维码添加"
+                        - generic [ref=e322]: 摄像机识别二维码添加
+                      - generic [ref=e323] [cursor=pointer]:
+                        - generic [ref=e324]:
+                          - checkbox "局域网"
+                        - generic [ref=e326]: 局域网
+                      - generic [ref=e327] [cursor=pointer]:
+                        - generic [ref=e328]:
+                          - checkbox "APP扫码添加"
+                        - generic [ref=e330]: APP扫码添加
+                      - generic [ref=e331] [cursor=pointer]:
+                        - generic [ref=e332]:
+                          - checkbox "蓝牙添加"
+                        - generic [ref=e334]: 蓝牙添加
+            - generic [ref=e335]:
+              - generic [ref=e336]:
+                - generic [ref=e337]:
+                  - heading "标准能力" [level=3] [ref=e338]:
+                    - text: 标准能力
+                    - img [ref=e340]
+                  - button "添加标准能力" [ref=e342] [cursor=pointer]:
+                    - generic [ref=e343]: 添加标准能力
+                - generic [ref=e346]:
+                  - table [ref=e348]:
+                    - rowgroup [ref=e358]:
+                      - row "类型 能力名称 能力标识 数据类型 数据定义 描述 所属模块 操作" [ref=e359]:
+                        - columnheader "类型" [ref=e360]:
+                          - generic [ref=e361]: 类型
+                        - columnheader "能力名称" [ref=e362]:
+                          - generic [ref=e363]: 能力名称
+                        - columnheader "能力标识" [ref=e364]:
+                          - generic [ref=e365]: 能力标识
+                        - columnheader "数据类型" [ref=e366]:
+                          - generic [ref=e367]: 数据类型
+                        - columnheader "数据定义" [ref=e368]:
+                          - generic [ref=e369]: 数据定义
+                        - columnheader "描述" [ref=e370]:
+                          - generic [ref=e371]: 描述
+                        - columnheader "所属模块" [ref=e372]:
+                          - generic [ref=e373]: 所属模块
+                        - columnheader "操作" [ref=e374]:
+                          - generic [ref=e375]: 操作
+                  - generic [ref=e379]:
+                    - table:
+                      - rowgroup
+                    - generic [ref=e381]: 暂无数据
+              - generic [ref=e383]:
+                - generic [ref=e384]:
+                  - heading "自定义能力" [level=3] [ref=e385]:
+                    - text: 自定义能力
+                    - img [ref=e387]
+                  - generic [ref=e389]: 您所定义的每一个功能，都与固件、APP控制台面板相关
+                  - button "添加自定义能力" [ref=e390] [cursor=pointer]:
+                    - generic [ref=e391]: 添加自定义能力
+                - generic [ref=e394]:
+                  - table [ref=e396]:
+                    - rowgroup [ref=e406]:
+                      - row "类型 能力名称 能力标识 数据类型 数据定义 描述 所属模块 操作" [ref=e407]:
+                        - columnheader "类型" [ref=e408]:
+                          - generic [ref=e409]: 类型
+                        - columnheader "能力名称" [ref=e410]:
+                          - generic [ref=e411]: 能力名称
+                        - columnheader "能力标识" [ref=e412]:
+                          - generic [ref=e413]: 能力标识
+                        - columnheader "数据类型" [ref=e414]:
+                          - generic [ref=e415]: 数据类型
+                        - columnheader "数据定义" [ref=e416]:
+                          - generic [ref=e417]: 数据定义
+                        - columnheader "描述" [ref=e418]:
+                          - generic [ref=e419]: 描述
+                        - columnheader "所属模块" [ref=e420]:
+                          - generic [ref=e421]: 所属模块
+                        - columnheader "操作" [ref=e422]:
+                          - generic [ref=e423]: 操作
+                  - generic [ref=e427]:
+                    - table:
+                      - rowgroup
+                    - generic [ref=e429]: 暂无数据

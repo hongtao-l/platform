@@ -1,0 +1,25 @@
+[      30ms] [LOG] 构建 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:50
+[      30ms] [LOG] 触发同步缓存 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:50
+[      31ms] [LOG] Proxy(Object) true false /product @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:50
+[      32ms] [ERROR] Error: 登录信息失效
+    at l9 (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:51:115687)
+    at pee (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:51:146813)
+    at https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:51:146864 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:50
+[      33ms] [LOG] Error: 登录信息失效
+    at l9 (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:51:115687)
+    at pee (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:51:146813)
+    at https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:51:146864 同步缓存失败 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:50
+[      60ms] [LOG] 构建 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:50
+[      60ms] [LOG] 触发同步缓存 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:50
+[      61ms] [LOG] Proxy(Object) true true /login @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:50
+[ 1021508ms] [LOG] 触发同步缓存 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:50
+[ 1021509ms] [LOG] Proxy(Object) false true /login @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:50
+[ 1021746ms] [LOG] {code: 0, msg: ok, data: Object} 用户信息 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:50
+[ 1022103ms] [LOG] 添加路由完毕 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:50
+[ 1022104ms] [LOG] 注册路由Tree @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:50
+[ 1022107ms] [LOG] [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object] 路由扁平化结果 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/index-Ceq0jxqi.js:50
+[ 1023344ms] [WARNING] 老平台登录失败，不影响主流程 TypeError: Cannot read properties of null (reading 'access_token')
+    at Proxy.d (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/legacy-login-CJF8rPql.js:22:361)
+    at async f (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/legacy-login-CJF8rPql.js:22:1592)
+    at async C (https://new-ecosystem-platform-v2.smartcloudcon.com/assets/login-kbr0-Kjp.js:1:12434) @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/login-kbr0-Kjp.js:0
+[ 1023344ms] [LOG] 登录成功 @ https://new-ecosystem-platform-v2.smartcloudcon.com/assets/login-kbr0-Kjp.js:0

@@ -1,0 +1,309 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e7]
+      - generic [ref=e9]: IoT 平台
+    - navigation [ref=e10]:
+      - generic [ref=e11] [cursor=pointer]:
+        - img [ref=e13]
+        - generic [ref=e15]: 工作台
+      - generic [ref=e16]:
+        - generic [ref=e17] [cursor=pointer]:
+          - img [ref=e19]
+          - generic [ref=e22]: 物模型管理
+          - img [ref=e24]
+        - generic:
+          - generic [ref=e26] [cursor=pointer]:
+            - img [ref=e28]
+            - generic [ref=e30]: IOT类目
+          - generic [ref=e31] [cursor=pointer]:
+            - img [ref=e33]
+            - generic [ref=e38]: 能力库
+          - generic [ref=e39] [cursor=pointer]:
+            - img [ref=e41]
+            - generic [ref=e44]: 算法库
+          - generic [ref=e45] [cursor=pointer]:
+            - img [ref=e47]
+            - generic [ref=e49]: 事件库
+      - generic [ref=e50]:
+        - generic [ref=e51] [cursor=pointer]:
+          - img [ref=e53]
+          - generic [ref=e57]: 产品管理
+          - img [ref=e59]
+        - generic:
+          - generic [ref=e61] [cursor=pointer]:
+            - img [ref=e63]
+            - generic [ref=e67]: 产品开发
+          - generic [ref=e68] [cursor=pointer]:
+            - img [ref=e70]
+            - generic [ref=e72]: 产品审核
+      - generic [ref=e73]:
+        - generic [ref=e74] [cursor=pointer]:
+          - img [ref=e76]
+          - generic [ref=e81]: 套餐管理
+          - img [ref=e83]
+        - generic [ref=e85] [cursor=pointer]:
+          - img [ref=e87]
+          - generic [ref=e91]: 套餐配置
+      - generic [ref=e92]:
+        - generic [ref=e93] [cursor=pointer]:
+          - img [ref=e95]
+          - generic [ref=e97]: 运营管理
+          - img [ref=e99]
+        - generic:
+          - generic [ref=e101] [cursor=pointer]:
+            - img [ref=e103]
+            - generic [ref=e105]: 商城位运营
+          - generic [ref=e106] [cursor=pointer]:
+            - img [ref=e108]
+            - generic [ref=e110]: 推荐位运营
+          - generic [ref=e111] [cursor=pointer]:
+            - img [ref=e113]
+            - generic [ref=e118]: 活动位运营
+          - generic [ref=e119] [cursor=pointer]:
+            - img [ref=e121]
+            - generic [ref=e123]: 用户分群
+          - generic [ref=e124] [cursor=pointer]:
+            - img [ref=e126]
+            - generic [ref=e128]: A/B Test
+    - generic [ref=e130] [cursor=pointer]:
+      - img [ref=e132]
+      - generic [ref=e134]: 收起菜单
+  - generic [ref=e135]:
+    - banner [ref=e136]:
+      - navigation "面包屑" [ref=e138]:
+        - generic [ref=e139]:
+          - link "首页" [ref=e140]
+          - text: /
+        - link "产品审核" [ref=e142]
+      - generic [ref=e143]:
+        - generic [ref=e144] [cursor=pointer]:
+          - img [ref=e146]
+          - superscript [ref=e150]: "3"
+        - button "管理员" [ref=e152] [cursor=pointer]:
+          - img [ref=e155]
+          - generic [ref=e157]: 管理员
+          - img [ref=e159]
+    - main [ref=e161]:
+      - generic [ref=e162]:
+        - generic [ref=e166]:
+          - button "返回 返回" [ref=e167] [cursor=pointer]:
+            - generic "返回" [ref=e168]:
+              - img [ref=e170]
+            - generic [ref=e173]: 返回
+          - separator [ref=e174]
+          - generic [ref=e175]: 产品详情
+        - generic [ref=e176]:
+          - generic [ref=e177]:
+            - generic [ref=e179]: 基本信息
+            - table [ref=e182]:
+              - rowgroup [ref=e183]:
+                - row "产品名称 Session基础产品_319364 产品ID PDRSAh5NV6PkRS6u 产品类目 UITest_Edit_285367" [ref=e184]:
+                  - cell "产品名称" [ref=e185]
+                  - cell "Session基础产品_319364" [ref=e186]
+                  - cell "产品ID" [ref=e187]
+                  - cell "PDRSAh5NV6PkRS6u" [ref=e188]
+                  - cell "产品类目" [ref=e189]
+                  - cell "UITest_Edit_285367" [ref=e190]
+                - row "所属企业 深圳市汇云通讯科技有限公司 产品状态 已通过 授权单价 ¥0.00" [ref=e191]:
+                  - cell "所属企业" [ref=e192]
+                  - cell "深圳市汇云通讯科技有限公司" [ref=e193]
+                  - cell "产品状态" [ref=e194]
+                  - cell "已通过" [ref=e195]:
+                    - generic [ref=e196]: 已通过
+                  - cell "授权单价" [ref=e197]
+                  - cell "¥0.00" [ref=e198]
+          - generic [ref=e199]:
+            - generic [ref=e201]: 物模型配置
+            - generic [ref=e202]:
+              - generic [ref=e203]:
+                - img [ref=e205]
+                - generic [ref=e210]: 已配置 6 个子项
+              - button "查看/修改" [ref=e211] [cursor=pointer]:
+                - generic [ref=e212]: 查看/修改
+          - generic [ref=e213]:
+            - generic [ref=e215]: 算法服务配置
+            - generic [ref=e217]:
+              - table [ref=e219]:
+                - rowgroup [ref=e228]:
+                  - row "算法ID 算法名称 服务ID 描述 是否支持 是否免开通 操作" [ref=e229]:
+                    - columnheader "算法ID" [ref=e230]:
+                      - generic [ref=e231]: 算法ID
+                    - columnheader "算法名称" [ref=e232]:
+                      - generic [ref=e233]: 算法名称
+                    - columnheader "服务ID" [ref=e234]:
+                      - generic [ref=e235]: 服务ID
+                    - columnheader "描述" [ref=e236]:
+                      - generic [ref=e237]: 描述
+                    - columnheader "是否支持" [ref=e238]:
+                      - generic [ref=e239]: 是否支持
+                    - columnheader "是否免开通" [ref=e240]:
+                      - generic [ref=e241]: 是否免开通
+                    - columnheader "操作" [ref=e242]:
+                      - generic [ref=e243]: 操作
+              - table [ref=e248]:
+                - rowgroup [ref=e257]:
+                  - row "ALG001 人形检测算法 SVC_001 基于深度学习的移动人形实时检测 算法配置 关联事件" [ref=e258]:
+                    - cell "ALG001" [ref=e259]:
+                      - generic [ref=e260]: ALG001
+                    - cell "人形检测算法" [ref=e261]:
+                      - generic [ref=e262]: 人形检测算法
+                    - cell "SVC_001" [ref=e263]:
+                      - generic [ref=e264]: SVC_001
+                    - cell "基于深度学习的移动人形实时检测" [ref=e265]:
+                      - generic [ref=e266]: 基于深度学习的移动人形实时检测
+                    - cell [ref=e267]:
+                      - generic [ref=e269]:
+                        - switch [checked] [disabled]
+                    - cell [ref=e272]:
+                      - generic [ref=e274]:
+                        - switch [checked] [disabled]
+                    - cell "算法配置 关联事件" [ref=e277]:
+                      - generic [ref=e278]:
+                        - button "算法配置" [ref=e279] [cursor=pointer]:
+                          - generic [ref=e280]: 算法配置
+                        - button "关联事件" [ref=e281] [cursor=pointer]:
+                          - generic [ref=e282]: 关联事件
+                  - row "ALG002 人脸识别算法 SVC_002 支持多人脸同时检测与识别 算法配置 关联事件" [ref=e283]:
+                    - cell "ALG002" [ref=e284]:
+                      - generic [ref=e285]: ALG002
+                    - cell "人脸识别算法" [ref=e286]:
+                      - generic [ref=e287]: 人脸识别算法
+                    - cell "SVC_002" [ref=e288]:
+                      - generic [ref=e289]: SVC_002
+                    - cell "支持多人脸同时检测与识别" [ref=e290]:
+                      - generic [ref=e291]: 支持多人脸同时检测与识别
+                    - cell [ref=e292]:
+                      - generic [ref=e294]:
+                        - switch [checked] [disabled]
+                    - cell [ref=e297]:
+                      - generic [ref=e299]:
+                        - switch [disabled]
+                    - cell "算法配置 关联事件" [ref=e302]:
+                      - generic [ref=e303]:
+                        - button "算法配置" [ref=e304] [cursor=pointer]:
+                          - generic [ref=e305]: 算法配置
+                        - button "关联事件" [ref=e306] [cursor=pointer]:
+                          - generic [ref=e307]: 关联事件
+                  - row "ALG003 车辆检测算法 SVC_003 识别车辆类型、颜色与车牌信息 算法配置 关联事件" [ref=e308]:
+                    - cell "ALG003" [ref=e309]:
+                      - generic [ref=e310]: ALG003
+                    - cell "车辆检测算法" [ref=e311]:
+                      - generic [ref=e312]: 车辆检测算法
+                    - cell "SVC_003" [ref=e313]:
+                      - generic [ref=e314]: SVC_003
+                    - cell "识别车辆类型、颜色与车牌信息" [ref=e315]:
+                      - generic [ref=e316]: 识别车辆类型、颜色与车牌信息
+                    - cell [ref=e317]:
+                      - generic [ref=e319]:
+                        - switch [disabled]
+                    - cell [ref=e322]:
+                      - generic [ref=e324]:
+                        - switch [disabled]
+                    - cell "算法配置 关联事件" [ref=e327]:
+                      - generic [ref=e328]:
+                        - button "算法配置" [ref=e329] [cursor=pointer]:
+                          - generic [ref=e330]: 算法配置
+                        - button "关联事件" [ref=e331] [cursor=pointer]:
+                          - generic [ref=e332]: 关联事件
+          - generic [ref=e333]:
+            - generic [ref=e335]: 平台服务
+            - generic [ref=e336]:
+              - generic [ref=e337]:
+                - generic [ref=e338]:
+                  - generic [ref=e339]: 云存配置
+                  - generic [ref=e340]:
+                    - switch [checked]
+                - generic [ref=e343]:
+                  - generic [ref=e344]: 码流类型
+                  - radiogroup "radio-group" [ref=e345]:
+                    - generic [ref=e346] [cursor=pointer]:
+                      - radio "主码流" [checked] [ref=e348]
+                      - generic [ref=e350]: 主码流
+                    - generic [ref=e351] [cursor=pointer]:
+                      - radio "子码流" [ref=e353]
+                      - generic [ref=e355]: 子码流
+              - generic [ref=e357]:
+                - generic [ref=e358]: 时光相册
+                - generic [ref=e359]:
+                  - switch
+          - generic [ref=e362]:
+            - generic [ref=e364]: App配置
+            - generic [ref=e365]:
+              - generic [ref=e366]:
+                - generic [ref=e367]:
+                  - text: 安装指引：
+                  - emphasis [ref=e368]: 已配置
+                - generic [ref=e369]: "|"
+                - generic [ref=e370]:
+                  - text: App使用范围：
+                  - emphasis [ref=e371]: 不限范围
+              - button "前往查看/修改" [ref=e372] [cursor=pointer]:
+                - generic [ref=e373]: 前往查看/修改
+          - generic [ref=e374]:
+            - generic [ref=e376]: 语音助手配置
+            - table [ref=e379]:
+              - rowgroup [ref=e380]:
+                - row "唤醒词 你好小智 支持语言 中文普通话" [ref=e381]:
+                  - cell "唤醒词" [ref=e382]
+                  - cell "你好小智" [ref=e383]
+                  - cell "支持语言" [ref=e384]
+                  - cell "中文普通话" [ref=e385]
+                - row "语音平台 Alexa / Google Assistant 状态" [ref=e386]:
+                  - cell "语音平台" [ref=e387]
+                  - cell "Alexa / Google Assistant" [ref=e388]
+                  - cell "状态" [ref=e389]
+                  - cell [ref=e390]:
+                    - generic [ref=e391]:
+                      - switch [checked] [disabled]
+          - generic [ref=e394]:
+            - generic [ref=e396]: 固件版本历史
+            - generic [ref=e398]:
+              - table [ref=e400]:
+                - rowgroup [ref=e407]:
+                  - row "版本号 发布日期 文件大小 更新内容 状态" [ref=e408]:
+                    - columnheader "版本号" [ref=e409]:
+                      - generic [ref=e410]: 版本号
+                    - columnheader "发布日期" [ref=e411]:
+                      - generic [ref=e412]: 发布日期
+                    - columnheader "文件大小" [ref=e413]:
+                      - generic [ref=e414]: 文件大小
+                    - columnheader "更新内容" [ref=e415]:
+                      - generic [ref=e416]: 更新内容
+                    - columnheader "状态" [ref=e417]:
+                      - generic [ref=e418]: 状态
+              - table [ref=e423]:
+                - rowgroup [ref=e430]:
+                  - row "v2.5.1 2026-06-10 12.8 MB 修复夜间模式白平衡异常；优化云存上传稳定性 当前版本" [ref=e431]:
+                    - cell "v2.5.1" [ref=e432]:
+                      - generic [ref=e433]: v2.5.1
+                    - cell "2026-06-10" [ref=e434]:
+                      - generic [ref=e435]: 2026-06-10
+                    - cell "12.8 MB" [ref=e436]:
+                      - generic [ref=e437]: 12.8 MB
+                    - cell "修复夜间模式白平衡异常；优化云存上传稳定性" [ref=e438]:
+                      - generic [ref=e439]: 修复夜间模式白平衡异常；优化云存上传稳定性
+                    - cell "当前版本" [ref=e440]:
+                      - generic [ref=e442]: 当前版本
+                  - row "v2.5.0 2026-05-20 12.5 MB 新增AI人形检测联动；优化P2P连接速度 历史版本" [ref=e443]:
+                    - cell "v2.5.0" [ref=e444]:
+                      - generic [ref=e445]: v2.5.0
+                    - cell "2026-05-20" [ref=e446]:
+                      - generic [ref=e447]: 2026-05-20
+                    - cell "12.5 MB" [ref=e448]:
+                      - generic [ref=e449]: 12.5 MB
+                    - cell "新增AI人形检测联动；优化P2P连接速度" [ref=e450]:
+                      - generic [ref=e451]: 新增AI人形检测联动；优化P2P连接速度
+                    - cell "历史版本" [ref=e452]:
+                      - generic [ref=e454]: 历史版本
+                  - row "v2.4.0 2026-04-15 11.9 MB 支持全彩夜视模式；修复设备唤醒延迟 历史版本" [ref=e455]:
+                    - cell "v2.4.0" [ref=e456]:
+                      - generic [ref=e457]: v2.4.0
+                    - cell "2026-04-15" [ref=e458]:
+                      - generic [ref=e459]: 2026-04-15
+                    - cell "11.9 MB" [ref=e460]:
+                      - generic [ref=e461]: 11.9 MB
+                    - cell "支持全彩夜视模式；修复设备唤醒延迟" [ref=e462]:
+                      - generic [ref=e463]: 支持全彩夜视模式；修复设备唤醒延迟
+                    - cell "历史版本" [ref=e464]:
+                      - generic [ref=e466]: 历史版本

@@ -1,0 +1,104 @@
+- generic [ref=e113]:
+  - generic [ref=e114]:
+    - generic [ref=e115]:
+      - img [ref=e116]
+      - generic [ref=e117]: 鹤梦云生态平台
+    - img [ref=e121] [cursor=pointer]
+  - generic [ref=e122]:
+    - generic [ref=e125]:
+      - menubar [ref=e126]:
+        - menuitem "首页" [ref=e127] [cursor=pointer]:
+          - generic [ref=e128]: 首页
+        - menuitem "企业管理" [ref=e129]:
+          - generic [ref=e130] [cursor=pointer]:
+            - generic [ref=e133]: 企业管理
+            - img [ref=e135]
+        - menuitem "物模型管理" [ref=e137]:
+          - generic [ref=e138] [cursor=pointer]:
+            - generic [ref=e141]: 物模型管理
+            - img [ref=e143]
+        - menuitem "产品管理" [ref=e145]:
+          - generic [ref=e146] [cursor=pointer]:
+            - generic [ref=e149]: 产品管理
+            - img [ref=e151]
+        - menuitem "固件管理" [ref=e153] [cursor=pointer]:
+          - generic [ref=e155]: 固件管理
+        - menuitem "生产管理" [ref=e156]:
+          - generic [ref=e157] [cursor=pointer]:
+            - generic [ref=e160]: 生产管理
+            - img [ref=e162]
+        - menuitem "设备中心" [ref=e164]:
+          - generic [ref=e165] [cursor=pointer]:
+            - generic [ref=e168]: 设备中心
+            - img [ref=e170]
+        - menuitem "应用服务" [ref=e172]:
+          - generic [ref=e173] [cursor=pointer]:
+            - generic [ref=e176]: 应用服务
+            - img [ref=e178]
+        - menuitem "套餐管理" [ref=e180]:
+          - generic [ref=e181] [cursor=pointer]:
+            - generic [ref=e184]: 套餐管理
+            - img [ref=e186]
+        - menuitem "4G管理" [ref=e188]:
+          - generic [ref=e189] [cursor=pointer]:
+            - generic [ref=e192]: 4G管理
+            - img [ref=e194]
+        - menuitem "订单管理" [ref=e196]:
+          - generic [ref=e197] [cursor=pointer]:
+            - generic [ref=e200]: 订单管理
+            - img [ref=e202]
+        - menuitem "费用中心" [ref=e204]:
+          - generic [ref=e205] [cursor=pointer]:
+            - generic [ref=e208]: 费用中心
+            - img [ref=e210]
+        - menuitem "平台账务" [ref=e212]:
+          - generic [ref=e213] [cursor=pointer]:
+            - generic [ref=e216]: 平台账务
+            - img [ref=e218]
+        - menuitem "设备分销" [ref=e220]:
+          - generic [ref=e221] [cursor=pointer]:
+            - generic [ref=e224]: 设备分销
+            - img [ref=e226]
+        - menuitem "设备分润" [ref=e228]:
+          - generic [ref=e229] [cursor=pointer]:
+            - generic [ref=e232]: 设备分润
+            - img [ref=e234]
+        - menuitem "全球调度" [ref=e236]:
+          - generic [ref=e237] [cursor=pointer]:
+            - generic [ref=e240]: 全球调度
+            - img [ref=e242]
+        - menuitem "客服系统" [ref=e244] [cursor=pointer]:
+          - generic [ref=e246]: 客服系统
+        - menuitem "运营管理" [ref=e247]:
+          - generic [ref=e248] [cursor=pointer]:
+            - generic [ref=e251]: 运营管理
+            - img [ref=e253]
+        - menuitem "日志审计" [ref=e255]:
+          - generic [ref=e256] [cursor=pointer]:
+            - generic [ref=e258]: 日志审计
+            - img [ref=e260]
+        - menuitem "权限管理" [ref=e262]:
+          - generic [ref=e263] [cursor=pointer]:
+            - generic [ref=e266]: 权限管理
+            - img [ref=e268]
+      - img [ref=e272] [cursor=pointer]
+    - generic [ref=e281]:
+      - generic [ref=e282]:
+        - img [ref=e284]
+        - generic [ref=e286]: 快捷入口
+      - generic [ref=e287]:
+        - generic [ref=e291] [cursor=pointer]:
+          - img [ref=e294]
+          - generic [ref=e298]:
+            - heading "产品管理" [level=3] [ref=e299]
+            - paragraph [ref=e300]: 创建和管理产品
+        - generic [ref=e304] [cursor=pointer]:
+          - img [ref=e307]
+          - generic [ref=e309]:
+            - heading "设备管理" [level=3] [ref=e310]
+            - paragraph [ref=e311]: 查看和管理设备
+        - generic [ref=e315] [cursor=pointer]:
+          - img [ref=e318]
+          - generic [ref=e320]:
+            - heading "用户信息" [level=3] [ref=e321]
+            - paragraph [ref=e322]: 管理个人信息

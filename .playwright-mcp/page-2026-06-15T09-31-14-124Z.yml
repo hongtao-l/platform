@@ -1,0 +1,206 @@
+- generic [ref=e117]:
+  - generic [ref=e118]:
+    - generic [ref=e119]:
+      - img [ref=e120]
+      - generic [ref=e121]: 鹤梦云生态平台
+    - img [ref=e125] [cursor=pointer]
+  - generic [ref=e126]:
+    - generic [ref=e129]:
+      - menubar [ref=e130]:
+        - menuitem "首页" [ref=e131] [cursor=pointer]:
+          - generic [ref=e132]: 首页
+        - menuitem "企业管理" [ref=e133]:
+          - generic [ref=e134] [cursor=pointer]:
+            - generic [ref=e137]: 企业管理
+            - img [ref=e139]
+        - menuitem "物模型管理" [ref=e141]:
+          - generic [ref=e142] [cursor=pointer]:
+            - generic [ref=e145]: 物模型管理
+            - img [ref=e147]
+        - menuitem "产品管理" [expanded] [ref=e149]:
+          - generic [ref=e150] [cursor=pointer]:
+            - generic [ref=e153]: 产品管理
+            - img [ref=e155]
+          - menu [ref=e328]:
+            - menuitem "产品开发" [active] [ref=e329] [cursor=pointer]:
+              - generic [ref=e330]: 产品开发
+            - menuitem "产品审核" [ref=e331] [cursor=pointer]:
+              - generic [ref=e332]: 产品审核
+            - menuitem "配网单元" [ref=e333] [cursor=pointer]:
+              - generic [ref=e334]: 配网单元
+            - menuitem "生态方案库" [ref=e335] [cursor=pointer]:
+              - generic [ref=e336]: 生态方案库
+            - menuitem "我的方案" [ref=e337] [cursor=pointer]:
+              - generic [ref=e338]: 我的方案
+            - menuitem "生态方案审核" [ref=e339] [cursor=pointer]:
+              - generic [ref=e340]: 生态方案审核
+            - menuitem "授权SaaS" [ref=e341] [cursor=pointer]:
+              - generic [ref=e342]: 授权SaaS
+        - menuitem "固件管理" [ref=e157] [cursor=pointer]:
+          - generic [ref=e159]: 固件管理
+        - menuitem "生产管理" [ref=e160]:
+          - generic [ref=e161] [cursor=pointer]:
+            - generic [ref=e164]: 生产管理
+            - img [ref=e166]
+        - menuitem "设备中心" [ref=e168]:
+          - generic [ref=e169] [cursor=pointer]:
+            - generic [ref=e172]: 设备中心
+            - img [ref=e174]
+        - menuitem "应用服务" [ref=e176]:
+          - generic [ref=e177] [cursor=pointer]:
+            - generic [ref=e180]: 应用服务
+            - img [ref=e182]
+        - menuitem "套餐管理" [ref=e184]:
+          - generic [ref=e185] [cursor=pointer]:
+            - generic [ref=e188]: 套餐管理
+            - img [ref=e190]
+        - menuitem "4G管理" [ref=e192]:
+          - generic [ref=e193] [cursor=pointer]:
+            - generic [ref=e196]: 4G管理
+            - img [ref=e198]
+        - menuitem "订单管理" [ref=e200]:
+          - generic [ref=e201] [cursor=pointer]:
+            - generic [ref=e204]: 订单管理
+            - img [ref=e206]
+        - menuitem "费用中心" [ref=e208]:
+          - generic [ref=e209] [cursor=pointer]:
+            - generic [ref=e212]: 费用中心
+            - img [ref=e214]
+        - menuitem "平台账务" [ref=e216]:
+          - generic [ref=e217] [cursor=pointer]:
+            - generic [ref=e220]: 平台账务
+            - img [ref=e222]
+        - menuitem "设备分销" [ref=e224]:
+          - generic [ref=e225] [cursor=pointer]:
+            - generic [ref=e228]: 设备分销
+            - img [ref=e230]
+        - menuitem "设备分润" [ref=e232]:
+          - generic [ref=e233] [cursor=pointer]:
+            - generic [ref=e236]: 设备分润
+            - img [ref=e238]
+        - menuitem "全球调度" [ref=e240]:
+          - generic [ref=e241] [cursor=pointer]:
+            - generic [ref=e244]: 全球调度
+            - img [ref=e246]
+        - menuitem "客服系统" [ref=e248] [cursor=pointer]:
+          - generic [ref=e250]: 客服系统
+        - menuitem "运营管理" [ref=e251]:
+          - generic [ref=e252] [cursor=pointer]:
+            - generic [ref=e255]: 运营管理
+            - img [ref=e257]
+        - menuitem "日志审计" [ref=e259]:
+          - generic [ref=e260] [cursor=pointer]:
+            - generic [ref=e263]: 日志审计
+            - img [ref=e265]
+        - menuitem "权限管理" [ref=e267]:
+          - generic [ref=e268] [cursor=pointer]:
+            - generic [ref=e271]: 权限管理
+            - img [ref=e273]
+      - img [ref=e277] [cursor=pointer]
+    - generic [ref=e351]:
+      - generic [ref=e354]:
+        - generic [ref=e357]:
+          - generic [ref=e360] [cursor=pointer]:
+            - generic:
+              - combobox [ref=e362]
+              - generic [ref=e363]: 产品名称
+            - img [ref=e366]
+          - textbox "请输入" [ref=e369]
+        - generic [ref=e371]:
+          - generic [ref=e372]: 产品状态
+          - generic [ref=e375]:
+            - generic:
+              - combobox "产品状态" [ref=e377]
+              - generic [ref=e378]: 请选择
+            - img [ref=e381] [cursor=pointer]
+        - generic [ref=e383]:
+          - generic [ref=e384]: 开发方式
+          - generic [ref=e388]:
+            - textbox "开发方式" [ref=e389] [cursor=pointer]
+            - img [ref=e392]
+        - generic [ref=e394]:
+          - generic [ref=e395]: 产品类目
+          - generic [ref=e398] [cursor=pointer]:
+            - generic:
+              - combobox "产品类目" [ref=e400]
+              - generic [ref=e401]: 请选择产品类目
+            - img [ref=e404]
+        - generic [ref=e406]:
+          - generic [ref=e407]: 创建时间
+          - generic [ref=e409]:
+            - img [ref=e411]
+            - combobox "创建时间" [ref=e413]
+            - generic [ref=e414]: 至
+            - combobox "结束时间" [ref=e415]
+        - generic [ref=e417]:
+          - button "搜索" [ref=e418] [cursor=pointer]:
+            - generic [ref=e419]: 搜索
+          - button "重置" [ref=e420] [cursor=pointer]:
+            - generic [ref=e421]: 重置
+      - generic [ref=e423]:
+        - alert [ref=e424]:
+          - paragraph [ref=e426]:
+            - generic [ref=e427]:
+              - strong [ref=e428]: 引用产品
+              - text: 来自设备调拨，仅可查看物模型配置（只读），操作列为空，不可编辑、发布和删除。
+        - button "创建产品" [ref=e429] [cursor=pointer]:
+          - img [ref=e431]
+          - generic [ref=e433]: 创建产品
+        - generic [ref=e434]:
+          - generic [ref=e436]:
+            - table [ref=e438]:
+              - rowgroup [ref=e454]:
+                - row "序号 产品信息 产品类目 开发方式 来源企业 产品状态 授权单价（元/个） 赠送授权数量 生产授权数量 操作人 所属企业 创建时间 更新时间 操作" [ref=e455]:
+                  - columnheader "序号" [ref=e456]:
+                    - generic [ref=e457]: 序号
+                  - columnheader "产品信息" [ref=e458]:
+                    - generic [ref=e459]: 产品信息
+                  - columnheader "产品类目" [ref=e460]:
+                    - generic [ref=e461]: 产品类目
+                  - columnheader "开发方式" [ref=e462]:
+                    - generic [ref=e463]: 开发方式
+                  - columnheader "来源企业" [ref=e464]:
+                    - generic [ref=e465]: 来源企业
+                  - columnheader "产品状态" [ref=e466]:
+                    - generic [ref=e467]: 产品状态
+                  - columnheader "授权单价（元/个）" [ref=e468]:
+                    - generic [ref=e469]: 授权单价（元/个）
+                  - columnheader "赠送授权数量" [ref=e470]:
+                    - generic [ref=e472]:
+                      - text: 赠送授权数量
+                      - img [ref=e474]
+                  - columnheader "生产授权数量" [ref=e476]:
+                    - generic [ref=e478]:
+                      - text: 生产授权数量
+                      - img [ref=e480]
+                  - columnheader "操作人" [ref=e482]:
+                    - generic [ref=e483]: 操作人
+                  - columnheader "所属企业" [ref=e484]:
+                    - generic [ref=e485]: 所属企业
+                  - columnheader "创建时间" [ref=e486]:
+                    - generic [ref=e487]: 创建时间
+                  - columnheader "更新时间" [ref=e488]:
+                    - generic [ref=e489]: 更新时间
+                  - columnheader "操作" [ref=e490]:
+                    - generic [ref=e491]: 操作
+            - generic [ref=e495]:
+              - table:
+                - rowgroup
+              - generic [ref=e497]: 暂无数据
+          - generic [ref=e499]:
+            - generic [ref=e500]: 共0条记录
+            - generic [ref=e501]:
+              - generic [ref=e504] [cursor=pointer]:
+                - generic:
+                  - combobox [ref=e506]
+                  - generic [ref=e507]: 10条/页
+                - img [ref=e510]
+              - button "上一页" [disabled] [ref=e512]:
+                - generic:
+                  - img
+              - list [ref=e513]:
+                - listitem "第 1 页" [ref=e514]: "1"
+              - button "下一页" [disabled] [ref=e515]:
+                - generic:
+                  - img
+          - img [ref=e518]

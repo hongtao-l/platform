@@ -1,0 +1,67 @@
+- main [ref=e3]:
+  - generic [ref=e4]:
+    - img "logo" [ref=e5]
+    - text: 鹤梦云
+  - generic [ref=e7]:
+    - heading "为行业领导者打造的" [level=1] [ref=e8]
+    - paragraph [ref=e9]: 一站式物联网生态系统
+    - paragraph [ref=e10]: 赋能制造商、解决方案提供商和分销商
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - img [ref=e15]
+        - generic [ref=e19]:
+          - heading "产品生命周期管理" [level=3] [ref=e20]
+          - paragraph [ref=e21]: 从产品构思到生命周期结束进行全面管理
+      - generic [ref=e22]:
+        - img [ref=e25]
+        - generic [ref=e28]:
+          - heading "无缝设备云集成" [level=3] [ref=e29]
+          - paragraph [ref=e30]: 将您的设备与我们强大的云基础设施集成
+      - generic [ref=e31]:
+        - img [ref=e34]
+        - generic [ref=e36]:
+          - heading "安全的空中下载(OTA)更新" [level=3] [ref=e37]
+          - paragraph [ref=e38]: 安全高效地为您的所有设备部署更新
+      - generic [ref=e39]:
+        - img [ref=e42]
+        - generic [ref=e44]:
+          - heading "自定义APP应用管理" [level=3] [ref=e45]
+          - paragraph [ref=e46]: 为您的生态开发和管理自定义应用程序
+      - generic [ref=e47]:
+        - img [ref=e50]
+        - generic [ref=e54]:
+          - heading "分销商自动收益分成" [level=3] [ref=e55]
+          - paragraph [ref=e56]: 与您的分销合作伙伴自动分享收益
+      - generic [ref=e57]:
+        - img [ref=e60]
+        - generic [ref=e62]:
+          - heading "精准APP营销运营" [level=3] [ref=e63]
+          - paragraph [ref=e64]: 直接通过平台开展营销活动
+  - generic [ref=e66]:
+    - heading "欢迎回来！" [level=2] [ref=e67]
+    - generic [ref=e68]:
+      - tablist [ref=e72]:
+        - tab "账号登录" [selected] [ref=e74]
+      - tabpanel "账号登录" [ref=e76]:
+        - generic [ref=e77]:
+          - generic [ref=e81]:
+            - img [ref=e84]
+            - textbox "账号" [ref=e86]: admin
+          - generic [ref=e91]:
+            - img [ref=e94]
+            - textbox "密码" [ref=e97]: "123456"
+            - img [ref=e100] [cursor=pointer]
+          - generic [ref=e101]:
+            - text: 登录视为您已阅读并同意鹤梦云
+            - generic [ref=e103] [cursor=pointer]: 用户协议
+            - text: 和
+            - generic [ref=e105] [cursor=pointer]: 隐私政策
+    - button "登录" [disabled]:
+      - generic:
+        - img
+      - generic: 登录
+    - generic [ref=e108]:
+      - text: 还没有账号?
+      - button "立即注册" [ref=e109] [cursor=pointer]:
+        - generic [ref=e110]: 立即注册
+      - generic [ref=e112] [cursor=pointer]: 忘记密码?
