@@ -83,7 +83,7 @@
           </el-table-column>
           <el-table-column label="套餐配置" width="110">
             <template #default="{ row }">
-              <el-button size="small" text type="primary" @click="router.push({ path: '/ops/activity/pkg', query: { strategyId: row.id, name: row.name } })">配置</el-button>
+              <el-button size="small" text type="primary" @click="router.push({ path: '/ops/activity/pkg', query: { strategyId: row.id, name: row.name } })">{{ row.pkgCount || 0 }}个套餐</el-button>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="200">
@@ -135,12 +135,17 @@
 
       <div class="card">
         <el-table :data="activityAddresses" stripe>
-          <el-table-column label="地址名称" min-width="200">
+          <el-table-column label="地址名称" min-width="180">
             <template #default="{ row }">
               <span class="strategy-name">{{ row.name }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="H5地址" min-width="280">
+          <el-table-column label="区域" width="80">
+            <template #default="{ row }">
+              <el-tag :type="row.region === 'overseas' ? 'warning' : 'primary'" size="small">{{ row.region === 'overseas' ? '海外' : '国内' }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="H5地址" min-width="260">
             <template #default="{ row }">
               <span class="cell-muted">{{ row.url }}</span>
             </template>
@@ -233,12 +238,17 @@
       <!-- Step 3: 活动内容 -->
       <div v-show="addStep === 3" class="step-content">
         <el-form label-position="top">
-          <el-form-item label="活动地址" required>
-            <el-select v-model="addForm.addressId" placeholder="请选择活动跳转地址" style="width:100%">
-              <el-option v-for="addr in activityAddresses" :key="addr.id" :label="`${addr.name} (${addr.url})`" :value="addr.id" />
+          <el-form-item v-if="addForm.regions.includes('国内')" label="国内活动地址" required>
+            <el-select v-model="addForm.addressIds.domestic" placeholder="请选择国内活动跳转地址" style="width:100%">
+              <el-option v-for="addr in domesticAddresses" :key="addr.id" :label="`${addr.name} (${addr.url})`" :value="addr.id" />
             </el-select>
-            <div class="form-hint" style="margin-top:4px">在「活动配置」中管理地址列表</div>
           </el-form-item>
+          <el-form-item v-if="addForm.regions.includes('海外')" label="海外活动地址" required>
+            <el-select v-model="addForm.addressIds.overseas" placeholder="请选择海外活动跳转地址" style="width:100%">
+              <el-option v-for="addr in overseasAddresses" :key="addr.id" :label="`${addr.name} (${addr.url})`" :value="addr.id" />
+            </el-select>
+          </el-form-item>
+          <div class="form-hint" style="margin-top:4px">在「活动配置」中管理地址列表</div>
         </el-form>
       </div>
 
@@ -325,11 +335,17 @@
 
       <div v-show="editStep === 3" class="step-content">
         <el-form label-position="top">
-          <el-form-item label="活动地址" required>
-            <el-select v-model="editForm.addressId" placeholder="请选择活动跳转地址" style="width:100%">
-              <el-option v-for="addr in activityAddresses" :key="addr.id" :label="`${addr.name} (${addr.url})`" :value="addr.id" />
+          <el-form-item v-if="editForm.regions.includes('国内')" label="国内活动地址" required>
+            <el-select v-model="editForm.addressIds.domestic" placeholder="请选择国内活动跳转地址" style="width:100%">
+              <el-option v-for="addr in domesticAddresses" :key="addr.id" :label="`${addr.name} (${addr.url})`" :value="addr.id" />
             </el-select>
           </el-form-item>
+          <el-form-item v-if="editForm.regions.includes('海外')" label="海外活动地址" required>
+            <el-select v-model="editForm.addressIds.overseas" placeholder="请选择海外活动跳转地址" style="width:100%">
+              <el-option v-for="addr in overseasAddresses" :key="addr.id" :label="`${addr.name} (${addr.url})`" :value="addr.id" />
+            </el-select>
+          </el-form-item>
+          <div class="form-hint" style="margin-top:4px">在「活动配置」中管理地址列表</div>
         </el-form>
       </div>
 
@@ -366,7 +382,11 @@
         </div>
         <div class="review-section">
           <div class="review-label">活动地址</div>
-          <div class="review-value">{{ getAddressName(detailStrategy.addressId) }}<br /><span class="cell-muted">{{ getAddressUrl(detailStrategy.addressId) }}</span></div>
+          <template v-if="detailStrategy.addressIds">
+            <div v-if="detailStrategy.addressIds.domestic" class="review-value" style="margin-bottom:8px">国内：{{ getAddressName(detailStrategy.addressIds.domestic) }}<br /><span class="cell-muted">{{ getAddressUrl(detailStrategy.addressIds.domestic) }}</span></div>
+            <div v-if="detailStrategy.addressIds.overseas" class="review-value">海外：{{ getAddressName(detailStrategy.addressIds.overseas) }}<br /><span class="cell-muted">{{ getAddressUrl(detailStrategy.addressIds.overseas) }}</span></div>
+          </template>
+          <div v-else class="review-value">—</div>
         </div>
         <div class="review-section">
           <div class="review-label">投放区域</div>
@@ -396,6 +416,12 @@
       <el-form ref="addressFormRef" :model="addressForm" label-width="80px">
         <el-form-item label="地址名称" required>
           <el-input v-model="addressForm.name" placeholder="例如：618大促活动页" maxlength="30" />
+        </el-form-item>
+        <el-form-item label="所属区域" required>
+          <el-select v-model="addressForm.region" placeholder="请选择所属区域" style="width:100%">
+            <el-option label="国内" value="domestic" />
+            <el-option label="海外" value="overseas" />
+          </el-select>
         </el-form-item>
         <el-form-item label="H5地址" required>
           <el-input v-model="addressForm.url" placeholder="https://m.example.com/activity/618" />
@@ -463,42 +489,46 @@ const strategies = ref([
     id: 'AS001', name: '618大促弹窗活动', status: 'active',
     startTime: '2026-06-01T00:00', endTime: '2026-06-18T23:59',
     regions: ['国内'], apps: ['牵心PRO'],
-    groups: ['高价值用户', '活跃用户'], addressId: 'ADDR001',
+    groups: ['高价值用户', '活跃用户'], addressIds: { domestic: 'ADDR001', overseas: '' },
     popupInterval: 24,
-    remark: '618大促首页弹窗'
+    remark: '618大促首页弹窗', pkgCount: 4
   },
   {
     id: 'AS002', name: '新用户专享弹窗', status: 'active',
     startTime: '2026-05-20T00:00', endTime: '2026-06-20T23:59',
     regions: ['国内', '海外'], apps: ['牵心PRO', '鹤梦之家'],
-    groups: ['新注册用户'], addressId: 'ADDR002',
+    groups: ['新注册用户'], addressIds: { domestic: 'ADDR002', overseas: '' },
     popupInterval: 12,
-    remark: '新用户首次打开App展示'
+    remark: '新用户首次打开App展示', pkgCount: 4
   },
   {
     id: 'AS003', name: '五一弹窗活动', status: 'expired',
     startTime: '2026-04-28T00:00', endTime: '2026-05-05T23:59',
     regions: ['国内'], apps: ['牵心PRO'],
-    groups: ['活跃用户', '付费用户'], addressId: 'ADDR003',
+    groups: ['活跃用户', '付费用户'], addressIds: { domestic: 'ADDR003', overseas: '' },
     popupInterval: 24,
-    remark: '五一特惠'
+    remark: '五一特惠', pkgCount: 4
   },
   {
     id: 'AS004', name: '双11预售弹窗', status: 'draft',
     startTime: '2026-11-01T00:00', endTime: '2026-11-11T23:59',
     regions: ['国内', '海外'], apps: ['牵心PRO', '鹤梦之家'],
-    groups: ['高价值用户', '活跃用户', '付费用户'], addressId: 'ADDR001',
+    groups: ['高价值用户', '活跃用户', '付费用户'], addressIds: { domestic: 'ADDR001', overseas: '' },
     popupInterval: 6,
-    remark: '双11大促预售'
+    remark: '双11大促预售', pkgCount: 4
   }
 ])
 
 // ===== Activity Addresses =====
 const activityAddresses = ref([
-  { id: 'ADDR001', name: '618大促活动页', url: 'https://m.example.com/activity/618' },
-  { id: 'ADDR002', name: '新用户专享页', url: 'https://m.example.com/new-user' },
-  { id: 'ADDR003', name: '五一特惠页', url: 'https://m.example.com/mayday' }
+  { id: 'ADDR001', name: '618大促活动页', url: 'https://m.example.com/activity/618', region: 'domestic' },
+  { id: 'ADDR002', name: '新用户专享页', url: 'https://m.example.com/new-user', region: 'domestic' },
+  { id: 'ADDR003', name: '五一特惠页', url: 'https://m.example.com/mayday', region: 'domestic' },
+  { id: 'ADDR004', name: 'Overseas Promo', url: 'https://m.example.com/overseas/promo', region: 'overseas' }
 ])
+
+const domesticAddresses = computed(() => activityAddresses.value.filter(a => a.region === 'domestic'))
+const overseasAddresses = computed(() => activityAddresses.value.filter(a => a.region === 'overseas'))
 
 // ===== Filters =====
 const filterStatus = ref('')
@@ -540,7 +570,7 @@ const addStep = ref(1)
 const addForm = reactive({
   name: '', startTime: '', endTime: '', remark: '',
   regions: ['国内'], apps: ['牵心PRO'],
-  groups: [], addressId: '', popupInterval: 24
+  groups: [], addressIds: { domestic: '', overseas: '' }, popupInterval: 24
 })
 
 const openAddStrategy = () => {
@@ -552,7 +582,7 @@ const openAddStrategy = () => {
   addForm.regions = ['国内']
   addForm.apps = ['牵心PRO']
   addForm.groups = []
-  addForm.addressId = ''
+  addForm.addressIds = { domestic: '', overseas: '' }
   addForm.popupInterval = 24
   addDrawerVisible.value = true
 }
@@ -560,7 +590,8 @@ const openAddStrategy = () => {
 const confirmAddStrategy = () => {
   if (!addForm.name.trim()) { addStep.value = 1; return }
   if (addForm.startTime && addForm.endTime && addForm.endTime <= addForm.startTime) { addStep.value = 1; return }
-  if (!addForm.addressId) { addStep.value = 3; return }
+  if (addForm.regions.includes('国内') && !addForm.addressIds.domestic) { addStep.value = 3; return }
+  if (addForm.regions.includes('海外') && !addForm.addressIds.overseas) { addStep.value = 3; return }
   if (!addForm.regions.length) { addStep.value = 2; return }
   if (!addForm.apps.length) { addStep.value = 2; return }
   if (!addForm.groups.length) { addStep.value = 2; return }
@@ -571,7 +602,7 @@ const confirmAddStrategy = () => {
     startTime: addForm.startTime, endTime: addForm.endTime,
     regions: [...addForm.regions],
     apps: [...addForm.apps], groups: [...addForm.groups],
-    addressId: addForm.addressId,
+    addressIds: { ...addForm.addressIds },
     popupInterval: addForm.popupInterval,
     remark: addForm.remark
   })
@@ -586,7 +617,7 @@ const editingId = ref('')
 const editForm = reactive({
   name: '', startTime: '', endTime: '', remark: '',
   regions: [], apps: [],
-  groups: [], addressId: '', popupInterval: 24
+  groups: [], addressIds: { domestic: '', overseas: '' }, popupInterval: 24
 })
 
 const openEditStrategy = (row) => {
@@ -599,7 +630,7 @@ const openEditStrategy = (row) => {
   editForm.regions = [...row.regions]
   editForm.apps = [...row.apps]
   editForm.groups = [...row.groups]
-  editForm.addressId = row.addressId || ''
+  editForm.addressIds = { domestic: row.addressIds?.domestic || '', overseas: row.addressIds?.overseas || '' }
   editForm.popupInterval = row.popupInterval || 24
   editDrawerVisible.value = true
 }
@@ -614,7 +645,7 @@ const confirmEditStrategy = () => {
   s.regions = [...editForm.regions]
   s.apps = [...editForm.apps]
   s.groups = [...editForm.groups]
-  s.addressId = editForm.addressId
+  s.addressIds = { ...editForm.addressIds }
   s.popupInterval = editForm.popupInterval
   editDrawerVisible.value = false
   applyFilter()
@@ -669,7 +700,7 @@ const copyStrategy = (row) => {
 // ===== Address CRUD =====
 const addressDialogVisible = ref(false)
 const editingAddressId = ref(null)
-const addressForm = reactive({ name: '', url: '' })
+const addressForm = reactive({ name: '', url: '', region: 'domestic' })
 
 const addressDialogTitle = computed(() => editingAddressId.value ? '编辑活动地址' : '添加活动地址')
 
@@ -677,6 +708,7 @@ function openAddAddress() {
   editingAddressId.value = null
   addressForm.name = ''
   addressForm.url = ''
+  addressForm.region = 'domestic'
   addressDialogVisible.value = true
 }
 
@@ -684,6 +716,7 @@ function openEditAddress(row) {
   editingAddressId.value = row.id
   addressForm.name = row.name
   addressForm.url = row.url
+  addressForm.region = row.region || 'domestic'
   addressDialogVisible.value = true
 }
 
@@ -691,10 +724,10 @@ function confirmAddress() {
   if (!addressForm.name.trim() || !addressForm.url.trim()) return
   if (editingAddressId.value) {
     const addr = activityAddresses.value.find(a => a.id === editingAddressId.value)
-    if (addr) { addr.name = addressForm.name; addr.url = addressForm.url }
+    if (addr) { addr.name = addressForm.name; addr.url = addressForm.url; addr.region = addressForm.region }
   } else {
     const id = 'ADDR' + String(activityAddresses.value.length + 1).padStart(3, '0')
-    activityAddresses.value.push({ id, name: addressForm.name, url: addressForm.url })
+    activityAddresses.value.push({ id, name: addressForm.name, url: addressForm.url, region: addressForm.region })
   }
   addressDialogVisible.value = false
 }
