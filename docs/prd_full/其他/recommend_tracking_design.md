@@ -1,7 +1,7 @@
 # 推荐位埋点设计文档
 
-> 文档版本: v1.0  
-> 更新日期: 2026-04-16  
+> 文档版本: v1.1  
+> 更新日期: 2026-06-24  
 > 目标: 通过精细化埋点数据，实现用户画像精准刻画，支撑精细化运营决策
 
 ---
@@ -38,7 +38,8 @@
 | **曝光类** | 推荐位曝光 | rec_slot_expose | 推荐位内容展示在用户可视区域 |
 | **浏览类** | 推荐位浏览 | rec_slot_view | 用户在推荐位停留超过阈值时间 |
 | **点击类** | 套餐卡片点击 | rec_pkg_click | 用户点击套餐卡片 |
-| **转化类** | 套餐购买成功 | rec_pkg_purchase | 用户完成套餐购买 |
+| **转化类** | 套餐购买成功 | rec_pkg_purchase_success | 用户完成套餐购买支付 |
+| **转化类** | 套餐购买失败 | rec_pkg_purchase_fail | 用户发起支付但支付失败 |
 | **交互类** | 漏斗层级切换 | rec_funnel_switch | 用户在漏斗不同层级间切换 |
 
 ### 2.2 详细事件定义
@@ -156,7 +157,65 @@
 
 ---
 
-#### 2.2.5 漏斗层级切换事件 (rec_funnel_switch)
+#### 2.2.5 套餐购买失败事件 (rec_pkg_purchase_fail)
+
+**触发条件**: 用户发起套餐购买支付但支付失败（含取消支付、余额不足、网络超时等）
+
+**事件属性**:
+
+| 属性名 | 属性ID | 类型 | 必填 | 说明 |
+|--------|--------|------|------|------|
+| 基础属性 | - | - | - | 同曝光事件 |
+| 订单ID | order_id | string | 否 | 预生成订单ID（如有） |
+| 失败原因 | fail_reason | string | 是 | 支付取消/余额不足/支付超时/支付渠道异常/其他 |
+| 失败错误码 | fail_code | string | 否 | 支付网关返回的错误码 |
+| 支付方式 | pay_method | string | 是 | 微信/支付宝/Apple Pay |
+| 应付金额 | pay_amount | float | 是 | 订单应付金额 |
+| 用户操作 | user_action | string | 是 | 放弃支付/重试/切换支付方式 |
+| 重试次数 | retry_count | int | 否 | 同一订单重试支付次数 |
+| 从发起到失败时长 | fail_duration | int | 是 | 从点击购买到支付失败时长(秒) |
+| 转化路径 | conversion_path | string | 是 | 曝光→点击→详情→购买→支付失败 |
+
+**示例数据**:
+```json
+{
+  "event_id": "rec_pkg_purchase_fail",
+  "user_id": "U12345678",
+  "device_id": "D87654321",
+  "app_id": "QX_PRO_001",
+  "slot_code": "rec_slot_home",
+  "slot_name": "首页推荐位",
+  "strategy_id": "STR_001",
+  "funnel_id": "FUN_001",
+  "funnel_level": 3,
+  "pkg_id": "REC_001",
+  "pkg_name": "7天事件云存储基础版",
+  "pkg_category": "云存储",
+  "pkg_price": 6.90,
+  "region": "domestic",
+  "user_group": "ug_rec_high_value",
+  "order_id": "ORD_123456",
+  "fail_reason": "余额不足",
+  "fail_code": "PAY_INSUFFICIENT_BALANCE",
+  "pay_method": "wechat",
+  "pay_amount": 6.90,
+  "user_action": "放弃支付",
+  "retry_count": 1,
+  "fail_duration": 45,
+  "conversion_path": "expose→click→detail→purchase→fail",
+  "timestamp": 1713244800000
+}
+```
+
+**业务价值**:
+- 计算支付失败率 = 支付失败数 / 发起支付数
+- 分析失败原因分布，定位支付环节问题
+- 为支付重试/挽留策略提供数据支撑
+- 监控支付渠道异常（如某渠道失败率突然升高）
+
+---
+
+#### 2.2.6 漏斗层级切换事件 (rec_funnel_switch)
 
 **触发条件**: 用户在漏斗不同层级间切换（如从第1层切换到第2层）
 
@@ -222,6 +281,8 @@
 | 客单价 | 累计消费金额 / 购买次数 | rec_pkg_purchase |
 | 复购率 | 购买次数 > 1 的用户占比 | rec_pkg_purchase |
 | 价格敏感度 | 优惠订单占比 > 50% 为敏感 | rec_pkg_purchase |
+| 支付失败倾向 | 近30天支付失败次数 / 发起支付次数 | rec_pkg_purchase_fail |
+| 支付重试率 | 失败后重试次数 / 支付失败次数 | rec_pkg_purchase_fail |
 
 #### 3.2.3 运营响应标签
 
@@ -273,6 +334,7 @@
 | 转化率(CVR) | 转化量 / 点击量 | 衡量转化效果 |
 | 客单价 | 总收入 / 转化量 | 平均订单金额 |
 | GMV | 转化金额总和 | 商品交易总额 |
+| 支付失败率 | 支付失败数 / 发起支付数 | 衡量支付环节流失 |
 
 #### 4.1.4 漏斗指标
 
@@ -375,7 +437,26 @@
 - 流失率高的层级: 优化套餐选择
 - 转化率低的层级: 调整价格或文案
 
-### 5.4 个性化推荐
+### 5.4 支付挽留策略
+
+**场景**: 基于支付失败数据，对支付失败用户实施挽留
+
+**数据支撑**:
+```
+支付失败分析
+├── 失败原因分布: 余额不足 / 超时 / 取消 / 渠道异常
+├── 支付方式分布: 微信 / 支付宝 / Apple Pay
+├── 重试转化: 失败后重试 → 成功支付的比例
+└── 放弃时段: 用户放弃支付的时段特征
+```
+
+**挽留策略**:
+- 余额不足: 推送优惠信息或推荐低价套餐
+- 支付超时: 保留订单30分钟，推送提醒
+- 支付取消: 次日推送「继续购买」消息
+- 渠道异常: 推荐切换支付方式
+
+### 5.5 个性化推荐
 
 **场景**: 基于用户画像实现千人千面
 
@@ -428,13 +509,27 @@ Tracker.track('rec_pkg_click', {
   click_position: 'card'
 });
 
-// 购买事件上报
+// 购买成功事件上报
 Tracker.track('rec_pkg_purchase', {
   slot_code: 'rec_slot_home',
   pkg_id: 'REC_001',
   order_id: 'ORD_123456',
   pay_amount: 6.90,
   pay_method: 'wechat'
+});
+
+// 购买失败事件上报
+Tracker.track('rec_pkg_purchase_fail', {
+  slot_code: 'rec_slot_home',
+  pkg_id: 'REC_001',
+  order_id: 'ORD_123456',
+  fail_reason: '余额不足',
+  fail_code: 'PAY_INSUFFICIENT_BALANCE',
+  pay_method: 'wechat',
+  pay_amount: 6.90,
+  user_action: '放弃支付',
+  retry_count: 1,
+  fail_duration: 45
 });
 ```
 

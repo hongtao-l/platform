@@ -75,8 +75,15 @@
 
     <!-- 底部栏 -->
     <div class="bottom-bar">
-      <van-button type="primary" block @click="startGenerate">
-        <van-icon name="video-o" size="16" /> 生成视频
+      <div v-if="genHint" class="gen-hint">{{ genHint }}</div>
+      <van-button
+        type="primary"
+        block
+        :disabled="!canGenerate"
+        @click="startGenerate"
+      >
+        <van-icon name="video-o" size="16" />
+        {{ genState.count >= 2 ? '已生成' : genState.count === 1 ? '生成视频（剩余 1 次）' : '生成视频' }}
       </van-button>
     </div>
 
@@ -85,7 +92,7 @@
       v-if="showConfirmGen"
       v-model:show="showConfirmGen"
       title="生成视频"
-      :message="`将自动使用全部 ${Math.min(images.length, 20)} 张图片生成短视频。`"
+      :message="`将自动使用全部 ${images.length} 张图片生成短视频。`"
       show-cancel-button
       confirm-button-text="开始生成"
       @confirm="doGenerate"
@@ -131,6 +138,43 @@ const playing = ref(false)
 const showConfirmGen = ref(false)
 const currentVideo = ref(null)
 const videoEl = ref(null)
+
+// ===== 生成次数管理（localStorage 持久化，00:00 重置） =====
+const STORAGE_KEY = `carecam_album_gen_${deviceId.value}`
+
+function loadGenState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return { count: 0, date: '', genDates: [] }
+    const data = JSON.parse(raw)
+    const today = new Date().toDateString()
+    if (data.date !== today) return { count: 0, date: today, genDates: [] }
+    return data
+  } catch { return { count: 0, date: new Date().toDateString(), genDates: [] } }
+}
+
+function saveGenState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+}
+
+const genState = ref(loadGenState())
+
+// 今日剩余可用次数
+const dailyRemaining = computed(() => Math.max(0, 2 - genState.value.count))
+
+// 是否可生成：今日次数未用完 + 当前日期未生成过视频
+const canGenerate = computed(() => {
+  if (genState.value.count >= 2) return false
+  // TODO: 接入真实日期参数后，从 route query 获取当前浏览的日期
+  return true
+})
+
+// 按钮提示文案
+const genHint = computed(() => {
+  if (genState.value.count >= 2) return '已生成'
+  if (genState.value.count === 1) return '生成视频（剩余 1 次）'
+  return ''
+})
 
 // ===== Mock 图片 =====
 // TODO: 接入真实 API
@@ -185,8 +229,8 @@ function viewImage() { /* TODO: 全屏大图 */ }
 
 // ===== 生成视频 =====
 function startGenerate() {
-  if (images.value.length < 3) {
-    showToast('至少需要 3 张图片才能生成视频')
+  if (genState.value.count >= 2) {
+    showToast('今日生成次数已用完，请明天再试')
     return
   }
   showConfirmGen.value = true
@@ -199,6 +243,14 @@ function doGenerate() {
   // TODO: 接入真实的视频生成 API，自动使用全部图片
   setTimeout(() => {
     generating.value = false
+
+    // 同一天已有视频 → 替换（仅保留最新一个）
+    const today = new Date().toDateString()
+    const sameDayIdx = videoList.value.findIndex(v => new Date(v.createdAt).toDateString() === today)
+    if (sameDayIdx >= 0) {
+      videoList.value.splice(sameDayIdx, 1)
+    }
+
     const newVid = {
       id: `vid-${Date.now()}`,
       url: '',
@@ -207,6 +259,12 @@ function doGenerate() {
       expiresAt: new Date(Date.now() + 30 * 86400000), expired: false, daysLeft: 30
     }
     videoList.value.unshift(newVid)
+
+    // 更新生成次数
+    genState.value.count += 1
+    genState.value.date = today
+    saveGenState(genState.value)
+
     showToast('视频生成成功')
     playVideo(newVid)
   }, 3000)
@@ -311,6 +369,10 @@ function handleShare() { showToast('分享功能开发中') }
   position: fixed; bottom: 0; left: 0; right: 0; background: $bg-color;
   padding: 10px 16px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid $border-color; z-index: 10;
+}
+.gen-hint {
+  text-align: center; font-size: 12px; color: $text-secondary;
+  margin-bottom: 6px; line-height: 1.4;
 }
 
 // ===== 生成遮罩 =====

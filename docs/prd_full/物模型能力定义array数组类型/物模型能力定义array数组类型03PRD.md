@@ -103,7 +103,7 @@ flowchart TD
 |------|------|------|
 | R01 | 数据类型扩展 | 属性型能力的数据类型从 enum/int/boolean/string 扩展为 enum/int/boolean/string/array/struct |
 | R02 | array 元素类型 | elementType 支持 int / string / struct（参数弹窗中仅支持 int / string） |
-| R03 | 默认值 | newCapability 时默认 elementType='int', arrayMaxLength=100 |
+| R03 | 默认值 | 无 |
 | R04 | 字段列表 | elementType='struct' 时必须至少 1 个字段；字段类型仅支持 enum / int / boolean / string / struct（不含 array） |
 | R05 | 最大长度范围 | 1-1000，步长 1 |
 | R06 | 列表展示 | 数据类型列显示「数组型」，数据定义列显示「元素{Int/String/Struct}, 最大{N}项」 |
@@ -144,8 +144,7 @@ flowchart TD
 
 **控件规格**：
 - 元素类型下拉：`el-select` 100% 宽度，选项「Int (数字)」「String (字符串)」「Struct (结构体)」
-- 最大长度：`el-input-number` min=1 max=1000 step=1，默认 100，width 150px
-- 默认值：`el-input` placeholder「请输入默认值」
+- 元素个数：
 
 **元素类型切换行为**：从 Struct 切换到 Int/String 时，已填的字段列表数据保留在内存中（切换回来时恢复）；保存时仅提交当前 elementType 对应的数据。
 
@@ -166,39 +165,6 @@ flowchart TD
 
 **空态**：「暂无字段」
 
-### 6.3 参数弹窗 — array 类型
-
-**触发条件**：在参数弹窗中数据类型选择「Array」
-
-**与能力弹窗 array 的区别**：
-- elementType 仅 Int / String（不支持 Struct，参数弹窗用于简单数据）
-- 默认值输入框 placeholder 为「请输入默认值（逗号分隔）」
-
-### 6.4 数据存储格式
-
-```json
-// array<int>
-{
-  "dataType": "array",
-  "elementType": "int",
-  "maxLength": 10,
-  "accessMode": "rw",
-  "defaultVal": ""
-}
-
-// array<struct>
-{
-  "dataType": "array",
-  "elementType": "struct",
-  "maxLength": 10,
-  "accessMode": "rw",
-  "fields": [
-    { "name": "启用", "identifier": "Switch", "dataType": "boolean", "trueLabel": "开启", "falseLabel": "关闭" },
-    { "name": "开始时间", "identifier": "StartTime", "dataType": "string", "maxLength": 8 },
-    { "name": "结束时间", "identifier": "EndTime", "dataType": "string", "maxLength": 8 }
-  ]
-}
-```
 
 ---
 

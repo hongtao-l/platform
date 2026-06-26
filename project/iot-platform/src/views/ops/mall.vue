@@ -275,9 +275,14 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="分类名称" min-width="200">
+        <el-table-column label="分类名称" min-width="160">
           <template #default="{ row }">
             <span class="text-medium">{{ row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="分类编码" width="140">
+          <template #default="{ row }">
+            <span class="cell-muted" style="font-family:monospace">{{ row.code || '—' }}</span>
           </template>
         </el-table-column>
         <el-table-column label="套餐数量" width="120">
@@ -299,6 +304,9 @@
     <el-dialog v-model="addCategoryVisible" :title="editingCategory ? '编辑分类' : '添加分类'" width="400px">
       <el-form-item label="分类名称" required>
         <el-input v-model="categoryForm.name" placeholder="请输入分类名称" />
+      </el-form-item>
+      <el-form-item label="分类编码" required>
+        <el-input v-model="categoryForm.code" placeholder="请输入分类编码（如 cloud_storage）" />
       </el-form-item>
       <template #footer>
         <el-button @click="addCategoryVisible = false">取消</el-button>
@@ -395,6 +403,7 @@
 <script setup>
 import { ref, reactive, computed } from 'vue'
 import { Plus, ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 
 // Page state
 const currentPage = ref('strategy-list')
@@ -425,7 +434,7 @@ const pkgTotalCount = computed(() => {
 // Categories with their packages
 const categories = ref([
   {
-    key: 'cloud', name: '云存储套餐',
+    key: 'cloud', name: '云存储套餐', code: 'cloud_storage',
     packages: [
       { id: 'PKG20220001', name: '事件录像7天', direction: '设备', subType: '订阅制', price: '¥6.90 / $0.95', enabled: true },
       { id: 'PKG20220015', name: '国内专享·极简云存', direction: '用户', subType: '订阅制', price: '¥59.00 / $8.50', enabled: true },
@@ -433,13 +442,13 @@ const categories = ref([
     ]
   },
   {
-    key: 'ai', name: 'AI智能服务',
+    key: 'ai', name: 'AI智能服务', code: 'ai_service',
     packages: [
       { id: 'PKG20220020', name: 'AI智能检测月卡', direction: '设备', subType: '订阅制', price: '¥19.90 / $2.99', enabled: true }
     ]
   },
   {
-    key: 'bundle', name: '综合套餐',
+    key: 'bundle', name: '综合套餐', code: 'bundle_pkg',
     packages: [
       { id: 'PKG20220025', name: '全家桶年度套餐', direction: '用户', subType: '非订阅', price: '¥199.00 / $29.99', enabled: true }
     ]
@@ -526,7 +535,7 @@ const deleteStrategy = (row) => {
 const categoryMgmtVisible = ref(false)
 const addCategoryVisible = ref(false)
 const editingCategory = ref(null)
-const categoryForm = reactive({ name: '' })
+const categoryForm = reactive({ name: '', code: '' })
 const _returnToAddPkg = ref(false)
 
 const openCategoryManagement = () => { categoryMgmtVisible.value = true }
@@ -539,21 +548,26 @@ const openCategoryFromTransfer = () => {
 const openAddCategory = () => {
   editingCategory.value = null
   categoryForm.name = ''
+  categoryForm.code = ''
   addCategoryVisible.value = true
 }
 
 const openEditCategory = (row) => {
   editingCategory.value = row
   categoryForm.name = row.name
+  categoryForm.code = row.code || ''
   addCategoryVisible.value = true
 }
 
 const saveCategory = () => {
-  if (!categoryForm.name) return
+  if (!categoryForm.name || !categoryForm.code) return
+  const dup = categories.value.find(c => c.code === categoryForm.code && c !== editingCategory.value)
+  if (dup) { ElMessage.warning(`分类编码「${categoryForm.code}」已存在，请使用其他编码`); return }
   if (editingCategory.value) {
     editingCategory.value.name = categoryForm.name
+    editingCategory.value.code = categoryForm.code
   } else {
-    categories.value.push({ key: 'cat_' + Date.now(), name: categoryForm.name, packages: [] })
+    categories.value.push({ key: 'cat_' + Date.now(), name: categoryForm.name, code: categoryForm.code, packages: [] })
   }
   addCategoryVisible.value = false
 }
