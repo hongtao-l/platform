@@ -92,7 +92,7 @@
       v-if="showConfirmGen"
       v-model:show="showConfirmGen"
       title="生成视频"
-      :message="`将自动使用全部 ${images.length} 张图片生成短视频。`"
+      message="确认生成该日期的时光视频？"
       show-cancel-button
       confirm-button-text="开始生成"
       @confirm="doGenerate"
@@ -147,9 +147,8 @@ function loadGenState() {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return { count: 0, date: '', genDates: [] }
     const data = JSON.parse(raw)
-    const today = new Date().toDateString()
-    if (data.date !== today) return { count: 0, date: today, genDates: [] }
-    return data
+    // TODO: 上线前移除，演示用每次进入重置
+    return { count: 0, date: new Date().toDateString(), genDates: data.genDates || [] }
   } catch { return { count: 0, date: new Date().toDateString(), genDates: [] } }
 }
 
@@ -265,7 +264,6 @@ function doGenerate() {
     genState.value.date = today
     saveGenState(genState.value)
 
-    showToast('视频生成成功')
     playVideo(newVid)
   }, 3000)
 }
