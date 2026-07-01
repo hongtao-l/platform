@@ -540,6 +540,14 @@ const initialAlgorithms = [
     capabilityIds: JSON.stringify(['SoundAlarm', 'AlgorithmSwitch', 'SoundAlarmSwitch', 'SoundAlarmCount', 'CustomAlarmAudio', 'LightAlarmSwitch', 'LightAlarmDuration']),
     eventIds: JSON.stringify([100003]),
     referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: 'pir_detection', algorithmIcon: '📡',
+    algorithmName: JSON.stringify({ '1': 'PIR侦测', '2': 'PIR Detection' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, Sensitivity: true, SmartTracking: true, SoundAlarm: true, DeviceLight: true, PersonDetect: true, VehicleDetect: true, PetDetect: true, MotionDetect: true, ScheduledDetect: true, ZoneDetect: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'Sensitivity', 'SmartTracking', 'SoundAlarm', 'DeviceLight', 'PersonDetect', 'VehicleDetect', 'PetDetect', 'MotionDetect', 'ScheduledDetect', 'ZoneDetect']),
+    eventIds: JSON.stringify([100001, 100002, 100008]),
+    referencedCount: 1
   }
 ]
 
@@ -556,6 +564,44 @@ const initialEvents = [
 
 store.algorithms = JSON.parse(JSON.stringify(initialAlgorithms))
 store.events = JSON.parse(JSON.stringify(initialEvents))
+
+// ===== 服务类型数据 =====
+const initialServices = [
+  { id: 1, name: '智能告警', serviceId: '110600', categoryId: 1, algorithmIds: [], eventIds: [] },
+  { id: 2, name: '低电检测服务', serviceId: '300028', categoryId: 1, algorithmIds: [], eventIds: [] },
+  { id: 3, name: '火焰检测', serviceId: '300022', categoryId: 1, algorithmIds: [], eventIds: [] },
+  { id: 4, name: '跌倒检测', serviceId: '300020', categoryId: 1, algorithmIds: [], eventIds: [] },
+  { id: 5, name: '宠物喂食器', serviceId: '300049', categoryId: 1, algorithmIds: [], eventIds: [] },
+  { id: 6, name: 'GPS定位', serviceId: '300050', categoryId: 1, algorithmIds: [], eventIds: [] },
+  { id: 7, name: '低功耗PIR检测', serviceId: '300048', categoryId: 1, algorithmIds: ['pir_detection'], eventIds: [100001, 100005] },
+  { id: 8, name: '非机动车检测', serviceId: '300047', categoryId: 1, algorithmIds: ['motion_detection'], eventIds: [100001, 100002, 100008] },
+  { id: 9, name: '鱼缸侦测', serviceId: '300046', categoryId: 1, algorithmIds: [], eventIds: [] },
+  { id: 10, name: '客流统计', serviceId: '300045', categoryId: 1, algorithmIds: ['motion_detection'], eventIds: [100002] },
+  { id: 11, name: '儿童检测', serviceId: '300044', categoryId: 1, algorithmIds: [], eventIds: [] },
+  { id: 12, name: '离岗侦测', serviceId: '300043', categoryId: 1, algorithmIds: ['motion_detection'], eventIds: [100001] },
+  { id: 13, name: '包裹侦测', serviceId: '300025', categoryId: 1, algorithmIds: ['motion_detection'], eventIds: [100006] },
+  { id: 14, name: '哭声侦测', serviceId: '300023', categoryId: 1, algorithmIds: ['sound_detection'], eventIds: [100003] },
+  { id: 15, name: '智能报警-家门监测', serviceId: '300041', categoryId: 1, algorithmIds: ['sound_detection'], eventIds: [100007] },
+  { id: 16, name: '智能报警-厨房安全', serviceId: '300040', categoryId: 1, algorithmIds: [], eventIds: [] },
+  { id: 17, name: '智能报警-宠物监测', serviceId: '300042', categoryId: 1, algorithmIds: [], eventIds: [] },
+  { id: 18, name: '智能报警-老人看护', serviceId: '300039', categoryId: 1, algorithmIds: [], eventIds: [] }
+]
+store.services = JSON.parse(JSON.stringify(initialServices))
+
+export function getAlgorithmServiceId(algorithmId) {
+  const svc = store.services.find(s => s.algorithmIds.includes(algorithmId))
+  return svc ? svc.serviceId : '-'
+}
+
+export function getAlgorithmEvents(algorithmId) {
+  const svcs = store.services.filter(s => s.algorithmIds.includes(algorithmId))
+  const eids = [...new Set(svcs.flatMap(s => s.eventIds))]
+  return eids
+}
+
+export function listServices() {
+  return { code: 0, data: { list: JSON.parse(JSON.stringify(store.services)) } }
+}
 
 // ---- 算法 CRUD ----
 
@@ -587,6 +633,7 @@ export function addAlgorithm(data) {
     algorithmId: data.algorithmId,
     algorithmIcon: data.algorithmIcon || '',
     algorithmName: data.algorithmName || '{}',
+    descr: data.descr || '',
     capabilities: data.capabilities || '{}',
     capabilityIds: data.capabilityIds || '[]',
     eventIds: data.eventIds || '[]',
@@ -603,6 +650,7 @@ export function updateAlgorithm(data) {
   if (data.algorithmId !== undefined) cur.algorithmId = data.algorithmId
   if (data.algorithmIcon !== undefined) cur.algorithmIcon = data.algorithmIcon
   if (data.algorithmName !== undefined) cur.algorithmName = data.algorithmName
+  if (data.descr !== undefined) cur.descr = data.descr
   if (data.capabilities !== undefined) cur.capabilities = data.capabilities
   if (data.capabilityIds !== undefined) cur.capabilityIds = data.capabilityIds
   if (data.eventIds !== undefined) cur.eventIds = data.eventIds

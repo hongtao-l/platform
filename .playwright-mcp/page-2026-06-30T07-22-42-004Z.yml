@@ -1,0 +1,582 @@
+- generic [ref=f34e3]:
+  - complementary [ref=f34e4]:
+    - generic [ref=f34e5]:
+      - img [ref=f34e7]
+      - generic [ref=f34e9]: IoT 平台
+    - navigation [ref=f34e10]:
+      - generic [ref=f34e11] [cursor=pointer]:
+        - img [ref=f34e13]
+        - generic [ref=f34e15]: 工作台
+      - generic [ref=f34e16]:
+        - generic [ref=f34e17] [cursor=pointer]:
+          - img [ref=f34e19]
+          - generic [ref=f34e22]: 物模型管理
+          - img [ref=f34e24]
+        - generic:
+          - generic [ref=f34e26] [cursor=pointer]:
+            - img [ref=f34e28]
+            - generic [ref=f34e30]: IOT类目
+          - generic [ref=f34e31] [cursor=pointer]:
+            - img [ref=f34e33]
+            - generic [ref=f34e38]: 能力库
+          - generic [ref=f34e39] [cursor=pointer]:
+            - img [ref=f34e41]
+            - generic [ref=f34e44]: 算法库
+          - generic [ref=f34e45] [cursor=pointer]:
+            - img [ref=f34e47]
+            - generic [ref=f34e49]: 事件库
+      - generic [ref=f34e50]:
+        - generic [ref=f34e51] [cursor=pointer]:
+          - img [ref=f34e53]
+          - generic [ref=f34e57]: 产品管理
+          - img [ref=f34e59]
+        - generic:
+          - generic [ref=f34e61] [cursor=pointer]:
+            - img [ref=f34e63]
+            - generic [ref=f34e67]: 产品开发
+          - generic [ref=f34e68] [cursor=pointer]:
+            - img [ref=f34e70]
+            - generic [ref=f34e72]: 产品审核
+      - generic [ref=f34e73]:
+        - generic [ref=f34e74] [cursor=pointer]:
+          - img [ref=f34e76]
+          - generic [ref=f34e81]: 套餐管理
+          - img [ref=f34e83]
+        - generic:
+          - generic [ref=f34e85] [cursor=pointer]:
+            - img [ref=f34e87]
+            - generic [ref=f34e91]: 套餐配置
+          - generic [ref=f34e92] [cursor=pointer]:
+            - img [ref=f34e94]
+            - generic [ref=f34e99]: 服务类型
+      - generic [ref=f34e100]:
+        - generic [ref=f34e101] [cursor=pointer]:
+          - img [ref=f34e103]
+          - generic [ref=f34e105]: 运营管理
+          - img [ref=f34e107]
+        - generic:
+          - generic [ref=f34e109] [cursor=pointer]:
+            - img [ref=f34e111]
+            - generic [ref=f34e113]: 商城位运营
+          - generic [ref=f34e114] [cursor=pointer]:
+            - img [ref=f34e116]
+            - generic [ref=f34e118]: 推荐位运营
+          - generic [ref=f34e119] [cursor=pointer]:
+            - img [ref=f34e121]
+            - generic [ref=f34e126]: 活动位运营
+          - generic [ref=f34e127] [cursor=pointer]:
+            - img [ref=f34e129]
+            - generic [ref=f34e131]: 用户分群
+          - generic [ref=f34e132] [cursor=pointer]:
+            - img [ref=f34e134]
+            - generic [ref=f34e136]: A/B Test
+    - generic [ref=f34e138] [cursor=pointer]:
+      - img [ref=f34e140]
+      - generic [ref=f34e142]: 收起菜单
+  - generic [ref=f34e143]:
+    - banner [ref=f34e144]:
+      - navigation "面包屑" [ref=f34e146]:
+        - link "首页" [ref=f34e148]
+      - generic [ref=f34e149]:
+        - generic [ref=f34e150] [cursor=pointer]:
+          - img [ref=f34e152]
+          - superscript [ref=f34e156]: "3"
+        - button "管理员" [ref=f34e158] [cursor=pointer]:
+          - img [ref=f34e161]
+          - generic [ref=f34e163]: 管理员
+          - img [ref=f34e165]
+    - main [ref=f34e167]:
+      - generic [ref=f34e168]:
+        - generic [ref=f34e171]:
+          - button "返回 返回" [ref=f34e172] [cursor=pointer]:
+            - generic "返回" [ref=f34e173]:
+              - img [ref=f34e175]
+            - generic [ref=f34e178]: 返回
+          - separator [ref=f34e179]
+          - generic [ref=f34e180]: 开发产品
+        - generic [ref=f34e181]:
+          - generic [ref=f34e182]:
+            - heading "智能门铃 Pro" [level=2] [ref=f34e183]
+            - button "编辑产品" [ref=f34e184] [cursor=pointer]:
+              - generic [ref=f34e185]:
+                - img [ref=f34e187]
+                - text: 编辑产品
+          - generic [ref=f34e190]:
+            - generic [ref=f34e191]: "产品Id: DOORBELL_001"
+            - generic [ref=f34e192]: "|"
+            - generic [ref=f34e193]: "产品型号: TEST-MODEL-388537"
+            - generic [ref=f34e194]: "|"
+            - generic [ref=f34e195]: "产品类目: UITest_Edit_285367"
+            - generic [ref=f34e196]: "|"
+            - generic [ref=f34e197]: "联网方式: -"
+        - generic [ref=f34e198]:
+          - generic [ref=f34e203] [cursor=pointer]: 功能定义与配置
+          - generic [ref=f34e209] [cursor=pointer]: 事件配置
+          - generic [ref=f34e215] [cursor=pointer]: 设备算法配置
+          - generic [ref=f34e221] [cursor=pointer]: 平台服务
+          - generic [ref=f34e227] [cursor=pointer]: 语音助手
+        - generic [ref=f34e228]:
+          - generic [ref=f34e229]:
+            - button "上一步" [ref=f34e230] [cursor=pointer]:
+              - generic [ref=f34e231]: 上一步
+            - button "跳过" [ref=f34e232] [cursor=pointer]:
+              - generic [ref=f34e233]: 跳过
+            - button "保存，下一步" [ref=f34e234] [cursor=pointer]:
+              - generic [ref=f34e235]:
+                - img [ref=f34e237]
+                - text: 保存，下一步
+          - separator [ref=f34e240]:
+            - generic [ref=f34e241]:
+              - img [ref=f34e243]
+              - generic [ref=f34e245]: 配置选项
+          - heading "算法服务（新）" [level=3] [ref=f34e247]
+          - generic [ref=f34e248]:
+            - img [ref=f34e250]
+            - generic [ref=f34e252]: 该模块用于配置端侧算法，请根据设备实际能力配置
+          - generic [ref=f34e255]:
+            - table [ref=f34e257]:
+              - rowgroup [ref=f34e267]:
+                - row "算法ID 服务ID 算法名称 描述 是否支持 免开通 能力配置 关联事件" [ref=f34e268]:
+                  - columnheader "算法ID" [ref=f34e269]:
+                    - generic [ref=f34e270]: 算法ID
+                  - columnheader "服务ID" [ref=f34e271]:
+                    - generic [ref=f34e272]: 服务ID
+                  - columnheader "算法名称" [ref=f34e273]:
+                    - generic [ref=f34e274]: 算法名称
+                  - columnheader "描述" [ref=f34e275]:
+                    - generic [ref=f34e276]: 描述
+                  - columnheader "是否支持" [ref=f34e277]:
+                    - generic [ref=f34e278]: 是否支持
+                  - columnheader "免开通" [ref=f34e279]:
+                    - generic [ref=f34e280]:
+                      - text: 免开通
+                      - img [ref=f34e282]
+                  - columnheader "能力配置" [ref=f34e284]:
+                    - generic [ref=f34e285]: 能力配置
+                  - columnheader "关联事件" [ref=f34e286]:
+                    - generic [ref=f34e287]: 关联事件
+            - table [ref=f34e292]:
+              - rowgroup [ref=f34e302]:
+                - row "motion_detection 300047 移动侦测算法 配置 配置" [ref=f34e303]:
+                  - cell "motion_detection" [ref=f34e304]:
+                    - generic [ref=f34e305]: motion_detection
+                  - cell "300047" [ref=f34e306]:
+                    - generic [ref=f34e307]: "300047"
+                  - cell "移动侦测算法" [ref=f34e308]:
+                    - generic [ref=f34e309]: 移动侦测算法
+                  - cell [ref=f34e310]
+                  - cell [ref=f34e311]:
+                    - generic [ref=f34e313]:
+                      - switch
+                  - cell [ref=f34e316]:
+                    - generic [ref=f34e318]:
+                      - switch [disabled]
+                  - cell "配置" [ref=f34e321]:
+                    - button "配置" [disabled] [ref=f34e323]:
+                      - generic [ref=f34e324]: 配置
+                  - cell "配置" [ref=f34e325]:
+                    - button "配置" [disabled] [ref=f34e327]:
+                      - generic [ref=f34e328]: 配置
+                - row "sound_detection 300023 声音侦测算法 配置 配置" [ref=f34e329]:
+                  - cell "sound_detection" [ref=f34e330]:
+                    - generic [ref=f34e331]: sound_detection
+                  - cell "300023" [ref=f34e332]:
+                    - generic [ref=f34e333]: "300023"
+                  - cell "声音侦测算法" [ref=f34e334]:
+                    - generic [ref=f34e335]: 声音侦测算法
+                  - cell [ref=f34e336]
+                  - cell [ref=f34e337]:
+                    - generic [ref=f34e339]:
+                      - switch
+                  - cell [ref=f34e342]:
+                    - generic [ref=f34e344]:
+                      - switch [disabled]
+                  - cell "配置" [ref=f34e347]:
+                    - button "配置" [disabled] [ref=f34e349]:
+                      - generic [ref=f34e350]: 配置
+                  - cell "配置" [ref=f34e351]:
+                    - button "配置" [disabled] [ref=f34e353]:
+                      - generic [ref=f34e354]: 配置
+                - row "pir_detection 300048 PIR侦测 配置 配置" [ref=f34e355]:
+                  - cell "pir_detection" [ref=f34e356]:
+                    - generic [ref=f34e357]: pir_detection
+                  - cell "300048" [ref=f34e358]:
+                    - generic [ref=f34e359]: "300048"
+                  - cell "PIR侦测" [ref=f34e360]:
+                    - generic [ref=f34e361]: PIR侦测
+                  - cell [ref=f34e362]
+                  - cell [ref=f34e363]:
+                    - generic [ref=f34e365]:
+                      - switch
+                  - cell [ref=f34e368]:
+                    - generic [ref=f34e370]:
+                      - switch [disabled]
+                  - cell "配置" [ref=f34e373]:
+                    - button "配置" [disabled] [ref=f34e375]:
+                      - generic [ref=f34e376]: 配置
+                  - cell "配置" [ref=f34e377]:
+                    - button "配置" [disabled] [ref=f34e379]:
+                      - generic [ref=f34e380]: 配置
+          - generic [ref=f34e381]:
+            - heading "算法服务（老） 旧版" [level=3] [ref=f34e383]:
+              - text: 算法服务（老）
+              - generic [ref=f34e384]: 旧版
+            - generic [ref=f34e385]:
+              - generic [ref=f34e386]:
+                - generic [ref=f34e387]:
+                  - generic [ref=f34e388]: 云存录像服务
+                  - generic [ref=f34e389]: "AIIoTType: 1010"
+                - generic [ref=f34e391]:
+                  - table [ref=f34e393]:
+                    - rowgroup [ref=f34e399]:
+                      - row "服务ID 服务名称 是否支持 说明" [ref=f34e400]:
+                        - columnheader "服务ID" [ref=f34e401]:
+                          - generic [ref=f34e402]: 服务ID
+                        - columnheader "服务名称" [ref=f34e403]:
+                          - generic [ref=f34e404]: 服务名称
+                        - columnheader "是否支持" [ref=f34e405]:
+                          - generic [ref=f34e406]: 是否支持
+                        - columnheader "说明" [ref=f34e407]:
+                          - generic [ref=f34e408]: 说明
+                  - table [ref=f34e413]:
+                    - rowgroup [ref=f34e419]:
+                      - row "300010 事件云存 事件录像：产生告警时触发录像" [ref=f34e420]:
+                        - cell "300010" [ref=f34e421]:
+                          - generic [ref=f34e422]: "300010"
+                        - cell "事件云存" [ref=f34e423]:
+                          - generic [ref=f34e424]: 事件云存
+                        - cell [ref=f34e425]:
+                          - generic [ref=f34e427]:
+                            - switch [checked]
+                        - cell "事件录像：产生告警时触发录像" [ref=f34e430]:
+                          - generic [ref=f34e431]: 事件录像：产生告警时触发录像
+                      - row "300011 全天云存 全天录像：全天24小时持续录像" [ref=f34e432]:
+                        - cell "300011" [ref=f34e433]:
+                          - generic [ref=f34e434]: "300011"
+                        - cell "全天云存" [ref=f34e435]:
+                          - generic [ref=f34e436]: 全天云存
+                        - cell [ref=f34e437]:
+                          - generic [ref=f34e439]:
+                            - switch [checked]
+                        - cell "全天录像：全天24小时持续录像" [ref=f34e442]:
+                          - generic [ref=f34e443]: 全天录像：全天24小时持续录像
+              - generic [ref=f34e445]:
+                - table [ref=f34e447]:
+                  - rowgroup [ref=f34e455]:
+                    - row "ID(AIIoTType) 算法名称 描述 是否支持 算法配置 关联事件" [ref=f34e456]:
+                      - columnheader "ID(AIIoTType)" [ref=f34e457]:
+                        - generic [ref=f34e458]: ID(AIIoTType)
+                      - columnheader "算法名称" [ref=f34e459]:
+                        - generic [ref=f34e460]: 算法名称
+                      - columnheader "描述" [ref=f34e461]:
+                        - generic [ref=f34e462]: 描述
+                      - columnheader "是否支持" [ref=f34e463]:
+                        - generic [ref=f34e464]: 是否支持
+                      - columnheader "算法配置" [ref=f34e465]:
+                        - generic [ref=f34e466]: 算法配置
+                      - columnheader "关联事件" [ref=f34e467]:
+                        - generic [ref=f34e468]: 关联事件
+                - table [ref=f34e473]:
+                  - rowgroup [ref=f34e481]:
+                    - row "1013 事件记录 记录设备上报的各类事件信息 配置 编辑" [ref=f34e482]:
+                      - cell "1013" [ref=f34e483]:
+                        - generic [ref=f34e484]: "1013"
+                      - cell "事件记录" [ref=f34e485]:
+                        - generic [ref=f34e486]: 事件记录
+                      - cell "记录设备上报的各类事件信息" [ref=f34e487]:
+                        - generic [ref=f34e488]: 记录设备上报的各类事件信息
+                      - cell [ref=f34e489]:
+                        - generic [ref=f34e491]:
+                          - switch [checked]
+                      - cell "配置" [ref=f34e494]:
+                        - button "配置" [ref=f34e496] [cursor=pointer]:
+                          - generic [ref=f34e497]: 配置
+                      - cell "编辑" [ref=f34e498]:
+                        - button "编辑" [ref=f34e500] [cursor=pointer]:
+                          - generic [ref=f34e501]: 编辑
+                    - row "1000 人形/运动检测 检测画面中的人形或移动物体 配置 编辑" [ref=f34e502]:
+                      - cell "1000" [ref=f34e503]:
+                        - generic [ref=f34e504]: "1000"
+                      - cell "人形/运动检测" [ref=f34e505]:
+                        - generic [ref=f34e506]: 人形/运动检测
+                      - cell "检测画面中的人形或移动物体" [ref=f34e507]:
+                        - generic [ref=f34e508]: 检测画面中的人形或移动物体
+                      - cell [ref=f34e509]:
+                        - generic [ref=f34e511]:
+                          - switch [checked]
+                      - cell "配置" [ref=f34e514]:
+                        - button "配置" [ref=f34e516] [cursor=pointer]:
+                          - generic [ref=f34e517]: 配置
+                      - cell "编辑" [ref=f34e518]:
+                        - button "编辑" [ref=f34e520] [cursor=pointer]:
+                          - generic [ref=f34e521]: 编辑
+                    - row "1088 车牌识别 自动读取并识别车牌信息 编辑" [ref=f34e522]:
+                      - cell "1088" [ref=f34e523]:
+                        - generic [ref=f34e524]: "1088"
+                      - cell "车牌识别" [ref=f34e525]:
+                        - generic [ref=f34e526]: 车牌识别
+                      - cell "自动读取并识别车牌信息" [ref=f34e527]:
+                        - generic [ref=f34e528]: 自动读取并识别车牌信息
+                      - cell [ref=f34e529]:
+                        - generic [ref=f34e531]:
+                          - switch
+                      - cell [ref=f34e534]
+                      - cell "编辑" [ref=f34e535]:
+                        - button "编辑" [ref=f34e537] [cursor=pointer]:
+                          - generic [ref=f34e538]: 编辑
+                    - row "1003 PIR红外检测 基于红外热释电的人体活动监测 配置 编辑" [ref=f34e539]:
+                      - cell "1003" [ref=f34e540]:
+                        - generic [ref=f34e541]: "1003"
+                      - cell "PIR红外检测" [ref=f34e542]:
+                        - generic [ref=f34e543]: PIR红外检测
+                      - cell "基于红外热释电的人体活动监测" [ref=f34e544]:
+                        - generic [ref=f34e545]: 基于红外热释电的人体活动监测
+                      - cell [ref=f34e546]:
+                        - generic [ref=f34e548]:
+                          - switch
+                      - cell "配置" [ref=f34e551]:
+                        - button "配置" [ref=f34e553] [cursor=pointer]:
+                          - generic [ref=f34e554]: 配置
+                      - cell "编辑" [ref=f34e555]:
+                        - button "编辑" [ref=f34e557] [cursor=pointer]:
+                          - generic [ref=f34e558]: 编辑
+                    - row "1090 客流统计 进入/出去行为识别与计数 配置 编辑" [ref=f34e559]:
+                      - cell "1090" [ref=f34e560]:
+                        - generic [ref=f34e561]: "1090"
+                      - cell "客流统计" [ref=f34e562]:
+                        - generic [ref=f34e563]: 客流统计
+                      - cell "进入/出去行为识别与计数" [ref=f34e564]:
+                        - generic [ref=f34e565]: 进入/出去行为识别与计数
+                      - cell [ref=f34e566]:
+                        - generic [ref=f34e568]:
+                          - switch
+                      - cell "配置" [ref=f34e571]:
+                        - button "配置" [ref=f34e573] [cursor=pointer]:
+                          - generic [ref=f34e574]: 配置
+                      - cell "编辑" [ref=f34e575]:
+                        - button "编辑" [ref=f34e577] [cursor=pointer]:
+                          - generic [ref=f34e578]: 编辑
+                    - row "1093 离线监控 设备断电或离线时的状态监测 配置 编辑" [ref=f34e579]:
+                      - cell "1093" [ref=f34e580]:
+                        - generic [ref=f34e581]: "1093"
+                      - cell "离线监控" [ref=f34e582]:
+                        - generic [ref=f34e583]: 离线监控
+                      - cell "设备断电或离线时的状态监测" [ref=f34e584]:
+                        - generic [ref=f34e585]: 设备断电或离线时的状态监测
+                      - cell [ref=f34e586]:
+                        - generic [ref=f34e588]:
+                          - switch [checked]
+                      - cell "配置" [ref=f34e591]:
+                        - button "配置" [ref=f34e593] [cursor=pointer]:
+                          - generic [ref=f34e594]: 配置
+                      - cell "编辑" [ref=f34e595]:
+                        - button "编辑" [ref=f34e597] [cursor=pointer]:
+                          - generic [ref=f34e598]: 编辑
+                    - row "1096 智能告警-儿童检测 综合全天候的儿童看护识别 配置 编辑" [ref=f34e599]:
+                      - cell "1096" [ref=f34e600]:
+                        - generic [ref=f34e601]: "1096"
+                      - cell "智能告警-儿童检测" [ref=f34e602]:
+                        - generic [ref=f34e603]: 智能告警-儿童检测
+                      - cell "综合全天候的儿童看护识别" [ref=f34e604]:
+                        - generic [ref=f34e605]: 综合全天候的儿童看护识别
+                      - cell [ref=f34e606]:
+                        - generic [ref=f34e608]:
+                          - switch
+                      - cell "配置" [ref=f34e611]:
+                        - button "配置" [ref=f34e613] [cursor=pointer]:
+                          - generic [ref=f34e614]: 配置
+                      - cell "编辑" [ref=f34e615]:
+                        - button "编辑" [ref=f34e617] [cursor=pointer]:
+                          - generic [ref=f34e618]: 编辑
+                    - row "1098 智能告警服务 基于多维参数的综合告警策略 配置 编辑" [ref=f34e619]:
+                      - cell "1098" [ref=f34e620]:
+                        - generic [ref=f34e621]: "1098"
+                      - cell "智能告警服务" [ref=f34e622]:
+                        - generic [ref=f34e623]: 智能告警服务
+                      - cell "基于多维参数的综合告警策略" [ref=f34e624]:
+                        - generic [ref=f34e625]: 基于多维参数的综合告警策略
+                      - cell [ref=f34e626]:
+                        - generic [ref=f34e628]:
+                          - switch
+                      - cell "配置" [ref=f34e631]:
+                        - button "配置" [ref=f34e633] [cursor=pointer]:
+                          - generic [ref=f34e634]: 配置
+                      - cell "编辑" [ref=f34e635]:
+                        - button "编辑" [ref=f34e637] [cursor=pointer]:
+                          - generic [ref=f34e638]: 编辑
+                    - row "1103 智能告警-老人看护 针对老年用户的异常行为识别 配置 编辑" [ref=f34e639]:
+                      - cell "1103" [ref=f34e640]:
+                        - generic [ref=f34e641]: "1103"
+                      - cell "智能告警-老人看护" [ref=f34e642]:
+                        - generic [ref=f34e643]: 智能告警-老人看护
+                      - cell "针对老年用户的异常行为识别" [ref=f34e644]:
+                        - generic [ref=f34e645]: 针对老年用户的异常行为识别
+                      - cell [ref=f34e646]:
+                        - generic [ref=f34e648]:
+                          - switch
+                      - cell "配置" [ref=f34e651]:
+                        - button "配置" [ref=f34e653] [cursor=pointer]:
+                          - generic [ref=f34e654]: 配置
+                      - cell "编辑" [ref=f34e655]:
+                        - button "编辑" [ref=f34e657] [cursor=pointer]:
+                          - generic [ref=f34e658]: 编辑
+                    - row "1104 智能告警-厨房监测 全方位监测厨房油烟和火情 配置 编辑" [ref=f34e659]:
+                      - cell "1104" [ref=f34e660]:
+                        - generic [ref=f34e661]: "1104"
+                      - cell "智能告警-厨房监测" [ref=f34e662]:
+                        - generic [ref=f34e663]: 智能告警-厨房监测
+                      - cell "全方位监测厨房油烟和火情" [ref=f34e664]:
+                        - generic [ref=f34e665]: 全方位监测厨房油烟和火情
+                      - cell [ref=f34e666]:
+                        - generic [ref=f34e668]:
+                          - switch
+                      - cell "配置" [ref=f34e671]:
+                        - button "配置" [ref=f34e673] [cursor=pointer]:
+                          - generic [ref=f34e674]: 配置
+                      - cell "编辑" [ref=f34e675]:
+                        - button "编辑" [ref=f34e677] [cursor=pointer]:
+                          - generic [ref=f34e678]: 编辑
+                    - row "1105 智能告警-家门检测 门口逗留、门缝检测等安防预警 配置 编辑" [ref=f34e679]:
+                      - cell "1105" [ref=f34e680]:
+                        - generic [ref=f34e681]: "1105"
+                      - cell "智能告警-家门检测" [ref=f34e682]:
+                        - generic [ref=f34e683]: 智能告警-家门检测
+                      - cell "门口逗留、门缝检测等安防预警" [ref=f34e684]:
+                        - generic [ref=f34e685]: 门口逗留、门缝检测等安防预警
+                      - cell [ref=f34e686]:
+                        - generic [ref=f34e688]:
+                          - switch
+                      - cell "配置" [ref=f34e691]:
+                        - button "配置" [ref=f34e693] [cursor=pointer]:
+                          - generic [ref=f34e694]: 配置
+                      - cell "编辑" [ref=f34e695]:
+                        - button "编辑" [ref=f34e697] [cursor=pointer]:
+                          - generic [ref=f34e698]: 编辑
+                    - row "1106 智能告警-宠物检测 整合宠物的多项健康和活动指标 配置 编辑" [ref=f34e699]:
+                      - cell "1106" [ref=f34e700]:
+                        - generic [ref=f34e701]: "1106"
+                      - cell "智能告警-宠物检测" [ref=f34e702]:
+                        - generic [ref=f34e703]: 智能告警-宠物检测
+                      - cell "整合宠物的多项健康和活动指标" [ref=f34e704]:
+                        - generic [ref=f34e705]: 整合宠物的多项健康和活动指标
+                      - cell [ref=f34e706]:
+                        - generic [ref=f34e708]:
+                          - switch [checked]
+                      - cell "配置" [ref=f34e711]:
+                        - button "配置" [ref=f34e713] [cursor=pointer]:
+                          - generic [ref=f34e714]: 配置
+                      - cell "编辑" [ref=f34e715]:
+                        - button "编辑" [ref=f34e717] [cursor=pointer]:
+                          - generic [ref=f34e718]: 编辑
+                    - row "1108 GPS信息处理 设备地理位置定位与上报 配置 编辑" [ref=f34e719]:
+                      - cell "1108" [ref=f34e720]:
+                        - generic [ref=f34e721]: "1108"
+                      - cell "GPS信息处理" [ref=f34e722]:
+                        - generic [ref=f34e723]: GPS信息处理
+                      - cell "设备地理位置定位与上报" [ref=f34e724]:
+                        - generic [ref=f34e725]: 设备地理位置定位与上报
+                      - cell [ref=f34e726]:
+                        - generic [ref=f34e728]:
+                          - switch
+                      - cell "配置" [ref=f34e731]:
+                        - button "配置" [ref=f34e733] [cursor=pointer]:
+                          - generic [ref=f34e734]: 配置
+                      - cell "编辑" [ref=f34e735]:
+                        - button "编辑" [ref=f34e737] [cursor=pointer]:
+                          - generic [ref=f34e738]: 编辑
+                    - row "1109 包裹侦测 检测门口或指定区域堆放的包裹 配置 编辑" [ref=f34e739]:
+                      - cell "1109" [ref=f34e740]:
+                        - generic [ref=f34e741]: "1109"
+                      - cell "包裹侦测" [ref=f34e742]:
+                        - generic [ref=f34e743]: 包裹侦测
+                      - cell "检测门口或指定区域堆放的包裹" [ref=f34e744]:
+                        - generic [ref=f34e745]: 检测门口或指定区域堆放的包裹
+                      - cell [ref=f34e746]:
+                        - generic [ref=f34e748]:
+                          - switch
+                      - cell "配置" [ref=f34e751]:
+                        - button "配置" [ref=f34e753] [cursor=pointer]:
+                          - generic [ref=f34e754]: 配置
+                      - cell "编辑" [ref=f34e755]:
+                        - button "编辑" [ref=f34e757] [cursor=pointer]:
+                          - generic [ref=f34e758]: 编辑
+                    - row "1111 鱼类检测 针对水族箱场景的特定识别 配置 编辑" [ref=f34e759]:
+                      - cell "1111" [ref=f34e760]:
+                        - generic [ref=f34e761]: "1111"
+                      - cell "鱼类检测" [ref=f34e762]:
+                        - generic [ref=f34e763]: 鱼类检测
+                      - cell "针对水族箱场景的特定识别" [ref=f34e764]:
+                        - generic [ref=f34e765]: 针对水族箱场景的特定识别
+                      - cell [ref=f34e766]:
+                        - generic [ref=f34e768]:
+                          - switch
+                      - cell "配置" [ref=f34e771]:
+                        - button "配置" [ref=f34e773] [cursor=pointer]:
+                          - generic [ref=f34e774]: 配置
+                      - cell "编辑" [ref=f34e775]:
+                        - button "编辑" [ref=f34e777] [cursor=pointer]:
+                          - generic [ref=f34e778]: 编辑
+                    - row "1112 人脸检测 检测画面中出现的人脸 配置 编辑" [ref=f34e779]:
+                      - cell "1112" [ref=f34e780]:
+                        - generic [ref=f34e781]: "1112"
+                      - cell "人脸检测" [ref=f34e782]:
+                        - generic [ref=f34e783]: 人脸检测
+                      - cell "检测画面中出现的人脸" [ref=f34e784]:
+                        - generic [ref=f34e785]: 检测画面中出现的人脸
+                      - cell [ref=f34e786]:
+                        - generic [ref=f34e788]:
+                          - switch
+                      - cell "配置" [ref=f34e791]:
+                        - button "配置" [ref=f34e793] [cursor=pointer]:
+                          - generic [ref=f34e794]: 配置
+                      - cell "编辑" [ref=f34e795]:
+                        - button "编辑" [ref=f34e797] [cursor=pointer]:
+                          - generic [ref=f34e798]: 编辑
+                    - row "1114 宠物喂食 监测宠物进食与自动喂食器联动 配置 编辑" [ref=f34e799]:
+                      - cell "1114" [ref=f34e800]:
+                        - generic [ref=f34e801]: "1114"
+                      - cell "宠物喂食" [ref=f34e802]:
+                        - generic [ref=f34e803]: 宠物喂食
+                      - cell "监测宠物进食与自动喂食器联动" [ref=f34e804]:
+                        - generic [ref=f34e805]: 监测宠物进食与自动喂食器联动
+                      - cell [ref=f34e806]:
+                        - generic [ref=f34e808]:
+                          - switch
+                      - cell "配置" [ref=f34e811]:
+                        - button "配置" [ref=f34e813] [cursor=pointer]:
+                          - generic [ref=f34e814]: 配置
+                      - cell "编辑" [ref=f34e815]:
+                        - button "编辑" [ref=f34e817] [cursor=pointer]:
+                          - generic [ref=f34e818]: 编辑
+                    - row "1083 车辆侦测 识别进入画面的各类机动车辆 配置 编辑" [ref=f34e819]:
+                      - cell "1083" [ref=f34e820]:
+                        - generic [ref=f34e821]: "1083"
+                      - cell "车辆侦测" [ref=f34e822]:
+                        - generic [ref=f34e823]: 车辆侦测
+                      - cell "识别进入画面的各类机动车辆" [ref=f34e824]:
+                        - generic [ref=f34e825]: 识别进入画面的各类机动车辆
+                      - cell [ref=f34e826]:
+                        - generic [ref=f34e828]:
+                          - switch
+                      - cell "配置" [ref=f34e831]:
+                        - button "配置" [ref=f34e833] [cursor=pointer]:
+                          - generic [ref=f34e834]: 配置
+                      - cell "编辑" [ref=f34e835]:
+                        - button "编辑" [ref=f34e837] [cursor=pointer]:
+                          - generic [ref=f34e838]: 编辑
+                    - row "1082 烟火侦测 基于图像识别的火灾烟雾和火焰检测 配置 编辑" [ref=f34e839]:
+                      - cell "1082" [ref=f34e840]:
+                        - generic [ref=f34e841]: "1082"
+                      - cell "烟火侦测" [ref=f34e842]:
+                        - generic [ref=f34e843]: 烟火侦测
+                      - cell "基于图像识别的火灾烟雾和火焰检测" [ref=f34e844]:
+                        - generic [ref=f34e845]: 基于图像识别的火灾烟雾和火焰检测
+                      - cell [ref=f34e846]:
+                        - generic [ref=f34e848]:
+                          - switch
+                      - cell "配置" [ref=f34e851]:
+                        - button "配置" [ref=f34e853] [cursor=pointer]:
+                          - generic [ref=f34e854]: 配置
+                      - cell "编辑" [ref=f34e855]:
+                        - button "编辑" [ref=f34e857] [cursor=pointer]:
+                          - generic [ref=f34e858]: 编辑

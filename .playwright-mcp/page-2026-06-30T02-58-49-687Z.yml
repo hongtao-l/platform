@@ -1,0 +1,118 @@
+- generic [ref=f13e3]:
+  - complementary [ref=f13e4]:
+    - generic [ref=f13e5]:
+      - img [ref=f13e7]
+      - generic [ref=f13e9]: IoT 平台
+    - navigation [ref=f13e10]:
+      - generic [ref=f13e11] [cursor=pointer]:
+        - img [ref=f13e13]
+        - generic [ref=f13e15]: 工作台
+      - generic [ref=f13e16]:
+        - generic [ref=f13e17] [cursor=pointer]:
+          - img [ref=f13e19]
+          - generic [ref=f13e22]: 物模型管理
+          - img [ref=f13e24]
+        - generic:
+          - generic [ref=f13e26] [cursor=pointer]:
+            - img [ref=f13e28]
+            - generic [ref=f13e30]: IOT类目
+          - generic [ref=f13e31] [cursor=pointer]:
+            - img [ref=f13e33]
+            - generic [ref=f13e38]: 能力库
+          - generic [ref=f13e39] [cursor=pointer]:
+            - img [ref=f13e41]
+            - generic [ref=f13e44]: 算法库
+          - generic [ref=f13e45] [cursor=pointer]:
+            - img [ref=f13e47]
+            - generic [ref=f13e49]: 事件库
+      - generic [ref=f13e50]:
+        - generic [ref=f13e51] [cursor=pointer]:
+          - img [ref=f13e53]
+          - generic [ref=f13e57]: 产品管理
+          - img [ref=f13e59]
+        - generic:
+          - generic [ref=f13e61] [cursor=pointer]:
+            - img [ref=f13e63]
+            - generic [ref=f13e67]: 产品开发
+          - generic [ref=f13e68] [cursor=pointer]:
+            - img [ref=f13e70]
+            - generic [ref=f13e72]: 产品审核
+      - generic [ref=f13e73]:
+        - generic [ref=f13e74] [cursor=pointer]:
+          - img [ref=f13e76]
+          - generic [ref=f13e81]: 套餐管理
+          - img [ref=f13e83]
+        - generic:
+          - generic [ref=f13e85] [cursor=pointer]:
+            - img [ref=f13e87]
+            - generic [ref=f13e91]: 套餐配置
+          - generic [ref=f13e92] [cursor=pointer]:
+            - img [ref=f13e94]
+            - generic [ref=f13e99]: 服务类型
+      - generic [ref=f13e100]:
+        - generic [ref=f13e101] [cursor=pointer]:
+          - img [ref=f13e103]
+          - generic [ref=f13e105]: 运营管理
+          - img [ref=f13e107]
+        - generic:
+          - generic [ref=f13e109] [cursor=pointer]:
+            - img [ref=f13e111]
+            - generic [ref=f13e113]: 商城位运营
+          - generic [ref=f13e114] [cursor=pointer]:
+            - img [ref=f13e116]
+            - generic [ref=f13e118]: 推荐位运营
+          - generic [ref=f13e119] [cursor=pointer]:
+            - img [ref=f13e121]
+            - generic [ref=f13e126]: 活动位运营
+          - generic [ref=f13e127] [cursor=pointer]:
+            - img [ref=f13e129]
+            - generic [ref=f13e131]: 用户分群
+          - generic [ref=f13e132] [cursor=pointer]:
+            - img [ref=f13e134]
+            - generic [ref=f13e136]: A/B Test
+    - generic [ref=f13e138] [cursor=pointer]:
+      - img [ref=f13e140]
+      - generic [ref=f13e142]: 收起菜单
+  - generic [ref=f13e143]:
+    - banner [ref=f13e144]:
+      - navigation "面包屑" [ref=f13e146]:
+        - generic [ref=f13e147]:
+          - link "首页" [ref=f13e148]
+          - text: /
+        - link "工作台" [ref=f13e150]
+      - generic [ref=f13e151]:
+        - generic [ref=f13e152] [cursor=pointer]:
+          - img [ref=f13e154]
+          - superscript [ref=f13e158]: "3"
+        - button "管理员" [ref=f13e160] [cursor=pointer]:
+          - img [ref=f13e163]
+          - generic [ref=f13e165]: 管理员
+          - img [ref=f13e167]
+    - main [ref=f13e169]:
+      - generic [ref=f13e170]:
+        - generic [ref=f13e171]:
+          - generic [ref=f13e172]:
+            - img [ref=f13e175]
+            - generic [ref=f13e179]:
+              - generic [ref=f13e180]: "128"
+              - generic [ref=f13e181]: 产品总数
+          - generic [ref=f13e182]:
+            - img [ref=f13e185]
+            - generic [ref=f13e187]:
+              - generic [ref=f13e188]: 3,256
+              - generic [ref=f13e189]: 设备总数
+          - generic [ref=f13e190]:
+            - img [ref=f13e193]
+            - generic [ref=f13e195]:
+              - generic [ref=f13e196]: 1,892
+              - generic [ref=f13e197]: 今日活跃
+          - generic [ref=f13e198]:
+            - img [ref=f13e201]
+            - generic [ref=f13e203]:
+              - generic [ref=f13e204]: 5,678
+              - generic [ref=f13e205]: 用户总数
+        - generic [ref=f13e206]:
+          - generic [ref=f13e208]: 快捷入口
+          - generic [ref=f13e210] [cursor=pointer]:
+            - img [ref=f13e212]
+            - generic [ref=f13e216]: 产品管理

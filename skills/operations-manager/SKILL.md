@@ -37,8 +37,8 @@
 
 | event_type | 含义 | 适用场景 |
 |------|------|------|
-| 0 | 普通事件 | 页面浏览、点击交互、开关切换等常规用户行为 |
-| 1 | 额外参数事件 | 涉及业务转化、订单、金额等需要扩展参数的事件 |
+| 0 | 普通事件 | 仅携带公共参数（13项），无业务参数的简单行为，如页面浏览、开关切换 |
+| 1 | 额外参数事件 | 除公共参数外还携带业务参数的事件，如涉及实验上下文、订单、金额等 |
 | 2 | 错误事件 | 操作失败、加载异常、网络错误等异常场景 |
 
 ### 公共参数（所有事件必带，不可省略）
@@ -46,12 +46,18 @@
 | 参数 | 类型 | 必填 | 说明 | 示例值 |
 |------|------|------|------|------|
 | event_type | String | 是 | 0=普通事件，1=额外参数事件，2=错误事件 | "0" |
-| event_id | String | 是 | 事件ID | "activity_view" |
-| event_time | Int64 | 是 | 事件发生时间戳(ms) | 1715846400000 |
+| event_id | String | 是 | 事件ID（对应事件库中的事件ID） | "plan_select" |
+| event_time | Int64 | 是 | 事件发生时间戳(ms) | 1716192000000 |
 | user_id | String | 是 | 用户唯一标识 | "usr_123456" |
 | session_id | String | 是 | 会话ID | "sess_abc123" |
-| os_type | String | 是 | iOS / Android | "Android" |
-| app_version | String | 是 | APP版本号 | "2.1.0" |
+| app_id | String | 是 | 应用ID | "app_xxx" |
+| app_version | String | 是 | 应用版本号 | "1.0.0" |
+| brand | String | 是 | 手机品牌 | "apple", "xiaomi" |
+| os_type | String | 是 | 系统类型 | "Android", "iOS" |
+| os_version | String | 是 | 手机系统版本 | "14.0" |
+| company_id | String | 是 | 用户的从属企业ID | "0000213ed0cdb8bc" |
+| country | String | 是 | 国家 | "CN" |
+| city | String | 是 | 城市 | "" |
 
 ### 业务参数（按事件定义）
 
@@ -88,7 +94,7 @@
 | 参数 | 类型 | 必填 | 说明 | 示例值 |
 | ... | ... | ... | ... | ... |
 
-> 公共参数固定为7项（event_type / event_id / event_time / user_id / session_id / os_type / app_version），不可增减。
+> 公共参数固定为13项（event_type / event_id / event_time / user_id / session_id / app_id / app_version / brand / os_type / os_version / company_id / country / city），不可增减。
 
 ### 2.3 业务参数（按事件）
 
@@ -158,5 +164,5 @@ POST /api/{module}/event
 - 埋点命名遵循统一规范（如：`module_action_result`），如项目有已有规范则沿用
 - 区分前台埋点（客户端上报）和后台埋点（服务端记录），本文档仅定义需求，不限定实现方式
 - 埋点事件需覆盖需求分析文档中定义的所有异常场景
-- **公共参数固定为7项**（event_type / event_id / event_time / user_id / session_id / os_type / app_version），所有事件必须携带，不得自行增减
+- **公共参数固定为13项**（event_type / event_id / event_time / user_id / session_id / app_id / app_version / brand / os_type / os_version / company_id / country / city），所有事件必须携带，不得自行增减
 - **event_type 分类**：普通行为(0)、带额外参数(1)、错误事件(2)，每个事件必须标注类型

@@ -147,6 +147,12 @@ const routes = [
     meta: { title: '套餐配置' }
   },
   {
+    path: '/pkg/service',
+    name: 'PkgService',
+    component: () => import('@/views/pkg/service.vue'),
+    meta: { title: '服务类型' }
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('@/views/error/404.vue'),

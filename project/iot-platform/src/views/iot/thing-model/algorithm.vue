@@ -14,7 +14,7 @@
 
     <div class="card table-card">
       <el-table :data="list" stripe v-loading="loading">
-        <el-table-column label="AlgorithmID" width="180">
+        <el-table-column label="算法ID" width="180">
           <template #default="{ row }">
             <code class="id-code">{{ row.algorithmId }}</code>
           </template>
@@ -40,13 +40,9 @@
             <span v-else class="text-muted">—</span>
           </template>
         </el-table-column>
-        <el-table-column label="关联事件" width="120" align="center">
+        <el-table-column label="描述" min-width="180">
           <template #default="{ row }">
-            <el-tag v-if="row._eventIds?.length" size="small" type="success"
-              class="count-badge" @click="openEventMgmt(row)">
-              {{ row._eventIds.length }} 个
-            </el-tag>
-            <span v-else class="text-muted">—</span>
+            <span>{{ row.descr || '—' }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="140" align="center" fixed="right">
@@ -79,53 +75,15 @@
 
     <AlgorithmEdit v-model:visible="dialogVisible" :edit-id="editId" @success="onSaved" />
 
-    <!-- 关联事件管理弹窗 -->
-    <el-dialog v-model="eventMgmtVisible" :title="eventMgmtTitle" width="640px"
-      :close-on-click-modal="false" destroy-on-close @open="initEventMgmt"
-      class="alg-assoc-dialog">
-      <div class="assoc-layout">
-        <div class="assoc-panel">
-          <div class="assoc-panel-header">可选事件</div>
-          <div class="assoc-panel-body">
-            <div v-for="evt in availableEvents" :key="evt.id"
-              class="assoc-item" @click="toggleEventItem(evt)">
-              <span class="assoc-item-id">{{ evt.eventId }}</span>
-              <span class="assoc-item-name">{{ evt._name?.['1'] || evt.eventId }}</span>
-              <el-icon v-if="isEventSelected(evt)" class="assoc-check" :size="16"><Check /></el-icon>
-            </div>
-            <div v-if="availableEvents.length === 0" class="assoc-empty">无可选事件</div>
-          </div>
-        </div>
-        <div class="assoc-panel">
-          <div class="assoc-panel-header">已关联 ({{ eventSelected.length }})</div>
-          <div class="assoc-panel-body">
-            <div v-for="evt in eventSelectedList" :key="evt.id" class="assoc-item selected">
-              <span class="assoc-item-id">{{ evt.eventId }}</span>
-              <span class="assoc-item-name">{{ evt._name?.['1'] || evt.eventId }}</span>
-              <el-button size="small" text type="danger" @click.stop="toggleEventItem(evt)">
-                <el-icon :size="14"><Close /></el-icon>
-              </el-button>
-            </div>
-            <div v-if="eventSelected.length === 0" class="assoc-empty">暂未选择</div>
-          </div>
-        </div>
-      </div>
-      <template #footer>
-        <el-button @click="eventMgmtVisible = false">取消</el-button>
-        <el-button type="primary" @click="saveEventMgmt" :loading="eventMgmtSaving">确认</el-button>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
-import { Plus, Check, Close } from '@element-plus/icons-vue'
+import { ref, reactive, onMounted } from 'vue'
+import { Plus } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import AlgorithmEdit from './AlgorithmEdit.vue'
-import {
-  listAlgorithms, deleteAlgorithm, updateAlgorithm, allEvents as fetchAllEvents
-} from './data'
+import { listAlgorithms, deleteAlgorithm } from './data'
 
 const search = reactive({ keyword: '' })
 const list = ref([])
@@ -139,7 +97,6 @@ const editId = ref(null)
 function parseItem(item) {
   try { item._name = JSON.parse(item.algorithmName || '{}') } catch { item._name = {} }
   try { item._caps = JSON.parse(item.capabilities || '{}') } catch { item._caps = {} }
-  try { item._eventIds = JSON.parse(item.eventIds || '[]') } catch { item._eventIds = [] }
   return item
 }
 
@@ -185,66 +142,7 @@ async function handleDelete(row) {
 
 function onSaved() { dialogVisible.value = false; fetchList() }
 
-// ===== 关联事件管理 =====
-const eventMgmtVisible = ref(false)
-const eventMgmtSaving = ref(false)
-const eventMgmtRow = ref(null)
-const eventSelected = ref([])
-const allEvents = ref([])
-
-const eventMgmtTitle = computed(() => `关联事件 — ${eventMgmtRow.value?._name?.['1'] || eventMgmtRow.value?.algorithmId || ''}`)
-
-const availableEvents = computed(() =>
-  allEvents.value.filter(e => !eventSelected.value.includes(e.id))
-)
-const eventSelectedList = computed(() =>
-  allEvents.value.filter(e => eventSelected.value.includes(e.id))
-)
-
-function isEventSelected(evt) { return eventSelected.value.includes(evt.id) }
-
-function toggleEventItem(evt) {
-  const idx = eventSelected.value.indexOf(evt.id)
-  if (idx === -1) eventSelected.value.push(evt.id)
-  else eventSelected.value.splice(idx, 1)
-}
-
-function openEventMgmt(row) {
-  eventMgmtRow.value = row
-  eventMgmtVisible.value = true
-}
-
-function initEventMgmt() {
-  if (!eventMgmtRow.value) return
-  const ids = eventMgmtRow.value._eventIds || []
-  eventSelected.value = allEvents.value
-    .filter(e => ids.includes(e.eventId))
-    .map(e => e.id)
-}
-
-async function saveEventMgmt() {
-  eventMgmtSaving.value = true
-  try {
-    const ids = allEvents.value
-      .filter(e => eventSelected.value.includes(e.id))
-      .map(e => e.eventId)
-    const res = updateAlgorithm({ id: eventMgmtRow.value.id, eventIds: JSON.stringify(ids) })
-    if (res.code === 0) {
-      ElMessage.success('关联事件更新成功')
-      eventMgmtVisible.value = false
-      fetchList()
-    }
-  } catch { /* ignore */ } finally { eventMgmtSaving.value = false }
-}
-
-onMounted(() => {
-  fetchList()
-  const evtRes = fetchAllEvents()
-  allEvents.value = (evtRes.data?.list || []).map(e => {
-    try { e._name = JSON.parse(e.eventName || '{}') } catch { e._name = {} }
-    return e
-  })
-})
+onMounted(() => { fetchList() })
 </script>
 
 <style lang="scss" scoped>
@@ -309,6 +207,4 @@ onMounted(() => {
 .assoc-empty { padding: 32px; text-align: center; color: var(--text-placeholder); font-size: 13px; }
 </style>
 
-<style lang="scss">
-.alg-assoc-dialog .el-dialog__body { padding-top: 20px; }
-</style>
+

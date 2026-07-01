@@ -1,0 +1,235 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e7]
+      - generic [ref=e9]: IoT 平台
+    - navigation [ref=e10]:
+      - generic [ref=e11] [cursor=pointer]:
+        - img [ref=e13]
+        - generic [ref=e15]: 工作台
+      - generic [ref=e16]:
+        - generic [ref=e17] [cursor=pointer]:
+          - img [ref=e19]
+          - generic [ref=e22]: 物模型管理
+          - img [ref=e24]
+        - generic:
+          - generic [ref=e26] [cursor=pointer]:
+            - img [ref=e28]
+            - generic [ref=e30]: IOT类目
+          - generic [ref=e31] [cursor=pointer]:
+            - img [ref=e33]
+            - generic [ref=e38]: 能力库
+          - generic [ref=e39] [cursor=pointer]:
+            - img [ref=e41]
+            - generic [ref=e44]: 算法库
+          - generic [ref=e45] [cursor=pointer]:
+            - img [ref=e47]
+            - generic [ref=e49]: 事件库
+      - generic [ref=e50]:
+        - generic [ref=e51] [cursor=pointer]:
+          - img [ref=e53]
+          - generic [ref=e57]: 产品管理
+          - img [ref=e59]
+        - generic:
+          - generic [ref=e61] [cursor=pointer]:
+            - img [ref=e63]
+            - generic [ref=e67]: 产品开发
+          - generic [ref=e68] [cursor=pointer]:
+            - img [ref=e70]
+            - generic [ref=e72]: 产品审核
+      - generic [ref=e73]:
+        - generic [ref=e74] [cursor=pointer]:
+          - img [ref=e76]
+          - generic [ref=e81]: 套餐管理
+          - img [ref=e83]
+        - generic [ref=e85] [cursor=pointer]:
+          - img [ref=e87]
+          - generic [ref=e91]: 套餐配置
+      - generic [ref=e92]:
+        - generic [ref=e93] [cursor=pointer]:
+          - img [ref=e95]
+          - generic [ref=e97]: 运营管理
+          - img [ref=e99]
+        - generic [ref=e209]:
+          - generic [ref=e101] [cursor=pointer]:
+            - img [ref=e103]
+            - generic [ref=e105]: 商城位运营
+          - generic [ref=e106] [cursor=pointer]:
+            - img [ref=e108]
+            - generic [ref=e110]: 推荐位运营
+          - generic [ref=e111] [cursor=pointer]:
+            - img [ref=e113]
+            - generic [ref=e118]: 活动位运营
+          - generic [ref=e119] [cursor=pointer]:
+            - img [ref=e121]
+            - generic [ref=e123]: 用户分群
+          - generic [ref=e124] [cursor=pointer]:
+            - img [ref=e126]
+            - generic [ref=e128]: A/B Test
+    - generic [ref=e130] [cursor=pointer]:
+      - img [ref=e132]
+      - generic [ref=e134]: 收起菜单
+  - generic [ref=e135]:
+    - banner [ref=e136]:
+      - navigation "面包屑" [ref=e138]:
+        - generic [ref=e139]:
+          - link "首页" [ref=e140]
+          - text: /
+        - link "推荐位运营" [ref=e210]
+      - generic [ref=e143]:
+        - generic [ref=e144] [cursor=pointer]:
+          - img [ref=e146]
+          - superscript [ref=e150]: "3"
+        - button "管理员" [ref=e152] [cursor=pointer]:
+          - img [ref=e155]
+          - generic [ref=e157]: 管理员
+          - img [ref=e159]
+    - main [ref=e161]:
+      - generic [ref=e211]:
+        - generic [ref=e212]:
+          - generic [ref=e213] [cursor=pointer]: 推荐位套餐漏斗
+          - generic [ref=e214] [cursor=pointer]: 推荐位策略
+        - generic [ref=e215]:
+          - generic [ref=e216]:
+            - generic [ref=e217]: 应用 / 推荐位
+            - generic [ref=e218]:
+              - generic [ref=e219] [cursor=pointer]:
+                - img [ref=e221]
+                - generic [ref=e223]: 牵心PRO
+              - generic [ref=e224]: QX_PRO_001
+              - generic [ref=e225]:
+                - generic [ref=e226] [cursor=pointer]:
+                  - text: 首页推荐位
+                  - generic [ref=e227]: rec_slot_home
+                - generic [ref=e228] [cursor=pointer]:
+                  - text: 活动推荐位
+                  - generic [ref=e229]: rec_slot_activity
+            - generic [ref=e231] [cursor=pointer]:
+              - img [ref=e233]
+              - generic [ref=e235]: 鹤梦之家
+          - generic [ref=e295]:
+            - generic [ref=e296]: 首页推荐位 · 推荐位策略
+            - generic [ref=e297]:
+              - generic [ref=e298]:
+                - generic [ref=e299]: 策略列表
+                - button "添加策略" [ref=e300] [cursor=pointer]:
+                  - generic [ref=e301]:
+                    - img [ref=e303]
+                    - text: 添加策略
+              - generic [ref=e306]:
+                - table [ref=e308]:
+                  - rowgroup [ref=e317]:
+                    - row "策略名称 投放区域 投放用户分群 漏斗配置 冷却期 备注 操作" [ref=e318]:
+                      - columnheader "策略名称" [ref=e319]:
+                        - generic [ref=e320]: 策略名称
+                      - columnheader "投放区域" [ref=e321]:
+                        - generic [ref=e322]: 投放区域
+                      - columnheader "投放用户分群" [ref=e323]:
+                        - generic [ref=e324]: 投放用户分群
+                      - columnheader "漏斗配置" [ref=e325]:
+                        - generic [ref=e326]: 漏斗配置
+                      - columnheader "冷却期" [ref=e327]:
+                        - generic [ref=e328]: 冷却期
+                      - columnheader "备注" [ref=e329]:
+                        - generic [ref=e330]: 备注
+                      - columnheader "操作" [ref=e331]:
+                        - generic [ref=e332]: 操作
+                - table [ref=e337]:
+                  - rowgroup [ref=e346]:
+                    - row "国内默认策略 未命中策略的用户展示此策略 国内 — 条件一 → 首页基础漏斗 条件二 → 首页基础漏斗 条件三 → 首页基础漏斗 — 国内默认策略，兜底展示 编辑" [ref=e347]:
+                      - cell "国内默认策略 未命中策略的用户展示此策略" [ref=e348]:
+                        - generic [ref=e350]:
+                          - generic [ref=e351]: 国内默认策略
+                          - generic [ref=e352]: 未命中策略的用户展示此策略
+                      - cell "国内" [ref=e353]:
+                        - generic [ref=e356]: 国内
+                      - cell "—" [ref=e357]:
+                        - generic [ref=e358]: —
+                      - cell "条件一 → 首页基础漏斗 条件二 → 首页基础漏斗 条件三 → 首页基础漏斗" [ref=e359]:
+                        - generic [ref=e361]:
+                          - generic [ref=e362]: 条件一 → 首页基础漏斗
+                          - generic [ref=e363]: 条件二 → 首页基础漏斗
+                          - generic [ref=e364]: 条件三 → 首页基础漏斗
+                      - cell "—" [ref=e365]:
+                        - generic [ref=e366]: —
+                      - cell "国内默认策略，兜底展示" [ref=e367]:
+                        - generic [ref=e368]: 国内默认策略，兜底展示
+                      - cell "编辑" [ref=e369]:
+                        - button "编辑" [ref=e371] [cursor=pointer]:
+                          - generic [ref=e372]: 编辑
+                    - row "海外默认策略 未命中策略的用户展示此策略 海外 — 条件一 → 首页基础漏斗 条件二 → 首页基础漏斗 条件三 → 首页基础漏斗 — 海外默认策略，兜底展示 编辑" [ref=e373]:
+                      - cell "海外默认策略 未命中策略的用户展示此策略" [ref=e374]:
+                        - generic [ref=e376]:
+                          - generic [ref=e377]: 海外默认策略
+                          - generic [ref=e378]: 未命中策略的用户展示此策略
+                      - cell "海外" [ref=e379]:
+                        - generic [ref=e382]: 海外
+                      - cell "—" [ref=e383]:
+                        - generic [ref=e384]: —
+                      - cell "条件一 → 首页基础漏斗 条件二 → 首页基础漏斗 条件三 → 首页基础漏斗" [ref=e385]:
+                        - generic [ref=e387]:
+                          - generic [ref=e388]: 条件一 → 首页基础漏斗
+                          - generic [ref=e389]: 条件二 → 首页基础漏斗
+                          - generic [ref=e390]: 条件三 → 首页基础漏斗
+                      - cell "—" [ref=e391]:
+                        - generic [ref=e392]: —
+                      - cell "海外默认策略，兜底展示" [ref=e393]:
+                        - generic [ref=e394]: 海外默认策略，兜底展示
+                      - cell "编辑" [ref=e395]:
+                        - button "编辑" [ref=e397] [cursor=pointer]:
+                          - generic [ref=e398]: 编辑
+                    - row "首页推广策略 国内 高价值推荐用户 活跃推荐用户 条件一 → 首页基础漏斗 条件二 → 升级推荐漏斗 条件三 → 首页基础漏斗 3 天 首页推广专用 编辑 删除" [ref=e399]:
+                      - cell "首页推广策略" [ref=e400]:
+                        - generic [ref=e403]: 首页推广策略
+                      - cell "国内" [ref=e404]:
+                        - generic [ref=e407]: 国内
+                      - cell "高价值推荐用户 活跃推荐用户" [ref=e408]:
+                        - generic [ref=e409]:
+                          - generic [ref=e411]: 高价值推荐用户
+                          - generic [ref=e413]: 活跃推荐用户
+                      - cell "条件一 → 首页基础漏斗 条件二 → 升级推荐漏斗 条件三 → 首页基础漏斗" [ref=e414]:
+                        - generic [ref=e416]:
+                          - generic [ref=e417]: 条件一 → 首页基础漏斗
+                          - generic [ref=e418]: 条件二 → 升级推荐漏斗
+                          - generic [ref=e419]: 条件三 → 首页基础漏斗
+                      - cell "3 天" [ref=e420]:
+                        - generic [ref=e421]: 3 天
+                      - cell "首页推广专用" [ref=e422]:
+                        - generic [ref=e423]: 首页推广专用
+                      - cell "编辑 删除" [ref=e424]:
+                        - generic [ref=e425]:
+                          - button "编辑" [ref=e426] [cursor=pointer]:
+                            - generic [ref=e427]: 编辑
+                          - button "删除" [ref=e428] [cursor=pointer]:
+                            - generic [ref=e429]: 删除
+        - dialog "编辑推荐位策略" [ref=e431]:
+          - generic [ref=e432]:
+            - heading "编辑推荐位策略" [level=2] [ref=e433]
+            - button "关闭此对话框" [ref=e434] [cursor=pointer]:
+              - img [ref=e436]
+          - generic [ref=e438]:
+            - generic [ref=e439]:
+              - generic [ref=e440] [cursor=pointer]:
+                - generic [ref=e441]: "1"
+                - generic [ref=e442]: 基础信息
+              - generic [ref=e444] [cursor=pointer]:
+                - generic [ref=e445]: "2"
+                - generic [ref=e446]: 漏斗配置
+              - generic [ref=e450] [cursor=pointer]: 投放配置
+            - generic [ref=e452]:
+              - generic [ref=e453]:
+                - generic [ref=e454]: "*策略名称"
+                - textbox "*策略名称" [ref=e458]:
+                  - /placeholder: 请输入策略名称
+                  - text: 首页推广策略
+              - generic [ref=e459]:
+                - generic [ref=e460]: 备注
+                - textbox "备注" [ref=e463]:
+                  - /placeholder: 请输入备注信息
+                  - text: 首页推广专用
+            - text: "* * *"
+          - generic [ref=e464]:
+            - button "取消" [ref=e465] [cursor=pointer]:
+              - generic [ref=e466]: 取消
+            - button "下一步" [ref=e467] [cursor=pointer]:
+              - generic [ref=e468]: 下一步

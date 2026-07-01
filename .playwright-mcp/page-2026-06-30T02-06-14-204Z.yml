@@ -1,0 +1,1224 @@
+- generic [ref=f2e10]:
+  - generic [ref=f2e11]:
+    - generic [ref=f2e12]:
+      - img [ref=f2e13]
+      - generic [ref=f2e14]: 鹤梦云生态平台
+    - img [ref=f2e18] [cursor=pointer]
+  - generic [ref=f2e19]:
+    - generic [ref=f2e22]:
+      - menubar [ref=f2e23]:
+        - menuitem "首页" [ref=f2e24] [cursor=pointer]:
+          - generic [ref=f2e25]: 首页
+        - menuitem "企业管理" [ref=f2e26]:
+          - generic [ref=f2e27] [cursor=pointer]:
+            - generic [ref=f2e30]: 企业管理
+            - img [ref=f2e32]
+        - menuitem "物模型管理" [ref=f2e34]:
+          - generic [ref=f2e35] [cursor=pointer]:
+            - generic [ref=f2e38]: 物模型管理
+            - img [ref=f2e40]
+        - menuitem "产品管理" [ref=f2e42]:
+          - generic [ref=f2e43] [cursor=pointer]:
+            - generic [ref=f2e46]: 产品管理
+            - img [ref=f2e48]
+        - menuitem "固件管理" [ref=f2e50] [cursor=pointer]:
+          - generic [ref=f2e52]: 固件管理
+        - menuitem "生产管理" [ref=f2e53]:
+          - generic [ref=f2e54] [cursor=pointer]:
+            - generic [ref=f2e57]: 生产管理
+            - img [ref=f2e59]
+        - menuitem "设备中心" [ref=f2e61]:
+          - generic [ref=f2e62] [cursor=pointer]:
+            - generic [ref=f2e65]: 设备中心
+            - img [ref=f2e67]
+        - menuitem "应用服务" [ref=f2e69]:
+          - generic [ref=f2e70] [cursor=pointer]:
+            - generic [ref=f2e73]: 应用服务
+            - img [ref=f2e75]
+        - menuitem "套餐管理" [expanded] [ref=f2e77]:
+          - generic [ref=f2e78] [cursor=pointer]:
+            - generic [ref=f2e81]: 套餐管理
+            - img [ref=f2e83]
+          - menu [ref=f2e85]:
+            - menuitem "服务类型" [ref=f2e86] [cursor=pointer]:
+              - generic [ref=f2e87]: 服务类型
+            - menuitem "套餐服务管理" [ref=f2e88] [cursor=pointer]:
+              - generic [ref=f2e89]: 套餐服务管理
+            - menuitem "套餐配置" [ref=f2e90] [cursor=pointer]:
+              - generic [ref=f2e91]: 套餐配置
+            - menuitem "赠送套餐" [ref=f2e92] [cursor=pointer]:
+              - generic [ref=f2e93]: 赠送套餐
+            - menuitem "超管开关套餐" [ref=f2e94] [cursor=pointer]:
+              - generic [ref=f2e95]: 超管开关套餐
+        - menuitem "4G管理" [ref=f2e96]:
+          - generic [ref=f2e97] [cursor=pointer]:
+            - generic [ref=f2e100]: 4G管理
+            - img [ref=f2e102]
+        - menuitem "订单管理" [ref=f2e104]:
+          - generic [ref=f2e105] [cursor=pointer]:
+            - generic [ref=f2e108]: 订单管理
+            - img [ref=f2e110]
+        - menuitem "费用中心" [ref=f2e112]:
+          - generic [ref=f2e113] [cursor=pointer]:
+            - generic [ref=f2e116]: 费用中心
+            - img [ref=f2e118]
+        - menuitem "平台账务" [ref=f2e120]:
+          - generic [ref=f2e121] [cursor=pointer]:
+            - generic [ref=f2e124]: 平台账务
+            - img [ref=f2e126]
+        - menuitem "设备分销" [ref=f2e128]:
+          - generic [ref=f2e129] [cursor=pointer]:
+            - generic [ref=f2e132]: 设备分销
+            - img [ref=f2e134]
+        - menuitem "设备分润" [ref=f2e136]:
+          - generic [ref=f2e137] [cursor=pointer]:
+            - generic [ref=f2e140]: 设备分润
+            - img [ref=f2e142]
+        - menuitem "全球调度" [ref=f2e144]:
+          - generic [ref=f2e145] [cursor=pointer]:
+            - generic [ref=f2e148]: 全球调度
+            - img [ref=f2e150]
+        - menuitem "运营管理" [ref=f2e152]:
+          - generic [ref=f2e153] [cursor=pointer]:
+            - generic [ref=f2e156]: 运营管理
+            - img [ref=f2e158]
+        - menuitem "日志审计" [ref=f2e160]:
+          - generic [ref=f2e161] [cursor=pointer]:
+            - generic [ref=f2e164]: 日志审计
+            - img [ref=f2e166]
+        - menuitem "客服工具" [ref=f2e168]:
+          - generic [ref=f2e169] [cursor=pointer]:
+            - generic [ref=f2e172]: 客服工具
+            - img [ref=f2e174]
+        - menuitem "权限管理" [ref=f2e176]:
+          - generic [ref=f2e177] [cursor=pointer]:
+            - generic [ref=f2e180]: 权限管理
+            - img [ref=f2e182]
+      - img [ref=f2e186] [cursor=pointer]
+    - generic [ref=f2e196]:
+      - generic [ref=f2e197]:
+        - generic [ref=f2e198]:
+          - generic [ref=f2e199]: 服务分类
+          - button "新建分类" [ref=f2e200] [cursor=pointer]:
+            - generic [ref=f2e201]: 新建分类
+        - generic [ref=f2e202]:
+          - generic [ref=f2e203] [cursor=pointer]:
+            - img [ref=f2e205]
+            - generic [ref=f2e207]: 未分类
+            - generic [ref=f2e209]: 默认
+            - generic [ref=f2e210]: "46"
+          - generic [ref=f2e211] [cursor=pointer]:
+            - img [ref=f2e213]
+            - generic [ref=f2e215]: 云存储
+            - generic [ref=f2e216]: "3"
+          - generic [ref=f2e217] [cursor=pointer]:
+            - img [ref=f2e219]
+            - generic [ref=f2e221]: AI服务
+            - generic [ref=f2e222]: "3"
+        - dialog "新建分类" [ref=f2e1514]:
+          - generic [active] [ref=f2e1515]:
+            - banner [ref=f2e1516]:
+              - heading "新建分类" [level=2] [ref=f2e1517]
+              - button "关闭此对话框" [ref=f2e1518] [cursor=pointer]:
+                - img [ref=f2e1520]
+            - generic [ref=f2e1523]:
+              - generic [ref=f2e1524]:
+                - generic [ref=f2e1525]: "* 分类名称"
+                - textbox "* 分类名称" [ref=f2e1529]:
+                  - /placeholder: 请输入分类名称
+              - generic [ref=f2e1530]:
+                - generic [ref=f2e1531]: 排序号
+                - generic [ref=f2e1533]:
+                  - button "减少数值" [ref=f2e1534]:
+                    - img [ref=f2e1536]
+                  - button "增加数值" [ref=f2e1538] [cursor=pointer]:
+                    - img [ref=f2e1540]
+                  - spinbutton "排序号" [ref=f2e1544]: "0"
+            - contentinfo [ref=f2e1545]:
+              - button "取消" [ref=f2e1546] [cursor=pointer]:
+                - generic [ref=f2e1547]: 取消
+              - button "确定" [ref=f2e1548] [cursor=pointer]:
+                - generic [ref=f2e1549]: 确定
+      - generic [ref=f2e223]:
+        - generic [ref=f2e224]:
+          - generic [ref=f2e225]: 服务管理
+          - generic [ref=f2e226]:
+            - button "批量移动" [disabled] [ref=f2e227]:
+              - generic [ref=f2e228]: 批量移动
+            - button "新增服务" [ref=f2e229] [cursor=pointer]:
+              - generic [ref=f2e230]:
+                - img [ref=f2e232]
+                - text: 新增服务
+        - generic [ref=f2e235]:
+          - table [ref=f2e237]:
+            - rowgroup [ref=f2e245]:
+              - row "选择所有行 服务名称 服务ID 所属分类 最后更新 操作" [ref=f2e246]:
+                - columnheader "选择所有行" [ref=f2e247]:
+                  - generic "选择所有行" [ref=f2e249] [cursor=pointer]:
+                    - generic [ref=f2e250]:
+                      - checkbox "选择所有行"
+                - columnheader "服务名称" [ref=f2e252]:
+                  - generic [ref=f2e253]: 服务名称
+                - columnheader "服务ID" [ref=f2e254]:
+                  - generic [ref=f2e255]: 服务ID
+                - columnheader "所属分类" [ref=f2e256]:
+                  - generic [ref=f2e257]: 所属分类
+                - columnheader "最后更新" [ref=f2e258]:
+                  - generic [ref=f2e259]: 最后更新
+                - columnheader "操作" [ref=f2e260]:
+                  - generic [ref=f2e261]: 操作
+          - table [ref=f2e266]:
+            - rowgroup [ref=f2e274]:
+              - row "选择当前行 智能告警 110600 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e275]:
+                - cell "选择当前行" [ref=f2e276]:
+                  - generic "选择当前行" [ref=f2e278] [cursor=pointer]:
+                    - generic [ref=f2e279]:
+                      - checkbox "选择当前行"
+                - cell "智能告警" [ref=f2e281]:
+                  - generic [ref=f2e282]: 智能告警
+                - cell "110600" [ref=f2e283]:
+                  - generic [ref=f2e284]: "110600"
+                - cell "未分类" [ref=f2e285]:
+                  - generic [ref=f2e286]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e287]:
+                  - generic [ref=f2e288]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e289]:
+                  - generic [ref=f2e290]:
+                    - button "修改" [ref=f2e291] [cursor=pointer]:
+                      - generic [ref=f2e292]:
+                        - img [ref=f2e294]
+                        - text: 修改
+                    - button "删除" [ref=f2e297] [cursor=pointer]:
+                      - generic [ref=f2e298]:
+                        - img [ref=f2e300]
+                        - text: 删除
+              - row "选择当前行 低电检测服务 300028 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e302]:
+                - cell "选择当前行" [ref=f2e303]:
+                  - generic "选择当前行" [ref=f2e305] [cursor=pointer]:
+                    - generic [ref=f2e306]:
+                      - checkbox "选择当前行"
+                - cell "低电检测服务" [ref=f2e308]:
+                  - generic [ref=f2e309]: 低电检测服务
+                - cell "300028" [ref=f2e310]:
+                  - generic [ref=f2e311]: "300028"
+                - cell "未分类" [ref=f2e312]:
+                  - generic [ref=f2e313]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e314]:
+                  - generic [ref=f2e315]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e316]:
+                  - generic [ref=f2e317]:
+                    - button "修改" [ref=f2e318] [cursor=pointer]:
+                      - generic [ref=f2e319]:
+                        - img [ref=f2e321]
+                        - text: 修改
+                    - button "删除" [ref=f2e324] [cursor=pointer]:
+                      - generic [ref=f2e325]:
+                        - img [ref=f2e327]
+                        - text: 删除
+              - row "选择当前行 火焰检测 300022 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e329]:
+                - cell "选择当前行" [ref=f2e330]:
+                  - generic "选择当前行" [ref=f2e332] [cursor=pointer]:
+                    - generic [ref=f2e333]:
+                      - checkbox "选择当前行"
+                - cell "火焰检测" [ref=f2e335]:
+                  - generic [ref=f2e336]: 火焰检测
+                - cell "300022" [ref=f2e337]:
+                  - generic [ref=f2e338]: "300022"
+                - cell "未分类" [ref=f2e339]:
+                  - generic [ref=f2e340]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e341]:
+                  - generic [ref=f2e342]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e343]:
+                  - generic [ref=f2e344]:
+                    - button "修改" [ref=f2e345] [cursor=pointer]:
+                      - generic [ref=f2e346]:
+                        - img [ref=f2e348]
+                        - text: 修改
+                    - button "删除" [ref=f2e351] [cursor=pointer]:
+                      - generic [ref=f2e352]:
+                        - img [ref=f2e354]
+                        - text: 删除
+              - row "选择当前行 跌倒检测 300020 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e356]:
+                - cell "选择当前行" [ref=f2e357]:
+                  - generic "选择当前行" [ref=f2e359] [cursor=pointer]:
+                    - generic [ref=f2e360]:
+                      - checkbox "选择当前行"
+                - cell "跌倒检测" [ref=f2e362]:
+                  - generic [ref=f2e363]: 跌倒检测
+                - cell "300020" [ref=f2e364]:
+                  - generic [ref=f2e365]: "300020"
+                - cell "未分类" [ref=f2e366]:
+                  - generic [ref=f2e367]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e368]:
+                  - generic [ref=f2e369]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e370]:
+                  - generic [ref=f2e371]:
+                    - button "修改" [ref=f2e372] [cursor=pointer]:
+                      - generic [ref=f2e373]:
+                        - img [ref=f2e375]
+                        - text: 修改
+                    - button "删除" [ref=f2e378] [cursor=pointer]:
+                      - generic [ref=f2e379]:
+                        - img [ref=f2e381]
+                        - text: 删除
+              - row "选择当前行 基础算法 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e383]:
+                - cell "选择当前行" [ref=f2e384]:
+                  - generic "选择当前行" [ref=f2e386] [cursor=pointer]:
+                    - generic [ref=f2e387]:
+                      - checkbox "选择当前行"
+                - cell "基础算法" [ref=f2e389]:
+                  - generic [ref=f2e390]: 基础算法
+                - cell [ref=f2e391]
+                - cell "未分类" [ref=f2e392]:
+                  - generic [ref=f2e393]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e394]:
+                  - generic [ref=f2e395]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e396]:
+                  - generic [ref=f2e397]:
+                    - button "修改" [ref=f2e398] [cursor=pointer]:
+                      - generic [ref=f2e399]:
+                        - img [ref=f2e401]
+                        - text: 修改
+                    - button "删除" [ref=f2e404] [cursor=pointer]:
+                      - generic [ref=f2e405]:
+                        - img [ref=f2e407]
+                        - text: 删除
+              - row "选择当前行 宠物喂食器 300049 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e409]:
+                - cell "选择当前行" [ref=f2e410]:
+                  - generic "选择当前行" [ref=f2e412] [cursor=pointer]:
+                    - generic [ref=f2e413]:
+                      - checkbox "选择当前行"
+                - cell "宠物喂食器" [ref=f2e415]:
+                  - generic [ref=f2e416]: 宠物喂食器
+                - cell "300049" [ref=f2e417]:
+                  - generic [ref=f2e418]: "300049"
+                - cell "未分类" [ref=f2e419]:
+                  - generic [ref=f2e420]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e421]:
+                  - generic [ref=f2e422]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e423]:
+                  - generic [ref=f2e424]:
+                    - button "修改" [ref=f2e425] [cursor=pointer]:
+                      - generic [ref=f2e426]:
+                        - img [ref=f2e428]
+                        - text: 修改
+                    - button "删除" [ref=f2e431] [cursor=pointer]:
+                      - generic [ref=f2e432]:
+                        - img [ref=f2e434]
+                        - text: 删除
+              - row "选择当前行 GPS定位 300050 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e436]:
+                - cell "选择当前行" [ref=f2e437]:
+                  - generic "选择当前行" [ref=f2e439] [cursor=pointer]:
+                    - generic [ref=f2e440]:
+                      - checkbox "选择当前行"
+                - cell "GPS定位" [ref=f2e442]:
+                  - generic [ref=f2e443]: GPS定位
+                - cell "300050" [ref=f2e444]:
+                  - generic [ref=f2e445]: "300050"
+                - cell "未分类" [ref=f2e446]:
+                  - generic [ref=f2e447]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e448]:
+                  - generic [ref=f2e449]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e450]:
+                  - generic [ref=f2e451]:
+                    - button "修改" [ref=f2e452] [cursor=pointer]:
+                      - generic [ref=f2e453]:
+                        - img [ref=f2e455]
+                        - text: 修改
+                    - button "删除" [ref=f2e458] [cursor=pointer]:
+                      - generic [ref=f2e459]:
+                        - img [ref=f2e461]
+                        - text: 删除
+              - row "选择当前行 低功耗PIR检测 300048 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e463]:
+                - cell "选择当前行" [ref=f2e464]:
+                  - generic "选择当前行" [ref=f2e466] [cursor=pointer]:
+                    - generic [ref=f2e467]:
+                      - checkbox "选择当前行"
+                - cell "低功耗PIR检测" [ref=f2e469]:
+                  - generic [ref=f2e470]: 低功耗PIR检测
+                - cell "300048" [ref=f2e471]:
+                  - generic [ref=f2e472]: "300048"
+                - cell "未分类" [ref=f2e473]:
+                  - generic [ref=f2e474]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e475]:
+                  - generic [ref=f2e476]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e477]:
+                  - generic [ref=f2e478]:
+                    - button "修改" [ref=f2e479] [cursor=pointer]:
+                      - generic [ref=f2e480]:
+                        - img [ref=f2e482]
+                        - text: 修改
+                    - button "删除" [ref=f2e485] [cursor=pointer]:
+                      - generic [ref=f2e486]:
+                        - img [ref=f2e488]
+                        - text: 删除
+              - row "选择当前行 非机动车检测 300047 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e490]:
+                - cell "选择当前行" [ref=f2e491]:
+                  - generic "选择当前行" [ref=f2e493] [cursor=pointer]:
+                    - generic [ref=f2e494]:
+                      - checkbox "选择当前行"
+                - cell "非机动车检测" [ref=f2e496]:
+                  - generic [ref=f2e497]: 非机动车检测
+                - cell "300047" [ref=f2e498]:
+                  - generic [ref=f2e499]: "300047"
+                - cell "未分类" [ref=f2e500]:
+                  - generic [ref=f2e501]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e502]:
+                  - generic [ref=f2e503]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e504]:
+                  - generic [ref=f2e505]:
+                    - button "修改" [ref=f2e506] [cursor=pointer]:
+                      - generic [ref=f2e507]:
+                        - img [ref=f2e509]
+                        - text: 修改
+                    - button "删除" [ref=f2e512] [cursor=pointer]:
+                      - generic [ref=f2e513]:
+                        - img [ref=f2e515]
+                        - text: 删除
+              - row "选择当前行 鱼缸侦测 300046 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e517]:
+                - cell "选择当前行" [ref=f2e518]:
+                  - generic "选择当前行" [ref=f2e520] [cursor=pointer]:
+                    - generic [ref=f2e521]:
+                      - checkbox "选择当前行"
+                - cell "鱼缸侦测" [ref=f2e523]:
+                  - generic [ref=f2e524]: 鱼缸侦测
+                - cell "300046" [ref=f2e525]:
+                  - generic [ref=f2e526]: "300046"
+                - cell "未分类" [ref=f2e527]:
+                  - generic [ref=f2e528]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e529]:
+                  - generic [ref=f2e530]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e531]:
+                  - generic [ref=f2e532]:
+                    - button "修改" [ref=f2e533] [cursor=pointer]:
+                      - generic [ref=f2e534]:
+                        - img [ref=f2e536]
+                        - text: 修改
+                    - button "删除" [ref=f2e539] [cursor=pointer]:
+                      - generic [ref=f2e540]:
+                        - img [ref=f2e542]
+                        - text: 删除
+              - row "选择当前行 客流统计 300045 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e544]:
+                - cell "选择当前行" [ref=f2e545]:
+                  - generic "选择当前行" [ref=f2e547] [cursor=pointer]:
+                    - generic [ref=f2e548]:
+                      - checkbox "选择当前行"
+                - cell "客流统计" [ref=f2e550]:
+                  - generic [ref=f2e551]: 客流统计
+                - cell "300045" [ref=f2e552]:
+                  - generic [ref=f2e553]: "300045"
+                - cell "未分类" [ref=f2e554]:
+                  - generic [ref=f2e555]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e556]:
+                  - generic [ref=f2e557]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e558]:
+                  - generic [ref=f2e559]:
+                    - button "修改" [ref=f2e560] [cursor=pointer]:
+                      - generic [ref=f2e561]:
+                        - img [ref=f2e563]
+                        - text: 修改
+                    - button "删除" [ref=f2e566] [cursor=pointer]:
+                      - generic [ref=f2e567]:
+                        - img [ref=f2e569]
+                        - text: 删除
+              - row "选择当前行 儿童检测 300044 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e571]:
+                - cell "选择当前行" [ref=f2e572]:
+                  - generic "选择当前行" [ref=f2e574] [cursor=pointer]:
+                    - generic [ref=f2e575]:
+                      - checkbox "选择当前行"
+                - cell "儿童检测" [ref=f2e577]:
+                  - generic [ref=f2e578]: 儿童检测
+                - cell "300044" [ref=f2e579]:
+                  - generic [ref=f2e580]: "300044"
+                - cell "未分类" [ref=f2e581]:
+                  - generic [ref=f2e582]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e583]:
+                  - generic [ref=f2e584]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e585]:
+                  - generic [ref=f2e586]:
+                    - button "修改" [ref=f2e587] [cursor=pointer]:
+                      - generic [ref=f2e588]:
+                        - img [ref=f2e590]
+                        - text: 修改
+                    - button "删除" [ref=f2e593] [cursor=pointer]:
+                      - generic [ref=f2e594]:
+                        - img [ref=f2e596]
+                        - text: 删除
+              - row "选择当前行 家门监测 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e598]:
+                - cell "选择当前行" [ref=f2e599]:
+                  - generic "选择当前行" [ref=f2e601] [cursor=pointer]:
+                    - generic [ref=f2e602]:
+                      - checkbox "选择当前行"
+                - cell "家门监测" [ref=f2e604]:
+                  - generic [ref=f2e605]: 家门监测
+                - cell [ref=f2e606]
+                - cell "未分类" [ref=f2e607]:
+                  - generic [ref=f2e608]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e609]:
+                  - generic [ref=f2e610]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e611]:
+                  - generic [ref=f2e612]:
+                    - button "修改" [ref=f2e613] [cursor=pointer]:
+                      - generic [ref=f2e614]:
+                        - img [ref=f2e616]
+                        - text: 修改
+                    - button "删除" [ref=f2e619] [cursor=pointer]:
+                      - generic [ref=f2e620]:
+                        - img [ref=f2e622]
+                        - text: 删除
+              - row "选择当前行 厨房监测 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e624]:
+                - cell "选择当前行" [ref=f2e625]:
+                  - generic "选择当前行" [ref=f2e627] [cursor=pointer]:
+                    - generic [ref=f2e628]:
+                      - checkbox "选择当前行"
+                - cell "厨房监测" [ref=f2e630]:
+                  - generic [ref=f2e631]: 厨房监测
+                - cell [ref=f2e632]
+                - cell "未分类" [ref=f2e633]:
+                  - generic [ref=f2e634]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e635]:
+                  - generic [ref=f2e636]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e637]:
+                  - generic [ref=f2e638]:
+                    - button "修改" [ref=f2e639] [cursor=pointer]:
+                      - generic [ref=f2e640]:
+                        - img [ref=f2e642]
+                        - text: 修改
+                    - button "删除" [ref=f2e645] [cursor=pointer]:
+                      - generic [ref=f2e646]:
+                        - img [ref=f2e648]
+                        - text: 删除
+              - row "选择当前行 宠物监测 300042 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e650]:
+                - cell "选择当前行" [ref=f2e651]:
+                  - generic "选择当前行" [ref=f2e653] [cursor=pointer]:
+                    - generic [ref=f2e654]:
+                      - checkbox "选择当前行"
+                - cell "宠物监测" [ref=f2e656]:
+                  - generic [ref=f2e657]: 宠物监测
+                - cell "300042" [ref=f2e658]:
+                  - generic [ref=f2e659]: "300042"
+                - cell "未分类" [ref=f2e660]:
+                  - generic [ref=f2e661]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e662]:
+                  - generic [ref=f2e663]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e664]:
+                  - generic [ref=f2e665]:
+                    - button "修改" [ref=f2e666] [cursor=pointer]:
+                      - generic [ref=f2e667]:
+                        - img [ref=f2e669]
+                        - text: 修改
+                    - button "删除" [ref=f2e672] [cursor=pointer]:
+                      - generic [ref=f2e673]:
+                        - img [ref=f2e675]
+                        - text: 删除
+              - row "选择当前行 老人看护 300039 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e677]:
+                - cell "选择当前行" [ref=f2e678]:
+                  - generic "选择当前行" [ref=f2e680] [cursor=pointer]:
+                    - generic [ref=f2e681]:
+                      - checkbox "选择当前行"
+                - cell "老人看护" [ref=f2e683]:
+                  - generic [ref=f2e684]: 老人看护
+                - cell "300039" [ref=f2e685]:
+                  - generic [ref=f2e686]: "300039"
+                - cell "未分类" [ref=f2e687]:
+                  - generic [ref=f2e688]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e689]:
+                  - generic [ref=f2e690]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e691]:
+                  - generic [ref=f2e692]:
+                    - button "修改" [ref=f2e693] [cursor=pointer]:
+                      - generic [ref=f2e694]:
+                        - img [ref=f2e696]
+                        - text: 修改
+                    - button "删除" [ref=f2e699] [cursor=pointer]:
+                      - generic [ref=f2e700]:
+                        - img [ref=f2e702]
+                        - text: 删除
+              - row "选择当前行 离岗侦测 300043 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e704]:
+                - cell "选择当前行" [ref=f2e705]:
+                  - generic "选择当前行" [ref=f2e707] [cursor=pointer]:
+                    - generic [ref=f2e708]:
+                      - checkbox "选择当前行"
+                - cell "离岗侦测" [ref=f2e710]:
+                  - generic [ref=f2e711]: 离岗侦测
+                - cell "300043" [ref=f2e712]:
+                  - generic [ref=f2e713]: "300043"
+                - cell "未分类" [ref=f2e714]:
+                  - generic [ref=f2e715]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e716]:
+                  - generic [ref=f2e717]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e718]:
+                  - generic [ref=f2e719]:
+                    - button "修改" [ref=f2e720] [cursor=pointer]:
+                      - generic [ref=f2e721]:
+                        - img [ref=f2e723]
+                        - text: 修改
+                    - button "删除" [ref=f2e726] [cursor=pointer]:
+                      - generic [ref=f2e727]:
+                        - img [ref=f2e729]
+                        - text: 删除
+              - row "选择当前行 包裹侦测 300025 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e731]:
+                - cell "选择当前行" [ref=f2e732]:
+                  - generic "选择当前行" [ref=f2e734] [cursor=pointer]:
+                    - generic [ref=f2e735]:
+                      - checkbox "选择当前行"
+                - cell "包裹侦测" [ref=f2e737]:
+                  - generic [ref=f2e738]: 包裹侦测
+                - cell "300025" [ref=f2e739]:
+                  - generic [ref=f2e740]: "300025"
+                - cell "未分类" [ref=f2e741]:
+                  - generic [ref=f2e742]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e743]:
+                  - generic [ref=f2e744]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e745]:
+                  - generic [ref=f2e746]:
+                    - button "修改" [ref=f2e747] [cursor=pointer]:
+                      - generic [ref=f2e748]:
+                        - img [ref=f2e750]
+                        - text: 修改
+                    - button "删除" [ref=f2e753] [cursor=pointer]:
+                      - generic [ref=f2e754]:
+                        - img [ref=f2e756]
+                        - text: 删除
+              - row "选择当前行 哭声侦测 300023 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e758]:
+                - cell "选择当前行" [ref=f2e759]:
+                  - generic "选择当前行" [ref=f2e761] [cursor=pointer]:
+                    - generic [ref=f2e762]:
+                      - checkbox "选择当前行"
+                - cell "哭声侦测" [ref=f2e764]:
+                  - generic [ref=f2e765]: 哭声侦测
+                - cell "300023" [ref=f2e766]:
+                  - generic [ref=f2e767]: "300023"
+                - cell "未分类" [ref=f2e768]:
+                  - generic [ref=f2e769]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e770]:
+                  - generic [ref=f2e771]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e772]:
+                  - generic [ref=f2e773]:
+                    - button "修改" [ref=f2e774] [cursor=pointer]:
+                      - generic [ref=f2e775]:
+                        - img [ref=f2e777]
+                        - text: 修改
+                    - button "删除" [ref=f2e780] [cursor=pointer]:
+                      - generic [ref=f2e781]:
+                        - img [ref=f2e783]
+                        - text: 删除
+              - row "选择当前行 智能报警-家门监测 300041 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e785]:
+                - cell "选择当前行" [ref=f2e786]:
+                  - generic "选择当前行" [ref=f2e788] [cursor=pointer]:
+                    - generic [ref=f2e789]:
+                      - checkbox "选择当前行"
+                - cell "智能报警-家门监测" [ref=f2e791]:
+                  - generic [ref=f2e792]: 智能报警-家门监测
+                - cell "300041" [ref=f2e793]:
+                  - generic [ref=f2e794]: "300041"
+                - cell "未分类" [ref=f2e795]:
+                  - generic [ref=f2e796]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e797]:
+                  - generic [ref=f2e798]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e799]:
+                  - generic [ref=f2e800]:
+                    - button "修改" [ref=f2e801] [cursor=pointer]:
+                      - generic [ref=f2e802]:
+                        - img [ref=f2e804]
+                        - text: 修改
+                    - button "删除" [ref=f2e807] [cursor=pointer]:
+                      - generic [ref=f2e808]:
+                        - img [ref=f2e810]
+                        - text: 删除
+              - row "选择当前行 智能报警-厨房安全 300040 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e812]:
+                - cell "选择当前行" [ref=f2e813]:
+                  - generic "选择当前行" [ref=f2e815] [cursor=pointer]:
+                    - generic [ref=f2e816]:
+                      - checkbox "选择当前行"
+                - cell "智能报警-厨房安全" [ref=f2e818]:
+                  - generic [ref=f2e819]: 智能报警-厨房安全
+                - cell "300040" [ref=f2e820]:
+                  - generic [ref=f2e821]: "300040"
+                - cell "未分类" [ref=f2e822]:
+                  - generic [ref=f2e823]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e824]:
+                  - generic [ref=f2e825]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e826]:
+                  - generic [ref=f2e827]:
+                    - button "修改" [ref=f2e828] [cursor=pointer]:
+                      - generic [ref=f2e829]:
+                        - img [ref=f2e831]
+                        - text: 修改
+                    - button "删除" [ref=f2e834] [cursor=pointer]:
+                      - generic [ref=f2e835]:
+                        - img [ref=f2e837]
+                        - text: 删除
+              - row "选择当前行 智能报警-宠物监测 300042 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e839]:
+                - cell "选择当前行" [ref=f2e840]:
+                  - generic "选择当前行" [ref=f2e842] [cursor=pointer]:
+                    - generic [ref=f2e843]:
+                      - checkbox "选择当前行"
+                - cell "智能报警-宠物监测" [ref=f2e845]:
+                  - generic [ref=f2e846]: 智能报警-宠物监测
+                - cell "300042" [ref=f2e847]:
+                  - generic [ref=f2e848]: "300042"
+                - cell "未分类" [ref=f2e849]:
+                  - generic [ref=f2e850]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e851]:
+                  - generic [ref=f2e852]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e853]:
+                  - generic [ref=f2e854]:
+                    - button "修改" [ref=f2e855] [cursor=pointer]:
+                      - generic [ref=f2e856]:
+                        - img [ref=f2e858]
+                        - text: 修改
+                    - button "删除" [ref=f2e861] [cursor=pointer]:
+                      - generic [ref=f2e862]:
+                        - img [ref=f2e864]
+                        - text: 删除
+              - row "选择当前行 智能报警-老人看护 300039 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e866]:
+                - cell "选择当前行" [ref=f2e867]:
+                  - generic "选择当前行" [ref=f2e869] [cursor=pointer]:
+                    - generic [ref=f2e870]:
+                      - checkbox "选择当前行"
+                - cell "智能报警-老人看护" [ref=f2e872]:
+                  - generic [ref=f2e873]: 智能报警-老人看护
+                - cell "300039" [ref=f2e874]:
+                  - generic [ref=f2e875]: "300039"
+                - cell "未分类" [ref=f2e876]:
+                  - generic [ref=f2e877]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e878]:
+                  - generic [ref=f2e879]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e880]:
+                  - generic [ref=f2e881]:
+                    - button "修改" [ref=f2e882] [cursor=pointer]:
+                      - generic [ref=f2e883]:
+                        - img [ref=f2e885]
+                        - text: 修改
+                    - button "删除" [ref=f2e888] [cursor=pointer]:
+                      - generic [ref=f2e889]:
+                        - img [ref=f2e891]
+                        - text: 删除
+              - row "选择当前行 智能报警 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e893]:
+                - cell "选择当前行" [ref=f2e894]:
+                  - generic "选择当前行" [ref=f2e896] [cursor=pointer]:
+                    - generic [ref=f2e897]:
+                      - checkbox "选择当前行"
+                - cell "智能报警" [ref=f2e899]:
+                  - generic [ref=f2e900]: 智能报警
+                - cell [ref=f2e901]
+                - cell "未分类" [ref=f2e902]:
+                  - generic [ref=f2e903]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e904]:
+                  - generic [ref=f2e905]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e906]:
+                  - generic [ref=f2e907]:
+                    - button "修改" [ref=f2e908] [cursor=pointer]:
+                      - generic [ref=f2e909]:
+                        - img [ref=f2e911]
+                        - text: 修改
+                    - button "删除" [ref=f2e914] [cursor=pointer]:
+                      - generic [ref=f2e915]:
+                        - img [ref=f2e917]
+                        - text: 删除
+              - row "选择当前行 烟火检测 300038 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e919]:
+                - cell "选择当前行" [ref=f2e920]:
+                  - generic "选择当前行" [ref=f2e922] [cursor=pointer]:
+                    - generic [ref=f2e923]:
+                      - checkbox "选择当前行"
+                - cell "烟火检测" [ref=f2e925]:
+                  - generic [ref=f2e926]: 烟火检测
+                - cell "300038" [ref=f2e927]:
+                  - generic [ref=f2e928]: "300038"
+                - cell "未分类" [ref=f2e929]:
+                  - generic [ref=f2e930]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e931]:
+                  - generic [ref=f2e932]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e933]:
+                  - generic [ref=f2e934]:
+                    - button "修改" [ref=f2e935] [cursor=pointer]:
+                      - generic [ref=f2e936]:
+                        - img [ref=f2e938]
+                        - text: 修改
+                    - button "删除" [ref=f2e941] [cursor=pointer]:
+                      - generic [ref=f2e942]:
+                        - img [ref=f2e944]
+                        - text: 删除
+              - row "选择当前行 宠物检测 300024 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e946]:
+                - cell "选择当前行" [ref=f2e947]:
+                  - generic "选择当前行" [ref=f2e949] [cursor=pointer]:
+                    - generic [ref=f2e950]:
+                      - checkbox "选择当前行"
+                - cell "宠物检测" [ref=f2e952]:
+                  - generic [ref=f2e953]: 宠物检测
+                - cell "300024" [ref=f2e954]:
+                  - generic [ref=f2e955]: "300024"
+                - cell "未分类" [ref=f2e956]:
+                  - generic [ref=f2e957]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e958]:
+                  - generic [ref=f2e959]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e960]:
+                  - generic [ref=f2e961]:
+                    - button "修改" [ref=f2e962] [cursor=pointer]:
+                      - generic [ref=f2e963]:
+                        - img [ref=f2e965]
+                        - text: 修改
+                    - button "删除" [ref=f2e968] [cursor=pointer]:
+                      - generic [ref=f2e969]:
+                        - img [ref=f2e971]
+                        - text: 删除
+              - row "选择当前行 声音检测 300037 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e973]:
+                - cell "选择当前行" [ref=f2e974]:
+                  - generic "选择当前行" [ref=f2e976] [cursor=pointer]:
+                    - generic [ref=f2e977]:
+                      - checkbox "选择当前行"
+                - cell "声音检测" [ref=f2e979]:
+                  - generic [ref=f2e980]: 声音检测
+                - cell "300037" [ref=f2e981]:
+                  - generic [ref=f2e982]: "300037"
+                - cell "未分类" [ref=f2e983]:
+                  - generic [ref=f2e984]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e985]:
+                  - generic [ref=f2e986]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e987]:
+                  - generic [ref=f2e988]:
+                    - button "修改" [ref=f2e989] [cursor=pointer]:
+                      - generic [ref=f2e990]:
+                        - img [ref=f2e992]
+                        - text: 修改
+                    - button "删除" [ref=f2e995] [cursor=pointer]:
+                      - generic [ref=f2e996]:
+                        - img [ref=f2e998]
+                        - text: 删除
+              - row "选择当前行 智能检测服务 300009 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1000]:
+                - cell "选择当前行" [ref=f2e1001]:
+                  - generic "选择当前行" [ref=f2e1003] [cursor=pointer]:
+                    - generic [ref=f2e1004]:
+                      - checkbox "选择当前行"
+                - cell "智能检测服务" [ref=f2e1006]:
+                  - generic [ref=f2e1007]: 智能检测服务
+                - cell "300009" [ref=f2e1008]:
+                  - generic [ref=f2e1009]: "300009"
+                - cell "未分类" [ref=f2e1010]:
+                  - generic [ref=f2e1011]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1012]:
+                  - generic [ref=f2e1013]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1014]:
+                  - generic [ref=f2e1015]:
+                    - button "修改" [ref=f2e1016] [cursor=pointer]:
+                      - generic [ref=f2e1017]:
+                        - img [ref=f2e1019]
+                        - text: 修改
+                    - button "删除" [ref=f2e1022] [cursor=pointer]:
+                      - generic [ref=f2e1023]:
+                        - img [ref=f2e1025]
+                        - text: 删除
+              - row "选择当前行 设备离线监测 300008 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1027]:
+                - cell "选择当前行" [ref=f2e1028]:
+                  - generic "选择当前行" [ref=f2e1030] [cursor=pointer]:
+                    - generic [ref=f2e1031]:
+                      - checkbox "选择当前行"
+                - cell "设备离线监测" [ref=f2e1033]:
+                  - generic [ref=f2e1034]: 设备离线监测
+                - cell "300008" [ref=f2e1035]:
+                  - generic [ref=f2e1036]: "300008"
+                - cell "未分类" [ref=f2e1037]:
+                  - generic [ref=f2e1038]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1039]:
+                  - generic [ref=f2e1040]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1041]:
+                  - generic [ref=f2e1042]:
+                    - button "修改" [ref=f2e1043] [cursor=pointer]:
+                      - generic [ref=f2e1044]:
+                        - img [ref=f2e1046]
+                        - text: 修改
+                    - button "删除" [ref=f2e1049] [cursor=pointer]:
+                      - generic [ref=f2e1050]:
+                        - img [ref=f2e1052]
+                        - text: 删除
+              - row "选择当前行 时光相册-宠物 300007 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1054]:
+                - cell "选择当前行" [ref=f2e1055]:
+                  - generic "选择当前行" [ref=f2e1057] [cursor=pointer]:
+                    - generic [ref=f2e1058]:
+                      - checkbox "选择当前行"
+                - cell "时光相册-宠物" [ref=f2e1060]:
+                  - generic [ref=f2e1061]: 时光相册-宠物
+                - cell "300007" [ref=f2e1062]:
+                  - generic [ref=f2e1063]: "300007"
+                - cell "未分类" [ref=f2e1064]:
+                  - generic [ref=f2e1065]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1066]:
+                  - generic [ref=f2e1067]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1068]:
+                  - generic [ref=f2e1069]:
+                    - button "修改" [ref=f2e1070] [cursor=pointer]:
+                      - generic [ref=f2e1071]:
+                        - img [ref=f2e1073]
+                        - text: 修改
+                    - button "删除" [ref=f2e1076] [cursor=pointer]:
+                      - generic [ref=f2e1077]:
+                        - img [ref=f2e1079]
+                        - text: 删除
+              - row "选择当前行 时光相册-儿童 300007 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1081]:
+                - cell "选择当前行" [ref=f2e1082]:
+                  - generic "选择当前行" [ref=f2e1084] [cursor=pointer]:
+                    - generic [ref=f2e1085]:
+                      - checkbox "选择当前行"
+                - cell "时光相册-儿童" [ref=f2e1087]:
+                  - generic [ref=f2e1088]: 时光相册-儿童
+                - cell "300007" [ref=f2e1089]:
+                  - generic [ref=f2e1090]: "300007"
+                - cell "未分类" [ref=f2e1091]:
+                  - generic [ref=f2e1092]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1093]:
+                  - generic [ref=f2e1094]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1095]:
+                  - generic [ref=f2e1096]:
+                    - button "修改" [ref=f2e1097] [cursor=pointer]:
+                      - generic [ref=f2e1098]:
+                        - img [ref=f2e1100]
+                        - text: 修改
+                    - button "删除" [ref=f2e1103] [cursor=pointer]:
+                      - generic [ref=f2e1104]:
+                        - img [ref=f2e1106]
+                        - text: 删除
+              - row "选择当前行 时光相册-老人 300007 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1108]:
+                - cell "选择当前行" [ref=f2e1109]:
+                  - generic "选择当前行" [ref=f2e1111] [cursor=pointer]:
+                    - generic [ref=f2e1112]:
+                      - checkbox "选择当前行"
+                - cell "时光相册-老人" [ref=f2e1114]:
+                  - generic [ref=f2e1115]: 时光相册-老人
+                - cell "300007" [ref=f2e1116]:
+                  - generic [ref=f2e1117]: "300007"
+                - cell "未分类" [ref=f2e1118]:
+                  - generic [ref=f2e1119]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1120]:
+                  - generic [ref=f2e1121]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1122]:
+                  - generic [ref=f2e1123]:
+                    - button "修改" [ref=f2e1124] [cursor=pointer]:
+                      - generic [ref=f2e1125]:
+                        - img [ref=f2e1127]
+                        - text: 修改
+                    - button "删除" [ref=f2e1130] [cursor=pointer]:
+                      - generic [ref=f2e1131]:
+                        - img [ref=f2e1133]
+                        - text: 删除
+              - row "选择当前行 时光相册-常规 300007 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1135]:
+                - cell "选择当前行" [ref=f2e1136]:
+                  - generic "选择当前行" [ref=f2e1138] [cursor=pointer]:
+                    - generic [ref=f2e1139]:
+                      - checkbox "选择当前行"
+                - cell "时光相册-常规" [ref=f2e1141]:
+                  - generic [ref=f2e1142]: 时光相册-常规
+                - cell "300007" [ref=f2e1143]:
+                  - generic [ref=f2e1144]: "300007"
+                - cell "未分类" [ref=f2e1145]:
+                  - generic [ref=f2e1146]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1147]:
+                  - generic [ref=f2e1148]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1149]:
+                  - generic [ref=f2e1150]:
+                    - button "修改" [ref=f2e1151] [cursor=pointer]:
+                      - generic [ref=f2e1152]:
+                        - img [ref=f2e1154]
+                        - text: 修改
+                    - button "删除" [ref=f2e1157] [cursor=pointer]:
+                      - generic [ref=f2e1158]:
+                        - img [ref=f2e1160]
+                        - text: 删除
+              - row "选择当前行 门铃套餐模板 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1162]:
+                - cell "选择当前行" [ref=f2e1163]:
+                  - generic "选择当前行" [ref=f2e1165] [cursor=pointer]:
+                    - generic [ref=f2e1166]:
+                      - checkbox "选择当前行"
+                - cell "门铃套餐模板" [ref=f2e1168]:
+                  - generic [ref=f2e1169]: 门铃套餐模板
+                - cell [ref=f2e1170]
+                - cell "未分类" [ref=f2e1171]:
+                  - generic [ref=f2e1172]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1173]:
+                  - generic [ref=f2e1174]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1175]:
+                  - generic [ref=f2e1176]:
+                    - button "修改" [ref=f2e1177] [cursor=pointer]:
+                      - generic [ref=f2e1178]:
+                        - img [ref=f2e1180]
+                        - text: 修改
+                    - button "删除" [ref=f2e1183] [cursor=pointer]:
+                      - generic [ref=f2e1184]:
+                        - img [ref=f2e1186]
+                        - text: 删除
+              - row "选择当前行 去广告套餐 300030 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1188]:
+                - cell "选择当前行" [ref=f2e1189]:
+                  - generic "选择当前行" [ref=f2e1191] [cursor=pointer]:
+                    - generic [ref=f2e1192]:
+                      - checkbox "选择当前行"
+                - cell "去广告套餐" [ref=f2e1194]:
+                  - generic [ref=f2e1195]: 去广告套餐
+                - cell "300030" [ref=f2e1196]:
+                  - generic [ref=f2e1197]: "300030"
+                - cell "未分类" [ref=f2e1198]:
+                  - generic [ref=f2e1199]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1200]:
+                  - generic [ref=f2e1201]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1202]:
+                  - generic [ref=f2e1203]:
+                    - button "修改" [ref=f2e1204] [cursor=pointer]:
+                      - generic [ref=f2e1205]:
+                        - img [ref=f2e1207]
+                        - text: 修改
+                    - button "删除" [ref=f2e1210] [cursor=pointer]:
+                      - generic [ref=f2e1211]:
+                        - img [ref=f2e1213]
+                        - text: 删除
+              - row "选择当前行 Google Home(语音助手) 300006 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1215]:
+                - cell "选择当前行" [ref=f2e1216]:
+                  - generic "选择当前行" [ref=f2e1218] [cursor=pointer]:
+                    - generic [ref=f2e1219]:
+                      - checkbox "选择当前行"
+                - cell "Google Home(语音助手)" [ref=f2e1221]:
+                  - generic [ref=f2e1222]: Google Home(语音助手)
+                - cell "300006" [ref=f2e1223]:
+                  - generic [ref=f2e1224]: "300006"
+                - cell "未分类" [ref=f2e1225]:
+                  - generic [ref=f2e1226]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1227]:
+                  - generic [ref=f2e1228]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1229]:
+                  - generic [ref=f2e1230]:
+                    - button "修改" [ref=f2e1231] [cursor=pointer]:
+                      - generic [ref=f2e1232]:
+                        - img [ref=f2e1234]
+                        - text: 修改
+                    - button "删除" [ref=f2e1237] [cursor=pointer]:
+                      - generic [ref=f2e1238]:
+                        - img [ref=f2e1240]
+                        - text: 删除
+              - row "选择当前行 Alexa(语音助手) 300005 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1242]:
+                - cell "选择当前行" [ref=f2e1243]:
+                  - generic "选择当前行" [ref=f2e1245] [cursor=pointer]:
+                    - generic [ref=f2e1246]:
+                      - checkbox "选择当前行"
+                - cell "Alexa(语音助手)" [ref=f2e1248]:
+                  - generic [ref=f2e1249]: Alexa(语音助手)
+                - cell "300005" [ref=f2e1250]:
+                  - generic [ref=f2e1251]: "300005"
+                - cell "未分类" [ref=f2e1252]:
+                  - generic [ref=f2e1253]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1254]:
+                  - generic [ref=f2e1255]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1256]:
+                  - generic [ref=f2e1257]:
+                    - button "修改" [ref=f2e1258] [cursor=pointer]:
+                      - generic [ref=f2e1259]:
+                        - img [ref=f2e1261]
+                        - text: 修改
+                    - button "删除" [ref=f2e1264] [cursor=pointer]:
+                      - generic [ref=f2e1265]:
+                        - img [ref=f2e1267]
+                        - text: 删除
+              - row "选择当前行 短信套餐 300031 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1269]:
+                - cell "选择当前行" [ref=f2e1270]:
+                  - generic "选择当前行" [ref=f2e1272] [cursor=pointer]:
+                    - generic [ref=f2e1273]:
+                      - checkbox "选择当前行"
+                - cell "短信套餐" [ref=f2e1275]:
+                  - generic [ref=f2e1276]: 短信套餐
+                - cell "300031" [ref=f2e1277]:
+                  - generic [ref=f2e1278]: "300031"
+                - cell "未分类" [ref=f2e1279]:
+                  - generic [ref=f2e1280]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1281]:
+                  - generic [ref=f2e1282]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1283]:
+                  - generic [ref=f2e1284]:
+                    - button "修改" [ref=f2e1285] [cursor=pointer]:
+                      - generic [ref=f2e1286]:
+                        - img [ref=f2e1288]
+                        - text: 修改
+                    - button "删除" [ref=f2e1291] [cursor=pointer]:
+                      - generic [ref=f2e1292]:
+                        - img [ref=f2e1294]
+                        - text: 删除
+              - row "选择当前行 定时提醒 300000 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1296]:
+                - cell "选择当前行" [ref=f2e1297]:
+                  - generic "选择当前行" [ref=f2e1299] [cursor=pointer]:
+                    - generic [ref=f2e1300]:
+                      - checkbox "选择当前行"
+                - cell "定时提醒" [ref=f2e1302]:
+                  - generic [ref=f2e1303]: 定时提醒
+                - cell "300000" [ref=f2e1304]:
+                  - generic [ref=f2e1305]: "300000"
+                - cell "未分类" [ref=f2e1306]:
+                  - generic [ref=f2e1307]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1308]:
+                  - generic [ref=f2e1309]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1310]:
+                  - generic [ref=f2e1311]:
+                    - button "修改" [ref=f2e1312] [cursor=pointer]:
+                      - generic [ref=f2e1313]:
+                        - img [ref=f2e1315]
+                        - text: 修改
+                    - button "删除" [ref=f2e1318] [cursor=pointer]:
+                      - generic [ref=f2e1319]:
+                        - img [ref=f2e1321]
+                        - text: 删除
+              - row "选择当前行 手势呼叫 300029 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1323]:
+                - cell "选择当前行" [ref=f2e1324]:
+                  - generic "选择当前行" [ref=f2e1326] [cursor=pointer]:
+                    - generic [ref=f2e1327]:
+                      - checkbox "选择当前行"
+                - cell "手势呼叫" [ref=f2e1329]:
+                  - generic [ref=f2e1330]: 手势呼叫
+                - cell "300029" [ref=f2e1331]:
+                  - generic [ref=f2e1332]: "300029"
+                - cell "未分类" [ref=f2e1333]:
+                  - generic [ref=f2e1334]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1335]:
+                  - generic [ref=f2e1336]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1337]:
+                  - generic [ref=f2e1338]:
+                    - button "修改" [ref=f2e1339] [cursor=pointer]:
+                      - generic [ref=f2e1340]:
+                        - img [ref=f2e1342]
+                        - text: 修改
+                    - button "删除" [ref=f2e1345] [cursor=pointer]:
+                      - generic [ref=f2e1346]:
+                        - img [ref=f2e1348]
+                        - text: 删除
+              - row "选择当前行 人脸识别 300033 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1350]:
+                - cell "选择当前行" [ref=f2e1351]:
+                  - generic "选择当前行" [ref=f2e1353] [cursor=pointer]:
+                    - generic [ref=f2e1354]:
+                      - checkbox "选择当前行"
+                - cell "人脸识别" [ref=f2e1356]:
+                  - generic [ref=f2e1357]: 人脸识别
+                - cell "300033" [ref=f2e1358]:
+                  - generic [ref=f2e1359]: "300033"
+                - cell "未分类" [ref=f2e1360]:
+                  - generic [ref=f2e1361]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1362]:
+                  - generic [ref=f2e1363]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1364]:
+                  - generic [ref=f2e1365]:
+                    - button "修改" [ref=f2e1366] [cursor=pointer]:
+                      - generic [ref=f2e1367]:
+                        - img [ref=f2e1369]
+                        - text: 修改
+                    - button "删除" [ref=f2e1372] [cursor=pointer]:
+                      - generic [ref=f2e1373]:
+                        - img [ref=f2e1375]
+                        - text: 删除
+              - row "选择当前行 人脸检测 300018 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1377]:
+                - cell "选择当前行" [ref=f2e1378]:
+                  - generic "选择当前行" [ref=f2e1380] [cursor=pointer]:
+                    - generic [ref=f2e1381]:
+                      - checkbox "选择当前行"
+                - cell "人脸检测" [ref=f2e1383]:
+                  - generic [ref=f2e1384]: 人脸检测
+                - cell "300018" [ref=f2e1385]:
+                  - generic [ref=f2e1386]: "300018"
+                - cell "未分类" [ref=f2e1387]:
+                  - generic [ref=f2e1388]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1389]:
+                  - generic [ref=f2e1390]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1391]:
+                  - generic [ref=f2e1392]:
+                    - button "修改" [ref=f2e1393] [cursor=pointer]:
+                      - generic [ref=f2e1394]:
+                        - img [ref=f2e1396]
+                        - text: 修改
+                    - button "删除" [ref=f2e1399] [cursor=pointer]:
+                      - generic [ref=f2e1400]:
+                        - img [ref=f2e1402]
+                        - text: 删除
+              - row "选择当前行 人流统计 300045 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1404]:
+                - cell "选择当前行" [ref=f2e1405]:
+                  - generic "选择当前行" [ref=f2e1407] [cursor=pointer]:
+                    - generic [ref=f2e1408]:
+                      - checkbox "选择当前行"
+                - cell "人流统计" [ref=f2e1410]:
+                  - generic [ref=f2e1411]: 人流统计
+                - cell "300045" [ref=f2e1412]:
+                  - generic [ref=f2e1413]: "300045"
+                - cell "未分类" [ref=f2e1414]:
+                  - generic [ref=f2e1415]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1416]:
+                  - generic [ref=f2e1417]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1418]:
+                  - generic [ref=f2e1419]:
+                    - button "修改" [ref=f2e1420] [cursor=pointer]:
+                      - generic [ref=f2e1421]:
+                        - img [ref=f2e1423]
+                        - text: 修改
+                    - button "删除" [ref=f2e1426] [cursor=pointer]:
+                      - generic [ref=f2e1427]:
+                        - img [ref=f2e1429]
+                        - text: 删除
+              - row "选择当前行 逗留提醒 300036 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1431]:
+                - cell "选择当前行" [ref=f2e1432]:
+                  - generic "选择当前行" [ref=f2e1434] [cursor=pointer]:
+                    - generic [ref=f2e1435]:
+                      - checkbox "选择当前行"
+                - cell "逗留提醒" [ref=f2e1437]:
+                  - generic [ref=f2e1438]: 逗留提醒
+                - cell "300036" [ref=f2e1439]:
+                  - generic [ref=f2e1440]: "300036"
+                - cell "未分类" [ref=f2e1441]:
+                  - generic [ref=f2e1442]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1443]:
+                  - generic [ref=f2e1444]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1445]:
+                  - generic [ref=f2e1446]:
+                    - button "修改" [ref=f2e1447] [cursor=pointer]:
+                      - generic [ref=f2e1448]:
+                        - img [ref=f2e1450]
+                        - text: 修改
+                    - button "删除" [ref=f2e1453] [cursor=pointer]:
+                      - generic [ref=f2e1454]:
+                        - img [ref=f2e1456]
+                        - text: 删除
+              - row "选择当前行 区域离开 300035 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1458]:
+                - cell "选择当前行" [ref=f2e1459]:
+                  - generic "选择当前行" [ref=f2e1461] [cursor=pointer]:
+                    - generic [ref=f2e1462]:
+                      - checkbox "选择当前行"
+                - cell "区域离开" [ref=f2e1464]:
+                  - generic [ref=f2e1465]: 区域离开
+                - cell "300035" [ref=f2e1466]:
+                  - generic [ref=f2e1467]: "300035"
+                - cell "未分类" [ref=f2e1468]:
+                  - generic [ref=f2e1469]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1470]:
+                  - generic [ref=f2e1471]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1472]:
+                  - generic [ref=f2e1473]:
+                    - button "修改" [ref=f2e1474] [cursor=pointer]:
+                      - generic [ref=f2e1475]:
+                        - img [ref=f2e1477]
+                        - text: 修改
+                    - button "删除" [ref=f2e1480] [cursor=pointer]:
+                      - generic [ref=f2e1481]:
+                        - img [ref=f2e1483]
+                        - text: 删除
+              - row "选择当前行 区域闯入 300034 未分类 2026/6/17 17:54:52 修改 删除" [ref=f2e1485]:
+                - cell "选择当前行" [ref=f2e1486]:
+                  - generic "选择当前行" [ref=f2e1488] [cursor=pointer]:
+                    - generic [ref=f2e1489]:
+                      - checkbox "选择当前行"
+                - cell "区域闯入" [ref=f2e1491]:
+                  - generic [ref=f2e1492]: 区域闯入
+                - cell "300034" [ref=f2e1493]:
+                  - generic [ref=f2e1494]: "300034"
+                - cell "未分类" [ref=f2e1495]:
+                  - generic [ref=f2e1496]: 未分类
+                - cell "2026/6/17 17:54:52" [ref=f2e1497]:
+                  - generic [ref=f2e1498]: 2026/6/17 17:54:52
+                - cell "修改 删除" [ref=f2e1499]:
+                  - generic [ref=f2e1500]:
+                    - button "修改" [ref=f2e1501] [cursor=pointer]:
+                      - generic [ref=f2e1502]:
+                        - img [ref=f2e1504]
+                        - text: 修改
+                    - button "删除" [ref=f2e1507] [cursor=pointer]:
+                      - generic [ref=f2e1508]:
+                        - img [ref=f2e1510]
+                        - text: 删除

@@ -1,0 +1,217 @@
+- generic [ref=f18e3]:
+  - complementary [ref=f18e4]:
+    - generic [ref=f18e5]:
+      - img [ref=f18e7]
+      - generic [ref=f18e9]: IoT 平台
+    - navigation [ref=f18e10]:
+      - generic [ref=f18e11] [cursor=pointer]:
+        - img [ref=f18e13]
+        - generic [ref=f18e15]: 工作台
+      - generic [ref=f18e16]:
+        - generic [ref=f18e17] [cursor=pointer]:
+          - img [ref=f18e19]
+          - generic [ref=f18e22]: 物模型管理
+          - img [ref=f18e24]
+        - generic:
+          - generic [ref=f18e26] [cursor=pointer]:
+            - img [ref=f18e28]
+            - generic [ref=f18e30]: IOT类目
+          - generic [ref=f18e31] [cursor=pointer]:
+            - img [ref=f18e33]
+            - generic [ref=f18e38]: 能力库
+          - generic [ref=f18e39] [cursor=pointer]:
+            - img [ref=f18e41]
+            - generic [ref=f18e44]: 算法库
+          - generic [ref=f18e45] [cursor=pointer]:
+            - img [ref=f18e47]
+            - generic [ref=f18e49]: 事件库
+      - generic [ref=f18e50]:
+        - generic [ref=f18e51] [cursor=pointer]:
+          - img [ref=f18e53]
+          - generic [ref=f18e57]: 产品管理
+          - img [ref=f18e59]
+        - generic:
+          - generic [ref=f18e61] [cursor=pointer]:
+            - img [ref=f18e63]
+            - generic [ref=f18e67]: 产品开发
+          - generic [ref=f18e68] [cursor=pointer]:
+            - img [ref=f18e70]
+            - generic [ref=f18e72]: 产品审核
+      - generic [ref=f18e73]:
+        - generic [ref=f18e74] [cursor=pointer]:
+          - img [ref=f18e76]
+          - generic [ref=f18e81]: 套餐管理
+          - img [ref=f18e83]
+        - generic:
+          - generic [ref=f18e85] [cursor=pointer]:
+            - img [ref=f18e87]
+            - generic [ref=f18e91]: 套餐配置
+          - generic [ref=f18e92] [cursor=pointer]:
+            - img [ref=f18e94]
+            - generic [ref=f18e99]: 服务类型
+      - generic [ref=f18e100]:
+        - generic [ref=f18e101] [cursor=pointer]:
+          - img [ref=f18e103]
+          - generic [ref=f18e105]: 运营管理
+          - img [ref=f18e107]
+        - generic:
+          - generic [ref=f18e109] [cursor=pointer]:
+            - img [ref=f18e111]
+            - generic [ref=f18e113]: 商城位运营
+          - generic [ref=f18e114] [cursor=pointer]:
+            - img [ref=f18e116]
+            - generic [ref=f18e118]: 推荐位运营
+          - generic [ref=f18e119] [cursor=pointer]:
+            - img [ref=f18e121]
+            - generic [ref=f18e126]: 活动位运营
+          - generic [ref=f18e127] [cursor=pointer]:
+            - img [ref=f18e129]
+            - generic [ref=f18e131]: 用户分群
+          - generic [ref=f18e132] [cursor=pointer]:
+            - img [ref=f18e134]
+            - generic [ref=f18e136]: A/B Test
+    - generic [ref=f18e138] [cursor=pointer]:
+      - img [ref=f18e140]
+      - generic [ref=f18e142]: 收起菜单
+  - generic [ref=f18e143]:
+    - banner [ref=f18e144]:
+      - navigation "面包屑" [ref=f18e146]:
+        - link "首页" [ref=f18e148]
+      - generic [ref=f18e149]:
+        - generic [ref=f18e150] [cursor=pointer]:
+          - img [ref=f18e152]
+          - superscript [ref=f18e156]: "3"
+        - button "管理员" [ref=f18e158] [cursor=pointer]:
+          - img [ref=f18e161]
+          - generic [ref=f18e163]: 管理员
+          - img [ref=f18e165]
+    - main [ref=f18e167]:
+      - generic [ref=f18e688]:
+        - generic [ref=f18e691]:
+          - button "返回 返回" [ref=f18e692] [cursor=pointer]:
+            - generic "返回" [ref=f18e693]:
+              - img [ref=f18e695]
+            - generic [ref=f18e698]: 返回
+          - separator [ref=f18e699]
+          - generic [ref=f18e700]: 开发产品
+        - generic [ref=f18e701]:
+          - generic [ref=f18e702]:
+            - heading "智能门铃 Pro" [level=2] [ref=f18e703]
+            - button "编辑产品" [ref=f18e704] [cursor=pointer]:
+              - generic [ref=f18e705]:
+                - img [ref=f18e707]
+                - text: 编辑产品
+          - generic [ref=f18e710]:
+            - generic [ref=f18e711]: "产品Id: DOORBELL_001"
+            - generic [ref=f18e712]: "|"
+            - generic [ref=f18e713]: "产品型号: TEST-MODEL-388537"
+            - generic [ref=f18e714]: "|"
+            - generic [ref=f18e715]: "产品类目: UITest_Edit_285367"
+            - generic [ref=f18e716]: "|"
+            - generic [ref=f18e717]: "联网方式: -"
+        - generic [ref=f18e718]:
+          - generic [ref=f18e723] [cursor=pointer]: 功能定义与配置
+          - generic [ref=f18e729] [cursor=pointer]: 事件配置
+          - generic [ref=f18e735] [cursor=pointer]: 设备算法配置
+          - generic [ref=f18e741] [cursor=pointer]: 平台服务
+          - generic [ref=f18e747] [cursor=pointer]: 语音助手
+        - generic [ref=f18e887]:
+          - generic [ref=f18e888]:
+            - button "上一步" [ref=f18e889] [cursor=pointer]:
+              - generic [ref=f18e890]: 上一步
+            - button "跳过" [ref=f18e891] [cursor=pointer]:
+              - generic [ref=f18e892]: 跳过
+            - button "保存，下一步" [ref=f18e893] [cursor=pointer]:
+              - generic [ref=f18e894]:
+                - img [ref=f18e896]
+                - text: 保存，下一步
+          - separator [ref=f18e899]:
+            - generic [ref=f18e900]:
+              - img [ref=f18e902]
+              - generic [ref=f18e904]: 配置选项
+          - generic [ref=f18e905]:
+            - img [ref=f18e907]
+            - generic [ref=f18e909]: 该模块用于配置端侧算法，请根据设备实际能力配置
+          - generic [ref=f18e912]:
+            - table [ref=f18e914]:
+              - rowgroup [ref=f18e923]:
+                - row "AlgorithmID 算法名称 描述 是否支持 计费模式 能力配置 关联事件" [ref=f18e924]:
+                  - columnheader "AlgorithmID" [ref=f18e925]:
+                    - generic [ref=f18e926]: AlgorithmID
+                  - columnheader "算法名称" [ref=f18e927]:
+                    - generic [ref=f18e928]: 算法名称
+                  - columnheader "描述" [ref=f18e929]:
+                    - generic [ref=f18e930]: 描述
+                  - columnheader "是否支持" [ref=f18e931]:
+                    - generic [ref=f18e932]: 是否支持
+                  - columnheader "计费模式" [ref=f18e933]:
+                    - generic [ref=f18e934]: 计费模式
+                  - columnheader "能力配置" [ref=f18e935]:
+                    - generic [ref=f18e936]: 能力配置
+                  - columnheader "关联事件" [ref=f18e937]:
+                    - generic [ref=f18e938]: 关联事件
+            - table [ref=f18e943]:
+              - rowgroup [ref=f18e952]:
+                - row "motion_detection 移动侦测算法 套餐购买 配置 编辑" [ref=f18e953]:
+                  - cell "motion_detection" [ref=f18e954]:
+                    - generic [ref=f18e955]: motion_detection
+                  - cell "移动侦测算法" [ref=f18e956]:
+                    - generic [ref=f18e957]: 移动侦测算法
+                  - cell [ref=f18e958]
+                  - cell [ref=f18e959]:
+                    - generic [ref=f18e961]:
+                      - switch
+                  - cell "套餐购买" [ref=f18e964]:
+                    - generic [ref=f18e967] [cursor=pointer]:
+                      - generic:
+                        - combobox [ref=f18e969]
+                        - generic [ref=f18e970]: 套餐购买
+                      - img [ref=f18e973]
+                  - cell "配置" [ref=f18e975]:
+                    - button "配置" [ref=f18e977] [cursor=pointer]:
+                      - generic [ref=f18e978]: 配置
+                  - cell "编辑" [ref=f18e979]:
+                    - button "编辑" [ref=f18e981] [cursor=pointer]:
+                      - generic [ref=f18e982]: 编辑
+                - row "sound_detection 声音侦测算法 套餐购买 配置 编辑" [ref=f18e983]:
+                  - cell "sound_detection" [ref=f18e984]:
+                    - generic [ref=f18e985]: sound_detection
+                  - cell "声音侦测算法" [ref=f18e986]:
+                    - generic [ref=f18e987]: 声音侦测算法
+                  - cell [ref=f18e988]
+                  - cell [ref=f18e989]:
+                    - generic [ref=f18e991]:
+                      - switch
+                  - cell "套餐购买" [ref=f18e994]:
+                    - generic [ref=f18e997] [cursor=pointer]:
+                      - generic:
+                        - combobox [ref=f18e999]
+                        - generic [ref=f18e1000]: 套餐购买
+                      - img [ref=f18e1003]
+                  - cell "配置" [ref=f18e1005]:
+                    - button "配置" [ref=f18e1007] [cursor=pointer]:
+                      - generic [ref=f18e1008]: 配置
+                  - cell "编辑" [ref=f18e1009]:
+                    - button "编辑" [ref=f18e1011] [cursor=pointer]:
+                      - generic [ref=f18e1012]: 编辑
+                - row "pir_detection PIR侦测 套餐购买 配置 编辑" [ref=f18e1013]:
+                  - cell "pir_detection" [ref=f18e1014]:
+                    - generic [ref=f18e1015]: pir_detection
+                  - cell "PIR侦测" [ref=f18e1016]:
+                    - generic [ref=f18e1017]: PIR侦测
+                  - cell [ref=f18e1018]
+                  - cell [ref=f18e1019]:
+                    - generic [ref=f18e1021]:
+                      - switch
+                  - cell "套餐购买" [ref=f18e1024]:
+                    - generic [ref=f18e1027] [cursor=pointer]:
+                      - generic:
+                        - combobox [ref=f18e1029]
+                        - generic [ref=f18e1030]: 套餐购买
+                      - img [ref=f18e1033]
+                  - cell "配置" [ref=f18e1035]:
+                    - button "配置" [ref=f18e1037] [cursor=pointer]:
+                      - generic [ref=f18e1038]: 配置
+                  - cell "编辑" [ref=f18e1039]:
+                    - button "编辑" [ref=f18e1041] [cursor=pointer]:
+                      - generic [ref=f18e1042]: 编辑

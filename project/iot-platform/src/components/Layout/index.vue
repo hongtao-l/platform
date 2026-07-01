@@ -188,7 +188,8 @@ const menuList = ref([
     title: '套餐管理',
     icon: Present,
     children: [
-      { title: '套餐配置', path: '/pkg', icon: Box }
+      { title: '套餐配置', path: '/pkg', icon: Box },
+      { title: '服务类型', path: '/pkg/service', icon: SetUp }
     ]
   },
   {
@@ -217,20 +218,36 @@ const expandedMenus = reactive(
 
 // 当前菜单名称
 const currentMenu = computed(() => {
+  let best = ''
+  let bestLen = 0
   for (const m of menuList.value) {
     if (m.children) {
-      const child = m.children.find(c => route.path.startsWith(c.path))
-      if (child) return child.title
-    } else if (route.path.startsWith(m.path)) {
-      return m.title
+      for (const child of m.children) {
+        if (route.path.startsWith(child.path) && child.path.length > bestLen) {
+          best = child.title
+          bestLen = child.path.length
+        }
+      }
+    } else if (route.path.startsWith(m.path) && m.path.length > bestLen) {
+      best = m.title
+      bestLen = m.path.length
     }
   }
-  return ''
+  return best
 })
 
-// 判断菜单是否激活
+// 判断菜单是否激活（最长匹配，避免 /pkg 和 /pkg/service 同时高亮）
 const isActive = (path) => {
-  return route.path.startsWith(path)
+  let best = ''
+  for (const m of menuList.value) {
+    const paths = m.children ? m.children.map(c => c.path) : [m.path]
+    for (const p of paths) {
+      if (route.path.startsWith(p) && p.length > best.length) {
+        best = p
+      }
+    }
+  }
+  return path === best
 }
 
 // 切换父菜单展开/收起

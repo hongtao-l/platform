@@ -1,0 +1,247 @@
+- generic [ref=f18e3]:
+  - complementary [ref=f18e4]:
+    - generic [ref=f18e5]:
+      - img [ref=f18e7]
+      - generic [ref=f18e9]: IoT 平台
+    - navigation [ref=f18e10]:
+      - generic [ref=f18e11] [cursor=pointer]:
+        - img [ref=f18e13]
+        - generic [ref=f18e15]: 工作台
+      - generic [ref=f18e16]:
+        - generic [ref=f18e17] [cursor=pointer]:
+          - img [ref=f18e19]
+          - generic [ref=f18e22]: 物模型管理
+          - img [ref=f18e24]
+        - generic:
+          - generic [ref=f18e26] [cursor=pointer]:
+            - img [ref=f18e28]
+            - generic [ref=f18e30]: IOT类目
+          - generic [ref=f18e31] [cursor=pointer]:
+            - img [ref=f18e33]
+            - generic [ref=f18e38]: 能力库
+          - generic [ref=f18e39] [cursor=pointer]:
+            - img [ref=f18e41]
+            - generic [ref=f18e44]: 算法库
+          - generic [ref=f18e45] [cursor=pointer]:
+            - img [ref=f18e47]
+            - generic [ref=f18e49]: 事件库
+      - generic [ref=f18e50]:
+        - generic [ref=f18e51] [cursor=pointer]:
+          - img [ref=f18e53]
+          - generic [ref=f18e57]: 产品管理
+          - img [ref=f18e59]
+        - generic:
+          - generic [ref=f18e61] [cursor=pointer]:
+            - img [ref=f18e63]
+            - generic [ref=f18e67]: 产品开发
+          - generic [ref=f18e68] [cursor=pointer]:
+            - img [ref=f18e70]
+            - generic [ref=f18e72]: 产品审核
+      - generic [ref=f18e73]:
+        - generic [ref=f18e74] [cursor=pointer]:
+          - img [ref=f18e76]
+          - generic [ref=f18e81]: 套餐管理
+          - img [ref=f18e83]
+        - generic:
+          - generic [ref=f18e85] [cursor=pointer]:
+            - img [ref=f18e87]
+            - generic [ref=f18e91]: 套餐配置
+          - generic [ref=f18e92] [cursor=pointer]:
+            - img [ref=f18e94]
+            - generic [ref=f18e99]: 服务类型
+      - generic [ref=f18e100]:
+        - generic [ref=f18e101] [cursor=pointer]:
+          - img [ref=f18e103]
+          - generic [ref=f18e105]: 运营管理
+          - img [ref=f18e107]
+        - generic:
+          - generic [ref=f18e109] [cursor=pointer]:
+            - img [ref=f18e111]
+            - generic [ref=f18e113]: 商城位运营
+          - generic [ref=f18e114] [cursor=pointer]:
+            - img [ref=f18e116]
+            - generic [ref=f18e118]: 推荐位运营
+          - generic [ref=f18e119] [cursor=pointer]:
+            - img [ref=f18e121]
+            - generic [ref=f18e126]: 活动位运营
+          - generic [ref=f18e127] [cursor=pointer]:
+            - img [ref=f18e129]
+            - generic [ref=f18e131]: 用户分群
+          - generic [ref=f18e132] [cursor=pointer]:
+            - img [ref=f18e134]
+            - generic [ref=f18e136]: A/B Test
+    - generic [ref=f18e138] [cursor=pointer]:
+      - img [ref=f18e140]
+      - generic [ref=f18e142]: 收起菜单
+  - generic [ref=f18e143]:
+    - banner [ref=f18e144]:
+      - navigation "面包屑" [ref=f18e146]:
+        - link "首页" [ref=f18e148]
+      - generic [ref=f18e149]:
+        - generic [ref=f18e150] [cursor=pointer]:
+          - img [ref=f18e152]
+          - superscript [ref=f18e156]: "3"
+        - button "管理员" [ref=f18e158] [cursor=pointer]:
+          - img [ref=f18e161]
+          - generic [ref=f18e163]: 管理员
+          - img [ref=f18e165]
+    - main [ref=f18e167]:
+      - generic [ref=f18e688]:
+        - generic [ref=f18e691]:
+          - button "返回 返回" [ref=f18e692] [cursor=pointer]:
+            - generic "返回" [ref=f18e693]:
+              - img [ref=f18e695]
+            - generic [ref=f18e698]: 返回
+          - separator [ref=f18e699]
+          - generic [ref=f18e700]: 开发产品
+        - generic [ref=f18e701]:
+          - generic [ref=f18e702]:
+            - heading "智能门铃 Pro" [level=2] [ref=f18e703]
+            - button "编辑产品" [ref=f18e704] [cursor=pointer]:
+              - generic [ref=f18e705]:
+                - img [ref=f18e707]
+                - text: 编辑产品
+          - generic [ref=f18e710]:
+            - generic [ref=f18e711]: "产品Id: DOORBELL_001"
+            - generic [ref=f18e712]: "|"
+            - generic [ref=f18e713]: "产品型号: TEST-MODEL-388537"
+            - generic [ref=f18e714]: "|"
+            - generic [ref=f18e715]: "产品类目: UITest_Edit_285367"
+            - generic [ref=f18e716]: "|"
+            - generic [ref=f18e717]: "联网方式: -"
+        - generic [ref=f18e718]:
+          - generic [ref=f18e723] [cursor=pointer]: 功能定义与配置
+          - generic [ref=f18e729] [cursor=pointer]: 事件配置
+          - generic [ref=f18e735] [cursor=pointer]: 设备算法配置
+          - generic [ref=f18e741] [cursor=pointer]: 平台服务
+          - generic [ref=f18e747] [cursor=pointer]: 语音助手
+        - generic [ref=f18e748]:
+          - tablist [ref=f18e752]:
+            - tab "设备能力" [selected] [ref=f18e753]
+            - tab "镜头配置" [ref=f18e754]
+            - tab "麦克风配置" [ref=f18e755]
+          - tabpanel "设备能力" [ref=f18e757]:
+            - generic [ref=f18e758]:
+              - button "上一步" [disabled] [ref=f18e759]:
+                - generic [ref=f18e760]: 上一步
+              - button "跳过" [ref=f18e761] [cursor=pointer]:
+                - generic [ref=f18e762]: 跳过
+              - button "保存,下一步" [ref=f18e763] [cursor=pointer]:
+                - generic [ref=f18e764]:
+                  - img [ref=f18e766]
+                  - text: 保存,下一步
+            - separator [ref=f18e769]:
+              - generic [ref=f18e770]:
+                - img [ref=f18e772]
+                - generic [ref=f18e774]: 配置选项
+            - generic [ref=f18e775]:
+              - radiogroup "segmented" [ref=f18e776]:
+                - generic [ref=f18e777]:
+                  - generic [ref=f18e778] [cursor=pointer]:
+                    - radio "联网方式" [checked]
+                    - generic [ref=f18e779]: 联网方式
+                  - generic [ref=f18e780] [cursor=pointer]:
+                    - radio "对讲设置"
+                    - generic [ref=f18e781]: 对讲设置
+                  - generic [ref=f18e782] [cursor=pointer]:
+                    - radio "存储设置"
+                    - generic [ref=f18e783]: 存储设置
+                  - generic [ref=f18e784] [cursor=pointer]:
+                    - radio "电池设置"
+                    - generic [ref=f18e785]: 电池设置
+                  - generic [ref=f18e786] [cursor=pointer]:
+                    - radio "工作模式"
+                    - generic [ref=f18e787]: 工作模式
+                  - generic [ref=f18e788] [cursor=pointer]:
+                    - radio "唤醒能力"
+                    - generic [ref=f18e789]: 唤醒能力
+                  - generic [ref=f18e790] [cursor=pointer]:
+                    - radio "OTA能力"
+                    - generic [ref=f18e791]: OTA能力
+                  - generic [ref=f18e792] [cursor=pointer]:
+                    - radio "指示灯"
+                    - generic [ref=f18e793]: 指示灯
+                  - generic [ref=f18e794] [cursor=pointer]:
+                    - radio "报警录制"
+                    - generic [ref=f18e795]: 报警录制
+                  - generic [ref=f18e796] [cursor=pointer]:
+                    - radio "红外灯"
+                    - generic [ref=f18e797]: 红外灯
+                  - generic [ref=f18e798] [cursor=pointer]:
+                    - radio "屏显配置"
+                    - generic [ref=f18e799]: 屏显配置
+                  - generic [ref=f18e800] [cursor=pointer]:
+                    - radio "喇叭配置"
+                    - generic [ref=f18e801]: 喇叭配置
+              - generic [ref=f18e807]:
+                - generic [ref=f18e808]:
+                  - generic [ref=f18e809]: 联网方式
+                  - group "联网方式" [ref=f18e811]:
+                    - generic [ref=f18e812] [cursor=pointer]:
+                      - generic [ref=f18e813]:
+                        - checkbox "有线"
+                      - generic [ref=f18e815]: 有线
+                    - generic [ref=f18e816] [cursor=pointer]:
+                      - generic [ref=f18e817]:
+                        - checkbox "WIFI"
+                      - generic [ref=f18e819]: WIFI
+                    - generic [ref=f18e820] [cursor=pointer]:
+                      - generic [ref=f18e821]:
+                        - checkbox "移动网络"
+                      - generic [ref=f18e823]: 移动网络
+                - generic [ref=f18e824]:
+                  - generic [ref=f18e825]: 配网方式
+                  - group "配网方式" [ref=f18e827]:
+                    - generic [ref=f18e828] [cursor=pointer]:
+                      - generic [ref=f18e829]:
+                        - checkbox "AP"
+                      - generic [ref=f18e831]: AP
+                    - generic [ref=f18e832] [cursor=pointer]:
+                      - generic [ref=f18e833]:
+                        - checkbox "声音"
+                      - generic [ref=f18e835]: 声音
+                    - generic [ref=f18e836] [cursor=pointer]:
+                      - generic [ref=f18e837]:
+                        - checkbox "smartlink"
+                      - generic [ref=f18e839]: smartlink
+                    - generic [ref=f18e840] [cursor=pointer]:
+                      - generic [ref=f18e841]:
+                        - checkbox "摄像机识别二维码添加"
+                      - generic [ref=f18e843]: 摄像机识别二维码添加
+                    - generic [ref=f18e844] [cursor=pointer]:
+                      - generic [ref=f18e845]:
+                        - checkbox "局域网"
+                      - generic [ref=f18e847]: 局域网
+                    - generic [ref=f18e848] [cursor=pointer]:
+                      - generic [ref=f18e849]:
+                        - checkbox "APP扫码添加"
+                      - generic [ref=f18e851]: APP扫码添加
+                    - generic [ref=f18e852] [cursor=pointer]:
+                      - generic [ref=f18e853]:
+                        - checkbox "蓝牙添加"
+                      - generic [ref=f18e855]: 蓝牙添加
+                - generic [ref=f18e856]:
+                  - generic [ref=f18e857]: 默认配网方式
+                  - generic [ref=f18e860] [cursor=pointer]:
+                    - generic:
+                      - combobox "默认配网方式" [ref=f18e862]
+                      - generic [ref=f18e863]: AP
+                    - img [ref=f18e866]
+            - generic [ref=f18e868]:
+              - generic [ref=f18e869]:
+                - heading "标准能力" [level=3] [ref=f18e870]:
+                  - text: 标准能力
+                  - img [ref=f18e872]
+                - button "添加标准能力" [ref=f18e874] [cursor=pointer]:
+                  - generic [ref=f18e875]: 添加标准能力
+              - generic [ref=f18e876]: 暂无数据
+            - generic [ref=f18e877]:
+              - generic [ref=f18e878]:
+                - generic [ref=f18e879]:
+                  - heading "自定义能力" [level=3] [ref=f18e880]:
+                    - text: 自定义能力
+                    - img [ref=f18e882]
+                  - text: 您所定义的每一个功能，都与固件、APP控制台面板相关
+                - button "添加自定义能力" [ref=f18e884] [cursor=pointer]:
+                  - generic [ref=f18e885]: 添加自定义能力
+              - generic [ref=f18e886]: 暂无数据

@@ -17,6 +17,10 @@
         </div>
       </el-form-item>
 
+      <el-form-item label="描述" prop="descr">
+        <el-input v-model="form.descr" type="textarea" :rows="3" placeholder="请输入算法描述" />
+      </el-form-item>
+
       <el-form-item label="图标">
         <el-upload
           class="icon-upload"
@@ -68,7 +72,8 @@ const langDialogVisible = ref(false)
 const form = reactive({
   algorithmId: '',
   algorithmName: { '1': '' },
-  algorithmIcon: ''
+  algorithmIcon: '',
+  descr: ''
 })
 
 const rules = {
@@ -92,6 +97,7 @@ async function loadDetail() {
       form.algorithmId = d.algorithmId || ''
       try { form.algorithmName = JSON.parse(d.algorithmName || '{}') } catch { form.algorithmName = { '1': '' } }
       form.algorithmIcon = d.algorithmIcon || ''
+      form.descr = d.descr || ''
     }
   } catch { /* ignore */ } finally { pageLoading.value = false }
 }
@@ -100,6 +106,7 @@ function resetForm() {
   form.algorithmId = ''
   form.algorithmName = { '1': '' }
   form.algorithmIcon = ''
+  form.descr = ''
 }
 
 function handleOpen() { isEdit.value ? loadDetail() : resetForm() }
@@ -113,7 +120,8 @@ async function handleSubmit() {
     const data = {
       algorithmId: form.algorithmId,
       algorithmIcon: form.algorithmIcon,
-      algorithmName: JSON.stringify(form.algorithmName)
+      algorithmName: JSON.stringify(form.algorithmName),
+      descr: form.descr
     }
     const res = isEdit.value
       ? updateAlgorithm({ id: props.editId, ...data })

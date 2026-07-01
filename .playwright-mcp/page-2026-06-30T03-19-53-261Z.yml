@@ -1,0 +1,88 @@
+- generic [ref=f17e3]:
+  - complementary [ref=f17e4]:
+    - generic [ref=f17e5]:
+      - img [ref=f17e7]
+      - generic [ref=f17e9]: IoT 平台
+    - navigation [ref=f17e10]:
+      - generic [ref=f17e11] [cursor=pointer]:
+        - img [ref=f17e13]
+        - generic [ref=f17e15]: 工作台
+      - generic [ref=f17e16]:
+        - generic [ref=f17e17] [cursor=pointer]:
+          - img [ref=f17e19]
+          - generic [ref=f17e22]: 物模型管理
+          - img [ref=f17e24]
+        - generic:
+          - generic [ref=f17e26] [cursor=pointer]:
+            - img [ref=f17e28]
+            - generic [ref=f17e30]: IOT类目
+          - generic [ref=f17e31] [cursor=pointer]:
+            - img [ref=f17e33]
+            - generic [ref=f17e38]: 能力库
+          - generic [ref=f17e39] [cursor=pointer]:
+            - img [ref=f17e41]
+            - generic [ref=f17e44]: 算法库
+          - generic [ref=f17e45] [cursor=pointer]:
+            - img [ref=f17e47]
+            - generic [ref=f17e49]: 事件库
+      - generic [ref=f17e50]:
+        - generic [ref=f17e51] [cursor=pointer]:
+          - img [ref=f17e53]
+          - generic [ref=f17e57]: 产品管理
+          - img [ref=f17e59]
+        - generic:
+          - generic [ref=f17e61] [cursor=pointer]:
+            - img [ref=f17e63]
+            - generic [ref=f17e67]: 产品开发
+          - generic [ref=f17e68] [cursor=pointer]:
+            - img [ref=f17e70]
+            - generic [ref=f17e72]: 产品审核
+      - generic [ref=f17e73]:
+        - generic [ref=f17e74] [cursor=pointer]:
+          - img [ref=f17e76]
+          - generic [ref=f17e81]: 套餐管理
+          - img [ref=f17e83]
+        - generic:
+          - generic [ref=f17e85] [cursor=pointer]:
+            - img [ref=f17e87]
+            - generic [ref=f17e91]: 套餐配置
+          - generic [ref=f17e92] [cursor=pointer]:
+            - img [ref=f17e94]
+            - generic [ref=f17e99]: 服务类型
+      - generic [ref=f17e100]:
+        - generic [ref=f17e101] [cursor=pointer]:
+          - img [ref=f17e103]
+          - generic [ref=f17e105]: 运营管理
+          - img [ref=f17e107]
+        - generic:
+          - generic [ref=f17e109] [cursor=pointer]:
+            - img [ref=f17e111]
+            - generic [ref=f17e113]: 商城位运营
+          - generic [ref=f17e114] [cursor=pointer]:
+            - img [ref=f17e116]
+            - generic [ref=f17e118]: 推荐位运营
+          - generic [ref=f17e119] [cursor=pointer]:
+            - img [ref=f17e121]
+            - generic [ref=f17e126]: 活动位运营
+          - generic [ref=f17e127] [cursor=pointer]:
+            - img [ref=f17e129]
+            - generic [ref=f17e131]: 用户分群
+          - generic [ref=f17e132] [cursor=pointer]:
+            - img [ref=f17e134]
+            - generic [ref=f17e136]: A/B Test
+    - generic [ref=f17e138] [cursor=pointer]:
+      - img [ref=f17e140]
+      - generic [ref=f17e142]: 收起菜单
+  - generic [ref=f17e143]:
+    - banner [ref=f17e144]:
+      - navigation "面包屑" [ref=f17e146]:
+        - link "首页" [ref=f17e148]
+      - generic [ref=f17e149]:
+        - generic [ref=f17e150] [cursor=pointer]:
+          - img [ref=f17e152]
+          - superscript [ref=f17e156]: "3"
+        - button "管理员" [ref=f17e158] [cursor=pointer]:
+          - img [ref=f17e161]
+          - generic [ref=f17e163]: 管理员
+          - img [ref=f17e165]
+    - main [ref=f17e167]

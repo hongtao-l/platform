@@ -219,23 +219,42 @@
               </div>
             </el-form-item>
           </div>
-          <el-form-item label="免费试用">
-            <div style="display:flex;align-items:center;justify-content:space-between">
-              <span style="font-size:13px;color:var(--text-secondary)">开启免费试用</span>
-              <el-switch v-model="form.freeTrial" />
-            </div>
+          <el-form-item label="允许试用" class="inline-form-item">
+            <el-switch v-model="form.freeTrial" />
           </el-form-item>
-          <div v-if="form.freeTrial" class="price-row">
-            <el-form-item label="试用周期（天）" prop="trialDays">
-              <el-input-number v-model="form.trialDays" :min="1" placeholder="如：7" style="width:100%" />
+          <div v-if="form.freeTrial" class="trial-config">
+            <el-form-item label="试用类型">
+              <el-radio-group v-model="form.trialType" size="small">
+                <el-radio label="free">免费试用</el-radio>
+                <el-radio label="paid">付费试用</el-radio>
+              </el-radio-group>
             </el-form-item>
-            <el-form-item label="过滤条件" prop="trialFilter">
-              <el-select v-model="form.trialFilter" placeholder="请选择过滤条件" style="width:100%">
-                <el-option label="从未试用过此套餐" value="never_this" />
-                <el-option label="从未试用过该服务类型" value="never_any" />
-                <el-option label="不限制" value="none" />
-              </el-select>
-            </el-form-item>
+            <div v-if="form.trialType === 'paid'" class="price-row">
+              <el-form-item label="试用售价（¥）">
+                <div class="price-prefix">
+                  <span class="prefix-label">¥</span>
+                  <el-input v-model="form.trialPriceYuan" type="number" placeholder="0.00" />
+                </div>
+              </el-form-item>
+              <el-form-item label="试用售价（$）">
+                <div class="price-prefix">
+                  <span class="prefix-label">$</span>
+                  <el-input v-model="form.trialPriceDollar" type="number" placeholder="0.00" />
+                </div>
+              </el-form-item>
+            </div>
+            <div class="price-row">
+              <el-form-item label="试用周期（天）" prop="trialDays">
+                <el-input-number v-model="form.trialDays" :min="1" placeholder="如：7" style="width:100%" />
+              </el-form-item>
+              <el-form-item label="过滤条件" prop="trialFilter">
+                <el-select v-model="form.trialFilter" placeholder="请选择过滤条件" style="width:100%">
+                  <el-option label="从未试用过此套餐" value="never_this" />
+                  <el-option label="从未试用过该服务类型" value="never_any" />
+                  <el-option label="不限制" value="none" />
+                </el-select>
+              </el-form-item>
+            </div>
           </div>
           <div class="price-row">
             <el-form-item label="订阅售价（¥）" prop="subPriceYuan">
@@ -452,6 +471,9 @@ const defaultForm = () => ({
   subPriceYuan: '',
   subPriceDollar: '',
   freeTrial: false,
+  trialType: 'free',
+  trialPriceYuan: '',
+  trialPriceDollar: '',
   trialDays: 7,
   trialFilter: '',
   iapQxproGoogle: '',
@@ -593,5 +615,23 @@ const handleSubmit = async () => {
 <style lang="scss" scoped>
 .el-form {
   padding-bottom: 16px;
+}
+
+.trial-config {
+  margin-top: 4px;
+}
+
+.inline-form-item.el-form-item {
+  display: flex;
+  align-items: center;
+  :deep(.el-form-item__label) {
+    flex-shrink: 0;
+    margin-bottom: 0;
+    padding-right: 12px;
+  }
+  :deep(.el-form-item__content) {
+    flex: 1;
+    margin-left: 0;
+  }
 }
 </style>

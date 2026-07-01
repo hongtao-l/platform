@@ -1,0 +1,725 @@
+- generic [ref=f4e3]:
+  - complementary [ref=f4e4]:
+    - generic [ref=f4e5]:
+      - img [ref=f4e7]
+      - generic [ref=f4e9]: IoT 平台
+    - navigation [ref=f4e10]:
+      - generic [ref=f4e11] [cursor=pointer]:
+        - img [ref=f4e13]
+        - generic [ref=f4e15]: 工作台
+      - generic [ref=f4e16]:
+        - generic [ref=f4e17] [cursor=pointer]:
+          - img [ref=f4e19]
+          - generic [ref=f4e22]: 物模型管理
+          - img [ref=f4e24]
+        - generic:
+          - generic [ref=f4e26] [cursor=pointer]:
+            - img [ref=f4e28]
+            - generic [ref=f4e30]: IOT类目
+          - generic [ref=f4e31] [cursor=pointer]:
+            - img [ref=f4e33]
+            - generic [ref=f4e38]: 能力库
+          - generic [ref=f4e39] [cursor=pointer]:
+            - img [ref=f4e41]
+            - generic [ref=f4e44]: 算法库
+          - generic [ref=f4e45] [cursor=pointer]:
+            - img [ref=f4e47]
+            - generic [ref=f4e49]: 事件库
+      - generic [ref=f4e50]:
+        - generic [ref=f4e51] [cursor=pointer]:
+          - img [ref=f4e53]
+          - generic [ref=f4e57]: 产品管理
+          - img [ref=f4e59]
+        - generic:
+          - generic [ref=f4e61] [cursor=pointer]:
+            - img [ref=f4e63]
+            - generic [ref=f4e67]: 产品开发
+          - generic [ref=f4e68] [cursor=pointer]:
+            - img [ref=f4e70]
+            - generic [ref=f4e72]: 产品审核
+      - generic [ref=f4e73]:
+        - generic [ref=f4e74] [cursor=pointer]:
+          - img [ref=f4e76]
+          - generic [ref=f4e81]: 套餐管理
+          - img [ref=f4e83]
+        - generic:
+          - generic [ref=f4e85] [cursor=pointer]:
+            - img [ref=f4e87]
+            - generic [ref=f4e91]: 套餐配置
+          - generic [ref=f4e92] [cursor=pointer]:
+            - img [ref=f4e94]
+            - generic [ref=f4e99]: 服务类型
+      - generic [ref=f4e100]:
+        - generic [ref=f4e101] [cursor=pointer]:
+          - img [ref=f4e103]
+          - generic [ref=f4e105]: 运营管理
+          - img [ref=f4e107]
+        - generic:
+          - generic [ref=f4e109] [cursor=pointer]:
+            - img [ref=f4e111]
+            - generic [ref=f4e113]: 商城位运营
+          - generic [ref=f4e114] [cursor=pointer]:
+            - img [ref=f4e116]
+            - generic [ref=f4e118]: 推荐位运营
+          - generic [ref=f4e119] [cursor=pointer]:
+            - img [ref=f4e121]
+            - generic [ref=f4e126]: 活动位运营
+          - generic [ref=f4e127] [cursor=pointer]:
+            - img [ref=f4e129]
+            - generic [ref=f4e131]: 用户分群
+          - generic [ref=f4e132] [cursor=pointer]:
+            - img [ref=f4e134]
+            - generic [ref=f4e136]: A/B Test
+    - generic [ref=f4e138] [cursor=pointer]:
+      - img [ref=f4e140]
+      - generic [ref=f4e142]: 收起菜单
+  - generic [ref=f4e143]:
+    - banner [ref=f4e144]:
+      - navigation "面包屑" [ref=f4e146]:
+        - generic [ref=f4e147]:
+          - link "首页" [ref=f4e148]
+          - text: /
+        - link "套餐配置" [ref=f4e169]
+      - generic [ref=f4e149]:
+        - generic [ref=f4e150] [cursor=pointer]:
+          - img [ref=f4e152]
+          - superscript [ref=f4e156]: "3"
+        - button "管理员" [ref=f4e158] [cursor=pointer]:
+          - img [ref=f4e161]
+          - generic [ref=f4e163]: 管理员
+          - img [ref=f4e165]
+    - main [ref=f4e167]:
+      - generic [ref=f4e170]:
+        - generic [ref=f4e171]:
+          - generic [ref=f4e172]:
+            - generic [ref=f4e173]:
+              - generic [ref=f4e174]: 服务分类
+              - button "新建分类" [ref=f4e175] [cursor=pointer]:
+                - generic [ref=f4e176]: 新建分类
+            - generic [ref=f4e177]:
+              - generic [ref=f4e178] [cursor=pointer]:
+                - img [ref=f4e180]
+                - generic [ref=f4e182]: 未分类
+                - generic [ref=f4e184]: "46"
+                - button [ref=f4e185]:
+                  - img [ref=f4e188]
+              - generic [ref=f4e191] [cursor=pointer]:
+                - img [ref=f4e193]
+                - generic [ref=f4e195]: 云存储
+                - generic [ref=f4e197]: "3"
+                - button [ref=f4e198]:
+                  - img [ref=f4e201]
+              - generic [ref=f4e204] [cursor=pointer]:
+                - img [ref=f4e206]
+                - generic [ref=f4e208]: AI服务
+                - generic [ref=f4e210]: "3"
+                - button [ref=f4e211]:
+                  - img [ref=f4e214]
+          - generic [ref=f4e217]:
+            - generic [ref=f4e218]:
+              - button "批量移动" [disabled] [ref=f4e219]:
+                - generic [ref=f4e220]: 批量移动
+              - button "新增服务" [ref=f4e221] [cursor=pointer]:
+                - generic [ref=f4e222]:
+                  - img [ref=f4e224]
+                  - text: 新增服务
+            - generic [ref=f4e226]:
+              - generic [ref=f4e228]:
+                - table [ref=f4e230]:
+                  - rowgroup [ref=f4e238]:
+                    - row "选择所有行 服务名称 服务ID 所属分类 最后更新 操作" [ref=f4e239]:
+                      - columnheader "选择所有行" [ref=f4e240]:
+                        - generic "选择所有行" [ref=f4e242] [cursor=pointer]:
+                          - generic [ref=f4e243]:
+                            - checkbox "选择所有行"
+                      - columnheader "服务名称" [ref=f4e245]:
+                        - generic [ref=f4e246]: 服务名称
+                      - columnheader "服务ID" [ref=f4e247]:
+                        - generic [ref=f4e248]: 服务ID
+                      - columnheader "所属分类" [ref=f4e249]:
+                        - generic [ref=f4e250]: 所属分类
+                      - columnheader "最后更新" [ref=f4e251]:
+                        - generic [ref=f4e252]: 最后更新
+                      - columnheader "操作" [ref=f4e253]:
+                        - generic [ref=f4e254]: 操作
+                - table [ref=f4e259]:
+                  - rowgroup [ref=f4e267]:
+                    - row "选择当前行 智能告警 110600 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e268]:
+                      - cell "选择当前行" [ref=f4e269]:
+                        - generic "选择当前行" [ref=f4e271] [cursor=pointer]:
+                          - generic [ref=f4e272]:
+                            - checkbox "选择当前行"
+                      - cell "智能告警" [ref=f4e274]:
+                        - generic [ref=f4e275]: 智能告警
+                      - cell "110600" [ref=f4e276]:
+                        - generic [ref=f4e277]: "110600"
+                      - cell "未分类" [ref=f4e278]:
+                        - generic [ref=f4e281]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e282]:
+                        - generic [ref=f4e283]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e284]:
+                        - generic [ref=f4e285]:
+                          - button "修改" [ref=f4e286] [cursor=pointer]:
+                            - generic [ref=f4e287]: 修改
+                          - button "删除" [ref=f4e288] [cursor=pointer]:
+                            - generic [ref=f4e289]: 删除
+                    - row "选择当前行 低电检测服务 300028 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e290]:
+                      - cell "选择当前行" [ref=f4e291]:
+                        - generic "选择当前行" [ref=f4e293] [cursor=pointer]:
+                          - generic [ref=f4e294]:
+                            - checkbox "选择当前行"
+                      - cell "低电检测服务" [ref=f4e296]:
+                        - generic [ref=f4e297]: 低电检测服务
+                      - cell "300028" [ref=f4e298]:
+                        - generic [ref=f4e299]: "300028"
+                      - cell "未分类" [ref=f4e300]:
+                        - generic [ref=f4e303]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e304]:
+                        - generic [ref=f4e305]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e306]:
+                        - generic [ref=f4e307]:
+                          - button "修改" [ref=f4e308] [cursor=pointer]:
+                            - generic [ref=f4e309]: 修改
+                          - button "删除" [ref=f4e310] [cursor=pointer]:
+                            - generic [ref=f4e311]: 删除
+                    - row "选择当前行 火焰检测 300022 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e312]:
+                      - cell "选择当前行" [ref=f4e313]:
+                        - generic "选择当前行" [ref=f4e315] [cursor=pointer]:
+                          - generic [ref=f4e316]:
+                            - checkbox "选择当前行"
+                      - cell "火焰检测" [ref=f4e318]:
+                        - generic [ref=f4e319]: 火焰检测
+                      - cell "300022" [ref=f4e320]:
+                        - generic [ref=f4e321]: "300022"
+                      - cell "未分类" [ref=f4e322]:
+                        - generic [ref=f4e325]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e326]:
+                        - generic [ref=f4e327]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e328]:
+                        - generic [ref=f4e329]:
+                          - button "修改" [ref=f4e330] [cursor=pointer]:
+                            - generic [ref=f4e331]: 修改
+                          - button "删除" [ref=f4e332] [cursor=pointer]:
+                            - generic [ref=f4e333]: 删除
+                    - row "选择当前行 跌倒检测 300020 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e334]:
+                      - cell "选择当前行" [ref=f4e335]:
+                        - generic "选择当前行" [ref=f4e337] [cursor=pointer]:
+                          - generic [ref=f4e338]:
+                            - checkbox "选择当前行"
+                      - cell "跌倒检测" [ref=f4e340]:
+                        - generic [ref=f4e341]: 跌倒检测
+                      - cell "300020" [ref=f4e342]:
+                        - generic [ref=f4e343]: "300020"
+                      - cell "未分类" [ref=f4e344]:
+                        - generic [ref=f4e347]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e348]:
+                        - generic [ref=f4e349]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e350]:
+                        - generic [ref=f4e351]:
+                          - button "修改" [ref=f4e352] [cursor=pointer]:
+                            - generic [ref=f4e353]: 修改
+                          - button "删除" [ref=f4e354] [cursor=pointer]:
+                            - generic [ref=f4e355]: 删除
+                    - row "选择当前行 宠物喂食器 300049 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e356]:
+                      - cell "选择当前行" [ref=f4e357]:
+                        - generic "选择当前行" [ref=f4e359] [cursor=pointer]:
+                          - generic [ref=f4e360]:
+                            - checkbox "选择当前行"
+                      - cell "宠物喂食器" [ref=f4e362]:
+                        - generic [ref=f4e363]: 宠物喂食器
+                      - cell "300049" [ref=f4e364]:
+                        - generic [ref=f4e365]: "300049"
+                      - cell "未分类" [ref=f4e366]:
+                        - generic [ref=f4e369]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e370]:
+                        - generic [ref=f4e371]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e372]:
+                        - generic [ref=f4e373]:
+                          - button "修改" [ref=f4e374] [cursor=pointer]:
+                            - generic [ref=f4e375]: 修改
+                          - button "删除" [ref=f4e376] [cursor=pointer]:
+                            - generic [ref=f4e377]: 删除
+                    - row "选择当前行 GPS定位 300050 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e378]:
+                      - cell "选择当前行" [ref=f4e379]:
+                        - generic "选择当前行" [ref=f4e381] [cursor=pointer]:
+                          - generic [ref=f4e382]:
+                            - checkbox "选择当前行"
+                      - cell "GPS定位" [ref=f4e384]:
+                        - generic [ref=f4e385]: GPS定位
+                      - cell "300050" [ref=f4e386]:
+                        - generic [ref=f4e387]: "300050"
+                      - cell "未分类" [ref=f4e388]:
+                        - generic [ref=f4e391]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e392]:
+                        - generic [ref=f4e393]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e394]:
+                        - generic [ref=f4e395]:
+                          - button "修改" [ref=f4e396] [cursor=pointer]:
+                            - generic [ref=f4e397]: 修改
+                          - button "删除" [ref=f4e398] [cursor=pointer]:
+                            - generic [ref=f4e399]: 删除
+                    - row "选择当前行 低功耗PIR检测 300048 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e400]:
+                      - cell "选择当前行" [ref=f4e401]:
+                        - generic "选择当前行" [ref=f4e403] [cursor=pointer]:
+                          - generic [ref=f4e404]:
+                            - checkbox "选择当前行"
+                      - cell "低功耗PIR检测" [ref=f4e406]:
+                        - generic [ref=f4e407]: 低功耗PIR检测
+                      - cell "300048" [ref=f4e408]:
+                        - generic [ref=f4e409]: "300048"
+                      - cell "未分类" [ref=f4e410]:
+                        - generic [ref=f4e413]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e414]:
+                        - generic [ref=f4e415]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e416]:
+                        - generic [ref=f4e417]:
+                          - button "修改" [ref=f4e418] [cursor=pointer]:
+                            - generic [ref=f4e419]: 修改
+                          - button "删除" [ref=f4e420] [cursor=pointer]:
+                            - generic [ref=f4e421]: 删除
+                    - row "选择当前行 非机动车检测 300047 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e422]:
+                      - cell "选择当前行" [ref=f4e423]:
+                        - generic "选择当前行" [ref=f4e425] [cursor=pointer]:
+                          - generic [ref=f4e426]:
+                            - checkbox "选择当前行"
+                      - cell "非机动车检测" [ref=f4e428]:
+                        - generic [ref=f4e429]: 非机动车检测
+                      - cell "300047" [ref=f4e430]:
+                        - generic [ref=f4e431]: "300047"
+                      - cell "未分类" [ref=f4e432]:
+                        - generic [ref=f4e435]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e436]:
+                        - generic [ref=f4e437]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e438]:
+                        - generic [ref=f4e439]:
+                          - button "修改" [ref=f4e440] [cursor=pointer]:
+                            - generic [ref=f4e441]: 修改
+                          - button "删除" [ref=f4e442] [cursor=pointer]:
+                            - generic [ref=f4e443]: 删除
+                    - row "选择当前行 鱼缸侦测 300046 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e444]:
+                      - cell "选择当前行" [ref=f4e445]:
+                        - generic "选择当前行" [ref=f4e447] [cursor=pointer]:
+                          - generic [ref=f4e448]:
+                            - checkbox "选择当前行"
+                      - cell "鱼缸侦测" [ref=f4e450]:
+                        - generic [ref=f4e451]: 鱼缸侦测
+                      - cell "300046" [ref=f4e452]:
+                        - generic [ref=f4e453]: "300046"
+                      - cell "未分类" [ref=f4e454]:
+                        - generic [ref=f4e457]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e458]:
+                        - generic [ref=f4e459]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e460]:
+                        - generic [ref=f4e461]:
+                          - button "修改" [ref=f4e462] [cursor=pointer]:
+                            - generic [ref=f4e463]: 修改
+                          - button "删除" [ref=f4e464] [cursor=pointer]:
+                            - generic [ref=f4e465]: 删除
+                    - row "选择当前行 客流统计 300045 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e466]:
+                      - cell "选择当前行" [ref=f4e467]:
+                        - generic "选择当前行" [ref=f4e469] [cursor=pointer]:
+                          - generic [ref=f4e470]:
+                            - checkbox "选择当前行"
+                      - cell "客流统计" [ref=f4e472]:
+                        - generic [ref=f4e473]: 客流统计
+                      - cell "300045" [ref=f4e474]:
+                        - generic [ref=f4e475]: "300045"
+                      - cell "未分类" [ref=f4e476]:
+                        - generic [ref=f4e479]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e480]:
+                        - generic [ref=f4e481]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e482]:
+                        - generic [ref=f4e483]:
+                          - button "修改" [ref=f4e484] [cursor=pointer]:
+                            - generic [ref=f4e485]: 修改
+                          - button "删除" [ref=f4e486] [cursor=pointer]:
+                            - generic [ref=f4e487]: 删除
+                    - row "选择当前行 儿童检测 300044 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e488]:
+                      - cell "选择当前行" [ref=f4e489]:
+                        - generic "选择当前行" [ref=f4e491] [cursor=pointer]:
+                          - generic [ref=f4e492]:
+                            - checkbox "选择当前行"
+                      - cell "儿童检测" [ref=f4e494]:
+                        - generic [ref=f4e495]: 儿童检测
+                      - cell "300044" [ref=f4e496]:
+                        - generic [ref=f4e497]: "300044"
+                      - cell "未分类" [ref=f4e498]:
+                        - generic [ref=f4e501]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e502]:
+                        - generic [ref=f4e503]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e504]:
+                        - generic [ref=f4e505]:
+                          - button "修改" [ref=f4e506] [cursor=pointer]:
+                            - generic [ref=f4e507]: 修改
+                          - button "删除" [ref=f4e508] [cursor=pointer]:
+                            - generic [ref=f4e509]: 删除
+                    - row "选择当前行 离岗侦测 300043 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e510]:
+                      - cell "选择当前行" [ref=f4e511]:
+                        - generic "选择当前行" [ref=f4e513] [cursor=pointer]:
+                          - generic [ref=f4e514]:
+                            - checkbox "选择当前行"
+                      - cell "离岗侦测" [ref=f4e516]:
+                        - generic [ref=f4e517]: 离岗侦测
+                      - cell "300043" [ref=f4e518]:
+                        - generic [ref=f4e519]: "300043"
+                      - cell "未分类" [ref=f4e520]:
+                        - generic [ref=f4e523]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e524]:
+                        - generic [ref=f4e525]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e526]:
+                        - generic [ref=f4e527]:
+                          - button "修改" [ref=f4e528] [cursor=pointer]:
+                            - generic [ref=f4e529]: 修改
+                          - button "删除" [ref=f4e530] [cursor=pointer]:
+                            - generic [ref=f4e531]: 删除
+                    - row "选择当前行 包裹侦测 300025 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e532]:
+                      - cell "选择当前行" [ref=f4e533]:
+                        - generic "选择当前行" [ref=f4e535] [cursor=pointer]:
+                          - generic [ref=f4e536]:
+                            - checkbox "选择当前行"
+                      - cell "包裹侦测" [ref=f4e538]:
+                        - generic [ref=f4e539]: 包裹侦测
+                      - cell "300025" [ref=f4e540]:
+                        - generic [ref=f4e541]: "300025"
+                      - cell "未分类" [ref=f4e542]:
+                        - generic [ref=f4e545]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e546]:
+                        - generic [ref=f4e547]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e548]:
+                        - generic [ref=f4e549]:
+                          - button "修改" [ref=f4e550] [cursor=pointer]:
+                            - generic [ref=f4e551]: 修改
+                          - button "删除" [ref=f4e552] [cursor=pointer]:
+                            - generic [ref=f4e553]: 删除
+                    - row "选择当前行 哭声侦测 300023 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e554]:
+                      - cell "选择当前行" [ref=f4e555]:
+                        - generic "选择当前行" [ref=f4e557] [cursor=pointer]:
+                          - generic [ref=f4e558]:
+                            - checkbox "选择当前行"
+                      - cell "哭声侦测" [ref=f4e560]:
+                        - generic [ref=f4e561]: 哭声侦测
+                      - cell "300023" [ref=f4e562]:
+                        - generic [ref=f4e563]: "300023"
+                      - cell "未分类" [ref=f4e564]:
+                        - generic [ref=f4e567]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e568]:
+                        - generic [ref=f4e569]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e570]:
+                        - generic [ref=f4e571]:
+                          - button "修改" [ref=f4e572] [cursor=pointer]:
+                            - generic [ref=f4e573]: 修改
+                          - button "删除" [ref=f4e574] [cursor=pointer]:
+                            - generic [ref=f4e575]: 删除
+                    - row "选择当前行 智能报警-家门监测 300041 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e576]:
+                      - cell "选择当前行" [ref=f4e577]:
+                        - generic "选择当前行" [ref=f4e579] [cursor=pointer]:
+                          - generic [ref=f4e580]:
+                            - checkbox "选择当前行"
+                      - cell "智能报警-家门监测" [ref=f4e582]:
+                        - generic [ref=f4e583]: 智能报警-家门监测
+                      - cell "300041" [ref=f4e584]:
+                        - generic [ref=f4e585]: "300041"
+                      - cell "未分类" [ref=f4e586]:
+                        - generic [ref=f4e589]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e590]:
+                        - generic [ref=f4e591]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e592]:
+                        - generic [ref=f4e593]:
+                          - button "修改" [ref=f4e594] [cursor=pointer]:
+                            - generic [ref=f4e595]: 修改
+                          - button "删除" [ref=f4e596] [cursor=pointer]:
+                            - generic [ref=f4e597]: 删除
+                    - row "选择当前行 智能报警-厨房安全 300040 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e598]:
+                      - cell "选择当前行" [ref=f4e599]:
+                        - generic "选择当前行" [ref=f4e601] [cursor=pointer]:
+                          - generic [ref=f4e602]:
+                            - checkbox "选择当前行"
+                      - cell "智能报警-厨房安全" [ref=f4e604]:
+                        - generic [ref=f4e605]: 智能报警-厨房安全
+                      - cell "300040" [ref=f4e606]:
+                        - generic [ref=f4e607]: "300040"
+                      - cell "未分类" [ref=f4e608]:
+                        - generic [ref=f4e611]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e612]:
+                        - generic [ref=f4e613]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e614]:
+                        - generic [ref=f4e615]:
+                          - button "修改" [ref=f4e616] [cursor=pointer]:
+                            - generic [ref=f4e617]: 修改
+                          - button "删除" [ref=f4e618] [cursor=pointer]:
+                            - generic [ref=f4e619]: 删除
+                    - row "选择当前行 智能报警-宠物监测 300042 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e620]:
+                      - cell "选择当前行" [ref=f4e621]:
+                        - generic "选择当前行" [ref=f4e623] [cursor=pointer]:
+                          - generic [ref=f4e624]:
+                            - checkbox "选择当前行"
+                      - cell "智能报警-宠物监测" [ref=f4e626]:
+                        - generic [ref=f4e627]: 智能报警-宠物监测
+                      - cell "300042" [ref=f4e628]:
+                        - generic [ref=f4e629]: "300042"
+                      - cell "未分类" [ref=f4e630]:
+                        - generic [ref=f4e633]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e634]:
+                        - generic [ref=f4e635]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e636]:
+                        - generic [ref=f4e637]:
+                          - button "修改" [ref=f4e638] [cursor=pointer]:
+                            - generic [ref=f4e639]: 修改
+                          - button "删除" [ref=f4e640] [cursor=pointer]:
+                            - generic [ref=f4e641]: 删除
+                    - row "选择当前行 智能报警-老人看护 300039 未分类 2026/6/17 17:54:52 修改 删除" [ref=f4e642]:
+                      - cell "选择当前行" [ref=f4e643]:
+                        - generic "选择当前行" [ref=f4e645] [cursor=pointer]:
+                          - generic [ref=f4e646]:
+                            - checkbox "选择当前行"
+                      - cell "智能报警-老人看护" [ref=f4e648]:
+                        - generic [ref=f4e649]: 智能报警-老人看护
+                      - cell "300039" [ref=f4e650]:
+                        - generic [ref=f4e651]: "300039"
+                      - cell "未分类" [ref=f4e652]:
+                        - generic [ref=f4e655]: 未分类
+                      - cell "2026/6/17 17:54:52" [ref=f4e656]:
+                        - generic [ref=f4e657]: 2026/6/17 17:54:52
+                      - cell "修改 删除" [ref=f4e658]:
+                        - generic [ref=f4e659]:
+                          - button "修改" [ref=f4e660] [cursor=pointer]:
+                            - generic [ref=f4e661]: 修改
+                          - button "删除" [ref=f4e662] [cursor=pointer]:
+                            - generic [ref=f4e663]: 删除
+              - generic [ref=f4e664]:
+                - generic [ref=f4e665]: 共 18 条
+                - generic [ref=f4e666]:
+                  - button "上一页" [disabled] [ref=f4e667]:
+                    - generic:
+                      - img
+                  - list [ref=f4e668]:
+                    - listitem "第 1 页" [ref=f4e669]: "1"
+                    - listitem "第 2 页" [ref=f4e670] [cursor=pointer]: "2"
+                  - button "下一页" [ref=f4e671] [cursor=pointer]:
+                    - generic:
+                      - img
+        - text: "*"
+        - dialog "创建服务类型" [ref=f4e710]:
+          - generic [active] [ref=f4e711]:
+            - generic [ref=f4e712]:
+              - heading "创建服务类型" [level=2] [ref=f4e713]
+              - button "关闭此对话框" [ref=f4e714] [cursor=pointer]:
+                - img [ref=f4e716]
+            - generic [ref=f4e719]:
+              - generic [ref=f4e720]:
+                - generic [ref=f4e721]:
+                  - generic [ref=f4e722]: "* * 服务名称"
+                  - textbox "* * 服务名称" [ref=f4e726]:
+                    - /placeholder: 例如：全天云存
+                - generic [ref=f4e727]:
+                  - generic [ref=f4e728]: "* * 服务ID"
+                  - textbox "* * 服务ID" [ref=f4e732]:
+                    - /placeholder: 例如：300010
+                - generic [ref=f4e733]:
+                  - generic [ref=f4e734]: 所属分类
+                  - generic [ref=f4e737] [cursor=pointer]:
+                    - generic:
+                      - combobox "所属分类" [ref=f4e739]
+                      - generic [ref=f4e740]: 未分类
+                    - img [ref=f4e743]
+              - generic [ref=f4e745]:
+                - generic [ref=f4e747]: 物模型配置 (多选)
+                - generic [ref=f4e748]:
+                  - generic [ref=f4e749]:
+                    - generic [ref=f4e751] [cursor=pointer]:
+                      - generic [ref=f4e752]:
+                        - checkbox "可选物模型 0/41"
+                      - generic [ref=f4e754]: 可选物模型 0/41
+                    - generic [ref=f4e757]:
+                      - img [ref=f4e760]
+                      - textbox "请输入搜索内容" [ref=f4e762]
+                    - group "checkbox-group" [ref=f4e764]:
+                      - generic [ref=f4e766] [cursor=pointer]:
+                        - generic [ref=f4e767]:
+                          - checkbox "1013 - 事件记录"
+                        - generic [ref=f4e769]: 1013 - 事件记录
+                      - generic [ref=f4e771] [cursor=pointer]:
+                        - generic [ref=f4e772]:
+                          - checkbox "1010 - 云存录像"
+                        - generic [ref=f4e774]: 1010 - 云存录像
+                      - generic [ref=f4e776] [cursor=pointer]:
+                        - generic [ref=f4e777]:
+                          - checkbox "1063 - 语音助手"
+                        - generic [ref=f4e779]: 1063 - 语音助手
+                      - generic [ref=f4e781] [cursor=pointer]:
+                        - generic [ref=f4e782]:
+                          - checkbox "1000 - 人形/运动检测"
+                        - generic [ref=f4e784]: 1000 - 人形/运动检测
+                      - generic [ref=f4e786] [cursor=pointer]:
+                        - generic [ref=f4e787]:
+                          - checkbox "1086 - 非机动车检测"
+                        - generic [ref=f4e789]: 1086 - 非机动车检测
+                      - generic [ref=f4e791] [cursor=pointer]:
+                        - generic [ref=f4e792]:
+                          - checkbox "1003 - PIR红外检测"
+                        - generic [ref=f4e794]: 1003 - PIR红外检测
+                      - generic [ref=f4e796] [cursor=pointer]:
+                        - generic [ref=f4e797]:
+                          - checkbox "1088 - 车牌识别"
+                        - generic [ref=f4e799]: 1088 - 车牌识别
+                      - generic [ref=f4e801] [cursor=pointer]:
+                        - generic [ref=f4e802]:
+                          - checkbox "1090 - 客流统计"
+                        - generic [ref=f4e804]: 1090 - 客流统计
+                      - generic [ref=f4e806] [cursor=pointer]:
+                        - generic [ref=f4e807]:
+                          - checkbox "1093 - 离线监控"
+                        - generic [ref=f4e809]: 1093 - 离线监控
+                      - generic [ref=f4e811] [cursor=pointer]:
+                        - generic [ref=f4e812]:
+                          - checkbox "1096 - 智能告警-儿童检测"
+                        - generic [ref=f4e814]: 1096 - 智能告警-儿童检测
+                      - generic [ref=f4e816] [cursor=pointer]:
+                        - generic [ref=f4e817]:
+                          - checkbox "1098 - 智能告警服务"
+                        - generic [ref=f4e819]: 1098 - 智能告警服务
+                      - generic [ref=f4e821] [cursor=pointer]:
+                        - generic [ref=f4e822]:
+                          - checkbox "1100 - 时光相册"
+                        - generic [ref=f4e824]: 1100 - 时光相册
+                      - generic [ref=f4e826] [cursor=pointer]:
+                        - generic [ref=f4e827]:
+                          - checkbox "1103 - 智能告警-老人看护"
+                        - generic [ref=f4e829]: 1103 - 智能告警-老人看护
+                      - generic [ref=f4e831] [cursor=pointer]:
+                        - generic [ref=f4e832]:
+                          - checkbox "1104 - 智能告警-厨房监测"
+                        - generic [ref=f4e834]: 1104 - 智能告警-厨房监测
+                      - generic [ref=f4e836] [cursor=pointer]:
+                        - generic [ref=f4e837]:
+                          - checkbox "1105 - 智能告警-家门检测"
+                        - generic [ref=f4e839]: 1105 - 智能告警-家门检测
+                      - generic [ref=f4e841] [cursor=pointer]:
+                        - generic [ref=f4e842]:
+                          - checkbox "1106 - 智能告警-宠物检测"
+                        - generic [ref=f4e844]: 1106 - 智能告警-宠物检测
+                      - generic [ref=f4e846] [cursor=pointer]:
+                        - generic [ref=f4e847]:
+                          - checkbox "1108 - GPS信息处理"
+                        - generic [ref=f4e849]: 1108 - GPS信息处理
+                      - generic [ref=f4e851] [cursor=pointer]:
+                        - generic [ref=f4e852]:
+                          - checkbox "1109 - 包裹侦测"
+                        - generic [ref=f4e854]: 1109 - 包裹侦测
+                      - generic [ref=f4e856] [cursor=pointer]:
+                        - generic [ref=f4e857]:
+                          - checkbox "1111 - 鱼类检测"
+                        - generic [ref=f4e859]: 1111 - 鱼类检测
+                      - generic [ref=f4e861] [cursor=pointer]:
+                        - generic [ref=f4e862]:
+                          - checkbox "1112 - 人脸检测"
+                        - generic [ref=f4e864]: 1112 - 人脸检测
+                      - generic [ref=f4e866] [cursor=pointer]:
+                        - generic [ref=f4e867]:
+                          - checkbox "1114 - 宠物喂食"
+                        - generic [ref=f4e869]: 1114 - 宠物喂食
+                      - generic [ref=f4e871] [cursor=pointer]:
+                        - generic [ref=f4e872]:
+                          - checkbox "1082 - 烟火侦测"
+                        - generic [ref=f4e874]: 1082 - 烟火侦测
+                      - generic [ref=f4e876] [cursor=pointer]:
+                        - generic [ref=f4e877]:
+                          - checkbox "1004 - 声音检测"
+                        - generic [ref=f4e879]: 1004 - 声音检测
+                      - generic [ref=f4e881] [cursor=pointer]:
+                        - generic [ref=f4e882]:
+                          - checkbox "1016 - 逗留提醒"
+                        - generic [ref=f4e884]: 1016 - 逗留提醒
+                      - generic [ref=f4e886] [cursor=pointer]:
+                        - generic [ref=f4e887]:
+                          - checkbox "1018 - 人物(人脸)识别"
+                        - generic [ref=f4e889]: 1018 - 人物(人脸)识别
+                      - generic [ref=f4e891] [cursor=pointer]:
+                        - generic [ref=f4e892]:
+                          - checkbox "1021 - 低电检测"
+                        - generic [ref=f4e894]: 1021 - 低电检测
+                      - generic [ref=f4e896] [cursor=pointer]:
+                        - generic [ref=f4e897]:
+                          - checkbox "1024 - 跌倒检测"
+                        - generic [ref=f4e899]: 1024 - 跌倒检测
+                      - generic [ref=f4e901] [cursor=pointer]:
+                        - generic [ref=f4e902]:
+                          - checkbox "1025 - 火焰检测"
+                        - generic [ref=f4e904]: 1025 - 火焰检测
+                      - generic [ref=f4e906] [cursor=pointer]:
+                        - generic [ref=f4e907]:
+                          - checkbox "1028 - 哭声检测"
+                        - generic [ref=f4e909]: 1028 - 哭声检测
+                      - generic [ref=f4e911] [cursor=pointer]:
+                        - generic [ref=f4e912]:
+                          - checkbox "1029 - 宠物检测"
+                        - generic [ref=f4e914]: 1029 - 宠物检测
+                      - generic [ref=f4e916] [cursor=pointer]:
+                        - generic [ref=f4e917]:
+                          - checkbox "1037 - 呼叫服务"
+                        - generic [ref=f4e919]: 1037 - 呼叫服务
+                      - generic [ref=f4e921] [cursor=pointer]:
+                        - generic [ref=f4e922]:
+                          - checkbox "1070 - 离岗侦测"
+                        - generic [ref=f4e924]: 1070 - 离岗侦测
+                      - generic [ref=f4e926] [cursor=pointer]:
+                        - generic [ref=f4e927]:
+                          - checkbox "1079 - 区域闯入"
+                        - generic [ref=f4e929]: 1079 - 区域闯入
+                      - generic [ref=f4e931] [cursor=pointer]:
+                        - generic [ref=f4e932]:
+                          - checkbox "1080 - 区域离开"
+                        - generic [ref=f4e934]: 1080 - 区域离开
+                      - generic [ref=f4e936] [cursor=pointer]:
+                        - generic [ref=f4e937]:
+                          - checkbox "1083 - 车辆侦测"
+                        - generic [ref=f4e939]: 1083 - 车辆侦测
+                      - generic [ref=f4e941] [cursor=pointer]:
+                        - generic [ref=f4e942]:
+                          - checkbox "1061 - 设备算法"
+                        - generic [ref=f4e944]: 1061 - 设备算法
+                      - generic [ref=f4e946] [cursor=pointer]:
+                        - generic [ref=f4e947]:
+                          - checkbox "1011 - 云端抓图"
+                        - generic [ref=f4e949]: 1011 - 云端抓图
+                      - generic [ref=f4e951] [cursor=pointer]:
+                        - generic [ref=f4e952]:
+                          - checkbox "2000 - 短信套餐"
+                        - generic [ref=f4e954]: 2000 - 短信套餐
+                      - generic [ref=f4e956] [cursor=pointer]:
+                        - generic [ref=f4e957]:
+                          - checkbox "2001 - 去广告套餐"
+                        - generic [ref=f4e959]: 2001 - 去广告套餐
+                      - generic [ref=f4e961] [cursor=pointer]:
+                        - generic [ref=f4e962]:
+                          - checkbox "3000 - 鸟类检测"
+                        - generic [ref=f4e964]: 3000 - 鸟类检测
+                      - generic [ref=f4e966] [cursor=pointer]:
+                        - generic [ref=f4e967]:
+                          - checkbox "3001 - 松鼠检测"
+                        - generic [ref=f4e969]: 3001 - 松鼠检测
+                  - generic [ref=f4e970]:
+                    - button "添加" [disabled] [ref=f4e971]:
+                      - generic [ref=f4e972]:
+                        - text: 添加
+                        - img [ref=f4e974]
+                    - button "移除" [disabled] [ref=f4e976]:
+                      - generic [ref=f4e977]:
+                        - img [ref=f4e979]
+                        - text: 移除
+                  - generic [ref=f4e981]:
+                    - generic [ref=f4e983] [cursor=pointer]:
+                      - generic [ref=f4e984]:
+                        - checkbox "已选物模型 0/0"
+                      - generic [ref=f4e986]: 已选物模型 0/0
+                    - generic [ref=f4e989]:
+                      - img [ref=f4e992]
+                      - textbox "请输入搜索内容" [ref=f4e994]
+                    - generic [ref=f4e995]:
+                      - group "checkbox-group"
+                      - generic [ref=f4e996]: 无数据
+            - generic [ref=f4e997]:
+              - button "取消" [ref=f4e998] [cursor=pointer]:
+                - generic [ref=f4e999]: 取消
+              - button "保存" [ref=f4e1000] [cursor=pointer]:
+                - generic [ref=f4e1001]: 保存

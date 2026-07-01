@@ -1057,16 +1057,25 @@
             <span class="section-title">配置选项</span>
           </el-divider>
         </div>
+        <!-- 算法服务（新） -->
+        <div class="section-header">
+          <h3 class="section-header-title">算法服务（新）</h3>
+        </div>
+
         <div class="tip-bar">
           <el-icon><InfoFilled /></el-icon>
           <span>该模块用于配置端侧算法，请根据设备实际能力配置</span>
         </div>
 
-        <!-- 算法列表 -->
         <div class="algo-service-section">
           <el-table :data="algoList" stripe>
-            <el-table-column label="AlgorithmID" width="150" align="center">
+            <el-table-column label="算法ID" width="150" align="center">
               <template #default="{ row }">{{ row.algorithmId }}</template>
+            </el-table-column>
+            <el-table-column label="服务ID" width="120" align="center">
+              <template #default="{ row }">
+                <span :class="{ 'cell-service-id': true, 'text-muted': row.serviceId === '-' }">{{ row.serviceId }}</span>
+              </template>
             </el-table-column>
             <el-table-column label="算法名称" min-width="160">
               <template #default="{ row }">
@@ -1083,25 +1092,94 @@
                 <el-switch v-model="row.supported" size="small" />
               </template>
             </el-table-column>
-            <el-table-column label="计费模式" width="120" align="center">
+            <el-table-column width="100" align="center">
+              <template #header>
+                <span>免开通</span>
+                <el-tooltip placement="top" effect="dark">
+                  <template #content>
+                    <div style="max-width:220px;line-height:1.6;">
+                      <div>开启：APP用户无需付费即可使用此功能</div>
+                      <div>关闭：APP用户需付费使用此功能，具体服务流程需联系平台/APP厂商</div>
+                    </div>
+                  </template>
+                  <el-icon class="header-tip-icon"><QuestionFilled /></el-icon>
+                </el-tooltip>
+              </template>
               <template #default="{ row }">
-                <el-select v-model="row.billing" size="small" style="width:100px">
-                  <el-option label="免费默认" value="free" />
-                  <el-option label="套餐购买" value="paid" />
-                </el-select>
+                <el-switch v-model="row.free" size="small" :disabled="!row.supported" />
               </template>
             </el-table-column>
             <el-table-column label="能力配置" width="100" align="center">
               <template #default="{ row }">
-                <el-button v-if="row.hasConfig" size="small" text type="primary" @click="openAlgoConfig(row)">配置</el-button>
+                <el-button v-if="row.hasConfig" size="small" text type="primary" :disabled="!row.supported" @click="openAlgoConfig(row)">配置</el-button>
               </template>
             </el-table-column>
             <el-table-column label="关联事件" width="100" align="center">
               <template #default="{ row }">
-                <el-button size="small" text type="primary" @click="openEventLink(row)">编辑</el-button>
+                <el-button size="small" text type="primary" :disabled="!row.supported" @click="openEventLink(row)">配置</el-button>
               </template>
             </el-table-column>
           </el-table>
+        </div>
+
+        <!-- 算法服务（老） -->
+        <div class="old-algo-card">
+          <div class="section-header">
+            <h3 class="section-header-title">
+              算法服务（老）
+              <span class="legacy-tag">旧版</span>
+            </h3>
+          </div>
+
+          <div class="algo-service-section">
+            <div class="old-service-group">
+              <div class="old-service-title">
+                <span class="old-service-name">云存录像服务</span>
+                <span class="aiiot-tag">AIIoTType: 1010</span>
+              </div>
+              <el-table :data="cloudRecordServices" stripe>
+                <el-table-column label="服务ID" width="100" prop="serviceId" />
+                <el-table-column label="服务名称" width="140" prop="name" />
+                <el-table-column label="是否支持" width="120" align="center">
+                  <template #default="{ row }">
+                    <el-switch v-model="row.supported" size="small" />
+                  </template>
+                </el-table-column>
+                <el-table-column label="说明" min-width="280" prop="descr" />
+              </el-table>
+            </div>
+
+            <el-table :data="oldAlgoList" stripe class="old-algo-table">
+              <el-table-column label="ID(AIIoTType)" width="120" align="center">
+                <template #default="{ row }">{{ row.id }}</template>
+              </el-table-column>
+              <el-table-column label="算法名称" min-width="160">
+                <template #default="{ row }">
+                  <span class="cell-name">{{ row.name }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="描述" min-width="200">
+                <template #default="{ row }">
+                  <span class="cell-desc">{{ row.descr }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="是否支持" width="100" align="center">
+                <template #default="{ row }">
+                  <el-switch v-model="row.supported" size="small" />
+                </template>
+              </el-table-column>
+              <el-table-column label="算法配置" width="100" align="center">
+                <template #default="{ row }">
+                  <el-button v-if="row.hasConfig" size="small" text type="primary">配置</el-button>
+                </template>
+              </el-table-column>
+              <el-table-column label="关联事件" width="100" align="center">
+                <template #default="{ row }">
+                  <el-button size="small" text type="primary">编辑</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
         </div>
       </div>
     </template>
@@ -1352,6 +1430,117 @@
       <template #footer>
         <el-button @click="algoConfigVisible = false">取消</el-button>
         <el-button type="primary" @click="saveAlgoConfig">确定</el-button>
+      </template>
+    </el-drawer>
+
+    <!-- PIR侦测 能力配置侧边弹窗 -->
+    <el-drawer v-model="pirConfigVisible" title="能力配置 - PIR侦测" size="860px" :close-on-click-modal="false" @closed="algoCapScope = null" class="algo-config-drawer">
+      <div class="algo-config-toolbar">
+        <span class="algo-config-count">固定配置项</span>
+      </div>
+      <div class="pir-config-section">
+        <div class="tip-bar" style="margin-bottom:16px">
+          <el-icon><InfoFilled /></el-icon>
+          <span>以下为PIR侦测算法的固定配置项，请根据实际需求设置</span>
+        </div>
+        <el-form label-width="120px" label-position="right">
+          <template v-for="item in pirConfigItems" :key="item.key">
+            <el-form-item :label="item.label">
+              <div>
+                <div class="pir-item-row">
+                  <span class="pir-item-label">是否支持</span>
+                  <el-radio-group v-model="pirConfigForm[item.key].supported" size="small">
+                    <el-radio label="1">支持</el-radio>
+                    <el-radio label="0">不支持</el-radio>
+                  </el-radio-group>
+                </div>
+                <div v-if="pirConfigForm[item.key].supported === '1'" class="pir-item-row" style="margin-top:8px">
+                  <span class="pir-item-label">默认值</span>
+                  <el-select v-if="item.key === 'sensitivity'" v-model="pirConfigForm[item.key].defaultVal" size="small" style="width:100px">
+                    <el-option label="1档" value="1" />
+                    <el-option label="2档" value="2" />
+                    <el-option label="3档" value="3" />
+                    <el-option label="4档" value="4" />
+                    <el-option label="5档" value="5" />
+                  </el-select>
+                  <el-radio-group v-else v-model="pirConfigForm[item.key].defaultVal" size="small">
+                    <el-radio label="1">开启</el-radio>
+                    <el-radio label="0">关闭</el-radio>
+                  </el-radio-group>
+                </div>
+              </div>
+            </el-form-item>
+          </template>
+        </el-form>
+      </div>
+
+      <el-divider />
+
+      <!-- 标准能力 -->
+      <div class="algo-cap-section">
+        <div class="algo-cap-section-header">
+          <span class="algo-cap-section-title">标准能力</span>
+          <el-button size="small" @click="openCapabilityDialog('standard')">+ 标准能力</el-button>
+        </div>
+        <el-table v-if="standardCapList.length" :data="standardCapList" stripe>
+          <el-table-column label="类型" width="80" align="center">
+            <template #default="{ row }">
+              <span :class="['type-tag', row.capType === 'prop' ? 'type-prop' : row.capType === 'svc' ? 'type-svc' : 'type-evt']">{{ capTypeLabel(row.capType) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="能力名称" min-width="120" show-overflow-tooltip>
+            <template #default="{ row }">{{ row.name }}</template>
+          </el-table-column>
+          <el-table-column label="标识" width="170" show-overflow-tooltip>
+            <template #default="{ row }">{{ row.identifier }}</template>
+          </el-table-column>
+          <el-table-column label="数据定义" min-width="160" show-overflow-tooltip>
+            <template #default="{ row }">{{ dataDefSummary(row.dataDef) }}</template>
+          </el-table-column>
+          <el-table-column label="操作" width="130" fixed="right">
+            <template #default="{ row, $index }">
+              <el-button size="small" text type="primary" @click="openAlgoCapEdit({ cap: row, source: 'standard', idx: $index })">编辑</el-button>
+              <el-button size="small" text type="danger" @click="standardCapList.splice($index, 1)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div v-else class="algo-config-empty">暂无标准能力</div>
+      </div>
+
+      <!-- 自定义能力 -->
+      <div class="algo-cap-section">
+        <div class="algo-cap-section-header">
+          <span class="algo-cap-section-title">自定义能力</span>
+          <el-button size="small" @click="openCustomCapCreate">+ 自定义能力</el-button>
+        </div>
+        <el-table v-if="customCapList.length" :data="customCapList" stripe>
+          <el-table-column label="类型" width="80" align="center">
+            <template #default="{ row }">
+              <span :class="['type-tag', row.capType === 'prop' ? 'type-prop' : row.capType === 'svc' ? 'type-svc' : 'type-evt']">{{ capTypeLabel(row.capType) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="能力名称" min-width="120" show-overflow-tooltip>
+            <template #default="{ row }">{{ row.name }}</template>
+          </el-table-column>
+          <el-table-column label="标识" width="170" show-overflow-tooltip>
+            <template #default="{ row }">{{ row.identifier }}</template>
+          </el-table-column>
+          <el-table-column label="数据定义" min-width="160" show-overflow-tooltip>
+            <template #default="{ row }">{{ dataDefSummary(row.dataDef) }}</template>
+          </el-table-column>
+          <el-table-column label="操作" width="130" fixed="right">
+            <template #default="{ row, $index }">
+              <el-button size="small" text type="primary" @click="openAlgoCapEdit({ cap: row, source: 'custom', idx: $index })">编辑</el-button>
+              <el-button size="small" text type="danger" @click="customCapList.splice($index, 1)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div v-else class="algo-config-empty">暂无自定义能力</div>
+      </div>
+
+      <template #footer>
+        <el-button @click="pirConfigVisible = false">取消</el-button>
+        <el-button type="primary" @click="savePirConfig">确定</el-button>
       </template>
     </el-drawer>
 
@@ -1672,30 +1861,54 @@
     </el-dialog>
 
     <!-- 关联事件弹窗 -->
-    <el-dialog v-model="eventLinkVisible" :title="'关联事件 - ' + (editingAlgo?._name?.['1'] || editingAlgo?.algorithmId)" width="560px" top="5vh" :close-on-click-modal="false">
-      <el-checkbox-group v-if="editingAlgo" v-model="editingAlgo.linkedEvents">
-        <div v-for="evt in eventOptions" :key="evt.id" class="event-check-item">
-          <el-checkbox :label="evt.id" :value="evt.id">
-            <span class="event-name">{{ evt.name }}</span>
-            <span class="event-desc">{{ evt.descr }}</span>
-          </el-checkbox>
-        </div>
-      </el-checkbox-group>
+    <el-drawer
+      v-model="eventLinkVisible"
+      :title="'关联事件 - ' + (editingAlgo?._name?.['1'] || editingAlgo?.algorithmId)"
+      direction="rtl"
+      size="640px"
+      :close-on-click-modal="false"
+      class="event-link-drawer"
+    >
+      <template v-if="editingAlgo">
+<el-table
+          ref="eventTableRef"
+          :data="linkedEventOptions"
+          stripe
+          @selection-change="handleEventSelectionChange"
+        >
+          <el-table-column type="selection" width="44" />
+          <el-table-column label="EventID" width="110">
+            <template #default="{ row }">
+              <code class="event-id-code">{{ row.id }}</code>
+            </template>
+          </el-table-column>
+          <el-table-column label="事件名称" min-width="140">
+            <template #default="{ row }">{{ row.name }}</template>
+          </el-table-column>
+          <el-table-column label="备注" min-width="160">
+            <template #default="{ row }">{{ row.descr || '—' }}</template>
+          </el-table-column>
+          <el-table-column label="推送文案" min-width="160">
+            <template #default="{ row }">{{ row._push?.['1'] || '—' }}</template>
+          </el-table-column>
+        </el-table>
+        <el-empty v-if="linkedEventOptions.length === 0" description="暂无关联事件" :image-size="80" />
+      </template>
       <template #footer>
         <el-button @click="eventLinkVisible = false">取消</el-button>
         <el-button type="primary" @click="saveEventLink">保存</el-button>
       </template>
-    </el-dialog>
+    </el-drawer>
 
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Plus, ArrowLeft, ArrowRight, Edit, Switch, Check, Setting, QuestionFilled, Delete, Search, InfoFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { listAlgorithms, allEvents, getCapabilitiesByIds, getModules, getAllCapabilities } from '@/views/iot/thing-model/data'
+import { listAlgorithms, allEvents, getCapabilitiesByIds, getModules, getAllCapabilities, getAlgorithmServiceId, getAlgorithmEvents } from '@/views/iot/thing-model/data'
 
 const route = useRoute()
 const router = useRouter()
@@ -2528,11 +2741,12 @@ function loadAlgorithms() {
     try { a._eventIds = JSON.parse(a.eventIds || '[]') } catch { a._eventIds = [] }
     return {
       ...a,
+      serviceId: getAlgorithmServiceId(a.algorithmId),
       supported: false,
-      billing: 'paid',
+      free: false,
       hasConfig: (() => { try { return JSON.parse(a.capabilityIds || '[]').length > 0 } catch { return false } })(),
       algoOptions: [],
-      linkedEvents: [],
+      linkedEvents: getAlgorithmEvents(a.algorithmId),
       standardCaps: [],
       customCaps: []
     }
@@ -2548,20 +2762,113 @@ const aiServices = ref([
   { serviceId: '400001', name: '全能AI', supported: false, descr: '集成多种AI算法服务，支持人脸识别、移动侦测、声音检测等智能分析能力' }
 ])
 
+// ===== 算法服务（老）算法列表（AIIoTType 风格）=====
+const oldAlgoList = ref([
+  { id: '1013', name: '事件记录', descr: '记录设备上报的各类事件信息', supported: true, hasConfig: true },
+  { id: '1000', name: '人形/运动检测', descr: '检测画面中的人形或移动物体', supported: true, hasConfig: true },
+  { id: '1088', name: '车牌识别', descr: '自动读取并识别车牌信息', supported: false, hasConfig: false },
+  { id: '1003', name: 'PIR红外检测', descr: '基于红外热释电的人体活动监测', supported: false, hasConfig: true },
+  { id: '1090', name: '客流统计', descr: '进入/出去行为识别与计数', supported: false, hasConfig: true },
+  { id: '1093', name: '离线监控', descr: '设备断电或离线时的状态监测', supported: true, hasConfig: true },
+  { id: '1096', name: '智能告警-儿童检测', descr: '综合全天候的儿童看护识别', supported: false, hasConfig: true },
+  { id: '1098', name: '智能告警服务', descr: '基于多维参数的综合告警策略', supported: false, hasConfig: true },
+  { id: '1103', name: '智能告警-老人看护', descr: '针对老年用户的异常行为识别', supported: false, hasConfig: true },
+  { id: '1104', name: '智能告警-厨房监测', descr: '全方位监测厨房油烟和火情', supported: false, hasConfig: true },
+  { id: '1105', name: '智能告警-家门检测', descr: '门口逗留、门缝检测等安防预警', supported: false, hasConfig: true },
+  { id: '1106', name: '智能告警-宠物检测', descr: '整合宠物的多项健康和活动指标', supported: true, hasConfig: true },
+  { id: '1108', name: 'GPS信息处理', descr: '设备地理位置定位与上报', supported: false, hasConfig: true },
+  { id: '1109', name: '包裹侦测', descr: '检测门口或指定区域堆放的包裹', supported: false, hasConfig: true },
+  { id: '1111', name: '鱼类检测', descr: '针对水族箱场景的特定识别', supported: false, hasConfig: true },
+  { id: '1112', name: '人脸检测', descr: '检测画面中出现的人脸', supported: false, hasConfig: true },
+  { id: '1114', name: '宠物喂食', descr: '监测宠物进食与自动喂食器联动', supported: false, hasConfig: true },
+  { id: '1083', name: '车辆侦测', descr: '识别进入画面的各类机动车辆', supported: false, hasConfig: true },
+  { id: '1082', name: '烟火侦测', descr: '基于图像识别的火灾烟雾和火焰检测', supported: false, hasConfig: true }
+])
+
 const eventOptions = ref([])
 
 function loadEvents() {
   const res = allEvents()
   eventOptions.value = (res.data?.list || []).map(e => {
     try { e._name = JSON.parse(e.eventName || '{}') } catch { e._name = {} }
-    return { id: e.eventId, name: e._name?.['1'] || e.eventId, descr: e.eventRemark || '', _dbId: e.id }
+    try { e._push = JSON.parse(e.pushCopy || '{}') } catch { e._push = {} }
+    return { id: e.eventId, name: e._name?.['1'] || e.eventId, descr: e.eventRemark || '', _push: e._push, _dbId: e.id }
   })
 }
 
 const algoConfigVisible = ref(false)
 const editingAlgo = ref(null)
 
+// ===== PIR侦测 能力配置 =====
+const pirConfigVisible = ref(false)
+const pirConfigItems = [
+  { key: 'abilitySwitch',   label: '能力开关' },
+  { key: 'sensitivity',     label: '灵敏度' },
+  { key: 'smartTracking',   label: '智能追踪开关' },
+  { key: 'soundAlarm',      label: '声音报警' },
+  { key: 'deviceLight',     label: '设备报警灯' },
+  { key: 'personDetect',    label: '人形侦测' },
+  { key: 'vehicleDetect',   label: '车辆检测' },
+  { key: 'petDetect',       label: '宠物检测' },
+  { key: 'motionDetect',    label: '移动检测' },
+  { key: 'scheduledDetect', label: '定时设置' },
+  { key: 'zoneDetect',      label: '自定义区域' }
+]
+const pirConfigForm = reactive({
+  abilitySwitch:   { supported: '1', defaultVal: '1' },
+  sensitivity:     { supported: '1', defaultVal: '3' },
+  smartTracking:   { supported: '0', defaultVal: '0' },
+  soundAlarm:      { supported: '1', defaultVal: '1' },
+  deviceLight:     { supported: '1', defaultVal: '0' },
+  personDetect:    { supported: '1', defaultVal: '1' },
+  vehicleDetect:   { supported: '0', defaultVal: '0' },
+  petDetect:       { supported: '0', defaultVal: '0' },
+  motionDetect:    { supported: '1', defaultVal: '1' },
+  scheduledDetect: { supported: '0', defaultVal: '0' },
+  zoneDetect:      { supported: '0', defaultVal: '0' }
+})
+
+function savePirConfig() {
+  if (editingAlgo.value) {
+    editingAlgo.value._pirConfig = JSON.parse(JSON.stringify(pirConfigForm))
+    editingAlgo.value.standardCaps = JSON.parse(JSON.stringify(standardCapList.value))
+    editingAlgo.value.customCaps = JSON.parse(JSON.stringify(customCapList.value))
+  }
+  ElMessage.success('PIR侦测能力配置已保存')
+  pirConfigVisible.value = false
+  algoCapScope.value = null
+}
+
 function openAlgoConfig(row) {
+  if (row.algorithmId === 'pir_detection') {
+    editingAlgo.value = row
+    algoCapScope.value = row
+    // Reset PIR config from row data or defaults
+    if (row._pirConfig) {
+      Object.keys(pirConfigForm).forEach(key => {
+        if (row._pirConfig[key]) {
+          pirConfigForm[key].supported = row._pirConfig[key].supported
+          pirConfigForm[key].defaultVal = row._pirConfig[key].defaultVal
+        }
+      })
+    }
+    // Initialize standard/custom caps from algorithm library
+    if (!row.standardCaps || row.standardCaps.length === 0) {
+      const ids = (() => { try { return JSON.parse(row.capabilityIds || '[]') } catch { return [] } })()
+      const modules = getModules()
+      const modMap = Object.fromEntries(modules.map(m => [m.id, m]))
+      row.standardCaps = getCapabilitiesByIds(ids).map(c => ({
+        id: Date.now() + Math.random(), capType: c.capType, name: c.name,
+        identifier: c.identifier, descr: c.descr || '', dataType: c.dataDef?.dataType || '—',
+        dataDef: JSON.parse(JSON.stringify(c.dataDef)),
+        moduleName: modMap[c.moduleId]?.name || ''
+      }))
+    }
+    standardCapList.value = JSON.parse(JSON.stringify(row.standardCaps || []))
+    customCapList.value = JSON.parse(JSON.stringify(row.customCaps || []))
+    pirConfigVisible.value = true
+    return
+  }
   editingAlgo.value = row
   algoCapScope.value = row
   // Initialize standard caps from algorithm library on first open
@@ -2594,7 +2901,31 @@ function saveAlgoTab() { ElMessage.success('设备算法配置已保存'); curre
 function savePlatformTab() { ElMessage.success('平台服务配置已保存'); currentStep.value = 4 }
 
 const eventLinkVisible = ref(false)
-function openEventLink(row) { editingAlgo.value = row; eventLinkVisible.value = true }
+const eventTableRef = ref(null)
+const linkedEventOptions = computed(() => {
+  if (!editingAlgo.value) return []
+  const svcEventIds = editingAlgo.value._svcEventIds || []
+  return eventOptions.value.filter(e => svcEventIds.includes(e.id))
+})
+function handleEventSelectionChange(rows) {
+  if (editingAlgo.value) {
+    editingAlgo.value.linkedEvents = rows.map(r => r.id)
+  }
+}
+function openEventLink(row) {
+  editingAlgo.value = row
+  row._svcEventIds = getAlgorithmEvents(row.algorithmId)
+  row.linkedEvents = [...row._svcEventIds]
+  eventLinkVisible.value = true
+  // 默认选中所有服务关联事件
+  nextTick(() => {
+    const table = eventTableRef.value
+    if (!table) return
+    linkedEventOptions.value.forEach(evt => {
+      table.toggleRowSelection(evt, true)
+    })
+  })
+}
 function saveEventLink() { ElMessage.success('关联事件已保存'); eventLinkVisible.value = false }
 
 // ===== Tab 3: 语音 =====
@@ -2915,9 +3246,18 @@ onMounted(() => { loadAlgorithms(); loadEvents(); loadEventConfig() })
 .param-empty { font-size: 12px; color: var(--text-placeholder); padding: 8px 0; }
 .form-hint { display: block; font-size: 11px; color: var(--text-placeholder); margin-bottom: 4px; }
 
+// ===== PIR 配置 =====
+.pir-config-section { padding: 0 20px; }
+.pir-item-row { display: flex; align-items: center; gap: 8px; }
+.pir-item-label { font-size: 12px; color: var(--text-secondary); flex-shrink: 0; }
+.pir-item-sep { color: var(--border-light); margin: 0 4px; }
+
 // ===== 通用 =====
 .cell-name { font-weight: 500; color: var(--text-primary); font-size: 13px; }
 .cell-desc { font-size: 13px; color: var(--text-secondary); }
+.cell-service-id { font-size: 13px; color: var(--text-primary); font-weight: 500; }
+.text-muted { color: var(--text-placeholder); }
+.header-tip-icon { margin-left: 4px; color: var(--text-placeholder); cursor: help; font-size: 14px; }
 .empty-state {
   display: flex; align-items: center; justify-content: center;
   padding: 60px 0; color: var(--text-placeholder); font-size: 14px;
@@ -2945,12 +3285,60 @@ onMounted(() => { loadAlgorithms(); loadEvents(); loadEventConfig() })
   :deep(.el-icon) { font-size: 14px; margin: 0; }
 }
 
+// ===== 算法服务 新/老 分区标题 =====
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 24px 0 12px;
+  padding: 0 24px;
+  &:first-child { margin-top: 0; }
+}
+.section-header-title {
+  margin: 0; font-size: 16px; font-weight: 600; color: var(--text-primary);
+}
+
+// ===== 旧版算法卡片 =====
+.old-algo-card {
+  background: #fafafa;
+  border: 1px solid #ebeef5;
+  border-radius: 8px;
+  padding: 20px 0;
+  margin-top: 24px;
+}
+.legacy-tag {
+  display: inline-block; vertical-align: middle;
+  margin-left: 10px; padding: 1px 8px; border-radius: 3px;
+  font-size: 12px; font-weight: 400; color: #909399;
+  background: #f4f4f5; border: 1px solid #e9e9eb;
+}
+
+// ===== 老算法服务组 =====
+.old-service-group {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-lighter, #e4e7ed);
+}
+.old-service-title {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+}
+.old-service-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.aiiot-tag {
+  display: inline-block; padding: 2px 8px; border-radius: 3px;
+  font-size: 12px; color: #909399; background: #f4f4f5; border: 1px solid #e9e9eb;
+}
+.old-algo-table {
+  margin-top: 20px;
+}
+
 </style>
 
 <style lang="scss">
 .algo-config-drawer {
   .el-drawer__body { padding: 20px 24px; }
 }
+.event-link-drawer {
+  .el-drawer__body { padding: 20px 24px; }
+}
+.event-id-code { font-size: 12px; color: var(--text-secondary); background: #f5f7fa; padding: 1px 6px; border-radius: 3px; }
 .alg-cap-dialog .el-dialog__body { padding-top: 20px; }
 .custom-cap-dialog .el-dialog__body { padding-top: 20px; }
 .cap-dialog {
