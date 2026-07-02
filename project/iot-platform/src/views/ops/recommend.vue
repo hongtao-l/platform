@@ -246,6 +246,7 @@
                   <span class="funnel-detail-code">{{ slot.code }}</span>
                   <span class="funnel-detail-dot">·</span>
                   <span class="funnel-detail-name">{{ slot.name }}</span>
+                  <span v-if="slot.category" class="funnel-detail-tag">{{ slot.category }}</span>
                   <span class="funnel-detail-price">{{ slot.price }}</span>
                 </div>
                 <!-- Per-layer template selector -->
@@ -588,19 +589,19 @@ const funnels = ref([
   {
     name: '首页基础漏斗', createdAt: '2026-03-22',
     slots: [
-      { code: 'REC_001', name: '7天事件云存储基础版', price: '¥6.90 / $0.95' },
-      { code: 'REC_003', name: 'AI智能检测月卡', price: '¥9.90 / $1.49' },
-      { code: 'REC_004', name: '全家桶年度套餐', price: '¥199.00 / $29.99' },
-      { code: 'REC_006', name: '国内专享·极简云存', price: '¥59.00' }
+      { code: 'REC_001', name: '7天事件云存储基础版', price: '¥6.90 / $0.95', category: '云存储套餐' },
+      { code: 'REC_003', name: 'AI智能检测月卡', price: '¥9.90 / $1.49', category: 'AI智能服务' },
+      { code: 'REC_004', name: '全家桶年度套餐', price: '¥199.00 / $29.99', category: '综合套餐' },
+      { code: 'REC_006', name: '国内专享·极简云存', price: '¥59.00', category: '云存储套餐' }
     ]
   },
   {
     name: '升级推荐漏斗', createdAt: '2026-03-25',
     slots: [
-      { code: 'REC_002', name: '30天全时云存储Pro版', price: '¥19.90 / $2.99' },
-      { code: 'REC_005', name: 'Overseas-Pro云存储', price: '$12.99' },
-      { code: 'REC_004', name: '全家桶年度套餐', price: '¥199.00 / $29.99' },
-      { code: 'REC_003', name: 'AI智能检测月卡', price: '¥9.90 / $1.49' }
+      { code: 'REC_002', name: '30天全时云存储Pro版', price: '¥19.90 / $2.99', category: '云存储套餐' },
+      { code: 'REC_005', name: 'Overseas-Pro云存储', price: '$12.99', category: '云存储套餐' },
+      { code: 'REC_004', name: '全家桶年度套餐', price: '¥199.00 / $29.99', category: '综合套餐' },
+      { code: 'REC_003', name: 'AI智能检测月卡', price: '¥9.90 / $1.49', category: 'AI智能服务' }
     ]
   }
 ])
@@ -992,6 +993,15 @@ const switchToFunnel = () => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.funnel-detail-tag {
+  font-size: 10px;
+  color: var(--gray-500);
+  background: var(--gray-100);
+  padding: 1px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
 }
 
 .funnel-detail-price {
