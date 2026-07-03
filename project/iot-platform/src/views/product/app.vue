@@ -9,45 +9,45 @@
       <span class="page-subtitle">{{ productName }} ({{ productId }})</span>
     </div>
 
-    <div class="card app-config-card">
-      <div class="config-layout">
+    <div class="config-layout">
+      <div class="config-sidebar">
         <el-segmented
           v-model="activeTab"
           :options="tabOptions"
           direction="vertical"
-          block
           class="module-segmented"
         />
-        <div class="config-detail">
-          <el-scrollbar height="520px">
-            <el-form label-position="right" label-width="140px" class="config-form">
+      </div>
+      <div class="config-detail card">
+        <el-form label-position="right" label-width="140px" class="config-form">
 
-              <!-- Tab 1: 安装指引 -->
-              <template v-if="activeTab === 'install'">
-                <div class="tab-section">
-                  <div class="tab-section-header">
-                    <span class="tab-section-title">安装指引步骤</span>
-                    <el-button type="primary" size="small" @click="addInstallStep">
-                      <el-icon><Plus /></el-icon>添加步骤
+            <!-- Tab 1: 安装指引 -->
+            <template v-if="activeTab === 'install'">
+              <div class="tab-section">
+                <div class="tab-section-header">
+                  <span class="tab-section-title">安装指引步骤</span>
+                  <el-button type="primary" size="small" @click="addInstallStep">
+                    <el-icon><Plus /></el-icon>添加步骤
+                  </el-button>
+                </div>
+                <div v-if="installSteps.length === 0" class="empty-state">暂无安装步骤，点击上方按钮添加</div>
+                <div v-else class="step-list">
+                  <div v-for="(step, idx) in installSteps" :key="idx" class="step-item">
+                    <span class="step-num">{{ idx + 1 }}</span>
+                    <el-input v-model="step.title" placeholder="步骤标题" style="width:200px" />
+                    <el-input v-model="step.descr" placeholder="步骤描述" style="flex:1" />
+                    <el-button size="small" text type="danger" @click="removeInstallStep(idx)">
+                      <el-icon><Delete /></el-icon>
                     </el-button>
                   </div>
-                  <div v-if="installSteps.length === 0" class="empty-state">暂无安装步骤，点击上方按钮添加</div>
-                  <div v-else class="step-list">
-                    <div v-for="(step, idx) in installSteps" :key="idx" class="step-item">
-                      <span class="step-num">{{ idx + 1 }}</span>
-                      <el-input v-model="step.title" placeholder="步骤标题" style="width:200px" />
-                      <el-input v-model="step.descr" placeholder="步骤描述" style="flex:1" />
-                      <el-button size="small" text type="danger" @click="removeInstallStep(idx)">
-                        <el-icon><Delete /></el-icon>
-                      </el-button>
-                    </div>
-                  </div>
                 </div>
-              </template>
+              </div>
+            </template>
 
-              <!-- Tab 2: App使用范围 -->
-              <template v-if="activeTab === 'scope'">
-                <div class="tab-section">
+            <!-- Tab 2: App使用范围 -->
+            <template v-if="activeTab === 'scope'">
+              <div class="tab-section">
+                <div class="config-item">
                   <el-form-item label="指定App">
                     <el-switch v-model="scopeConfig.specifyApp" active-text="仅限指定App使用" inactive-text="不限App" />
                   </el-form-item>
@@ -61,22 +61,24 @@
                       </el-select>
                     </el-form-item>
                   </div>
-                  <el-form-item label="说明">
-                    <span class="form-tip">配置App使用范围后，仅限指定App可以绑定该产品下的设备</span>
-                  </el-form-item>
                 </div>
-              </template>
+                <div class="config-descr">配置App使用范围后，仅限指定App可以绑定该产品下的设备</div>
+              </div>
+            </template>
 
-              <!-- Tab 3: 默认配置 -->
-              <template v-if="activeTab === 'defaults'">
-                <div class="tab-section">
+            <!-- Tab 3: 默认配置 -->
+            <template v-if="activeTab === 'defaults'">
+              <div class="tab-section">
+                <div class="config-item">
                   <el-form-item label="默认分辨率">
                     <el-radio-group v-model="defaultConfig.resolution">
                       <el-radio label="uhd">超清 (2K/4K)</el-radio>
                       <el-radio label="sd">标清 (1080P及以下)</el-radio>
                     </el-radio-group>
                   </el-form-item>
+                </div>
 
+                <div class="config-item">
                   <el-form-item label="图片插值">
                     <div class="inline-switch-group">
                       <el-switch v-model="defaultConfig.imageInterp.enabled" size="small" />
@@ -91,35 +93,45 @@
                       </template>
                     </div>
                   </el-form-item>
+                </div>
 
+                <div class="config-item">
                   <el-form-item label="视频插值">
                     <div class="inline-switch-group">
                       <el-switch v-model="defaultConfig.videoInterp" size="small" />
                       <span class="switch-label">{{ defaultConfig.videoInterp ? '开启' : '关闭' }}</span>
                     </div>
                   </el-form-item>
+                </div>
 
+                <div class="config-item">
                   <el-form-item label="全彩模式时段">
                     <el-radio-group v-model="defaultConfig.fullColorMode">
                       <el-radio label="auto">夜间智能感知</el-radio>
                       <el-radio label="scheduled">定时开启</el-radio>
                     </el-radio-group>
                   </el-form-item>
+                </div>
 
+                <div class="config-item">
                   <el-form-item label="一键报警配置">
                     <el-radio-group v-model="defaultConfig.alarmConfig">
                       <el-radio label="enabled">启用</el-radio>
                       <el-radio label="disabled">禁用</el-radio>
                     </el-radio-group>
                   </el-form-item>
+                </div>
 
+                <div class="config-item">
                   <el-form-item label="假三目设置">
                     <el-radio-group v-model="defaultConfig.fakeTriple">
                       <el-radio label="on">开启</el-radio>
                       <el-radio label="off">关闭</el-radio>
                     </el-radio-group>
                   </el-form-item>
+                </div>
 
+                <div class="config-item">
                   <el-form-item label="灯控开关显示">
                     <el-radio-group v-model="defaultConfig.lightSwitch">
                       <el-radio label="hide">不显示</el-radio>
@@ -137,17 +149,51 @@
                       />
                     </template>
                   </el-form-item>
-
                 </div>
-              </template>
 
-            </el-form>
-          </el-scrollbar>
+                <div class="config-item">
+                  <el-form-item label="低电量保护策略">
+                    <div class="policy-wrapper">
+                      <div class="inline-switch-group">
+                        <el-switch v-model="defaultConfig.lowBatteryPolicy.enabled" size="small" />
+                        <span class="switch-label">{{ defaultConfig.lowBatteryPolicy.enabled ? '开启' : '关闭' }}</span>
+                      </div>
+                      <template v-if="defaultConfig.lowBatteryPolicy.enabled">
+                        <div class="policy-extra">
+                          <div class="policy-row">
+                            <span class="policy-label">低电量阈值</span>
+                            <el-input-number
+                              v-model="defaultConfig.lowBatteryPolicy.threshold"
+                              :min="1"
+                              :max="100"
+                              size="small"
+                              style="width:100px"
+                            />
+                            <span class="policy-unit">%</span>
+                            <span class="policy-hint">低于此电量将禁用所选功能</span>
+                          </div>
+                          <div class="policy-row">
+                            <span class="policy-label">禁用功能</span>
+                            <el-checkbox-group v-model="defaultConfig.lowBatteryPolicy.disabledFeatures" class="policy-checkbox-group">
+                              <el-checkbox label="ptz">PTZ控制</el-checkbox>
+                              <el-checkbox label="talk">语音对讲</el-checkbox>
+                              <el-checkbox label="call">一键呼叫</el-checkbox>
+                            </el-checkbox-group>
+                          </div>
+                        </div>
+                      </template>
+                    </div>
+                  </el-form-item>
+                </div>
 
-          <!-- 保存按钮 -->
-          <div class="save-bar">
-            <el-button type="primary" @click="handleSave">保存配置</el-button>
-          </div>
+              </div>
+            </template>
+
+          </el-form>
+
+        <!-- 保存按钮 -->
+        <div class="save-bar">
+          <el-button type="primary" @click="handleSave">保存配置</el-button>
         </div>
       </div>
     </div>
@@ -203,7 +249,12 @@ const defaultConfig = reactive({
   alarmConfig: 'enabled',
   fakeTriple: 'off',
   lightSwitch: 'show',
-  lightDuration: 60
+  lightDuration: 60,
+  lowBatteryPolicy: {
+    enabled: false,
+    threshold: 20,
+    disabledFeatures: []
+  }
 })
 
 // ===== Actions =====
@@ -234,32 +285,35 @@ function goBack() {
   color: var(--text-secondary);
 }
 
-.app-config-card {
-  padding: var(--spacing-lg);
-}
-
 .config-layout {
   display: flex;
-  gap: 24px;
-  min-height: 400px;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.config-sidebar {
+  flex-shrink: 0;
+  width: 140px;
 }
 
 .module-segmented {
-  flex-shrink: 0;
-  width: 130px;
-  background: #F5F7FA;
+  background: #fff;
   border-radius: 6px;
-  padding: 8px;
+  padding: 4px;
+  width: 100%;
+  box-shadow: var(--box-shadow-light, 0 1px 4px rgba(0,0,0,.06));
   :deep(.el-segmented__group) { width: 100%; }
   :deep(.el-segmented) { background: transparent; }
   :deep(.el-segmented__item) {
-    padding: 10px 12px;
+    padding: 11px 14px;
     justify-content: center;
-    font-size: 13px;
+    font-size: 14px;
     text-align: center;
     border-radius: 4px;
     color: #606266;
     transition: all .2s;
+    margin-bottom: 2px;
+    &:last-child { margin-bottom: 0; }
     &:hover { color: #4992FE; }
     &.is-selected {
       background: #4992FE;
@@ -274,10 +328,30 @@ function goBack() {
   display: flex;
   flex-direction: column;
   min-height: 480px;
+  padding: var(--spacing-lg);
 }
 
 .tab-section {
   padding: 4px 0;
+}
+
+.config-item {
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border-lighter);
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+.config-descr {
+  font-size: 13px;
+  color: var(--text-placeholder);
+  margin-top: -8px;
+  padding-bottom: 4px;
 }
 
 .tab-section-header {
@@ -381,5 +455,45 @@ function goBack() {
   padding: 40px 0;
   color: var(--text-placeholder);
   font-size: 14px;
+}
+
+// ===== 低电量保护策略 =====
+.policy-extra {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  background: var(--gray-50);
+  border-radius: 6px;
+}
+
+.policy-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.policy-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  width: 70px;
+}
+
+.policy-unit {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.policy-hint {
+  font-size: 12px;
+  color: var(--text-placeholder);
+  margin-left: 4px;
+}
+
+.policy-checkbox-group {
+  display: flex;
+  gap: 16px;
 }
 </style>

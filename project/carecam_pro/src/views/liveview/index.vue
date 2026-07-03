@@ -45,6 +45,7 @@
       <div v-if="activePanel === 'ptz'" class="ptz-wrapper">
         <PTZPanel
           :visible="true"
+          :disabled="isFeatureDisabled('ptz')"
           @ptz="onPtz"
           @ptz-stop="onPtzStop"
           @ptz-center="onPtzCenter"
@@ -58,7 +59,7 @@
             v-for="fn in moreFunctions"
             :key="fn.key"
             class="more-btn"
-            :class="{ active: fn.active }"
+            :class="{ active: fn.active, disabled: isFeatureDisabled(fn.key) }"
             @click="onMoreFn(fn)"
           >
             <div class="more-icon" :style="{ background: fn.active ? 'rgba(26,115,232,0.35)' : '' }">
@@ -105,7 +106,7 @@
         v-for="btn in mainButtons"
         :key="btn.key"
         class="tool-btn"
-        :class="{ active: btn.active }"
+        :class="{ active: btn.active, disabled: btn.disabled }"
         @click="onToolbarAction(btn.key)"
       >
         <div class="tool-icon" :style="{ background: btn.active ? 'rgba(26,115,232,0.35)' : '' }">
@@ -120,6 +121,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { showToast } from 'vant'
 import TopBar from '@/components/LiveView/TopBar.vue'
 import PTZPanel from '@/components/LiveView/PTZPanel.vue'
 
@@ -161,6 +163,27 @@ const isRecording = ref(false)
 const lightModeIdx = ref(0)
 const lightModes = ['关', '补光', '红外', '智能']
 
+// 低电量保护策略（模拟平台配置）
+const batteryLevel = ref(15)
+const lowBatteryPolicy = ref({
+  enabled: true,
+  threshold: 20,
+  disabledFeatures: ['ptz', 'talk', 'call']
+})
+
+// 功能 key → 平台配置 key 映射
+const featurePolicyMap = {
+  ptz: 'ptz',
+  intercom: 'talk',
+  alarm: 'call'
+}
+
+function isFeatureDisabled(featureKey) {
+  const policy = lowBatteryPolicy.value
+  if (!policy.enabled || !featurePolicyMap[featureKey]) return false
+  return policy.disabledFeatures.includes(featurePolicyMap[featureKey]) && batteryLevel.value < policy.threshold
+}
+
 const moreFunctions = [
   { key: 'flip_h', label: '水平翻转', icon: 'exchange', active: false },
   { key: 'flip_v', label: '垂直翻转', icon: 'upgrade', active: false },
@@ -174,7 +197,7 @@ const moreFunctions = [
 
 const mainButtons = computed(() => [
   { key: 'ptz', label: 'PTZ', icon: 'guide-o', active: activePanel.value === 'ptz' },
-  { key: 'intercom', label: '语音对讲', icon: 'phone-o', active: false },
+  { key: 'intercom', label: '语音对讲', icon: 'phone-o', active: false, disabled: isFeatureDisabled('intercom') },
   { key: 'subdevice', label: '子设备', icon: 'apps-o', active: activePanel.value === 'subdevice' },
   { key: 'playback', label: '回放', icon: 'clock-o', active: false },
   { key: 'record', label: '录制', icon: 'video-o', active: isRecording.value },
@@ -203,6 +226,10 @@ function onPtzStop() { console.log('PTZ stop') }
 function onPtzCenter() { console.log('PTZ center') }
 
 function onToolbarAction(key) {
+  if (mainButtons.value.find(b => b.key === key)?.disabled) {
+    showToast({ message: '电量低，暂不可用', className: 'toast-compact' })
+    return
+  }
   if (key === 'ptz') {
     activePanel.value = activePanel.value === 'ptz' ? null : 'ptz'
   } else if (key === 'more') {
@@ -219,6 +246,10 @@ function onToolbarAction(key) {
 }
 
 function onMoreFn(fn) {
+  if (isFeatureDisabled(fn.key)) {
+    showToast({ message: '电量低，暂不可用', className: 'toast-compact' })
+    return
+  }
   switch (fn.key) {
     case 'flip_h': console.log('Horizontal flip'); break
     case 'flip_v': console.log('Vertical flip'); break
@@ -554,5 +585,29 @@ function goToSettings() { router.push({ path: '/settings', query: { deviceId: de
 
 .tool-btn.active .tool-label {
   color: rgba(255,255,255,0.9);
+}
+
+.tool-btn.disabled {
+  opacity: 0.35;
+  pointer-events: auto;
+  cursor: not-allowed;
+}
+
+.more-btn.disabled {
+  opacity: 0.35;
+  pointer-events: auto;
+  cursor: not-allowed;
+}
+</style>
+
+<style lang="scss">
+.toast-compact {
+  .van-toast__text {
+    font-size: 10px !important;
+    padding: 2px 8px !important;
+    border-radius: 3px !important;
+    min-width: auto !important;
+    line-height: 1.2 !important;
+  }
 }
 </style>
