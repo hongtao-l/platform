@@ -175,7 +175,7 @@
 import { ref, reactive, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { aiStatus } from '@/store/devStatus'
-import { showToast } from 'vant'
+import { showToast } from '@/utils/toast'
 
 const router = useRouter()
 const route = useRoute()
@@ -228,7 +228,7 @@ const editingIndex = ref(-1)
 const editingName = ref('')
 const editingDesc = ref('')
 
-const maxEvents = 10
+const maxEvents = 4
 const events = reactive([
   { name: '儿童守护', desc: '小孩哭喊、跌倒、出门', enabled: true },
   { name: '包裹送达', desc: '快递或者外卖送达', enabled: true },
@@ -238,7 +238,7 @@ const events = reactive([
 
 const openAddEvent = () => {
   if (events.length >= maxEvents) {
-    showToast('最多添加10个关注事件')
+    showToast('最多添加4个关注事件')
     return
   }
   editingIndex.value = -1; editingName.value = ''; editingDesc.value = ''; showAddDialog.value = true

@@ -1,11 +1,11 @@
 <template>
-  <el-dialog v-model="visible" :title="isEdit ? '编辑算法' : '添加算法'" width="480px"
+  <el-dialog v-model="visible" :title="isEdit ? '编辑算法' : '添加算法'" width="520px"
     :close-on-click-modal="false" destroy-on-close @open="handleOpen"
     class="alg-edit-dialog">
     <el-form ref="formRef" :model="form" :rules="rules" label-width="100px" v-loading="pageLoading">
 
-      <el-form-item label="AlgorithmID" prop="algorithmId">
-        <el-input v-model="form.algorithmId" placeholder="PascalCase，如 motion_detection" />
+      <el-form-item label="算法ID" prop="algorithmId">
+        <el-input v-model="form.algorithmId" placeholder="如 4001" />
       </el-form-item>
 
       <el-form-item label="算法名称" prop="nameZh">
@@ -39,6 +39,8 @@
         </el-upload>
       </el-form-item>
 
+      <el-divider />
+
     </el-form>
 
     <template #footer>
@@ -60,7 +62,9 @@ import LangDialog from '@/views/algorithm/LangDialog.vue'
 import { getAlgorithm, addAlgorithm, updateAlgorithm } from './data'
 
 const visible = defineModel('visible', { default: false })
-const props = defineProps({ editId: { type: [Number, String], default: null } })
+const props = defineProps({
+  editId: { type: [Number, String], default: null }
+})
 const emit = defineEmits(['success'])
 
 const formRef = ref()
@@ -77,7 +81,7 @@ const form = reactive({
 })
 
 const rules = {
-  algorithmId: [{ required: true, message: '请输入 AlgorithmID', trigger: 'blur' }]
+  algorithmId: [{ required: true, message: '请输入 算法ID', trigger: 'blur' }]
 }
 
 function handleIconUpload(file) {
@@ -109,7 +113,13 @@ function resetForm() {
   form.descr = ''
 }
 
-function handleOpen() { isEdit.value ? loadDetail() : resetForm() }
+async function handleOpen() {
+  if (isEdit.value) {
+    await loadDetail()
+  } else {
+    resetForm()
+  }
+}
 
 async function handleSubmit() {
   await formRef.value?.validate()

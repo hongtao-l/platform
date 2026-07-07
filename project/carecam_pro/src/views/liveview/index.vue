@@ -49,6 +49,7 @@
           @ptz="onPtz"
           @ptz-stop="onPtzStop"
           @ptz-center="onPtzCenter"
+          @disabled-click="showToast('电量低，暂不可用')"
         />
       </div>
 
@@ -100,6 +101,20 @@
       </div>
     </div>
 
+    <!-- 慢速提示条（工具栏上方） -->
+    <transition name="speed-bar-slide">
+      <div v-if="showSpeedHint && !speedHintDismissed" class="speed-hint-bar" @click="goToStore">
+        <div class="speed-hint-left">
+          <van-icon name="info-o" size="14" color="rgba(255,255,255,0.65)" />
+          <span class="speed-hint-text">{{ hintText }}</span>
+        </div>
+        <div class="speed-hint-right">
+          <span class="speed-hint-cta">了解云存储</span>
+          <van-icon name="cross" size="16" color="rgba(255,255,255,0.45)" @click.stop="speedHintDismissed = true" />
+        </div>
+      </div>
+    </transition>
+
     <!-- 底部工具栏 -->
     <div class="bottom-toolbar">
       <div
@@ -121,7 +136,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { showToast } from 'vant'
+import { showToast } from '@/utils/toast'
 import TopBar from '@/components/LiveView/TopBar.vue'
 import PTZPanel from '@/components/LiveView/PTZPanel.vue'
 
@@ -162,6 +177,25 @@ const activePanel = ref(null)
 const isRecording = ref(false)
 const lightModeIdx = ref(0)
 const lightModes = ['关', '补光', '红外', '智能']
+
+// 网络资源分配策略（服务端控制地区，当前仅印度）
+const speedThreshold = 100 // KB/s
+const hintText = '当前网络较慢，云存储服务可提升流畅度'
+const speedHintDismissed = ref(false)
+const loadSpeed = ref(80) // TODO: 真实测速，当前模拟慢速
+const hasCloudStorage = ref(false) // TODO: 接入真实云存状态
+const isSupportedRegion = ref(true) // TODO: 接入后台地区接口，当前模拟印度
+
+const showSpeedHint = computed(() => {
+  if (!isSupportedRegion.value) return false
+  if (hasCloudStorage.value) return false
+  if (loadSpeed.value >= speedThreshold) return false
+  return true
+})
+
+const goToStore = () => {
+  router.push('/store?tab=cloud')
+}
 
 // 低电量保护策略（模拟平台配置）
 const batteryLevel = ref(15)
@@ -227,7 +261,7 @@ function onPtzCenter() { console.log('PTZ center') }
 
 function onToolbarAction(key) {
   if (mainButtons.value.find(b => b.key === key)?.disabled) {
-    showToast({ message: '电量低，暂不可用', className: 'toast-compact' })
+    showToast('电量低，暂不可用')
     return
   }
   if (key === 'ptz') {
@@ -247,7 +281,7 @@ function onToolbarAction(key) {
 
 function onMoreFn(fn) {
   if (isFeatureDisabled(fn.key)) {
-    showToast({ message: '电量低，暂不可用', className: 'toast-compact' })
+    showToast('电量低，暂不可用')
     return
   }
   switch (fn.key) {
@@ -330,6 +364,59 @@ function goToSettings() { router.push({ path: '/settings', query: { deviceId: de
   font-size: 12px;
   color: rgba(255,255,255,0.2);
   letter-spacing: 1px;
+}
+
+// 慢速提示条
+.speed-hint-bar {
+  height: 44px;
+  background: linear-gradient(90deg, rgba(26, 115, 232, 0.12), rgba(26, 115, 232, 0.04));
+  border-top: 1px solid rgba(26, 115, 232, 0.1);
+  border-bottom: 1px solid rgba(26, 115, 232, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 10;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.speed-hint-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.speed-hint-text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.speed-hint-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.speed-hint-cta {
+  font-size: 11px;
+  color: #90CAF9;
+  font-weight: 500;
+}
+
+.speed-bar-slide-enter-active {
+  transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.speed-bar-slide-leave-active {
+  transition: all 0.25s ease-in;
+}
+.speed-bar-slide-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.speed-bar-slide-leave-to {
+  opacity: 0;
+  transform: translateY(12px);
 }
 
 .video-overlay {
@@ -600,14 +687,3 @@ function goToSettings() { router.push({ path: '/settings', query: { deviceId: de
 }
 </style>
 
-<style lang="scss">
-.toast-compact {
-  .van-toast__text {
-    font-size: 10px !important;
-    padding: 2px 8px !important;
-    border-radius: 3px !important;
-    min-width: auto !important;
-    line-height: 1.2 !important;
-  }
-}
-</style>

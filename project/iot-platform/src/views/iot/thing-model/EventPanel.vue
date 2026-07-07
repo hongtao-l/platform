@@ -3,7 +3,7 @@
     <!-- 搜索栏 -->
     <div class="toolbar">
       <div class="toolbar-left">
-        <el-input v-model="search.keyword" placeholder="搜索 EventID / 名称"
+        <el-input v-model="search.keyword" placeholder="搜索 事件ID / 名称"
           clearable style="width: 240px" @keyup.enter="handleSearch" />
         <el-button type="primary" @click="handleSearch">查询</el-button>
         <el-button @click="handleReset">重置</el-button>
@@ -16,7 +16,7 @@
     <!-- 表格 -->
     <div class="card">
     <el-table :data="list" stripe v-loading="loading">
-      <el-table-column label="EventID" width="110">
+      <el-table-column label="事件ID" width="110">
         <template #default="{ row }">
           <code class="id-code">{{ row.eventId }}</code>
         </template>

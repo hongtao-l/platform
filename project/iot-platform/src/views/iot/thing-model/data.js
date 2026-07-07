@@ -526,28 +526,172 @@ export function isLegacyCapIdentifierUnique(identifier, excludeCapId) {
 
 const initialAlgorithms = [
   {
-    id: nextId(), algorithmId: 'motion_detection', algorithmIcon: '🔍',
-    algorithmName: JSON.stringify({ '1': '移动侦测算法', '2': 'Motion Detection' }),
+    id: nextId(), algorithmId: '4001', algorithmIcon: '🔍', serviceId: '400001',
+    algorithmName: JSON.stringify({ '1': '新侦测算法', '2': 'New Detection' }),
     capabilities: JSON.stringify({ MotionDetect: true, AlgorithmSwitch: true, Sensitivity: true, DetectType: true, ScheduledDetect: true, ZoneDetect: true, __detectTypes: { motion: '运动', person: '人形', vehicle: '车辆' } }),
     capabilityIds: JSON.stringify(['MotionDetect', 'AlgorithmSwitch', 'Sensitivity', 'DetectType', 'ScheduledDetect', 'ZoneDetect']),
     eventIds: JSON.stringify([100001, 100002]),
     referencedCount: 3
   },
   {
-    id: nextId(), algorithmId: 'sound_detection', algorithmIcon: '🔊',
-    algorithmName: JSON.stringify({ '1': '声音侦测算法', '2': 'Sound Detection' }),
-    capabilities: JSON.stringify({ SoundAlarm: true, AlgorithmSwitch: true, SoundAlarmSwitch: true, SoundAlarmCount: true, CustomAlarmAudio: true, LightAlarmSwitch: true, LightAlarmDuration: true }),
-    capabilityIds: JSON.stringify(['SoundAlarm', 'AlgorithmSwitch', 'SoundAlarmSwitch', 'SoundAlarmCount', 'CustomAlarmAudio', 'LightAlarmSwitch', 'LightAlarmDuration']),
+    id: nextId(), algorithmId: '1108', algorithmIcon: '📍', serviceId: '300050',
+    algorithmName: JSON.stringify({ '1': 'GPS信息处理', '2': 'GPS Info Processing' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch']),
+    eventIds: JSON.stringify([]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1109', algorithmIcon: '📦', serviceId: '300025',
+    algorithmName: JSON.stringify({ '1': '包裹检测', '2': 'Package Detection' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch']),
+    eventIds: JSON.stringify([100006]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1111', algorithmIcon: '🐟', serviceId: '300046',
+    algorithmName: JSON.stringify({ '1': '鱼类检测', '2': 'Fish Detection' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch']),
+    eventIds: JSON.stringify([]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1112', algorithmIcon: '👤', serviceId: '300018',
+    algorithmName: JSON.stringify({ '1': '人脸检测', '2': 'Face Detection' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, PersonDetect: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'PersonDetect']),
+    eventIds: JSON.stringify([100002]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1114', algorithmIcon: '🍽️', serviceId: '300049',
+    algorithmName: JSON.stringify({ '1': '宠物喂食', '2': 'Pet Feeding' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch']),
+    eventIds: JSON.stringify([]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1082', algorithmIcon: '🔥', serviceId: '300038',
+    algorithmName: JSON.stringify({ '1': '烟火侦测', '2': 'Fire & Smoke Detection' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, Sensitivity: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'Sensitivity']),
+    eventIds: JSON.stringify([]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1004', algorithmIcon: '🔊', serviceId: '300037',
+    algorithmName: JSON.stringify({ '1': '声音检测', '2': 'Sound Detection' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, SoundAlarm: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'SoundAlarm']),
     eventIds: JSON.stringify([100003]),
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: 'pir_detection', algorithmIcon: '📡',
-    algorithmName: JSON.stringify({ '1': 'PIR侦测', '2': 'PIR Detection' }),
-    capabilities: JSON.stringify({ AlgorithmSwitch: true, Sensitivity: true, SmartTracking: true, SoundAlarm: true, DeviceLight: true, PersonDetect: true, VehicleDetect: true, PetDetect: true, MotionDetect: true, ScheduledDetect: true, ZoneDetect: true }),
-    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'Sensitivity', 'SmartTracking', 'SoundAlarm', 'DeviceLight', 'PersonDetect', 'VehicleDetect', 'PetDetect', 'MotionDetect', 'ScheduledDetect', 'ZoneDetect']),
-    eventIds: JSON.stringify([100001, 100002, 100008]),
-    referencedCount: 1
+    id: nextId(), algorithmId: '1086', algorithmIcon: '🚲', serviceId: '300047',
+    algorithmName: JSON.stringify({ '1': '非机动车检测', '2': 'Non-Motor Vehicle Detection' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, VehicleDetect: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'VehicleDetect']),
+    eventIds: JSON.stringify([]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1003', algorithmIcon: '📡', serviceId: '300048',
+    algorithmName: JSON.stringify({ '1': 'PIR红外检测', '2': 'PIR Detection' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, Sensitivity: true, PersonDetect: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'Sensitivity', 'PersonDetect']),
+    eventIds: JSON.stringify([100001]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1088', algorithmIcon: '🚗', serviceId: '300019',
+    algorithmName: JSON.stringify({ '1': '车牌识别', '2': 'License Plate Recognition' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, VehicleDetect: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'VehicleDetect']),
+    eventIds: JSON.stringify([100008]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1090', algorithmIcon: '🚶', serviceId: '300045',
+    algorithmName: JSON.stringify({ '1': '客流统计', '2': 'People Counting' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, PersonDetect: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'PersonDetect']),
+    eventIds: JSON.stringify([100002]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1021', algorithmIcon: '🔋', serviceId: '300028',
+    algorithmName: JSON.stringify({ '1': '低电检测', '2': 'Low Battery Detection' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch']),
+    eventIds: JSON.stringify([100005]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1024', algorithmIcon: '🆘', serviceId: '300020',
+    algorithmName: JSON.stringify({ '1': '跌倒检测', '2': 'Fall Detection' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, PersonDetect: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'PersonDetect']),
+    eventIds: JSON.stringify([]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1025', algorithmIcon: '🔥', serviceId: '300022',
+    algorithmName: JSON.stringify({ '1': '火焰检测', '2': 'Flame Detection' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, Sensitivity: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'Sensitivity']),
+    eventIds: JSON.stringify([]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1028', algorithmIcon: '😢', serviceId: '300023',
+    algorithmName: JSON.stringify({ '1': '哭声检测', '2': 'Cry Detection' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, SoundAlarm: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'SoundAlarm']),
+    eventIds: JSON.stringify([100003]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1029', algorithmIcon: '🐾', serviceId: '300024',
+    algorithmName: JSON.stringify({ '1': '宠物检测', '2': 'Pet Detection' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, PetDetect: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'PetDetect']),
+    eventIds: JSON.stringify([]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1070', algorithmIcon: '🚫', serviceId: '300043',
+    algorithmName: JSON.stringify({ '1': '离岗侦测', '2': 'Absence Detection' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, PersonDetect: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'PersonDetect']),
+    eventIds: JSON.stringify([]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1079', algorithmIcon: '🚧', serviceId: '300034',
+    algorithmName: JSON.stringify({ '1': '区域闯入', '2': 'Area Intrusion' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, ZoneDetect: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'ZoneDetect']),
+    eventIds: JSON.stringify([100001]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1080', algorithmIcon: '🚪', serviceId: '300035',
+    algorithmName: JSON.stringify({ '1': '区域离开', '2': 'Area Exit' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, ZoneDetect: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'ZoneDetect']),
+    eventIds: JSON.stringify([100001]),
+    referencedCount: 0
+  },
+  {
+    id: nextId(), algorithmId: '1083', algorithmIcon: '🚙', serviceId: '300017',
+    algorithmName: JSON.stringify({ '1': '车辆侦测', '2': 'Vehicle Detection' }),
+    capabilities: JSON.stringify({ AlgorithmSwitch: true, VehicleDetect: true }),
+    capabilityIds: JSON.stringify(['AlgorithmSwitch', 'VehicleDetect']),
+    eventIds: JSON.stringify([100008]),
+    referencedCount: 0
   }
 ]
 
@@ -573,18 +717,25 @@ const initialServices = [
   { id: 4, name: '跌倒检测', serviceId: '300020', categoryId: 1, algorithmIds: [], eventIds: [] },
   { id: 5, name: '宠物喂食器', serviceId: '300049', categoryId: 1, algorithmIds: [], eventIds: [] },
   { id: 6, name: 'GPS定位', serviceId: '300050', categoryId: 1, algorithmIds: [], eventIds: [] },
-  { id: 7, name: '低功耗PIR检测', serviceId: '300048', categoryId: 1, algorithmIds: ['pir_detection'], eventIds: [100001, 100005] },
-  { id: 8, name: '非机动车检测', serviceId: '300047', categoryId: 1, algorithmIds: ['motion_detection'], eventIds: [100001, 100002, 100008] },
+  { id: 7, name: '低功耗PIR检测', serviceId: '300048', categoryId: 1, algorithmIds: ['4003'], eventIds: [100001, 100005] },
+  { id: 8, name: '非机动车检测', serviceId: '300047', categoryId: 1, algorithmIds: ['4001'], eventIds: [100001, 100002, 100008] },
   { id: 9, name: '鱼缸侦测', serviceId: '300046', categoryId: 1, algorithmIds: [], eventIds: [] },
-  { id: 10, name: '客流统计', serviceId: '300045', categoryId: 1, algorithmIds: ['motion_detection'], eventIds: [100002] },
+  { id: 10, name: '客流统计', serviceId: '300045', categoryId: 1, algorithmIds: ['4001'], eventIds: [100002] },
   { id: 11, name: '儿童检测', serviceId: '300044', categoryId: 1, algorithmIds: [], eventIds: [] },
-  { id: 12, name: '离岗侦测', serviceId: '300043', categoryId: 1, algorithmIds: ['motion_detection'], eventIds: [100001] },
-  { id: 13, name: '包裹侦测', serviceId: '300025', categoryId: 1, algorithmIds: ['motion_detection'], eventIds: [100006] },
-  { id: 14, name: '哭声侦测', serviceId: '300023', categoryId: 1, algorithmIds: ['sound_detection'], eventIds: [100003] },
-  { id: 15, name: '智能报警-家门监测', serviceId: '300041', categoryId: 1, algorithmIds: ['sound_detection'], eventIds: [100007] },
+  { id: 12, name: '离岗侦测', serviceId: '300043', categoryId: 1, algorithmIds: ['4001'], eventIds: [100001] },
+  { id: 13, name: '包裹侦测', serviceId: '300025', categoryId: 1, algorithmIds: ['4001'], eventIds: [100006] },
+  { id: 14, name: '哭声侦测', serviceId: '300023', categoryId: 1, algorithmIds: ['4002'], eventIds: [100003] },
+  { id: 15, name: '智能报警-家门监测', serviceId: '300041', categoryId: 1, algorithmIds: ['4002'], eventIds: [100007] },
   { id: 16, name: '智能报警-厨房安全', serviceId: '300040', categoryId: 1, algorithmIds: [], eventIds: [] },
   { id: 17, name: '智能报警-宠物监测', serviceId: '300042', categoryId: 1, algorithmIds: [], eventIds: [] },
-  { id: 18, name: '智能报警-老人看护', serviceId: '300039', categoryId: 1, algorithmIds: [], eventIds: [] }
+  { id: 18, name: '智能报警-老人看护', serviceId: '300039', categoryId: 1, algorithmIds: [], eventIds: [] },
+  // 以下为演示「一个算法对应多个服务」的额外服务映射
+  { id: 19, name: '人脸识别增强', serviceId: '300052', categoryId: 1, algorithmIds: ['1112'], eventIds: [100002] },
+  { id: 20, name: 'PIR增强检测', serviceId: '300053', categoryId: 1, algorithmIds: ['1003'], eventIds: [100001, 100005] },
+  { id: 21, name: '车辆识别增强', serviceId: '300054', categoryId: 1, algorithmIds: ['1083'], eventIds: [100008] },
+  { id: 22, name: '车牌识别增强', serviceId: '300055', categoryId: 1, algorithmIds: ['1088'], eventIds: [100008] },
+  { id: 23, name: '烟火侦测增强', serviceId: '300056', categoryId: 1, algorithmIds: ['1082'], eventIds: [] },
+  { id: 24, name: '声音检测增强', serviceId: '300057', categoryId: 1, algorithmIds: ['1004'], eventIds: [100003] }
 ]
 store.services = JSON.parse(JSON.stringify(initialServices))
 
@@ -593,10 +744,16 @@ export function getAlgorithmServiceId(algorithmId) {
   return svc ? svc.serviceId : '-'
 }
 
+export function getAllAlgorithmServices(algorithmId) {
+  return store.services.filter(s => s.algorithmIds.includes(algorithmId))
+}
+
 export function getAlgorithmEvents(algorithmId) {
+  const algo = store.algorithms.find(a => a.algorithmId === algorithmId)
+  const algoEventIds = (() => { try { return JSON.parse(algo?.eventIds || '[]') } catch { return [] } })()
   const svcs = store.services.filter(s => s.algorithmIds.includes(algorithmId))
-  const eids = [...new Set(svcs.flatMap(s => s.eventIds))]
-  return eids
+  const svcEventIds = svcs.flatMap(s => s.eventIds)
+  return [...new Set([...algoEventIds, ...svcEventIds])]
 }
 
 export function listServices() {

@@ -92,7 +92,7 @@
       <el-tab-pane label="事件库" name="event">
         <div class="toolbar">
           <div class="toolbar-left">
-            <el-input v-model="eventSearch.keyword" placeholder="搜索 EventID / 名称"
+            <el-input v-model="eventSearch.keyword" placeholder="搜索 事件ID / 名称"
               clearable style="width: 240px" @keyup.enter="handleEventSearch" />
             <el-button type="primary" @click="handleEventSearch">查询</el-button>
             <el-button @click="handleEventReset">重置</el-button>
@@ -104,7 +104,7 @@
 
         <div class="card table-card">
           <el-table :data="eventList" stripe v-loading="eventLoading">
-            <el-table-column label="EventID" width="110">
+            <el-table-column label="事件ID" width="110">
               <template #default="{ row }">
                 <code class="id-code">{{ row.eventId }}</code>
               </template>

@@ -27,8 +27,8 @@
     <!-- 步骤条 -->
     <el-steps :active="currentStep" simple class="steps-bar">
       <el-step title="功能定义与配置" @click="currentStep = 0" />
-      <el-step title="事件配置" @click="currentStep = 1" />
-      <el-step title="设备算法配置" @click="currentStep = 2" />
+      <!-- <el-step title="事件配置" @click="currentStep = 1" /> -->
+      <el-step title="设备算法服务" @click="currentStep = 2" />
       <el-step title="平台服务" @click="currentStep = 3" />
       <el-step title="语音助手" @click="currentStep = 4" />
     </el-steps>
@@ -1018,7 +1018,7 @@
         <!-- 事件列表 -->
         <div class="event-config-section">
           <el-table :data="eventConfigList" stripe>
-            <el-table-column label="EventID" width="150" align="center">
+            <el-table-column label="事件ID" width="150" align="center">
               <template #default="{ row }">{{ row.eventId }}</template>
             </el-table-column>
             <el-table-column label="事件名称" min-width="160">
@@ -1045,7 +1045,7 @@
     <template v-if="currentStep === 2">
       <div class="step-content-card">
         <div class="step-btns-bar">
-          <el-button class="w-160" @click="currentStep = 1">上一步</el-button>
+          <el-button class="w-160" @click="currentStep = 0">上一步</el-button>
           <el-button class="w-160" @click="currentStep = 3">跳过</el-button>
           <el-button type="primary" class="w-160" @click="saveAlgoTab">
             <el-icon><Check /></el-icon>保存，下一步
@@ -1057,34 +1057,41 @@
             <span class="section-title">配置选项</span>
           </el-divider>
         </div>
-        <!-- 算法服务（新） -->
-        <div class="section-header">
-          <h3 class="section-header-title">算法服务（新）</h3>
-        </div>
-
         <div class="tip-bar">
           <el-icon><InfoFilled /></el-icon>
           <span>该模块用于配置端侧算法，请根据设备实际能力配置</span>
         </div>
 
         <div class="algo-service-section">
-          <el-table :data="algoList" stripe>
-            <el-table-column label="算法ID" width="150" align="center">
-              <template #default="{ row }">{{ row.algorithmId }}</template>
-            </el-table-column>
-            <el-table-column label="服务ID" width="120" align="center">
+          <el-table :data="algoList" stripe :span-method="algoSpanMethod">
+            <el-table-column label="算法ID" width="110" align="center">
               <template #default="{ row }">
-                <span :class="{ 'cell-service-id': true, 'text-muted': row.serviceId === '-' }">{{ row.serviceId }}</span>
+                <span :class="{ 'merged-cell': row._rowSpan > 1 }">{{ row.algorithmId }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="算法名称" min-width="160">
+            <el-table-column label="算法名称" min-width="140">
               <template #default="{ row }">
                 <span class="cell-name">{{ row._name?.['1'] || row.algorithmId }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="描述" min-width="200">
+            <el-table-column label="描述" min-width="160">
               <template #default="{ row }">
-                <span class="cell-desc">{{ row.descr }}</span>
+                <span class="cell-desc">{{ row.descr || '-' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="能力配置" width="100" align="center">
+              <template #default="{ row }">
+                <el-button v-if="row.hasConfig && row._isFirstRow" size="small" text type="primary" @click="openAlgoConfig(row)">配置</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column label="关联事件" width="100" align="center">
+              <template #default="{ row }">
+                <el-button v-if="row._isFirstRow" size="small" text type="primary" @click="openEventLink(row)">配置</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column label="服务ID" width="120" align="center">
+              <template #default="{ row }">
+                <span :class="{ 'cell-service-id': true, 'text-muted': row.serviceId === '-' }">{{ row.serviceId }}</span>
               </template>
             </el-table-column>
             <el-table-column label="是否支持" width="100" align="center">
@@ -1109,77 +1116,7 @@
                 <el-switch v-model="row.free" size="small" :disabled="!row.supported" />
               </template>
             </el-table-column>
-            <el-table-column label="能力配置" width="100" align="center">
-              <template #default="{ row }">
-                <el-button v-if="row.hasConfig" size="small" text type="primary" :disabled="!row.supported" @click="openAlgoConfig(row)">配置</el-button>
-              </template>
-            </el-table-column>
-            <el-table-column label="关联事件" width="100" align="center">
-              <template #default="{ row }">
-                <el-button size="small" text type="primary" :disabled="!row.supported" @click="openEventLink(row)">配置</el-button>
-              </template>
-            </el-table-column>
           </el-table>
-        </div>
-
-        <!-- 算法服务（老） -->
-        <div class="old-algo-card">
-          <div class="section-header">
-            <h3 class="section-header-title">
-              算法服务（老）
-              <span class="legacy-tag">旧版</span>
-            </h3>
-          </div>
-
-          <div class="algo-service-section">
-            <div class="old-service-group">
-              <div class="old-service-title">
-                <span class="old-service-name">云存录像服务</span>
-                <span class="aiiot-tag">AIIoTType: 1010</span>
-              </div>
-              <el-table :data="cloudRecordServices" stripe>
-                <el-table-column label="服务ID" width="100" prop="serviceId" />
-                <el-table-column label="服务名称" width="140" prop="name" />
-                <el-table-column label="是否支持" width="120" align="center">
-                  <template #default="{ row }">
-                    <el-switch v-model="row.supported" size="small" />
-                  </template>
-                </el-table-column>
-                <el-table-column label="说明" min-width="280" prop="descr" />
-              </el-table>
-            </div>
-
-            <el-table :data="oldAlgoList" stripe class="old-algo-table">
-              <el-table-column label="ID(AIIoTType)" width="120" align="center">
-                <template #default="{ row }">{{ row.id }}</template>
-              </el-table-column>
-              <el-table-column label="算法名称" min-width="160">
-                <template #default="{ row }">
-                  <span class="cell-name">{{ row.name }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="描述" min-width="200">
-                <template #default="{ row }">
-                  <span class="cell-desc">{{ row.descr }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="是否支持" width="100" align="center">
-                <template #default="{ row }">
-                  <el-switch v-model="row.supported" size="small" />
-                </template>
-              </el-table-column>
-              <el-table-column label="算法配置" width="100" align="center">
-                <template #default="{ row }">
-                  <el-button v-if="row.hasConfig" size="small" text type="primary">配置</el-button>
-                </template>
-              </el-table-column>
-              <el-table-column label="关联事件" width="100" align="center">
-                <template #default="{ row }">
-                  <el-button size="small" text type="primary">编辑</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
         </div>
       </div>
     </template>
@@ -1201,17 +1138,73 @@
           </el-divider>
         </div>
 
-        <!-- 平台服务列表 -->
+        <!-- 平台服务列表（算法服务 老） -->
         <div class="algo-service-section">
-          <el-table :data="[...cloudRecordServices, ...aiServices]" stripe>
-            <el-table-column label="服务ID" width="100" prop="serviceId" />
-            <el-table-column label="服务名称" width="140" prop="name" />
+          <div class="old-service-group">
+            <div class="old-service-title">
+              <span class="old-service-name">云存录像服务</span>
+              <span class="aiiot-tag">AIIoTType: 1010</span>
+            </div>
+            <el-table :data="cloudRecordServices" stripe>
+              <el-table-column label="服务ID" width="100" prop="serviceId" />
+              <el-table-column label="服务名称" width="140" prop="name" />
+              <el-table-column label="是否支持" width="120" align="center">
+                <template #default="{ row }">
+                  <el-switch v-model="row.supported" size="small" />
+                </template>
+              </el-table-column>
+              <el-table-column label="说明" min-width="280" prop="descr" />
+            </el-table>
+          </div>
+
+          <div class="old-service-group">
+            <div class="old-service-title">
+              <span class="old-service-name">云端抓图支持的服务</span>
+            </div>
+            <el-table :data="cloudSnapshotServices" stripe>
+              <el-table-column label="服务ID" width="100" prop="serviceId" />
+              <el-table-column label="服务名称" width="140" prop="name" />
+              <el-table-column label="是否支持" width="120" align="center">
+                <template #default="{ row }">
+                  <el-switch v-model="row.supported" size="small" />
+                </template>
+              </el-table-column>
+              <el-table-column label="说明" min-width="280" prop="descr" />
+            </el-table>
+          </div>
+
+          <el-table :data="oldAlgoList" stripe class="old-algo-table">
+            <el-table-column label="ID(AIIoTType)" width="120" align="center">
+              <template #default="{ row }">{{ row.id }}</template>
+            </el-table-column>
+            <el-table-column label="服务ID" width="110" align="center">
+              <template #default="{ row }">{{ row.serviceId }}</template>
+            </el-table-column>
+            <el-table-column label="算法名称" min-width="160">
+              <template #default="{ row }">
+                <span class="cell-name">{{ row.name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="描述" min-width="200">
+              <template #default="{ row }">
+                <span class="cell-desc">{{ row.descr }}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="是否支持" width="100" align="center">
               <template #default="{ row }">
                 <el-switch v-model="row.supported" size="small" />
               </template>
             </el-table-column>
-            <el-table-column label="说明" min-width="280" prop="descr" />
+            <el-table-column label="算法配置" width="100" align="center">
+              <template #default="{ row }">
+                <el-button v-if="row.hasConfig" size="small" text type="primary">配置</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column label="关联事件" width="100" align="center">
+              <template #default="{ row }">
+                <el-button size="small" text type="primary">编辑</el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
       </div>
@@ -1877,7 +1870,7 @@
           @selection-change="handleEventSelectionChange"
         >
           <el-table-column type="selection" width="44" />
-          <el-table-column label="EventID" width="110">
+          <el-table-column label="事件ID" width="110">
             <template #default="{ row }">
               <code class="event-id-code">{{ row.id }}</code>
             </template>
@@ -1908,7 +1901,7 @@ import { ref, reactive, computed, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Plus, ArrowLeft, ArrowRight, Edit, Switch, Check, Setting, QuestionFilled, Delete, Search, InfoFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { listAlgorithms, allEvents, getCapabilitiesByIds, getModules, getAllCapabilities, getAlgorithmServiceId, getAlgorithmEvents } from '@/views/iot/thing-model/data'
+import { listAlgorithms, allEvents, getCapabilitiesByIds, getModules, getAllCapabilities, getAlgorithmServiceId, getAlgorithmEvents, getAllAlgorithmServices } from '@/views/iot/thing-model/data'
 
 const route = useRoute()
 const router = useRouter()
@@ -1946,8 +1939,8 @@ function saveNextFuncStep() {
     activeFuncTab.value = funcTabs[idx + 1].key
     ElMessage.success('已保存，进入下一步')
   } else {
-    currentStep.value = 1
-    ElMessage.success('功能配置已完成，进入事件配置')
+    currentStep.value = 2
+    ElMessage.success('功能配置已完成，进入设备算法配置')
   }
 }
 
@@ -2736,26 +2729,72 @@ const algoList = ref([])
 
 function loadAlgorithms() {
   const res = listAlgorithms({ pageSize: 200 })
-  algoList.value = (res.data?.list || []).map(a => {
+  const rows = []
+  ;(res.data?.list || []).forEach(a => {
     try { a._name = JSON.parse(a.algorithmName || '{}') } catch { a._name = {} }
     try { a._eventIds = JSON.parse(a.eventIds || '[]') } catch { a._eventIds = [] }
-    return {
-      ...a,
-      serviceId: getAlgorithmServiceId(a.algorithmId),
-      supported: false,
-      free: false,
-      hasConfig: (() => { try { return JSON.parse(a.capabilityIds || '[]').length > 0 } catch { return false } })(),
-      algoOptions: [],
-      linkedEvents: getAlgorithmEvents(a.algorithmId),
-      standardCaps: [],
-      customCaps: []
+    const hasConfig = (() => { try { return JSON.parse(a.capabilityIds || '[]').length > 0 } catch { return false } })()
+    const algoEvents = getAlgorithmEvents(a.algorithmId)
+    // 获取该算法对应的所有服务
+    const services = getAllAlgorithmServices(a.algorithmId)
+    if (services.length === 0) {
+      // 无服务映射 → 单行占位
+      rows.push({
+        ...a,
+        serviceId: a.serviceId || '-',
+        serviceName: '',
+        supported: false,
+        free: false,
+        hasConfig,
+        algoOptions: [],
+        linkedEvents: algoEvents,
+        standardCaps: [],
+        customCaps: [],
+        _rowSpan: 1,
+        _isFirstRow: true
+      })
+    } else {
+      services.forEach((svc, si) => {
+        rows.push({
+          ...a,
+          serviceId: svc.serviceId,
+          serviceName: svc.name,
+          supported: false,
+          free: false,
+          hasConfig,
+          algoOptions: [],
+          linkedEvents: algoEvents,
+          standardCaps: [],
+          customCaps: [],
+          _rowSpan: services.length,
+          _isFirstRow: si === 0
+        })
+      })
     }
   })
+  algoList.value = rows
+}
+
+// 合并算法级单元格（算法ID/名称/描述/能力配置/关联事件）
+function algoSpanMethod({ columnIndex, row }) {
+  // 算法级列: 0=算法ID, 1=算法名称, 2=描述, 3=能力配置, 4=关联事件
+  if (columnIndex <= 4) {
+    if (row._isFirstRow) {
+      return { rowspan: row._rowSpan, colspan: 1 }
+    }
+    return { rowspan: 0, colspan: 0 }
+  }
+  return { rowspan: 1, colspan: 1 }
 }
 
 const cloudRecordServices = ref([
   { serviceId: '300010', name: '事件云存', supported: true, descr: '事件录像：产生告警时触发录像' },
   { serviceId: '300011', name: '全天云存', supported: true, descr: '全天录像：全天24小时持续录像' }
+])
+
+const cloudSnapshotServices = ref([
+  { serviceId: '300012', name: '鸟类检测', supported: false, descr: '云端抓图-鸟类识别与分类' },
+  { serviceId: '300013', name: '松鼠检测', supported: false, descr: '云端抓图-松鼠识别与分类' }
 ])
 
 const aiServices = ref([
@@ -2764,25 +2803,18 @@ const aiServices = ref([
 
 // ===== 算法服务（老）算法列表（AIIoTType 风格）=====
 const oldAlgoList = ref([
-  { id: '1013', name: '事件记录', descr: '记录设备上报的各类事件信息', supported: true, hasConfig: true },
-  { id: '1000', name: '人形/运动检测', descr: '检测画面中的人形或移动物体', supported: true, hasConfig: true },
-  { id: '1088', name: '车牌识别', descr: '自动读取并识别车牌信息', supported: false, hasConfig: false },
-  { id: '1003', name: 'PIR红外检测', descr: '基于红外热释电的人体活动监测', supported: false, hasConfig: true },
-  { id: '1090', name: '客流统计', descr: '进入/出去行为识别与计数', supported: false, hasConfig: true },
-  { id: '1093', name: '离线监控', descr: '设备断电或离线时的状态监测', supported: true, hasConfig: true },
-  { id: '1096', name: '智能告警-儿童检测', descr: '综合全天候的儿童看护识别', supported: false, hasConfig: true },
-  { id: '1098', name: '智能告警服务', descr: '基于多维参数的综合告警策略', supported: false, hasConfig: true },
-  { id: '1103', name: '智能告警-老人看护', descr: '针对老年用户的异常行为识别', supported: false, hasConfig: true },
-  { id: '1104', name: '智能告警-厨房监测', descr: '全方位监测厨房油烟和火情', supported: false, hasConfig: true },
-  { id: '1105', name: '智能告警-家门检测', descr: '门口逗留、门缝检测等安防预警', supported: false, hasConfig: true },
-  { id: '1106', name: '智能告警-宠物检测', descr: '整合宠物的多项健康和活动指标', supported: true, hasConfig: true },
-  { id: '1108', name: 'GPS信息处理', descr: '设备地理位置定位与上报', supported: false, hasConfig: true },
-  { id: '1109', name: '包裹侦测', descr: '检测门口或指定区域堆放的包裹', supported: false, hasConfig: true },
-  { id: '1111', name: '鱼类检测', descr: '针对水族箱场景的特定识别', supported: false, hasConfig: true },
-  { id: '1112', name: '人脸检测', descr: '检测画面中出现的人脸', supported: false, hasConfig: true },
-  { id: '1114', name: '宠物喂食', descr: '监测宠物进食与自动喂食器联动', supported: false, hasConfig: true },
-  { id: '1083', name: '车辆侦测', descr: '识别进入画面的各类机动车辆', supported: false, hasConfig: true },
-  { id: '1082', name: '烟火侦测', descr: '基于图像识别的火灾烟雾和火焰检测', supported: false, hasConfig: true }
+  { id: '1013', name: '全能AI', serviceId: '300051', descr: '集成多种AI算法服务', supported: true, hasConfig: true },
+  { id: '1093', name: '离线监控', serviceId: '300008', descr: '设备断电或离线时的状态监测', supported: true, hasConfig: true },
+  { id: '1096', name: '智能告警-儿童检测', serviceId: '300044', descr: '综合全天候的儿童看护识别', supported: false, hasConfig: true },
+  { id: '1098', name: '智能告警服务', serviceId: '300009', descr: '基于多维参数的综合告警策略', supported: false, hasConfig: true },
+  { id: '1103', name: '智能告警-老人看护', serviceId: '300039', descr: '针对老年用户的异常行为识别', supported: false, hasConfig: true },
+  { id: '1104', name: '智能告警-厨房监测', serviceId: '300040', descr: '全方位监测厨房油烟和火情', supported: false, hasConfig: true },
+  { id: '1105', name: '智能告警-家门检测', serviceId: '300041', descr: '门口逗留、门缝检测等安防预警', supported: false, hasConfig: true },
+  { id: '1106', name: '智能告警-宠物检测', serviceId: '300042', descr: '整合宠物的多项健康和活动指标', supported: true, hasConfig: true },
+  { id: '1016', name: '逗留提醒', serviceId: '300036', descr: '检测人员逗留并触发提醒', supported: false, hasConfig: true },
+  { id: '1061', name: '设备算法', serviceId: '-', descr: '设备端算法能力配置', supported: false, hasConfig: false },
+  { id: '2000', name: '短信套餐', serviceId: '300031', descr: '短信通知服务套餐', supported: false, hasConfig: false },
+  { id: '2001', name: '去广告套餐', serviceId: '300030', descr: '去除APP内广告展示', supported: false, hasConfig: false }
 ])
 
 const eventOptions = ref([])
@@ -2840,7 +2872,7 @@ function savePirConfig() {
 }
 
 function openAlgoConfig(row) {
-  if (row.algorithmId === 'pir_detection') {
+  if (row.algorithmId === '4003') {
     editingAlgo.value = row
     algoCapScope.value = row
     // Reset PIR config from row data or defaults
@@ -2897,15 +2929,15 @@ function saveAlgoConfig() {
   algoConfigVisible.value = false
   algoCapScope.value = null
 }
-function saveAlgoTab() { ElMessage.success('设备算法配置已保存'); currentStep.value = 3 }
+function saveAlgoTab() { ElMessage.success('设备算法服务已保存'); currentStep.value = 3 }
 function savePlatformTab() { ElMessage.success('平台服务配置已保存'); currentStep.value = 4 }
 
 const eventLinkVisible = ref(false)
 const eventTableRef = ref(null)
 const linkedEventOptions = computed(() => {
   if (!editingAlgo.value) return []
-  const svcEventIds = editingAlgo.value._svcEventIds || []
-  return eventOptions.value.filter(e => svcEventIds.includes(e.id))
+  const allSvcEventIds = getAlgorithmEvents(editingAlgo.value.algorithmId)
+  return eventOptions.value.filter(e => allSvcEventIds.includes(e.id))
 })
 function handleEventSelectionChange(rows) {
   if (editingAlgo.value) {
@@ -2914,15 +2946,12 @@ function handleEventSelectionChange(rows) {
 }
 function openEventLink(row) {
   editingAlgo.value = row
-  row._svcEventIds = getAlgorithmEvents(row.algorithmId)
-  row.linkedEvents = [...row._svcEventIds]
   eventLinkVisible.value = true
-  // 默认选中所有服务关联事件
   nextTick(() => {
     const table = eventTableRef.value
     if (!table) return
     linkedEventOptions.value.forEach(evt => {
-      table.toggleRowSelection(evt, true)
+      table.toggleRowSelection(evt, row.linkedEvents.includes(evt.id))
     })
   })
 }
@@ -3136,6 +3165,10 @@ onMounted(() => { loadAlgorithms(); loadEvents(); loadEventConfig() })
 .algo-service-section {
   padding: 20px 24px;
   &:first-of-type { border-bottom: 1px solid var(--border-lighter, #e4e7ed); }
+  // 合并单元格居中
+  .merged-cell {
+    font-weight: 500;
+  }
 }
 .algo-service-header {
   display: flex; align-items: center; gap: 12px; margin-bottom: 12px;

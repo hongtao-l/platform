@@ -7,8 +7,8 @@
       <div class="section-title">基本信息</div>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="AlgorithmID" prop="algorithmId">
-            <el-input v-model="form.algorithmId" placeholder="PascalCase，如 motion_detection" />
+          <el-form-item label="算法ID" prop="algorithmId">
+            <el-input v-model="form.algorithmId" placeholder="如 4001" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -171,7 +171,7 @@ function toggleEvent(eid) {
 }
 
 const rules = {
-  algorithmId: [{ required: true, message: '请输入 AlgorithmID', trigger: 'blur' }]
+  algorithmId: [{ required: true, message: '请输入 算法ID', trigger: 'blur' }]
 }
 
 async function loadEvents() {

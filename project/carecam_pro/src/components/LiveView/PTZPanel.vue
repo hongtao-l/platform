@@ -23,18 +23,16 @@
 </template>
 
 <script setup>
-import { showToast } from 'vant'
-
 const props = defineProps({
   visible: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false }
 })
 
-const emit = defineEmits(['ptz', 'ptz-stop', 'ptz-center'])
+const emit = defineEmits(['ptz', 'ptz-stop', 'ptz-center', 'disabled-click'])
 
 function onBtn(dir) {
   if (props.disabled) {
-    showToast({ message: '电量低，暂不可用', className: 'toast-compact' })
+    emit('disabled-click')
     return
   }
   if (dir === 'center') {

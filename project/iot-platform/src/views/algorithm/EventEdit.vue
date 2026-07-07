@@ -3,7 +3,7 @@
     :close-on-click-modal="false" destroy-on-close @open="handleOpen">
     <el-form ref="formRef" :model="form" :rules="rules" label-width="100px" v-loading="pageLoading">
 
-      <el-form-item label="EventID" prop="eventId">
+      <el-form-item label="事件ID" prop="eventId">
         <el-input-number v-model="form.eventId" :min="1" :disabled="isEdit"
           style="width:100%" placeholder="请输入事件 ID，如 100000" />
       </el-form-item>
@@ -71,7 +71,7 @@ const form = reactive({
 })
 
 const rules = {
-  eventId: [{ required: true, message: '请输入 EventID', trigger: 'blur' }]
+  eventId: [{ required: true, message: '请输入 事件ID', trigger: 'blur' }]
 }
 
 async function loadDetail() {

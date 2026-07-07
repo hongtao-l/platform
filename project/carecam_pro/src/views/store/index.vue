@@ -232,16 +232,20 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { showToast } from 'vant'
 import { fetchMyServices, fetchAvailableDevices, buildDeviceServiceMap } from '@/mock/services'
 import { useServicesStore } from '@/composables/useServicesStore'
 
 const router = useRouter()
+const route = useRoute()
 const { state } = useServicesStore()
 
 const serviceTabs = ['云存储', 'AI智能服务', '离线监测', '去广告', '流量充值']
-const activeTab = ref(0)
+
+// 支持 ?tab=cloud 锚定到云存储 Tab
+const tabQueryMap = { cloud: 0, ai: 1, offline: 2, adfree: 3, data: 4 }
+const activeTab = ref(tabQueryMap[route.query.tab] ?? 0)
 const selectedPlan = ref(0)
 const agreed = ref(true)
 

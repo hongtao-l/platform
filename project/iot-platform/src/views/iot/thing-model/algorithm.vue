@@ -37,7 +37,14 @@
               class="count-badge" @click="$router.push(`/thing-model/algorithm/${row.id}/capabilities`)">
               {{ getCapCount(row) }} 个
             </el-tag>
-            <span v-else class="text-muted">—</span>
+            <span v-else class="text-muted">0 个</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="关联事件" width="100" align="center">
+          <template #default="{ row }">
+            <el-tag size="small" type="warning" class="count-badge" @click="openEventDrawer(row)">
+              {{ getEventCount(row) }} 个
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="描述" min-width="180">
@@ -73,17 +80,51 @@
       </div>
     </div>
 
+    <!-- 关联事件侧边抽屉 -->
+    <el-drawer
+      v-model="eventDrawerVisible"
+      :title="'关联事件 - ' + (editingRow?._name?.['1'] || editingRow?.algorithmId || '')"
+      direction="rtl"
+      size="560px"
+      :close-on-click-modal="false"
+      class="event-link-drawer"
+    >
+      <el-table
+        ref="eventTableRef"
+        :data="allEventsList"
+        stripe
+        @selection-change="onEventSelectionChange"
+      >
+        <el-table-column type="selection" width="44" />
+        <el-table-column label="事件ID" width="100">
+          <template #default="{ row }">{{ row.eventId }}</template>
+        </el-table-column>
+        <el-table-column label="事件名称" min-width="140">
+          <template #default="{ row }">{{ row._name?.['1'] || row.eventId }}</template>
+        </el-table-column>
+        <el-table-column label="备注" min-width="200">
+          <template #default="{ row }">{{ row.eventRemark || '-' }}</template>
+        </el-table-column>
+      </el-table>
+      <el-empty v-if="allEventsList.length === 0" description="暂无事件数据" :image-size="80" />
+
+      <template #footer>
+        <el-button @click="eventDrawerVisible = false">取消</el-button>
+        <el-button type="primary" @click="saveEventLink">保存</el-button>
+      </template>
+    </el-drawer>
+
     <AlgorithmEdit v-model:visible="dialogVisible" :edit-id="editId" @success="onSaved" />
 
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, nextTick } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import AlgorithmEdit from './AlgorithmEdit.vue'
-import { listAlgorithms, deleteAlgorithm } from './data'
+import { listAlgorithms, deleteAlgorithm, getAlgorithm, updateAlgorithm, allEvents as fetchAllEvents } from './data'
 
 const search = reactive({ keyword: '' })
 const list = ref([])
@@ -94,9 +135,17 @@ const total = ref(0)
 const dialogVisible = ref(false)
 const editId = ref(null)
 
+// 事件抽屉
+const eventDrawerVisible = ref(false)
+const eventTableRef = ref(null)
+const editingRow = ref(null)
+const allEventsList = ref([])
+const selectedEventIds = ref([])
+
 function parseItem(item) {
   try { item._name = JSON.parse(item.algorithmName || '{}') } catch { item._name = {} }
   try { item._caps = JSON.parse(item.capabilities || '{}') } catch { item._caps = {} }
+  try { item._eventIds = JSON.parse(item.eventIds || '[]') } catch { item._eventIds = [] }
   return item
 }
 
@@ -106,6 +155,51 @@ function getCapCount(row) {
   const caps = row._caps || {}
   const keys = Object.keys(caps).filter(k => !k.startsWith('__'))
   return keys.length
+}
+function getEventCount(row) {
+  return (row._eventIds || []).length
+}
+
+function loadAllEvents() {
+  const res = fetchAllEvents()
+  allEventsList.value = (res.data?.list || []).map(e => {
+    try { e._name = JSON.parse(e.eventName || '{}') } catch { e._name = {} }
+    return e
+  })
+}
+
+async function openEventDrawer(row) {
+  editingRow.value = row
+  loadAllEvents()
+  // 从 data.js 获取最新 eventIds
+  const res = getAlgorithm(row.id)
+  if (res.code === 0 && res.data) {
+    try { selectedEventIds.value = JSON.parse(res.data.eventIds || '[]') } catch { selectedEventIds.value = [] }
+  }
+  eventDrawerVisible.value = true
+  await nextTick()
+  const table = eventTableRef.value
+  if (!table) return
+  allEventsList.value.forEach(evt => {
+    table.toggleRowSelection(evt, selectedEventIds.value.includes(evt.eventId))
+  })
+}
+
+function onEventSelectionChange(rows) {
+  selectedEventIds.value = rows.map(r => r.eventId)
+}
+
+async function saveEventLink() {
+  if (!editingRow.value) return
+  const res = updateAlgorithm({
+    id: editingRow.value.id,
+    eventIds: JSON.stringify(selectedEventIds.value)
+  })
+  if (res.code === 0) {
+    ElMessage.success('关联事件已保存')
+    eventDrawerVisible.value = false
+    fetchList()
+  }
 }
 
 async function fetchList() {
@@ -165,7 +259,6 @@ onMounted(() => { fetchList() })
   }
   .name-text { font-weight: 500; color: var(--text-primary); }
   .text-muted { color: var(--text-secondary); }
-  .count-text { font-weight: 500; }
   .icon-cell { width: 28px; height: 28px; object-fit: cover; border-radius: 4px; }
   .count-badge { cursor: pointer; }
   .empty-state { padding: 40px 0; }
@@ -177,34 +270,4 @@ onMounted(() => { fetchList() })
   border-top: 1px solid var(--border-lighter); margin-top: var(--spacing-md);
   .total-text { font-size: var(--font-sm); color: var(--text-secondary); }
 }
-
-// 关联弹窗通用样式
-.assoc-layout { display: flex; gap: 12px; }
-.assoc-panel {
-  flex: 1; border: 1px solid var(--border-light);
-  border-radius: var(--radius-sm); overflow: hidden;
-  display: flex; flex-direction: column; max-height: 360px;
-}
-.assoc-panel-header {
-  display: flex; align-items: center;
-  padding: 10px 12px; background: var(--bg-elevated);
-  border-bottom: 1px solid var(--border-light);
-  font-size: var(--font-xs); font-weight: 500; color: var(--text-secondary);
-  flex-shrink: 0;
-}
-.assoc-panel-body { flex: 1; overflow-y: auto; }
-.assoc-item {
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 12px; cursor: pointer; font-size: 13px; user-select: none;
-  border-bottom: 1px solid var(--border-lighter);
-  transition: background .15s;
-  &:hover { background: var(--bg-hover); }
-  &.selected { background: var(--primary-bg); }
-}
-.assoc-item-name { color: var(--text-regular); flex: 1; }
-.assoc-item-id { font-weight: 500; color: var(--text-primary); min-width: 60px; font-size: 12px; }
-.assoc-check { color: var(--primary-color); flex-shrink: 0; }
-.assoc-empty { padding: 32px; text-align: center; color: var(--text-placeholder); font-size: 13px; }
 </style>
-
-

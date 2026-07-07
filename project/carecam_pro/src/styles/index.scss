@@ -184,3 +184,27 @@ body {
 .van-date-picker {
   --van-picker-background: #{$bg-color};
 }
+
+/* ========================================
+   全局 Toast
+   ======================================== */
+
+.global-toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  z-index: 9999;
+  pointer-events: none;
+  white-space: nowrap;
+  transition: opacity 0.3s;
+}
+
+.global-toast--out {
+  opacity: 0;
+}
