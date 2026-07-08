@@ -143,267 +143,23 @@
           </el-form-item>
         </el-form>
 
-        <!-- 配置选项卡 -->
-        <el-tabs v-model="activeConfigTab" class="config-tabs">
-          <!-- 物模型配置 -->
-          <el-tab-pane label="物模型配置" name="thingModel">
-            <div class="transfer-container">
-              <div class="transfer-panel">
-                <div class="transfer-panel-header">
-                  <el-checkbox
-                    v-model="tmSourceCheckAll"
-                    :indeterminate="tmSourceIndeterminate"
-                    @change="handleTmSourceCheckAll"
-                  >
-                    可选物模型 {{ tmSourceCheckedCount }}/{{ tmSource.length }}
-                  </el-checkbox>
-                </div>
-                <div class="transfer-search">
-                  <el-input v-model="tmSourceKeyword" placeholder="请输入搜索内容" size="small" clearable>
-                    <template #prefix><el-icon><Search /></el-icon></template>
-                  </el-input>
-                </div>
-                <div class="transfer-list">
-                  <el-checkbox-group v-model="tmSourceChecked">
-                    <div
-                      v-for="item in filteredTmSource"
-                      :key="item.id"
-                      class="transfer-item"
-                    >
-                      <el-checkbox :value="item.id" :label="item.id">
-                        {{ item.id }} - {{ item.name }}
-                      </el-checkbox>
-                    </div>
-                  </el-checkbox-group>
-                </div>
-              </div>
-              <div class="transfer-actions">
-                <el-button :disabled="tmSourceChecked.length === 0" @click="addThingModels">
-                  添加 <el-icon><ArrowRight /></el-icon>
-                </el-button>
-                <el-button :disabled="tmTargetChecked.length === 0" @click="removeThingModels">
-                  <el-icon><ArrowLeft /></el-icon> 移除
-                </el-button>
-              </div>
-              <div class="transfer-panel">
-                <div class="transfer-panel-header">
-                  <el-checkbox
-                    v-model="tmTargetCheckAll"
-                    :indeterminate="tmTargetIndeterminate"
-                    @change="handleTmTargetCheckAll"
-                  >
-                    已选物模型 {{ tmTargetCheckedCount }}/{{ tmTarget.length }}
-                  </el-checkbox>
-                </div>
-                <div class="transfer-search">
-                  <el-input v-model="tmTargetKeyword" placeholder="请输入搜索内容" size="small" clearable>
-                    <template #prefix><el-icon><Search /></el-icon></template>
-                  </el-input>
-                </div>
-                <div class="transfer-list">
-                  <el-checkbox-group v-model="tmTargetChecked">
-                    <div
-                      v-for="item in filteredTmTarget"
-                      :key="item.id"
-                      class="transfer-item"
-                    >
-                      <el-checkbox :value="item.id" :label="item.id">
-                        {{ item.id }} - {{ item.name }}
-                      </el-checkbox>
-                    </div>
-                  </el-checkbox-group>
-                  <div v-if="tmTarget.length === 0" class="transfer-empty">无数据</div>
-                </div>
-              </div>
-            </div>
-          </el-tab-pane>
-
-          <!-- 算法配置 -->
-          <el-tab-pane label="算法配置" name="algorithm">
-            <div class="transfer-container">
-              <div class="transfer-panel">
-                <div class="transfer-panel-header">
-                  <el-checkbox
-                    v-model="algSourceCheckAll"
-                    :indeterminate="algSourceIndeterminate"
-                    @change="handleAlgSourceCheckAll"
-                  >
-                    可选算法 {{ algSourceCheckedCount }}/{{ algSource.length }}
-                  </el-checkbox>
-                </div>
-                <div class="transfer-search">
-                  <el-input v-model="algSourceKeyword" placeholder="请输入搜索内容" size="small" clearable>
-                    <template #prefix><el-icon><Search /></el-icon></template>
-                  </el-input>
-                </div>
-                <div class="transfer-list">
-                  <el-checkbox-group v-model="algSourceChecked">
-                    <div
-                      v-for="item in filteredAlgSource"
-                      :key="item.id"
-                      class="transfer-item"
-                    >
-                      <el-checkbox :value="item.id" :label="item.id">
-                        {{ item.algorithmId }} - {{ parseI18nName(item.algorithmName) }}
-                      </el-checkbox>
-                    </div>
-                  </el-checkbox-group>
-                </div>
-              </div>
-              <div class="transfer-actions">
-                <el-button :disabled="algSourceChecked.length === 0" @click="addAlgorithms">
-                  添加 <el-icon><ArrowRight /></el-icon>
-                </el-button>
-                <el-button :disabled="algTargetChecked.length === 0" @click="removeAlgorithms">
-                  <el-icon><ArrowLeft /></el-icon> 移除
-                </el-button>
-              </div>
-              <div class="transfer-panel">
-                <div class="transfer-panel-header">
-                  <el-checkbox
-                    v-model="algTargetCheckAll"
-                    :indeterminate="algTargetIndeterminate"
-                    @change="handleAlgTargetCheckAll"
-                  >
-                    已选算法 {{ algTargetCheckedCount }}/{{ algTarget.length }}
-                  </el-checkbox>
-                </div>
-                <div class="transfer-search">
-                  <el-input v-model="algTargetKeyword" placeholder="请输入搜索内容" size="small" clearable>
-                    <template #prefix><el-icon><Search /></el-icon></template>
-                  </el-input>
-                </div>
-                <div class="transfer-list">
-                  <el-checkbox-group v-model="algTargetChecked">
-                    <div
-                      v-for="item in filteredAlgTarget"
-                      :key="item.id"
-                      class="transfer-item"
-                    >
-                      <el-checkbox :value="item.id" :label="item.id">
-                        {{ item.algorithmId }} - {{ parseI18nName(item.algorithmName) }}
-                      </el-checkbox>
-                    </div>
-                  </el-checkbox-group>
-                  <div v-if="algTarget.length === 0" class="transfer-empty">无数据</div>
-                </div>
-              </div>
-            </div>
-          </el-tab-pane>
-
-          <!-- 事件配置 -->
-          <el-tab-pane label="事件配置" name="event">
-            <div class="transfer-container">
-              <div class="transfer-panel">
-                <div class="transfer-panel-header">
-                  <el-checkbox
-                    v-model="evtSourceCheckAll"
-                    :indeterminate="evtSourceIndeterminate"
-                    @change="handleEvtSourceCheckAll"
-                  >
-                    可选事件 {{ evtSourceCheckedCount }}/{{ evtSource.length }}
-                  </el-checkbox>
-                </div>
-                <div class="transfer-search">
-                  <el-input v-model="evtSourceKeyword" placeholder="请输入搜索内容" size="small" clearable>
-                    <template #prefix><el-icon><Search /></el-icon></template>
-                  </el-input>
-                </div>
-                <div class="transfer-list">
-                  <el-checkbox-group v-model="evtSourceChecked">
-                    <div
-                      v-for="item in filteredEvtSource"
-                      :key="item.id"
-                      class="transfer-item"
-                    >
-                      <el-checkbox :value="item.id" :label="item.id">
-                        {{ item.eventId }} - {{ parseI18nName(item.eventName) }}
-                      </el-checkbox>
-                    </div>
-                  </el-checkbox-group>
-                </div>
-              </div>
-              <div class="transfer-actions">
-                <el-button :disabled="evtSourceChecked.length === 0" @click="addEvents">
-                  添加 <el-icon><ArrowRight /></el-icon>
-                </el-button>
-                <el-button :disabled="evtTargetChecked.length === 0" @click="removeEvents">
-                  <el-icon><ArrowLeft /></el-icon> 移除
-                </el-button>
-              </div>
-              <div class="transfer-panel">
-                <div class="transfer-panel-header">
-                  <el-checkbox
-                    v-model="evtTargetCheckAll"
-                    :indeterminate="evtTargetIndeterminate"
-                    @change="handleEvtTargetCheckAll"
-                  >
-                    已选事件 {{ evtTargetCheckedCount }}/{{ evtTarget.length }}
-                  </el-checkbox>
-                </div>
-                <div class="transfer-search">
-                  <el-input v-model="evtTargetKeyword" placeholder="请输入搜索内容" size="small" clearable>
-                    <template #prefix><el-icon><Search /></el-icon></template>
-                  </el-input>
-                </div>
-                <div class="transfer-list">
-                  <el-checkbox-group v-model="evtTargetChecked">
-                    <div
-                      v-for="item in filteredEvtTarget"
-                      :key="item.id"
-                      class="transfer-item"
-                    >
-                      <el-checkbox :value="item.id" :label="item.id">
-                        {{ item.eventId }} - {{ parseI18nName(item.eventName) }}
-                      </el-checkbox>
-                    </div>
-                  </el-checkbox-group>
-                  <div v-if="evtTarget.length === 0" class="transfer-empty">无数据</div>
-                </div>
-              </div>
-            </div>
-          </el-tab-pane>
-        </el-tabs>
-
-        <!-- 算法参数详情配置（仅修改模式） -->
-        <div v-if="serviceDialogMode === 'edit' && tmTarget.length > 0" class="algorithm-section">
-          <div class="section-divider">
-            <span>算法参数详情配置</span>
+        <!-- 已绑定物模型（只读，由算法库绑定自动关联） -->
+        <div class="transfer-panel">
+          <div class="transfer-panel-header">
+            <span class="transfer-panel-title">已绑定物模型 {{ boundAlgorithms.length }}</span>
           </div>
-          <div
-            v-for="tm in tmTarget"
-            :key="tm.id"
-            class="algorithm-block"
-          >
-            <div class="algorithm-block-header">
-              <span class="algorithm-tm-id">{{ tm.id }}</span>
-              <span class="algorithm-tm-name">{{ tm.name }}</span>
+          <div class="transfer-list">
+            <div
+              v-for="item in boundAlgorithms"
+              :key="item.id"
+              class="transfer-item"
+            >
+              <span>{{ item.algorithmId }} - {{ item._displayName }}</span>
             </div>
-            <el-table :data="getAlgorithmEvents(tm.id)" size="small" class="algorithm-table">
-              <el-table-column label="#" width="50" align="center">
-                <template #default="{ $index }">{{ $index + 1 }}</template>
-              </el-table-column>
-              <el-table-column label="事件类型">
-                <template #default="{ row }">
-                  <el-input v-model="row.eventType" size="small" placeholder="请输入事件类型" />
-                </template>
-              </el-table-column>
-              <el-table-column label="是否开启" width="100" align="center">
-                <template #default="{ row }">
-                  <el-switch v-model="row.enabled" size="small" />
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" width="80" align="center">
-                <template #default="{ $index }">
-                  <el-button size="small" text type="danger" @click="removeAlgorithmEvent(tm.id, $index)">删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <el-button size="small" text type="primary" style="margin-top:8px" @click="addAlgorithmEvent(tm.id)">
-              <el-icon><Plus /></el-icon> 添加事件
-            </el-button>
+            <div v-if="boundAlgorithms.length === 0" class="transfer-empty">前往算法库绑定后自动关联</div>
           </div>
         </div>
+
       </div>
 
       <template #footer>
@@ -417,12 +173,8 @@
 <script setup>
 import { ref, reactive, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus, Folder, Edit, Search, ArrowRight, ArrowLeft } from '@element-plus/icons-vue'
-import { listAlgorithms, listEvents } from '@/views/iot/thing-model/data'
-
-function parseI18nName(jsonStr) {
-  try { return JSON.parse(jsonStr || '{}')['1'] || '' } catch { return '' }
-}
+import { Plus, Folder, Edit } from '@element-plus/icons-vue'
+import { listAlgorithms, listServices } from '@/views/iot/thing-model/data'
 
 // ===== 分类管理 =====
 const activeCategory = ref(1)
@@ -533,302 +285,43 @@ const serviceForm = reactive({
   categoryId: 1
 })
 
-// 所有可选物模型
-const allThingModels = ref([
-  { id: 1013, name: '事件记录' }, { id: 1010, name: '云存录像' },
-  { id: 1063, name: '语音助手' }, { id: 1000, name: '人形/运动检测' },
-  { id: 1086, name: '非机动车检测' }, { id: 1003, name: 'PIR红外检测' },
-  { id: 1088, name: '车牌识别' }, { id: 1090, name: '客流统计' },
-  { id: 1093, name: '离线监控' }, { id: 1096, name: '智能告警-儿童检测' },
-  { id: 1098, name: '智能告警服务' }, { id: 1100, name: '时光相册' },
-  { id: 1103, name: '智能告警-老人看护' }, { id: 1104, name: '智能告警-厨房监测' },
-  { id: 1105, name: '智能告警-家门检测' }, { id: 1106, name: '智能告警-宠物检测' },
-  { id: 1108, name: 'GPS信息处理' }, { id: 1109, name: '包裹侦测' },
-  { id: 1111, name: '鱼类检测' }, { id: 1112, name: '人脸检测' },
-  { id: 1114, name: '宠物喂食' }, { id: 1082, name: '烟火侦测' },
-  { id: 1004, name: '声音检测' }, { id: 1016, name: '逗留提醒' },
-  { id: 1018, name: '人物(人脸)识别' }, { id: 1021, name: '低电检测' },
-  { id: 1024, name: '跌倒检测' }, { id: 1025, name: '火焰检测' },
-  { id: 1028, name: '哭声检测' }, { id: 1029, name: '宠物检测' },
-  { id: 1037, name: '呼叫服务' }, { id: 1070, name: '离岗侦测' },
-  { id: 1079, name: '区域闯入' }, { id: 1080, name: '区域离开' },
-  { id: 1083, name: '车辆侦测' }, { id: 1061, name: '设备算法' },
-  { id: 1011, name: '云端抓图' }, { id: 2000, name: '短信套餐' },
-  { id: 2001, name: '去广告套餐' }, { id: 3000, name: '鸟类检测' },
-  { id: 3001, name: '松鼠检测' }
-])
-
-// 可选/已选物模型状态
-const activeConfigTab = ref('thingModel')
-const tmSource = ref([])
-const tmTarget = ref([])
-const tmSourceChecked = ref([])
-const tmTargetChecked = ref([])
-const tmSourceKeyword = ref('')
-const tmTargetKeyword = ref('')
-
-const tmSourceCheckedCount = computed(() => tmSourceChecked.value.length)
-const tmTargetCheckedCount = computed(() => tmTargetChecked.value.length)
-
-const tmSourceCheckAll = computed({
-  get: () => tmSource.value.length > 0 && tmSourceChecked.value.length === tmSource.value.length,
-  set: () => {}
+// 已绑定算法 — 由算法库绑定自动关联，只读
+const boundAlgorithms = computed(() => {
+  const allAlgs = listAlgorithms({ page: 1, pageSize: 999 }).data?.list || []
+  const allSvcs = listServices().data?.list || []
+  const svcId = serviceForm.serviceId
+  if (!svcId) return []
+  const thisSvc = allSvcs.find(s => s.serviceId === svcId)
+  if (!thisSvc) return []
+  return allAlgs
+    .filter(alg => {
+      try { return JSON.parse(alg.serviceIds || '[]').includes(thisSvc.id) } catch { return false }
+    })
+    .map(alg => {
+      let name = alg.algorithmId
+      try { name = JSON.parse(alg.algorithmName || '{}')['1'] || alg.algorithmId } catch { /* */ }
+      return { ...alg, _displayName: name }
+    })
 })
-const tmSourceIndeterminate = computed(() =>
-  tmSourceChecked.value.length > 0 && tmSourceChecked.value.length < tmSource.value.length
-)
-const tmTargetCheckAll = computed({
-  get: () => tmTarget.value.length > 0 && tmTargetChecked.value.length === tmTarget.value.length,
-  set: () => {}
-})
-const tmTargetIndeterminate = computed(() =>
-  tmTargetChecked.value.length > 0 && tmTargetChecked.value.length < tmTarget.value.length
-)
-
-const filteredTmSource = computed(() => {
-  if (!tmSourceKeyword.value) return tmSource.value
-  const kw = tmSourceKeyword.value.toLowerCase()
-  return tmSource.value.filter(t => t.name.includes(kw) || String(t.id).includes(kw))
-})
-
-const filteredTmTarget = computed(() => {
-  if (!tmTargetKeyword.value) return tmTarget.value
-  const kw = tmTargetKeyword.value.toLowerCase()
-  return tmTarget.value.filter(t => t.name.includes(kw) || String(t.id).includes(kw))
-})
-
-const handleTmSourceCheckAll = (val) => {
-  tmSourceChecked.value = val ? tmSource.value.map(t => t.id) : []
-}
-
-const handleTmTargetCheckAll = (val) => {
-  tmTargetChecked.value = val ? tmTarget.value.map(t => t.id) : []
-}
-
-const addThingModels = () => {
-  const toMove = tmSource.value.filter(t => tmSourceChecked.value.includes(t.id))
-  tmTarget.value.push(...toMove)
-  tmSource.value = tmSource.value.filter(t => !tmSourceChecked.value.includes(t.id))
-  tmSourceChecked.value = []
-}
-
-const removeThingModels = () => {
-  const toMove = tmTarget.value.filter(t => tmTargetChecked.value.includes(t.id))
-  tmSource.value.push(...toMove)
-  tmTarget.value = tmTarget.value.filter(t => !tmTargetChecked.value.includes(t.id))
-  tmTargetChecked.value = []
-}
-
-// ===== 算法穿梭框 =====
-const algSource = ref([])
-const algTarget = ref([])
-const algSourceChecked = ref([])
-const algTargetChecked = ref([])
-const algSourceKeyword = ref('')
-const algTargetKeyword = ref('')
-
-const algSourceCheckedCount = computed(() => algSourceChecked.value.length)
-const algTargetCheckedCount = computed(() => algTargetChecked.value.length)
-
-const algSourceCheckAll = computed({
-  get: () => algSource.value.length > 0 && algSourceChecked.value.length === algSource.value.length,
-  set: () => {}
-})
-const algSourceIndeterminate = computed(() =>
-  algSourceChecked.value.length > 0 && algSourceChecked.value.length < algSource.value.length
-)
-const algTargetCheckAll = computed({
-  get: () => algTarget.value.length > 0 && algTargetChecked.value.length === algTarget.value.length,
-  set: () => {}
-})
-const algTargetIndeterminate = computed(() =>
-  algTargetChecked.value.length > 0 && algTargetChecked.value.length < algTarget.value.length
-)
-
-const filteredAlgSource = computed(() => {
-  if (!algSourceKeyword.value) return algSource.value
-  const kw = algSourceKeyword.value.toLowerCase()
-  return algSource.value.filter(a => {
-    const name = parseI18nName(a.algorithmName)
-    return name.toLowerCase().includes(kw) || a.algorithmId.toLowerCase().includes(kw)
-  })
-})
-const filteredAlgTarget = computed(() => {
-  if (!algTargetKeyword.value) return algTarget.value
-  const kw = algTargetKeyword.value.toLowerCase()
-  return algTarget.value.filter(a => {
-    const name = parseI18nName(a.algorithmName)
-    return name.toLowerCase().includes(kw) || a.algorithmId.toLowerCase().includes(kw)
-  })
-})
-
-const handleAlgSourceCheckAll = (val) => {
-  algSourceChecked.value = val ? algSource.value.map(a => a.id) : []
-}
-const handleAlgTargetCheckAll = (val) => {
-  algTargetChecked.value = val ? algTarget.value.map(a => a.id) : []
-}
-const addAlgorithms = () => {
-  const toMove = algSource.value.filter(a => algSourceChecked.value.includes(a.id))
-  algTarget.value.push(...toMove)
-  algSource.value = algSource.value.filter(a => !algSourceChecked.value.includes(a.id))
-  algSourceChecked.value = []
-}
-const removeAlgorithms = () => {
-  const toMove = algTarget.value.filter(a => algTargetChecked.value.includes(a.id))
-  algSource.value.push(...toMove)
-  algTarget.value = algTarget.value.filter(a => !algTargetChecked.value.includes(a.id))
-  algTargetChecked.value = []
-}
-
-// ===== 事件穿梭框 =====
-const evtSource = ref([])
-const evtTarget = ref([])
-const evtSourceChecked = ref([])
-const evtTargetChecked = ref([])
-const evtSourceKeyword = ref('')
-const evtTargetKeyword = ref('')
-
-const evtSourceCheckedCount = computed(() => evtSourceChecked.value.length)
-const evtTargetCheckedCount = computed(() => evtTargetChecked.value.length)
-
-const evtSourceCheckAll = computed({
-  get: () => evtSource.value.length > 0 && evtSourceChecked.value.length === evtSource.value.length,
-  set: () => {}
-})
-const evtSourceIndeterminate = computed(() =>
-  evtSourceChecked.value.length > 0 && evtSourceChecked.value.length < evtSource.value.length
-)
-const evtTargetCheckAll = computed({
-  get: () => evtTarget.value.length > 0 && evtTargetChecked.value.length === evtTarget.value.length,
-  set: () => {}
-})
-const evtTargetIndeterminate = computed(() =>
-  evtTargetChecked.value.length > 0 && evtTargetChecked.value.length < evtTarget.value.length
-)
-
-const filteredEvtSource = computed(() => {
-  if (!evtSourceKeyword.value) return evtSource.value
-  const kw = evtSourceKeyword.value.toLowerCase()
-  return evtSource.value.filter(e => {
-    const name = parseI18nName(e.eventName)
-    return name.toLowerCase().includes(kw) || String(e.eventId).includes(kw)
-  })
-})
-const filteredEvtTarget = computed(() => {
-  if (!evtTargetKeyword.value) return evtTarget.value
-  const kw = evtTargetKeyword.value.toLowerCase()
-  return evtTarget.value.filter(e => {
-    const name = parseI18nName(e.eventName)
-    return name.toLowerCase().includes(kw) || String(e.eventId).includes(kw)
-  })
-})
-
-const handleEvtSourceCheckAll = (val) => {
-  evtSourceChecked.value = val ? evtSource.value.map(e => e.id) : []
-}
-const handleEvtTargetCheckAll = (val) => {
-  evtTargetChecked.value = val ? evtTarget.value.map(e => e.id) : []
-}
-const addEvents = () => {
-  const toMove = evtSource.value.filter(e => evtSourceChecked.value.includes(e.id))
-  evtTarget.value.push(...toMove)
-  evtSource.value = evtSource.value.filter(e => !evtSourceChecked.value.includes(e.id))
-  evtSourceChecked.value = []
-}
-const removeEvents = () => {
-  const toMove = evtTarget.value.filter(e => evtTargetChecked.value.includes(e.id))
-  evtSource.value.push(...toMove)
-  evtTarget.value = evtTarget.value.filter(e => !evtTargetChecked.value.includes(e.id))
-  evtTargetChecked.value = []
-}
-
-// 算法参数事件
-const algorithmEvents = ref({})
-
-const getAlgorithmEvents = (tmId) => {
-  if (!algorithmEvents.value[tmId]) {
-    algorithmEvents.value[tmId] = []
-  }
-  return algorithmEvents.value[tmId]
-}
-
-const addAlgorithmEvent = (tmId) => {
-  if (!algorithmEvents.value[tmId]) {
-    algorithmEvents.value[tmId] = []
-  }
-  algorithmEvents.value[tmId].push({ eventType: '', enabled: true })
-}
-
-const removeAlgorithmEvent = (tmId, index) => {
-  if (algorithmEvents.value[tmId]) {
-    algorithmEvents.value[tmId].splice(index, 1)
-  }
-}
 
 const openServiceDialog = (mode, row) => {
   serviceDialogMode.value = mode
-  activeConfigTab.value = 'thingModel'
 
   if (mode === 'add') {
     editingService.value = null
     serviceForm.name = ''
     serviceForm.serviceId = ''
     serviceForm.categoryId = activeCategory.value
-    // 物模型
-    tmSource.value = [...allThingModels.value]
-    tmTarget.value = []
-    // 算法
-    const algRes = listAlgorithms({ page: 1, pageSize: 50 })
-    algSource.value = algRes.data.list || []
-    algTarget.value = []
-    // 事件
-    const evtRes = listEvents({ page: 1, pageSize: 50 })
-    evtSource.value = evtRes.data.list || []
-    evtTarget.value = []
   } else {
     editingService.value = row
     serviceForm.name = row.name
     serviceForm.serviceId = row.serviceId
     serviceForm.categoryId = row.categoryId
-    // 物模型
-    tmTarget.value = allThingModels.value.filter(t => [1106].includes(t.id))
-    tmSource.value = allThingModels.value.filter(t => ![1106].includes(t.id))
-    // 算法
-    const algRes = listAlgorithms({ page: 1, pageSize: 50 })
-    const allAlgs = algRes.data.list || []
-    algTarget.value = allAlgs.filter(a => ['A001'].includes(a.algorithmId))
-    algSource.value = allAlgs.filter(a => !['A001'].includes(a.algorithmId))
-    // 事件
-    const evtRes = listEvents({ page: 1, pageSize: 50 })
-    const allEvts = evtRes.data.list || []
-    evtTarget.value = allEvts.filter(e => ['1001', '1002'].includes(String(e.eventId)))
-    evtSource.value = allEvts.filter(e => !['1001', '1002'].includes(String(e.eventId)))
-    // 算法事件
-    algorithmEvents.value = {}
-    algorithmEvents.value[1106] = [
-      { eventType: '智能告警-宠物检测', enabled: true }
-    ]
   }
-  tmSourceChecked.value = []
-  tmTargetChecked.value = []
-  tmSourceKeyword.value = ''
-  tmTargetKeyword.value = ''
-  algSourceChecked.value = []
-  algTargetChecked.value = []
-  algSourceKeyword.value = ''
-  algTargetKeyword.value = ''
-  evtSourceChecked.value = []
-  evtTargetChecked.value = []
-  evtSourceKeyword.value = ''
-  evtTargetKeyword.value = ''
   serviceDialogVisible.value = true
 }
 
-const handleServiceDialogClosed = () => {
-  activeConfigTab.value = 'thingModel'
-  algorithmEvents.value = {}
-}
+const handleServiceDialogClosed = () => {}
 
 const saveService = () => {
   if (!serviceForm.name.trim()) return ElMessage.warning('请输入服务名称')
@@ -974,37 +467,6 @@ const saveService = () => {
   }
 }
 
-.section-divider {
-  display: flex;
-  align-items: center;
-  margin: 20px 0 12px;
-  color: var(--text-secondary);
-  font-size: 13px;
-
-  &::before,
-  &::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border-lighter);
-  }
-
-  span {
-    padding: 0 12px;
-    white-space: nowrap;
-  }
-}
-
-.config-tabs {
-  margin-top: 8px;
-}
-
-.transfer-container {
-  display: flex;
-  align-items: stretch;
-  gap: 12px;
-}
-
 .transfer-panel {
   flex: 1;
   border: 1px solid var(--border-lighter);
@@ -1018,10 +480,6 @@ const saveService = () => {
   padding: 10px 12px;
   border-bottom: 1px solid var(--border-lighter);
   font-size: 13px;
-}
-
-.transfer-search {
-  padding: 8px;
 }
 
 .transfer-list {
@@ -1043,42 +501,6 @@ const saveService = () => {
   font-size: 13px;
 }
 
-.transfer-actions {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-// ===== 算法参数区域 =====
-.algorithm-block {
-  border: 1px solid var(--border-lighter);
-  border-radius: 6px;
-  padding: 12px;
-  margin-bottom: 12px;
-}
-
-.algorithm-block-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  font-size: 13px;
-
-  .algorithm-tm-id {
-    font-weight: 600;
-    color: var(--primary-color);
-  }
-
-  .algorithm-tm-name {
-    color: var(--text-primary);
-  }
-}
-
-.algorithm-table {
-  margin-bottom: 0;
-}
 </style>
 
 <style lang="scss">
@@ -1091,12 +513,4 @@ const saveService = () => {
   font-size: 13px;
 }
 
-/* 配置选项卡 */
-.config-tabs .el-tabs__header {
-  margin-bottom: 12px;
-}
-
-.config-tabs .el-tabs__content {
-  overflow: visible;
-}
 </style>

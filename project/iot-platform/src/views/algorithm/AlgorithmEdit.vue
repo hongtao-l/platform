@@ -6,14 +6,22 @@
       <!-- 基本信息 -->
       <div class="section-title">基本信息</div>
       <el-row :gutter="20">
-        <el-col :span="12">
+        <el-col :span="8">
           <el-form-item label="算法ID" prop="algorithmId">
             <el-input v-model="form.algorithmId" placeholder="如 4001" />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="8">
           <el-form-item label="排序">
             <el-input-number v-model="form.sortOrder" :min="0" style="width:100%" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="算法类型">
+            <el-radio-group v-model="form.algorithmType">
+              <el-radio value="device">设备</el-radio>
+              <el-radio value="platform">平台</el-radio>
+            </el-radio-group>
           </el-form-item>
         </el-col>
       </el-row>
@@ -145,7 +153,7 @@ const capOptions = [
 ]
 
 const form = reactive({
-  algorithmId: '', algorithmName: { '1': '' }, algorithmIcon: '', sortOrder: 0,
+  algorithmId: '', algorithmName: { '1': '' }, algorithmIcon: '', sortOrder: 0, algorithmType: 'device',
   capabilities: Object.fromEntries(capOptions.map(c => [c.key, false])),
   eventIds: [], extendedProps: ''
 })
@@ -197,6 +205,7 @@ async function loadDetail() {
       try { form.algorithmName = JSON.parse(d.algorithmName || '{}') } catch { form.algorithmName = { '1': '' } }
       form.algorithmIcon = d.algorithmIcon || ''
       form.sortOrder = d.sortOrder ?? 0
+      form.algorithmType = d.algorithmType || 'device'
       try { form.capabilities = JSON.parse(d.capabilities || '{}') } catch { form.capabilities = {} }
       capOptions.forEach(c => { if (!(c.key in form.capabilities)) form.capabilities[c.key] = false })
       const caps = form.capabilities
@@ -211,7 +220,7 @@ async function loadDetail() {
 
 function resetForm() {
   form.algorithmId = ''; form.algorithmName = { '1': '' }; form.algorithmIcon = ''
-  form.sortOrder = 0; form.extendedProps = ''; form.eventIds = []
+  form.sortOrder = 0; form.algorithmType = 'device'; form.extendedProps = ''; form.eventIds = []
   form.capabilities = Object.fromEntries(capOptions.map(c => [c.key, false]))
   detectTypeRows.value = []
 }
@@ -229,6 +238,7 @@ async function handleSubmit() {
   try {
     const data = {
       algorithmId: form.algorithmId, algorithmIcon: form.algorithmIcon, sortOrder: form.sortOrder,
+      algorithmType: form.algorithmType,
       algorithmName: JSON.stringify(form.algorithmName),
       capabilities: JSON.stringify({ ...form.capabilities, DetectType: detectType }),
       eventIds: JSON.stringify(form.eventIds),

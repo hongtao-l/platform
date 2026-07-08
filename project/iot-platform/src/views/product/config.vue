@@ -1074,7 +1074,7 @@
                 <span class="cell-name">{{ row._name?.['1'] || row.algorithmId }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="描述" min-width="160">
+            <el-table-column label="描述" min-width="100">
               <template #default="{ row }">
                 <span class="cell-desc">{{ row.descr || '-' }}</span>
               </template>
@@ -1113,7 +1113,7 @@
                 </el-tooltip>
               </template>
               <template #default="{ row }">
-                <el-switch v-model="row.free" size="small" :disabled="!row.supported" />
+                <el-switch v-model="row.free" size="small" :disabled="!row.supported" @change="onFreeChange(row)" />
               </template>
             </el-table-column>
           </el-table>
@@ -1138,71 +1138,26 @@
           </el-divider>
         </div>
 
-        <!-- 平台服务列表（算法服务 老） -->
         <div class="algo-service-section">
-          <div class="old-service-group">
-            <div class="old-service-title">
-              <span class="old-service-name">云存录像服务</span>
-              <span class="aiiot-tag">AIIoTType: 1010</span>
-            </div>
-            <el-table :data="cloudRecordServices" stripe>
-              <el-table-column label="服务ID" width="100" prop="serviceId" />
-              <el-table-column label="服务名称" width="140" prop="name" />
-              <el-table-column label="是否支持" width="120" align="center">
-                <template #default="{ row }">
-                  <el-switch v-model="row.supported" size="small" />
-                </template>
-              </el-table-column>
-              <el-table-column label="说明" min-width="280" prop="descr" />
-            </el-table>
-          </div>
-
-          <div class="old-service-group">
-            <div class="old-service-title">
-              <span class="old-service-name">云端抓图支持的服务</span>
-            </div>
-            <el-table :data="cloudSnapshotServices" stripe>
-              <el-table-column label="服务ID" width="100" prop="serviceId" />
-              <el-table-column label="服务名称" width="140" prop="name" />
-              <el-table-column label="是否支持" width="120" align="center">
-                <template #default="{ row }">
-                  <el-switch v-model="row.supported" size="small" />
-                </template>
-              </el-table-column>
-              <el-table-column label="说明" min-width="280" prop="descr" />
-            </el-table>
-          </div>
-
-          <el-table :data="oldAlgoList" stripe class="old-algo-table">
-            <el-table-column label="ID(AIIoTType)" width="120" align="center">
-              <template #default="{ row }">{{ row.id }}</template>
-            </el-table-column>
-            <el-table-column label="服务ID" width="110" align="center">
-              <template #default="{ row }">{{ row.serviceId }}</template>
-            </el-table-column>
-            <el-table-column label="算法名称" min-width="160">
+          <el-table :data="platformServices" stripe>
+            <el-table-column label="服务ID" width="120" align="center">
               <template #default="{ row }">
-                <span class="cell-name">{{ row.name }}</span>
+                <span :class="{ 'cell-service-id': true, 'text-muted': row.serviceId === '-' }">{{ row.serviceId }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="描述" min-width="200">
+            <el-table-column label="服务名称" min-width="120">
               <template #default="{ row }">
-                <span class="cell-desc">{{ row.descr }}</span>
+                <span>{{ row.serviceName }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="描述" min-width="100">
+              <template #default="{ row }">
+                <span class="text-muted">{{ row.descr || '—' }}</span>
               </template>
             </el-table-column>
             <el-table-column label="是否支持" width="100" align="center">
               <template #default="{ row }">
                 <el-switch v-model="row.supported" size="small" />
-              </template>
-            </el-table-column>
-            <el-table-column label="算法配置" width="100" align="center">
-              <template #default="{ row }">
-                <el-button v-if="row.hasConfig" size="small" text type="primary">配置</el-button>
-              </template>
-            </el-table-column>
-            <el-table-column label="关联事件" width="100" align="center">
-              <template #default="{ row }">
-                <el-button size="small" text type="primary">编辑</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -1893,13 +1848,39 @@
       </template>
     </el-drawer>
 
+    <!-- 套餐绑定侧边弹窗 -->
+    <el-drawer
+      v-model="packageDrawerVisible"
+      title="选择绑定套餐"
+      direction="rtl"
+      size="480px"
+      :close-on-click-modal="false"
+      class="package-bind-drawer"
+    >
+      <div class="package-list">
+        <div
+          v-for="pkg in packageOptions"
+          :key="pkg.id"
+          :class="['package-item', { active: packageDrawerRow?.boundPackage === pkg.id }]"
+          @click="confirmPackageBinding(pkg.id)"
+        >
+          <div class="package-item-left">
+            <span class="package-item-id">{{ pkg.id }}</span>
+            <span class="package-item-name">{{ pkg.name }}</span>
+          </div>
+          <el-icon v-if="packageDrawerRow?.boundPackage === pkg.id" color="#1A73E8"><CircleCheck /></el-icon>
+        </div>
+      </div>
+      <el-empty v-if="packageOptions.length === 0" description="暂无可用套餐" :image-size="80" />
+    </el-drawer>
+
   </div>
 </template>
 
 <script setup>
 import { ref, reactive, computed, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Plus, ArrowLeft, ArrowRight, Edit, Switch, Check, Setting, QuestionFilled, Delete, Search, InfoFilled } from '@element-plus/icons-vue'
+import { Plus, ArrowLeft, ArrowRight, Edit, Switch, Check, Setting, QuestionFilled, Delete, Search, InfoFilled, CircleCheck } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { listAlgorithms, allEvents, getCapabilitiesByIds, getModules, getAllCapabilities, getAlgorithmServiceId, getAlgorithmEvents, getAllAlgorithmServices } from '@/views/iot/thing-model/data'
 
@@ -2745,6 +2726,7 @@ function loadAlgorithms() {
         serviceName: '',
         supported: false,
         free: false,
+        boundPackage: '',
         hasConfig,
         algoOptions: [],
         linkedEvents: algoEvents,
@@ -2761,6 +2743,7 @@ function loadAlgorithms() {
           serviceName: svc.name,
           supported: false,
           free: false,
+          boundPackage: '',
           hasConfig,
           algoOptions: [],
           linkedEvents: algoEvents,
@@ -2787,6 +2770,23 @@ function algoSpanMethod({ columnIndex, row }) {
   return { rowspan: 1, colspan: 1 }
 }
 
+// ===== 步骤3: 平台服务（合并单元格）=====
+const platformServices = ref([])
+
+function loadPlatformServices() {
+  const rows = []
+  cloudRecordServices.value.forEach(svc => {
+    rows.push({ serviceId: svc.serviceId, serviceName: svc.name, descr: svc.descr || '', supported: svc.supported })
+  })
+  cloudSnapshotServices.value.forEach(svc => {
+    rows.push({ serviceId: svc.serviceId, serviceName: svc.name, descr: svc.descr || '', supported: svc.supported })
+  })
+  oldAlgoList.value.forEach(item => {
+    rows.push({ serviceId: item.serviceId, serviceName: item.name, descr: item.descr || '', supported: item.supported })
+  })
+  platformServices.value = rows
+}
+
 const cloudRecordServices = ref([
   { serviceId: '300010', name: '事件云存', supported: true, descr: '事件录像：产生告警时触发录像' },
   { serviceId: '300011', name: '全天云存', supported: true, descr: '全天录像：全天24小时持续录像' }
@@ -2797,11 +2797,6 @@ const cloudSnapshotServices = ref([
   { serviceId: '300013', name: '松鼠检测', supported: false, descr: '云端抓图-松鼠识别与分类' }
 ])
 
-const aiServices = ref([
-  { serviceId: '400001', name: '全能AI', supported: false, descr: '集成多种AI算法服务，支持人脸识别、移动侦测、声音检测等智能分析能力' }
-])
-
-// ===== 算法服务（老）算法列表（AIIoTType 风格）=====
 const oldAlgoList = ref([
   { id: '1013', name: '全能AI', serviceId: '300051', descr: '集成多种AI算法服务', supported: true, hasConfig: true },
   { id: '1093', name: '离线监控', serviceId: '300008', descr: '设备断电或离线时的状态监测', supported: true, hasConfig: true },
@@ -2963,6 +2958,33 @@ const voiceList = ref([
   { alloTType: 1063, platform: 'GOOGLE_HOME', descr: 'GOOGLE_HOME', supported: false }
 ])
 
+// ===== 套餐绑定 =====
+const packageOptions = [
+  { id: '300031', name: '短信套餐（300031）' },
+  { id: '300030', name: '去广告套餐（300030）' },
+  { id: '300010', name: '事件云存（300010）' },
+  { id: '300011', name: '全天云存（300011）' }
+]
+
+const packageDrawerVisible = ref(false)
+const packageDrawerRow = ref(null)
+
+function onFreeChange(row) {
+  if (!row.free) row.boundPackage = ''
+}
+
+function openPackageDrawer(row) {
+  packageDrawerRow.value = row
+  packageDrawerVisible.value = true
+}
+
+function confirmPackageBinding(pkgId) {
+  if (packageDrawerRow.value) {
+    packageDrawerRow.value.boundPackage = pkgId
+  }
+  packageDrawerVisible.value = false
+}
+
 function finishDev() {
   ElMessage.success('产品配置已完成，即将返回产品列表')
   setTimeout(() => router.push('/product/development'), 1200)
@@ -2971,7 +2993,7 @@ function finishDev() {
 function handleBack() { router.push('/product/development') }
 function handleEditProduct() { ElMessage.info('编辑产品基础信息') }
 
-onMounted(() => { loadAlgorithms(); loadEvents(); loadEventConfig() })
+onMounted(() => { loadAlgorithms(); loadEvents(); loadEventConfig(); loadPlatformServices() })
 </script>
 
 <style lang="scss" scoped>
@@ -3378,5 +3400,18 @@ onMounted(() => { loadAlgorithms(); loadEvents(); loadEventConfig() })
   .el-dialog__body { padding-top: 20px; }
   .el-form-item { margin-bottom: 18px; }
   .el-divider { margin: 24px 0 20px; }
+}
+.package-bind-drawer {
+  .el-drawer__body { padding: 0; }
+  .package-list { padding: 8px 0; }
+  .package-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px; cursor: pointer; transition: background .15s;
+    &:hover { background: var(--bg-elevated); }
+    &.active { background: var(--primary-bg); }
+    &-left { display: flex; align-items: center; gap: 12px; }
+    &-id { font-size: 13px; font-weight: 500; color: var(--text-primary); font-family: monospace; }
+    &-name { font-size: 13px; color: var(--text-secondary); }
+  }
 }
 </style>

@@ -17,6 +17,13 @@
         </div>
       </el-form-item>
 
+      <el-form-item label="算法类型">
+        <el-radio-group v-model="form.algorithmType">
+          <el-radio value="device">设备</el-radio>
+          <el-radio value="platform">平台</el-radio>
+        </el-radio-group>
+      </el-form-item>
+
       <el-form-item label="描述" prop="descr">
         <el-input v-model="form.descr" type="textarea" :rows="3" placeholder="请输入算法描述" />
       </el-form-item>
@@ -77,7 +84,8 @@ const form = reactive({
   algorithmId: '',
   algorithmName: { '1': '' },
   algorithmIcon: '',
-  descr: ''
+  descr: '',
+  algorithmType: 'device'
 })
 
 const rules = {
@@ -102,6 +110,7 @@ async function loadDetail() {
       try { form.algorithmName = JSON.parse(d.algorithmName || '{}') } catch { form.algorithmName = { '1': '' } }
       form.algorithmIcon = d.algorithmIcon || ''
       form.descr = d.descr || ''
+      form.algorithmType = d.algorithmType || 'device'
     }
   } catch { /* ignore */ } finally { pageLoading.value = false }
 }
@@ -111,6 +120,7 @@ function resetForm() {
   form.algorithmName = { '1': '' }
   form.algorithmIcon = ''
   form.descr = ''
+  form.algorithmType = 'device'
 }
 
 async function handleOpen() {
@@ -131,7 +141,8 @@ async function handleSubmit() {
       algorithmId: form.algorithmId,
       algorithmIcon: form.algorithmIcon,
       algorithmName: JSON.stringify(form.algorithmName),
-      descr: form.descr
+      descr: form.descr,
+      algorithmType: form.algorithmType
     }
     const res = isEdit.value
       ? updateAlgorithm({ id: props.editId, ...data })
@@ -165,6 +176,7 @@ async function handleSubmit() {
   width: 100%; height: 100%;
   object-fit: cover;
 }
+
 </style>
 
 <style lang="scss">

@@ -17,7 +17,7 @@
 
         <div class="card table-card">
           <el-table :data="algoList" stripe v-loading="algoLoading">
-            <el-table-column label="AlgorithmID" width="180">
+            <el-table-column label="算法ID（AIIOTTYPE）" width="180">
               <template #default="{ row }">
                 <code class="id-code">{{ row.algorithmId }}</code>
               </template>
@@ -33,6 +33,11 @@
                 <span class="name-text">{{ row._name?.['1'] || row.algorithmId }}</span>
               </template>
             </el-table-column>
+            <el-table-column label="算法类型" width="80" align="center">
+              <template #default="{ row }">
+                <el-tag size="small" :type="row.algorithmType === 'platform' ? 'warning' : ''">{{ row.algorithmType === 'platform' ? '平台' : '设备' }}</el-tag>
+              </template>
+            </el-table-column>
             <el-table-column label="能力标签" min-width="260">
               <template #default="{ row }">
                 <div class="pill-list">
@@ -42,8 +47,8 @@
                     size="small" type="info" class="pill-tag pill-more">
                     +{{ getCapLabels(row._caps).length - 5 }}
                   </el-tag>
-                  <span v-if="getCapLabels(row._caps).length === 0" class="text-muted">—</span>
                 </div>
+                <el-button v-if="getCapLabels(row._caps).length === 0" size="small" text type="primary">配置</el-button>
               </template>
             </el-table-column>
             <el-table-column label="关联事件" width="100" align="center">
@@ -51,7 +56,17 @@
                 <el-tag v-if="row._eventIds?.length" size="small" type="success">
                   {{ row._eventIds.length }} 个
                 </el-tag>
-                <span v-else class="text-muted">—</span>
+                <el-button v-else size="small" text type="primary">配置</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column label="关联服务" min-width="140">
+              <template #default="{ row }">
+                <div class="pill-list">
+                  <el-tag v-for="svc in (row._services || [])" :key="svc.id" size="small" class="pill-tag pill-service" style="cursor:pointer" @click="openServiceDrawer(row)">
+                    {{ svc.serviceId }}
+                  </el-tag>
+                </div>
+                <el-button v-if="!(row._services || []).length" size="small" text type="primary" @click="openServiceDrawer(row)">配置</el-button>
               </template>
             </el-table-column>
             <el-table-column label="引用设备" width="100" align="center">
@@ -163,6 +178,37 @@
     </el-tabs>
 
     <!-- 算法编辑弹窗 -->
+    <!-- 关联服务侧边抽屉 -->
+    <el-drawer
+      v-model="serviceDrawerVisible"
+      :title="'关联服务 - ' + (editingServiceRow?._name?.['1'] || editingServiceRow?.algorithmId || '')"
+      direction="rtl"
+      size="480px"
+      :close-on-click-modal="false"
+      class="service-link-drawer"
+    >
+      <el-table
+        ref="serviceTableRef"
+        :data="allServicesList"
+        stripe
+        @selection-change="onServiceSelectionChange"
+      >
+        <el-table-column type="selection" width="44" />
+        <el-table-column label="服务ID" width="120">
+          <template #default="{ row }">{{ row.serviceId }}</template>
+        </el-table-column>
+        <el-table-column label="服务名称" min-width="140">
+          <template #default="{ row }">{{ row.name }}</template>
+        </el-table-column>
+      </el-table>
+      <el-empty v-if="allServicesList.length === 0" description="暂无服务数据" :image-size="80" />
+
+      <template #footer>
+        <el-button @click="serviceDrawerVisible = false">取消</el-button>
+        <el-button type="primary" @click="saveServiceLink">保存</el-button>
+      </template>
+    </el-drawer>
+
     <AlgorithmEdit v-model:visible="algoDialogVisible" :edit-id="algoEditId" @success="onAlgoSaved" />
     <!-- 事件编辑弹窗 -->
     <EventEdit v-model:visible="eventDialogVisible" :edit-id="eventEditId" @success="onEventSaved" />
@@ -170,10 +216,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, nextTick } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { algorithmApi } from '@/api/index.js'
+import { listServices, listAlgorithms, getAlgorithm, updateAlgorithm, deleteAlgorithm, listEvents, deleteEvent } from '@/views/iot/thing-model/data'
 import AlgorithmEdit from './AlgorithmEdit.vue'
 import EventEdit from './EventEdit.vue'
 
@@ -204,6 +250,11 @@ function parseAlgoJson(item) {
   try { item._name = JSON.parse(item.algorithmName || '{}') } catch { item._name = {} }
   try { item._caps = JSON.parse(item.capabilities || '{}') } catch { item._caps = {} }
   try { item._eventIds = JSON.parse(item.eventIds || '[]') } catch { item._eventIds = [] }
+  try {
+    const svcIds = JSON.parse(item.serviceIds || '[]')
+    const allSvcs = listServices().data?.list || []
+    item._services = allSvcs.filter(s => svcIds.includes(s.id))
+  } catch { item._services = [] }
   return item
 }
 function parseEventJson(item) {
@@ -231,8 +282,8 @@ function getCapLabels(caps) {
 async function fetchAlgoList() {
   algoLoading.value = true
   try {
-    const res = await algorithmApi.listAlgorithm({
-      pageNum: algoPage.value,
+    const res = listAlgorithms({
+      page: algoPage.value,
       pageSize: algoPageSize.value,
       keyword: algoSearch.keyword || undefined
     })
@@ -255,7 +306,7 @@ async function handleDeleteAlgo(row) {
     })
   } catch { return }
   try {
-    const res = await algorithmApi.deleteAlgorithm(row.id)
+    const res = deleteAlgorithm(row.id)
     if (res.code === 0) { ElMessage.success('删除成功'); fetchAlgoList() }
   } catch { /* ignore */ }
 }
@@ -266,8 +317,8 @@ function onAlgoSaved() { algoDialogVisible.value = false; fetchAlgoList(); fetch
 async function fetchEventList() {
   eventLoading.value = true
   try {
-    const res = await algorithmApi.listEvent({
-      pageNum: eventPage.value,
+    const res = listEvents({
+      page: eventPage.value,
       pageSize: eventPageSize.value,
       keyword: eventSearch.keyword || undefined
     })
@@ -290,12 +341,61 @@ async function handleDeleteEvent(row) {
     })
   } catch { return }
   try {
-    const res = await algorithmApi.deleteEvent(row.id)
+    const res = deleteEvent(row.id)
     if (res.code === 0) { ElMessage.success('删除成功'); fetchEventList() }
   } catch { /* ignore */ }
 }
 
 function onEventSaved() { eventDialogVisible.value = false; fetchEventList(); fetchAlgoList() }
+
+// 服务抽屉
+const serviceDrawerVisible = ref(false)
+const serviceTableRef = ref(null)
+const editingServiceRow = ref(null)
+const allServicesList = ref([])
+const selectedServiceIds = ref([])
+
+function loadAllServices() {
+  const res = listServices()
+  allServicesList.value = res.data?.list || []
+}
+
+async function openServiceDrawer(row) {
+  editingServiceRow.value = row
+  loadAllServices()
+  try {
+    const res = getAlgorithm(row.id)
+    if (res.code === 0 && res.data) {
+      try { selectedServiceIds.value = JSON.parse(res.data.serviceIds || '[]') } catch { selectedServiceIds.value = [] }
+    }
+  } catch { selectedServiceIds.value = [] }
+  serviceDrawerVisible.value = true
+  await nextTick()
+  const table = serviceTableRef.value
+  if (!table) return
+  allServicesList.value.forEach(svc => {
+    table.toggleRowSelection(svc, selectedServiceIds.value.includes(svc.id))
+  })
+}
+
+function onServiceSelectionChange(rows) {
+  selectedServiceIds.value = rows.map(r => r.id)
+}
+
+function saveServiceLink() {
+  if (!editingServiceRow.value) return
+  try {
+    const res = updateAlgorithm({
+      id: editingServiceRow.value.id,
+      serviceIds: JSON.stringify(selectedServiceIds.value)
+    })
+    if (res.code === 0) {
+      ElMessage.success('关联服务已保存')
+      serviceDrawerVisible.value = false
+      fetchAlgoList()
+    }
+  } catch { /* ignore */ }
+}
 
 onMounted(() => { fetchAlgoList(); fetchEventList() })
 </script>

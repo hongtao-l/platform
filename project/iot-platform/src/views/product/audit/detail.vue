@@ -100,7 +100,16 @@
               </el-tooltip>
             </template>
             <template #default="{ row }">
-              <el-switch v-model="row.free" size="small" @change="onFreeChange(row)" />
+              <el-switch v-model="row.free" size="small" :disabled="!row.supported" @change="onFreeChange(row)" />
+            </template>
+          </el-table-column>
+          <el-table-column label="绑定套餐" width="140" align="center">
+            <template #default="{ row }">
+              <template v-if="row.free">
+                <el-button v-if="row.boundPackage" size="small" text type="primary" @click="openPackageDrawer(row)">{{ row.boundPackage }}</el-button>
+                <el-button v-else size="small" text type="primary" @click="openPackageDrawer(row)">配置</el-button>
+              </template>
+              <span v-else class="text-muted">—</span>
             </template>
           </el-table-column>
           <template #empty>
@@ -115,110 +124,41 @@
           <span class="card-title">平台服务</span>
         </div>
         <div class="algo-service-section">
-          <div class="old-service-group">
-            <div class="old-service-title">
-              <span class="old-service-name">云存录像服务</span>
-              <span class="aiiot-tag">AIIoTType: 1010</span>
-            </div>
-            <el-table :data="cloudRecordServices" stripe>
-              <el-table-column label="服务ID" width="100" align="center">
-                <template #default="{ row }">
-                  <span class="cell-service-id">{{ row.serviceId }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="服务名称" width="140">
-                <template #default="{ row }">
-                  <span class="cell-name">{{ row.name }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="是否支持" width="100" align="center">
-                <template #default="{ row }">
-                  <el-switch v-model="row.supported" size="small" />
-                </template>
-              </el-table-column>
-              <el-table-column label="是否免开通" width="100" align="center">
-                <template #default="{ row }">
-                  <el-switch v-model="row.free" size="small" @change="onFreeChange(row)" />
-                </template>
-              </el-table-column>
-              <el-table-column label="绑定套餐" width="140" align="center">
-                <template #default="{ row }">
-                  <template v-if="row.free">
-                    <el-button v-if="row.boundPackage" size="small" text type="primary" @click="openPackageDrawer(row)">{{ row.boundPackage }}</el-button>
-                    <el-button v-else size="small" text type="primary" @click="openPackageDrawer(row)">配置</el-button>
-                  </template>
-                  <span v-else class="text-muted">—</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="说明" min-width="160">
-                <template #default="{ row }">
-                  <span class="cell-desc">{{ row.descr }}</span>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-
-          <div class="old-service-group">
-            <div class="old-service-title">
-              <span class="old-service-name">云端抓图支持的服务</span>
-            </div>
-            <el-table :data="cloudSnapshotServices" stripe>
-              <el-table-column label="服务ID" width="100" align="center">
-                <template #default="{ row }">
-                  <span class="cell-service-id">{{ row.serviceId }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="服务名称" width="140">
-                <template #default="{ row }">
-                  <span class="cell-name">{{ row.name }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="是否支持" width="100" align="center">
-                <template #default="{ row }">
-                  <el-switch v-model="row.supported" size="small" />
-                </template>
-              </el-table-column>
-              <el-table-column label="是否免开通" width="100" align="center">
-                <template #default="{ row }">
-                  <el-switch v-model="row.free" size="small" @change="onFreeChange(row)" />
-                </template>
-              </el-table-column>
-              <el-table-column label="绑定套餐" width="140" align="center">
-                <template #default="{ row }">
-                  <template v-if="row.free">
-                    <el-button v-if="row.boundPackage" size="small" text type="primary" @click="openPackageDrawer(row)">{{ row.boundPackage }}</el-button>
-                    <el-button v-else size="small" text type="primary" @click="openPackageDrawer(row)">配置</el-button>
-                  </template>
-                  <span v-else class="text-muted">—</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="说明" min-width="160">
-                <template #default="{ row }">
-                  <span class="cell-desc">{{ row.descr }}</span>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-
-          <el-table :data="oldAlgoList" stripe class="old-algo-table">
-            <el-table-column label="ID(AIIoTType)" width="120" align="center">
+          <el-table :data="platformServices" stripe :span-method="platformSpanMethod">
+            <el-table-column label="算法ID" width="110" align="center">
               <template #default="{ row }">
-                <span class="cell-name">{{ row.id }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="服务ID" width="110" align="center">
-              <template #default="{ row }">
-                <span class="cell-service-id">{{ row.serviceId }}</span>
+                <span :class="{ 'merged-cell': row._rowSpan > 1 }">{{ row.algoId }}</span>
               </template>
             </el-table-column>
             <el-table-column label="算法名称" min-width="140">
               <template #default="{ row }">
-                <span class="cell-name">{{ row.name }}</span>
+                <span class="cell-name">{{ row.algoName }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="描述" min-width="140">
+            <el-table-column label="描述" min-width="160">
               <template #default="{ row }">
-                <span class="cell-desc">{{ row.descr }}</span>
+                <span class="cell-desc">{{ row.descr || '—' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="能力配置" width="100" align="center">
+              <template #default="{ row }">
+                <el-button v-if="row.hasConfig && row._isFirstRow" size="small" text type="primary">配置</el-button>
+                <span v-else-if="row._isFirstRow" class="text-muted">—</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="关联事件" width="100" align="center">
+              <template #default="{ row }">
+                <el-button v-if="row._isFirstRow" size="small" text type="primary">配置</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column label="服务ID" width="120" align="center">
+              <template #default="{ row }">
+                <span :class="{ 'cell-service-id': true, 'text-muted': row.serviceId === '-' }">{{ row.serviceId }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="服务名称" min-width="120">
+              <template #default="{ row }">
+                <span>{{ row.serviceName || row.algoName }}</span>
               </template>
             </el-table-column>
             <el-table-column label="是否支持" width="100" align="center">
@@ -228,18 +168,18 @@
             </el-table-column>
             <el-table-column label="是否免开通" width="100" align="center">
               <template #default="{ row }">
-                <el-switch v-model="row.free" size="small" @change="onFreeChange(row)" />
+                <el-switch v-model="row.free" size="small" :disabled="!row.supported" @change="onFreeChange(row)" />
               </template>
             </el-table-column>
             <el-table-column label="绑定套餐" width="140" align="center">
-                <template #default="{ row }">
-                  <template v-if="row.free">
-                    <el-button v-if="row.boundPackage" size="small" text type="primary" @click="openPackageDrawer(row)">{{ row.boundPackage }}</el-button>
-                    <el-button v-else size="small" text type="primary" @click="openPackageDrawer(row)">配置</el-button>
-                  </template>
-                  <span v-else class="text-muted">—</span>
+              <template #default="{ row }">
+                <template v-if="row.free">
+                  <el-button v-if="row.boundPackage" size="small" text type="primary" @click="openPackageDrawer(row)">{{ row.boundPackage }}</el-button>
+                  <el-button v-else size="small" text type="primary" @click="openPackageDrawer(row)">配置</el-button>
                 </template>
-              </el-table-column>
+                <span v-else class="text-muted">—</span>
+              </template>
+            </el-table-column>
             <template #empty>
               <div class="empty-state">暂无数据</div>
             </template>
@@ -1401,6 +1341,7 @@ function loadAlgoServices() {
         descr: a.descr || '',
         supported: false,
         free: false,
+        boundPackage: '',
         hasConfig,
         linkedEvents,
         _rowSpan: 1,
@@ -1947,6 +1888,50 @@ const packageOptions = [
   { id: '300011', name: '全天云存（300011）' }
 ]
 
+// ===== 平台服务（合并单元格）=====
+const platformServices = ref([])
+
+function loadPlatformServices() {
+  const rows = []
+
+  cloudRecordServices.value.forEach((svc, si) => {
+    rows.push({
+      algoId: '1010', algoName: '云存录像服务', descr: '云存录像服务',
+      serviceId: svc.serviceId, serviceName: svc.name,
+      supported: svc.supported, free: svc.free, boundPackage: svc.boundPackage || '',
+      _rowSpan: cloudRecordServices.value.length, _isFirstRow: si === 0
+    })
+  })
+
+  cloudSnapshotServices.value.forEach((svc, si) => {
+    rows.push({
+      algoId: 'snapshot', algoName: '云端抓图支持的服务', descr: '云端抓图支持的服务',
+      serviceId: svc.serviceId, serviceName: svc.name,
+      supported: svc.supported, free: svc.free, boundPackage: svc.boundPackage || '',
+      _rowSpan: cloudSnapshotServices.value.length, _isFirstRow: si === 0
+    })
+  })
+
+  oldAlgoList.value.forEach(item => {
+    rows.push({
+      algoId: item.id, algoName: item.name, descr: item.descr,
+      serviceId: item.serviceId, serviceName: item.name,
+      supported: item.supported, free: item.free, boundPackage: item.boundPackage || '',
+      _rowSpan: 1, _isFirstRow: true
+    })
+  })
+
+  platformServices.value = rows
+}
+
+function platformSpanMethod({ columnIndex, row }) {
+  if (columnIndex <= 4) {
+    if (row._isFirstRow) return { rowspan: row._rowSpan, colspan: 1 }
+    return { rowspan: 0, colspan: 0 }
+  }
+  return { rowspan: 1, colspan: 1 }
+}
+
 const cloudRecordServices = ref([
   { serviceId: '300010', name: '事件云存', supported: true, free: false, boundPackage: '', descr: '事件录像：产生告警时触发录像' },
   { serviceId: '300011', name: '全天云存', supported: true, free: false, boundPackage: '', descr: '全天录像：全天24小时持续录像' }
@@ -2026,7 +2011,7 @@ function goBack() {
   router.push('/product/audit')
 }
 
-onMounted(() => { loadAlgoServices() })
+onMounted(() => { loadAlgoServices(); loadPlatformServices() })
 </script>
 
 <style lang="scss" scoped>

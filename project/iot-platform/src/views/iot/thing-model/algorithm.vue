@@ -14,7 +14,7 @@
 
     <div class="card table-card">
       <el-table :data="list" stripe v-loading="loading">
-        <el-table-column label="算法ID" width="180">
+        <el-table-column label="算法ID（AIIOTTYPE）" width="180">
           <template #default="{ row }">
             <code class="id-code">{{ row.algorithmId }}</code>
           </template>
@@ -31,20 +31,37 @@
             <span class="name-text">{{ row._name?.['1'] || row.algorithmId }}</span>
           </template>
         </el-table-column>
+        <el-table-column label="算法类型" width="80" align="center">
+          <template #default="{ row }">
+            <el-tag size="small" :type="row.algorithmType === 'platform' ? 'warning' : ''">{{ row.algorithmType === 'platform' ? '平台' : '设备' }}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="关联能力" width="120" align="center">
           <template #default="{ row }">
-            <el-tag v-if="getCapCount(row) > 0" size="small" type="primary"
+            <el-button v-if="getCapCount(row) === 0" size="small" text type="primary"
+              @click="$router.push(`/thing-model/algorithm/${row.id}/capabilities`)">配置</el-button>
+            <el-tag v-else size="small" type="primary"
               class="count-badge" @click="$router.push(`/thing-model/algorithm/${row.id}/capabilities`)">
               {{ getCapCount(row) }} 个
             </el-tag>
-            <span v-else class="text-muted">0 个</span>
           </template>
         </el-table-column>
         <el-table-column label="关联事件" width="100" align="center">
           <template #default="{ row }">
-            <el-tag size="small" type="warning" class="count-badge" @click="openEventDrawer(row)">
+            <el-button v-if="getEventCount(row) === 0" size="small" text type="primary" @click="openEventDrawer(row)">配置</el-button>
+            <el-tag v-else size="small" type="warning" class="count-badge" @click="openEventDrawer(row)">
               {{ getEventCount(row) }} 个
             </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="关联服务" min-width="140">
+          <template #default="{ row }">
+            <div class="pill-list">
+              <el-tag v-for="svc in (row._services || [])" :key="svc.id" size="small" class="pill-tag pill-service" style="cursor:pointer" @click="openServiceDrawer(row)">
+                {{ svc.serviceId }}
+              </el-tag>
+            </div>
+            <el-button v-if="!(row._services || []).length" size="small" text type="primary" @click="openServiceDrawer(row)">配置</el-button>
           </template>
         </el-table-column>
         <el-table-column label="描述" min-width="180">
@@ -114,6 +131,37 @@
       </template>
     </el-drawer>
 
+    <!-- 关联服务侧边抽屉 -->
+    <el-drawer
+      v-model="serviceDrawerVisible"
+      :title="'关联服务 - ' + (editingRow?._name?.['1'] || editingRow?.algorithmId || '')"
+      direction="rtl"
+      size="480px"
+      :close-on-click-modal="false"
+      class="service-link-drawer"
+    >
+      <el-table
+        ref="serviceTableRef"
+        :data="allServicesList"
+        stripe
+        @selection-change="onServiceSelectionChange"
+      >
+        <el-table-column type="selection" width="44" />
+        <el-table-column label="服务ID" width="120">
+          <template #default="{ row }">{{ row.serviceId }}</template>
+        </el-table-column>
+        <el-table-column label="服务名称" min-width="140">
+          <template #default="{ row }">{{ row.name }}</template>
+        </el-table-column>
+      </el-table>
+      <el-empty v-if="allServicesList.length === 0" description="暂无服务数据" :image-size="80" />
+
+      <template #footer>
+        <el-button @click="serviceDrawerVisible = false">取消</el-button>
+        <el-button type="primary" @click="saveServiceLink">保存</el-button>
+      </template>
+    </el-drawer>
+
     <AlgorithmEdit v-model:visible="dialogVisible" :edit-id="editId" @success="onSaved" />
 
   </div>
@@ -124,7 +172,7 @@ import { ref, reactive, onMounted, nextTick } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import AlgorithmEdit from './AlgorithmEdit.vue'
-import { listAlgorithms, deleteAlgorithm, getAlgorithm, updateAlgorithm, allEvents as fetchAllEvents } from './data'
+import { listAlgorithms, deleteAlgorithm, getAlgorithm, updateAlgorithm, allEvents as fetchAllEvents, listServices } from './data'
 
 const search = reactive({ keyword: '' })
 const list = ref([])
@@ -146,6 +194,11 @@ function parseItem(item) {
   try { item._name = JSON.parse(item.algorithmName || '{}') } catch { item._name = {} }
   try { item._caps = JSON.parse(item.capabilities || '{}') } catch { item._caps = {} }
   try { item._eventIds = JSON.parse(item.eventIds || '[]') } catch { item._eventIds = [] }
+  try {
+    const svcIds = JSON.parse(item.serviceIds || '[]')
+    const allSvcs = listServices().data?.list || []
+    item._services = allSvcs.filter(s => svcIds.includes(s.id))
+  } catch { item._services = [] }
   return item
 }
 
@@ -198,6 +251,50 @@ async function saveEventLink() {
   if (res.code === 0) {
     ElMessage.success('关联事件已保存')
     eventDrawerVisible.value = false
+    fetchList()
+  }
+}
+
+// 服务抽屉
+const serviceDrawerVisible = ref(false)
+const serviceTableRef = ref(null)
+const allServicesList = ref([])
+const selectedServiceIds = ref([])
+
+function loadAllServices() {
+  const res = listServices()
+  allServicesList.value = res.data?.list || []
+}
+
+async function openServiceDrawer(row) {
+  editingRow.value = row
+  loadAllServices()
+  const res = getAlgorithm(row.id)
+  if (res.code === 0 && res.data) {
+    try { selectedServiceIds.value = JSON.parse(res.data.serviceIds || '[]') } catch { selectedServiceIds.value = [] }
+  }
+  serviceDrawerVisible.value = true
+  await nextTick()
+  const table = serviceTableRef.value
+  if (!table) return
+  allServicesList.value.forEach(svc => {
+    table.toggleRowSelection(svc, selectedServiceIds.value.includes(svc.id))
+  })
+}
+
+function onServiceSelectionChange(rows) {
+  selectedServiceIds.value = rows.map(r => r.id)
+}
+
+async function saveServiceLink() {
+  if (!editingRow.value) return
+  const res = updateAlgorithm({
+    id: editingRow.value.id,
+    serviceIds: JSON.stringify(selectedServiceIds.value)
+  })
+  if (res.code === 0) {
+    ElMessage.success('关联服务已保存')
+    serviceDrawerVisible.value = false
     fetchList()
   }
 }

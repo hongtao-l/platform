@@ -419,7 +419,7 @@ function handleContinueDev(row) {
 }
 
 function handleAppConfig(row) {
-  ElMessage.info(`App配置 - ${row.name}`)
+  router.push({ path: '/product/app', query: { productId: row.productId, name: row.name } })
 }
 
 function handleAddFirmware(row) {

@@ -526,7 +526,7 @@ export function isLegacyCapIdentifierUnique(identifier, excludeCapId) {
 
 const initialAlgorithms = [
   {
-    id: nextId(), algorithmId: '4001', algorithmIcon: '🔍', serviceId: '400001',
+    id: nextId(), algorithmType: 'device', algorithmId: '4001', algorithmIcon: '🔍', serviceId: '400001',
     algorithmName: JSON.stringify({ '1': '新侦测算法', '2': 'New Detection' }),
     capabilities: JSON.stringify({ MotionDetect: true, AlgorithmSwitch: true, Sensitivity: true, DetectType: true, ScheduledDetect: true, ZoneDetect: true, __detectTypes: { motion: '运动', person: '人形', vehicle: '车辆' } }),
     capabilityIds: JSON.stringify(['MotionDetect', 'AlgorithmSwitch', 'Sensitivity', 'DetectType', 'ScheduledDetect', 'ZoneDetect']),
@@ -534,7 +534,7 @@ const initialAlgorithms = [
     referencedCount: 3
   },
   {
-    id: nextId(), algorithmId: '1108', algorithmIcon: '📍', serviceId: '300050',
+    id: nextId(), algorithmType: 'device', algorithmId: '1108', algorithmIcon: '📍', serviceId: '300050',
     algorithmName: JSON.stringify({ '1': 'GPS信息处理', '2': 'GPS Info Processing' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch']),
@@ -542,7 +542,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1109', algorithmIcon: '📦', serviceId: '300025',
+    id: nextId(), algorithmType: 'device', algorithmId: '1109', algorithmIcon: '📦', serviceId: '300025',
     algorithmName: JSON.stringify({ '1': '包裹检测', '2': 'Package Detection' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch']),
@@ -550,7 +550,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1111', algorithmIcon: '🐟', serviceId: '300046',
+    id: nextId(), algorithmType: 'device', algorithmId: '1111', algorithmIcon: '🐟', serviceId: '300046',
     algorithmName: JSON.stringify({ '1': '鱼类检测', '2': 'Fish Detection' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch']),
@@ -558,7 +558,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1112', algorithmIcon: '👤', serviceId: '300018',
+    id: nextId(), algorithmType: 'device', algorithmId: '1112', algorithmIcon: '👤', serviceId: '300018',
     algorithmName: JSON.stringify({ '1': '人脸检测', '2': 'Face Detection' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true, PersonDetect: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch', 'PersonDetect']),
@@ -566,7 +566,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1114', algorithmIcon: '🍽️', serviceId: '300049',
+    id: nextId(), algorithmType: 'device', algorithmId: '1114', algorithmIcon: '🍽️', serviceId: '300049',
     algorithmName: JSON.stringify({ '1': '宠物喂食', '2': 'Pet Feeding' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch']),
@@ -574,7 +574,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1082', algorithmIcon: '🔥', serviceId: '300038',
+    id: nextId(), algorithmType: 'device', algorithmId: '1082', algorithmIcon: '🔥', serviceId: '300038',
     algorithmName: JSON.stringify({ '1': '烟火侦测', '2': 'Fire & Smoke Detection' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true, Sensitivity: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch', 'Sensitivity']),
@@ -582,7 +582,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1004', algorithmIcon: '🔊', serviceId: '300037',
+    id: nextId(), algorithmType: 'device', algorithmId: '1004', algorithmIcon: '🔊', serviceId: '300037',
     algorithmName: JSON.stringify({ '1': '声音检测', '2': 'Sound Detection' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true, SoundAlarm: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch', 'SoundAlarm']),
@@ -590,7 +590,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1086', algorithmIcon: '🚲', serviceId: '300047',
+    id: nextId(), algorithmType: 'device', algorithmId: '1086', algorithmIcon: '🚲', serviceId: '300047',
     algorithmName: JSON.stringify({ '1': '非机动车检测', '2': 'Non-Motor Vehicle Detection' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true, VehicleDetect: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch', 'VehicleDetect']),
@@ -598,7 +598,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1003', algorithmIcon: '📡', serviceId: '300048',
+    id: nextId(), algorithmType: 'device', algorithmId: '1003', algorithmIcon: '📡', serviceId: '300048',
     algorithmName: JSON.stringify({ '1': 'PIR红外检测', '2': 'PIR Detection' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true, Sensitivity: true, PersonDetect: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch', 'Sensitivity', 'PersonDetect']),
@@ -606,7 +606,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1088', algorithmIcon: '🚗', serviceId: '300019',
+    id: nextId(), algorithmType: 'device', algorithmId: '1088', algorithmIcon: '🚗', serviceId: '300019',
     algorithmName: JSON.stringify({ '1': '车牌识别', '2': 'License Plate Recognition' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true, VehicleDetect: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch', 'VehicleDetect']),
@@ -614,7 +614,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1090', algorithmIcon: '🚶', serviceId: '300045',
+    id: nextId(), algorithmType: 'device', algorithmId: '1090', algorithmIcon: '🚶', serviceId: '300045',
     algorithmName: JSON.stringify({ '1': '客流统计', '2': 'People Counting' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true, PersonDetect: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch', 'PersonDetect']),
@@ -622,7 +622,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1021', algorithmIcon: '🔋', serviceId: '300028',
+    id: nextId(), algorithmType: 'device', algorithmId: '1021', algorithmIcon: '🔋', serviceId: '300028',
     algorithmName: JSON.stringify({ '1': '低电检测', '2': 'Low Battery Detection' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch']),
@@ -630,7 +630,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1024', algorithmIcon: '🆘', serviceId: '300020',
+    id: nextId(), algorithmType: 'device', algorithmId: '1024', algorithmIcon: '🆘', serviceId: '300020',
     algorithmName: JSON.stringify({ '1': '跌倒检测', '2': 'Fall Detection' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true, PersonDetect: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch', 'PersonDetect']),
@@ -638,7 +638,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1025', algorithmIcon: '🔥', serviceId: '300022',
+    id: nextId(), algorithmType: 'device', algorithmId: '1025', algorithmIcon: '🔥', serviceId: '300022',
     algorithmName: JSON.stringify({ '1': '火焰检测', '2': 'Flame Detection' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true, Sensitivity: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch', 'Sensitivity']),
@@ -646,7 +646,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1028', algorithmIcon: '😢', serviceId: '300023',
+    id: nextId(), algorithmType: 'device', algorithmId: '1028', algorithmIcon: '😢', serviceId: '300023',
     algorithmName: JSON.stringify({ '1': '哭声检测', '2': 'Cry Detection' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true, SoundAlarm: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch', 'SoundAlarm']),
@@ -654,7 +654,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1029', algorithmIcon: '🐾', serviceId: '300024',
+    id: nextId(), algorithmType: 'device', algorithmId: '1029', algorithmIcon: '🐾', serviceId: '300024',
     algorithmName: JSON.stringify({ '1': '宠物检测', '2': 'Pet Detection' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true, PetDetect: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch', 'PetDetect']),
@@ -662,7 +662,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1070', algorithmIcon: '🚫', serviceId: '300043',
+    id: nextId(), algorithmType: 'device', algorithmId: '1070', algorithmIcon: '🚫', serviceId: '300043',
     algorithmName: JSON.stringify({ '1': '离岗侦测', '2': 'Absence Detection' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true, PersonDetect: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch', 'PersonDetect']),
@@ -670,7 +670,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1079', algorithmIcon: '🚧', serviceId: '300034',
+    id: nextId(), algorithmType: 'device', algorithmId: '1079', algorithmIcon: '🚧', serviceId: '300034',
     algorithmName: JSON.stringify({ '1': '区域闯入', '2': 'Area Intrusion' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true, ZoneDetect: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch', 'ZoneDetect']),
@@ -678,7 +678,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1080', algorithmIcon: '🚪', serviceId: '300035',
+    id: nextId(), algorithmType: 'device', algorithmId: '1080', algorithmIcon: '🚪', serviceId: '300035',
     algorithmName: JSON.stringify({ '1': '区域离开', '2': 'Area Exit' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true, ZoneDetect: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch', 'ZoneDetect']),
@@ -686,7 +686,7 @@ const initialAlgorithms = [
     referencedCount: 0
   },
   {
-    id: nextId(), algorithmId: '1083', algorithmIcon: '🚙', serviceId: '300017',
+    id: nextId(), algorithmType: 'device', algorithmId: '1083', algorithmIcon: '🚙', serviceId: '300017',
     algorithmName: JSON.stringify({ '1': '车辆侦测', '2': 'Vehicle Detection' }),
     capabilities: JSON.stringify({ AlgorithmSwitch: true, VehicleDetect: true }),
     capabilityIds: JSON.stringify(['AlgorithmSwitch', 'VehicleDetect']),
@@ -794,6 +794,7 @@ export function addAlgorithm(data) {
     capabilities: data.capabilities || '{}',
     capabilityIds: data.capabilityIds || '[]',
     eventIds: data.eventIds || '[]',
+    algorithmType: data.algorithmType || 'device',
     referencedCount: 0
   }
   store.algorithms.push(item)
@@ -811,6 +812,8 @@ export function updateAlgorithm(data) {
   if (data.capabilities !== undefined) cur.capabilities = data.capabilities
   if (data.capabilityIds !== undefined) cur.capabilityIds = data.capabilityIds
   if (data.eventIds !== undefined) cur.eventIds = data.eventIds
+  if (data.serviceIds !== undefined) cur.serviceIds = data.serviceIds
+  if (data.algorithmType !== undefined) cur.algorithmType = data.algorithmType
   // 更新事件引用计数
   _updateEventRefCounts()
   return { code: 0 }
