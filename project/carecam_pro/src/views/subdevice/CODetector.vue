@@ -23,8 +23,8 @@
         <div class="reading-time">更新于 {{ lastUpdate }}</div>
       </div>
 
-      <!-- 告警阈值 -->
-      <div class="section-card">
+      <!-- 告警阈值：前端暂隐藏，放开改 featureFlags.alarmSettings -->
+      <div v-if="subdeviceFeatures.alarmSettings" class="section-card">
         <div class="section-title">
           <van-icon name="warning-o" size="16" color="#FBBC04" />
           <span>告警设置</span>
@@ -64,8 +64,8 @@
         <div class="test-hint">按下按钮后设备将发出短促告警音，确认设备正常</div>
       </div>
 
-      <!-- 历史 -->
-      <div class="section-card">
+      <!-- 历史：前端暂隐藏，放开改 featureFlags.trend -->
+      <div v-if="subdeviceFeatures.trend" class="section-card">
         <div class="section-title">
           <van-icon name="chart-trending-o" size="16" color="#7C3AED" />
           <span>24h CO浓度趋势</span>
@@ -95,6 +95,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { subdeviceFeatures } from '@/config/featureFlags'
 const router = useRouter()
 
 const coValue = ref(5)

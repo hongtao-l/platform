@@ -19,8 +19,8 @@
         <div v-if="isOpen" class="open-duration">已开启 {{ openDuration }}</div>
       </div>
 
-      <!-- 开关记录 -->
-      <div class="section-card">
+      <!-- 开关记录：前端暂隐藏，放开改 featureFlags.records -->
+      <div v-if="subdeviceFeatures.records" class="section-card">
         <div class="section-title">
           <van-icon name="clock-o" size="16" color="#1A73E8" />
           <span>最近记录</span>
@@ -42,8 +42,8 @@
         </div>
       </div>
 
-      <!-- 告警设置 -->
-      <div class="section-card">
+      <!-- 告警设置：前端暂隐藏，放开改 featureFlags.alarmSettings -->
+      <div v-if="subdeviceFeatures.alarmSettings" class="section-card">
         <div class="section-title">
           <van-icon name="warning-o" size="16" color="#FBBC04" />
           <span>告警设置</span>
@@ -76,8 +76,8 @@
         </div>
       </div>
 
-      <!-- 事件日志 -->
-      <div class="section-card">
+      <!-- 事件日志：前端暂隐藏，放开改 featureFlags.records -->
+      <div v-if="subdeviceFeatures.records" class="section-card">
         <div class="section-title">
           <van-icon name="notes-o" size="16" color="#7C3AED" />
           <span>事件日志</span>
@@ -118,6 +118,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { subdeviceFeatures } from '@/config/featureFlags'
 const router = useRouter()
 
 const isOpen = ref(true)

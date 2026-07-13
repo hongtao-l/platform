@@ -290,26 +290,33 @@
         <span style="font-size:12px;font-weight:400;color:var(--text-placeholder);margin-left:6px">选填，针对每个APP配置</span>
       </span>
       <div class="section-block">
-        <div class="iap-app-row">
-          <div class="iap-app-info">
-            <div class="iap-app-name">牵心PRO</div>
-            <div class="iap-app-id">APPID: QX_PRO_001</div>
-          </div>
-          <div class="iap-keys">
-            <el-input v-model="form.iapQxproGoogle" placeholder="Google 内购 Key" />
-            <el-input v-model="form.iapQxproApple" placeholder="Apple 内购 Key" />
-          </div>
+        <div v-if="iapTabs.length === 0" style="padding:8px 0;font-size:13px;color:var(--text-placeholder)">
+          请先在「套餐定价」中勾选定价类型
         </div>
-        <div class="iap-app-row" style="margin-bottom:0">
-          <div class="iap-app-info">
-            <div class="iap-app-name">鹤梦之家</div>
-            <div class="iap-app-id">APPID: HM_HOME_001</div>
-          </div>
-          <div class="iap-keys">
-            <el-input v-model="form.iapHmhomeGoogle" placeholder="Google 内购 Key" />
-            <el-input v-model="form.iapHmhomeApple" placeholder="Apple 内购 Key" />
-          </div>
-        </div>
+        <el-tabs v-else v-model="activeIapTab" class="iap-tabs">
+          <el-tab-pane
+            v-for="tab in iapTabs"
+            :key="tab.key"
+            :label="tab.label"
+            :name="tab.key"
+          >
+            <div
+              v-for="(app, idx) in IAP_APPS"
+              :key="app.key"
+              class="iap-app-row"
+              :style="idx === IAP_APPS.length - 1 ? 'margin-bottom:0' : ''"
+            >
+              <div class="iap-app-info">
+                <div class="iap-app-name">{{ app.name }}</div>
+                <div class="iap-app-id">APPID: {{ app.appid }}</div>
+              </div>
+              <div class="iap-keys">
+                <el-input v-model="form.iapKeys[tab.key][app.key].google" placeholder="Google 内购 Key" />
+                <el-input v-model="form.iapKeys[tab.key][app.key].apple" placeholder="Apple 内购 Key" />
+              </div>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
       </div>
 
       <!-- ===== 标签配置 ===== -->
@@ -448,6 +455,57 @@ const isEdit = computed(() => props.mode === 'edit')
 const formRef = ref(null)
 const saving = ref(false)
 
+// ===== 内购Key：定价类型 × APP × 平台 三层结构 =====
+const IAP_APPS = [
+  { key: 'qxpro', name: '牵心PRO', appid: 'QX_PRO_001' },
+  { key: 'hmhome', name: '鹤梦之家', appid: 'HM_HOME_001' }
+]
+const IAP_TYPES = ['nonSub', 'sub', 'free']
+
+const emptyIapKeys = () => {
+  const out = {}
+  for (const t of IAP_TYPES) {
+    out[t] = {}
+    for (const app of IAP_APPS) out[t][app.key] = { google: '', apple: '' }
+  }
+  return out
+}
+
+// 回填/迁移内购Key（新数据深拷贝；老数据按原定价类型迁移：订阅→sub，否则→nonSub）
+const normalizeIapKeys = (fd) => {
+  const keys = emptyIapKeys()
+  if (fd && fd.iapKeys) {
+    for (const t of IAP_TYPES) {
+      for (const app of IAP_APPS) {
+        const src = fd.iapKeys?.[t]?.[app.key]
+        if (src) {
+          keys[t][app.key].google = src.google || ''
+          keys[t][app.key].apple = src.apple || ''
+        }
+      }
+    }
+  } else if (fd && (fd.iapQxproGoogle || fd.iapQxproApple || fd.iapHmhomeGoogle || fd.iapHmhomeApple)) {
+    const t = fd.priceSub ? 'sub' : 'nonSub'
+    keys[t].qxpro.google = fd.iapQxproGoogle || ''
+    keys[t].qxpro.apple = fd.iapQxproApple || ''
+    keys[t].hmhome.google = fd.iapHmhomeGoogle || ''
+    keys[t].hmhome.apple = fd.iapHmhomeApple || ''
+  }
+  return keys
+}
+
+// 保存时对内购Key做首尾去空格
+const buildTrimmedIapKeys = () => {
+  const out = emptyIapKeys()
+  for (const t of IAP_TYPES) {
+    for (const app of IAP_APPS) {
+      out[t][app.key].google = (form.iapKeys[t][app.key].google || '').trim()
+      out[t][app.key].apple = (form.iapKeys[t][app.key].apple || '').trim()
+    }
+  }
+  return out
+}
+
 const defaultForm = () => ({
   name: '',
   lpUrlCn: '',
@@ -476,10 +534,7 @@ const defaultForm = () => ({
   trialPriceDollar: '',
   trialDays: 7,
   trialFilter: '',
-  iapQxproGoogle: '',
-  iapQxproApple: '',
-  iapHmhomeGoogle: '',
-  iapHmhomeApple: '',
+  iapKeys: emptyIapKeys(),
   pkgTags: [],
   descTags: [],
   shelfRegion: [],
@@ -542,6 +597,25 @@ const onPriceTypeChange = (type) => {
   }
 }
 
+// 内购Key Tab（仅渲染已勾选的定价类型；免费与订阅/非订阅互斥）
+const iapTabs = computed(() => {
+  if (form.priceFree) return [{ key: 'free', label: '免费' }]
+  const tabs = []
+  if (form.priceSub) tabs.push({ key: 'sub', label: '订阅制' })
+  if (form.priceNonSub) tabs.push({ key: 'nonSub', label: '非订阅' })
+  return tabs
+})
+
+const activeIapTab = ref('sub')
+
+// 激活 Tab 失效时自动切到第一个可用；无可用则置空（已填Key保留在 form.iapKeys 中）
+watch(iapTabs, (tabs) => {
+  if (tabs.length === 0) { activeIapTab.value = ''; return }
+  if (!tabs.some(t => t.key === activeIapTab.value)) {
+    activeIapTab.value = tabs[0].key
+  }
+}, { immediate: true })
+
 // 产品限制切换
 const onProductRestrictChange = () => {
   if (form.productRestrict === 'none') {
@@ -553,10 +627,9 @@ const onProductRestrictChange = () => {
 watch(() => props.visible, (val) => {
   if (val) {
     if (isEdit.value && props.data) {
-      Object.assign(form, defaultForm(), props.data._formData || {})
-      if (props.data._formData) {
-        Object.assign(form, props.data._formData)
-      }
+      const fd = props.data._formData || {}
+      Object.assign(form, defaultForm(), fd)
+      form.iapKeys = normalizeIapKeys(fd)
     }
   }
 })
@@ -577,6 +650,7 @@ const handleSubmit = async () => {
 
   saving.value = true
   setTimeout(() => {
+    const trimmedIap = buildTrimmedIapKeys()
     const output = {
       name: form.name,
       direction: form.direction,
@@ -594,6 +668,7 @@ const handleSubmit = async () => {
       shelfApp: [...form.shelfApp],
       shelfSlot: [...form.shelfSlot],
       category: form.category,
+      iapKeys: trimmedIap,
       subType: form.priceFree ? 'free' : (form.priceSub ? 'sub' : 'nonSub'),
       price: form.priceFree ? '免费' : '待定',
       cost: '待定',
@@ -604,7 +679,7 @@ const handleSubmit = async () => {
         : form.shelfRegion.includes('国内') ? 'cn'
         : form.shelfRegion.includes('海外') ? 'overseas'
         : 'global',
-      _formData: { ...form }  // 保存完整表单数据供编辑回填
+      _formData: { ...form, iapKeys: trimmedIap }  // 保存完整表单数据供编辑回填
     }
     emit('save', output)
     saving.value = false
@@ -633,5 +708,12 @@ const handleSubmit = async () => {
     flex: 1;
     margin-left: 0;
   }
+}
+</style>
+
+<style lang="scss">
+/* 内购Key Tab：弹窗内需非 scoped 才能穿透 Element Plus */
+.el-drawer .iap-tabs .el-tabs__header {
+  margin-bottom: 12px;
 }
 </style>

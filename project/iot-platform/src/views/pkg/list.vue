@@ -3,6 +3,10 @@
     <!-- 筛选栏 -->
     <div class="filter-bar">
       <div class="filter-item">
+        <label>套餐ID</label>
+        <el-input v-model="filters.code" placeholder="搜索套餐ID" size="default" style="width:160px" clearable />
+      </div>
+      <div class="filter-item">
         <label>套餐名称</label>
         <el-input v-model="filters.keyword" placeholder="搜索套餐名称" size="default" style="width:180px" clearable />
       </div>
@@ -205,6 +209,7 @@ import PkgConfig from './config.vue'
 
 // ===== 筛选 =====
 const filters = reactive({
+  code: '',
   keyword: '',
   direction: '',
   region: '',
@@ -216,6 +221,7 @@ const handleQuery = () => {
 }
 
 const handleReset = () => {
+  filters.code = ''
   filters.keyword = ''
   filters.direction = ''
   filters.region = ''

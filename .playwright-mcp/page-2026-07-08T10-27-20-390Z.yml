@@ -1,0 +1,313 @@
+- generic [ref=f1e3]:
+  - complementary [ref=f1e4]:
+    - generic [ref=f1e5]:
+      - img [ref=f1e7]
+      - generic [ref=f1e9]: IoT 平台
+    - navigation [ref=f1e10]:
+      - generic [ref=f1e11] [cursor=pointer]:
+        - img [ref=f1e13]
+        - generic [ref=f1e15]: 工作台
+      - generic [ref=f1e16]:
+        - generic [ref=f1e17] [cursor=pointer]:
+          - img [ref=f1e19]
+          - generic [ref=f1e22]: 物模型管理
+          - img [ref=f1e24]
+        - generic:
+          - generic [ref=f1e26] [cursor=pointer]:
+            - img [ref=f1e28]
+            - generic [ref=f1e30]: IOT类目
+          - generic [ref=f1e31] [cursor=pointer]:
+            - img [ref=f1e33]
+            - generic [ref=f1e38]: 能力库
+          - generic [ref=f1e39] [cursor=pointer]:
+            - img [ref=f1e41]
+            - generic [ref=f1e44]: 算法库
+          - generic [ref=f1e45] [cursor=pointer]:
+            - img [ref=f1e47]
+            - generic [ref=f1e49]: 事件库
+      - generic [ref=f1e50]:
+        - generic [ref=f1e51] [cursor=pointer]:
+          - img [ref=f1e53]
+          - generic [ref=f1e57]: 产品管理
+          - img [ref=f1e59]
+        - generic:
+          - generic [ref=f1e61] [cursor=pointer]:
+            - img [ref=f1e63]
+            - generic [ref=f1e67]: 产品开发
+          - generic [ref=f1e68] [cursor=pointer]:
+            - img [ref=f1e70]
+            - generic [ref=f1e72]: 产品审核
+      - generic [ref=f1e73]:
+        - generic [ref=f1e74] [cursor=pointer]:
+          - img [ref=f1e76]
+          - generic [ref=f1e81]: 套餐管理
+          - img [ref=f1e83]
+        - generic:
+          - generic [ref=f1e85] [cursor=pointer]:
+            - img [ref=f1e87]
+            - generic [ref=f1e91]: 套餐配置
+          - generic [ref=f1e92] [cursor=pointer]:
+            - img [ref=f1e94]
+            - generic [ref=f1e99]: 服务类型
+      - generic [ref=f1e100]:
+        - generic [ref=f1e101] [cursor=pointer]:
+          - img [ref=f1e103]
+          - generic [ref=f1e105]: 运营管理
+          - img [ref=f1e107]
+        - generic:
+          - generic [ref=f1e109] [cursor=pointer]:
+            - img [ref=f1e111]
+            - generic [ref=f1e113]: 商城位运营
+          - generic [ref=f1e114] [cursor=pointer]:
+            - img [ref=f1e116]
+            - generic [ref=f1e118]: 推荐位运营
+          - generic [ref=f1e119] [cursor=pointer]:
+            - img [ref=f1e121]
+            - generic [ref=f1e126]: 活动位运营
+          - generic [ref=f1e127] [cursor=pointer]:
+            - img [ref=f1e129]
+            - generic [ref=f1e131]: 用户分群
+          - generic [ref=f1e132] [cursor=pointer]:
+            - img [ref=f1e134]
+            - generic [ref=f1e136]: A/B Test
+    - generic [ref=f1e138] [cursor=pointer]:
+      - img [ref=f1e140]
+      - generic [ref=f1e142]: 收起菜单
+  - generic [ref=f1e143]:
+    - banner [ref=f1e144]:
+      - navigation "面包屑" [ref=f1e146]:
+        - generic [ref=f1e147]:
+          - link "首页" [ref=f1e148]
+          - text: /
+        - link "活动位运营" [ref=f1e150]
+      - generic [ref=f1e151]:
+        - generic [ref=f1e152] [cursor=pointer]:
+          - img [ref=f1e154]
+          - superscript [ref=f1e158]: "3"
+        - button "管理员" [ref=f1e160] [cursor=pointer]:
+          - img [ref=f1e163]
+          - generic [ref=f1e165]: 管理员
+          - img [ref=f1e167]
+    - main [ref=f1e169]:
+      - generic [ref=f1e170]:
+        - generic [ref=f1e171]:
+          - generic [ref=f1e173] [cursor=pointer]:
+            - generic:
+              - combobox [ref=f1e175]
+              - generic [ref=f1e176]: 全部状态
+            - img [ref=f1e179]
+          - generic [ref=f1e182] [cursor=pointer]:
+            - generic:
+              - combobox [ref=f1e184]
+              - generic [ref=f1e185]: 全部区域
+            - img [ref=f1e188]
+          - generic [ref=f1e191] [cursor=pointer]:
+            - generic:
+              - combobox [ref=f1e193]
+              - generic [ref=f1e194]: 全部APP
+            - img [ref=f1e197]
+          - textbox "搜索活动名称..." [ref=f1e201]
+        - generic [ref=f1e203]:
+          - generic [ref=f1e204]:
+            - generic [ref=f1e205]: 活动位策略列表
+            - generic [ref=f1e206]:
+              - button "活动配置" [ref=f1e207] [cursor=pointer]:
+                - generic [ref=f1e208]: 活动配置
+              - button "添加活动" [ref=f1e209] [cursor=pointer]:
+                - generic [ref=f1e210]:
+                  - img [ref=f1e212]
+                  - text: 添加活动
+          - generic [ref=f1e215]:
+            - table [ref=f1e217]:
+              - rowgroup [ref=f1e229]:
+                - row "活动名称 弹窗频率 活动周期 活动状态 投放区域 投放APP 投放用户分群 备注 套餐配置 操作" [ref=f1e230]:
+                  - columnheader "活动名称" [ref=f1e231]:
+                    - generic [ref=f1e232]: 活动名称
+                  - columnheader "弹窗频率" [ref=f1e233]:
+                    - generic [ref=f1e234]: 弹窗频率
+                  - columnheader "活动周期" [ref=f1e235]:
+                    - generic [ref=f1e236]: 活动周期
+                  - columnheader "活动状态" [ref=f1e237]:
+                    - generic [ref=f1e238]: 活动状态
+                  - columnheader "投放区域" [ref=f1e239]:
+                    - generic [ref=f1e240]: 投放区域
+                  - columnheader "投放APP" [ref=f1e241]:
+                    - generic [ref=f1e242]: 投放APP
+                  - columnheader "投放用户分群" [ref=f1e243]:
+                    - generic [ref=f1e244]: 投放用户分群
+                  - columnheader "备注" [ref=f1e245]:
+                    - generic [ref=f1e246]: 备注
+                  - columnheader "套餐配置" [ref=f1e247]:
+                    - generic [ref=f1e248]: 套餐配置
+                  - columnheader "操作" [ref=f1e249]:
+                    - generic [ref=f1e250]: 操作
+            - table [ref=f1e255]:
+              - rowgroup [ref=f1e267]:
+                - row "618大促弹窗活动 AS001 每 24 小时 2026-06-01 00:00 至 2026-06-18 23:59 已过期 国内 牵心PRO 高价值用户 活跃用户 618大促首页弹窗 4个套餐 查看 复制新建 移除" [ref=f1e268]:
+                  - cell "618大促弹窗活动 AS001" [ref=f1e269]:
+                    - generic [ref=f1e271]:
+                      - generic [ref=f1e272]: 618大促弹窗活动
+                      - generic [ref=f1e273]: AS001
+                  - cell "每 24 小时" [ref=f1e274]:
+                    - generic [ref=f1e275]: 每 24 小时
+                  - cell "2026-06-01 00:00 至 2026-06-18 23:59" [ref=f1e276]:
+                    - generic [ref=f1e278]:
+                      - generic [ref=f1e279]: 2026-06-01 00:00
+                      - generic [ref=f1e280]: 至 2026-06-18 23:59
+                  - cell "已过期" [ref=f1e281]:
+                    - generic [ref=f1e283]: 已过期
+                  - cell "国内" [ref=f1e284]:
+                    - generic [ref=f1e285]:
+                      - generic:
+                        - generic: 国内
+                  - cell "牵心PRO" [ref=f1e286]:
+                    - generic [ref=f1e287]:
+                      - generic:
+                        - generic: 牵心PRO
+                  - cell "高价值用户 活跃用户" [ref=f1e288]:
+                    - generic [ref=f1e289]:
+                      - generic:
+                        - generic: 高价值用户
+                      - generic:
+                        - generic: 活跃用户
+                  - cell "618大促首页弹窗" [ref=f1e290]:
+                    - generic [ref=f1e292]: 618大促首页弹窗
+                  - cell "4个套餐" [ref=f1e293]:
+                    - button "4个套餐" [ref=f1e295] [cursor=pointer]:
+                      - generic [ref=f1e296]: 4个套餐
+                  - cell "查看 复制新建 移除" [ref=f1e297]:
+                    - generic [ref=f1e298]:
+                      - button "查看" [ref=f1e299] [cursor=pointer]:
+                        - generic [ref=f1e300]: 查看
+                      - button "复制新建" [ref=f1e301] [cursor=pointer]:
+                        - generic [ref=f1e302]: 复制新建
+                      - button "移除" [ref=f1e303] [cursor=pointer]:
+                        - generic [ref=f1e304]: 移除
+                - row "新用户专享弹窗 AS002 每 12 小时 2026-05-20 00:00 至 2026-06-20 23:59 已过期 国内 海外 牵心PRO 鹤梦之家 新注册用户 新用户首次打开App展示 4个套餐 查看 复制新建 移除" [ref=f1e305]:
+                  - cell "新用户专享弹窗 AS002" [ref=f1e306]:
+                    - generic [ref=f1e308]:
+                      - generic [ref=f1e309]: 新用户专享弹窗
+                      - generic [ref=f1e310]: AS002
+                  - cell "每 12 小时" [ref=f1e311]:
+                    - generic [ref=f1e312]: 每 12 小时
+                  - cell "2026-05-20 00:00 至 2026-06-20 23:59" [ref=f1e313]:
+                    - generic [ref=f1e315]:
+                      - generic [ref=f1e316]: 2026-05-20 00:00
+                      - generic [ref=f1e317]: 至 2026-06-20 23:59
+                  - cell "已过期" [ref=f1e318]:
+                    - generic [ref=f1e320]: 已过期
+                  - cell "国内 海外" [ref=f1e321]:
+                    - generic [ref=f1e322]:
+                      - generic:
+                        - generic: 国内
+                      - generic:
+                        - generic: 海外
+                  - cell "牵心PRO 鹤梦之家" [ref=f1e323]:
+                    - generic [ref=f1e324]:
+                      - generic:
+                        - generic: 牵心PRO
+                      - generic:
+                        - generic: 鹤梦之家
+                  - cell "新注册用户" [ref=f1e325]:
+                    - generic [ref=f1e326]:
+                      - generic:
+                        - generic: 新注册用户
+                  - cell "新用户首次打开App展示" [ref=f1e327]:
+                    - generic [ref=f1e329]: 新用户首次打开App展示
+                  - cell "4个套餐" [ref=f1e330]:
+                    - button "4个套餐" [ref=f1e332] [cursor=pointer]:
+                      - generic [ref=f1e333]: 4个套餐
+                  - cell "查看 复制新建 移除" [ref=f1e334]:
+                    - generic [ref=f1e335]:
+                      - button "查看" [ref=f1e336] [cursor=pointer]:
+                        - generic [ref=f1e337]: 查看
+                      - button "复制新建" [ref=f1e338] [cursor=pointer]:
+                        - generic [ref=f1e339]: 复制新建
+                      - button "移除" [ref=f1e340] [cursor=pointer]:
+                        - generic [ref=f1e341]: 移除
+                - row "五一弹窗活动 AS003 每 24 小时 2026-04-28 00:00 至 2026-05-05 23:59 已过期 国内 牵心PRO 活跃用户 付费用户 五一特惠 4个套餐 查看 复制新建 移除" [ref=f1e342]:
+                  - cell "五一弹窗活动 AS003" [ref=f1e343]:
+                    - generic [ref=f1e345]:
+                      - generic [ref=f1e346]: 五一弹窗活动
+                      - generic [ref=f1e347]: AS003
+                  - cell "每 24 小时" [ref=f1e348]:
+                    - generic [ref=f1e349]: 每 24 小时
+                  - cell "2026-04-28 00:00 至 2026-05-05 23:59" [ref=f1e350]:
+                    - generic [ref=f1e352]:
+                      - generic [ref=f1e353]: 2026-04-28 00:00
+                      - generic [ref=f1e354]: 至 2026-05-05 23:59
+                  - cell "已过期" [ref=f1e355]:
+                    - generic [ref=f1e357]: 已过期
+                  - cell "国内" [ref=f1e358]:
+                    - generic [ref=f1e359]:
+                      - generic:
+                        - generic: 国内
+                  - cell "牵心PRO" [ref=f1e360]:
+                    - generic [ref=f1e361]:
+                      - generic:
+                        - generic: 牵心PRO
+                  - cell "活跃用户 付费用户" [ref=f1e362]:
+                    - generic [ref=f1e363]:
+                      - generic:
+                        - generic: 活跃用户
+                      - generic:
+                        - generic: 付费用户
+                  - cell "五一特惠" [ref=f1e364]:
+                    - generic [ref=f1e366]: 五一特惠
+                  - cell "4个套餐" [ref=f1e367]:
+                    - button "4个套餐" [ref=f1e369] [cursor=pointer]:
+                      - generic [ref=f1e370]: 4个套餐
+                  - cell "查看 复制新建 移除" [ref=f1e371]:
+                    - generic [ref=f1e372]:
+                      - button "查看" [ref=f1e373] [cursor=pointer]:
+                        - generic [ref=f1e374]: 查看
+                      - button "复制新建" [ref=f1e375] [cursor=pointer]:
+                        - generic [ref=f1e376]: 复制新建
+                      - button "移除" [ref=f1e377] [cursor=pointer]:
+                        - generic [ref=f1e378]: 移除
+                - row "双11预售弹窗 AS004 每 6 小时 2026-11-01 00:00 至 2026-11-11 23:59 草稿 国内 海外 牵心PRO 鹤梦之家 高价值用户 活跃用户 付费用户 双11大促预售 4个套餐 编辑 删除 发布" [ref=f1e379]:
+                  - cell "双11预售弹窗 AS004" [ref=f1e380]:
+                    - generic [ref=f1e382]:
+                      - generic [ref=f1e383]: 双11预售弹窗
+                      - generic [ref=f1e384]: AS004
+                  - cell "每 6 小时" [ref=f1e385]:
+                    - generic [ref=f1e386]: 每 6 小时
+                  - cell "2026-11-01 00:00 至 2026-11-11 23:59" [ref=f1e387]:
+                    - generic [ref=f1e389]:
+                      - generic [ref=f1e390]: 2026-11-01 00:00
+                      - generic [ref=f1e391]: 至 2026-11-11 23:59
+                  - cell "草稿" [ref=f1e392]:
+                    - generic [ref=f1e394]: 草稿
+                  - cell "国内 海外" [ref=f1e395]:
+                    - generic [ref=f1e396]:
+                      - generic:
+                        - generic: 国内
+                      - generic:
+                        - generic: 海外
+                  - cell "牵心PRO 鹤梦之家" [ref=f1e397]:
+                    - generic [ref=f1e398]:
+                      - generic:
+                        - generic: 牵心PRO
+                      - generic:
+                        - generic: 鹤梦之家
+                  - cell "高价值用户 活跃用户 付费用户" [ref=f1e399]:
+                    - generic [ref=f1e400]:
+                      - generic:
+                        - generic: 高价值用户
+                      - generic:
+                        - generic: 活跃用户
+                      - generic:
+                        - generic: 付费用户
+                  - cell "双11大促预售" [ref=f1e401]:
+                    - generic [ref=f1e403]: 双11大促预售
+                  - cell "4个套餐" [ref=f1e404]:
+                    - button "4个套餐" [ref=f1e406] [cursor=pointer]:
+                      - generic [ref=f1e407]: 4个套餐
+                  - cell "编辑 删除 发布" [ref=f1e408]:
+                    - generic [ref=f1e409]:
+                      - button "编辑" [ref=f1e410] [cursor=pointer]:
+                        - generic [ref=f1e411]: 编辑
+                      - button "删除" [ref=f1e412] [cursor=pointer]:
+                        - generic [ref=f1e413]: 删除
+                      - button "发布" [ref=f1e414] [cursor=pointer]:
+                        - generic [ref=f1e415]: 发布

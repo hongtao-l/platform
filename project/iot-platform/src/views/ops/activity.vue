@@ -105,6 +105,7 @@
               <template v-else>
                 <el-button size="small" text type="primary" @click="openDetailDrawer(row)">查看</el-button>
                 <el-button size="small" text type="primary" @click="copyStrategy(row)">复制新建</el-button>
+                <el-button size="small" text type="danger" @click="removeStrategy(row)">删除</el-button>
               </template>
             </template>
           </el-table-column>
@@ -440,7 +441,7 @@
 import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { Plus, ArrowLeft } from '@element-plus/icons-vue'
-import { ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const router = useRouter()
 
@@ -539,7 +540,7 @@ const filterSearch = ref('')
 const filteredStrategies = ref([])
 
 const applyFilter = () => {
-  let list = strategies.value
+  let list = strategies.value.filter(s => !s.archived)
 
   // Auto-check expired
   const now = new Date().toISOString()
@@ -695,6 +696,21 @@ const copyStrategy = (row) => {
   const id = 'AS' + String(strategies.value.length + 1).padStart(3, '0')
   strategies.value.push({ ...row, id, name: row.name + '（副本）', status: 'draft' })
   applyFilter()
+}
+
+const removeStrategy = async (row) => {
+  try {
+    await ElMessageBox.confirm(
+      `确定删除活动「${row.name}」？删除后将从列表隐藏，历史投放数据仍保留可追溯。`,
+      '删除活动',
+      { confirmButtonText: '确定删除', cancelButtonText: '取消', type: 'warning' }
+    )
+  } catch {
+    return
+  }
+  row.archived = true
+  applyFilter()
+  ElMessage.success('活动已删除')
 }
 
 // ===== Address CRUD =====

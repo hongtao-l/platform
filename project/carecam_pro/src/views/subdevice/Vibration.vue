@@ -26,8 +26,8 @@
         </div>
       </div>
 
-      <!-- 告警设置 -->
-      <div class="section-card">
+      <!-- 告警设置：前端暂隐藏，放开改 featureFlags.alarmSettings -->
+      <div v-if="subdeviceFeatures.alarmSettings" class="section-card">
         <div class="section-title">
           <van-icon name="warning-o" size="16" color="#FBBC04" />
           <span>告警设置</span>
@@ -51,8 +51,8 @@
         </div>
       </div>
 
-      <!-- 震动记录 -->
-      <div class="section-card">
+      <!-- 震动记录：前端暂隐藏，放开改 featureFlags.records -->
+      <div v-if="subdeviceFeatures.records" class="section-card">
         <div class="section-title">
           <van-icon name="notes-o" size="16" color="#7C3AED" />
           <span>震动记录</span>
@@ -86,6 +86,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { subdeviceFeatures } from '@/config/featureFlags'
 const router = useRouter()
 
 const vibrating = ref(false)

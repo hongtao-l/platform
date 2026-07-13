@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>运营驾驶舱 - Deep Space Operations</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;family=Geist:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "background": "#0A0E14",
+          "surface": "#0A0E14",
+          "surface-container-lowest": "#0C1017",
+          "surface-container-low": "#12171F",
+          "surface-container": "#161C26",
+          "surface-container-high": "#1B222E",
+          "surface-container-highest": "#212936",
+          "on-surface": "#E8EAED",
+          "on-surface-variant": "#8B949E",
+          "outline": "#484F58",
+          "outline-variant": "rgba(255,255,255,0.06)",
+          "primary": "#00F2FF",
+          "on-primary": "#00272B",
+          "secondary": "#3E63DD",
+          "tertiary": "#7000FF",
+          "success": "#00E676",
+          "warning": "#FFB74D",
+          "error": "#FF5252",
+          "grid-line": "rgba(255,255,255,0.04)",
+          "glow": "rgba(0,242,255,0.08)"
+        },
+        "borderRadius": {
+                "DEFAULT": "8px",
+                "sm": "4px",
+                "lg": "12px",
+                "xl": "1.5rem",
+                "full": "9999px"
+        },
+        "fontFamily": {
+                "headline": ["Inter"],
+                "display": ["Inter"],
+                "body": ["Inter"],
+                "data-num": ["JetBrains Mono"],
+                "label": ["Geist"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { background-color: #0A0E14; color: #E8EAED; }
+  .panel {
+    background-color: #12171F;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    box-shadow: inset 0 0 20px rgba(0,242,255,0.02);
+  }
+  .panel:hover {
+    box-shadow: inset 0 0 20px rgba(0,242,255,0.05), 0 0 15px rgba(0,242,255,0.08);
+    border-color: rgba(0,242,255,0.2);
+    transition: all 0.3s ease;
+  }
+  .glow-text {
+    text-shadow: 0 0 8px rgba(0,242,255,0.4);
+  }
+  .glow-text-sm {
+    text-shadow: 0 0 4px rgba(0,242,255,0.3);
+  }
+  .glow-bg {
+    box-shadow: 0 0 12px rgba(0,242,255,0.2);
+  }
+  .sim-tag {
+    background-color: rgba(255,183,77,0.2);
+    color: #FFB74D;
+  }
+  .chart-grid {
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+</style>
+</head>
+<body class="font-body antialiased min-h-screen flex flex-col overflow-x-hidden">
+<!-- TOP BAR (Shared Component Context Mapping) -->
+<header class="flex justify-between items-center h-16 px-6 w-full sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant shadow-[0_1px_0_0_rgba(255,255,255,0.06)]">
+<div class="flex items-center gap-4">
+<div class="w-3 h-3 rounded-full bg-primary glow-bg"></div>
+<h1 class="text-headline-md font-bold tracking-tighter text-primary glow-text">运营驾驶舱</h1>
+</div>
+<!-- Top Nav Links (Mock) -->
+<nav class="hidden md:flex gap-6 absolute left-1/2 -translate-x-1/2 h-full items-center font-headline text-body-md font-medium tracking-wide">
+<div class="text-primary border-b-2 border-primary pb-1 h-full flex items-center shadow-[0_4px_12px_-2px_rgba(0,242,255,0.3)] cursor-pointer">Dashboard</div>
+<div class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest/50 transition-colors duration-200 h-full flex items-center px-3 cursor-pointer">Fleet</div>
+<div class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest/50 transition-colors duration-200 h-full flex items-center px-3 cursor-pointer">Logistics</div>
+<div class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest/50 transition-colors duration-200 h-full flex items-center px-3 cursor-pointer">Analytics</div>
+</nav>
+<div class="flex items-center gap-4 text-sm font-data-num text-on-surface-variant">
+<span>数据更新于 2026-07-09 10:30:42</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-container-highest text-primary transition-colors cursor-pointer active:scale-95">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+</button>
+<div class="flex gap-2 ml-2 text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:text-on-surface">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-on-surface">settings</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-on-surface">account_circle</span>
+</div>
+</div>
+</header>
+<!-- FILTER BAR -->
+<div class="px-6 py-4 flex flex-wrap gap-4 items-center border-b border-outline-variant bg-surface-container-lowest z-40 relative">
+<div class="flex bg-surface-container rounded-lg p-1 border border-outline-variant text-label-sm font-label tracking-widest">
+<button class="px-4 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface transition-colors">全部区域</button>
+<button class="px-4 py-1.5 rounded-md bg-primary/10 text-primary glow-text-sm border border-primary/30 transition-colors">国内</button>
+<button class="px-4 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface transition-colors">北美</button>
+<button class="px-4 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface transition-colors">欧洲</button>
+<button class="px-4 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface transition-colors">亚太</button>
+</div>
+<div class="flex bg-surface-container rounded-lg p-1 border border-outline-variant text-label-sm font-label tracking-widest">
+<button class="px-4 py-1.5 rounded-md bg-surface-container-high text-on-surface transition-colors">本月</button>
+<button class="px-4 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface transition-colors">本季</button>
+<button class="px-4 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface transition-colors">本年</button>
+<button class="px-4 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface transition-colors">自定义</button>
+</div>
+<div class="flex items-center gap-2 bg-surface-container rounded-lg p-1 px-3 border border-outline-variant text-label-sm font-label">
+<span class="text-on-surface">同比 / 环比</span>
+<div class="w-8 h-4 bg-primary/20 rounded-full relative cursor-pointer border border-primary/30">
+<div class="absolute right-0.5 top-0.5 w-3 h-3 bg-primary rounded-full glow-bg"></div>
+</div>
+</div>
+<div class="flex bg-surface-container rounded-lg p-1 border border-outline-variant text-label-sm font-label tracking-widest ml-auto">
+<button class="px-4 py-1.5 rounded-md bg-primary/10 text-primary glow-text-sm border border-primary/30 transition-colors">牵心PRO</button>
+<button class="px-4 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface transition-colors">鹤梦之家</button>
+</div>
+</div>
+<!-- MAIN DASHBOARD CONTENT -->
+<main class="flex-1 p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
+<!-- LEFT COLUMN (8-col) -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<!-- KPI CARDS -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+<!-- Card 1 -->
+<div class="panel p-6 flex flex-col justify-between h-32 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="text-label-sm font-label text-on-surface-variant uppercase tracking-widest z-10">总收入</span>
+<div class="text-[32px] font-data-num font-bold text-primary glow-text leading-none z-10">¥12.8M</div>
+<div class="flex items-center gap-2 text-sm z-10">
+<span class="text-success flex items-center font-data-num text-xs"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 12.5%</span>
+<span class="text-on-surface-variant text-xs">同比</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="panel p-6 flex flex-col justify-between h-32 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="text-label-sm font-label text-on-surface-variant uppercase tracking-widest z-10">ARP值</span>
+<div class="text-[32px] font-data-num font-bold text-on-surface leading-none z-10">¥38.50</div>
+<div class="flex justify-between items-end w-full z-10">
+<div class="flex items-center gap-2 text-sm">
+<span class="text-success flex items-center font-data-num text-xs"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 3.2%</span>
+<span class="text-on-surface-variant text-xs">同比</span>
+</div>
+<span class="text-on-surface-variant text-[10px]">单用户平均收入</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="panel p-6 flex flex-col justify-between h-32 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="text-label-sm font-label text-on-surface-variant uppercase tracking-widest z-10">总用户数</span>
+<div class="text-[32px] font-data-num font-bold text-on-surface leading-none z-10">86,420</div>
+<div class="flex items-center gap-2 text-sm z-10">
+<span class="text-success flex items-center font-data-num text-xs"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 8.7%</span>
+<span class="text-on-surface-variant text-xs">同比</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="panel p-6 flex flex-col justify-between h-32 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="text-label-sm font-label text-on-surface-variant uppercase tracking-widest z-10">总转化率</span>
+<div class="text-[32px] font-data-num font-bold text-on-surface leading-none z-10">4.8%</div>
+<div class="flex items-center gap-2 text-sm z-10">
+<span class="text-error flex items-center font-data-num text-xs"><span class="material-symbols-outlined text-[14px]">arrow_downward</span> 0.3%</span>
+<span class="text-on-surface-variant text-xs">同比</span>
+</div>
+</div>
+</div>
+<!-- FUNNEL PANEL -->
+<div class="panel p-6 flex flex-col gap-6">
+<div class="flex justify-between items-center border-b border-outline-variant pb-4">
+<h2 class="text-label-sm font-label text-on-surface-variant uppercase tracking-widest">转化漏斗</h2>
+<div class="flex gap-4 text-sm font-label">
+<span class="text-primary border-b border-primary pb-1 cursor-pointer">商城位</span>
+<span class="text-on-surface-variant hover:text-on-surface cursor-pointer">推荐位</span>
+<span class="text-on-surface-variant hover:text-on-surface cursor-pointer">活动位</span>
+<span class="text-on-surface-variant hover:text-on-surface cursor-pointer">汇总</span>
+</div>
+</div>
+<div class="relative py-8 flex justify-between items-center h-48 chart-grid rounded-lg border border-outline-variant px-8">
+<!-- Stage 1 -->
+<div class="flex flex-col items-center z-10">
+<div class="h-24 w-12 bg-primary/20 border border-primary rounded-t-lg relative flex items-end justify-center pb-2">
+<div class="w-full bg-primary h-full absolute bottom-0 left-0 rounded-t-lg opacity-40"></div>
+</div>
+<span class="mt-4 text-on-surface-variant text-sm">点击</span>
+<span class="font-data-num text-primary font-bold glow-text-sm">128,500</span>
+</div>
+<!-- Inter 1 -->
+<div class="flex flex-col items-center justify-center relative -top-6">
+<div class="h-px w-24 bg-outline-variant absolute top-1/2 -z-10"></div>
+<span class="text-xs font-data-num text-on-surface-variant bg-surface-container px-2 py-1 rounded border border-outline-variant">↓ 72.3%</span>
+</div>
+<!-- Stage 2 -->
+<div class="flex flex-col items-center z-10">
+<div class="h-20 w-12 bg-secondary/20 border border-secondary rounded-t-lg relative flex items-end justify-center pb-2">
+<div class="w-full bg-secondary h-full absolute bottom-0 left-0 rounded-t-lg opacity-40"></div>
+</div>
+<span class="mt-4 text-on-surface-variant text-sm">曝光</span>
+<span class="font-data-num text-secondary font-bold">92,800</span>
+</div>
+<!-- Inter 2 -->
+<div class="flex flex-col items-center justify-center relative -top-6">
+<div class="h-px w-24 bg-outline-variant absolute top-1/2 -z-10"></div>
+<span class="text-xs font-data-num text-on-surface-variant bg-surface-container px-2 py-1 rounded border border-outline-variant">↓ 45.8%</span>
+</div>
+<!-- Stage 3 -->
+<div class="flex flex-col items-center z-10">
+<div class="h-12 w-12 bg-tertiary/20 border border-tertiary rounded-t-lg relative flex items-end justify-center pb-2">
+<div class="w-full bg-tertiary h-full absolute bottom-0 left-0 rounded-t-lg opacity-40"></div>
+</div>
+<span class="mt-4 text-on-surface-variant text-sm">支付</span>
+<span class="font-data-num text-tertiary font-bold">42,500</span>
+</div>
+<!-- Inter 3 -->
+<div class="flex flex-col items-center justify-center relative -top-6">
+<div class="h-px w-24 bg-outline-variant absolute top-1/2 -z-10"></div>
+<span class="text-xs font-data-num text-on-surface-variant bg-surface-container px-2 py-1 rounded border border-outline-variant">↓ 86.2%</span>
+</div>
+<!-- Stage 4 -->
+<div class="flex flex-col items-center z-10">
+<div class="h-8 w-12 bg-success/20 border border-success rounded-t-lg relative flex items-end justify-center pb-2">
+<div class="w-full bg-success h-full absolute bottom-0 left-0 rounded-t-lg opacity-40"></div>
+</div>
+<span class="mt-4 text-on-surface-variant text-sm">转化</span>
+<span class="font-data-num text-success font-bold">36,620</span>
+</div>
+</div>
+<div class="flex justify-between items-center bg-surface-container-high rounded-lg p-3 px-4 border border-outline-variant">
+<span class="text-sm text-on-surface">整体转化率 <span class="font-data-num font-bold ml-2">28.5%</span></span>
+<span class="text-sm text-on-surface-variant flex items-center gap-2">环比 <span class="text-success font-data-num text-xs flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 1.2%</span></span>
+</div>
+</div>
+<!-- BOTTOM PANELS -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Bar Chart Vertical -->
+<div class="panel p-6 flex flex-col gap-4 min-h-[300px]">
+<h2 class="text-label-sm font-label text-on-surface-variant uppercase tracking-widest">运营位收入排行</h2>
+<div class="flex-1 flex items-end justify-around pb-6 pt-4 chart-grid border-b border-l border-outline-variant relative px-4">
+<div class="flex flex-col items-center gap-2 relative group w-1/3">
+<div class="absolute -top-8 text-primary font-data-num text-sm glow-text-sm opacity-0 group-hover:opacity-100 transition-opacity">¥5.2M</div>
+<div class="w-10 h-32 bg-gradient-to-t from-primary/10 to-primary/40 border border-primary/50 rounded-t-lg relative">
+<div class="absolute top-0 w-full h-1 bg-primary glow-bg rounded-t-lg"></div>
+</div>
+<span class="text-xs text-on-surface mt-2">商城位</span>
+</div>
+<div class="flex flex-col items-center gap-2 relative group w-1/3">
+<div class="absolute -top-8 text-secondary font-data-num text-sm opacity-0 group-hover:opacity-100 transition-opacity">¥3.8M</div>
+<div class="w-10 h-24 bg-gradient-to-t from-secondary/10 to-secondary/40 border border-secondary/50 rounded-t-lg relative">
+<div class="absolute top-0 w-full h-1 bg-secondary rounded-t-lg"></div>
+</div>
+<span class="text-xs text-on-surface mt-2">推荐位</span>
+</div>
+<div class="flex flex-col items-center gap-2 relative group w-1/3">
+<div class="absolute -top-8 text-tertiary font-data-num text-sm opacity-0 group-hover:opacity-100 transition-opacity">¥2.1M</div>
+<div class="w-10 h-16 bg-gradient-to-t from-tertiary/10 to-tertiary/40 border border-tertiary/50 rounded-t-lg relative">
+<div class="absolute top-0 w-full h-1 bg-tertiary rounded-t-lg"></div>
+</div>
+<span class="text-xs text-on-surface mt-2">活动位</span>
+</div>
+</div>
+</div>
+<!-- Bar Chart Horizontal -->
+<div class="panel p-6 flex flex-col gap-4 min-h-[300px]">
+<h2 class="text-label-sm font-label text-on-surface-variant uppercase tracking-widest">运营位转化率对比</h2>
+<div class="flex-1 flex flex-col justify-center gap-6 py-4">
+<div class="flex flex-col gap-1 w-full">
+<div class="flex justify-between text-xs text-on-surface">
+<span>商城位</span>
+<span class="font-data-num text-primary">5.2%</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[52%] relative glow-bg"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1 w-full">
+<div class="flex justify-between text-xs text-on-surface">
+<span>推荐位</span>
+<span class="font-data-num text-secondary">3.1%</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[31%] relative"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1 w-full">
+<div class="flex justify-between text-xs text-on-surface">
+<span>活动位</span>
+<span class="font-data-num text-tertiary">2.4%</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[24%] relative"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN (4-col) -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<!-- Donut Chart -->
+<div class="panel p-6 flex flex-col items-center gap-6">
+<div class="w-full flex justify-start">
+<h2 class="text-label-sm font-label text-on-surface-variant uppercase tracking-widest">区域收入占比</h2>
+</div>
+<div class="relative w-48 h-48 flex items-center justify-center">
+<!-- Placeholder for Donut SVG -->
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="rgba(255,255,255,0.06)" stroke-width="12"></circle>
+<!-- 亚太 8% -->
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="#FFB74D" stroke-dasharray="251.2" stroke-dashoffset="231.1" stroke-linecap="round" stroke-width="12"></circle>
+<!-- 欧洲 12% (starts at 8%) -->
+<circle class="origin-center rotate-[28.8deg]" cx="50" cy="50" fill="transparent" r="40" stroke="#7000FF" stroke-dasharray="251.2" stroke-dashoffset="221.05" stroke-linecap="round" stroke-width="12"></circle>
+<!-- 北美 18% (starts at 20%) -->
+<circle class="origin-center rotate-[72deg]" cx="50" cy="50" fill="transparent" r="40" stroke="#3E63DD" stroke-dasharray="251.2" stroke-dashoffset="205.9" stroke-linecap="round" stroke-width="12"></circle>
+<!-- 国内 62% (starts at 38%) -->
+<circle class="origin-center rotate-[136.8deg]" cx="50" cy="50" fill="transparent" r="40" stroke="#00F2FF" stroke-dasharray="251.2" stroke-dashoffset="95.45" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="text-[20px] font-data-num font-bold text-primary glow-text leading-none">¥12.8M</span>
+</div>
+</div>
+<div class="w-full grid grid-cols-2 gap-4 text-xs">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary glow-bg"></div>
+<span class="text-on-surface">国内 <span class="font-data-num text-primary ml-1">62%</span></span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<span class="text-on-surface">北美 <span class="font-data-num text-secondary ml-1">18%</span></span>
+<span class="text-[8px] font-label px-1 rounded sim-tag">SIM</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span class="text-on-surface">欧洲 <span class="font-data-num text-tertiary ml-1">12%</span></span>
+<span class="text-[8px] font-label px-1 rounded sim-tag">SIM</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-warning"></div>
+<span class="text-on-surface">亚太 <span class="font-data-num text-warning ml-1">8%</span></span>
+<span class="text-[8px] font-label px-1 rounded sim-tag">SIM</span>
+</div>
+</div>
+</div>
+<!-- Compact Table -->
+<div class="panel p-6 flex flex-col gap-4">
+<h2 class="text-label-sm font-label text-on-surface-variant uppercase tracking-widest">区域指标对比</h2>
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left text-xs">
+<thead>
+<tr class="text-on-surface-variant font-label border-b border-outline-variant">
+<th class="pb-2 font-normal">区域</th>
+<th class="pb-2 font-normal text-right">收入</th>
+<th class="pb-2 font-normal text-right">用户数</th>
+<th class="pb-2 font-normal text-right">转化率</th>
+</tr>
+</thead>
+<tbody class="font-data-num">
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-highest/30 transition-colors">
+<td class="py-2 text-on-surface font-body">国内</td>
+<td class="py-2 text-right relative">
+<div class="absolute inset-y-1 right-0 bg-primary/10 w-[80%] rounded z-0"></div>
+<span class="relative z-10 text-primary">¥7.9M</span>
+</td>
+<td class="py-2 text-right">52,400</td>
+<td class="py-2 text-right text-success">5.1%</td>
+</tr>
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-highest/30 transition-colors">
+<td class="py-2 text-on-surface font-body flex items-center gap-1">北美 <span class="text-[8px] font-label px-1 rounded sim-tag">SIM</span></td>
+<td class="py-2 text-right relative">
+<div class="absolute inset-y-1 right-0 bg-secondary/10 w-[40%] rounded z-0"></div>
+<span class="relative z-10 text-secondary">¥2.3M</span>
+</td>
+<td class="py-2 text-right">15,200</td>
+<td class="py-2 text-right text-on-surface">4.2%</td>
+</tr>
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-highest/30 transition-colors">
+<td class="py-2 text-on-surface font-body flex items-center gap-1">欧洲 <span class="text-[8px] font-label px-1 rounded sim-tag">SIM</span></td>
+<td class="py-2 text-right relative">
+<div class="absolute inset-y-1 right-0 bg-tertiary/10 w-[20%] rounded z-0"></div>
+<span class="relative z-10 text-tertiary">¥1.5M</span>
+</td>
+<td class="py-2 text-right">10,800</td>
+<td class="py-2 text-right text-error">3.8%</td>
+</tr>
+<tr class="hover:bg-surface-container-highest/30 transition-colors">
+<td class="py-2 text-on-surface font-body flex items-center gap-1">亚太 <span class="text-[8px] font-label px-1 rounded sim-tag">SIM</span></td>
+<td class="py-2 text-right relative">
+<div class="absolute inset-y-1 right-0 bg-warning/10 w-[15%] rounded z-0"></div>
+<span class="relative z-10 text-warning">¥1.0M</span>
+</td>
+<td class="py-2 text-right">8,020</td>
+<td class="py-2 text-right text-on-surface">4.0%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Service Rankings -->
+<div class="panel p-6 flex flex-col gap-4">
+<h2 class="text-label-sm font-label text-on-surface-variant uppercase tracking-widest">服务营收排行</h2>
+<div class="flex flex-col gap-4 mt-2">
+<div class="flex items-center gap-3">
+<span class="font-data-num text-primary font-bold text-sm w-4">1</span>
+<div class="flex flex-col flex-1 gap-1">
+<div class="flex justify-between text-xs text-on-surface">
+<span>云存储</span>
+<span class="font-data-num text-primary glow-text-sm">¥6.2M</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[85%] relative glow-bg"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-data-num text-secondary font-bold text-sm w-4">2</span>
+<div class="flex flex-col flex-1 gap-1">
+<div class="flex justify-between text-xs text-on-surface">
+<span>全能AI</span>
+<span class="font-data-num text-secondary">¥3.1M</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[45%] relative"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-data-num text-tertiary font-bold text-sm w-4">3</span>
+<div class="flex flex-col flex-1 gap-1">
+<div class="flex justify-between text-xs text-on-surface">
+<span>时光相册</span>
+<span class="font-data-num text-tertiary">¥1.5M</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[20%] relative"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Line Chart -->
+<div class="panel p-6 flex flex-col gap-4 flex-1">
+<h2 class="text-label-sm font-label text-on-surface-variant uppercase tracking-widest">服务收入趋势</h2>
+<div class="w-full flex-1 chart-grid border-l border-b border-outline-variant relative mt-2 min-h-[120px]">
+<!-- Mock Line Chart SVG -->
+<svg class="absolute inset-0 w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 100 40">
+<path class="glow-bg" d="M 0 35 Q 20 15 40 25 T 80 10 T 100 5" fill="none" stroke="#00F2FF" stroke-width="1.5" style="filter: drop-shadow(0 0 4px rgba(0,242,255,0.4));"></path>
+<path d="M 0 38 Q 25 30 50 35 T 80 20 T 100 15" fill="none" stroke="#3E63DD" stroke-dasharray="2 2" stroke-width="1.5"></path>
+<path d="M 0 39 Q 30 38 60 36 T 90 30 T 100 28" fill="none" stroke="#7000FF" stroke-dasharray="1 3" stroke-width="1.5"></path>
+<!-- Data Points -->
+<circle cx="80" cy="10" fill="#00F2FF" r="1.5"></circle>
+<circle cx="80" cy="20" fill="#3E63DD" r="1.5"></circle>
+</svg>
+</div>
+</div>
+</div>
+</main>
+</body></html>

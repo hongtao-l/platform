@@ -1140,6 +1140,19 @@
 
         <div class="algo-service-section">
           <el-table :data="platformServices" stripe>
+            <el-table-column label="算法名称" min-width="160">
+              <template #default="{ row }">
+                <template v-if="row.algoNames && row.algoNames.length">
+                  <el-tag
+                    v-for="name in row.algoNames"
+                    :key="name"
+                    size="small"
+                    style="margin-right:4px;margin-bottom:2px"
+                  >{{ name }}</el-tag>
+                </template>
+                <span v-else class="text-muted">—</span>
+              </template>
+            </el-table-column>
             <el-table-column label="服务ID" width="120" align="center">
               <template #default="{ row }">
                 <span :class="{ 'cell-service-id': true, 'text-muted': row.serviceId === '-' }">{{ row.serviceId }}</span>
@@ -1882,7 +1895,7 @@ import { ref, reactive, computed, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Plus, ArrowLeft, ArrowRight, Edit, Switch, Check, Setting, QuestionFilled, Delete, Search, InfoFilled, CircleCheck } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { listAlgorithms, allEvents, getCapabilitiesByIds, getModules, getAllCapabilities, getAlgorithmServiceId, getAlgorithmEvents, getAllAlgorithmServices } from '@/views/iot/thing-model/data'
+import { listAlgorithms, listServices, allEvents, getCapabilitiesByIds, getModules, getAllCapabilities, getAlgorithmServiceId, getAlgorithmEvents, getAllAlgorithmServices } from '@/views/iot/thing-model/data'
 
 const route = useRoute()
 const router = useRouter()
@@ -2770,19 +2783,34 @@ function algoSpanMethod({ columnIndex, row }) {
   return { rowspan: 1, colspan: 1 }
 }
 
-// ===== 步骤3: 平台服务（合并单元格）=====
+// ===== 步骤3: 平台服务 =====
 const platformServices = ref([])
+
+function parseI18nName(jsonStr) {
+  try { return JSON.parse(jsonStr || '{}')['1'] || '' } catch { return '' }
+}
+
+function getAlgoNamesForService(serviceId) {
+  const svcs = listServices().data?.list || []
+  const svc = svcs.find(s => s.serviceId === serviceId)
+  if (!svc || !svc.algorithmIds?.length) return []
+  const algos = listAlgorithms({ page: 1, pageSize: 999 }).data?.list || []
+  return svc.algorithmIds
+    .map(aid => algos.find(a => a.algorithmId === aid))
+    .filter(Boolean)
+    .map(a => parseI18nName(a.algorithmName) || a.algorithmId)
+}
 
 function loadPlatformServices() {
   const rows = []
   cloudRecordServices.value.forEach(svc => {
-    rows.push({ serviceId: svc.serviceId, serviceName: svc.name, descr: svc.descr || '', supported: svc.supported })
+    rows.push({ serviceId: svc.serviceId, serviceName: svc.name, descr: svc.descr || '', supported: svc.supported, algoNames: getAlgoNamesForService(svc.serviceId) })
   })
   cloudSnapshotServices.value.forEach(svc => {
-    rows.push({ serviceId: svc.serviceId, serviceName: svc.name, descr: svc.descr || '', supported: svc.supported })
+    rows.push({ serviceId: svc.serviceId, serviceName: svc.name, descr: svc.descr || '', supported: svc.supported, algoNames: getAlgoNamesForService(svc.serviceId) })
   })
   oldAlgoList.value.forEach(item => {
-    rows.push({ serviceId: item.serviceId, serviceName: item.name, descr: item.descr || '', supported: item.supported })
+    rows.push({ serviceId: item.serviceId, serviceName: item.name, descr: item.descr || '', supported: item.supported, algoNames: getAlgoNamesForService(item.serviceId) })
   })
   platformServices.value = rows
 }

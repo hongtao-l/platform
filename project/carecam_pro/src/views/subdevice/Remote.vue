@@ -52,8 +52,8 @@
         </div>
       </div>
 
-      <!-- 操作日志 -->
-      <div class="section-card">
+      <!-- 操作日志：前端暂隐藏，放开改 featureFlags.records -->
+      <div v-if="subdeviceFeatures.records" class="section-card">
         <div class="section-title">
           <van-icon name="notes-o" size="16" color="#7C3AED" />
           <span>操作记录</span>
@@ -82,6 +82,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { subdeviceFeatures } from '@/config/featureFlags'
 const router = useRouter()
 
 const paired = ref(true)

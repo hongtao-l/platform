@@ -174,8 +174,6 @@
 import { ref, reactive, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Folder, Edit } from '@element-plus/icons-vue'
-import { listAlgorithms, listServices } from '@/views/iot/thing-model/data'
-
 // ===== 分类管理 =====
 const activeCategory = ref(1)
 const categoryList = ref([
