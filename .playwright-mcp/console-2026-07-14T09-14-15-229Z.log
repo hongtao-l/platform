@@ -1,0 +1,95 @@
+[     210ms] [WARNING] document.domain mutation is ignored because the surrounding agent cluster is origin-keyed. @ https://bailian.console.aliyun.com/cn-beijing?tab=app:140
+[     211ms] [LOG] ██╗  ██╗██╗                                     
+██║  ██║██║                                     
+███████║██║                                     
+██╔══██║██║                                     
+██║  ██║██║▄█╗                                  
+╚═╝  ╚═╝╚═╝╚═╝                                  
+                                                
+██████╗  █████╗ ██╗██╗     ██╗ █████╗ ███╗   ██╗
+██╔══██╗██╔══██╗██║██║     ██║██╔══██╗████╗  ██║
+██████╔╝███████║██║██║     ██║███████║██╔██╗ ██║
+██╔══██╗██╔══██║██║██║     ██║██╔══██║██║╚██╗██║
+██████╔╝██║  ██║██║███████╗██║██║  ██║██║ ╚████║
+╚═════╝ ╚═╝  ╚═╝╚═╝╚══════╝╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
+                                                 @ https://g.alicdn.com/isipfe/efm-fe/3.4.232/noopconsole.js:0
+[    1974ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://g.alicdn.com/isipfe/efm-fe/3.2.227/lato-medium.woff2 @ https://g.alicdn.com/isipfe/efm-fe/3.5.596/assets/MenuItem-B_U_NTmT.js:0
+[    1974ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://g.alicdn.com/isipfe/efm-fe/3.2.227/lato-regular.woff2 @ https://g.alicdn.com/isipfe/efm-fe/3.5.596/assets/MenuItem-B_U_NTmT.js:0
+[    1974ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://at.alicdn.com/t/a/font_4647901_sizbgykhpu.woff2?t=1760341323071 @ https://g.alicdn.com/isipfe/efm-fe/3.5.596/assets/MenuItem-B_U_NTmT.js:0
+[    2466ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://at.alicdn.com/t/a/font_1256165_qqkmcyr3o6.woff2 @ :3
+[   10261ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://at.alicdn.com/t/c/font_4700424_4h2ezfk91jk.woff2 @ https://g.alicdn.com/dawn/fe-fast-login/0.0.50/index.js:0
+[   10643ms] [WARNING] var __dworker_1784020465871__={};
+__dworker_1784020465871__.default=function(e,t){for(var n in t){var r=t[n],o=!1;if("[object Array]"===Object.prototype.toString.call(r))for(var i=0;i<r.length;i++){var a=r[i];for(var u in a)if("customInfo"!==u){var c=a[u];switch(Object.prototype.toString.call(c)){case"[object RegExp]":o=c.test(e[u]);break;case"[object String]":o=c===e[u];break;default:o=e[u]===c}if(!o)break}if(o)return[n,a.customInfo]}}return[]};
+
+(function M(e,t,n){e.addEventListener("message",(function(r){var o=r.data;try{var i=o.id;if("RPC"!==o.type||null==i)return;if(o.method){var a=t[o.method];null==a?e.postMessage({type:"RPC",id:i,error:"NO_SUCH_METHOD"}):Promise.resolve().then((function(){return a.apply(null,o.params)})).then((function(t){e.postMessage({type:"RPC",id:i,result:t})})).catch((function(t){e.postMessage({type:"RPC",id:i,error:""+t})}))}else{var u=n[i];if(null==u)throw Error("Unknown callback ".concat(i));delete n[i],o.error?u[1](Error(o.error)):u[0](o.result)}}catch(e){console.error("worker addEventListener error",e)}}))})(self,__dworker_1784020465871__,{}); @ https://o.alicdn.com/dawn/dawn-tracker-aliyun/index.umd.js:0
+[   11187ms] [WARNING] var __dworker_1784020466415__={};
+__dworker_1784020466415__.default=function(e,t){for(var n in t){var r=t[n],o=!1;if("[object Array]"===Object.prototype.toString.call(r))for(var i=0;i<r.length;i++){var a=r[i];for(var u in a)if("customInfo"!==u){var c=a[u];switch(Object.prototype.toString.call(c)){case"[object RegExp]":o=c.test(e[u]);break;case"[object String]":o=c===e[u];break;default:o=e[u]===c}if(!o)break}if(o)return[n,a.customInfo]}}return[]};
+
+(function M(e,t,n){e.addEventListener("message",(function(r){var o=r.data;try{var i=o.id;if("RPC"!==o.type||null==i)return;if(o.method){var a=t[o.method];null==a?e.postMessage({type:"RPC",id:i,error:"NO_SUCH_METHOD"}):Promise.resolve().then((function(){return a.apply(null,o.params)})).then((function(t){e.postMessage({type:"RPC",id:i,result:t})})).catch((function(t){e.postMessage({type:"RPC",id:i,error:""+t})}))}else{var u=n[i];if(null==u)throw Error("Unknown callback ".concat(i));delete n[i],o.error?u[1](Error(o.error)):u[0](o.result)}}catch(e){console.error("worker addEventListener error",e)}}))})(self,__dworker_1784020466415__,{}); @ https://o.alicdn.com/dawn/dawn-tracker-aliyun/index.umd.js:0
+[   11225ms] [LOG] goldlogReport page_show EXP {refererHost: undefined, refererHostValid: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   11239ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   11283ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://passport.aliyun.com/havanaone/login/login.htm?lang=zh_CN&appName=aliyun&appEntrance=aliyun_pc_pwd&styleType=vertical&bizParams=&notLoadSsoView=true&notKeepLogin=true&isMobile=false&targetId=alibaba-login-iframe&redirectType=iframeRedirect&returnUrl=https%3A%2F%2Faccount.aliyun.com%2Flogin%2Flogin_aliyun%3FresType%3Dhtml%26boxEntrance%3Dmini%26loginScene%3DfastLogin%26oauth_callback%3Dhttps%3A%2F%2Fbailian.console.aliyun.com%2Fcn-beijing%3Ftab%3Dapp%23%2Fapp-center%26log_channel%3Ddialog%26log_platform%3Dpc%26login_log_entrance%3Dofficial%26login_method%3Dpwd_login%26log_biz%3Daliyun%26bizPassParams%3D%257B%2522tenantName%2522%253A%2522website%2522%252C%2522isDialogReg%2522%253Atrue%252C%2522action%2522%253A%2522login%2522%257D&cssUrl=&regUrl=https://account.aliyun.com/register/qr_register.htm?oauth_callback=https%3A%2F%2Fbailian.console.aliyun.com%2Fcn-beijing%3Ftab%3Dapp%23%2Fapp-center&bizPassParams=%7B%22tenantName%22%3A%22website%22%2C%22isDialogReg%22%3Atrue%2C%22action%22%3A%22login%22%7D&rnd=0.748397564799443:0
+[   11316ms] [LOG] Tue Jul 14 2026 17:14:26 GMT+0800 (中国标准时间) @ https://g.alicdn.com/AWSC/et/1.83.41/et_f.js:1
+[   11391ms] [ERROR] Permissions policy violation: accelerometer is not allowed in this document. @ https://g.alicdn.com/AWSC/fireyejs/1.231.69/fireyejs.js:0
+[   11391ms] [WARNING] The deviceorientation events are blocked by permissions policy. See https://github.com/w3c/webappsec-permissions-policy/blob/master/features.md#sensor-features @ https://g.alicdn.com/AWSC/fireyejs/1.231.69/fireyejs.js:0
+[   11405ms] [WARNING] var __dworker_1784020466633__={};
+__dworker_1784020466633__.default=function(e,t){for(var n in t){var r=t[n],o=!1;if("[object Array]"===Object.prototype.toString.call(r))for(var i=0;i<r.length;i++){var a=r[i];for(var u in a)if("customInfo"!==u){var c=a[u];switch(Object.prototype.toString.call(c)){case"[object RegExp]":o=c.test(e[u]);break;case"[object String]":o=c===e[u];break;default:o=e[u]===c}if(!o)break}if(o)return[n,a.customInfo]}}return[]};
+
+(function M(e,t,n){e.addEventListener("message",(function(r){var o=r.data;try{var i=o.id;if("RPC"!==o.type||null==i)return;if(o.method){var a=t[o.method];null==a?e.postMessage({type:"RPC",id:i,error:"NO_SUCH_METHOD"}):Promise.resolve().then((function(){return a.apply(null,o.params)})).then((function(t){e.postMessage({type:"RPC",id:i,result:t})})).catch((function(t){e.postMessage({type:"RPC",id:i,error:""+t})}))}else{var u=n[i];if(null==u)throw Error("Unknown callback ".concat(i));delete n[i],o.error?u[1](Error(o.error)):u[0](o.result)}}catch(e){console.error("worker addEventListener error",e)}}))})(self,__dworker_1784020466633__,{}); @ https://o.alicdn.com/dawn/dawn-tracker-aliyun/index.umd.js:0
+[   11472ms] [LOG] null @ https://g.alicdn.com/aliyun-havana/fe-account-login-reg/0.0.17/umi.js:17
+[   11510ms] [LOG] Tue Jul 14 2026 17:14:26 GMT+0800 (中国标准时间) @ https://g.alicdn.com/AWSC/et/1.83.41/et_f.js:1
+[   11531ms] [LOG] null @ https://g.alicdn.com/aliyun-havana/fe-account-login-reg/0.0.17/umi.js:17
+[   11552ms] [WARNING] var __dworker_1784020466780__={};
+__dworker_1784020466780__.default=function(e,t){for(var n in t){var r=t[n],o=!1;if("[object Array]"===Object.prototype.toString.call(r))for(var i=0;i<r.length;i++){var a=r[i];for(var u in a)if("customInfo"!==u){var c=a[u];switch(Object.prototype.toString.call(c)){case"[object RegExp]":o=c.test(e[u]);break;case"[object String]":o=c===e[u];break;default:o=e[u]===c}if(!o)break}if(o)return[n,a.customInfo]}}return[]};
+
+(function M(e,t,n){e.addEventListener("message",(function(r){var o=r.data;try{var i=o.id;if("RPC"!==o.type||null==i)return;if(o.method){var a=t[o.method];null==a?e.postMessage({type:"RPC",id:i,error:"NO_SUCH_METHOD"}):Promise.resolve().then((function(){return a.apply(null,o.params)})).then((function(t){e.postMessage({type:"RPC",id:i,result:t})})).catch((function(t){e.postMessage({type:"RPC",id:i,error:""+t})}))}else{var u=n[i];if(null==u)throw Error("Unknown callback ".concat(i));delete n[i],o.error?u[1](Error(o.error)):u[0](o.result)}}catch(e){console.error("worker addEventListener error",e)}}))})(self,__dworker_1784020466780__,{}); @ https://o.alicdn.com/dawn/dawn-tracker-aliyun/index.umd.js:0
+[   11560ms] [ERROR] Permissions policy violation: accelerometer is not allowed in this document. @ https://g.alicdn.com/AWSC/fireyejs/1.231.69/fireyejs.js:0
+[   11560ms] [WARNING] The deviceorientation events are blocked by permissions policy. See https://github.com/w3c/webappsec-permissions-policy/blob/master/features.md#sensor-features @ https://g.alicdn.com/AWSC/fireyejs/1.231.69/fireyejs.js:0
+[   11591ms] [LOG] goldlogReport page_show EXP {refererHost: undefined, refererHostValid: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   11604ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   11604ms] [LOG] goldlogReport passkey.page.view CLK undefined @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   11651ms] [LOG] Tue Jul 14 2026 17:14:26 GMT+0800 (中国标准时间) @ https://g.alicdn.com/AWSC/et/1.83.41/et_f.js:1
+[   11661ms] [ERROR] Permissions policy violation: accelerometer is not allowed in this document. @ https://g.alicdn.com/AWSC/fireyejs/1.231.69/fireyejs.js:0
+[   11661ms] [WARNING] The deviceorientation events are blocked by permissions policy. See https://github.com/w3c/webappsec-permissions-policy/blob/master/features.md#sensor-features @ https://g.alicdn.com/AWSC/fireyejs/1.231.69/fireyejs.js:0
+[   11942ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   11942ms] [LOG] resize {action: resizeIframe, height: 168, width: 400} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   11942ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   12305ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   12306ms] [LOG] resize {action: resizeIframe, height: 168, width: 400} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   12306ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   12387ms] [LOG] Tue Jul 14 2026 17:14:27 GMT+0800 (中国标准时间) @ https://g.alicdn.com/AWSC/et/1.83.41/et_f.js:1
+[   16656ms] [WARNING] The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet) @ https://g.alicdn.com/AWSC/fireyejs/1.231.69/fireyejs.js:0
+[   16658ms] [LOG] goldlogReport pwd.loginid.focus CLK undefined @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   23727ms] [LOG] goldlogReport pwd.loginid.blur CLK {value: qjustlht} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   23728ms] [LOG] goldlogReport pwd.password.focus CLK undefined @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   29808ms] [LOG] goldlogReport pwd.password.blur CLK {inputed: true} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   29929ms] [LOG] goldlogReport submit_btn CLK undefined @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   30270ms] [LOG] goldlogReport login_result CLK {type: undefined, titleMsg: 该账号不存在, redirect: false, iframeRedirect: false, parentRedirect: false} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   30273ms] [LOG] resize {action: resizeIframe, height: 204, width: 400} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   30273ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   30276ms] [LOG] resize {action: resizeIframe, height: 204, width: 400} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   30276ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   35960ms] [LOG] goldlogReport pwd.loginid.focus CLK undefined @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   36465ms] [LOG] resize {action: resizeIframe, height: 168, width: 400} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   36466ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   37379ms] [LOG] goldlogReport pwd.loginid.blur CLK {value: qjustlhta} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   37497ms] [LOG] goldlogReport submit_btn CLK undefined @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   38183ms] [LOG] goldlogReport login_result CLK {type: undefined, titleMsg: undefined, redirect: false, iframeRedirect: false, parentRedirect: false} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   38183ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   38184ms] [LOG] resize {action: resizeIframe, height: 168, width: 400} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   38184ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[   42973ms] [WARNING] document.domain mutation is ignored because the surrounding agent cluster is origin-keyed. @ https://bailian.console.aliyun.com/cn-beijing?tab=app:167
+[   42973ms] [LOG] ██╗  ██╗██╗                                     
+██║  ██║██║                                     
+███████║██║                                     
+██╔══██║██║                                     
+██║  ██║██║▄█╗                                  
+╚═╝  ╚═╝╚═╝╚═╝                                  
+                                                
+██████╗  █████╗ ██╗██╗     ██╗ █████╗ ███╗   ██╗
+██╔══██╗██╔══██╗██║██║     ██║██╔══██╗████╗  ██║
+██████╔╝███████║██║██║     ██║███████║██╔██╗ ██║
+██╔══██╗██╔══██║██║██║     ██║██╔══██║██║╚██╗██║
+██████╔╝██║  ██║██║███████╗██║██║  ██║██║ ╚████║
+╚═════╝ ╚═╝  ╚═╝╚═╝╚══════╝╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
+                                                 @ https://g.alicdn.com/isipfe/efm-fe/3.4.232/noopconsole.js:0

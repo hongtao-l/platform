@@ -1,0 +1,212 @@
+- generic [active] [ref=f36e1]:
+  - generic [ref=f36e6]:
+    - generic [ref=f36e7]:
+      - generic [ref=f36e8]:
+        - button "展开产品面板" [ref=f36e12]:
+          - button [ref=f36e13] [cursor=pointer]
+        - img "logo" [ref=f36e18] [cursor=pointer]
+      - generic [ref=f36e19]:
+        - generic [ref=f36e20] [cursor=pointer]: 模型
+        - generic [ref=f36e22] [cursor=pointer]: 应用
+        - generic [ref=f36e24] [cursor=pointer]:
+          - generic [ref=f36e25]: 订阅
+          - generic [ref=f36e26]: Token Plan
+        - generic [ref=f36e27] [cursor=pointer]: 体验
+        - generic [ref=f36e29] [cursor=pointer]: 文档
+        - generic [ref=f36e31] [cursor=pointer]: API 参考
+      - generic [ref=f36e33]:
+        - separator [ref=f36e36]
+        - generic [ref=f36e37]:
+          - generic [ref=f36e38] [cursor=pointer]:
+            - generic [ref=f36e39]: 华北2（北京）
+            - img "spark-down-line" [ref=f36e40]
+          - generic [ref=f36e44] [cursor=pointer]:
+            - img "spark-spaceManagement-line" [ref=f36e45]
+            - generic [ref=f36e48]: 默认业务空间
+            - img "spark-down-line" [ref=f36e49]
+        - img "spark-setting-line" [ref=f36e53]
+        - generic [ref=f36e59] [cursor=pointer]:
+          - generic [ref=f36e60]:
+            - generic "qjustlhta" [ref=f36e61]
+            - generic [ref=f36e62]: 主账号
+          - img "avatar" [ref=f36e63]
+    - generic [ref=f36e64]:
+      - generic [ref=f36e66]:
+        - generic [ref=f36e67]:
+          - generic [ref=f36e69]:
+            - button [ref=f36e70] [cursor=pointer]:
+              - img "spark-left-line" [ref=f36e72]
+            - generic [ref=f36e75]: Managed Agents
+          - generic [ref=f36e77]: 智能体平台
+          - generic [ref=f36e78] [cursor=pointer]:
+            - img "spark-doubleStar-line" [ref=f36e80]
+            - generic "快速开始" [ref=f36e83]
+          - generic [ref=f36e84] [cursor=pointer]:
+            - img "spark-agent-line" [ref=f36e86]
+            - generic "智能体" [ref=f36e90]
+          - generic [ref=f36e91] [cursor=pointer]:
+            - img "spark-E-commerceproduct-line" [ref=f36e93]
+            - generic "环境" [ref=f36e96]
+          - generic [ref=f36e97] [cursor=pointer]:
+            - generic [ref=f36e98]: 
+            - generic "凭证" [ref=f36e100]
+          - generic [ref=f36e101] [cursor=pointer]:
+            - img "spark-message-line" [ref=f36e103]
+            - generic "会话" [ref=f36e106]
+          - generic [ref=f36e107]: 资源
+          - generic [ref=f36e108] [cursor=pointer]:
+            - img "spark-fileCode-line" [ref=f36e110]
+            - generic "文件" [ref=f36e113]
+          - generic [ref=f36e114]: 扩展
+          - generic [ref=f36e115] [cursor=pointer]:
+            - img "spark-MCP-mcp-line" [ref=f36e117]
+            - generic "MCP" [ref=f36e120]
+          - generic "技能" [ref=f36e126] [cursor=pointer]
+        - generic [ref=f36e127]:
+          - generic [ref=f36e128] [cursor=pointer]:
+            - generic [ref=f36e129]: 
+            - generic "使用文档" [ref=f36e131]
+            - img "spark-right-line" [ref=f36e132]
+          - generic [ref=f36e135] [cursor=pointer]:
+            - generic [ref=f36e136]: 
+            - generic "API文档" [ref=f36e138]
+            - img "spark-right-line" [ref=f36e139]
+          - generic [ref=f36e142] [cursor=pointer]:
+            - img "spark-user-line" [ref=f36e144]
+            - generic "权限管理" [ref=f36e148]
+            - img "spark-right-line" [ref=f36e149]
+          - generic [ref=f36e152] [cursor=pointer]:
+            - img "spark-apiKey-line" [ref=f36e154]
+            - generic "API Key" [ref=f36e157]
+            - img "spark-right-line" [ref=f36e158]
+        - button [ref=f36e163] [cursor=pointer]:
+          - img "spark-operateLeft-line" [ref=f36e165]
+      - generic [ref=f36e540]:
+        - generic [ref=f36e541]:
+          - navigation [ref=f36e542]:
+            - list [ref=f36e543]:
+              - listitem [ref=f36e544]:
+                - generic [ref=f36e545]: 环境
+          - paragraph [ref=f36e547]: 配置运行时环境，提供企业级安全沙箱与自定义软件包，支持多会话复用。
+        - button "spark-plus-line 添加环境" [ref=f36e549] [cursor=pointer]:
+          - img "spark-plus-line" [ref=f36e551]
+          - generic [ref=f36e555]: 添加环境
+      - generic [ref=f36e178]:
+        - generic [ref=f36e179]:
+          - button [ref=f36e181] [cursor=pointer]:
+            - img "spark-fee-line" [ref=f36e183]
+          - button [ref=f36e186] [cursor=pointer]:
+            - img "spark-headset-line" [ref=f36e188]
+          - button [ref=f36e193] [cursor=pointer]:
+            - img "spark-document-line" [ref=f36e195]
+        - button [ref=f36e199] [cursor=pointer]:
+          - img "spark-right-line" [ref=f36e201]
+  - iframe [ref=f36e204]:
+    
+  - iframe [ref=f36e205]:
+    
+  - dialog "展开产品面板":
+    - navigation "产品与服务" [ref=f36e206]:
+      - generic [ref=f36e207]:
+        - generic "我的资源" [ref=f36e208] [cursor=pointer]:
+          - generic [ref=f36e209]:
+            - generic [ref=f36e210]: 
+            - generic [ref=f36e212]: 我的资源
+        - generic "访问和收藏" [ref=f36e213] [cursor=pointer]:
+          - generic [ref=f36e214]:
+            - generic [ref=f36e215]: 
+            - generic [ref=f36e217]: 访问和收藏
+        - generic "产品与服务" [ref=f36e218] [cursor=pointer]:
+          - generic [ref=f36e219]:
+            - generic [ref=f36e220]: 
+            - generic [ref=f36e222]: 产品与服务
+        - generic [ref=f36e224]:
+          - button "全部" [ref=f36e225] [cursor=pointer]
+          - button "人工智能与机器学习" [ref=f36e226] [cursor=pointer]
+          - button "计算" [ref=f36e227] [cursor=pointer]
+          - button "容器" [ref=f36e228] [cursor=pointer]
+          - button "存储" [ref=f36e229] [cursor=pointer]
+          - button "网络与CDN" [ref=f36e230] [cursor=pointer]
+          - button "安全" [ref=f36e231] [cursor=pointer]
+          - button "中间件" [ref=f36e232] [cursor=pointer]
+          - button "数据库" [ref=f36e233] [cursor=pointer]
+          - button "大数据计算" [ref=f36e234] [cursor=pointer]
+          - button "媒体服务" [ref=f36e235] [cursor=pointer]
+          - button "企业服务与云通信" [ref=f36e236] [cursor=pointer]
+          - button "域名与网站" [ref=f36e237] [cursor=pointer]
+          - button "终端用户计算" [ref=f36e238] [cursor=pointer]
+          - button "物联网" [ref=f36e239] [cursor=pointer]
+          - button "开发工具" [ref=f36e240] [cursor=pointer]
+          - button "迁移与运维管理" [ref=f36e241] [cursor=pointer]
+          - button "云市场" [ref=f36e242] [cursor=pointer]
+          - button "支持与服务" [ref=f36e243] [cursor=pointer]
+    - main "我的资源" [ref=f36e244]:
+      - generic [ref=f36e245]:
+        - generic [ref=f36e246]: 我的资源
+        - generic [ref=f36e254]:
+          - generic [ref=f36e255]:
+            - generic "计算" [ref=f36e256]:
+              - img "computing" [ref=f36e257]
+            - generic [ref=f36e260]:
+              - link "云服务器 ECS star-fill" [ref=f36e261] [cursor=pointer]:
+                - /url: //ecs.console.aliyun.com
+                - generic "云服务器 ECS" [ref=f36e263]
+                - img "star-fill" [ref=f36e265]
+              - link "2 密钥对" [ref=f36e269] [cursor=pointer]:
+                - /url: //ecs.console.aliyun.com/home
+                - generic [ref=f36e270]: "2"
+                - generic [ref=f36e271]: 密钥对
+          - generic [ref=f36e272]:
+            - generic "安全" [ref=f36e273]:
+              - img "security" [ref=f36e274]
+            - generic [ref=f36e277]:
+              - link "数字证书管理服务（原SSL证书） star-fill" [ref=f36e278] [cursor=pointer]:
+                - /url: //yundun.console.aliyun.com/?p=cas
+                - generic "数字证书管理服务（原SSL证书）" [ref=f36e280]
+                - img "star-fill" [ref=f36e282]
+              - generic [ref=f36e286] [cursor=pointer]:
+                - generic [ref=f36e287]: "-"
+                - img "help-line" [ref=f36e289]
+          - generic [ref=f36e292]:
+            - generic "域名与网站" [ref=f36e293]:
+              - img "doweb" [ref=f36e294]
+            - generic [ref=f36e296]:
+              - generic [ref=f36e297]:
+                - link "域名与网站 star-fill" [ref=f36e298] [cursor=pointer]:
+                  - /url: //dc.console.aliyun.com/next/index
+                  - generic "域名与网站" [ref=f36e300]
+                  - img "star-fill" [ref=f36e302]
+                - link "1 域名" [ref=f36e306] [cursor=pointer]:
+                  - /url: //dc.console.aliyun.com/next/index#/domain-list/all
+                  - generic [ref=f36e307]: "1"
+                  - generic [ref=f36e308]: 域名
+              - generic [ref=f36e309]:
+                - link "云解析DNS star-fill" [ref=f36e310] [cursor=pointer]:
+                  - /url: //dnsnext.console.aliyun.com/authoritative
+                  - generic "云解析DNS" [ref=f36e312]
+                  - img "star-fill" [ref=f36e314]
+                - link "1 域名" [ref=f36e318] [cursor=pointer]:
+                  - /url: //dnsnext.console.aliyun.com/authoritative
+                  - generic [ref=f36e319]: "1"
+                  - generic [ref=f36e320]: 域名
+          - generic [ref=f36e321]:
+            - generic "迁移与运维管理" [ref=f36e322]:
+              - img "migrationom" [ref=f36e323]
+            - generic [ref=f36e326]:
+              - link "访问控制 RAM star-fill" [ref=f36e327] [cursor=pointer]:
+                - /url: //ram.console.aliyun.com
+                - generic "访问控制 RAM" [ref=f36e329]
+                - img "star-fill" [ref=f36e331]
+              - link "5 角色" [ref=f36e335] [cursor=pointer]:
+                - /url: //ram.console.aliyun.com/roles
+                - generic [ref=f36e336]: "5"
+                - generic [ref=f36e337]: 角色
+      - text:                                                                                                                                                                                                                                                             
+      - button "收起产品面板" [ref=f36e339] [cursor=pointer]:
+        - generic [ref=f36e340]: 
+    - button "收起产品面板" [ref=f36e341]
+  - text:      
+  - iframe [ref=f36e342]:
+    
+  - iframe [ref=f36e343]:
+    

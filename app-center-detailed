@@ -1,0 +1,27 @@
+- generic [active] [ref=f24e1]:
+  - generic [ref=f24e6]:
+    - generic [ref=f24e7]:
+      - generic [ref=f24e8]
+      - generic [ref=f24e19]
+      - generic [ref=f24e33]
+    - generic [ref=f24e64]:
+      - generic [ref=f24e66]
+      - generic [ref=f24e674]
+      - generic [ref=f24e179]
+  - iframe [ref=f24e205]:
+    
+  - iframe [ref=f24e206]:
+    
+  - dialog "展开产品面板":
+    - navigation "产品与服务" [ref=f24e207]:
+      - generic [ref=f24e208]
+    - main "我的资源" [ref=f24e245]:
+      - generic [ref=f24e246]
+      - text:                                                                                                                                                                                                                                                             
+      - button "收起产品面板" [ref=f24e271] [cursor=pointer]
+    - button "收起产品面板" [ref=f24e273]
+  - iframe [ref=f24e274]:
+    
+  - iframe [ref=f24e275]:
+    
+  - text:      

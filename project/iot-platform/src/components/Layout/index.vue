@@ -143,7 +143,9 @@ import {
   Grid,
   Monitor,
   Warning,
-  Checked
+  Checked,
+  Service,
+  Setting
 } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -190,6 +192,14 @@ const menuList = ref([
     children: [
       { title: '套餐配置', path: '/pkg', icon: Box },
       { title: '服务类型', path: '/pkg/service', icon: SetUp }
+    ]
+  },
+  {
+    title: '智能体管理',
+    icon: Monitor,
+    children: [
+      { title: '智能体配置', path: '/agent', icon: Setting },
+      { title: '模型管理', path: '/agent/model', icon: SetUp }
     ]
   },
   {

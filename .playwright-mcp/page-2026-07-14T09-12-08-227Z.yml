@@ -1,0 +1,848 @@
+- generic [ref=e1]:
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - button "展开产品面板" [ref=e12]:
+          - button [ref=e13] [cursor=pointer]
+        - img "logo" [ref=e18] [cursor=pointer]
+      - generic [ref=e19]:
+        - generic [ref=e20] [cursor=pointer]: 模型
+        - generic [ref=e22] [cursor=pointer]: 应用
+        - generic [ref=e24] [cursor=pointer]:
+          - generic [ref=e25]: 订阅
+          - generic [ref=e26]: Token Plan
+        - generic [ref=e27] [cursor=pointer]: 体验
+        - generic [ref=e29] [cursor=pointer]: 文档
+        - generic [ref=e31] [cursor=pointer]: API 参考
+      - generic [ref=e33]:
+        - separator [ref=e36]
+        - generic [ref=e38] [cursor=pointer]:
+          - generic [ref=e39]: 华北2（北京）
+          - img "spark-down-line" [ref=e40]
+        - generic [ref=e43] [cursor=pointer]:
+          - text: 登录
+          - generic [ref=e44]: 
+    - generic [ref=e45]:
+      - generic [ref=e47]:
+        - generic [ref=e48]:
+          - button "plus 创建应用" [ref=e50] [cursor=pointer]:
+            - img "plus" [ref=e52]
+            - generic [ref=e55]: 创建应用
+          - generic [ref=e56] [cursor=pointer]:
+            - img "spark-singleStar-line" [ref=e58]
+            - generic "应用广场" [ref=e61]
+          - generic [ref=e62] [cursor=pointer]:
+            - generic [ref=e63]: 
+            - generic "应用管理" [ref=e65]
+          - generic [ref=e66] [cursor=pointer]:
+            - img "spark-agent-line" [ref=e68]
+            - generic "Managed Agents" [ref=e72]:
+              - text: Managed Agents
+              - generic [ref=e73]: Beta
+          - generic [ref=e74] [cursor=pointer]:
+            - generic [ref=e75]: 
+            - generic "UI 设计器" [ref=e77]
+          - generic [ref=e78] [cursor=pointer]:
+            - generic [ref=e79]: 
+            - generic "任务中心" [ref=e81]
+          - generic [ref=e82]: 组件
+          - generic "Skill 管理" [ref=e88] [cursor=pointer]
+          - generic [ref=e89] [cursor=pointer]:
+            - generic [ref=e90]: 
+            - generic "MCP 广场" [ref=e92]
+          - generic [ref=e93] [cursor=pointer]:
+            - generic [ref=e94]: 
+            - generic "MCP 管理" [ref=e96]
+          - generic [ref=e97] [cursor=pointer]:
+            - generic [ref=e98]: 
+            - generic "组件广场" [ref=e100]
+          - generic [ref=e101] [cursor=pointer]:
+            - generic [ref=e102]: 
+            - generic "组件管理" [ref=e104]
+          - generic [ref=e105] [cursor=pointer]:
+            - generic [ref=e106]: 
+            - generic "企业知识库" [ref=e108]
+          - generic [ref=e109]: 数据
+          - generic "记忆库" [ref=e115] [cursor=pointer]
+          - generic [ref=e116] [cursor=pointer]:
+            - generic [ref=e117]: 
+            - generic "知识库" [ref=e119]
+          - generic [ref=e120] [cursor=pointer]:
+            - generic [ref=e121]: 
+            - generic "[object Object]" [ref=e123]: 数据连接
+          - generic [ref=e125] [cursor=pointer]:
+            - generic [ref=e126]: 
+            - generic "应用评测" [ref=e128]
+          - generic [ref=e129] [cursor=pointer]:
+            - generic [ref=e130]: 
+            - generic "应用观测" [ref=e132]
+        - generic [ref=e133]:
+          - generic [ref=e134] [cursor=pointer]:
+            - img "spark-user-line" [ref=e136]
+            - generic "权限管理" [ref=e140]
+            - img "spark-right-line" [ref=e141]
+          - generic [ref=e144] [cursor=pointer]:
+            - img "spark-apiKey-line" [ref=e146]
+            - generic "API Key" [ref=e149]
+            - img "spark-right-line" [ref=e150]
+        - button [ref=e155] [cursor=pointer]:
+          - img "spark-operateLeft-line" [ref=e157]
+      - generic [ref=e161]:
+        - generic [ref=e162]: 应用管理
+        - generic [ref=e164]:
+          - generic [ref=e165]: 登录以使用
+          - generic [ref=e166]: 您当前处于未登录状态，登录后可使用完整服务
+          - button "立即登录" [active] [ref=e167] [cursor=pointer]
+      - generic [ref=e170]:
+        - generic [ref=e171]:
+          - button [ref=e173] [cursor=pointer]:
+            - img "spark-fee-line" [ref=e175]
+          - button [ref=e178] [cursor=pointer]:
+            - img "spark-headset-line" [ref=e180]
+          - button [ref=e185] [cursor=pointer]:
+            - img "spark-document-line" [ref=e187]
+        - button [ref=e191] [cursor=pointer]:
+          - img "spark-right-line" [ref=e193]
+  - iframe [ref=e196]:
+    
+  - iframe [ref=e197]:
+    
+  - dialog "展开产品面板":
+    - navigation "产品与服务" [ref=e198]:
+      - generic [ref=e199]:
+        - generic "产品与服务" [ref=e200] [cursor=pointer]:
+          - generic [ref=e201]:
+            - generic [ref=e202]: 
+            - generic [ref=e204]: 产品与服务
+        - generic [ref=e206]:
+          - button "全部" [ref=e207] [cursor=pointer]
+          - button "人工智能与机器学习" [ref=e208] [cursor=pointer]
+          - button "计算" [ref=e209] [cursor=pointer]
+          - button "容器" [ref=e210] [cursor=pointer]
+          - button "存储" [ref=e211] [cursor=pointer]
+          - button "网络与CDN" [ref=e212] [cursor=pointer]
+          - button "安全" [ref=e213] [cursor=pointer]
+          - button "中间件" [ref=e214] [cursor=pointer]
+          - button "数据库" [ref=e215] [cursor=pointer]
+          - button "大数据计算" [ref=e216] [cursor=pointer]
+          - button "媒体服务" [ref=e217] [cursor=pointer]
+          - button "企业服务与云通信" [ref=e218] [cursor=pointer]
+          - button "域名与网站" [ref=e219] [cursor=pointer]
+          - button "终端用户计算" [ref=e220] [cursor=pointer]
+          - button "物联网" [ref=e221] [cursor=pointer]
+          - button "开发工具" [ref=e222] [cursor=pointer]
+          - button "迁移与运维管理" [ref=e223] [cursor=pointer]
+          - button "云市场" [ref=e224] [cursor=pointer]
+          - button "支持与服务" [ref=e225] [cursor=pointer]
+    - main "我的资源" [ref=e226]:
+      - generic [ref=e227]:
+        - generic [ref=e228]: 产品与服务
+        - alert [ref=e229]:
+          - generic [ref=e230]: 
+          - generic [ref=e231]: 部分控制台不支持 RAM 账号和 RAM 角色，以登录后展示内容为准。
+        - generic [ref=e232]:
+          - generic [ref=e233]: 
+          - textbox "请输入关键词" [ref=e236]
+        - generic [ref=e237]:
+          - generic [ref=e238]:
+            - generic [ref=e239]: 人工智能与机器学习
+            - generic [ref=e240]:
+              - generic [ref=e241]:
+                - generic [ref=e242]: 人工智能平台
+                - link "人工智能平台 PAI" [ref=e244] [cursor=pointer]:
+                  - /url: //pai.console.aliyun.com
+                - generic [ref=e245]:
+                  - link "智能计算灵骏" [ref=e246] [cursor=pointer]:
+                    - /url: //lingjun.console.aliyun.com
+                  - generic [ref=e247]: 公测中
+              - generic [ref=e250]:
+                - generic [ref=e251]: 模型平台与服务
+                - link "向量检索服务 DashVector" [ref=e253] [cursor=pointer]:
+                  - /url: //dashvector.console.aliyun.com
+                - link "大模型服务平台百炼" [ref=e255] [cursor=pointer]:
+                  - /url: //bailian.console.aliyun.com
+              - generic [ref=e256]:
+                - generic [ref=e257]: 智能搜索与推荐
+                - link "智能开放搜索 OpenSearch" [ref=e259] [cursor=pointer]:
+                  - /url: //opensearch.console.aliyun.com
+                - link "智能推荐 AIRec" [ref=e261] [cursor=pointer]:
+                  - /url: //airec.console.aliyun.com
+              - generic [ref=e262]:
+                - generic [ref=e263]: 视觉智能
+                - link "视觉智能开放平台" [ref=e265] [cursor=pointer]:
+                  - /url: //vision.console.aliyun.com
+                - link "图像搜索" [ref=e267] [cursor=pointer]:
+                  - /url: //imagesearch.console.aliyun.com
+                - link "视觉计算服务" [ref=e269] [cursor=pointer]:
+                  - /url: //vcs.console.aliyun.com
+                - link "文字识别 OCR" [ref=e271] [cursor=pointer]:
+                  - /url: //ocr.console.aliyun.com
+              - generic [ref=e272]:
+                - generic [ref=e273]: 自然语言处理
+                - link "自然语言处理 NLP" [ref=e275] [cursor=pointer]:
+                  - /url: //alinlp.console.aliyun.com
+                - link "地址标准化" [ref=e277] [cursor=pointer]:
+                  - /url: //addrp.console.aliyun.com
+                - link "机器翻译" [ref=e279] [cursor=pointer]:
+                  - /url: //mt.console.aliyun.com
+                - generic [ref=e280]:
+                  - link "文档智能" [ref=e281] [cursor=pointer]:
+                    - /url: https://docmind.console.aliyun.com/doc-overview
+                  - generic [ref=e282]: 公测中
+              - generic [ref=e285]:
+                - generic [ref=e286]: 智能语音交互
+                - link "智能语音交互" [ref=e288] [cursor=pointer]:
+                  - /url: //nls-portal.console.aliyun.com
+              - generic [ref=e289]:
+                - generic [ref=e290]: 决策智能
+                - link "优化求解器" [ref=e292] [cursor=pointer]:
+                  - /url: //opt.console.aliyun.com
+              - generic [ref=e293]:
+                - generic [ref=e294]: AI应用
+                - link "数知地球 AI Earth" [ref=e296] [cursor=pointer]:
+                  - /url: //rsimganalys.console.aliyun.com
+                - link "三维空间重建" [ref=e298] [cursor=pointer]:
+                  - /url: //tdsr.console.aliyun.com
+                - link "虚拟数字人" [ref=e300] [cursor=pointer]:
+                  - /url: //avatar.console.aliyun.com
+                - generic [ref=e301]:
+                  - link "企业 Agent 应用平台" [ref=e302] [cursor=pointer]:
+                    - /url: https://agentone.console.aliyun.com/ui/agent_store/trial/InstanceManagement
+                  - generic [ref=e303]: 公测中
+                - link "服务数字员工" [ref=e307] [cursor=pointer]:
+                  - /url: //aiemployee.console.aliyun.com/overview
+                - link "AI 翻译数字员工" [ref=e309] [cursor=pointer]:
+                  - /url: //rta.console.aliyun.com
+              - generic [ref=e310]:
+                - generic [ref=e311]: 行业智能
+                - link "自动驾驶云开发平台" [ref=e313] [cursor=pointer]:
+                  - /url: //iovcc.console.aliyun.com
+                - generic [ref=e314]:
+                  - link "基因分析平台" [ref=e315] [cursor=pointer]:
+                    - /url: //easygene.console.aliyun.com
+                  - generic [ref=e316]: 公测中
+              - generic [ref=e319]:
+                - generic [ref=e320]: 智能客服
+                - link "云联络中心" [ref=e322] [cursor=pointer]:
+                  - /url: //ccc.console.aliyun.com
+                - link "智能对话机器人" [ref=e324] [cursor=pointer]:
+                  - /url: //chatbot.console.aliyun.com
+                - link "客服工作台" [ref=e326] [cursor=pointer]:
+                  - /url: //alime.console.aliyun.com
+                - link "智能对话分析" [ref=e328] [cursor=pointer]:
+                  - /url: //sca.console.aliyun.com
+          - generic [ref=e329]:
+            - generic [ref=e330]: 计算
+            - generic [ref=e331]:
+              - generic [ref=e332]:
+                - generic [ref=e333]: 云服务器
+                - link "云服务器 ECS" [ref=e335] [cursor=pointer]:
+                  - /url: //ecs.console.aliyun.com
+                - link "轻量应用服务器" [ref=e337] [cursor=pointer]:
+                  - /url: //swasnext.console.aliyun.com
+                - link "弹性加速计算实例" [ref=e339] [cursor=pointer]:
+                  - /url: //eais.console.aliyun.com
+                - link "弹性伸缩" [ref=e341] [cursor=pointer]:
+                  - /url: //ess.console.aliyun.com
+                - link "云虚拟主机" [ref=e343] [cursor=pointer]:
+                  - /url: //netcn.console.aliyun.com/core/host/list2
+                - link "弹性容器实例 ECI" [ref=e345] [cursor=pointer]:
+                  - /url: //eci.console.aliyun.com
+                - link "计算巢服务" [ref=e347] [cursor=pointer]:
+                  - /url: //computenest.console.aliyun.com
+                - link "VMware服务" [ref=e349] [cursor=pointer]:
+                  - /url: //acvs.console.aliyun.com
+                - link "Alibaba Cloud Linux" [ref=e351] [cursor=pointer]:
+                  - /url: //alinux.console.aliyun.com/
+              - generic [ref=e352]:
+                - generic [ref=e353]: 高性能计算
+                - link "弹性高性能计算" [ref=e355] [cursor=pointer]:
+                  - /url: //ehpcnext.console.aliyun.com
+                - link "批量计算" [ref=e357] [cursor=pointer]:
+                  - /url: //batchcompute.console.aliyun.com
+              - generic [ref=e358]:
+                - generic [ref=e359]: Serverless
+                - link "函数计算 FC" [ref=e361] [cursor=pointer]:
+                  - /url: //fcnext.console.aliyun.com
+                - link "云工作流 CloudFlow" [ref=e363] [cursor=pointer]:
+                  - /url: //fnf.console.aliyun.com
+                - link "Serverless 应用引擎 SAE" [ref=e365] [cursor=pointer]:
+                  - /url: //saenext.console.aliyun.com
+                - generic [ref=e366]:
+                  - link "云原生应用开发平台 CAP" [ref=e367] [cursor=pointer]:
+                    - /url: //cap.console.aliyun.com
+                  - generic [ref=e368]: 公测中
+              - generic [ref=e371]:
+                - generic [ref=e372]: 无影
+                - generic [ref=e373]:
+                  - link "无影 Agent 开发套件 AgentBay" [ref=e374] [cursor=pointer]:
+                    - /url: //agentbay.console.aliyun.com
+                  - generic [ref=e375]: 公测中
+              - generic [ref=e378]:
+                - generic [ref=e379]: 边缘计算
+                - link "边缘节点服务 ENS" [ref=e381] [cursor=pointer]:
+                  - /url: //ens.console.aliyun.com
+                - link "边缘网络加速 ENA" [ref=e383] [cursor=pointer]:
+                  - /url: //ena.console.aliyun.com
+                - link "视图计算" [ref=e385] [cursor=pointer]:
+                  - /url: //vs.console.aliyun.com
+          - generic [ref=e386]:
+            - generic [ref=e387]: 容器
+            - generic [ref=e389]:
+              - generic [ref=e390]: 容器服务
+              - link "容器镜像服务" [ref=e392] [cursor=pointer]:
+                - /url: //cr.console.aliyun.com
+              - link "容器服务 Kubernetes 版 ACK" [ref=e394] [cursor=pointer]:
+                - /url: //cs.console.aliyun.com/#/k8s
+              - link "服务网格 ASM" [ref=e396] [cursor=pointer]:
+                - /url: //servicemesh.console.aliyun.com
+              - link "分布式云容器平台 ACK One" [ref=e398] [cursor=pointer]:
+                - /url: //cs.console.aliyun.com/one
+              - link "容器计算服务 ACS" [ref=e400] [cursor=pointer]:
+                - /url: //acs.console.aliyun.com
+          - generic [ref=e401]:
+            - generic [ref=e402]: 存储
+            - generic [ref=e403]:
+              - generic [ref=e404]:
+                - generic [ref=e405]: 基础存储服务
+                - link "对象存储 OSS" [ref=e407] [cursor=pointer]:
+                  - /url: //oss.console.aliyun.com
+                - link "文件存储 NAS" [ref=e409] [cursor=pointer]:
+                  - /url: //nas.console.aliyun.com
+                - link "表格存储" [ref=e411] [cursor=pointer]:
+                  - /url: //otsnext.console.aliyun.com
+                - generic [ref=e412]:
+                  - link "文件存储HDFS版" [ref=e413] [cursor=pointer]:
+                    - /url: //dfs.console.aliyun.com
+                  - generic [ref=e414]: 公测中
+                - link "数据库文件存储 DBFS" [ref=e418] [cursor=pointer]:
+                  - /url: //dbfs.console.aliyun.com
+                - link "块存储 EBS" [ref=e420] [cursor=pointer]:
+                  - /url: //ebs.console.aliyun.com
+              - generic [ref=e421]:
+                - generic [ref=e422]: 存储数据服务
+                - link "智能媒体管理" [ref=e424] [cursor=pointer]:
+                  - /url: //imm.console.aliyun.com
+                - link "网盘与相册服务 PDS" [ref=e426] [cursor=pointer]:
+                  - /url: //pds.console.aliyun.com
+                - link "日志服务 SLS" [ref=e428] [cursor=pointer]:
+                  - /url: //sls.console.aliyun.com
+                - link "云备份 Cloud Backup" [ref=e430] [cursor=pointer]:
+                  - /url: //hbr.console.aliyun.com
+                - link "数据灾备中心 BDRC" [ref=e432] [cursor=pointer]:
+                  - /url: //bdrc.console.aliyun.com
+              - generic [ref=e433]:
+                - generic [ref=e434]: 数据迁移与工具
+                - link "云存储网关" [ref=e436] [cursor=pointer]:
+                  - /url: //sgwnew.console.aliyun.com
+                - link "闪电立方 Data Transport" [ref=e438] [cursor=pointer]:
+                  - /url: https://mgwnext.console.aliyun.com/offline-mg-task
+              - generic [ref=e439]:
+                - generic [ref=e440]: 混合云存储
+                - link "混合云容灾服务 HDR" [ref=e442] [cursor=pointer]:
+                  - /url: //hdr.console.aliyun.com
+                - link "混合云存储" [ref=e444] [cursor=pointer]:
+                  - /url: //hgw.console.aliyun.com
+          - generic [ref=e445]:
+            - generic [ref=e446]: 网络与CDN
+            - generic [ref=e447]:
+              - generic [ref=e448]:
+                - generic [ref=e449]: 云上网络
+                - link "专有网络VPC" [ref=e451] [cursor=pointer]:
+                  - /url: //vpc.console.aliyun.com
+                - link "负载均衡" [ref=e453] [cursor=pointer]:
+                  - /url: //slb.console.aliyun.com
+                - link "NAT网关" [ref=e455] [cursor=pointer]:
+                  - /url: //vpc.console.aliyun.com/nat
+                - link "弹性公网IP" [ref=e457] [cursor=pointer]:
+                  - /url: //vpc.console.aliyun.com/eip
+                - link "云数据传输" [ref=e459] [cursor=pointer]:
+                  - /url: //cdt.console.aliyun.com
+                - link "共享带宽" [ref=e461] [cursor=pointer]:
+                  - /url: //vpc.console.aliyun.com/cbwp
+                - link "私网连接" [ref=e463] [cursor=pointer]:
+                  - /url: //vpc.console.aliyun.com/endpoint
+                - link "IPv6转换服务" [ref=e465] [cursor=pointer]:
+                  - /url: //ipv6trans.console.aliyun.com
+                - link "云解析 PrivateZone" [ref=e467] [cursor=pointer]:
+                  - /url: //dnsnext.console.aliyun.com/privateDNS
+                - link "共享流量包" [ref=e469] [cursor=pointer]:
+                  - /url: //vpc.console.aliyun.com/stp
+                - generic [ref=e470]:
+                  - link "网络智能服务" [ref=e471] [cursor=pointer]:
+                    - /url: //nis.console.aliyun.com
+                  - generic [ref=e472]: 公测中
+                - link "IP地址管理" [ref=e476] [cursor=pointer]:
+                  - /url: //ipam.console.aliyun.com
+              - generic [ref=e477]:
+                - generic [ref=e478]: 跨地域网络
+                - link "云企业网" [ref=e480] [cursor=pointer]:
+                  - /url: //cen.console.aliyun.com
+                - link "全球加速" [ref=e482] [cursor=pointer]:
+                  - /url: //ga.console.aliyun.com
+              - generic [ref=e483]:
+                - generic [ref=e484]: 混合云网络
+                - link "VPN网关" [ref=e486] [cursor=pointer]:
+                  - /url: //vpc.console.aliyun.com/vpn
+                - link "智能接入网关" [ref=e488] [cursor=pointer]:
+                  - /url: //smartag.console.aliyun.com
+                - link "高速通道" [ref=e490] [cursor=pointer]:
+                  - /url: //expressconnect.console.aliyun.com
+                - link "云连接器" [ref=e492] [cursor=pointer]:
+                  - /url: //cc.console.aliyun.com/
+              - generic [ref=e493]:
+                - generic [ref=e494]: CDN
+                - link "边缘安全加速 ESA" [ref=e496] [cursor=pointer]:
+                  - /url: //esa.console.aliyun.com
+                - link "CDN" [ref=e498] [cursor=pointer]:
+                  - /url: //cdn.console.aliyun.com
+                - link "PCDN" [ref=e500] [cursor=pointer]:
+                  - /url: //pcdn.console.aliyun.com
+          - generic [ref=e501]:
+            - generic [ref=e502]: 安全
+            - generic [ref=e503]:
+              - generic [ref=e504]:
+                - generic [ref=e505]: 云安全
+                - link "云盾" [ref=e507] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com
+                - link "DDoS 防护" [ref=e509] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=ddos
+                - link "DDoS 高防" [ref=e511] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=ddoscoo
+                - link "Web应用防火墙 WAF" [ref=e513] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=wafnext
+                - link "云安全中心" [ref=e515] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=sas
+                - link "办公安全平台 SASE" [ref=e517] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=csas
+                - link "云防火墙" [ref=e519] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/cfw
+                - link "运维安全中心（堡垒机）" [ref=e521] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=bastion
+              - generic [ref=e522]:
+                - generic [ref=e523]: 数据安全
+                - link "数据安全中心（含数据库审计）" [ref=e525] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=sddp
+                - link "加密服务" [ref=e527] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=hsm
+                - link "密钥管理服务" [ref=e529] [cursor=pointer]:
+                  - /url: https://yundun.console.aliyun.com/?p=kms
+                - link "数字证书管理服务（原SSL证书）" [ref=e531] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=cas
+              - generic [ref=e532]:
+                - generic [ref=e533]: 身份安全
+                - link "应用身份服务 (IDaaS)" [ref=e535] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=idaas
+              - generic [ref=e536]:
+                - generic [ref=e537]: 业务安全
+                - link "内容安全" [ref=e539] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=cts
+                - link "风险识别" [ref=e541] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=saf
+                - link "实人认证" [ref=e543] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=cloudauth
+                - link "智能核身" [ref=e545] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=cloudauth&commodityCode=cloudauth_smart
+                - link "验证码" [ref=e547] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=captcha
+                - link "区块链服务" [ref=e549] [cursor=pointer]:
+                  - /url: //baas.console.aliyun.com
+                - link "金融级实人认证" [ref=e551] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=cloudauth&commodityCode=cloudauth_fin
+                - link "信息核验" [ref=e553] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=cloudinfo
+              - generic [ref=e554]:
+                - generic [ref=e555]: 安全服务
+                - link "安全管家服务" [ref=e557] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=mss
+                - link "安全众测" [ref=e559] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=xz
+                - link "威胁情报" [ref=e561] [cursor=pointer]:
+                  - /url: //yundun.console.aliyun.com/?p=sasti
+          - generic [ref=e562]:
+            - generic [ref=e563]: 中间件
+            - generic [ref=e564]:
+              - generic [ref=e565]:
+                - generic [ref=e566]: 微服务工具与平台
+                - link "微服务引擎 MSE" [ref=e568] [cursor=pointer]:
+                  - /url: //mse.console.aliyun.com
+                - link "分布式任务调度 SchedulerX" [ref=e570] [cursor=pointer]:
+                  - /url: //schedulerx2.console.aliyun.com
+                - link "企业级分布式应用服务 EDAS" [ref=e572] [cursor=pointer]:
+                  - /url: //edas.console.aliyun.com
+                - link "应用高可用服务 AHAS" [ref=e574] [cursor=pointer]:
+                  - /url: //ahas.console.aliyun.com
+                - link "金融分布式架构" [ref=e576] [cursor=pointer]:
+                  - /url: //sofa.console.aliyun.com
+              - generic [ref=e577]:
+                - generic [ref=e578]: 云消息队列
+                - link "云消息队列 RocketMQ 版" [ref=e580] [cursor=pointer]:
+                  - /url: //ons.console.aliyun.com
+                - link "云消息队列 Kafka 版" [ref=e582] [cursor=pointer]:
+                  - /url: //kafka.console.aliyun.com
+                - link "云消息队列 RabbitMQ 版" [ref=e584] [cursor=pointer]:
+                  - /url: //amqp.console.aliyun.com
+                - link "云消息队列 MQTT 版" [ref=e586] [cursor=pointer]:
+                  - /url: //mqtt.console.aliyun.com
+                - link "轻量消息队列（原 MNS）" [ref=e588] [cursor=pointer]:
+                  - /url: //mns.console.aliyun.com
+              - generic [ref=e589]:
+                - generic [ref=e590]: 应用集成
+                - link "API 网关" [ref=e592] [cursor=pointer]:
+                  - /url: //apigateway.console.aliyun.com
+                - link "事件总线 EventBridge" [ref=e594] [cursor=pointer]:
+                  - /url: //eventbridge.console.aliyun.com
+                - link "云原生API网关" [ref=e596] [cursor=pointer]:
+                  - /url: //apig.console.aliyun.com
+                - link "AI网关" [ref=e598] [cursor=pointer]:
+                  - /url: //apig.console.aliyun.com/#/ai-gateway-overview
+              - generic [ref=e599]:
+                - generic [ref=e600]: 云原生可观测
+                - link "性能测试" [ref=e602] [cursor=pointer]:
+                  - /url: //pts.console.aliyun.com
+                - link "应用实时监控服务 ARMS" [ref=e604] [cursor=pointer]:
+                  - /url: //arms.console.aliyun.com
+                - link "可观测链路 OpenTelemetry 版" [ref=e606] [cursor=pointer]:
+                  - /url: //trace.console.aliyun.com
+                - link "可观测监控 Prometheus 版" [ref=e608] [cursor=pointer]:
+                  - /url: //cms.console.aliyun.com/prom/instances
+                - link "可观测可视化 Grafana 版" [ref=e610] [cursor=pointer]:
+                  - /url: //ags.console.aliyun.com/#/grafana/workspace
+                - link "Agent 观测与优化 AgentLoop" [ref=e612] [cursor=pointer]:
+                  - /url: //agentloop.console.aliyun.com
+          - generic [ref=e613]:
+            - generic [ref=e614]: 数据库
+            - generic [ref=e615]:
+              - generic [ref=e616]:
+                - generic [ref=e617]: 关系型数据库
+                - link "云原生数据库 PolarDB" [ref=e619] [cursor=pointer]:
+                  - /url: //yaochi.console.aliyun.com/overview?selectMenuProducts=polardb
+                - link "云原生分布式数据库 PolarDB-X" [ref=e621] [cursor=pointer]:
+                  - /url: //polardb-x.console.aliyun.com
+                - link "云数据库 RDS" [ref=e623] [cursor=pointer]:
+                  - /url: //rdsnext.console.aliyun.com
+                - link "云数据库 OceanBase 版" [ref=e625] [cursor=pointer]:
+                  - /url: //oceanbasenext.console.aliyun.com
+                - link "阿里云数据库（瑶池）" [ref=e627] [cursor=pointer]:
+                  - /url: //yaochi.console.aliyun.com/overview
+              - generic [ref=e628]:
+                - generic [ref=e629]: NoSQL 数据库
+                - link "云数据库 Tair（兼容 Redis）" [ref=e631] [cursor=pointer]:
+                  - /url: //kvstore.console.aliyun.com
+                - link "云原生多模数据库 Lindorm" [ref=e633] [cursor=pointer]:
+                  - /url: //lindorm.console.aliyun.com
+                - link "云数据库 MongoDB 版" [ref=e635] [cursor=pointer]:
+                  - /url: //mongodb.console.aliyun.com
+                - link "云数据库HBase版" [ref=e637] [cursor=pointer]:
+                  - /url: //hbase.console.aliyun.com
+                - link "时序时空数据库TSDB" [ref=e639] [cursor=pointer]:
+                  - /url: //tsdb.console.aliyun.com
+                - link "图数据库" [ref=e641] [cursor=pointer]:
+                  - /url: //gdb.console.aliyun.com
+                - link "云数据库 Memcache 版" [ref=e643] [cursor=pointer]:
+                  - /url: //kvstore.console.aliyun.com/?instanceType=Memcache
+              - generic [ref=e644]:
+                - generic [ref=e645]: 数据库平台与服务
+                - link "数据库专家服务" [ref=e647] [cursor=pointer]:
+                  - /url: //dbes.console.aliyun.com
+                - link "云数据库专属集群" [ref=e649] [cursor=pointer]:
+                  - /url: //cddc.console.aliyun.com
+              - generic [ref=e650]:
+                - generic [ref=e651]: 数据仓库
+                - link "云原生数据仓库AnalyticDB MySQL版" [ref=e653] [cursor=pointer]:
+                  - /url: //adb.console.aliyun.com
+                - link "云原生数据仓库 AnalyticDB PostgreSQL版" [ref=e655] [cursor=pointer]:
+                  - /url: //gpdbnext.console.aliyun.com
+                - link "云数据库 ClickHouse" [ref=e657] [cursor=pointer]:
+                  - /url: //clickhouse.console.aliyun.com
+                - link "云原生数据湖分析" [ref=e659] [cursor=pointer]:
+                  - /url: //datalakeanalytics.console.aliyun.com
+                - link "云数据库 SelectDB 版" [ref=e661] [cursor=pointer]:
+                  - /url: https://selectdb.console.aliyun.com
+              - generic [ref=e662]:
+                - generic [ref=e663]: 数据库管理工具
+                - link "数据传输服务 DTS" [ref=e665] [cursor=pointer]:
+                  - /url: //dtsnew.console.aliyun.com
+                - link "数据管理 DMS" [ref=e667] [cursor=pointer]:
+                  - /url: //dms.aliyun.com
+                - link "数据库备份" [ref=e669] [cursor=pointer]:
+                  - /url: //dbs.console.aliyun.com
+                - link "数据库自治服务 DAS" [ref=e671] [cursor=pointer]:
+                  - /url: //hdm.console.aliyun.com
+          - generic [ref=e672]:
+            - generic [ref=e673]: 大数据计算
+            - generic [ref=e674]:
+              - generic [ref=e675]:
+                - generic [ref=e676]: 数据计算与分析
+                - link "云原生大数据计算服务 MaxCompute" [ref=e678] [cursor=pointer]:
+                  - /url: //maxcompute.console.aliyun.com
+                - link "实时数仓 Hologres" [ref=e680] [cursor=pointer]:
+                  - /url: //hologram.console.aliyun.com
+                - link "检索分析服务 Elasticsearch 版" [ref=e682] [cursor=pointer]:
+                  - /url: //elasticsearch.console.aliyun.com
+                - link "实时计算 Flink 版" [ref=e684] [cursor=pointer]:
+                  - /url: //realtime-compute.console.aliyun.com
+                - link "图计算服务 GraphCompute" [ref=e686] [cursor=pointer]:
+                  - /url: //igraph.console.aliyun.com
+                - link "向量检索服务 Milvus 版" [ref=e688] [cursor=pointer]:
+                  - /url: //milvus.console.aliyun.com
+              - generic [ref=e689]:
+                - generic [ref=e690]: 数据湖
+                - link "开源大数据平台 E-MapReduce" [ref=e692] [cursor=pointer]:
+                  - /url: //emr-next.console.aliyun.com
+                - link "数据湖构建 Data Lake Formation" [ref=e694] [cursor=pointer]:
+                  - /url: //dlf-next.console.aliyun.com/
+              - generic [ref=e695]:
+                - generic [ref=e696]: 数据应用与可视化
+                - link "智能商业分析 Quick BI" [ref=e698] [cursor=pointer]:
+                  - /url: //bi.aliyun.com
+                - link "DataV 数据可视化" [ref=e700] [cursor=pointer]:
+                  - /url: //datav.aliyun.com
+                - link "智能用户增长 Quick Audience" [ref=e702] [cursor=pointer]:
+                  - /url: //retailadvqa.console.aliyun.com
+                - link "全域采集与增长分析 Quick Tracking" [ref=e704] [cursor=pointer]:
+                  - /url: //quickaplus.console.aliyun.com
+              - generic [ref=e705]:
+                - generic [ref=e706]: 数据开发与管理
+                - link "大数据开发治理平台 DataWorks" [ref=e708] [cursor=pointer]:
+                  - /url: //dataworks.console.aliyun.com/overview
+                - link "智能数据建设与治理 Dataphin" [ref=e710] [cursor=pointer]:
+                  - /url: //dataphin.console.aliyun.com
+                - link "数据集成 Data Integration" [ref=e712] [cursor=pointer]:
+                  - /url: //workbench.shuju.aliyun.com/console
+                - link "数据总线 DataHub" [ref=e714] [cursor=pointer]:
+                  - /url: //dhsnext.console.aliyun.com
+                - link "数据资源平台" [ref=e716] [cursor=pointer]:
+                  - /url: //dataq.console.aliyun.com
+                - link "大数据专家服务" [ref=e718] [cursor=pointer]:
+                  - /url: //bigdatacst.console.aliyun.com
+          - generic [ref=e719]:
+            - generic [ref=e720]: 媒体服务
+            - generic [ref=e721]:
+              - generic [ref=e722]:
+                - generic [ref=e723]: 视频服务
+                - link "视频点播" [ref=e725] [cursor=pointer]:
+                  - /url: //vod.console.aliyun.com
+                - link "视频直播" [ref=e727] [cursor=pointer]:
+                  - /url: //live.console.aliyun.com
+                - link "音视频通信" [ref=e729] [cursor=pointer]:
+                  - /url: //rtc.console.aliyun.com
+              - generic [ref=e730]:
+                - generic [ref=e731]: 媒体处理与内容生产
+                - link "媒体处理" [ref=e733] [cursor=pointer]:
+                  - /url: //mps.console.aliyun.com
+                - link "智能媒体服务" [ref=e735] [cursor=pointer]:
+                  - /url: //ice.console.aliyun.com
+              - generic [ref=e736]:
+                - generic [ref=e737]: 媒体服务
+                - link "音视频终端 SDK" [ref=e739] [cursor=pointer]:
+                  - /url: //imp.console.aliyun.com
+          - generic [ref=e740]:
+            - generic [ref=e741]: 企业服务与云通信
+            - generic [ref=e742]:
+              - generic [ref=e743]:
+                - generic [ref=e744]: 企业云服务
+                - link "移动研发平台 EMAS" [ref=e746] [cursor=pointer]:
+                  - /url: //emas.console.aliyun.com
+                - link "云行情" [ref=e748] [cursor=pointer]:
+                  - /url: //assetservice.console.aliyun.com
+                - link "云原生应用组装平台 BizWorks" [ref=e750] [cursor=pointer]:
+                  - /url: //bizworks.console.aliyun.com
+                - link "Salesforce on Alibaba Cloud" [ref=e752] [cursor=pointer]:
+                  - /url: //salesforce.console.aliyun.com
+                - link "机器人流程自动化 RPA" [ref=e754] [cursor=pointer]:
+                  - /url: https://rpa.console.aliyun.com
+                - link "营销引擎" [ref=e756] [cursor=pointer]:
+                  - /url: //imarketing.console.aliyun.com/
+              - generic [ref=e757]:
+                - generic [ref=e758]: 企业基础服务
+                - link "ICP 备案" [ref=e760] [cursor=pointer]:
+                  - /url: //bsn.console.aliyun.com
+              - generic [ref=e761]:
+                - generic [ref=e762]: 企业办公协同
+                - link "Teambition 企业协同" [ref=e764] [cursor=pointer]:
+                  - /url: //teambition.console.aliyun.com
+                - link "阿里邮箱" [ref=e766] [cursor=pointer]:
+                  - /url: //alimail.console.aliyun.com
+                - link "邮件推送" [ref=e768] [cursor=pointer]:
+                  - /url: //dm.console.aliyun.com
+                - link "宜搭" [ref=e770] [cursor=pointer]:
+                  - /url: //yida.console.aliyun.com
+                - link "云会议" [ref=e772] [cursor=pointer]:
+                  - /url: //cvc.console.aliyun.com
+              - generic [ref=e773]:
+                - generic [ref=e774]: 云通信
+                - link "语音服务" [ref=e776] [cursor=pointer]:
+                  - /url: //dyvms.console.aliyun.com/dyvms.htm
+                - link "短信服务" [ref=e778] [cursor=pointer]:
+                  - /url: //dysms.console.aliyun.com/dysms.htm
+                - link "号码隐私保护" [ref=e780] [cursor=pointer]:
+                  - /url: //dyplsnext.console.aliyun.com
+                - link "号码认证服务" [ref=e782] [cursor=pointer]:
+                  - /url: //dypns.console.aliyun.com
+                - link "智能联络中心" [ref=e784] [cursor=pointer]:
+                  - /url: //aiccs.console.aliyun.com
+                - link "号码百科" [ref=e786] [cursor=pointer]:
+                  - /url: //dytns.console.aliyun.com
+                - link "5G 互联平台" [ref=e788] [cursor=pointer]:
+                  - /url: //xgip.console.aliyun.com
+                - link "Chat App 消息服务" [ref=e790] [cursor=pointer]:
+                  - /url: //cams.console.aliyun.com
+          - generic [ref=e791]:
+            - generic [ref=e792]: 域名与网站
+            - generic [ref=e793]:
+              - generic [ref=e794]:
+                - generic [ref=e795]: 域名与备案服务
+                - link "域名与网站" [ref=e797] [cursor=pointer]:
+                  - /url: //dc.console.aliyun.com/next/index
+                - link "备案服务" [ref=e799] [cursor=pointer]:
+                  - /url: //companyreg.console.aliyun.com
+                - link "云解析DNS" [ref=e801] [cursor=pointer]:
+                  - /url: //dnsnext.console.aliyun.com/authoritative
+              - generic [ref=e802]:
+                - generic [ref=e803]: 知识产权服务
+                - link "商标服务" [ref=e805] [cursor=pointer]:
+                  - /url: https://tm.console.aliyun.com/#/overview
+                - link "软件著作权登记服务" [ref=e807] [cursor=pointer]:
+                  - /url: //copyright.console.aliyun.com
+          - generic [ref=e808]:
+            - generic [ref=e809]: 终端用户计算
+            - generic [ref=e811]:
+              - generic [ref=e812]: 无影
+              - link "无影云电脑企业版" [ref=e814] [cursor=pointer]:
+                - /url: //eds.console.aliyun.com
+              - link "无影云手机" [ref=e816] [cursor=pointer]:
+                - /url: //cloudphone.console.aliyun.com
+              - generic [ref=e817]:
+                - link "无影云应用" [ref=e818] [cursor=pointer]:
+                  - /url: //appstreaming.console.aliyun.com
+                - generic [ref=e819]: 公测中
+              - link "无影云电脑个人版" [ref=e823] [cursor=pointer]:
+                - /url: //eds-personal.console.aliyun.com
+          - generic [ref=e824]:
+            - generic [ref=e825]: 物联网
+            - generic [ref=e826]:
+              - generic [ref=e827]:
+                - generic [ref=e828]: 物联网云服务
+                - link "物联网平台" [ref=e830] [cursor=pointer]:
+                  - /url: //iot.console.aliyun.com
+                - link "物联网无线连接服务" [ref=e832] [cursor=pointer]:
+                  - /url: //dyiotnext.console.aliyun.com/overview
+                - link "物联网络管理平台" [ref=e834] [cursor=pointer]:
+                  - /url: //linkwan.console.aliyun.com
+                - link "IoT 设备身份认证" [ref=e836] [cursor=pointer]:
+                  - /url: https://iotsec.console.aliyun.com/
+                - link "IoT安全运营中心" [ref=e838] [cursor=pointer]:
+                  - /url: https://iotsec.console.aliyun.com/
+              - generic [ref=e839]:
+                - generic [ref=e840]: 设备端服务
+                - link "物联网边缘计算" [ref=e842] [cursor=pointer]:
+                  - /url: //iotedge.console.aliyun.com
+              - generic [ref=e843]:
+                - generic [ref=e844]: 行业物联网
+                - link "云AP" [ref=e846] [cursor=pointer]:
+                  - /url: //cloudap.console.aliyun.com
+                - link "云价签" [ref=e848] [cursor=pointer]:
+                  - /url: //cloudesl.console.aliyun.com
+                - link "云投屏" [ref=e850] [cursor=pointer]:
+                  - /url: https://ls.iot.aliyun.com/
+          - generic [ref=e851]:
+            - generic [ref=e852]: 开发工具
+            - generic [ref=e853]:
+              - generic [ref=e854]:
+                - generic [ref=e855]: API 与工具
+                - link "资源编排" [ref=e857] [cursor=pointer]:
+                  - /url: //ros.console.aliyun.com
+                - link "Node.js 性能平台" [ref=e859] [cursor=pointer]:
+                  - /url: //node.console.aliyun.com
+                - link "移动开发平台 mPaaS" [ref=e861] [cursor=pointer]:
+                  - /url: //mpaas.console.aliyun.com
+                - generic [ref=e862]:
+                  - link "信息查询服务" [ref=e863] [cursor=pointer]:
+                    - /url: //ipaas.console.aliyun.com/guide
+                  - generic [ref=e864]: 公测中
+              - generic [ref=e867]:
+                - generic [ref=e868]: 云效DevOps
+                - link "云效" [ref=e870] [cursor=pointer]:
+                  - /url: //devops.console.aliyun.com
+              - generic [ref=e871]:
+                - generic [ref=e872]: 开发与运维
+                - link "多端低代码开发平台魔笔" [ref=e874] [cursor=pointer]:
+                  - /url: //mobinext.console.aliyun.com/welcome
+                - link "OpenAPI Explorer" [ref=e876] [cursor=pointer]:
+                  - /url: https://api.aliyun.com/
+          - generic [ref=e877]:
+            - generic [ref=e878]: 迁移与运维管理
+            - generic [ref=e879]:
+              - generic [ref=e880]:
+                - generic [ref=e881]: 运维与监控
+                - link "云监控" [ref=e883] [cursor=pointer]:
+                  - /url: //cloudmonitornext.console.aliyun.com
+                - link "智能顾问" [ref=e885] [cursor=pointer]:
+                  - /url: //advisor.console.aliyun.com
+                - link "系统运维管理 OOS" [ref=e887] [cursor=pointer]:
+                  - /url: //oos.console.aliyun.com
+                - link "云网管" [ref=e889] [cursor=pointer]:
+                  - /url: //cmn.console.aliyun.com
+                - link "运维事件中心" [ref=e891] [cursor=pointer]:
+                  - /url: //alert.console.aliyun.com
+                - link "网络分析与监控" [ref=e893] [cursor=pointer]:
+                  - /url: //cloudmonitornext.console.aliyun.com/newSite
+                - generic [ref=e894]:
+                  - link "全域智能运维平台 STAROps" [ref=e895] [cursor=pointer]:
+                    - /url: //starops.console.aliyun.com
+                  - generic [ref=e896]: 公测中
+              - generic [ref=e899]:
+                - generic [ref=e900]: 云管理
+                - link "访问控制 RAM" [ref=e902] [cursor=pointer]:
+                  - /url: //ram.console.aliyun.com
+                - link "操作审计" [ref=e904] [cursor=pointer]:
+                  - /url: //actiontrail.console.aliyun.com
+                - link "资源管理" [ref=e906] [cursor=pointer]:
+                  - /url: //resourcemanager.console.aliyun.com
+                - generic [ref=e907]:
+                  - link "配置审计" [ref=e908] [cursor=pointer]:
+                    - /url: //config.console.aliyun.com
+                  - generic [ref=e909]: 公测中
+                - link "逻辑编排" [ref=e913] [cursor=pointer]:
+                  - /url: //lc.console.aliyun.com
+                - link "配额中心" [ref=e915] [cursor=pointer]:
+                  - /url: //quotas.console.aliyun.com
+                - link "云速搭" [ref=e917] [cursor=pointer]:
+                  - /url: //bpstudio.console.aliyun.com
+                - link "云 SSO" [ref=e919] [cursor=pointer]:
+                  - /url: //cloudsso.console.aliyun.com
+                - link "云治理中心" [ref=e921] [cursor=pointer]:
+                  - /url: //governance.console.aliyun.com
+                - link "服务目录" [ref=e923] [cursor=pointer]:
+                  - /url: //servicecatalog.console.aliyun.com
+                - link "智能体身份 Agent Identity" [ref=e925] [cursor=pointer]:
+                  - /url: //agentidentity.console.aliyun.com
+              - generic [ref=e926]:
+                - generic [ref=e927]: 备份与迁移
+                - generic [ref=e928]:
+                  - link "服务器迁移中心" [ref=e929] [cursor=pointer]:
+                    - /url: //smcnext.console.aliyun.com
+                  - generic [ref=e930]: 公测中
+                - generic [ref=e933]:
+                  - link "云迁移中心" [ref=e934] [cursor=pointer]:
+                    - /url: //apds.console.aliyun.com
+                  - generic [ref=e935]: 公测中
+          - generic [ref=e938]:
+            - generic [ref=e939]: 云市场
+            - link "云市场" [ref=e941] [cursor=pointer]:
+              - /url: //marketnext.console.aliyun.com
+          - generic [ref=e942]:
+            - generic [ref=e943]: 支持与服务
+            - link "支持与服务" [ref=e945] [cursor=pointer]:
+              - /url: //spc.console.aliyun.com
+      - button "收起产品面板" [ref=e947] [cursor=pointer]:
+        - generic [ref=e948]: 
+    - button "收起产品面板" [ref=e949]
+  - iframe [ref=e950]:
+    
+  - dialog [ref=e952]:
+    - iframe [ref=e955]:
+      
+    - button "关闭" [ref=e956] [cursor=pointer]:
+      - generic [ref=e957]: 

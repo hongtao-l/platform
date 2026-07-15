@@ -153,6 +153,24 @@ const routes = [
     meta: { title: '服务类型' }
   },
   {
+    path: '/agent',
+    name: 'AgentList',
+    component: () => import('@/views/agent/list.vue'),
+    meta: { title: '智能体配置' }
+  },
+  {
+    path: '/agent/model',
+    name: 'AgentModel',
+    component: () => import('@/views/agent/model.vue'),
+    meta: { title: '模型管理' }
+  },
+  {
+    path: '/agent/:id',
+    name: 'AgentConfig',
+    component: () => import('@/views/agent/config.vue'),
+    meta: { title: '智能体配置' }
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('@/views/error/404.vue'),

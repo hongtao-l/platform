@@ -1,0 +1,19 @@
+[     414ms] [WARNING] document.domain mutation is ignored because the surrounding agent cluster is origin-keyed. @ https://bailian.console.aliyun.com/cn-beijing?tab=app:167
+[     415ms] [LOG] ██╗  ██╗██╗                                     
+██║  ██║██║                                     
+███████║██║                                     
+██╔══██║██║                                     
+██║  ██║██║▄█╗                                  
+╚═╝  ╚═╝╚═╝╚═╝                                  
+                                                
+██████╗  █████╗ ██╗██╗     ██╗ █████╗ ███╗   ██╗
+██╔══██╗██╔══██╗██║██║     ██║██╔══██╗████╗  ██║
+██████╔╝███████║██║██║     ██║███████║██╔██╗ ██║
+██╔══██╗██╔══██║██║██║     ██║██╔══██║██║╚██╗██║
+██████╔╝██║  ██║██║███████╗██║██║  ██║██║ ╚████║
+╚═════╝ ╚═╝  ╚═╝╚═╝╚══════╝╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
+                                                 @ https://g.alicdn.com/isipfe/efm-fe/3.4.232/noopconsole.js:0
+[    2828ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://g.alicdn.com/isipfe/efm-fe/3.2.227/lato-medium.woff2 @ https://g.alicdn.com/isipfe/efm-fe/3.5.596/assets/MenuItem-B_U_NTmT.js:0
+[    2828ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://g.alicdn.com/isipfe/efm-fe/3.2.227/lato-regular.woff2 @ https://g.alicdn.com/isipfe/efm-fe/3.5.596/assets/MenuItem-B_U_NTmT.js:0
+[    2828ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://at.alicdn.com/t/a/font_4647901_sizbgykhpu.woff2?t=1760341323071 @ https://g.alicdn.com/isipfe/efm-fe/3.5.596/assets/MenuItem-B_U_NTmT.js:0
+[    3053ms] [INFO] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://at.alicdn.com/t/a/font_1256165_qqkmcyr3o6.woff2 @ https://bailian.console.aliyun.com/cn-beijing?tab=app#/app-center:0

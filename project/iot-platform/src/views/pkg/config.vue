@@ -244,8 +244,14 @@
               </el-form-item>
             </div>
             <div class="price-row">
-              <el-form-item label="试用周期（天）" prop="trialDays">
+              <!-- 免费试用：试用天数 -->
+              <el-form-item v-if="form.trialType === 'free'" label="试用天数" prop="trialDays">
                 <el-input-number v-model="form.trialDays" :min="1" placeholder="如：7" style="width:100%" />
+              </el-form-item>
+              <!-- 付费试用：试用期数（固定1期，不可修改） -->
+              <el-form-item v-if="form.trialType === 'paid'" label="试用期数" prop="trialDays">
+                <el-input-number v-model="form.trialDays" :min="1" disabled style="width:100%" />
+                <div class="field-tip">仅支持首期优惠</div>
               </el-form-item>
               <el-form-item label="过滤条件" prop="trialFilter">
                 <el-select v-model="form.trialFilter" placeholder="请选择过滤条件" style="width:100%">
@@ -284,7 +290,8 @@
         </el-form-item>
       </div>
 
-      <!-- ===== 内购Key配置 ===== -->
+      <!-- ===== 内购Key配置（免费套餐无需配置） ===== -->
+      <template v-if="!form.priceFree">
       <span class="section-label">
         内购Key配置
         <span style="font-size:12px;font-weight:400;color:var(--text-placeholder);margin-left:6px">选填，针对每个APP配置</span>
@@ -318,6 +325,7 @@
           </el-tab-pane>
         </el-tabs>
       </div>
+      </template>
 
       <!-- ===== 标签配置 ===== -->
       <el-form-item label="套餐标签">
@@ -532,7 +540,7 @@ const defaultForm = () => ({
   trialType: 'free',
   trialPriceYuan: '',
   trialPriceDollar: '',
-  trialDays: 7,
+  trialDays: 1,
   trialFilter: '',
   iapKeys: emptyIapKeys(),
   pkgTags: [],
@@ -601,8 +609,8 @@ const onPriceTypeChange = (type) => {
 const iapTabs = computed(() => {
   if (form.priceFree) return [{ key: 'free', label: '免费' }]
   const tabs = []
-  if (form.priceSub) tabs.push({ key: 'sub', label: '订阅制' })
   if (form.priceNonSub) tabs.push({ key: 'nonSub', label: '非订阅' })
+  if (form.priceSub) tabs.push({ key: 'sub', label: '订阅制' })
   return tabs
 })
 
@@ -624,6 +632,11 @@ const onProductRestrictChange = () => {
 }
 
 // 编辑时回填数据
+// 切换到付费试用时，试用期数固定为 1
+watch(() => form.trialType, (val) => {
+  if (val === 'paid') form.trialDays = 1
+})
+
 watch(() => props.visible, (val) => {
   if (val) {
     if (isEdit.value && props.data) {
@@ -708,6 +721,12 @@ const handleSubmit = async () => {
     flex: 1;
     margin-left: 0;
   }
+}
+
+.field-tip {
+  font-size: 12px;
+  color: var(--text-placeholder);
+  margin-top: 4px;
 }
 </style>
 

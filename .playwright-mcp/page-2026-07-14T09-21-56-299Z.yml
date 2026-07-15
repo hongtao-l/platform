@@ -1,0 +1,665 @@
+- generic [ref=f70e1]:
+  - generic [ref=f70e8]:
+    - generic [ref=f70e9]:
+      - generic [ref=f70e10]:
+        - button "展开产品面板" [ref=f70e14]:
+          - button [ref=f70e15] [cursor=pointer]
+        - img "logo" [ref=f70e20] [cursor=pointer]
+      - generic [ref=f70e21]:
+        - generic [ref=f70e22] [cursor=pointer]: 模型
+        - generic [ref=f70e24] [cursor=pointer]: 应用
+        - generic [ref=f70e26] [cursor=pointer]:
+          - generic [ref=f70e27]: 订阅
+          - generic [ref=f70e28]: Token Plan
+        - generic [ref=f70e29] [cursor=pointer]: 体验
+        - generic [ref=f70e31] [cursor=pointer]: 文档
+        - generic [ref=f70e33] [cursor=pointer]: API 参考
+      - generic [ref=f70e35]:
+        - separator [ref=f70e38]
+        - generic [ref=f70e39]:
+          - generic [ref=f70e40] [cursor=pointer]:
+            - generic [ref=f70e41]: 华北2（北京）
+            - img "spark-down-line" [ref=f70e42]
+          - generic [ref=f70e46] [cursor=pointer]:
+            - img "spark-spaceManagement-line" [ref=f70e47]
+            - generic [ref=f70e50]: 默认业务空间
+            - img "spark-down-line" [ref=f70e51]
+        - img "spark-setting-line" [ref=f70e55]
+        - generic [ref=f70e61] [cursor=pointer]:
+          - generic [ref=f70e62]:
+            - generic "qjustlhta" [ref=f70e63]
+            - generic [ref=f70e64]: 主账号
+          - img "avatar" [ref=f70e65]
+    - generic [ref=f70e66]:
+      - generic [ref=f70e68]:
+        - generic [ref=f70e69]:
+          - button "plus 创建应用" [ref=f70e71] [cursor=pointer]:
+            - img "plus" [ref=f70e73]
+            - generic [ref=f70e76]: 创建应用
+          - generic [ref=f70e77] [cursor=pointer]:
+            - img "spark-singleStar-line" [ref=f70e79]
+            - generic "应用广场" [ref=f70e82]
+          - generic [ref=f70e83] [cursor=pointer]:
+            - generic [ref=f70e84]: 
+            - generic "应用管理" [ref=f70e86]
+          - generic [ref=f70e87] [cursor=pointer]:
+            - img "spark-agent-line" [ref=f70e89]
+            - generic "Managed Agents" [ref=f70e93]:
+              - text: Managed Agents
+              - generic [ref=f70e94]: Beta
+          - generic [ref=f70e95] [cursor=pointer]:
+            - generic [ref=f70e96]: 
+            - generic "UI 设计器" [ref=f70e98]
+          - generic [ref=f70e99] [cursor=pointer]:
+            - generic [ref=f70e100]: 
+            - generic "任务中心" [ref=f70e102]
+          - generic [ref=f70e103]: 组件
+          - generic "Skill 管理" [ref=f70e109] [cursor=pointer]
+          - generic [ref=f70e110] [cursor=pointer]:
+            - generic [ref=f70e111]: 
+            - generic "MCP 广场" [ref=f70e113]
+          - generic [ref=f70e114] [cursor=pointer]:
+            - generic [ref=f70e115]: 
+            - generic "MCP 管理" [ref=f70e117]
+          - generic [ref=f70e118] [cursor=pointer]:
+            - generic [ref=f70e119]: 
+            - generic "组件广场" [ref=f70e121]
+          - generic [ref=f70e122] [cursor=pointer]:
+            - generic [ref=f70e123]: 
+            - generic "组件管理" [ref=f70e125]
+          - generic [ref=f70e126]: 数据
+          - generic "记忆库" [ref=f70e132] [cursor=pointer]
+          - generic [ref=f70e133] [cursor=pointer]:
+            - generic [ref=f70e134]: 
+            - generic "知识库" [ref=f70e136]
+          - generic [ref=f70e137] [cursor=pointer]:
+            - generic [ref=f70e138]: 
+            - generic "[object Object]" [ref=f70e140]: 数据连接
+          - generic [ref=f70e142] [cursor=pointer]:
+            - generic [ref=f70e143]: 
+            - generic "应用评测" [ref=f70e145]
+          - generic [ref=f70e146] [cursor=pointer]:
+            - generic [ref=f70e147]: 
+            - generic "应用观测" [ref=f70e149]
+        - generic [ref=f70e150]:
+          - generic [ref=f70e151] [cursor=pointer]:
+            - img "spark-user-line" [ref=f70e153]
+            - generic "权限管理" [ref=f70e157]
+            - img "spark-right-line" [ref=f70e158]
+          - generic [ref=f70e161] [cursor=pointer]:
+            - img "spark-apiKey-line" [ref=f70e163]
+            - generic "API Key" [ref=f70e166]
+            - img "spark-right-line" [ref=f70e167]
+        - button [ref=f70e172] [cursor=pointer]:
+          - img "spark-operateLeft-line" [ref=f70e174]
+      - generic [ref=f70e1144]:
+        - generic [ref=f70e1145]:
+          - navigation [ref=f70e1147]:
+            - list [ref=f70e1148]:
+              - listitem [ref=f70e1149]:
+                - generic [ref=f70e1150]: 应用广场
+          - radiogroup "segmented control" [ref=f70e1152]:
+            - generic [ref=f70e1153]:
+              - generic [ref=f70e1154] [cursor=pointer]:
+                - radio "精选应用"
+                - generic "精选应用" [ref=f70e1155]
+              - generic [ref=f70e1156] [cursor=pointer]:
+                - radio "全部应用" [checked] [active]
+                - generic "全部应用" [ref=f70e1157]
+          - generic [ref=f70e1159]:
+            - img "spark-search-line" [ref=f70e1161]
+            - textbox "搜索应用" [ref=f70e1165]
+        - generic [ref=f70e1169]:
+          - generic [ref=f70e1171]:
+            - generic [ref=f70e1172]:
+              - generic [ref=f70e1173]:
+                - generic [ref=f70e1174]: 应用类型
+                - button [ref=f70e1175] [cursor=pointer]:
+                  - img "spark-clear-line" [ref=f70e1177]
+              - generic [ref=f70e1182]:
+                - generic [ref=f70e1183]: 类别
+                - generic [ref=f70e1184]:
+                  - generic [ref=f70e1185] [cursor=pointer]: 智能体
+                  - generic [ref=f70e1188] [cursor=pointer]: 工作流
+                  - generic [ref=f70e1191] [cursor=pointer]: 高代码
+                  - generic [ref=f70e1194] [cursor=pointer]: 解决方案
+                  - generic [ref=f70e1197] [cursor=pointer]: 应用实践
+              - generic [ref=f70e1201]:
+                - generic [ref=f70e1202]: 模态
+                - generic [ref=f70e1203]:
+                  - generic [ref=f70e1204] [cursor=pointer]: 文本
+                  - generic [ref=f70e1207] [cursor=pointer]: 视觉
+                  - generic [ref=f70e1210] [cursor=pointer]: 语音
+                  - generic [ref=f70e1213] [cursor=pointer]: 多模态
+            - generic [ref=f70e1216]:
+              - generic [ref=f70e1217]:
+                - generic [ref=f70e1218]: 应用场景
+                - button [ref=f70e1219] [cursor=pointer]:
+                  - img "spark-clear-line" [ref=f70e1221]
+              - generic [ref=f70e1226]:
+                - generic [ref=f70e1227]: 领域
+                - generic [ref=f70e1228]:
+                  - generic [ref=f70e1229] [cursor=pointer]: 电商
+                  - generic [ref=f70e1232] [cursor=pointer]: 医疗
+                  - generic [ref=f70e1235] [cursor=pointer]: 政务
+                  - generic [ref=f70e1238] [cursor=pointer]: 教培
+                  - generic [ref=f70e1241] [cursor=pointer]: 互联网
+                  - generic [ref=f70e1244] [cursor=pointer]: 物流
+                  - generic [ref=f70e1247] [cursor=pointer]: 房产
+                  - generic [ref=f70e1250] [cursor=pointer]: 企服
+                  - generic [ref=f70e1253] [cursor=pointer]: 营销
+                  - generic [ref=f70e1256] [cursor=pointer]: 内容创作
+                  - generic [ref=f70e1259] [cursor=pointer]: 金融
+          - generic [ref=f70e1263]:
+            - generic [ref=f70e1265]:
+              - generic [ref=f70e1266]: 应用模板
+              - generic [ref=f70e1267]: "648"
+            - generic [ref=f70e1268]:
+              - generic [ref=f70e1269] [cursor=pointer]:
+                - generic [ref=f70e1270]:
+                  - img "icon" [ref=f70e1271]
+                  - generic "多模态交互开发套件" [ref=f70e1272]
+                - generic [ref=f70e1273]: 视频&音频实时交互能力，场景功能自由组合，SDK/API快速接入，适用于各类软硬件应用。
+                - generic [ref=f70e1275]:
+                  - generic [ref=f70e1276]:
+                    - generic [ref=f70e1277]: 多模态交互
+                    - generic [ref=f70e1278]: 语音交互
+                    - generic [ref=f70e1279]: 对话助手
+                  - generic [ref=f70e1281]:
+                    - generic [ref=f70e1283]:
+                      - img "spark-circlePlay-line" [ref=f70e1284]
+                      - text: "0"
+                    - generic [ref=f70e1288]:
+                      - img "spark-copy-line" [ref=f70e1289]
+                      - text: "0"
+              - generic [ref=f70e1293] [cursor=pointer]:
+                - generic [ref=f70e1294]:
+                  - img "icon" [ref=f70e1295]
+                  - generic "伶鹊CCAI-对话分析AIO" [ref=f70e1296]
+                - generic [ref=f70e1297]: 基于深度调优的对话大模型，为营销服类产品提供智能化升级所需要的生成式摘要总结、质检、分析等能力应用。
+                - generic [ref=f70e1299]:
+                  - generic [ref=f70e1300]:
+                    - generic [ref=f70e1301]: 客服支持
+                    - generic [ref=f70e1302]: 智能质检
+                  - generic [ref=f70e1304]:
+                    - generic [ref=f70e1306]:
+                      - img "spark-circlePlay-line" [ref=f70e1307]
+                      - text: "0"
+                    - generic [ref=f70e1311]:
+                      - img "spark-copy-line" [ref=f70e1312]
+                      - text: "0"
+              - generic [ref=f70e1316] [cursor=pointer]:
+                - generic [ref=f70e1317]:
+                  - img "icon" [ref=f70e1318]
+                  - generic "伶鹊CCAI-客服对话Agent" [ref=f70e1319]
+                - generic [ref=f70e1320]: 伶鹊对话 Agent 是快速构建企业客服机器人的 LLM 原生应用， 基于伶鹊客服场景专属大模型，帮助企业开发者添加业务流程编排，快速构建专属的客服场景对话机器人。
+                - generic [ref=f70e1322]:
+                  - generic [ref=f70e1323]: 智能客服
+                  - generic [ref=f70e1326]:
+                    - generic [ref=f70e1328]:
+                      - img "spark-circlePlay-line" [ref=f70e1329]
+                      - text: "0"
+                    - generic [ref=f70e1333]:
+                      - img "spark-copy-line" [ref=f70e1334]
+                      - text: "0"
+              - generic [ref=f70e1338] [cursor=pointer]:
+                - generic [ref=f70e1339]:
+                  - img "icon" [ref=f70e1340]
+                  - generic "伶鹊CCAI-语音对话机器人" [ref=f70e1341]
+                - generic [ref=f70e1342]: 快速搭建企业服务领域大模型语音机器人，支持网络通讯测试与多端便捷集成。
+                - generic [ref=f70e1346]:
+                  - generic [ref=f70e1348]:
+                    - img "spark-circlePlay-line" [ref=f70e1349]
+                    - text: "0"
+                  - generic [ref=f70e1353]:
+                    - img "spark-copy-line" [ref=f70e1354]
+                    - text: "0"
+              - generic [ref=f70e1358] [cursor=pointer]:
+                - generic [ref=f70e1359]:
+                  - img "icon" [ref=f70e1360]
+                  - generic "全妙-泛企业VOC挖掘" [ref=f70e1361]
+                - generic [ref=f70e1362]: 这是一款面向各类企业的VOC标签挖掘工具，不论是用户的长短评论、帖子、还是用户和客服/销售的聊天记录、通话记录，都可以使用。通过勾选或自定义标签让大模型打标，准确率高于人工或规则打标，面对业务标签频繁变动也能更敏捷地响应。
+                - generic [ref=f70e1364]:
+                  - generic [ref=f70e1365]:
+                    - generic [ref=f70e1366]: VOC 打标
+                    - generic [ref=f70e1367]: 标签
+                    - generic [ref=f70e1368]: 文本分析
+                  - generic [ref=f70e1370]:
+                    - generic [ref=f70e1372]:
+                      - img "spark-circlePlay-line" [ref=f70e1373]
+                      - text: "0"
+                    - generic [ref=f70e1377]:
+                      - img "spark-copy-line" [ref=f70e1378]
+                      - text: "0"
+              - generic [ref=f70e1382] [cursor=pointer]:
+                - generic [ref=f70e1383]:
+                  - img "icon" [ref=f70e1384]
+                  - generic "全妙-传媒/零售文章风格与格式学习" [ref=f70e1385]
+                - generic [ref=f70e1386]: 借助大模型的分析能力，快速学习您创作的样例文章风格与格式，以此来辅助您创作类似风格文章
+                - generic [ref=f70e1388]:
+                  - generic [ref=f70e1389]:
+                    - generic [ref=f70e1390]: 文本创作
+                    - generic [ref=f70e1391]: 个性化
+                  - generic [ref=f70e1393]:
+                    - generic [ref=f70e1395]:
+                      - img "spark-circlePlay-line" [ref=f70e1396]
+                      - text: "0"
+                    - generic [ref=f70e1400]:
+                      - img "spark-copy-line" [ref=f70e1401]
+                      - text: "0"
+              - generic [ref=f70e1405] [cursor=pointer]:
+                - generic [ref=f70e1406]:
+                  - img "icon" [ref=f70e1407]
+                  - generic "千问联网检索Agent" [ref=f70e1408]
+                - generic [ref=f70e1409]: 百炼联网搜索智能体，可实时检索全网多维多源信息，自动筛选权威来源并提炼要点，支持追溯引用与多轮追问，快速生成可靠答案，提升决策与效率
+                - generic [ref=f70e1411]:
+                  - generic [ref=f70e1412]: 联网搜索
+                  - generic [ref=f70e1415]:
+                    - generic [ref=f70e1417]:
+                      - img "spark-circlePlay-line" [ref=f70e1418]
+                      - text: "0"
+                    - generic [ref=f70e1422]:
+                      - img "spark-copy-line" [ref=f70e1423]
+                      - text: "0"
+              - generic [ref=f70e1427] [cursor=pointer]:
+                - generic [ref=f70e1428]:
+                  - img "icon" [ref=f70e1429]
+                  - generic "听悟-智能纪要" [ref=f70e1430]
+                - generic [ref=f70e1431]: 基于语音识别和大语言模型，对会议、访谈、课堂等场景下的实时或离线录音进行智能总结分析。
+                - generic [ref=f70e1433]:
+                  - generic [ref=f70e1434]:
+                    - generic [ref=f70e1435]: 会议纪要
+                    - generic [ref=f70e1436]: 教育培训
+                  - generic [ref=f70e1438]:
+                    - generic [ref=f70e1440]:
+                      - img "spark-circlePlay-line" [ref=f70e1441]
+                      - text: "0"
+                    - generic [ref=f70e1445]:
+                      - img "spark-copy-line" [ref=f70e1446]
+                      - text: "0"
+              - generic [ref=f70e1450] [cursor=pointer]:
+                - generic [ref=f70e1451]:
+                  - img "icon" [ref=f70e1452]
+                  - generic "听悟-汽车销售服务质量洞察" [ref=f70e1453]
+                - generic [ref=f70e1454]: 汽车电话邀约、门店接待、试乘试驾、售后服务等售车全流程场景进行服务洞察，包含服务流程、业务要求、优势介绍、竞品应对等等各类对话内容。
+                - generic [ref=f70e1456]:
+                  - generic [ref=f70e1457]:
+                    - generic [ref=f70e1458]: 服务洞察
+                    - generic [ref=f70e1459]: 成交转化
+                  - generic [ref=f70e1461]:
+                    - generic [ref=f70e1463]:
+                      - img "spark-circlePlay-line" [ref=f70e1464]
+                      - text: "0"
+                    - generic [ref=f70e1468]:
+                      - img "spark-copy-line" [ref=f70e1469]
+                      - text: "0"
+              - generic [ref=f70e1473] [cursor=pointer]:
+                - generic [ref=f70e1474]:
+                  - img "icon" [ref=f70e1475]
+                  - generic "听悟-通用服务洞察" [ref=f70e1476]
+                - generic [ref=f70e1477]: 为各类销售场景提供全面的服务质检解决方案，确保客服和销售团队每次互动都达到高标准，从而提升客户满意度和公司声誉。
+                - generic [ref=f70e1479]:
+                  - generic [ref=f70e1480]:
+                    - generic [ref=f70e1481]: 服务洞察
+                    - generic [ref=f70e1482]: 成交转化
+                  - generic [ref=f70e1484]:
+                    - generic [ref=f70e1486]:
+                      - img "spark-circlePlay-line" [ref=f70e1487]
+                      - text: "0"
+                    - generic [ref=f70e1491]:
+                      - img "spark-copy-line" [ref=f70e1492]
+                      - text: "0"
+              - generic [ref=f70e1496] [cursor=pointer]:
+                - generic [ref=f70e1497]:
+                  - img "icon" [ref=f70e1498]
+                  - generic "全妙-电商文案智能可控生成" [ref=f70e1499]
+                - generic [ref=f70e1500]: 基于全妙可控式生成大模型，智能生成高转化电商文案，实现精准控字、风格多变，助力品牌高效曝光，营销提效一步到位。
+                - generic [ref=f70e1502]:
+                  - generic [ref=f70e1503]:
+                    - generic [ref=f70e1504]: 营销
+                    - generic [ref=f70e1505]: 文本写作
+                    - generic [ref=f70e1506]: 字数可控
+                  - generic [ref=f70e1508]:
+                    - generic [ref=f70e1510]:
+                      - img "spark-circlePlay-line" [ref=f70e1511]
+                      - text: "0"
+                    - generic [ref=f70e1515]:
+                      - img "spark-copy-line" [ref=f70e1516]
+                      - text: "0"
+              - generic [ref=f70e1520] [cursor=pointer]:
+                - generic [ref=f70e1521]:
+                  - img "icon" [ref=f70e1522]
+                  - generic "全妙-影视传媒视频理解" [ref=f70e1523]
+                - generic [ref=f70e1524]: 借助视频处理、视频理解、大语言模型的串联能力，实现对视频里指定要点的理解和提取，并按要求生成指定类型的文案 、提取标签、洞察分析
+                - generic [ref=f70e1526]:
+                  - generic [ref=f70e1527]:
+                    - generic [ref=f70e1528]: 多模态
+                    - generic [ref=f70e1529]: 营销
+                    - generic [ref=f70e1530]: 效率工具
+                  - generic [ref=f70e1532]:
+                    - generic [ref=f70e1534]:
+                      - img "spark-circlePlay-line" [ref=f70e1535]
+                      - text: "0"
+                    - generic [ref=f70e1539]:
+                      - img "spark-copy-line" [ref=f70e1540]
+                      - text: "0"
+              - generic [ref=f70e1544] [cursor=pointer]:
+                - generic [ref=f70e1545]:
+                  - img "icon" [ref=f70e1546]
+                  - generic "ChatPDF 企业知识库问答" [ref=f70e1547]
+                - generic [ref=f70e1548]: 上传 PDF 文档到知识库后，可通过自然语言提问，快速获取文档中的关键信息。它支持中英文等多种语言，适用于学术研究、商业分析和学习辅助等场景，能高效提取论文观点、合同条款或技术内容。
+                - generic [ref=f70e1550]:
+                  - generic [ref=f70e1551]:
+                    - generic [ref=f70e1552]: 知识库
+                    - generic [ref=f70e1553]: 免费
+                    - generic [ref=f70e1554]: 智能体
+                  - generic [ref=f70e1556]:
+                    - generic [ref=f70e1558]:
+                      - img "spark-circlePlay-line" [ref=f70e1559]
+                      - text: "8986"
+                    - generic [ref=f70e1563]:
+                      - img "spark-copy-line" [ref=f70e1564]
+                      - text: "9155"
+              - generic [ref=f70e1568] [cursor=pointer]:
+                - generic [ref=f70e1569]:
+                  - img "icon" [ref=f70e1570]
+                  - generic "全妙-影视互娱剧本创作" [ref=f70e1571]
+                - generic [ref=f70e1572]: 在提供创意灵感的同时，方便快速生成各类剧本策划和情节续写，助你打造优质作品
+                - generic [ref=f70e1574]:
+                  - generic [ref=f70e1575]:
+                    - generic [ref=f70e1576]: 剧本策划
+                    - generic [ref=f70e1577]: 情节续写
+                    - generic [ref=f70e1578]: 文本创作
+                  - generic [ref=f70e1580]:
+                    - generic [ref=f70e1582]:
+                      - img "spark-circlePlay-line" [ref=f70e1583]
+                      - text: "0"
+                    - generic [ref=f70e1587]:
+                      - img "spark-copy-line" [ref=f70e1588]
+                      - text: "0"
+              - generic [ref=f70e1592] [cursor=pointer]:
+                - generic [ref=f70e1593]:
+                  - img "icon" [ref=f70e1594]
+                  - generic "拍照搜题" [ref=f70e1595]
+                - generic [ref=f70e1596]: 基于多模态识别与结构化知识库，实现“拍题即答”，及时响应，精准可靠。
+                - generic [ref=f70e1598]:
+                  - generic [ref=f70e1599]:
+                    - generic [ref=f70e1600]: 教育
+                    - generic [ref=f70e1601]: 知识库
+                    - generic [ref=f70e1602]: 智能体
+                  - generic [ref=f70e1604]:
+                    - generic [ref=f70e1606]:
+                      - img "spark-circlePlay-line" [ref=f70e1607]
+                      - text: "2263"
+                    - generic [ref=f70e1611]:
+                      - img "spark-copy-line" [ref=f70e1612]
+                      - text: "2118"
+              - generic [ref=f70e1616] [cursor=pointer]:
+                - generic [ref=f70e1617]:
+                  - img "icon" [ref=f70e1618]
+                  - generic "全妙-车机网络热点信息互动问答" [ref=f70e1619]
+                - generic [ref=f70e1620]: 和【封面新闻】联合打造：针对汽车用户在驾车过程中的收听新闻的需求，通过大模型实现新闻内容的自动加工、分类聚合，富媒体呈现、交互式播报、个性化呈现，打造智能座舱新闻聚合播报产品，带给用户全新的体验。
+                - generic [ref=f70e1622]:
+                  - generic [ref=f70e1623]:
+                    - generic [ref=f70e1624]: 交互式
+                    - generic [ref=f70e1625]: 多模态
+                  - generic [ref=f70e1627]:
+                    - generic [ref=f70e1629]:
+                      - img "spark-circlePlay-line" [ref=f70e1630]
+                      - text: "0"
+                    - generic [ref=f70e1634]:
+                      - img "spark-copy-line" [ref=f70e1635]
+                      - text: "0"
+              - generic [ref=f70e1639] [cursor=pointer]:
+                - generic [ref=f70e1640]:
+                  - img "icon" [ref=f70e1641]
+                  - generic "全妙-泛企业线索挖掘" [ref=f70e1642]
+                - generic [ref=f70e1643]: 从社交媒体数据、通话记录等地方挖掘用户画像及二次销售机会，以及收集竞品和行业趋势线索。
+                - generic [ref=f70e1645]:
+                  - generic [ref=f70e1646]:
+                    - generic [ref=f70e1647]: 销售线索
+                    - generic [ref=f70e1648]: 销售机会
+                    - generic [ref=f70e1649]: 挖掘
+                  - generic [ref=f70e1651]:
+                    - generic [ref=f70e1653]:
+                      - img "spark-circlePlay-line" [ref=f70e1654]
+                      - text: "0"
+                    - generic [ref=f70e1658]:
+                      - img "spark-copy-line" [ref=f70e1659]
+                      - text: "0"
+              - generic [ref=f70e1663] [cursor=pointer]:
+                - generic [ref=f70e1664]:
+                  - img "icon" [ref=f70e1665]
+                  - generic "全妙-网络内容安全审核" [ref=f70e1666]
+                - generic [ref=f70e1667]: 网络内容安全审核工具用于网站、社交媒体等平台。它能自动扫描文本，快速检测涉黄、暴恐、侵权等违规内容，辅助人工审核，提高效率，确保网络环境合法合规、积极健康。
+                - generic [ref=f70e1669]:
+                  - generic [ref=f70e1670]:
+                    - generic [ref=f70e1671]: 文本检测
+                    - generic [ref=f70e1672]: 安全合规
+                    - generic [ref=f70e1673]: 审核
+                  - generic [ref=f70e1675]:
+                    - generic [ref=f70e1677]:
+                      - img "spark-circlePlay-line" [ref=f70e1678]
+                      - text: "0"
+                    - generic [ref=f70e1682]:
+                      - img "spark-copy-line" [ref=f70e1683]
+                      - text: "0"
+              - generic [ref=f70e1687] [cursor=pointer]:
+                - generic [ref=f70e1688]:
+                  - img "icon" [ref=f70e1689]
+                  - generic "小说故事与角色批量生成" [ref=f70e1690]
+                - generic [ref=f70e1691]: 支持生成多维角色设定（外貌、性格、背景），智能构建对话逻辑，自动生成章节大纲与万字正文。
+                - generic [ref=f70e1693]:
+                  - generic [ref=f70e1694]:
+                    - generic [ref=f70e1695]: 创作辅助
+                    - generic [ref=f70e1696]: 工作流
+                  - generic [ref=f70e1698]:
+                    - generic [ref=f70e1700]:
+                      - img "spark-circlePlay-line" [ref=f70e1701]
+                      - text: "9943"
+                    - generic [ref=f70e1705]:
+                      - img "spark-copy-line" [ref=f70e1706]
+                      - text: "3910"
+              - generic [ref=f70e1710] [cursor=pointer]:
+                - generic [ref=f70e1711]:
+                  - img "icon" [ref=f70e1712]
+                  - generic "公众号爆文创作" [ref=f70e1713]
+                - generic [ref=f70e1714]: 快速生成符合微信公众号传播规律的图文混合内容。支持行业趋势分析、标题优化、段落排版建议、配图推荐等功能，覆盖美妆、科技、教育等多领域，助力用户提升文章打开率与转发数量。
+                - generic [ref=f70e1716]:
+                  - generic [ref=f70e1717]:
+                    - generic [ref=f70e1718]: 内容创作
+                    - generic [ref=f70e1719]: 工作流
+                  - generic [ref=f70e1721]:
+                    - generic [ref=f70e1723]:
+                      - img "spark-circlePlay-line" [ref=f70e1724]
+                      - text: "27460"
+                    - generic [ref=f70e1728]:
+                      - img "spark-copy-line" [ref=f70e1729]
+                      - text: "4602"
+              - generic [ref=f70e1733] [cursor=pointer]:
+                - generic [ref=f70e1734]:
+                  - img "icon" [ref=f70e1735]
+                  - generic "一键生成电商产品视频" [ref=f70e1736]
+                - generic [ref=f70e1737]: 专为电商卖家设计，只需输入商品信息（如名称、规格、价格），即可一键生成高质量商品展示视频。视频优化店铺视觉效果，增强用户吸引力，助力快速提升产品销量。适用于服饰、数码、家居等各类淘宝商品推广场景，简化视频制作流程。
+                - generic [ref=f70e1739]:
+                  - generic [ref=f70e1740]:
+                    - generic [ref=f70e1741]: 电商
+                    - generic [ref=f70e1742]: 工作流
+                  - generic [ref=f70e1744]:
+                    - generic [ref=f70e1746]:
+                      - img "spark-circlePlay-line" [ref=f70e1747]
+                      - text: "30356"
+                    - generic [ref=f70e1751]:
+                      - img "spark-copy-line" [ref=f70e1752]
+                      - text: "2364"
+              - generic [ref=f70e1756] [cursor=pointer]:
+                - generic [ref=f70e1757]:
+                  - img "icon" [ref=f70e1758]
+                  - generic "一键生成短剧（动漫风）" [ref=f70e1759]
+                - generic [ref=f70e1760]: 输入一句话，自动生成具有的完整短剧剧本，包含场景、角色、对话与分镜，融合奇幻、自然与温情元素，适用于动画创作与故事开发。
+                - generic [ref=f70e1762]:
+                  - generic [ref=f70e1763]:
+                    - generic [ref=f70e1764]: 短剧
+                    - generic [ref=f70e1765]: 工作流
+                  - generic [ref=f70e1767]:
+                    - generic [ref=f70e1769]:
+                      - img "spark-circlePlay-line" [ref=f70e1770]
+                      - text: "40993"
+                    - generic [ref=f70e1774]:
+                      - img "spark-copy-line" [ref=f70e1775]
+                      - text: "2229"
+              - generic [ref=f70e1779] [cursor=pointer]:
+                - generic [ref=f70e1780]:
+                  - img "icon" [ref=f70e1781]
+                  - generic "拍立搜-图搜商品问答" [ref=f70e1782]
+                - generic [ref=f70e1783]: 只需随手一拍，系统即通过多模态视觉识别精准定位商品，并基于结构化商品图像知识库，为你提供深度、可靠的问题解答。
+                - generic [ref=f70e1785]:
+                  - generic [ref=f70e1786]:
+                    - generic [ref=f70e1787]: 电商
+                    - generic [ref=f70e1788]: 多模态
+                    - generic [ref=f70e1789]: 知识库
+                    - generic [ref=f70e1790]: 工作流
+                  - generic [ref=f70e1792]:
+                    - generic [ref=f70e1794]:
+                      - img "spark-circlePlay-line" [ref=f70e1795]
+                      - text: "1701"
+                    - generic [ref=f70e1799]:
+                      - img "spark-copy-line" [ref=f70e1800]
+                      - text: "1753"
+              - generic [ref=f70e1804] [cursor=pointer]:
+                - generic [ref=f70e1805]:
+                  - img "icon" [ref=f70e1806]
+                  - generic "差旅酒店预定助手" [ref=f70e1807]
+                - generic [ref=f70e1808]: 功能： 1、推荐语模板：当用户输入问候语，未提供酒店信息时，会自动提供酒店信息模板，供用户填写。例子：“你能为我做什么？” 2、酒店查询：当用户提供目的地，酒店需求等信息，会帮用户查询该目的地相关酒店 3、查询酒店房型价格及预定链接：用户根据查询到的酒店列表，然后选择想要了解的酒店，进行酒店房型价格查询，最后根据预定链接进行房间预定。例子：“查询xxxx酒店，房型价格” 4、行程规划：智能体会自动缓存用户的出行信息，然后根据出发地和目的地进行车票航班的查询，还可以根据目的地，给出目的地当日的天气情况。例子：“我需要行程规划”"
+                - generic [ref=f70e1810]:
+                  - generic [ref=f70e1811]:
+                    - generic [ref=f70e1812]: 酒店预订
+                    - generic [ref=f70e1813]: 行程规划
+                    - generic [ref=f70e1814]: 智能推荐
+                    - generic [ref=f70e1815]: 工作流
+                  - generic [ref=f70e1817]:
+                    - generic [ref=f70e1819]:
+                      - img "spark-circlePlay-line" [ref=f70e1820]
+                      - text: "716"
+                    - generic [ref=f70e1824]:
+                      - img "spark-copy-line" [ref=f70e1825]
+                      - text: "353"
+      - generic [ref=f70e239]:
+        - generic [ref=f70e240]:
+          - button [ref=f70e242] [cursor=pointer]:
+            - img "spark-fee-line" [ref=f70e244]
+          - button [ref=f70e247] [cursor=pointer]:
+            - img "spark-headset-line" [ref=f70e249]
+          - button [ref=f70e254] [cursor=pointer]:
+            - img "spark-document-line" [ref=f70e256]
+        - button [ref=f70e260] [cursor=pointer]:
+          - img "spark-right-line" [ref=f70e262]
+  - iframe [ref=f70e4]:
+    
+  - iframe [ref=f70e5]:
+    
+  - dialog "展开产品面板":
+    - navigation "产品与服务" [ref=f70e265]:
+      - generic [ref=f70e266]:
+        - generic "我的资源" [ref=f70e267] [cursor=pointer]:
+          - generic [ref=f70e268]:
+            - generic [ref=f70e269]: 
+            - generic [ref=f70e271]: 我的资源
+        - generic "访问和收藏" [ref=f70e272] [cursor=pointer]:
+          - generic [ref=f70e273]:
+            - generic [ref=f70e274]: 
+            - generic [ref=f70e276]: 访问和收藏
+        - generic "产品与服务" [ref=f70e277] [cursor=pointer]:
+          - generic [ref=f70e278]:
+            - generic [ref=f70e279]: 
+            - generic [ref=f70e281]: 产品与服务
+        - generic [ref=f70e283]:
+          - button "全部" [ref=f70e284] [cursor=pointer]
+          - button "人工智能与机器学习" [ref=f70e285] [cursor=pointer]
+          - button "计算" [ref=f70e286] [cursor=pointer]
+          - button "容器" [ref=f70e287] [cursor=pointer]
+          - button "存储" [ref=f70e288] [cursor=pointer]
+          - button "网络与CDN" [ref=f70e289] [cursor=pointer]
+          - button "安全" [ref=f70e290] [cursor=pointer]
+          - button "中间件" [ref=f70e291] [cursor=pointer]
+          - button "数据库" [ref=f70e292] [cursor=pointer]
+          - button "大数据计算" [ref=f70e293] [cursor=pointer]
+          - button "媒体服务" [ref=f70e294] [cursor=pointer]
+          - button "企业服务与云通信" [ref=f70e295] [cursor=pointer]
+          - button "域名与网站" [ref=f70e296] [cursor=pointer]
+          - button "终端用户计算" [ref=f70e297] [cursor=pointer]
+          - button "物联网" [ref=f70e298] [cursor=pointer]
+          - button "开发工具" [ref=f70e299] [cursor=pointer]
+          - button "迁移与运维管理" [ref=f70e300] [cursor=pointer]
+          - button "云市场" [ref=f70e301] [cursor=pointer]
+          - button "支持与服务" [ref=f70e302] [cursor=pointer]
+    - main "我的资源" [ref=f70e303]:
+      - generic [ref=f70e304]:
+        - generic [ref=f70e305]: 我的资源
+        - generic [ref=f70e313]:
+          - generic [ref=f70e314]:
+            - generic "计算" [ref=f70e315]:
+              - img "computing" [ref=f70e316]
+            - generic [ref=f70e319]:
+              - link "云服务器 ECS star-fill" [ref=f70e320] [cursor=pointer]:
+                - /url: //ecs.console.aliyun.com
+                - generic "云服务器 ECS" [ref=f70e322]
+                - img "star-fill" [ref=f70e324]
+              - link "2 密钥对" [ref=f70e328] [cursor=pointer]:
+                - /url: //ecs.console.aliyun.com/home
+                - generic [ref=f70e329]: "2"
+                - generic [ref=f70e330]: 密钥对
+          - generic [ref=f70e331]:
+            - generic "安全" [ref=f70e332]:
+              - img "security" [ref=f70e333]
+            - generic [ref=f70e336]:
+              - link "数字证书管理服务（原SSL证书） star-fill" [ref=f70e337] [cursor=pointer]:
+                - /url: //yundun.console.aliyun.com/?p=cas
+                - generic "数字证书管理服务（原SSL证书）" [ref=f70e339]
+                - img "star-fill" [ref=f70e341]
+              - generic [ref=f70e345] [cursor=pointer]:
+                - generic [ref=f70e346]: "-"
+                - img "help-line" [ref=f70e348]
+          - generic [ref=f70e351]:
+            - generic "域名与网站" [ref=f70e352]:
+              - img "doweb" [ref=f70e353]
+            - generic [ref=f70e355]:
+              - generic [ref=f70e356]:
+                - link "域名与网站 star-fill" [ref=f70e357] [cursor=pointer]:
+                  - /url: //dc.console.aliyun.com/next/index
+                  - generic "域名与网站" [ref=f70e359]
+                  - img "star-fill" [ref=f70e361]
+                - link "1 域名" [ref=f70e365] [cursor=pointer]:
+                  - /url: //dc.console.aliyun.com/next/index#/domain-list/all
+                  - generic [ref=f70e366]: "1"
+                  - generic [ref=f70e367]: 域名
+              - generic [ref=f70e368]:
+                - link "云解析DNS star-fill" [ref=f70e369] [cursor=pointer]:
+                  - /url: //dnsnext.console.aliyun.com/authoritative
+                  - generic "云解析DNS" [ref=f70e371]
+                  - img "star-fill" [ref=f70e373]
+                - link "1 域名" [ref=f70e377] [cursor=pointer]:
+                  - /url: //dnsnext.console.aliyun.com/authoritative
+                  - generic [ref=f70e378]: "1"
+                  - generic [ref=f70e379]: 域名
+          - generic [ref=f70e380]:
+            - generic "迁移与运维管理" [ref=f70e381]:
+              - img "migrationom" [ref=f70e382]
+            - generic [ref=f70e385]:
+              - link "访问控制 RAM star-fill" [ref=f70e386] [cursor=pointer]:
+                - /url: //ram.console.aliyun.com
+                - generic "访问控制 RAM" [ref=f70e388]
+                - img "star-fill" [ref=f70e390]
+              - link "5 角色" [ref=f70e394] [cursor=pointer]:
+                - /url: //ram.console.aliyun.com/roles
+                - generic [ref=f70e395]: "5"
+                - generic [ref=f70e396]: 角色
+      - text:                                                                                                                                                                                                                                                             
+      - button "收起产品面板" [ref=f70e398] [cursor=pointer]:
+        - generic [ref=f70e399]: 
+    - button "收起产品面板" [ref=f70e400]
+  - text:      
+  - iframe [ref=f70e401]:
+    
+  - iframe [ref=f70e402]:
+    
