@@ -1,0 +1,127 @@
+- generic [active] [ref=f24e1]:
+  - generic [ref=f24e3]:
+    - complementary [ref=f24e4]:
+      - generic [ref=f24e5]: IoT 平台
+      - navigation [ref=f24e10]:
+        - generic [ref=f24e11] [cursor=pointer]: 工作台
+        - generic [ref=f24e16]:
+          - generic [ref=f24e17] [cursor=pointer]: 物模型管理
+          - generic:
+            - generic [ref=f24e26] [cursor=pointer]: IOT类目
+            - generic [ref=f24e31] [cursor=pointer]: 能力库
+            - generic [ref=f24e39] [cursor=pointer]: 算法库
+            - generic [ref=f24e45] [cursor=pointer]: 事件库
+        - generic [ref=f24e50]:
+          - generic [ref=f24e51] [cursor=pointer]: 产品管理
+          - generic:
+            - generic [ref=f24e61] [cursor=pointer]: 产品开发
+            - generic [ref=f24e68] [cursor=pointer]: 产品审核
+        - generic [ref=f24e73]:
+          - generic [ref=f24e74] [cursor=pointer]: 套餐管理
+          - generic:
+            - generic [ref=f24e85] [cursor=pointer]: 套餐配置
+            - generic [ref=f24e92] [cursor=pointer]: 服务类型
+        - generic [ref=f24e100]:
+          - generic [ref=f24e101] [cursor=pointer]: 智能体管理
+          - generic:
+            - generic [ref=f24e109] [cursor=pointer]: 智能体配置
+            - generic [ref=f24e114] [cursor=pointer]: 模型管理
+        - generic [ref=f24e122]:
+          - generic [ref=f24e123] [cursor=pointer]: 运营管理
+          - generic:
+            - generic [ref=f24e131] [cursor=pointer]: 商城位运营
+            - generic [ref=f24e136] [cursor=pointer]: 推荐位运营
+            - generic [ref=f24e141] [cursor=pointer]: 活动位运营
+            - generic [ref=f24e149] [cursor=pointer]: 用户分群
+            - generic [ref=f24e154] [cursor=pointer]: A/B Test
+      - generic [ref=f24e159]: 收起菜单
+    - generic [ref=f24e165]:
+      - banner [ref=f24e166]:
+        - navigation "面包屑" [ref=f24e168]:
+          - generic [ref=f24e169]:
+            - link "首页" [ref=f24e170]
+            - text: /
+          - link "模型管理" [ref=f24e172]
+        - generic [ref=f24e173]:
+          - superscript [ref=f24e180] [cursor=pointer]: "3"
+          - button "管理员" [ref=f24e182] [cursor=pointer]
+      - main [ref=f24e191]:
+        - generic [ref=f24e192]:
+          - generic [ref=f24e193]:
+            - generic [ref=f24e194]:
+              - generic [ref=f24e195]: 厂商
+              - generic [ref=f24e197] [cursor=pointer]:
+                - generic:
+                  - combobox [ref=f24e199]
+                  - generic [ref=f24e200]: 全部
+            - generic [ref=f24e205]:
+              - generic [ref=f24e206]: 状态
+              - generic [ref=f24e208] [cursor=pointer]:
+                - generic:
+                  - combobox [ref=f24e210]
+                  - generic [ref=f24e211]: 全部
+            - generic [ref=f24e216]:
+              - button "查询" [ref=f24e217] [cursor=pointer]
+              - button "重置" [ref=f24e219] [cursor=pointer]
+            - generic [ref=f24e221]:
+              - button [ref=f24e222] [cursor=pointer]
+              - button [ref=f24e227] [cursor=pointer]
+          - generic [ref=f24e232]:
+            - generic [ref=f24e234]:
+              - table [ref=f24e236]:
+                - rowgroup [ref=f24e244]:
+                  - row [ref=f24e245]:
+                    - columnheader "厂商名称" [ref=f24e246]
+                    - columnheader "模型标识" [ref=f24e248]
+                    - columnheader "显示名称" [ref=f24e250]
+                    - columnheader "API Key" [ref=f24e252]
+                    - columnheader "状态" [ref=f24e254]
+                    - columnheader "操作" [ref=f24e256]
+              - table [ref=f24e262]:
+                - rowgroup [ref=f24e270]:
+                  - row [ref=f24e271]:
+                    - cell "阿里云" [ref=f24e272]
+                    - cell "qwen-max" [ref=f24e274]
+                    - cell "通义千问 Qwen-Max" [ref=f24e276]
+                    - cell "****abcd" [ref=f24e278]
+                    - cell [ref=f24e280]:
+                      - generic [ref=f24e282]:
+                        - switch [checked]
+                    - cell [ref=f24e285]:
+                      - generic [ref=f24e286]:
+                        - button "编辑" [ref=f24e287] [cursor=pointer]
+                        - button "删除" [ref=f24e289] [cursor=pointer]
+                  - row [ref=f24e291]:
+                    - cell "百度智能云" [ref=f24e292]
+                    - cell "ernie-4.0-8k" [ref=f24e294]
+                    - cell "文心一言 ERNIE-4.0" [ref=f24e296]
+                    - cell "****7890" [ref=f24e298]
+                    - cell [ref=f24e300]:
+                      - generic [ref=f24e302]:
+                        - switch [checked]
+                    - cell [ref=f24e305]:
+                      - generic [ref=f24e306]:
+                        - button "编辑" [ref=f24e307] [cursor=pointer]
+                        - button "删除" [ref=f24e309] [cursor=pointer]
+                  - row [ref=f24e311]:
+                    - cell "智谱 AI" [ref=f24e312]
+                    - cell "glm-4" [ref=f24e314]
+                    - cell "GLM-4" [ref=f24e316]
+                    - cell "****9012" [ref=f24e318]
+                    - cell [ref=f24e320]:
+                      - generic [ref=f24e322]:
+                        - switch
+                    - cell [ref=f24e325]:
+                      - generic [ref=f24e326]:
+                        - button "编辑" [ref=f24e327] [cursor=pointer]
+                        - button "删除" [ref=f24e329] [cursor=pointer]
+            - generic [ref=f24e331]:
+              - generic [ref=f24e332]: 共 3 条
+              - generic [ref=f24e333]:
+                - button "上一页" [disabled] [ref=f24e334]
+                - list [ref=f24e335]:
+                  - listitem "第 1 页" [ref=f24e336]: "1"
+                - button "下一页" [disabled] [ref=f24e337]
+          - text: "* * * *"
+  - alert [ref=f24e457]:
+    - paragraph [ref=f24e461]: 已删除

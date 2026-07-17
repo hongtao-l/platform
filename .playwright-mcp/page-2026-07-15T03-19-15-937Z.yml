@@ -1,0 +1,132 @@
+- generic [active] [ref=f16e1]:
+  - generic [ref=f16e3]:
+    - complementary [ref=f16e4]:
+      - generic [ref=f16e5]: IoT 平台
+      - navigation [ref=f16e10]:
+        - generic [ref=f16e11] [cursor=pointer]: 工作台
+        - generic [ref=f16e16]:
+          - generic [ref=f16e17] [cursor=pointer]: 物模型管理
+          - generic:
+            - generic [ref=f16e26] [cursor=pointer]: IOT类目
+            - generic [ref=f16e31] [cursor=pointer]: 能力库
+            - generic [ref=f16e39] [cursor=pointer]: 算法库
+            - generic [ref=f16e45] [cursor=pointer]: 事件库
+        - generic [ref=f16e50]:
+          - generic [ref=f16e51] [cursor=pointer]: 产品管理
+          - generic:
+            - generic [ref=f16e61] [cursor=pointer]: 产品开发
+            - generic [ref=f16e68] [cursor=pointer]: 产品审核
+        - generic [ref=f16e73]:
+          - generic [ref=f16e74] [cursor=pointer]: 套餐管理
+          - generic:
+            - generic [ref=f16e85] [cursor=pointer]: 套餐配置
+            - generic [ref=f16e92] [cursor=pointer]: 服务类型
+        - generic [ref=f16e100]:
+          - generic [ref=f16e101] [cursor=pointer]: 智能体管理
+          - generic:
+            - generic [ref=f16e109] [cursor=pointer]: 智能体配置
+            - generic [ref=f16e114] [cursor=pointer]: 模型管理
+        - generic [ref=f16e122]:
+          - generic [ref=f16e123] [cursor=pointer]: 运营管理
+          - generic:
+            - generic [ref=f16e131] [cursor=pointer]: 商城位运营
+            - generic [ref=f16e136] [cursor=pointer]: 推荐位运营
+            - generic [ref=f16e141] [cursor=pointer]: 活动位运营
+            - generic [ref=f16e149] [cursor=pointer]: 用户分群
+            - generic [ref=f16e154] [cursor=pointer]: A/B Test
+      - generic [ref=f16e159]: 收起菜单
+    - generic [ref=f16e165]:
+      - banner [ref=f16e166]:
+        - navigation "面包屑" [ref=f16e168]:
+          - generic [ref=f16e169]:
+            - link "首页" [ref=f16e170]
+            - text: /
+          - link "智能体配置" [ref=f16e191]
+        - generic [ref=f16e171]:
+          - superscript [ref=f16e178] [cursor=pointer]: "3"
+          - button "管理员" [ref=f16e180] [cursor=pointer]
+      - main [ref=f16e189]:
+        - generic [ref=f16e449]:
+          - generic [ref=f16e451]:
+            - button [ref=f16e452] [cursor=pointer]
+            - generic [ref=f16e457]:
+              - generic [ref=f16e458]: 测试工作流demo
+              - generic [ref=f16e459]: 草稿
+              - generic [ref=f16e463]: 更新于：2026/7/15 11:19:14
+          - generic [ref=f16e464]:
+            - generic [ref=f16e465]:
+              - button "画布配置" [ref=f16e466] [cursor=pointer]
+              - button "发布渠道" [ref=f16e467] [cursor=pointer]
+            - generic [ref=f16e468]:
+              - button [ref=f16e469] [cursor=pointer]
+              - button "观测" [ref=f16e474] [cursor=pointer]
+              - button [ref=f16e476] [cursor=pointer]
+              - button "版本管理" [ref=f16e481] [cursor=pointer]
+              - button "发布" [ref=f16e483] [cursor=pointer]
+          - generic [ref=f16e486]:
+            - generic [ref=f16e487]:
+              - generic [ref=f16e488]:
+                - generic [ref=f16e489]: 节点管理
+                - button [ref=f16e490] [cursor=pointer]
+              - generic [ref=f16e495]:
+                - button "节点库" [ref=f16e496] [cursor=pointer]
+                - button "当前" [ref=f16e497] [cursor=pointer]
+              - textbox "搜索节点名称" [ref=f16e505]
+              - generic [ref=f16e506]:
+                - generic [ref=f16e507]:
+                  - generic [ref=f16e508]: 基础
+                  - generic [ref=f16e509]: 大模型
+                  - generic [ref=f16e512]: 多模态生成
+                  - generic [ref=f16e515]: 知识库
+                - generic [ref=f16e518]:
+                  - generic [ref=f16e519]: 工具
+                  - generic [ref=f16e520]: API
+                  - generic [ref=f16e523]: MCP
+                  - generic [ref=f16e526]: 数据连接器
+                  - generic [ref=f16e529]: 插件
+                  - generic [ref=f16e532]: 应用组件
+                  - generic [ref=f16e535]: 流程输出
+                  - generic [ref=f16e538]: 记忆库
+                - generic [ref=f16e541]:
+                  - generic [ref=f16e542]: 逻辑
+                  - generic [ref=f16e543]: 脚本
+                  - generic [ref=f16e546]: 条件判断
+                  - generic [ref=f16e549]: 意图分类
+                  - generic [ref=f16e552]: 循环
+                  - generic [ref=f16e555]: 批处理
+                - generic [ref=f16e558]:
+                  - generic [ref=f16e559]: 变量
+                  - generic [ref=f16e560]: 变量处理
+                  - generic [ref=f16e563]: 变量赋值
+                  - generic [ref=f16e566]: 参数提取
+                - generic [ref=f16e569]:
+                  - generic [ref=f16e570]: 数据
+                  - generic [ref=f16e571]: 文档解析
+                  - generic [ref=f16e574]: 图片解析
+                  - generic [ref=f16e577]: 视频解析
+                  - generic [ref=f16e580]: 音频解析
+                - generic [ref=f16e583]:
+                  - generic [ref=f16e584]: 智能体
+                  - generic [ref=f16e585]: 智能体创建
+                  - generic [ref=f16e588]: 智能体群组
+                - generic [ref=f16e591]:
+                  - generic [ref=f16e592]: 云资源
+                  - generic [ref=f16e593]: 函数计算
+                  - generic [ref=f16e596]: AppFlow
+            - generic [ref=f16e599]:
+              - generic [ref=f16e600]:
+                - generic [ref=f16e601]:
+                  - button [disabled] [ref=f16e602]
+                  - button [disabled] [ref=f16e607]
+                - generic [ref=f16e613]:
+                  - button [ref=f16e614] [cursor=pointer]
+                  - generic [ref=f16e619]: 100%
+                  - button [ref=f16e620] [cursor=pointer]
+                  - button [ref=f16e625] [cursor=pointer]
+              - generic [ref=f16e630]:
+                - generic [ref=f16e631]: 开始
+                - generic [ref=f16e641]: 结束
+                - generic:
+                  - paragraph: 从左侧节点库中拖入节点到画布中
+  - alert [ref=f16e651]:
+    - paragraph [ref=f16e655]: 工作流应用已创建

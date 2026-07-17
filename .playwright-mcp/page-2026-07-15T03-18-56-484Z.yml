@@ -1,0 +1,149 @@
+- generic [ref=f16e3]:
+  - complementary [ref=f16e4]:
+    - generic [ref=f16e5]: IoT 平台
+    - navigation [ref=f16e10]:
+      - generic [ref=f16e11] [cursor=pointer]: 工作台
+      - generic [ref=f16e16]:
+        - generic [ref=f16e17] [cursor=pointer]: 物模型管理
+        - generic:
+          - generic [ref=f16e26] [cursor=pointer]: IOT类目
+          - generic [ref=f16e31] [cursor=pointer]: 能力库
+          - generic [ref=f16e39] [cursor=pointer]: 算法库
+          - generic [ref=f16e45] [cursor=pointer]: 事件库
+      - generic [ref=f16e50]:
+        - generic [ref=f16e51] [cursor=pointer]: 产品管理
+        - generic:
+          - generic [ref=f16e61] [cursor=pointer]: 产品开发
+          - generic [ref=f16e68] [cursor=pointer]: 产品审核
+      - generic [ref=f16e73]:
+        - generic [ref=f16e74] [cursor=pointer]: 套餐管理
+        - generic:
+          - generic [ref=f16e85] [cursor=pointer]: 套餐配置
+          - generic [ref=f16e92] [cursor=pointer]: 服务类型
+      - generic [ref=f16e100]:
+        - generic [ref=f16e101] [cursor=pointer]: 智能体管理
+        - generic:
+          - generic [ref=f16e109] [cursor=pointer]: 智能体配置
+          - generic [ref=f16e114] [cursor=pointer]: 模型管理
+      - generic [ref=f16e122]:
+        - generic [ref=f16e123] [cursor=pointer]: 运营管理
+        - generic:
+          - generic [ref=f16e131] [cursor=pointer]: 商城位运营
+          - generic [ref=f16e136] [cursor=pointer]: 推荐位运营
+          - generic [ref=f16e141] [cursor=pointer]: 活动位运营
+          - generic [ref=f16e149] [cursor=pointer]: 用户分群
+          - generic [ref=f16e154] [cursor=pointer]: A/B Test
+    - generic [ref=f16e159]: 收起菜单
+  - generic [ref=f16e165]:
+    - banner [ref=f16e166]:
+      - navigation "面包屑" [ref=f16e168]:
+        - generic [ref=f16e169]:
+          - link "首页" [ref=f16e170]
+          - text: /
+        - link "智能体配置" [ref=f16e191]
+      - generic [ref=f16e171]:
+        - superscript [ref=f16e178] [cursor=pointer]: "3"
+        - button "管理员" [ref=f16e180] [cursor=pointer]
+    - main [ref=f16e189]:
+      - generic [ref=f16e192]:
+        - generic [ref=f16e193]:
+          - generic [ref=f16e194]:
+            - button "全部" [ref=f16e195] [cursor=pointer]
+            - button "智能体" [ref=f16e196] [cursor=pointer]
+            - button "工作流" [ref=f16e197] [cursor=pointer]
+          - generic [ref=f16e198]:
+            - button "使用指南" [ref=f16e199] [cursor=pointer]
+            - button [ref=f16e201] [cursor=pointer]
+        - generic [ref=f16e206]:
+          - textbox "搜索应用名称" [ref=f16e213]
+          - generic [ref=f16e215] [cursor=pointer]:
+            - generic:
+              - combobox [ref=f16e217]
+              - generic [ref=f16e218]: 请选择
+          - button [ref=f16e223] [cursor=pointer]
+        - generic [ref=f16e228]:
+          - generic [ref=f16e229]:
+            - generic [ref=f16e236]:
+              - generic [ref=f16e237]: 全能AI助手
+              - generic [ref=f16e238]: 已发布
+            - generic [ref=f16e239]:
+              - generic [ref=f16e240]: "应用ID:"
+              - generic [ref=f16e241]: 552f73c8e1a24f6d
+              - button [ref=f16e242] [cursor=pointer]
+            - generic [ref=f16e247]: 模型:通义千问 Qwen-Max
+            - generic [ref=f16e248]: 更新于 2026/7/14 10:30:00
+            - generic [ref=f16e249]:
+              - button "配置" [ref=f16e250] [cursor=pointer]
+              - button "下线" [ref=f16e252] [cursor=pointer]
+              - button [ref=f16e255] [cursor=pointer]
+          - generic [ref=f16e260]:
+            - generic [ref=f16e267]:
+              - generic [ref=f16e268]: 厨房安全智体
+              - generic [ref=f16e269]: 未发布
+            - generic [ref=f16e270]:
+              - generic [ref=f16e271]: "应用ID:"
+              - generic [ref=f16e272]: a9ca3f12d8e04b7c
+              - button [ref=f16e273] [cursor=pointer]
+            - generic [ref=f16e278]: 模型:文心一言 ERNIE-4.0
+            - generic [ref=f16e279]: 更新于 2026/7/13 16:20:00
+            - generic [ref=f16e280]:
+              - button "配置" [ref=f16e281] [cursor=pointer]
+              - button "发布" [disabled] [ref=f16e283]
+              - button [ref=f16e286] [cursor=pointer]
+          - generic [ref=f16e291]:
+            - generic [ref=f16e298]:
+              - generic [ref=f16e299]: 老人看护助手
+              - generic [ref=f16e300]: 未发布
+            - generic [ref=f16e301]:
+              - generic [ref=f16e302]: "应用ID:"
+              - generic [ref=f16e303]: 064ec4a9b2f04d8e
+              - button [ref=f16e304] [cursor=pointer]
+            - generic [ref=f16e309]: 模型:通义千问 Qwen-Max
+            - generic [ref=f16e310]: 更新于 2026/7/12 09:15:00
+            - generic [ref=f16e311]:
+              - button "配置" [ref=f16e312] [cursor=pointer]
+              - button "发布" [disabled] [ref=f16e314]
+              - button [ref=f16e317] [cursor=pointer]
+        - dialog "创建应用" [ref=f16e323]:
+          - generic [active] [ref=f16e324]:
+            - generic [ref=f16e325]:
+              - heading "创建应用" [level=2] [ref=f16e326]
+              - button "关闭此对话框" [ref=f16e327] [cursor=pointer]
+            - generic [ref=f16e332]:
+              - generic [ref=f16e333]:
+                - generic [ref=f16e334]: 低代码
+                - generic [ref=f16e335] [cursor=pointer]:
+                  - generic [ref=f16e341]:
+                    - generic [ref=f16e342]: 智能体应用
+                    - generic [ref=f16e343]: 构建智能体应用，连接知识、插件等
+                  - radio [ref=f16e346]
+                - generic [ref=f16e348] [cursor=pointer]:
+                  - generic [ref=f16e353]:
+                    - generic [ref=f16e354]: 工作流应用
+                    - generic [ref=f16e355]: 通过画布自定义编排工作流
+                  - radio [checked] [ref=f16e358]
+                - separator [ref=f16e360]
+                - generic [ref=f16e361]: 高代码
+                - generic [ref=f16e362] [cursor=pointer]:
+                  - generic [ref=f16e367]:
+                    - generic [ref=f16e368]: 高代码应用
+                    - generic [ref=f16e369]: 高代码开发和云上托管的应用
+                  - radio [ref=f16e372]
+              - generic [ref=f16e422]:
+                - heading "创建工作流应用" [level=4] [ref=f16e423]
+                - paragraph [ref=f16e424]: 通过画布自定义编排工作流，实现复杂的业务逻辑处理，支持多种节点类型和条件分支，适用于自动化任务处理场景。
+                - generic [ref=f16e425]:
+                  - generic [ref=f16e426]:
+                    - generic [ref=f16e427]: "* 应用名称"
+                    - generic [ref=f16e430]:
+                      - textbox "* 应用名称" [ref=f16e431]:
+                        - /placeholder: 请输入应用名称
+                      - generic: 0 / 50
+                  - generic [ref=f16e435]:
+                    - generic [ref=f16e436]: 描述信息
+                    - textbox "描述信息" [ref=f16e440]:
+                      - /placeholder: 请输入描述信息
+                  - group "应用头像" [ref=f16e441]
+            - generic [ref=f16e417]:
+              - button "取消" [ref=f16e418] [cursor=pointer]
+              - button "立即创建" [disabled] [ref=f16e420]

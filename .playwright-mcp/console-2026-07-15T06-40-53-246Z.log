@@ -1,0 +1,84 @@
+[    1801ms] [WARNING] The value "devide-width" for key "width" is invalid, and has been ignored. @ https://lanhuapp.com/link/#/invite?sid=lXRzo8Ca:0
+[    3264ms] [WARNING] from:  {path: /, name: undefined, params: Object, query: Object, hash: } , to:  {fullPath: /invite?sid=lXRzo8Ca, path: /invite, query: Object, hash: , name: Invite} @ https://lanhuapp.com/link/js/app.aa9244ac.js:0
+[    3409ms] [INFO] 监控 js 错误 @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[    3409ms] [LOG] 用户访问记录监控 @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[    3409ms] [LOG] 静态资源加载监控 @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[    3409ms] [INFO] 页面加载性能监控 @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[    3409ms] [INFO] 监控资源异常 @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[    3409ms] [INFO] 行为监控 @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[    3410ms] [INFO] 监控 http 请求日志 @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[    3512ms] [INFO] %c[2026-07-15 14:40:56.754]:[INFO] UNLOAD - undefined color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[    3725ms] [WARNING] The value "devide-width" for key "width" is invalid, and has been ignored. @ https://lanhuapp.com/sso/#/main/home?redirect_to=https%3A%2F%2Flanhuapp.com%2Flink%2F%23%2Finvite%3Fsid%3DlXRzo8Ca%26sign%3D&login_title=%E7%AE%A1%E6%99%93%E5%AE%87-UI%20%E9%82%80%E8%AF%B7%E4%BD%A0%E5%8A%A0%E5%85%A5%20%E9%B9%A4%E6%A2%A6%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8&login_icon=https%3A%2F%2Falipic.lanhuapp.com%2Fweb4494f0f6-c1e9-41cd-b986-953eb525617e&isInvite=1&invite_id=92ce57b0-d3d3-487e-addf-dbe9d300f70a&tid=32b93f31-aee1-401a-baa1-425f06afb188:0
+[    5311ms] [LOG] Wed Jul 15 2026 14:40:58 GMT+0800 (中国标准时间) @ https://g.alicdn.com/AWSC/et/1.83.41/et_f.js:1
+[    6233ms] [INFO] 监控 js 错误 @ https://sso-cdn.lanhuapp.com/ssoweb/js/chunk-vendors.1b348ec8.js:115
+[    6233ms] [LOG] 用户访问记录监控 @ https://sso-cdn.lanhuapp.com/ssoweb/js/chunk-vendors.1b348ec8.js:115
+[    6233ms] [LOG] 静态资源加载监控 @ https://sso-cdn.lanhuapp.com/ssoweb/js/chunk-vendors.1b348ec8.js:115
+[    6233ms] [INFO] 页面加载性能监控 @ https://sso-cdn.lanhuapp.com/ssoweb/js/chunk-vendors.1b348ec8.js:115
+[    6234ms] [INFO] 监控资源异常 @ https://sso-cdn.lanhuapp.com/ssoweb/js/chunk-vendors.1b348ec8.js:115
+[    6234ms] [INFO] 页面用户行为监控 @ https://sso-cdn.lanhuapp.com/ssoweb/js/chunk-vendors.1b348ec8.js:115
+[    6234ms] [INFO] 监控 http 请求日志 @ https://sso-cdn.lanhuapp.com/ssoweb/js/chunk-vendors.1b348ec8.js:115
+[    6234ms] [INFO] 监控 js 错误 @ https://sso-cdn.lanhuapp.com/ssoweb/js/chunk-vendors.1b348ec8.js:138
+[    6235ms] [LOG] 用户访问记录监控 @ https://sso-cdn.lanhuapp.com/ssoweb/js/chunk-vendors.1b348ec8.js:138
+[    6235ms] [LOG] 静态资源加载监控 @ https://sso-cdn.lanhuapp.com/ssoweb/js/chunk-vendors.1b348ec8.js:138
+[    6235ms] [INFO] 页面加载性能监控 @ https://sso-cdn.lanhuapp.com/ssoweb/js/chunk-vendors.1b348ec8.js:138
+[    6235ms] [INFO] 监控资源异常 @ https://sso-cdn.lanhuapp.com/ssoweb/js/chunk-vendors.1b348ec8.js:138
+[    6235ms] [INFO] 页面用户行为监控 @ https://sso-cdn.lanhuapp.com/ssoweb/js/chunk-vendors.1b348ec8.js:138
+[    6235ms] [INFO] 监控 http 请求日志 @ https://sso-cdn.lanhuapp.com/ssoweb/js/chunk-vendors.1b348ec8.js:138
+[    7982ms] [LOG] [debug] auth:  false , sso open:  false , sso auth:  false false , tid:  32b93f31-aee1-401a-baa1-425f06afb188 @ https://sso-cdn.lanhuapp.com/ssoweb/js/app.e97f42d3.js:0
+[    7990ms] [LOG] [debug] isSsoOpen:  false @ https://sso-cdn.lanhuapp.com/ssoweb/js/app.e97f42d3.js:0
+[   10789ms] [WARNING] The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet) @ https://g.alicdn.com/AWSC/fireyejs/1.231.69/fireyejs.js:0
+[   18097ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://lanhuapp.com/sso/#/main/home?account=18712417852&scene=password&tid=32b93f31-aee1-401a-baa1-425f06afb188:0
+[   55415ms] [WARNING] 暂时无utm信息 @ https://sso-cdn.lanhuapp.com/ssoweb/js/app.e97f42d3.js:0
+[   55416ms] [WARNING] 33333 undefined LT-CT3L05X3CPHlj0PhelqQLLqjqEqsYNNa2hlXP73JGxMj58PFeQuOYGj2wl6PbPUY undefined @ https://sso-cdn.lanhuapp.com/ssoweb/js/app.e97f42d3.js:0
+[   55416ms] [LOG] [auth] redirect_to:  https://lanhuapp.com/link/#/invite?sid=lXRzo8Ca&sign= @ https://sso-cdn.lanhuapp.com/ssoweb/js/app.e97f42d3.js:0
+[   55423ms] [LOG] [debug] paramsString:  inviter=92ce57b0-d3d3-487e-addf-dbe9d300f70a&request_from=web&sso_ticket=LT-CT3L05X3CPHlj0PhelqQLLqjqEqsYNNa2hlXP73JGxMj58PFeQuOYGj2wl6PbPUY&redirect_uri=https%3A%2F%2Flanhuapp.com%2Flink%2F%23%2Finvite%3Fsid%3DlXRzo8Ca%26sign%3D%26action%3Dlogin%26corpId%3Dnull%26action_type%3Dcode&action=login&action_type=code https://lanhuapp.com @ https://sso-cdn.lanhuapp.com/ssoweb/js/app.e97f42d3.js:0
+[   55604ms] [WARNING] The value "devide-width" for key "width" is invalid, and has been ignored. @ https://lanhuapp.com/link/#/invite?sid=lXRzo8Ca&sign=&action=login&corpId=null&action_type=code&sso_token=eyJhbGciOiJIUzI1NiIsImlhdCI6MTc4NDA5NzcwOCwiZXhwIjoxNzkxODczNzA4fQ.eyJpZCI6IjgxZmMwZDY3LTI4MTUtNGNiYi04ODY2LTMzZjQ5MDA2YjJmYSJ9.knjw8qVJXDXnui2564ggTK8z5M2YPNezKl9tpt5OHJ8:0
+[   55655ms] [WARNING] from:  {path: /, name: undefined, params: Object, query: Object, hash: } , to:  {fullPath: /invite?sid=lXRzo8Ca&sign=&action=login&corpId=nul…mYSJ9.knjw8qVJXDXnui2564ggTK8z5M2YPNezKl9tpt5OHJ8, path: /invite, query: Object, hash: , name: Invite} @ https://lanhuapp.com/link/js/app.aa9244ac.js:0
+[   55656ms] [WARNING] from:  {path: /, name: undefined, params: Object, query: Object, hash: } , to:  {fullPath: /invite?sid=lXRzo8Ca&sign, hash: , query: Object, name: Invite, path: /invite} @ https://lanhuapp.com/link/js/app.aa9244ac.js:0
+[   55668ms] [INFO] 监控 js 错误 @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55668ms] [LOG] 用户访问记录监控 @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55668ms] [LOG] 静态资源加载监控 @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55668ms] [INFO] 页面加载性能监控 @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55668ms] [INFO] 监控资源异常 @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55668ms] [INFO] 行为监控 @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55668ms] [INFO] 监控 http 请求日志 @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55872ms] [INFO] %c[2026-07-15 14:41:49.115]:[INFO] PV - 用户访问 color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55874ms] [INFO] %c[2026-07-15 14:41:49.118]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/css/app.623bef2b.css color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55874ms] [INFO] %c[2026-07-15 14:41:49.119]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/css/chunk-vendors.3f0d192f.css color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55874ms] [INFO] %c[2026-07-15 14:41:49.119]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/app.aa9244ac.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55874ms] [INFO] %c[2026-07-15 14:41:49.120]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-vendors.39c758db.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55875ms] [INFO] %c[2026-07-15 14:41:49.120]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/css/about.5640700f.css color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55875ms] [INFO] %c[2026-07-15 14:41:49.120]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/css/chunk-0b95c680.711df0e3.css color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55875ms] [INFO] %c[2026-07-15 14:41:49.120]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/css/chunk-1f684103.993b2878.css color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55875ms] [INFO] %c[2026-07-15 14:41:49.121]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/css/chunk-61817c0e.9d4e674d.css color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55876ms] [INFO] %c[2026-07-15 14:41:49.121]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/css/chunk-70f9434c.69a9af18.css color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55876ms] [INFO] %c[2026-07-15 14:41:49.121]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/css/chunk-bab4cfbc.10961be8.css color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55876ms] [INFO] %c[2026-07-15 14:41:49.121]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/about.6d6319c0.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55876ms] [INFO] %c[2026-07-15 14:41:49.122]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-080097b0.819332dc.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55876ms] [INFO] %c[2026-07-15 14:41:49.122]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-0b95c680.c85f4eef.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55877ms] [INFO] %c[2026-07-15 14:41:49.122]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-1f684103.d84c1fc4.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55877ms] [INFO] %c[2026-07-15 14:41:49.122]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-251cc19f.d6d4136b.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55877ms] [INFO] %c[2026-07-15 14:41:49.122]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-2d0b68ce.ebff1593.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55877ms] [INFO] %c[2026-07-15 14:41:49.123]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-2d0d0a16.6c8f7e03.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55878ms] [INFO] %c[2026-07-15 14:41:49.123]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-2d0e239d.b5c5ae69.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55878ms] [INFO] %c[2026-07-15 14:41:49.123]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-2d2080c7.1c3bdc6d.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55878ms] [INFO] %c[2026-07-15 14:41:49.123]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-4bd3cbba.74b3f9d2.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55878ms] [INFO] %c[2026-07-15 14:41:49.124]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-61817c0e.38692cde.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55878ms] [INFO] %c[2026-07-15 14:41:49.124]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-70f9434c.d00cadea.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55879ms] [INFO] %c[2026-07-15 14:41:49.124]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-895579a6.69be3ce2.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55879ms] [INFO] %c[2026-07-15 14:41:49.124]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-bab4cfbc.f12d7e5b.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55879ms] [INFO] %c[2026-07-15 14:41:49.125]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-c7882e16.399d6b2e.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55879ms] [INFO] %c[2026-07-15 14:41:49.125]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/chunk-cf931ebc.39b57b51.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55880ms] [INFO] %c[2026-07-15 14:41:49.125]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/polyfills-core-js.28f5c352.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   55880ms] [INFO] %c[2026-07-15 14:41:49.125]:[INFO] PERFORMANCE - 加载资源:https://lanhuapp.com/link/js/polyfills-dom.cd511f2f.js color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   56338ms] [INFO] %c[2026-07-15 14:41:49.161]:[INFO] HTTP - 请求 POST 200 https://lanhuapp.com/api/share/url/resolve color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   56340ms] [INFO] %c[2026-07-15 14:41:49.585]:[INFO] UNLOAD - undefined color: DodgerBlue t @ https://lanhuapp.com/link/js/chunk-vendors.39c758db.js:62
+[   57618ms] [WARNING] [AB] Unable to query 'saas_exp_help_effect' in A/B Test! @ https://lhcdn.lanhuapp.com/web/js/vendors.4ce0faa5.js:116
+[   57619ms] [WARNING] [AB] Unable to query 'saas_exp_perf_collect' in A/B Test! @ https://lhcdn.lanhuapp.com/web/js/vendors.4ce0faa5.js:116
+[   57721ms] [WARNING] not login yet~ @ https://lhcdn.lanhuapp.com/web/js/kefu.2e07840a.js:0
+[   57806ms] [WARNING] not pc dingding @ https://lhcdn.lanhuapp.com/web/js/common.f1fdd4a4.js:0
+[   58772ms] [WARNING] not pc dingding @ https://lhcdn.lanhuapp.com/web/js/common.1e0ad530.js:0
+[   59491ms] [WARNING] [board]not show new toolbar guide @ https://lhcdn.lanhuapp.com/web/js/editor.21571f28.js:1
+[   59498ms] [WARNING] rate 100 undefined @ https://lhcdn.lanhuapp.com/web/js/editor~stage-block.c1abac01.js:0
+[   59508ms] [WARNING] this.MAX_SCALE 16 16 @ https://lhcdn.lanhuapp.com/web/js/editor.21571f28.js:1
+[13474129ms] [WARNING] space @ https://lhcdn.lanhuapp.com/web/js/editor~stage-block.c1abac01.js:0

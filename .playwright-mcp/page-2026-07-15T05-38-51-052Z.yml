@@ -1,0 +1,67 @@
+- generic [ref=f26e1]:
+  - generic [ref=f26e3]:
+    - complementary [ref=f26e4]:
+      - generic [ref=f26e5]: IoT 平台
+      - navigation [ref=f26e10]:
+        - generic [ref=f26e11] [cursor=pointer]: 工作台
+        - generic [ref=f26e16]:
+          - generic [ref=f26e17] [cursor=pointer]: 物模型管理
+          - generic:
+            - generic [ref=f26e26] [cursor=pointer]: IOT类目
+            - generic [ref=f26e31] [cursor=pointer]: 能力库
+            - generic [ref=f26e39] [cursor=pointer]: 算法库
+            - generic [ref=f26e45] [cursor=pointer]: 事件库
+        - generic [ref=f26e50]:
+          - generic [ref=f26e51] [cursor=pointer]: 产品管理
+          - generic:
+            - generic [ref=f26e61] [cursor=pointer]: 产品开发
+            - generic [ref=f26e68] [cursor=pointer]: 产品审核
+        - generic [ref=f26e73]:
+          - generic [ref=f26e74] [cursor=pointer]: 套餐管理
+          - generic:
+            - generic [ref=f26e85] [cursor=pointer]: 套餐配置
+            - generic [ref=f26e92] [cursor=pointer]: 服务类型
+        - generic [ref=f26e100]:
+          - generic [ref=f26e101] [cursor=pointer]: 智能体管理
+          - generic:
+            - generic [ref=f26e109] [cursor=pointer]: 智能体配置
+            - generic [ref=f26e114] [cursor=pointer]: 模型管理
+        - generic [ref=f26e122]:
+          - generic [ref=f26e123] [cursor=pointer]: 运营管理
+          - generic:
+            - generic [ref=f26e131] [cursor=pointer]: 商城位运营
+            - generic [ref=f26e136] [cursor=pointer]: 推荐位运营
+            - generic [ref=f26e141] [cursor=pointer]: 活动位运营
+            - generic [ref=f26e149] [cursor=pointer]: 用户分群
+            - generic [ref=f26e154] [cursor=pointer]: A/B Test
+      - generic [ref=f26e159]: 收起菜单
+    - generic [ref=f26e165]:
+      - banner [ref=f26e166]:
+        - navigation "面包屑" [ref=f26e168]:
+          - generic [ref=f26e169]:
+            - link "首页" [ref=f26e170]
+            - text: /
+          - link "智能体配置" [ref=f26e172]
+        - generic [ref=f26e173]:
+          - superscript [ref=f26e180] [cursor=pointer]: "3"
+          - button "管理员" [ref=f26e182] [cursor=pointer]
+      - main [ref=f26e191]:
+        - generic [ref=f26e233]:
+          - generic [ref=f26e234]:
+            - generic [ref=f26e235]:
+              - button "全部" [ref=f26e236] [cursor=pointer]
+              - button "智能体" [ref=f26e237] [cursor=pointer]
+              - button "工作流" [ref=f26e238] [cursor=pointer]
+            - generic [ref=f26e239]:
+              - button "使用指南" [active] [ref=f26e240] [cursor=pointer]
+              - button [ref=f26e242] [cursor=pointer]
+          - generic [ref=f26e247]:
+            - textbox "搜索应用名称" [ref=f26e254]
+            - generic [ref=f26e256] [cursor=pointer]:
+              - generic:
+                - combobox [ref=f26e258]
+                - generic [ref=f26e259]: 请选择
+            - button [ref=f26e264] [cursor=pointer]
+          - paragraph [ref=f26e388]: 暂无应用，点击右上角「创建应用」开始
+  - alert [ref=f26e389]:
+    - paragraph [ref=f26e393]: 使用指南功能即将上线

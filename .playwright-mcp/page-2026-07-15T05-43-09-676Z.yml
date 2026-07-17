@@ -1,0 +1,106 @@
+- generic [ref=f28e3]:
+  - complementary [ref=f28e4]:
+    - generic [ref=f28e5]: IoT 平台
+    - navigation [ref=f28e10]:
+      - generic [ref=f28e11] [cursor=pointer]: 工作台
+      - generic [ref=f28e16]:
+        - generic [ref=f28e17] [cursor=pointer]: 物模型管理
+        - generic:
+          - generic [ref=f28e26] [cursor=pointer]: IOT类目
+          - generic [ref=f28e31] [cursor=pointer]: 能力库
+          - generic [ref=f28e39] [cursor=pointer]: 算法库
+          - generic [ref=f28e45] [cursor=pointer]: 事件库
+      - generic [ref=f28e50]:
+        - generic [ref=f28e51] [cursor=pointer]: 产品管理
+        - generic:
+          - generic [ref=f28e61] [cursor=pointer]: 产品开发
+          - generic [ref=f28e68] [cursor=pointer]: 产品审核
+      - generic [ref=f28e73]:
+        - generic [ref=f28e74] [cursor=pointer]: 套餐管理
+        - generic:
+          - generic [ref=f28e85] [cursor=pointer]: 套餐配置
+          - generic [ref=f28e92] [cursor=pointer]: 服务类型
+      - generic [ref=f28e100]:
+        - generic [ref=f28e101] [cursor=pointer]: 智能体管理
+        - generic:
+          - generic [ref=f28e109] [cursor=pointer]: 智能体配置
+          - generic [ref=f28e114] [cursor=pointer]: 模型管理
+      - generic [ref=f28e122]:
+        - generic [ref=f28e123] [cursor=pointer]: 运营管理
+        - generic:
+          - generic [ref=f28e131] [cursor=pointer]: 商城位运营
+          - generic [ref=f28e136] [cursor=pointer]: 推荐位运营
+          - generic [ref=f28e141] [cursor=pointer]: 活动位运营
+          - generic [ref=f28e149] [cursor=pointer]: 用户分群
+          - generic [ref=f28e154] [cursor=pointer]: A/B Test
+    - generic [ref=f28e159]: 收起菜单
+  - generic [ref=f28e165]:
+    - banner [ref=f28e166]:
+      - navigation "面包屑" [ref=f28e168]:
+        - generic [ref=f28e169]:
+          - link "首页" [ref=f28e170]
+          - text: /
+        - link "智能体配置" [ref=f28e172]
+      - generic [ref=f28e173]:
+        - superscript [ref=f28e180] [cursor=pointer]: "3"
+        - button "管理员" [ref=f28e182] [cursor=pointer]
+    - main [ref=f28e191]:
+      - generic [ref=f28e192]:
+        - generic [ref=f28e193]:
+          - generic [ref=f28e194]:
+            - button "全部" [ref=f28e195] [cursor=pointer]
+            - button "智能体" [ref=f28e196] [cursor=pointer]
+            - button "工作流" [ref=f28e197] [cursor=pointer]
+          - generic [ref=f28e198]:
+            - button "使用指南" [ref=f28e199] [cursor=pointer]
+            - button [ref=f28e201] [cursor=pointer]
+        - generic [ref=f28e206]:
+          - textbox "搜索应用名称" [ref=f28e213]
+          - generic [ref=f28e215] [cursor=pointer]:
+            - generic:
+              - combobox [ref=f28e217]
+              - generic [ref=f28e218]: 请选择
+          - button [ref=f28e223] [cursor=pointer]
+        - generic [ref=f28e228]:
+          - generic [ref=f28e229]:
+            - generic [ref=f28e236]:
+              - generic [ref=f28e237]: 全能AI助手
+              - generic [ref=f28e238]: 已发布
+            - generic [ref=f28e239]:
+              - generic [ref=f28e240]: "应用ID:"
+              - generic [ref=f28e241]: 552f73c8e1a24f6d
+              - button [ref=f28e242] [cursor=pointer]
+            - generic [ref=f28e247]: 模型:通义千问 Qwen-Max
+            - generic [ref=f28e248]: 更新于 2026/7/14 10:30:00
+            - generic [ref=f28e249]:
+              - button "配置" [ref=f28e250] [cursor=pointer]
+              - button "下线" [ref=f28e252] [cursor=pointer]
+              - button [ref=f28e255] [cursor=pointer]
+          - generic [ref=f28e260]:
+            - generic [ref=f28e267]:
+              - generic [ref=f28e268]: 厨房安全智体
+              - generic [ref=f28e269]: 未发布
+            - generic [ref=f28e270]:
+              - generic [ref=f28e271]: "应用ID:"
+              - generic [ref=f28e272]: a9ca3f12d8e04b7c
+              - button [ref=f28e273] [cursor=pointer]
+            - generic [ref=f28e278]: 模型:文心一言 ERNIE-4.0
+            - generic [ref=f28e279]: 更新于 2026/7/13 16:20:00
+            - generic [ref=f28e280]:
+              - button "配置" [ref=f28e281] [cursor=pointer]
+              - button "发布" [disabled] [ref=f28e283]
+              - button [ref=f28e286] [cursor=pointer]
+          - generic [ref=f28e291]:
+            - generic [ref=f28e298]:
+              - generic [ref=f28e299]: 老人看护助手
+              - generic [ref=f28e300]: 未发布
+            - generic [ref=f28e301]:
+              - generic [ref=f28e302]: "应用ID:"
+              - generic [ref=f28e303]: 064ec4a9b2f04d8e
+              - button [ref=f28e304] [cursor=pointer]
+            - generic [ref=f28e309]: 模型:通义千问 Qwen-Max
+            - generic [ref=f28e310]: 更新于 2026/7/12 09:15:00
+            - generic [ref=f28e311]:
+              - button "配置" [ref=f28e312] [cursor=pointer]
+              - button "发布" [disabled] [ref=f28e314]
+              - button [ref=f28e317] [cursor=pointer]

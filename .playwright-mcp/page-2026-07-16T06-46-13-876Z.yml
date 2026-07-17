@@ -1,0 +1,36 @@
+- generic [ref=f1e5]:
+  - generic [ref=f1e8]:
+    - generic [ref=f1e9] [cursor=pointer]: 
+    - generic [ref=f1e11]: 360°全景摄像机
+    - generic [ref=f1e12]:
+      - generic [ref=f1e13]: 双鱼眼
+      - generic [ref=f1e14]: 
+  - generic [ref=f1e17]:
+    - generic [ref=f1e18] [cursor=pointer]:
+      - generic [ref=f1e19]: 
+      - generic [ref=f1e20]: 鱼眼
+    - generic [ref=f1e21] [cursor=pointer]:
+      - generic [ref=f1e22]: 
+      - generic [ref=f1e23]: 全景
+    - generic [ref=f1e24] [cursor=pointer]: 360°VR
+    - generic [ref=f1e26] [cursor=pointer]:
+      - generic [ref=f1e27]: 
+      - generic [ref=f1e28]: 180°VR
+    - generic [ref=f1e29] [cursor=pointer]:
+      - generic [ref=f1e30]: 
+      - generic [ref=f1e31]: 小星球
+    - generic [ref=f1e32] [cursor=pointer]:
+      - generic [ref=f1e33]: 
+      - generic [ref=f1e34]: 双鱼眼
+  - generic [ref=f1e36]:
+    - generic [ref=f1e37]:
+      - generic [ref=f1e38] [cursor=pointer]:
+        - generic [ref=f1e39]: 
+        - generic [ref=f1e41]: 对讲
+      - generic [ref=f1e42] [cursor=pointer]:
+        - generic [ref=f1e43]: 
+        - generic [ref=f1e45]: 回放
+      - generic [ref=f1e46] [cursor=pointer]:
+        - generic [ref=f1e47]: 
+        - generic [ref=f1e49]: 更多
+    - text:   

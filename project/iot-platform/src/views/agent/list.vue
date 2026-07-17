@@ -1,19 +1,8 @@
 <template>
   <div class="page-container">
-    <!-- Segmented control + 操作 -->
+    <!-- 操作 -->
     <div class="top-bar">
-      <div class="segmented-control">
-        <button
-          v-for="tab in typeTabs"
-          :key="tab.value"
-          :class="['seg-item', { active: activeType === tab.value }]"
-          @click="activeType = tab.value"
-        >
-          {{ tab.label }}
-        </button>
-      </div>
       <div class="top-actions">
-        <el-button text @click="handleGuide">使用指南</el-button>
         <el-button type="primary" @click="openCreateDialog">
           <el-icon><Plus /></el-icon>
           创建应用
@@ -32,10 +21,6 @@
         clearable
         @clear="filters.keyword = ''"
       />
-      <el-select v-model="filters.type" size="default" style="width: 100px">
-        <el-option label="全部" value="" />
-        <el-option label="智能体" value="agent" />
-      </el-select>
       <el-button text @click="handleRefresh">
         <el-icon><Refresh /></el-icon>
       </el-button>
@@ -55,7 +40,10 @@
           </div>
           <div class="card-title-area">
             <span class="card-name">{{ agent.name }}</span>
-            <span :class="['status-tag', agent.enabled ? 'published' : 'unpublished']">
+            <span v-if="agent.type === 'workflow'" :class="['status-tag', agent.draft ? 'draft' : 'published']">
+              {{ agent.draft ? '草稿' : '已发布' }}
+            </span>
+            <span v-else :class="['status-tag', agent.enabled ? 'published' : 'unpublished']">
               {{ agent.enabled ? '已发布' : '未发布' }}
             </span>
           </div>
@@ -63,15 +51,18 @@
 
         <!-- 应用 ID -->
         <div class="card-id">
-          <span class="id-label">应用ID:</span>
+          <span class="id-label">智能体ID:</span>
           <span class="id-value">{{ agent.appId }}</span>
           <el-button text size="small" class="copy-btn" @click="copyAppId(agent.appId)">
             <el-icon :size="14"><DocumentCopy /></el-icon>
           </el-button>
         </div>
 
-        <!-- 模型信息 -->
-        <div v-if="agent.modelId" class="card-model">
+        <!-- 模型/类型信息 -->
+        <div v-if="agent.type === 'workflow'" class="card-type-tag">
+          <span class="type-badge workflow">工作流</span>
+        </div>
+        <div v-else-if="agent.modelId" class="card-model">
           <span class="model-label">模型:</span>
           <span class="model-value">{{ modelLabel(agent.modelId) }}</span>
         </div>
@@ -82,23 +73,33 @@
         <!-- 操作按钮 -->
         <div class="card-actions">
           <el-button size="small" @click="goToConfig(agent)">配置</el-button>
-          <el-button
-            size="small"
-            :type="agent.enabled ? 'default' : 'primary'"
-            :disabled="!agent.enabled"
-            @click="agent.enabled && handleUnpublish(agent)"
-          >
-            {{ agent.enabled ? '下线' : '发布' }}
-          </el-button>
+          <template v-if="agent.type === 'workflow'">
+            <el-button
+              size="small"
+              :type="agent.enabled ? 'default' : 'primary'"
+              :disabled="!agent.enabled"
+              @click="agent.enabled && handleUnpublish(agent)"
+            >
+              {{ agent.enabled ? '下线' : '发布' }}
+            </el-button>
+          </template>
+          <template v-else>
+            <el-button
+              size="small"
+              :type="agent.enabled ? 'default' : 'primary'"
+              :disabled="!agent.enabled"
+              @click="agent.enabled && handleUnpublish(agent)"
+            >
+              {{ agent.enabled ? '下线' : '发布' }}
+            </el-button>
+          </template>
           <el-dropdown trigger="click" @command="(cmd) => handleCardAction(cmd, agent)">
             <el-button size="small" text class="more-btn">
               <el-icon><MoreFilled /></el-icon>
             </el-button>
             <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item command="debug">在线调试</el-dropdown-item>
-                <el-dropdown-item command="delete" divided>删除</el-dropdown-item>
-              </el-dropdown-menu>
+              <el-dropdown-item command="debug">在线调试</el-dropdown-item>
+              <el-dropdown-item command="delete" divided>删除</el-dropdown-item>
             </template>
           </el-dropdown>
         </div>
@@ -199,7 +200,33 @@
                 <el-input v-model="createForm.descr" placeholder="请输入描述信息" />
               </el-form-item>
               <el-form-item label="应用头像">
-                <div class="avatar-uploader">
+                <div class="avatar-uploader" @click="handleAvatarUpload">
+                  <el-avatar :size="56" shape="square">
+                    <el-icon :size="24"><Plus /></el-icon>
+                  </el-avatar>
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+
+          <div v-else-if="createForm.type === 'workflow'" class="form-section">
+            <h4>创建工作流应用</h4>
+            <p class="form-desc">通过画布自定义编排工作流，实现复杂的业务逻辑处理，支持多种节点类型和条件分支，适用于自动化任务处理场景。</p>
+
+            <el-form label-width="80px" label-position="right" class="create-form">
+              <el-form-item label="应用名称" required>
+                <el-input
+                  v-model="createForm.name"
+                  placeholder="请输入应用名称"
+                  :maxlength="50"
+                  show-word-limit
+                />
+              </el-form-item>
+              <el-form-item label="描述信息">
+                <el-input v-model="createForm.descr" placeholder="请输入描述信息" />
+              </el-form-item>
+              <el-form-item label="应用头像">
+                <div class="avatar-uploader" @click="handleAvatarUpload">
                   <el-avatar :size="56" shape="square">
                     <el-icon :size="24"><Plus /></el-icon>
                   </el-avatar>
@@ -210,17 +237,48 @@
 
           <div v-else class="form-placeholder">
             <el-icon :size="48"><Clock /></el-icon>
-            <p>{{ createForm.type === 'workflow' ? '工作流应用' : '高代码应用' }}功能即将上线</p>
+            <p>高代码应用功能即将上线</p>
           </div>
         </div>
       </div>
 
       <template #footer>
         <el-button @click="createDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="createAgent" :disabled="!createForm.name.trim() || createForm.type === 'workflow' || createForm.type === 'highcode'">
+        <el-button type="primary" @click="createAgent" :disabled="!createForm.name.trim() || createForm.type === 'highcode'">
           立即创建
         </el-button>
       </template>
+    </el-dialog>
+
+    <!-- 使用指南弹窗 -->
+    <el-dialog v-model="showGuideDialog" title="使用指南" width="680px">
+      <div class="guide-body">
+        <div class="guide-section">
+          <h4>智能体应用</h4>
+          <p>构建 AI 智能体，连接知识库、工具和插件，实现复杂对话和任务处理能力。</p>
+          <ul>
+            <li>支持多种大模型（通义千问、文心一言、GLM-4 等）</li>
+            <li>可配置知识库、连接器、MCP 工具等扩展能力</li>
+            <li>支持 Agent 2.0 框架，强化 ReAct 与 Function Call 能力</li>
+          </ul>
+        </div>
+        <div class="guide-section">
+          <h4>工作流应用</h4>
+          <p>通过可视化画布自定义编排工作流，实现复杂的业务逻辑处理。</p>
+          <ul>
+            <li>拖拽式节点编排，支持大模型、API、逻辑判断等 30+ 节点类型</li>
+            <li>支持条件分支、意图分类、循环和批处理等流程控制</li>
+            <li>发布为 API/SDK 调用，或接入钉钉、微信等平台</li>
+          </ul>
+        </div>
+        <div class="guide-section">
+          <h4>高代码应用</h4>
+          <p>高代码开发和云上托管的应用，适用于需要深度定制开发的高级场景。</p>
+        </div>
+        <el-alert type="info" :closable="false" show-icon style="margin-top: 16px;">
+          <template #title>详细开发文档请参考平台帮助中心或联系技术支持</template>
+        </el-alert>
+      </div>
     </el-dialog>
 
     <!-- 在线调试抽屉 -->
@@ -292,7 +350,8 @@ const enabledModels = computed(() => modelList.filter(m => m.enabled))
 // ===== 类型筛选 tabs =====
 const typeTabs = [
   { label: '全部', value: '' },
-  { label: '智能体', value: 'agent' }
+  { label: '智能体', value: 'agent' },
+  { label: '工作流', value: 'workflow' }
 ]
 const activeType = ref('')
 
@@ -305,8 +364,14 @@ const handleRefresh = () => {
   setTimeout(() => { loading.value = false }, 500)
 }
 
+const showGuideDialog = ref(false)
+
 const handleGuide = () => {
-  ElMessage.info('使用指南功能即将上线')
+  showGuideDialog.value = true
+}
+
+const handleAvatarUpload = () => {
+  ElMessage.info('头像上传功能即将上线')
 }
 
 // ===== 列表 =====
@@ -314,6 +379,11 @@ const handleGuide = () => {
 
 const filteredList = computed(() => {
   let list = agentList
+  if (activeType.value === 'agent') {
+    list = list.filter(a => a.type !== 'workflow')
+  } else if (activeType.value === 'workflow') {
+    list = list.filter(a => a.type === 'workflow')
+  }
   if (filters.keyword) {
     const kw = filters.keyword.toLowerCase()
     list = list.filter(a => a.name.toLowerCase().includes(kw))
@@ -323,14 +393,18 @@ const filteredList = computed(() => {
 
 const copyAppId = (appId) => {
   navigator.clipboard.writeText(appId).then(() => {
-    ElMessage.success('应用ID已复制')
+    ElMessage.success('智能体ID已复制')
   }).catch(() => {
-    ElMessage.info('应用ID: ' + appId)
+    ElMessage.info('智能体ID: ' + appId)
   })
 }
 
 const goToConfig = (agent) => {
-  router.push(`/agent/${agent.id}`)
+  if (agent.type === 'workflow') {
+    router.push(`/agent/workflow/${agent.id}`)
+  } else {
+    router.push(`/agent/${agent.id}`)
+  }
 }
 
 const handleUnpublish = (agent) => {
@@ -390,9 +464,32 @@ const handleCreateClosed = () => {
 const createAgent = () => {
   if (!createForm.name.trim()) return ElMessage.warning('请输入应用名称')
 
+  const appId = generateAppId()
+  const now = new Date().toLocaleString('zh-CN', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })
+
+  if (createForm.type === 'workflow') {
+    const newWorkflow = {
+      id: Date.now(),
+      appId,
+      name: createForm.name.trim(),
+      descr: createForm.descr.trim(),
+      type: 'workflow',
+      enabled: false,
+      draft: true,
+      updatedAt: now,
+      nodes: [],
+      edges: []
+    }
+    agentList.unshift(newWorkflow)
+    ElMessage.success('工作流应用已创建')
+    createDialogVisible.value = false
+    router.push(`/agent/workflow/${newWorkflow.id}`)
+    return
+  }
+
   const newAgent = {
     id: Date.now(),
-    appId: generateAppId(),
+    appId,
     name: createForm.name.trim(),
     descr: createForm.descr.trim(),
     modelId: enabledModels.value[0]?.id || null,
@@ -402,13 +499,12 @@ const createAgent = () => {
     topP: 0.9,
     enabled: false,
     linkedAlgos: [],
-    updatedAt: new Date().toLocaleString('zh-CN', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })
+    type: 'agent',
+    updatedAt: now
   }
   agentList.unshift(newAgent)
   ElMessage.success('智能体已创建')
   createDialogVisible.value = false
-
-  // 跳转到配置页
   router.push(`/agent/${newAgent.id}`)
 }
 
@@ -588,6 +684,11 @@ const sendDebugMessage = async () => {
     background: #f6ffed;
   }
 
+  &.draft {
+    color: var(--text-placeholder);
+    background: var(--bg-page);
+  }
+
   &.unpublished {
     color: var(--text-placeholder);
     background: var(--bg-page);
@@ -615,6 +716,21 @@ const sendDebugMessage = async () => {
     height: auto;
     color: var(--text-placeholder);
     &:hover { color: var(--primary-color); }
+  }
+}
+
+.card-type-tag {
+  margin-bottom: 4px;
+
+  .type-badge {
+    font-size: 12px;
+    padding: 1px 8px;
+    border-radius: 4px;
+
+    &.workflow {
+      color: #722ed1;
+      background: #f9f0ff;
+    }
   }
 }
 
@@ -926,5 +1042,37 @@ const sendDebugMessage = async () => {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+// ===== 使用指南弹窗 =====
+.guide-body {
+  padding-top: 20px;
+}
+
+.guide-section {
+  margin-bottom: 20px;
+
+  h4 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0 0 8px;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 20px;
+
+    li {
+      font-size: 13px;
+      color: var(--text-regular);
+      line-height: 1.8;
+    }
+  }
 }
 </style>

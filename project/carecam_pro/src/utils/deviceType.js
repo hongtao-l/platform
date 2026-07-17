@@ -14,7 +14,8 @@ export const DeviceType = {
   WIDE_ANGLE: 'wideAngle',
   MULTI: 'multi',
   STANDARD: 'standard',
-  OTHER: 'other'
+  OTHER: 'other',
+  PANORAMIC: 'panoramic'
 }
 
 /**
@@ -41,6 +42,11 @@ export function resolveDeviceRoute(deviceName, lensCount) {
     return '/liveview/wide-angle'
   }
 
+  // 360°全景：关键词「全景 / 360 / panoramic / 鱼眼 / fisheye」
+  if (/全景|360|panoramic|鱼眼|fisheye/.test(name)) {
+    return '/liveview/panoramic'
+  }
+
   // 多目：关键词「多目 / multi / 双目 / 三目 / 四目」
   if (/多目|multi|双目|三目|四目/.test(name)) {
     return '/liveview/multi'
@@ -59,6 +65,7 @@ export function getDeviceTypeLabel(deviceType) {
     case DeviceType.WIDE_ANGLE: return '多目单流广角摄像机'
     case DeviceType.MULTI: return '多目摄像机'
     case DeviceType.OTHER: return '其他摄像机'
+    case DeviceType.PANORAMIC: return '360°全景摄像机'
     default: return '实时预览'
   }
 }

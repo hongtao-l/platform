@@ -1,0 +1,237 @@
+- generic [ref=f9e1]:
+  - generic [ref=f9e62]:
+    - text:           
+    - generic [ref=f9e706]:
+      - generic [ref=f9e707]:
+        - generic [ref=f9e708]:
+          - generic [ref=f9e709]:
+            - button [ref=f9e710] [cursor=pointer]:
+              - img "arrow-left" [ref=f9e712]
+            - navigation [ref=f9e715]:
+              - list [ref=f9e716]:
+                - listitem [ref=f9e717]:
+                  - generic [ref=f9e718]: 测试工作流
+          - generic [ref=f9e725]:
+            - generic [ref=f9e726]:
+              - img "spark-document-line" [ref=f9e727]
+              - text: 草稿
+            - generic [ref=f9e730]: 更新于：10:52:04
+        - radiogroup "segmented control" [ref=f9e732]:
+          - generic [ref=f9e733]:
+            - generic [ref=f9e734] [cursor=pointer]:
+              - radio "画布配置"
+              - generic "画布配置" [ref=f9e735]
+            - generic [ref=f9e736] [cursor=pointer]:
+              - radio "发布渠道" [checked] [active]
+              - generic "发布渠道" [ref=f9e737]
+      - generic [ref=f9e1125]:
+        - alert [ref=f9e1126]:
+          - generic [ref=f9e1127]: 基于已创建的应用 API 您还可以进行“发布到平台”或“集成其他能力继续开发”的操作！
+          - button [ref=f9e1129] [cursor=pointer]:
+            - img "close" [ref=f9e1130]
+        - generic [ref=f9e1133]:
+          - generic [ref=f9e1134]:
+            - generic [ref=f9e1135]:
+              - generic [ref=f9e1136]: 调用方式
+              - generic [ref=f9e1137]:
+                - generic [ref=f9e1138]: 适用于通过 API/SDK 调用当前应用，灵活集成到业务场景中。
+                - generic [ref=f9e1139]:
+                  - generic [ref=f9e1140]: 应用ID：c67f95ce7220458fb7dd57ddd7770603
+                  - img "spark-copy-line" [ref=f9e1141] [cursor=pointer]
+            - generic [ref=f9e1145]:
+              - generic [ref=f9e1147]:
+                - img "api" [ref=f9e1149]
+                - generic [ref=f9e1150]:
+                  - generic [ref=f9e1152]:
+                    - generic [ref=f9e1153]: API
+                    - generic [ref=f9e1154]: 已创建
+                  - generic [ref=f9e1156]: 以API的形式调用当前应用，需要传入应用ID、API Key等参数值，支持通过DashScope SDK调用。
+                - generic [ref=f9e1158]:
+                  - button "API KEY" [ref=f9e1159] [cursor=pointer]
+                  - button "API 调试" [disabled] [ref=f9e1161]
+              - generic [ref=f9e1163]:
+                - img "sdk" [ref=f9e1165]
+                - generic [ref=f9e1166]:
+                  - generic [ref=f9e1167]: SDK
+                  - generic [ref=f9e1170]:
+                    - generic [ref=f9e1171]: 使用百炼应用开发SDK进行调用，支持复杂业务开发需求。
+                    - button "spark-document-line 使用文档" [ref=f9e1172] [cursor=pointer]:
+                      - img "spark-document-line" [ref=f9e1174]
+                      - generic [ref=f9e1177]: 使用文档
+          - generic [ref=f9e1180]:
+            - generic [ref=f9e1181]:
+              - generic [ref=f9e1182]: 发布平台
+              - generic [ref=f9e1183]: 适用于多渠道打通，支持一键发布到平台，快捷创建可交互的 Agent。
+            - generic [ref=f9e1184]:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic: 钉钉机器人
+                          - generic:
+                            - generic:
+                              - text: 请先授权
+                              - img "spark-upperrightArrow-line"
+                        - generic: 简单配置，即可为您的组织在钉钉平台上创建一个有大模型能力加成的AI机器人。
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic: 微信公众号
+                          - generic:
+                            - generic:
+                              - text: 请先授权
+                              - img "spark-upperrightArrow-line"
+                        - generic: 简单配置，即可将您的微信公众号（订阅号）接入AI机器人，全天候回应客户咨询。
+          - generic [ref=f9e1185]:
+            - generic [ref=f9e1186]:
+              - generic [ref=f9e1187]: 集成开发
+              - generic [ref=f9e1188]: 适用于 Agent 继续开发，把当前 Agent 集成到其他业务流程中
+            - generic [ref=f9e1189]:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic: 组件
+                        - generic: 未创建
+                    - generic:
+                      - generic:
+                        - text: 以组件的形式发布智能体/工作流应用，需要配置入参，发布后用户可以通过组件的方式在其他应用中黑盒的引用这个智能体/工作流的内容
+                        - button "spark-document-line 说明文档":
+                          - generic:
+                            - img "spark-document-line"
+                          - generic: 说明文档
+              - generic [ref=f9e1190]:
+                - generic:
+                  - generic:
+                    - generic:
+                      - img "ui-designer"
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic: UI 应用
+                          - generic: 未创建
+                      - generic: 通过阿里云多端低代码平台魔笔将百炼智能体发布为生产级 Web/H5 应用，或嵌入已有的 Web/H5/App/小程序中。您还可以通过魔笔定制 UI，集成账号与业务系统。
+            - generic [ref=f9e1191]:
+              - generic [ref=f9e1192]: AI实时互动
+              - generic [ref=f9e1194]:
+                - generic [ref=f9e1197]:
+                  - generic [ref=f9e1198]: 语音互动
+                  - generic [ref=f9e1201]: 创建超拟人化的语音通话智能体，10分钟可完成本地部署。
+                - generic [ref=f9e1204]:
+                  - generic [ref=f9e1205]: 视频互动
+                  - generic [ref=f9e1208]: 创建超拟人化的视频通话智能体，AI将结合摄像头画面给出响应，10分钟可完成本地部署。
+  - iframe [ref=f9e381]:
+    
+  - iframe [ref=f9e382]:
+    
+  - dialog "展开产品面板":
+    - navigation "产品与服务" [ref=f9e383]:
+      - generic [ref=f9e384]:
+        - generic "我的资源" [ref=f9e385] [cursor=pointer]:
+          - generic [ref=f9e386]:
+            - generic [ref=f9e387]: 
+            - generic [ref=f9e389]: 我的资源
+        - generic "访问和收藏" [ref=f9e390] [cursor=pointer]:
+          - generic [ref=f9e391]:
+            - generic [ref=f9e392]: 
+            - generic [ref=f9e394]: 访问和收藏
+        - generic "产品与服务" [ref=f9e395] [cursor=pointer]:
+          - generic [ref=f9e396]:
+            - generic [ref=f9e397]: 
+            - generic [ref=f9e399]: 产品与服务
+        - generic [ref=f9e401]:
+          - button "全部" [ref=f9e402] [cursor=pointer]
+          - button "人工智能与机器学习" [ref=f9e403] [cursor=pointer]
+          - button "计算" [ref=f9e404] [cursor=pointer]
+          - button "容器" [ref=f9e405] [cursor=pointer]
+          - button "存储" [ref=f9e406] [cursor=pointer]
+          - button "网络与CDN" [ref=f9e407] [cursor=pointer]
+          - button "安全" [ref=f9e408] [cursor=pointer]
+          - button "中间件" [ref=f9e409] [cursor=pointer]
+          - button "数据库" [ref=f9e410] [cursor=pointer]
+          - button "大数据计算" [ref=f9e411] [cursor=pointer]
+          - button "媒体服务" [ref=f9e412] [cursor=pointer]
+          - button "企业服务与云通信" [ref=f9e413] [cursor=pointer]
+          - button "域名与网站" [ref=f9e414] [cursor=pointer]
+          - button "终端用户计算" [ref=f9e415] [cursor=pointer]
+          - button "物联网" [ref=f9e416] [cursor=pointer]
+          - button "开发工具" [ref=f9e417] [cursor=pointer]
+          - button "迁移与运维管理" [ref=f9e418] [cursor=pointer]
+          - button "云市场" [ref=f9e419] [cursor=pointer]
+          - button "支持与服务" [ref=f9e420] [cursor=pointer]
+    - main "我的资源" [ref=f9e421]:
+      - generic [ref=f9e422]:
+        - generic [ref=f9e423]: 我的资源
+        - generic [ref=f9e431]:
+          - generic [ref=f9e432]:
+            - generic "计算" [ref=f9e433]:
+              - img "computing" [ref=f9e434]
+            - generic [ref=f9e437]:
+              - link "云服务器 ECS star-fill" [ref=f9e438] [cursor=pointer]:
+                - /url: //ecs.console.aliyun.com
+                - generic "云服务器 ECS" [ref=f9e440]
+                - img "star-fill" [ref=f9e442]
+              - link "2 密钥对" [ref=f9e446] [cursor=pointer]:
+                - /url: //ecs.console.aliyun.com/home
+                - generic [ref=f9e447]: "2"
+                - generic [ref=f9e448]: 密钥对
+          - generic [ref=f9e449]:
+            - generic "安全" [ref=f9e450]:
+              - img "security" [ref=f9e451]
+            - generic [ref=f9e454]:
+              - link "数字证书管理服务（原SSL证书） star-fill" [ref=f9e455] [cursor=pointer]:
+                - /url: //yundun.console.aliyun.com/?p=cas
+                - generic "数字证书管理服务（原SSL证书）" [ref=f9e457]
+                - img "star-fill" [ref=f9e459]
+              - generic [ref=f9e463] [cursor=pointer]:
+                - generic [ref=f9e464]: "-"
+                - img "help-line" [ref=f9e466]
+          - generic [ref=f9e469]:
+            - generic "域名与网站" [ref=f9e470]:
+              - img "doweb" [ref=f9e471]
+            - generic [ref=f9e473]:
+              - generic [ref=f9e474]:
+                - link "域名与网站 star-fill" [ref=f9e475] [cursor=pointer]:
+                  - /url: //dc.console.aliyun.com/next/index
+                  - generic "域名与网站" [ref=f9e477]
+                  - img "star-fill" [ref=f9e479]
+                - link "1 域名" [ref=f9e483] [cursor=pointer]:
+                  - /url: //dc.console.aliyun.com/next/index#/domain-list/all
+                  - generic [ref=f9e484]: "1"
+                  - generic [ref=f9e485]: 域名
+              - generic [ref=f9e486]:
+                - link "云解析DNS star-fill" [ref=f9e487] [cursor=pointer]:
+                  - /url: //dnsnext.console.aliyun.com/authoritative
+                  - generic "云解析DNS" [ref=f9e489]
+                  - img "star-fill" [ref=f9e491]
+                - link "1 域名" [ref=f9e495] [cursor=pointer]:
+                  - /url: //dnsnext.console.aliyun.com/authoritative
+                  - generic [ref=f9e496]: "1"
+                  - generic [ref=f9e497]: 域名
+          - generic [ref=f9e498]:
+            - generic "迁移与运维管理" [ref=f9e499]:
+              - img "migrationom" [ref=f9e500]
+            - generic [ref=f9e503]:
+              - link "访问控制 RAM star-fill" [ref=f9e504] [cursor=pointer]:
+                - /url: //ram.console.aliyun.com
+                - generic "访问控制 RAM" [ref=f9e506]
+                - img "star-fill" [ref=f9e508]
+              - link "5 角色" [ref=f9e512] [cursor=pointer]:
+                - /url: //ram.console.aliyun.com/roles
+                - generic [ref=f9e513]: "5"
+                - generic [ref=f9e514]: 角色
+      - text:                                                                                                                                                                                                                                                             
+      - button "收起产品面板" [ref=f9e516] [cursor=pointer]:
+        - generic [ref=f9e517]: 
+    - button "收起产品面板" [ref=f9e518]
+  - text:      
+  - iframe [ref=f9e519]:
+    
+  - iframe [ref=f9e520]:
+    

@@ -1,0 +1,8 @@
+[ 4570287ms] [LOG] Mutation Events polyfill installed (native feature: not present). @ https://static-fe.tapd.cn/chunk-vendors.8bbea5474de0.js:40
+[ 4570287ms] [WARNING] document.domain mutation is ignored because the surrounding agent cluster is origin-keyed. @ https://static-fe.tapd.cn/chunk-common.728f10966025.js:0
+[ 4570492ms] [WARNING] This method is not recommended @ https://static-fe.tapd.cn/chunk-tapdui.3ffd6919fa08.js:21
+[ 4570492ms] [WARNING] This method is not recommended @ https://static-fe.tapd.cn/chunk-tapdui.3ffd6919fa08.js:21
+[ 4570584ms] [WARNING] This method is not recommended @ https://static-fe.tapd.cn/chunk-tapdui.3ffd6919fa08.js:21
+[ 4570584ms] [WARNING] This method is not recommended @ https://static-fe.tapd.cn/chunk-tapdui.3ffd6919fa08.js:21
+[ 4570986ms] [WARNING] document.domain mutation is ignored because the surrounding agent cluster is origin-keyed. @ https://www.tapd.cn/cloud_logins/login?site=TAPD&ref=https%3A%2F%2Fwww.tapd.cn%2Ftapd_fe%2F39258384%2Fstory%2Fdetail%2F1139258384001099284:103
+[ 4571598ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://www.tapd.cn/cloud_logins/login?site=TAPD&ref=https%3A%2F%2Fwww.tapd.cn%2Ftapd_fe%2F39258384%2Fstory%2Fdetail%2F1139258384001099284:0

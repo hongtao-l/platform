@@ -191,6 +191,16 @@ const devices = ref([
     unreadCount: 1,
     bgGradient: 'linear-gradient(135deg, #1a1a1a, #333)',
     group: '客厅'
+  },
+  {
+    id: 'cam004',
+    name: '360°全景摄像机',
+    status: 'online',
+    isShared: false,
+    cloudPlan: 'Pro',
+    unreadCount: 0,
+    bgGradient: 'linear-gradient(135deg, #0d1b3e, #1e3a6e)',
+    group: '客厅'
   }
 ])
 

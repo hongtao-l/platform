@@ -165,6 +165,12 @@ const routes = [
     meta: { title: '模型管理' }
   },
   {
+    path: '/agent/workflow/:id',
+    name: 'WorkflowConfig',
+    component: () => import('@/views/agent/workflow-config.vue'),
+    meta: { title: '工作流配置' }
+  },
+  {
     path: '/agent/:id',
     name: 'AgentConfig',
     component: () => import('@/views/agent/config.vue'),

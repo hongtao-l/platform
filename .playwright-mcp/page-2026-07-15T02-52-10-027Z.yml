@@ -1,0 +1,316 @@
+- generic [active] [ref=f9e1]:
+  - generic [ref=f9e62]:
+    - text:           
+    - generic [ref=f9e706]:
+      - generic [ref=f9e707]:
+        - generic [ref=f9e708]:
+          - generic [ref=f9e709]:
+            - button [ref=f9e710] [cursor=pointer]:
+              - img "arrow-left" [ref=f9e712]
+            - navigation [ref=f9e715]:
+              - list [ref=f9e716]:
+                - listitem [ref=f9e717]:
+                  - generic [ref=f9e718]: 测试工作流
+          - generic [ref=f9e725]:
+            - generic [ref=f9e726]:
+              - img "spark-document-line" [ref=f9e727]
+              - text: 草稿
+            - generic [ref=f9e730]: 更新于：10:52:04
+        - radiogroup "segmented control" [ref=f9e732]:
+          - generic [ref=f9e733]:
+            - generic [ref=f9e734] [cursor=pointer]:
+              - radio "画布配置" [checked]
+              - generic "画布配置" [ref=f9e735]
+            - generic [ref=f9e736] [cursor=pointer]:
+              - radio "发布渠道"
+              - generic "发布渠道" [ref=f9e737]
+        - generic [ref=f9e739]:
+          - button [ref=f9e741] [cursor=pointer]:
+            - img "spark-processOutput-line" [ref=f9e743]
+          - button [ref=f9e746] [cursor=pointer]:
+            - img "spark-intervention-line" [ref=f9e748]
+          - button [ref=f9e751] [cursor=pointer]:
+            - img "spark-setting-line" [ref=f9e753]
+          - button "spark-tabularRegression-line 观测" [ref=f9e757] [cursor=pointer]:
+            - img "spark-tabularRegression-line" [ref=f9e759]
+            - generic [ref=f9e762]: 观测
+          - generic [ref=f9e763]:
+            - button "测试" [ref=f9e764] [cursor=pointer]
+            - button "spark-organizeAnswer-fill 1" [ref=f9e767] [cursor=pointer]:
+              - img "spark-organizeAnswer-fill" [ref=f9e769]
+              - superscript [ref=f9e773]:
+                - generic [ref=f9e774]: "1"
+          - button [ref=f9e777] [cursor=pointer]:
+            - img "spark-save-line" [ref=f9e780]
+          - button "版本管理" [ref=f9e784] [cursor=pointer]
+          - button "发布" [ref=f9e786] [cursor=pointer]
+      - generic [ref=f9e791]:
+        - alert [ref=f9e793]:
+          - img "exclamation-circle" [ref=f9e794]
+          - generic [ref=f9e799]:
+            - text: 部分历史主线模型将下线，请在下线前进行切换，详情查看
+            - link "公告链接" [ref=f9e800] [cursor=pointer]:
+              - /url: https://www.aliyun.com/notice/118177?spm=5176.29512420.J_JASdJ65l9Zg8lf6Fc9UC_.37.491d19d5n5GTPU
+          - button [ref=f9e801] [cursor=pointer]:
+            - img "close" [ref=f9e802]
+        - generic [ref=f9e805]:
+          - generic [ref=f9e806]:
+            - generic [ref=f9e807]:
+              - generic [ref=f9e808]: 节点管理
+              - img "spark-operateLeft-line" [ref=f9e809] [cursor=pointer]
+            - generic [ref=f9e812]:
+              - tablist [ref=f9e813]:
+                - generic [ref=f9e815]:
+                  - tab "节点库" [selected] [ref=f9e817] [cursor=pointer]
+                  - tab "当前" [ref=f9e819] [cursor=pointer]
+              - tabpanel "节点库" [ref=f9e822]:
+                - generic [ref=f9e823]:
+                  - generic [ref=f9e825]:
+                    - img "spark-search-line" [ref=f9e827]
+                    - textbox "搜索节点名称" [ref=f9e831]
+                  - generic [ref=f9e832]:
+                    - generic [ref=f9e833]:
+                      - generic [ref=f9e834]: 基础
+                      - generic [ref=f9e836] [cursor=pointer]:
+                        - img "spark-modePlaza-line" [ref=f9e838]
+                        - generic [ref=f9e841]: 大模型
+                      - generic [ref=f9e843] [cursor=pointer]:
+                        - img "spark-multiModal01-line" [ref=f9e845]
+                        - generic [ref=f9e848]: 多模态生成
+                      - generic [ref=f9e850] [cursor=pointer]:
+                        - img "spark-book-line" [ref=f9e852]
+                        - generic [ref=f9e855]: 知识库
+                    - generic [ref=f9e856]:
+                      - generic [ref=f9e857]: 工具
+                      - generic [ref=f9e859] [cursor=pointer]:
+                        - img "spark-api-line" [ref=f9e861]
+                        - generic [ref=f9e864]: API
+                      - generic [ref=f9e866] [cursor=pointer]:
+                        - img "spark-MCP-mcp-line" [ref=f9e868]
+                        - generic [ref=f9e871]: MCP
+                      - generic [ref=f9e873] [cursor=pointer]:
+                        - img "spark-depthEstimation-line" [ref=f9e875]
+                        - generic [ref=f9e878]: 数据连接器
+                      - generic [ref=f9e880] [cursor=pointer]:
+                        - img "spark-plugin-line" [ref=f9e882]
+                        - generic [ref=f9e885]: 插件
+                      - generic [ref=f9e887] [cursor=pointer]:
+                        - img "spark-osWidget-line" [ref=f9e889]
+                        - generic [ref=f9e892]: 应用组件
+                      - generic [ref=f9e894] [cursor=pointer]:
+                        - img "spark-processOutput-line" [ref=f9e896]
+                        - generic [ref=f9e899]: 流程输出
+                      - generic [ref=f9e901] [cursor=pointer]:
+                        - img "spark-memory-line" [ref=f9e903]
+                        - generic [ref=f9e906]: 记忆库
+                    - generic [ref=f9e907]:
+                      - generic [ref=f9e908]: 逻辑
+                      - generic [ref=f9e910] [cursor=pointer]:
+                        - img "spark-fileCode-line" [ref=f9e912]
+                        - generic [ref=f9e915]: 脚本
+                      - generic [ref=f9e917] [cursor=pointer]:
+                        - img "spark-conditionalJudgment-line" [ref=f9e919]
+                        - generic [ref=f9e922]: 条件判断
+                      - generic [ref=f9e924] [cursor=pointer]:
+                        - img "spark-effciency-line" [ref=f9e926]
+                        - generic [ref=f9e929]: 意图分类
+                      - generic [ref=f9e931] [cursor=pointer]:
+                        - img "spark-cycleDiagram-line" [ref=f9e933]
+                        - generic [ref=f9e936]: 循环
+                      - generic [ref=f9e938] [cursor=pointer]:
+                        - img "spark-summary-line" [ref=f9e940]
+                        - generic [ref=f9e943]: 批处理
+                    - generic [ref=f9e944]:
+                      - generic [ref=f9e945]: 变量
+                      - generic [ref=f9e947] [cursor=pointer]:
+                        - img "spark-variableProcessing-line" [ref=f9e949]
+                        - generic [ref=f9e952]: 变量处理
+                      - generic [ref=f9e954] [cursor=pointer]:
+                        - img "spark-variableSetting-line" [ref=f9e956]
+                        - generic [ref=f9e959]: 变量赋值
+                      - generic [ref=f9e961] [cursor=pointer]:
+                        - img "spark-config-line" [ref=f9e963]
+                        - generic [ref=f9e966]: 参数提取
+                    - generic [ref=f9e967]:
+                      - generic [ref=f9e968]: 数据
+                      - generic [ref=f9e970] [cursor=pointer]:
+                        - img "spark-document-line" [ref=f9e972]
+                        - generic [ref=f9e975]: 文档解析
+                      - generic [ref=f9e977] [cursor=pointer]:
+                        - img "spark-picture-line" [ref=f9e979]
+                        - generic [ref=f9e982]: 图片解析
+                      - generic [ref=f9e984] [cursor=pointer]:
+                        - img "spark-video-line" [ref=f9e986]
+                        - generic [ref=f9e990]: 视频解析
+                      - generic [ref=f9e992] [cursor=pointer]:
+                        - img "spark-audioClassification-line" [ref=f9e994]
+                        - generic [ref=f9e997]: 音频解析
+                    - generic [ref=f9e998]:
+                      - generic [ref=f9e999]: 智能体
+                      - generic [ref=f9e1001] [cursor=pointer]:
+                        - img "spark-createAgent-line" [ref=f9e1003]
+                        - generic [ref=f9e1006]: 智能体创建
+                      - generic [ref=f9e1008] [cursor=pointer]:
+                        - img "spark-multiAgent-line" [ref=f9e1010]
+                        - generic [ref=f9e1013]: 智能体群组
+                    - generic [ref=f9e1014]:
+                      - generic [ref=f9e1015]: 云资源
+                      - generic [ref=f9e1016]:
+                        - generic [ref=f9e1017]:
+                          - img "spark-function-line" [ref=f9e1019]
+                          - generic [ref=f9e1022]: 函数计算
+                        - button "授权" [ref=f9e1023] [cursor=pointer]
+                      - generic [ref=f9e1025]:
+                        - generic [ref=f9e1026]:
+                          - img "spark-flowChart-line" [ref=f9e1028]
+                          - generic [ref=f9e1031]: AppFlow
+                        - button "授权" [ref=f9e1032] [cursor=pointer]
+          - generic:
+            - img "spark-operateLeft-line"
+          - generic [ref=f9e1034]:
+            - generic [ref=f9e1038]:
+              - generic:
+                - generic:
+                  - button "spark-processStart-line 开始 spark-more-line" [ref=f9e1039]:
+                    - generic [ref=f9e1041]:
+                      - generic [ref=f9e1042]:
+                        - img "spark-processStart-line" [ref=f9e1044]
+                        - generic [ref=f9e1047]: 开始
+                      - img "spark-more-line" [ref=f9e1050] [cursor=pointer]
+                  - button "spark-flag-line 结束 spark-more-line" [ref=f9e1054]:
+                    - generic [ref=f9e1056]:
+                      - generic [ref=f9e1057]:
+                        - img "spark-flag-line" [ref=f9e1059]
+                        - generic [ref=f9e1062]: 结束
+                      - img "spark-more-line" [ref=f9e1065] [cursor=pointer]
+            - generic [ref=f9e1070]:
+              - generic [ref=f9e1071]:
+                - img "spark-floating-line24px" [ref=f9e1073] [cursor=pointer]
+                - separator [ref=f9e1076]
+                - generic [ref=f9e1077] [cursor=pointer]:
+                  - img "spark-reduce-line" [ref=f9e1079]
+                  - generic [ref=f9e1083]: 142%
+                  - img "spark-amplify-line" [ref=f9e1085]
+                - separator [ref=f9e1088]
+                - img "spark-defaultSize-line" [ref=f9e1090] [cursor=pointer]
+              - generic [ref=f9e1093]:
+                - img "spark-addCircle-fill" [ref=f9e1095] [cursor=pointer]
+                - img "spark-cardAddition-line" [ref=f9e1099] [cursor=pointer]
+                - separator [ref=f9e1102]
+                - generic [ref=f9e1103] [cursor=pointer]:
+                  - img "spark-mouse-line" [ref=f9e1104]
+                  - img "spark-down-line" [ref=f9e1107]
+                - separator [ref=f9e1110]
+                - img "spark-keyboard-line" [ref=f9e1112] [cursor=pointer]
+              - generic [ref=f9e1116]:
+                - img "spark-undo-line" [ref=f9e1118]
+                - img "spark-redo-line" [ref=f9e1122]
+  - iframe [ref=f9e381]:
+    
+  - iframe [ref=f9e382]:
+    
+  - dialog "展开产品面板":
+    - navigation "产品与服务" [ref=f9e383]:
+      - generic [ref=f9e384]:
+        - generic "我的资源" [ref=f9e385] [cursor=pointer]:
+          - generic [ref=f9e386]:
+            - generic [ref=f9e387]: 
+            - generic [ref=f9e389]: 我的资源
+        - generic "访问和收藏" [ref=f9e390] [cursor=pointer]:
+          - generic [ref=f9e391]:
+            - generic [ref=f9e392]: 
+            - generic [ref=f9e394]: 访问和收藏
+        - generic "产品与服务" [ref=f9e395] [cursor=pointer]:
+          - generic [ref=f9e396]:
+            - generic [ref=f9e397]: 
+            - generic [ref=f9e399]: 产品与服务
+        - generic [ref=f9e401]:
+          - button "全部" [ref=f9e402] [cursor=pointer]
+          - button "人工智能与机器学习" [ref=f9e403] [cursor=pointer]
+          - button "计算" [ref=f9e404] [cursor=pointer]
+          - button "容器" [ref=f9e405] [cursor=pointer]
+          - button "存储" [ref=f9e406] [cursor=pointer]
+          - button "网络与CDN" [ref=f9e407] [cursor=pointer]
+          - button "安全" [ref=f9e408] [cursor=pointer]
+          - button "中间件" [ref=f9e409] [cursor=pointer]
+          - button "数据库" [ref=f9e410] [cursor=pointer]
+          - button "大数据计算" [ref=f9e411] [cursor=pointer]
+          - button "媒体服务" [ref=f9e412] [cursor=pointer]
+          - button "企业服务与云通信" [ref=f9e413] [cursor=pointer]
+          - button "域名与网站" [ref=f9e414] [cursor=pointer]
+          - button "终端用户计算" [ref=f9e415] [cursor=pointer]
+          - button "物联网" [ref=f9e416] [cursor=pointer]
+          - button "开发工具" [ref=f9e417] [cursor=pointer]
+          - button "迁移与运维管理" [ref=f9e418] [cursor=pointer]
+          - button "云市场" [ref=f9e419] [cursor=pointer]
+          - button "支持与服务" [ref=f9e420] [cursor=pointer]
+    - main "我的资源" [ref=f9e421]:
+      - generic [ref=f9e422]:
+        - generic [ref=f9e423]: 我的资源
+        - generic [ref=f9e431]:
+          - generic [ref=f9e432]:
+            - generic "计算" [ref=f9e433]:
+              - img "computing" [ref=f9e434]
+            - generic [ref=f9e437]:
+              - link "云服务器 ECS star-fill" [ref=f9e438] [cursor=pointer]:
+                - /url: //ecs.console.aliyun.com
+                - generic "云服务器 ECS" [ref=f9e440]
+                - img "star-fill" [ref=f9e442]
+              - link "2 密钥对" [ref=f9e446] [cursor=pointer]:
+                - /url: //ecs.console.aliyun.com/home
+                - generic [ref=f9e447]: "2"
+                - generic [ref=f9e448]: 密钥对
+          - generic [ref=f9e449]:
+            - generic "安全" [ref=f9e450]:
+              - img "security" [ref=f9e451]
+            - generic [ref=f9e454]:
+              - link "数字证书管理服务（原SSL证书） star-fill" [ref=f9e455] [cursor=pointer]:
+                - /url: //yundun.console.aliyun.com/?p=cas
+                - generic "数字证书管理服务（原SSL证书）" [ref=f9e457]
+                - img "star-fill" [ref=f9e459]
+              - generic [ref=f9e463] [cursor=pointer]:
+                - generic [ref=f9e464]: "-"
+                - img "help-line" [ref=f9e466]
+          - generic [ref=f9e469]:
+            - generic "域名与网站" [ref=f9e470]:
+              - img "doweb" [ref=f9e471]
+            - generic [ref=f9e473]:
+              - generic [ref=f9e474]:
+                - link "域名与网站 star-fill" [ref=f9e475] [cursor=pointer]:
+                  - /url: //dc.console.aliyun.com/next/index
+                  - generic "域名与网站" [ref=f9e477]
+                  - img "star-fill" [ref=f9e479]
+                - link "1 域名" [ref=f9e483] [cursor=pointer]:
+                  - /url: //dc.console.aliyun.com/next/index#/domain-list/all
+                  - generic [ref=f9e484]: "1"
+                  - generic [ref=f9e485]: 域名
+              - generic [ref=f9e486]:
+                - link "云解析DNS star-fill" [ref=f9e487] [cursor=pointer]:
+                  - /url: //dnsnext.console.aliyun.com/authoritative
+                  - generic "云解析DNS" [ref=f9e489]
+                  - img "star-fill" [ref=f9e491]
+                - link "1 域名" [ref=f9e495] [cursor=pointer]:
+                  - /url: //dnsnext.console.aliyun.com/authoritative
+                  - generic [ref=f9e496]: "1"
+                  - generic [ref=f9e497]: 域名
+          - generic [ref=f9e498]:
+            - generic "迁移与运维管理" [ref=f9e499]:
+              - img "migrationom" [ref=f9e500]
+            - generic [ref=f9e503]:
+              - link "访问控制 RAM star-fill" [ref=f9e504] [cursor=pointer]:
+                - /url: //ram.console.aliyun.com
+                - generic "访问控制 RAM" [ref=f9e506]
+                - img "star-fill" [ref=f9e508]
+              - link "5 角色" [ref=f9e512] [cursor=pointer]:
+                - /url: //ram.console.aliyun.com/roles
+                - generic [ref=f9e513]: "5"
+                - generic [ref=f9e514]: 角色
+      - text:                                                                                                                                                                                                                                                             
+      - button "收起产品面板" [ref=f9e516] [cursor=pointer]:
+        - generic [ref=f9e517]: 
+    - button "收起产品面板" [ref=f9e518]
+  - text:      
+  - iframe [ref=f9e519]:
+    
+  - iframe [ref=f9e520]:
+    

@@ -1,0 +1,80 @@
+[     372ms] [WARNING] document.domain mutation is ignored because the surrounding agent cluster is origin-keyed. @ https://bailian.console.aliyun.com/cn-beijing?tab=app:140
+[     372ms] [LOG] ██╗  ██╗██╗                                     
+██║  ██║██║                                     
+███████║██║                                     
+██╔══██║██║                                     
+██║  ██║██║▄█╗                                  
+╚═╝  ╚═╝╚═╝╚═╝                                  
+                                                
+██████╗  █████╗ ██╗██╗     ██╗ █████╗ ███╗   ██╗
+██╔══██╗██╔══██╗██║██║     ██║██╔══██╗████╗  ██║
+██████╔╝███████║██║██║     ██║███████║██╔██╗ ██║
+██╔══██╗██╔══██║██║██║     ██║██╔══██║██║╚██╗██║
+██████╔╝██║  ██║██║███████╗██║██║  ██║██║ ╚████║
+╚═════╝ ╚═╝  ╚═╝╚═╝╚══════╝╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
+                                                 @ https://g.alicdn.com/isipfe/efm-fe/3.4.232/noopconsole.js:0
+[  120983ms] [WARNING] var __dworker_1784083695495__={};
+__dworker_1784083695495__.default=function(e,t){for(var n in t){var r=t[n],o=!1;if("[object Array]"===Object.prototype.toString.call(r))for(var i=0;i<r.length;i++){var a=r[i];for(var u in a)if("customInfo"!==u){var c=a[u];switch(Object.prototype.toString.call(c)){case"[object RegExp]":o=c.test(e[u]);break;case"[object String]":o=c===e[u];break;default:o=e[u]===c}if(!o)break}if(o)return[n,a.customInfo]}}return[]};
+
+(function M(e,t,n){e.addEventListener("message",(function(r){var o=r.data;try{var i=o.id;if("RPC"!==o.type||null==i)return;if(o.method){var a=t[o.method];null==a?e.postMessage({type:"RPC",id:i,error:"NO_SUCH_METHOD"}):Promise.resolve().then((function(){return a.apply(null,o.params)})).then((function(t){e.postMessage({type:"RPC",id:i,result:t})})).catch((function(t){e.postMessage({type:"RPC",id:i,error:""+t})}))}else{var u=n[i];if(null==u)throw Error("Unknown callback ".concat(i));delete n[i],o.error?u[1](Error(o.error)):u[0](o.result)}}catch(e){console.error("worker addEventListener error",e)}}))})(self,__dworker_1784083695495__,{}); @ https://o.alicdn.com/dawn/dawn-tracker-aliyun/index.umd.js:0
+[  121668ms] [WARNING] var __dworker_1784083696180__={};
+__dworker_1784083696180__.default=function(e,t){for(var n in t){var r=t[n],o=!1;if("[object Array]"===Object.prototype.toString.call(r))for(var i=0;i<r.length;i++){var a=r[i];for(var u in a)if("customInfo"!==u){var c=a[u];switch(Object.prototype.toString.call(c)){case"[object RegExp]":o=c.test(e[u]);break;case"[object String]":o=c===e[u];break;default:o=e[u]===c}if(!o)break}if(o)return[n,a.customInfo]}}return[]};
+
+(function M(e,t,n){e.addEventListener("message",(function(r){var o=r.data;try{var i=o.id;if("RPC"!==o.type||null==i)return;if(o.method){var a=t[o.method];null==a?e.postMessage({type:"RPC",id:i,error:"NO_SUCH_METHOD"}):Promise.resolve().then((function(){return a.apply(null,o.params)})).then((function(t){e.postMessage({type:"RPC",id:i,result:t})})).catch((function(t){e.postMessage({type:"RPC",id:i,error:""+t})}))}else{var u=n[i];if(null==u)throw Error("Unknown callback ".concat(i));delete n[i],o.error?u[1](Error(o.error)):u[0](o.result)}}catch(e){console.error("worker addEventListener error",e)}}))})(self,__dworker_1784083696180__,{}); @ https://o.alicdn.com/dawn/dawn-tracker-aliyun/index.umd.js:0
+[  121741ms] [WARNING] var __dworker_1784083696253__={};
+__dworker_1784083696253__.default=function(e,t){for(var n in t){var r=t[n],o=!1;if("[object Array]"===Object.prototype.toString.call(r))for(var i=0;i<r.length;i++){var a=r[i];for(var u in a)if("customInfo"!==u){var c=a[u];switch(Object.prototype.toString.call(c)){case"[object RegExp]":o=c.test(e[u]);break;case"[object String]":o=c===e[u];break;default:o=e[u]===c}if(!o)break}if(o)return[n,a.customInfo]}}return[]};
+
+(function M(e,t,n){e.addEventListener("message",(function(r){var o=r.data;try{var i=o.id;if("RPC"!==o.type||null==i)return;if(o.method){var a=t[o.method];null==a?e.postMessage({type:"RPC",id:i,error:"NO_SUCH_METHOD"}):Promise.resolve().then((function(){return a.apply(null,o.params)})).then((function(t){e.postMessage({type:"RPC",id:i,result:t})})).catch((function(t){e.postMessage({type:"RPC",id:i,error:""+t})}))}else{var u=n[i];if(null==u)throw Error("Unknown callback ".concat(i));delete n[i],o.error?u[1](Error(o.error)):u[0](o.result)}}catch(e){console.error("worker addEventListener error",e)}}))})(self,__dworker_1784083696253__,{}); @ https://o.alicdn.com/dawn/dawn-tracker-aliyun/index.umd.js:0
+[  121814ms] [WARNING] [AES] 未监测到Aplus SDK @ https://o.alicdn.com/dawn/dawn-tracker-aliyun/index.umd.js:0
+[  121815ms] [LOG] goldlogReport page_show EXP {refererHost: undefined, refererHostValid: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  121847ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  121998ms] [WARNING] [AES] 未监测到Aplus SDK @ https://o.alicdn.com/dawn/dawn-tracker-aliyun/index.umd.js:0
+[  122011ms] [LOG] null @ https://g.alicdn.com/aliyun-havana/fe-account-login-reg/0.0.17/umi.js:17
+[  122059ms] [WARNING] var __dworker_1784083696572__={};
+__dworker_1784083696572__.default=function(e,t){for(var n in t){var r=t[n],o=!1;if("[object Array]"===Object.prototype.toString.call(r))for(var i=0;i<r.length;i++){var a=r[i];for(var u in a)if("customInfo"!==u){var c=a[u];switch(Object.prototype.toString.call(c)){case"[object RegExp]":o=c.test(e[u]);break;case"[object String]":o=c===e[u];break;default:o=e[u]===c}if(!o)break}if(o)return[n,a.customInfo]}}return[]};
+
+(function M(e,t,n){e.addEventListener("message",(function(r){var o=r.data;try{var i=o.id;if("RPC"!==o.type||null==i)return;if(o.method){var a=t[o.method];null==a?e.postMessage({type:"RPC",id:i,error:"NO_SUCH_METHOD"}):Promise.resolve().then((function(){return a.apply(null,o.params)})).then((function(t){e.postMessage({type:"RPC",id:i,result:t})})).catch((function(t){e.postMessage({type:"RPC",id:i,error:""+t})}))}else{var u=n[i];if(null==u)throw Error("Unknown callback ".concat(i));delete n[i],o.error?u[1](Error(o.error)):u[0](o.result)}}catch(e){console.error("worker addEventListener error",e)}}))})(self,__dworker_1784083696572__,{}); @ https://o.alicdn.com/dawn/dawn-tracker-aliyun/index.umd.js:0
+[  122069ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://passport.aliyun.com/havanaone/login/login.htm?lang=zh_CN&appName=aliyun&appEntrance=aliyun_pc_pwd&styleType=vertical&bizParams=&notLoadSsoView=true&notKeepLogin=true&isMobile=false&targetId=alibaba-login-iframe&redirectType=iframeRedirect&returnUrl=https%3A%2F%2Faccount.aliyun.com%2Flogin%2Flogin_aliyun%3FresType%3Dhtml%26boxEntrance%3Dmini%26loginScene%3DfastLogin%26oauth_callback%3Dhttps%3A%2F%2Fbailian.console.aliyun.com%2Fcn-beijing%3Ftab%3Dapp%23%2Fapp-center%26log_channel%3Ddialog%26log_platform%3Dpc%26login_log_entrance%3Dofficial%26login_method%3Dpwd_login%26log_biz%3Daliyun%26bizPassParams%3D%257B%2522tenantName%2522%253A%2522website%2522%252C%2522isDialogReg%2522%253Atrue%252C%2522action%2522%253A%2522login%2522%257D&cssUrl=&regUrl=https://account.aliyun.com/register/qr_register.htm?oauth_callback=https%3A%2F%2Fbailian.console.aliyun.com%2Fcn-beijing%3Ftab%3Dapp%23%2Fapp-center&bizPassParams=%7B%22tenantName%22%3A%22website%22%2C%22isDialogReg%22%3Atrue%2C%22action%22%3A%22login%22%7D&rnd=0.4705812799541941:0
+[  122173ms] [LOG] goldlogReport page_show EXP {refererHost: undefined, refererHostValid: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  122197ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  122197ms] [LOG] goldlogReport passkey.page.view CLK undefined @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  122297ms] [LOG] Wed Jul 15 2026 10:48:16 GMT+0800 (中国标准时间) @ https://g.alicdn.com/AWSC/et/1.83.41/et_f.js:1
+[  122390ms] [LOG] Wed Jul 15 2026 10:48:16 GMT+0800 (中国标准时间) @ https://g.alicdn.com/AWSC/et/1.83.41/et_f.js:1
+[  122417ms] [LOG] null @ https://g.alicdn.com/aliyun-havana/fe-account-login-reg/0.0.17/umi.js:17
+[  122455ms] [LOG] Wed Jul 15 2026 10:48:16 GMT+0800 (中国标准时间) @ https://g.alicdn.com/AWSC/et/1.83.41/et_f.js:1
+[  122538ms] [ERROR] Permissions policy violation: accelerometer is not allowed in this document. @ https://g.alicdn.com/AWSC/fireyejs/1.231.69/fireyejs.js:0
+[  122538ms] [WARNING] The deviceorientation events are blocked by permissions policy. See https://github.com/w3c/webappsec-permissions-policy/blob/master/features.md#sensor-features @ https://g.alicdn.com/AWSC/fireyejs/1.231.69/fireyejs.js:0
+[  122565ms] [ERROR] Permissions policy violation: accelerometer is not allowed in this document. @ https://g.alicdn.com/AWSC/fireyejs/1.231.69/fireyejs.js:0
+[  122565ms] [WARNING] The deviceorientation events are blocked by permissions policy. See https://github.com/w3c/webappsec-permissions-policy/blob/master/features.md#sensor-features @ https://g.alicdn.com/AWSC/fireyejs/1.231.69/fireyejs.js:0
+[  122611ms] [ERROR] Permissions policy violation: accelerometer is not allowed in this document. @ https://g.alicdn.com/AWSC/fireyejs/1.231.69/fireyejs.js:0
+[  122611ms] [WARNING] The deviceorientation events are blocked by permissions policy. See https://github.com/w3c/webappsec-permissions-policy/blob/master/features.md#sensor-features @ https://g.alicdn.com/AWSC/fireyejs/1.231.69/fireyejs.js:0
+[  122848ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  122848ms] [LOG] resize {action: resizeIframe, height: 168, width: 400} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  122849ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  122999ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  122999ms] [LOG] resize {action: resizeIframe, height: 168, width: 400} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  122999ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  123063ms] [LOG] Wed Jul 15 2026 10:48:17 GMT+0800 (中国标准时间) @ https://g.alicdn.com/AWSC/et/1.83.41/et_f.js:1
+[  222004ms] [WARNING] The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet) @ https://g.alicdn.com/AWSC/fireyejs/1.231.69/fireyejs.js:0
+[  222006ms] [LOG] goldlogReport pwd.loginid.focus CLK undefined @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  223409ms] [LOG] goldlogReport pwd.loginid.blur CLK {value: qjustlhta} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  223550ms] [LOG] goldlogReport submit_btn CLK undefined @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  223801ms] [LOG] goldlogReport login_result CLK {type: undefined, titleMsg: undefined, redirect: false, iframeRedirect: false, parentRedirect: false} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  223801ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  223802ms] [LOG] resize {action: resizeIframe, height: 168, width: 400} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  223802ms] [LOG] goldlogReport postMessage OTHER {url: https%3A%2F%2Faccount.aliyun.com%2F, isWhiteList: undefined} @ https://g.alicdn.com/aliyun-havana/havana-nlogin/0.9.61/index.js:0
+[  225278ms] [WARNING] document.domain mutation is ignored because the surrounding agent cluster is origin-keyed. @ https://bailian.console.aliyun.com/cn-beijing?tab=app:167
+[  225278ms] [LOG] ██╗  ██╗██╗                                     
+██║  ██║██║                                     
+███████║██║                                     
+██╔══██║██║                                     
+██║  ██║██║▄█╗                                  
+╚═╝  ╚═╝╚═╝╚═╝                                  
+                                                
+██████╗  █████╗ ██╗██╗     ██╗ █████╗ ███╗   ██╗
+██╔══██╗██╔══██╗██║██║     ██║██╔══██╗████╗  ██║
+██████╔╝███████║██║██║     ██║███████║██╔██╗ ██║
+██╔══██╗██╔══██║██║██║     ██║██╔══██║██║╚██╗██║
+██████╔╝██║  ██║██║███████╗██║██║  ██║██║ ╚████║
+╚═════╝ ╚═╝  ╚═╝╚═╝╚══════╝╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
+                                                 @ https://g.alicdn.com/isipfe/efm-fe/3.4.232/noopconsole.js:0

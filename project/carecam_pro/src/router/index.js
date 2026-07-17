@@ -64,6 +64,12 @@ const routes = [
     meta: { title: '多目摄像机' }
   },
   {
+    path: '/liveview/panoramic',
+    name: 'LiveViewPanoramic',
+    component: () => import('@/views/liveview/panoramic.vue'),
+    meta: { title: '360°全景' }
+  },
+  {
     path: '/liveview/other',
     name: 'LiveViewOther',
     component: () => import('@/views/liveview/other.vue'),

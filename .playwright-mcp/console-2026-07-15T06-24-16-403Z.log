@@ -1,0 +1,23 @@
+[     317ms] [WARNING] document.domain mutation is ignored because the surrounding agent cluster is origin-keyed. @ https://bailian.console.aliyun.com/:168
+[     318ms] [LOG] ██╗  ██╗██╗                                     
+██║  ██║██║                                     
+███████║██║                                     
+██╔══██║██║                                     
+██║  ██║██║▄█╗                                  
+╚═╝  ╚═╝╚═╝╚═╝                                  
+                                                
+██████╗  █████╗ ██╗██╗     ██╗ █████╗ ███╗   ██╗
+██╔══██╗██╔══██╗██║██║     ██║██╔══██╗████╗  ██║
+██████╔╝███████║██║██║     ██║███████║██╔██╗ ██║
+██╔══██╗██╔══██║██║██║     ██║██╔══██║██║╚██╗██║
+██████╔╝██║  ██║██║███████╗██║██║  ██║██║ ╚████║
+╚═════╝ ╚═╝  ╚═╝╚═╝╚══════╝╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
+                                                 @ https://g.alicdn.com/isipfe/efm-fe/3.4.232/noopconsole.js:0
+[   55342ms] [WARNING] The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet) @ https://uaction.alicdn.com/AWSC/uab/1.140.0/collina.js:8
+[  761891ms] [WARNING] The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet) @ https://g.alicdn.com/AWSC/fireyejs/1.219.2/fireyejs.js:1
+[ 6768445ms] [WARNING] The provided value '*/*' is not a valid enum value of type XMLHttpRequestResponseType. @ https://g.alicdn.com/aliyun-help/help-portal-fe/0.12.48/js/vendor.js:7
+[ 6768541ms] [LOG] %c [APLUS] -- APLUS INIT SUCCESS background:#3B82FE; padding: 4px; padding-right: 8px; border-radius: 4px; color: #fff; @ :1
+[ 6768736ms] [ERROR] Permissions policy violation: gyroscope is not allowed in this document. @ https://g.alicdn.com/secdev/sufei_data/3.9.14/index.js:0
+[ 6768737ms] [ERROR] Permissions policy violation: accelerometer is not allowed in this document. @ https://g.alicdn.com/aliyun-help/help-portal-fe/0.12.48/js/index.js:0
+[ 6768737ms] [WARNING] The deviceorientation events are blocked by permissions policy. See https://github.com/w3c/webappsec-permissions-policy/blob/master/features.md#sensor-features @ https://g.alicdn.com/aliyun-help/help-portal-fe/0.12.48/js/index.js:0
+[ 6769479ms] [LOG] Wed Jul 15 2026 16:17:05 GMT+0800 (中国标准时间) @ https://g.alicdn.com/AWSC/et/1.83.41/et_f.js:1

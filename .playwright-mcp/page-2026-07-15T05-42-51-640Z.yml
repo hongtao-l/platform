@@ -1,0 +1,130 @@
+- generic [ref=f27e3]:
+  - complementary [ref=f27e4]:
+    - generic [ref=f27e5]: IoT 平台
+    - navigation [ref=f27e10]:
+      - generic [ref=f27e11] [cursor=pointer]: 工作台
+      - generic [ref=f27e16]:
+        - generic [ref=f27e17] [cursor=pointer]: 物模型管理
+        - generic:
+          - generic [ref=f27e26] [cursor=pointer]: IOT类目
+          - generic [ref=f27e31] [cursor=pointer]: 能力库
+          - generic [ref=f27e39] [cursor=pointer]: 算法库
+          - generic [ref=f27e45] [cursor=pointer]: 事件库
+      - generic [ref=f27e50]:
+        - generic [ref=f27e51] [cursor=pointer]: 产品管理
+        - generic:
+          - generic [ref=f27e61] [cursor=pointer]: 产品开发
+          - generic [ref=f27e68] [cursor=pointer]: 产品审核
+      - generic [ref=f27e73]:
+        - generic [ref=f27e74] [cursor=pointer]: 套餐管理
+        - generic:
+          - generic [ref=f27e85] [cursor=pointer]: 套餐配置
+          - generic [ref=f27e92] [cursor=pointer]: 服务类型
+      - generic [ref=f27e100]:
+        - generic [ref=f27e101] [cursor=pointer]: 智能体管理
+        - generic:
+          - generic [ref=f27e109] [cursor=pointer]: 智能体配置
+          - generic [ref=f27e114] [cursor=pointer]: 模型管理
+      - generic [ref=f27e122]:
+        - generic [ref=f27e123] [cursor=pointer]: 运营管理
+        - generic:
+          - generic [ref=f27e131] [cursor=pointer]: 商城位运营
+          - generic [ref=f27e136] [cursor=pointer]: 推荐位运营
+          - generic [ref=f27e141] [cursor=pointer]: 活动位运营
+          - generic [ref=f27e149] [cursor=pointer]: 用户分群
+          - generic [ref=f27e154] [cursor=pointer]: A/B Test
+    - generic [ref=f27e159]: 收起菜单
+  - generic [ref=f27e165]:
+    - banner [ref=f27e166]:
+      - navigation "面包屑" [ref=f27e168]:
+        - generic [ref=f27e169]:
+          - link "首页" [ref=f27e170]
+          - text: /
+        - link "智能体配置" [ref=f27e191]
+      - generic [ref=f27e171]:
+        - superscript [ref=f27e178] [cursor=pointer]: "3"
+        - button "管理员" [ref=f27e180] [cursor=pointer]
+    - main [ref=f27e189]:
+      - generic [ref=f27e422]:
+        - generic [ref=f27e424]:
+          - button [ref=f27e425] [cursor=pointer]
+          - generic [ref=f27e430]:
+            - generic [ref=f27e431]: 验证观测
+            - generic [ref=f27e432]: 草稿
+            - generic [ref=f27e436]: 更新于：2026/7/15 13:42:17
+        - generic [ref=f27e437]:
+          - generic [ref=f27e438]:
+            - button "画布配置" [ref=f27e439] [cursor=pointer]
+            - button "发布渠道" [active] [ref=f27e440] [cursor=pointer]
+          - generic [ref=f27e441]:
+            - button [ref=f27e442] [cursor=pointer]
+            - button "观测" [ref=f27e447] [cursor=pointer]
+            - button [ref=f27e449] [cursor=pointer]
+            - button "版本管理" [ref=f27e454] [cursor=pointer]
+            - button "发布" [ref=f27e456] [cursor=pointer]
+        - generic [ref=f27e745]:
+          - generic [ref=f27e746]:
+            - text: 基于已创建的应用 API 您还可以进行"发布到平台"或"集成其他能力继续开发"的操作！
+            - button [ref=f27e747] [cursor=pointer]
+          - generic [ref=f27e752]:
+            - generic [ref=f27e753]:
+              - heading "调用方式" [level=3] [ref=f27e754]
+              - paragraph [ref=f27e755]: 适用于通过 API/SDK 调用当前应用，灵活集成到业务场景中。
+              - generic [ref=f27e756]:
+                - generic [ref=f27e757]: 应用ID：8bfbc015aff0d967
+                - button [ref=f27e758] [cursor=pointer]
+            - generic [ref=f27e763]:
+              - generic [ref=f27e770]:
+                - generic [ref=f27e771]:
+                  - generic [ref=f27e772]: API
+                  - generic [ref=f27e773]: 已创建
+                - paragraph [ref=f27e774]: 以API的形式调用当前应用，需要传入应用ID、API Key等参数值。
+                - generic [ref=f27e775]:
+                  - button "API KEY" [ref=f27e776] [cursor=pointer]
+                  - button "API 调试" [disabled] [ref=f27e778]
+              - generic [ref=f27e785]:
+                - generic [ref=f27e786]: SDK
+                - paragraph [ref=f27e788]: 使用百炼应用开发SDK进行调用，支持复杂业务开发需求。
+                - button "使用文档" [ref=f27e790] [cursor=pointer]
+          - generic [ref=f27e792]:
+            - generic [ref=f27e793]:
+              - heading "发布平台" [level=3] [ref=f27e794]
+              - paragraph [ref=f27e795]: 适用于多渠道打通，支持一键发布到平台，快捷创建可交互的 Agent。
+            - generic [ref=f27e796]:
+              - generic [ref=f27e797]:
+                - generic [ref=f27e798]: 钉
+                - generic [ref=f27e799]:
+                  - generic [ref=f27e800]: 钉钉机器人
+                  - generic [ref=f27e801] [cursor=pointer]: 请先授权
+                - paragraph [ref=f27e806]: 简单配置，即可为您的组织在钉钉平台上创建一个有大模型能力加成的AI机器人。
+              - generic [ref=f27e807]:
+                - generic [ref=f27e808]: 微
+                - generic [ref=f27e809]:
+                  - generic [ref=f27e810]: 微信公众号
+                  - generic [ref=f27e811] [cursor=pointer]: 请先授权
+                - paragraph [ref=f27e816]: 简单配置，即可将您的微信公众号（订阅号）接入AI机器人，全天候回应客户咨询。
+          - generic [ref=f27e817]:
+            - generic [ref=f27e818]:
+              - heading "集成开发" [level=3] [ref=f27e819]
+              - paragraph [ref=f27e820]: 适用于 Agent 继续开发，把当前 Agent 集成到其他业务流程中
+            - generic [ref=f27e821]:
+              - generic [ref=f27e822]:
+                - generic [ref=f27e823]:
+                  - generic [ref=f27e824]: 组件
+                  - generic [ref=f27e825]: 未创建
+                - paragraph [ref=f27e826]: 以组件的形式发布智能体/工作流应用，需要配置入参，发布后用户可以通过组件的方式在其他应用中黑盒的引用这个智能体/工作流的内容。
+                - button "说明文档" [ref=f27e827] [cursor=pointer]
+              - generic [ref=f27e829]:
+                - generic [ref=f27e830]:
+                  - generic [ref=f27e831]: UI 应用
+                  - generic [ref=f27e832]: 未创建
+                - paragraph [ref=f27e833]: 通过阿里云多端低代码平台魔笔将百炼智能体发布为生产级 Web/H5 应用，或嵌入已有的 Web/H5/App/小程序中。
+          - generic [ref=f27e834]:
+            - heading "AI实时互动" [level=3] [ref=f27e836]
+            - generic [ref=f27e837]:
+              - generic [ref=f27e838]:
+                - text: 语音互动
+                - paragraph [ref=f27e839]: 创建超拟人化的语音通话智能体，10分钟可完成本地部署。
+              - generic [ref=f27e840]:
+                - text: 视频互动
+                - paragraph [ref=f27e841]: 创建超拟人化的视频通话智能体，AI将结合摄像头画面给出响应，10分钟可完成本地部署。
