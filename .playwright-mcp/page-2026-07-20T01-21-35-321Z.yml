@@ -1,0 +1,44 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]: IoT 平台
+    - navigation [ref=e10]:
+      - generic [ref=e11] [cursor=pointer]: 工作台
+      - generic [ref=e16]:
+        - generic [ref=e17] [cursor=pointer]: 物模型管理
+        - generic:
+          - generic [ref=e26] [cursor=pointer]: IOT类目
+          - generic [ref=e31] [cursor=pointer]: 能力库
+          - generic [ref=e39] [cursor=pointer]: 算法库
+          - generic [ref=e45] [cursor=pointer]: 事件库
+      - generic [ref=e50]:
+        - generic [ref=e51] [cursor=pointer]: 产品管理
+        - generic:
+          - generic [ref=e61] [cursor=pointer]: 产品开发
+          - generic [ref=e68] [cursor=pointer]: 产品审核
+      - generic [ref=e73]:
+        - generic [ref=e74] [cursor=pointer]: 套餐管理
+        - generic:
+          - generic [ref=e85] [cursor=pointer]: 套餐配置
+          - generic [ref=e92] [cursor=pointer]: 服务类型
+      - generic [ref=e100]:
+        - generic [ref=e101] [cursor=pointer]: 智能体管理
+        - generic:
+          - generic [ref=e109] [cursor=pointer]: 智能体配置
+          - generic [ref=e114] [cursor=pointer]: 模型管理
+      - generic [ref=e122]:
+        - generic [ref=e123] [cursor=pointer]: 运营管理
+        - generic:
+          - generic [ref=e131] [cursor=pointer]: 商城位运营
+          - generic [ref=e136] [cursor=pointer]: 推荐位运营
+          - generic [ref=e141] [cursor=pointer]: 活动位运营
+          - generic [ref=e149] [cursor=pointer]: 用户分群
+          - generic [ref=e154] [cursor=pointer]: A/B Test
+    - generic [ref=e159]: 收起菜单
+  - generic [ref=e165]:
+    - banner [ref=e166]:
+      - navigation "面包屑" [ref=e167]:
+        - link "首页" [ref=e169]
+      - generic [ref=e170]:
+        - superscript [ref=e177] [cursor=pointer]: "3"
+        - button "管理员" [ref=e179] [cursor=pointer]
+    - main [ref=e188]

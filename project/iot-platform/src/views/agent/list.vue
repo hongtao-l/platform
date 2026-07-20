@@ -5,7 +5,7 @@
       <div class="top-actions">
         <el-button type="primary" @click="openCreateDialog">
           <el-icon><Plus /></el-icon>
-          创建应用
+          创建智能体
         </el-button>
       </div>
     </div>
@@ -14,7 +14,7 @@
     <div class="search-bar">
       <el-input
         v-model="filters.keyword"
-        placeholder="搜索应用名称"
+        placeholder="搜索智能体名称"
         :prefix-icon="Search"
         size="default"
         style="width: 280px"
@@ -108,14 +108,14 @@
       <!-- 空态 -->
       <div v-if="filteredList.length === 0 && !loading" class="empty-state">
         <el-icon :size="48" class="empty-icon"><FolderOpened /></el-icon>
-        <p>暂无应用，点击右上角「创建应用」开始</p>
+        <p>暂无应用，点击右上角「创建智能体」开始</p>
       </div>
     </div>
 
-    <!-- 创建应用弹窗 — 左右分栏 -->
+    <!-- 创建智能体弹窗 — 左右分栏 -->
     <el-dialog
       v-model="createDialogVisible"
-      title="创建应用"
+      title="创建智能体"
       width="720px"
       :close-on-click-modal="false"
       @closed="handleCreateClosed"
@@ -123,7 +123,6 @@
       <div class="create-body">
         <!-- 左侧类型选择 -->
         <div class="create-left">
-          <div class="type-section-label">低代码</div>
           <div
             :class="['type-radio-card', { selected: createForm.type === 'agent' }]"
             @click="createForm.type = 'agent'"
@@ -137,61 +136,40 @@
             </div>
             <el-radio v-model="createForm.type" value="agent" class="type-radio" />
           </div>
-          <div
-            :class="['type-radio-card', { selected: createForm.type === 'workflow' }]"
-            @click="createForm.type = 'workflow'"
-          >
+          <div class="type-radio-card disabled">
             <div class="type-icon">
               <el-icon :size="22"><Share /></el-icon>
             </div>
             <div class="type-info">
-              <div class="type-title">工作流应用</div>
+              <div class="type-title">工作流应用 <span class="unsupported-tag">暂不支持</span></div>
               <div class="type-desc">通过画布自定义编排工作流</div>
             </div>
-            <el-radio v-model="createForm.type" value="workflow" class="type-radio" />
           </div>
 
           <el-divider style="margin: 16px 0" />
 
-          <div class="type-section-label">高代码</div>
-          <div
-            :class="['type-radio-card', { selected: createForm.type === 'highcode' }]"
-            @click="createForm.type = 'highcode'"
-          >
+          <div class="type-radio-card disabled">
             <div class="type-icon">
               <el-icon :size="22"><Monitor /></el-icon>
             </div>
             <div class="type-info">
-              <div class="type-title">高代码应用</div>
+              <div class="type-title">高代码应用 <span class="unsupported-tag">暂不支持</span></div>
               <div class="type-desc">高代码开发和云上托管的应用</div>
             </div>
-            <el-radio v-model="createForm.type" value="highcode" class="type-radio" />
           </div>
         </div>
 
         <!-- 右侧表单 -->
         <div class="create-right">
           <div v-if="createForm.type === 'agent'" class="form-section">
-            <h4>创建智能体应用</h4>
+            <h4>创建智能体</h4>
             <p class="form-desc">构建智能体应用，连接知识、数据与插件等能力</p>
 
             <el-form label-width="80px" label-position="right" class="create-form">
-              <el-form-item label="类型" required>
-                <el-radio-group v-model="createForm.agentVersion">
-                  <el-radio value="2.0" size="large">Agent 2.0 (推荐)</el-radio>
-                  <el-radio value="1.0" size="large">Agent 1.0</el-radio>
-                </el-radio-group>
-                <p class="radio-desc" v-if="createForm.agentVersion === '2.0'">
-                  基于AgentScope开发框架构建，全新Agent模式，强化React与Function Call能力
-                </p>
-                <p class="radio-desc" v-else>
-                  结合Prompt与多种业务规则控制的Agent模式，在知识库检索增强任务上更具稳定性
-                </p>
-              </el-form-item>
-              <el-form-item label="应用名称" required>
+              <el-form-item label="智能体名称" required>
                 <el-input
                   v-model="createForm.name"
-                  placeholder="请输入应用名称"
+                  placeholder="请输入智能体名称"
                   :maxlength="50"
                   show-word-limit
                 />
@@ -199,7 +177,7 @@
               <el-form-item label="描述信息">
                 <el-input v-model="createForm.descr" placeholder="请输入描述信息" />
               </el-form-item>
-              <el-form-item label="应用头像">
+              <el-form-item label="智能体头像">
                 <div class="avatar-uploader" @click="handleAvatarUpload">
                   <el-avatar :size="56" shape="square">
                     <el-icon :size="24"><Plus /></el-icon>
@@ -214,10 +192,10 @@
             <p class="form-desc">通过画布自定义编排工作流，实现复杂的业务逻辑处理，支持多种节点类型和条件分支，适用于自动化任务处理场景。</p>
 
             <el-form label-width="80px" label-position="right" class="create-form">
-              <el-form-item label="应用名称" required>
+              <el-form-item label="智能体名称" required>
                 <el-input
                   v-model="createForm.name"
-                  placeholder="请输入应用名称"
+                  placeholder="请输入智能体名称"
                   :maxlength="50"
                   show-word-limit
                 />
@@ -225,7 +203,7 @@
               <el-form-item label="描述信息">
                 <el-input v-model="createForm.descr" placeholder="请输入描述信息" />
               </el-form-item>
-              <el-form-item label="应用头像">
+              <el-form-item label="智能体头像">
                 <div class="avatar-uploader" @click="handleAvatarUpload">
                   <el-avatar :size="56" shape="square">
                     <el-icon :size="24"><Plus /></el-icon>
@@ -244,7 +222,7 @@
 
       <template #footer>
         <el-button @click="createDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="createAgent" :disabled="!createForm.name.trim() || createForm.type === 'highcode'">
+        <el-button type="primary" @click="createAgent" :disabled="!createForm.name.trim()">
           立即创建
         </el-button>
       </template>
@@ -446,7 +424,6 @@ const createDialogVisible = ref(false)
 
 const defaultCreateForm = () => ({
   type: 'agent',
-  agentVersion: '2.0',
   name: '',
   descr: ''
 })
@@ -833,6 +810,22 @@ const sendDebugMessage = async () => {
   &.selected {
     border-color: var(--primary-color);
     background: var(--primary-bg);
+  }
+
+  &.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+
+    &:hover {
+      border-color: var(--border-lighter);
+    }
+  }
+
+  .unsupported-tag {
+    font-size: 11px;
+    color: var(--text-placeholder);
+    font-weight: 400;
+    margin-left: 4px;
   }
 
   .type-icon {

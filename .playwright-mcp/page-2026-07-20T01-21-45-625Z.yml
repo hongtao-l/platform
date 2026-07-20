@@ -1,0 +1,132 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]: IoT 平台
+    - navigation [ref=e10]:
+      - generic [ref=e11] [cursor=pointer]: 工作台
+      - generic [ref=e16]:
+        - generic [ref=e17] [cursor=pointer]: 物模型管理
+        - generic:
+          - generic [ref=e26] [cursor=pointer]: IOT类目
+          - generic [ref=e31] [cursor=pointer]: 能力库
+          - generic [ref=e39] [cursor=pointer]: 算法库
+          - generic [ref=e45] [cursor=pointer]: 事件库
+      - generic [ref=e50]:
+        - generic [ref=e51] [cursor=pointer]: 产品管理
+        - generic:
+          - generic [ref=e61] [cursor=pointer]: 产品开发
+          - generic [ref=e68] [cursor=pointer]: 产品审核
+      - generic [ref=e73]:
+        - generic [ref=e74] [cursor=pointer]: 套餐管理
+        - generic:
+          - generic [ref=e85] [cursor=pointer]: 套餐配置
+          - generic [ref=e92] [cursor=pointer]: 服务类型
+      - generic [ref=e100]:
+        - generic [ref=e101] [cursor=pointer]: 智能体管理
+        - generic:
+          - generic [ref=e109] [cursor=pointer]: 智能体配置
+          - generic [ref=e114] [cursor=pointer]: 模型管理
+      - generic [ref=e122]:
+        - generic [ref=e123] [cursor=pointer]: 运营管理
+        - generic:
+          - generic [ref=e131] [cursor=pointer]: 商城位运营
+          - generic [ref=e136] [cursor=pointer]: 推荐位运营
+          - generic [ref=e141] [cursor=pointer]: 活动位运营
+          - generic [ref=e149] [cursor=pointer]: 用户分群
+          - generic [ref=e154] [cursor=pointer]: A/B Test
+    - generic [ref=e159]: 收起菜单
+  - generic [ref=e165]:
+    - banner [ref=e166]:
+      - navigation "面包屑" [ref=e167]:
+        - generic [ref=e168]:
+          - link "首页" [ref=e169]
+          - text: /
+        - link "智能体配置" [ref=e190]
+      - generic [ref=e170]:
+        - superscript [ref=e177] [cursor=pointer]: "3"
+        - button "管理员" [ref=e179] [cursor=pointer]
+    - main [ref=e188]:
+      - generic [ref=e191]:
+        - button [ref=e194] [cursor=pointer]
+        - generic [ref=e199]:
+          - textbox "搜索智能体名称" [ref=e206]
+          - button [ref=e207] [cursor=pointer]
+        - generic [ref=e212]:
+          - generic [ref=e213]:
+            - generic [ref=e220]:
+              - generic [ref=e221]: 全能AI助手
+              - generic [ref=e222]: 已发布
+            - generic [ref=e223]:
+              - generic [ref=e224]: "智能体ID:"
+              - generic [ref=e225]: 552f73c8e1a24f6d
+              - button [ref=e226] [cursor=pointer]
+            - generic [ref=e231]: 模型:通义千问 Qwen-Max
+            - generic [ref=e232]: 更新于 2026/7/14 10:30:00
+            - generic [ref=e233]:
+              - button "配置" [ref=e234] [cursor=pointer]
+              - button "下线" [ref=e236] [cursor=pointer]
+              - button [ref=e239] [cursor=pointer]
+          - generic [ref=e244]:
+            - generic [ref=e251]:
+              - generic [ref=e252]: 厨房安全智体
+              - generic [ref=e253]: 未发布
+            - generic [ref=e254]:
+              - generic [ref=e255]: "智能体ID:"
+              - generic [ref=e256]: a9ca3f12d8e04b7c
+              - button [ref=e257] [cursor=pointer]
+            - generic [ref=e262]: 模型:文心一言 ERNIE-4.0
+            - generic [ref=e263]: 更新于 2026/7/13 16:20:00
+            - generic [ref=e264]:
+              - button "配置" [ref=e265] [cursor=pointer]
+              - button "发布" [disabled] [ref=e267]
+              - button [ref=e270] [cursor=pointer]
+          - generic [ref=e275]:
+            - generic [ref=e282]:
+              - generic [ref=e283]: 老人看护助手
+              - generic [ref=e284]: 未发布
+            - generic [ref=e285]:
+              - generic [ref=e286]: "智能体ID:"
+              - generic [ref=e287]: 064ec4a9b2f04d8e
+              - button [ref=e288] [cursor=pointer]
+            - generic [ref=e293]: 模型:通义千问 Qwen-Max
+            - generic [ref=e294]: 更新于 2026/7/12 09:15:00
+            - generic [ref=e295]:
+              - button "配置" [ref=e296] [cursor=pointer]
+              - button "发布" [disabled] [ref=e298]
+              - button [ref=e301] [cursor=pointer]
+        - dialog "创建智能体" [ref=e307]:
+          - generic [active] [ref=e308]:
+            - generic [ref=e309]:
+              - heading "创建智能体" [level=2] [ref=e310]
+              - button "关闭此对话框" [ref=e311] [cursor=pointer]
+            - generic [ref=e316]:
+              - generic [ref=e317]:
+                - generic [ref=e318] [cursor=pointer]:
+                  - generic [ref=e324]:
+                    - generic [ref=e325]: 智能体应用
+                    - generic [ref=e326]: 构建智能体应用，连接知识、插件等
+                  - radio [checked] [ref=e329]
+                - generic [ref=e336]:
+                  - generic [ref=e337]: 工作流应用 暂不支持
+                  - generic [ref=e338]: 通过画布自定义编排工作流
+                - separator [ref=e339]
+                - generic [ref=e345]:
+                  - generic [ref=e346]: 高代码应用 暂不支持
+                  - generic [ref=e347]: 高代码开发和云上托管的应用
+              - generic [ref=e349]:
+                - heading "创建智能体" [level=4] [ref=e350]
+                - paragraph [ref=e351]: 构建智能体应用，连接知识、数据与插件等能力
+                - generic [ref=e352]:
+                  - generic [ref=e353]:
+                    - generic [ref=e354]: "* 智能体名称"
+                    - generic [ref=e357]:
+                      - textbox "* 智能体名称" [ref=e358]:
+                        - /placeholder: 请输入智能体名称
+                      - generic: 0 / 50
+                  - generic [ref=e362]:
+                    - generic [ref=e363]: 描述信息
+                    - textbox "描述信息" [ref=e367]:
+                      - /placeholder: 请输入描述信息
+                  - group "智能体头像" [ref=e368]
+            - generic [ref=e376]:
+              - button "取消" [ref=e377] [cursor=pointer]
+              - button "立即创建" [disabled] [ref=e379]
