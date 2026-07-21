@@ -91,7 +91,7 @@
         <el-table-column label="产品信息" min-width="200">
           <template #default="{ row }">
             <div class="product-info">
-              <span class="product-name">{{ row.name }}</span>
+              <span class="product-name" @click="handleManageProduct(row)">{{ row.name }}</span>
               <span class="product-id">{{ row.productId }}</span>
             </div>
           </template>
@@ -418,6 +418,10 @@ function handleContinueDev(row) {
   router.push(`/product/config?id=${row.productId}&name=${row.name}`)
 }
 
+function handleManageProduct(row) {
+  router.push({ path: '/product/audit/detail', query: { productId: row.productId, name: row.name } })
+}
+
 function handleAppConfig(row) {
   router.push({ path: '/product/app', query: { productId: row.productId, name: row.name } })
 }
@@ -473,7 +477,7 @@ function handleMore(cmd, row) {
 .product-info {
   display: flex;
   flex-direction: column;
-  .product-name { font-weight: 500; color: var(--text-primary); }
+  .product-name { font-weight: 500; color: var(--text-primary); cursor: pointer; &:hover { color: var(--primary-color); } }
   .product-id { font-size: 13px; color: var(--text-placeholder); font-family: monospace; margin-top: 2px; }
 }
 

@@ -60,20 +60,20 @@
               <span class="cell-name">{{ row.name }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="描述" min-width="160">
+<el-table-column label="能力配置" width="100" align="center">
             <template #default="{ row }">
-              <span class="cell-desc">{{ row.descr || '-' }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="能力配置" width="100" align="center">
-            <template #default="{ row }">
-              <el-button v-if="row.hasConfig && row._isFirstRow" size="small" text type="primary" @click="openAlgoConfigDrawer(row)">配置</el-button>
+              <el-button v-if="row.hasConfig && row._isFirstRow" size="small" text type="primary" @click="openAlgoConfigDrawer(row)">查看</el-button>
               <span v-else-if="row._isFirstRow" class="text-muted">—</span>
             </template>
           </el-table-column>
           <el-table-column label="关联事件" width="100" align="center">
             <template #default="{ row }">
-              <el-button v-if="row._isFirstRow" size="small" text type="primary" @click="openEventDrawer(row)">配置</el-button>
+              <el-button v-if="row._isFirstRow" size="small" text type="primary" @click="openEventDrawer(row)">查看</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column label="服务名称" min-width="120">
+            <template #default="{ row }">
+              <span>{{ row.serviceName || '—' }}</span>
             </template>
           </el-table-column>
           <el-table-column label="服务ID" width="120" align="center">
@@ -81,35 +81,9 @@
               <span :class="{ 'cell-service-id': true, 'text-muted': row.serviceId === '-' }">{{ row.serviceId }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="是否支持" width="100" align="center">
+          <el-table-column label="服务开通方式" width="140" align="center">
             <template #default="{ row }">
-              <el-switch v-model="row.supported" size="small" />
-            </template>
-          </el-table-column>
-          <el-table-column width="100" align="center">
-            <template #header>
-              <span>免开通</span>
-              <el-tooltip placement="top" effect="dark">
-                <template #content>
-                  <div style="max-width:220px;line-height:1.6;">
-                    <div>开启：APP用户无需付费即可使用此功能</div>
-                    <div>关闭：APP用户需付费使用此功能，具体服务流程需联系平台/APP厂商</div>
-                  </div>
-                </template>
-                <el-icon class="header-tip-icon"><QuestionFilled /></el-icon>
-              </el-tooltip>
-            </template>
-            <template #default="{ row }">
-              <el-switch v-model="row.free" size="small" :disabled="!row.supported" @change="onFreeChange(row)" />
-            </template>
-          </el-table-column>
-          <el-table-column label="绑定套餐" width="140" align="center">
-            <template #default="{ row }">
-              <template v-if="row.free">
-                <el-button v-if="row.boundPackage" size="small" text type="primary" @click="openPackageDrawer(row)">{{ row.boundPackage }}</el-button>
-                <el-button v-else size="small" text type="primary" @click="openPackageDrawer(row)">配置</el-button>
-              </template>
-              <span v-else class="text-muted">—</span>
+              <span>{{ row.free ? '免开通' : 'APP购买开通' }}</span>
             </template>
           </el-table-column>
           <template #empty>
@@ -135,25 +109,15 @@
                 <span class="cell-name">{{ row.algoName }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="描述" min-width="160">
-              <template #default="{ row }">
-                <span class="cell-desc">{{ row.descr || '—' }}</span>
-              </template>
-            </el-table-column>
             <el-table-column label="能力配置" width="100" align="center">
               <template #default="{ row }">
-                <el-button v-if="row.hasConfig && row._isFirstRow" size="small" text type="primary">配置</el-button>
+                <el-button v-if="row.hasConfig && row._isFirstRow" size="small" text type="primary">查看</el-button>
                 <span v-else-if="row._isFirstRow" class="text-muted">—</span>
               </template>
             </el-table-column>
             <el-table-column label="关联事件" width="100" align="center">
               <template #default="{ row }">
-                <el-button v-if="row._isFirstRow" size="small" text type="primary">配置</el-button>
-              </template>
-            </el-table-column>
-            <el-table-column label="服务ID" width="120" align="center">
-              <template #default="{ row }">
-                <span :class="{ 'cell-service-id': true, 'text-muted': row.serviceId === '-' }">{{ row.serviceId }}</span>
+                <el-button v-if="row._isFirstRow" size="small" text type="primary">查看</el-button>
               </template>
             </el-table-column>
             <el-table-column label="服务名称" min-width="120">
@@ -161,23 +125,14 @@
                 <span>{{ row.serviceName || row.algoName }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="是否支持" width="100" align="center">
+            <el-table-column label="服务ID" width="120" align="center">
               <template #default="{ row }">
-                <el-switch v-model="row.supported" size="small" />
+                <span :class="{ 'cell-service-id': true, 'text-muted': row.serviceId === '-' }">{{ row.serviceId }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="是否免开通" width="100" align="center">
+            <el-table-column label="服务开通方式" width="140" align="center">
               <template #default="{ row }">
-                <el-switch v-model="row.free" size="small" :disabled="!row.supported" @change="onFreeChange(row)" />
-              </template>
-            </el-table-column>
-            <el-table-column label="绑定套餐" width="140" align="center">
-              <template #default="{ row }">
-                <template v-if="row.free">
-                  <el-button v-if="row.boundPackage" size="small" text type="primary" @click="openPackageDrawer(row)">{{ row.boundPackage }}</el-button>
-                  <el-button v-else size="small" text type="primary" @click="openPackageDrawer(row)">配置</el-button>
-                </template>
-                <span v-else class="text-muted">—</span>
+                <span>{{ row.free ? '免开通' : 'APP购买开通' }}</span>
               </template>
             </el-table-column>
             <template #empty>
@@ -668,12 +623,9 @@
           <span class="algo-config-count">共 {{ eventOptions.length }} 个事件</span>
         </div>
         <el-table
-          ref="eventTableRef"
           :data="eventOptions"
           stripe
-          @selection-change="onEventSelectionChange"
         >
-          <el-table-column type="selection" width="44" />
           <el-table-column label="事件ID" width="110">
             <template #default="{ row }">
               <code class="event-id-code">{{ row.id }}</code>
@@ -692,8 +644,7 @@
         <el-empty v-if="eventOptions.length === 0" description="暂无事件数据" :image-size="80" />
       </template>
       <template #footer>
-        <el-button @click="eventDrawerVisible = false">取消</el-button>
-        <el-button type="primary" @click="saveEventLink">保存</el-button>
+        <el-button @click="eventDrawerVisible = false">关闭</el-button>
       </template>
     </el-drawer>
 
@@ -714,7 +665,6 @@
           <div class="algo-cap-section">
             <div class="algo-cap-section-header">
               <span class="algo-cap-section-title">标准能力</span>
-              <el-button size="small" @click="onAddStdCap">+ 标准能力</el-button>
             </div>
             <el-table v-if="standardCapList.length" :data="standardCapList" stripe>
               <el-table-column label="类型" width="80" align="center">
@@ -731,19 +681,12 @@
               <el-table-column label="数据定义" min-width="160" show-overflow-tooltip>
                 <template #default="{ row }">{{ dataDefSummary(row.dataDef) }}</template>
               </el-table-column>
-              <el-table-column label="操作" width="130" fixed="right">
-                <template #default="{ row, $index }">
-                  <el-button size="small" text type="primary" @click="onEditStdCap(row, $index)">编辑</el-button>
-                  <el-button size="small" text type="danger" @click="standardCapList.splice($index, 1)">删除</el-button>
-                </template>
-              </el-table-column>
             </el-table>
             <div v-else class="algo-config-empty">暂无标准能力</div>
           </div>
           <div class="algo-cap-section">
             <div class="algo-cap-section-header">
               <span class="algo-cap-section-title">自定义能力</span>
-              <el-button size="small" @click="onAddCustomCap">+ 自定义能力</el-button>
             </div>
             <el-table v-if="customCapList.length" :data="customCapList" stripe>
               <el-table-column label="类型" width="80" align="center">
@@ -760,21 +703,14 @@
               <el-table-column label="数据定义" min-width="160" show-overflow-tooltip>
                 <template #default="{ row }">{{ dataDefSummary(row.dataDef) }}</template>
               </el-table-column>
-              <el-table-column label="操作" width="130" fixed="right">
-                <template #default="{ row, $index }">
-                  <el-button size="small" text type="primary" @click="onEditCustomCap(row, $index)">编辑</el-button>
-                  <el-button size="small" text type="danger" @click="customCapList.splice($index, 1)">删除</el-button>
-                </template>
-              </el-table-column>
             </el-table>
             <div v-else class="algo-config-empty">暂无自定义能力</div>
           </div>
         </template>
-        <div v-else class="algo-config-empty">暂未添加能力，请点击上方按钮添加</div>
+        <div v-else class="algo-config-empty">暂无能力数据</div>
       </template>
       <template #footer>
-        <el-button @click="algoConfigDrawerVisible = false">取消</el-button>
-        <el-button type="primary" @click="saveAlgoConfig">确定</el-button>
+        <el-button @click="algoConfigDrawerVisible = false">关闭</el-button>
       </template>
     </el-drawer>
 
@@ -1338,6 +1274,7 @@ function loadAlgoServices() {
         id: a.algorithmId,
         name: a._name?.['1'] || a.algorithmId,
         serviceId: a.serviceId || '-',
+        serviceName: '—',
         descr: a.descr || '',
         supported: false,
         free: false,
@@ -1353,6 +1290,7 @@ function loadAlgoServices() {
           id: a.algorithmId,
           name: a._name?.['1'] || a.algorithmId,
           serviceId: svc.serviceId,
+          serviceName: svc.name || '—',
           descr: a.descr || '',
           supported: false,
           free: false,
@@ -1369,8 +1307,8 @@ function loadAlgoServices() {
 }
 
 function algoSpanMethod({ columnIndex, row }) {
-  // 算法级列: 0=算法ID, 1=算法名称, 2=描述, 3=能力配置, 4=关联事件
-  if (columnIndex <= 4) {
+  // 算法级列: 0=算法ID, 1=算法名称, 2=能力配置, 3=关联事件
+  if (columnIndex <= 3) {
     if (row._isFirstRow) return { rowspan: row._rowSpan, colspan: 1 }
     return { rowspan: 0, colspan: 0 }
   }
@@ -1925,7 +1863,7 @@ function loadPlatformServices() {
 }
 
 function platformSpanMethod({ columnIndex, row }) {
-  if (columnIndex <= 4) {
+  if (columnIndex <= 3) {
     if (row._isFirstRow) return { rowspan: row._rowSpan, colspan: 1 }
     return { rowspan: 0, colspan: 0 }
   }

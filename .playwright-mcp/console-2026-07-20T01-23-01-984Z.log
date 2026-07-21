@@ -1,0 +1,13 @@
+[   12424ms] [WARNING] ElementPlusError: [el-pagination] [API] small is about to be deprecated in version 3.0.0, please use size instead.
+For more detail, please visit: https://element-plus.org/zh-CN/component/pagination.html
+
+    at ft (https://pm.tao-zone.top/assets/index-CdtjMmFS.js:35:1674)
+    at fe.immediate (https://pm.tao-zone.top/assets/index-CdtjMmFS.js:35:2458)
+    at Xi (https://pm.tao-zone.top/assets/index-CdtjMmFS.js:14:38)
+    at Ga (https://pm.tao-zone.top/assets/index-CdtjMmFS.js:14:109)
+    at r.call (https://pm.tao-zone.top/assets/index-CdtjMmFS.js:14:3494)
+    at w (https://pm.tao-zone.top/assets/index-CdtjMmFS.js:10:16674)
+    at Wx (https://pm.tao-zone.top/assets/index-CdtjMmFS.js:10:16888)
+    at vd (https://pm.tao-zone.top/assets/index-CdtjMmFS.js:14:3695)
+    at fe (https://pm.tao-zone.top/assets/index-CdtjMmFS.js:14:3201)
+    at wo (https://pm.tao-zone.top/assets/index-CdtjMmFS.js:35:2439) @ https://pm.tao-zone.top/assets/index-CdtjMmFS.js:34
