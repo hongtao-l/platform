@@ -1,0 +1,241 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]: IoT 平台
+    - navigation [ref=e10]:
+      - generic [ref=e11] [cursor=pointer]: 工作台
+      - generic [ref=e16]:
+        - generic [ref=e17] [cursor=pointer]: 物模型管理
+        - generic:
+          - generic [ref=e26] [cursor=pointer]: IOT类目
+          - generic [ref=e31] [cursor=pointer]: 能力库
+          - generic [ref=e39] [cursor=pointer]: 算法库
+          - generic [ref=e45] [cursor=pointer]: 事件库
+      - generic [ref=e50]:
+        - generic [ref=e51] [cursor=pointer]: 产品管理
+        - generic:
+          - generic [ref=e61] [cursor=pointer]: 产品开发
+          - generic [ref=e68] [cursor=pointer]: 产品审核
+      - generic [ref=e73]:
+        - generic [ref=e74] [cursor=pointer]: 套餐管理
+        - generic:
+          - generic [ref=e85] [cursor=pointer]: 套餐配置
+          - generic [ref=e92] [cursor=pointer]: 服务类型
+      - generic [ref=e100]:
+        - generic [ref=e101] [cursor=pointer]: 智能体管理
+        - generic:
+          - generic [ref=e109] [cursor=pointer]: 智能体配置
+          - generic [ref=e114] [cursor=pointer]: 模型管理
+      - generic [ref=e122]:
+        - generic [ref=e123] [cursor=pointer]: 运营管理
+        - generic [ref=e239]:
+          - generic [ref=e131] [cursor=pointer]: 商城位运营
+          - generic [ref=e136] [cursor=pointer]: 推荐位运营
+          - generic [ref=e141] [cursor=pointer]: 活动位运营
+          - generic [ref=e149] [cursor=pointer]: 用户分群
+          - generic [ref=e154] [cursor=pointer]: A/B Test
+    - generic [ref=e159]: 收起菜单
+  - generic [ref=e165]:
+    - banner [ref=e166]:
+      - navigation "面包屑" [ref=e168]:
+        - generic [ref=e169]:
+          - link "首页" [ref=e170]
+          - text: /
+        - link "推荐位运营" [ref=e240]
+      - generic [ref=e173]:
+        - superscript [ref=e180] [cursor=pointer]: "3"
+        - button "管理员" [ref=e182] [cursor=pointer]
+    - main [ref=e191]:
+      - generic [ref=e241]:
+        - generic [ref=e242]:
+          - generic [ref=e243] [cursor=pointer]: 弹窗类型
+          - generic [ref=e244] [cursor=pointer]: 固定类型
+        - generic [ref=e245]:
+          - generic [ref=e246]:
+            - generic [ref=e247]: 应用 / 推荐位
+            - generic [ref=e248]:
+              - generic [ref=e249] [cursor=pointer]: 牵心PRO
+              - generic [ref=e254]: QX_PRO_001
+              - generic [ref=e255]:
+                - generic [ref=e256] [cursor=pointer]:
+                  - text: 首页推荐位
+                  - generic [ref=e257]: rec_slot_home
+                - generic [ref=e258] [cursor=pointer]:
+                  - text: 活动推荐位
+                  - generic [ref=e259]: rec_slot_activity
+            - generic [ref=e260]: 鹤梦之家
+          - generic [ref=e266]:
+            - generic:
+              - generic: 首页推荐位 · 固定类型策略
+              - generic [ref=e319]:
+                - generic [ref=e320]:
+                  - generic [ref=e321]: 策略列表
+                  - button [ref=e322] [cursor=pointer]
+                - generic:
+                  - generic:
+                    - table [ref=e327]:
+                      - rowgroup [ref=e337]:
+                        - row [ref=e338]:
+                          - columnheader "策略名称" [ref=e339]
+                          - columnheader "位置编码" [ref=e341]
+                          - columnheader "套餐数量" [ref=e343]
+                          - columnheader "冷却时间" [ref=e345]
+                          - columnheader "投放区域" [ref=e347]
+                          - columnheader "用户分群" [ref=e349]
+                          - columnheader "备注" [ref=e351]
+                          - columnheader "操作" [ref=e353]
+                    - table [ref=e356]:
+                      - rowgroup [ref=e366]:
+                        - row [ref=e367]:
+                          - cell "首页底部推荐策略" [ref=e368]
+                          - cell "home_bottom" [ref=e370]
+                          - cell "3 个" [ref=e374]
+                          - cell "2 小时" [ref=e376]
+                          - cell "国内" [ref=e378]
+                          - cell "高价值推荐用户" [ref=e382]
+                          - cell "首页底部常驻推荐" [ref=e386]
+                          - cell [ref=e388]:
+                            - generic [ref=e389]:
+                              - button "编辑" [ref=e390] [cursor=pointer]
+                              - button "删除" [ref=e392] [cursor=pointer]
+                        - row [ref=e394]:
+                          - cell "海外首页底部推荐" [ref=e395]
+                          - cell "home_bottom" [ref=e397]
+                          - cell "2 个" [ref=e401]
+                          - cell "4 小时" [ref=e403]
+                          - cell "海外" [ref=e405]
+                          - cell "全部用户" [ref=e409]
+                          - cell "—" [ref=e411]
+                          - cell [ref=e413]:
+                            - generic [ref=e414]:
+                              - button "编辑" [ref=e415] [cursor=pointer]
+                              - button "删除" [ref=e417] [cursor=pointer]
+        - dialog "选择套餐" [ref=e517]:
+          - generic [ref=e518]:
+            - heading "选择套餐" [level=2] [ref=e519]
+            - button "关闭此对话框" [ref=e520] [cursor=pointer]
+          - generic [ref=e524]:
+            - generic [ref=e525]:
+              - generic [ref=e527] [cursor=pointer]:
+                - generic:
+                  - combobox [ref=e529]
+                  - generic [ref=e530]: 全部分类
+              - generic [ref=e536] [cursor=pointer]:
+                - generic:
+                  - combobox [ref=e538]
+                  - generic [ref=e539]: 投放区域
+              - generic [ref=e545] [cursor=pointer]:
+                - generic:
+                  - combobox [ref=e547]
+                  - generic [ref=e548]: 投放APP
+              - generic [ref=e554] [cursor=pointer]:
+                - generic:
+                  - combobox [ref=e556]
+                  - generic [ref=e557]: 投放运营位
+              - textbox "搜索套餐名称或ID" [ref=e564]
+            - generic [ref=e565]: 从套餐配置模块的套餐列表中选择（单选）
+            - generic [ref=e566]:
+              - generic [ref=e569] [cursor=pointer]:
+                - generic [ref=e570]: 7天事件云存储基础版
+                - generic [ref=e571]:
+                  - generic [ref=e572]: REC_001
+                  - generic [ref=e573]: 云存储套餐
+                  - generic [ref=e574]: ¥6.90 / $0.95
+              - generic [ref=e577] [cursor=pointer]:
+                - generic [ref=e578]: 30天全时云存储Pro版
+                - generic [ref=e579]:
+                  - generic [ref=e580]: REC_002
+                  - generic [ref=e581]: 云存储套餐
+                  - generic [ref=e582]: ¥19.90 / $2.99
+              - generic [ref=e585] [cursor=pointer]:
+                - generic [ref=e586]: AI智能检测月卡
+                - generic [ref=e587]:
+                  - generic [ref=e588]: REC_003
+                  - generic [ref=e589]: AI智能服务
+                  - generic [ref=e590]: ¥9.90 / $1.49
+              - generic [ref=e593] [cursor=pointer]:
+                - generic [ref=e594]: 全家桶年度套餐
+                - generic [ref=e595]:
+                  - generic [ref=e596]: REC_004
+                  - generic [ref=e597]: 综合套餐
+                  - generic [ref=e598]: ¥199.00 / $29.99
+              - generic [ref=e601] [cursor=pointer]:
+                - generic [ref=e602]: Overseas-Pro云存储
+                - generic [ref=e603]:
+                  - generic [ref=e604]: REC_005
+                  - generic [ref=e605]: 云存储套餐
+                  - generic [ref=e606]: $12.99
+              - generic [ref=e609] [cursor=pointer]:
+                - generic [ref=e610]: 国内专享·极简云存
+                - generic [ref=e611]:
+                  - generic [ref=e612]: REC_006
+                  - generic [ref=e613]: 云存储套餐
+                  - generic [ref=e614]: ¥59.00
+          - generic [ref=e615]:
+            - button "取消" [ref=e616] [cursor=pointer]
+            - button "确定" [ref=e618] [cursor=pointer]
+        - dialog "添加固定类型策略" [ref=e420]:
+          - generic [ref=e421]:
+            - heading "添加固定类型策略" [level=2] [ref=e422]
+            - button "关闭此对话框" [ref=e423] [cursor=pointer]
+          - generic [ref=e428]:
+            - generic [ref=e429]: 基础信息
+            - generic [ref=e430]:
+              - generic [ref=e431]:
+                - generic [ref=e432]: "*策略名称"
+                - textbox "*策略名称" [ref=e436]:
+                  - /placeholder: 请输入策略名称
+              - generic [ref=e437]:
+                - generic [ref=e438]: "*位置编码"
+                - generic [ref=e441] [cursor=pointer]:
+                  - generic:
+                    - combobox "*位置编码" [ref=e443]
+                    - generic [ref=e444]: 请选择展示位置
+              - generic [ref=e449]:
+                - generic [ref=e450]: 备注
+                - textbox "备注" [ref=e453]:
+                  - /placeholder: 请输入备注信息
+            - generic [ref=e454]: 套餐配置
+            - generic [ref=e455]:
+              - generic [ref=e456]: 暂未添加套餐
+              - generic [ref=e457] [cursor=pointer]: 添加套餐
+            - generic [ref=e461]: 投放配置
+            - generic [ref=e462]:
+              - generic [ref=e463]:
+                - generic [ref=e464]: "*冷却时间"
+                - generic [ref=e465]:
+                  - generic [ref=e466]:
+                    - button "减少数值" [ref=e467] [cursor=pointer]
+                    - button "增加数值" [ref=e471] [cursor=pointer]
+                    - spinbutton "*冷却时间" [ref=e477]: "2"
+                  - generic [ref=e478]: 小时
+              - generic [ref=e479]: 用户关闭推荐位后，需等待 N 小时才会再次展示
+              - group "*投放区域" [ref=e480]:
+                - generic [ref=e483]:
+                  - generic [ref=e484] [cursor=pointer]:
+                    - generic [ref=e486]:
+                      - checkbox "国内" [checked]
+                    - text: 国内
+                  - generic [ref=e488] [cursor=pointer]:
+                    - generic [ref=e490]:
+                      - checkbox "海外"
+                    - text: 海外
+              - group "用户分群" [ref=e492]:
+                - generic [ref=e495]:
+                  - generic [ref=e496] [cursor=pointer]:
+                    - generic [ref=e498]:
+                      - checkbox "高价值推荐用户 ug_rec_high_value"
+                    - text: 高价值推荐用户
+                    - generic [ref=e500]: ug_rec_high_value
+                  - generic [ref=e501] [cursor=pointer]:
+                    - generic [ref=e503]:
+                      - checkbox "活跃推荐用户 ug_rec_active"
+                    - text: 活跃推荐用户
+                    - generic [ref=e505]: ug_rec_active
+                  - generic [ref=e506] [cursor=pointer]:
+                    - generic [ref=e508]:
+                      - checkbox "沉默推荐用户 ug_rec_silent"
+                    - text: 沉默推荐用户
+                    - generic [ref=e510]: ug_rec_silent
+          - generic [ref=e511]:
+            - button "取消" [ref=e512] [cursor=pointer]
+            - button "确定" [ref=e514] [cursor=pointer]

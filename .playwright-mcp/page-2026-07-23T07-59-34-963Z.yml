@@ -1,0 +1,100 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]: IoT 平台
+    - navigation [ref=e10]:
+      - generic [ref=e11] [cursor=pointer]: 工作台
+      - generic [ref=e16]:
+        - generic [ref=e17] [cursor=pointer]: 物模型管理
+        - generic:
+          - generic [ref=e26] [cursor=pointer]: IOT类目
+          - generic [ref=e31] [cursor=pointer]: 能力库
+          - generic [ref=e39] [cursor=pointer]: 算法库
+          - generic [ref=e45] [cursor=pointer]: 事件库
+      - generic [ref=e50]:
+        - generic [ref=e51] [cursor=pointer]: 产品管理
+        - generic:
+          - generic [ref=e61] [cursor=pointer]: 产品开发
+          - generic [ref=e68] [cursor=pointer]: 产品审核
+      - generic [ref=e73]:
+        - generic [ref=e74] [cursor=pointer]: 套餐管理
+        - generic:
+          - generic [ref=e85] [cursor=pointer]: 套餐配置
+          - generic [ref=e92] [cursor=pointer]: 服务类型
+      - generic [ref=e100]:
+        - generic [ref=e101] [cursor=pointer]: 智能体管理
+        - generic:
+          - generic [ref=e109] [cursor=pointer]: 智能体配置
+          - generic [ref=e114] [cursor=pointer]: 模型管理
+      - generic [ref=e122]:
+        - generic [ref=e123] [cursor=pointer]: 运营管理
+        - generic [ref=e239]:
+          - generic [ref=e131] [cursor=pointer]: 商城位运营
+          - generic [ref=e136] [cursor=pointer]: 推荐位运营
+          - generic [ref=e141] [cursor=pointer]: 活动位运营
+          - generic [ref=e149] [cursor=pointer]: 用户分群
+          - generic [ref=e154] [cursor=pointer]: A/B Test
+    - generic [ref=e159]: 收起菜单
+  - generic [ref=e165]:
+    - banner [ref=e166]:
+      - navigation "面包屑" [ref=e168]:
+        - generic [ref=e169]:
+          - link "首页" [ref=e170]
+          - text: /
+        - link "推荐位运营" [ref=e240]
+      - generic [ref=e173]:
+        - superscript [ref=e180] [cursor=pointer]: "3"
+        - button "管理员" [ref=e182] [cursor=pointer]
+    - main [ref=e191]:
+      - generic [ref=e241]:
+        - generic [ref=e242]:
+          - generic [ref=e243] [cursor=pointer]: 弹窗类型
+          - generic [ref=e244] [cursor=pointer]: 固定类型
+        - generic [ref=e245]:
+          - generic [ref=e246]:
+            - generic [ref=e247]: 应用 / 推荐位
+            - generic [ref=e248]:
+              - generic [ref=e249] [cursor=pointer]: 牵心PRO
+              - generic [ref=e254]: QX_PRO_001
+              - generic [ref=e255]:
+                - generic [ref=e256] [cursor=pointer]:
+                  - text: 首页推荐位
+                  - generic [ref=e257]: rec_slot_home
+                - generic [ref=e258] [cursor=pointer]:
+                  - text: 活动推荐位
+                  - generic [ref=e259]: rec_slot_activity
+            - generic [ref=e260]: 鹤梦之家
+          - generic [ref=e266]:
+            - generic:
+              - generic:
+                - generic [ref=e267] [cursor=pointer]: 推荐位套餐漏斗
+                - generic [ref=e268] [cursor=pointer]: 推荐位策略
+              - generic:
+                - generic: 首页推荐位 · 漏斗列表
+                - generic [ref=e269]:
+                  - generic [ref=e270]:
+                    - generic [ref=e271]: 漏斗列表
+                    - button [ref=e272] [cursor=pointer]
+                  - generic:
+                    - generic:
+                      - table [ref=e277]:
+                        - rowgroup [ref=e282]:
+                          - row [ref=e283]:
+                            - columnheader "漏斗名称" [ref=e284]
+                            - columnheader "创建时间" [ref=e286]
+                            - columnheader "操作" [ref=e288]
+                      - table [ref=e291]:
+                        - rowgroup [ref=e296]:
+                          - row [ref=e297]:
+                            - cell "首页基础漏斗" [ref=e298]
+                            - cell "2026-03-22" [ref=e300]
+                            - cell [ref=e302]:
+                              - generic [ref=e303]:
+                                - button "编辑" [ref=e304] [cursor=pointer]
+                                - button "删除" [ref=e306] [cursor=pointer]
+                          - row [ref=e308]:
+                            - cell "升级推荐漏斗" [ref=e309]
+                            - cell "2026-03-25" [ref=e311]
+                            - cell [ref=e313]:
+                              - generic [ref=e314]:
+                                - button "编辑" [ref=e315] [cursor=pointer]
+                                - button "删除" [ref=e317] [cursor=pointer]

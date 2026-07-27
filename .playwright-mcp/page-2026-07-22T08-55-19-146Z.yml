@@ -1,0 +1,55 @@
+- generic [ref=f5e4]:
+  - generic [ref=f5e5]:
+    - generic [ref=f5e6]: 16:55
+    - generic [ref=f5e9]:
+      - generic [ref=f5e10]:
+        - generic [ref=f5e11]: J
+        - generic [ref=f5e12]:
+          - generic [ref=f5e13]: John Smith
+          - generic [ref=f5e14]: john@example.com
+        - generic [ref=f5e15]: 编辑
+      - generic [ref=f5e17]:
+        - generic [ref=f5e18]:
+          - generic [ref=f5e19]: 
+          - generic [ref=f5e21]: 服务商城
+          - generic [ref=f5e22]: 
+        - generic [ref=f5e23]:
+          - generic [ref=f5e24]: 
+          - generic [ref=f5e26]: 我的服务
+          - generic [ref=f5e70]: 待绑定
+          - generic [ref=f5e27]: 
+        - generic [ref=f5e28]:
+          - generic [ref=f5e29]: 
+          - generic [ref=f5e31]: 我的订单
+          - generic [ref=f5e32]: 
+        - generic [ref=f5e33]:
+          - generic [ref=f5e34]: 
+          - generic [ref=f5e36]: 我的券包
+          - generic [ref=f5e37]: 
+      - generic [ref=f5e39]:
+        - generic [ref=f5e40]:
+          - generic [ref=f5e41]: 
+          - generic [ref=f5e43]: 帮助与反馈
+          - generic [ref=f5e44]: 
+        - generic [ref=f5e45]:
+          - generic [ref=f5e46]: 
+          - generic [ref=f5e48]: 客服中心
+          - generic [ref=f5e49]: 
+        - generic [ref=f5e50]:
+          - generic [ref=f5e51]: 
+          - generic [ref=f5e53]: 关于
+          - generic [ref=f5e54]: 
+      - generic [ref=f5e55]: 退出登录
+    - tablist [ref=f5e56]:
+      - tab " 首页" [ref=f5e57] [cursor=pointer]:
+        - generic [ref=f5e58]: 
+        - generic [ref=f5e60]: 首页
+      - tab " 3 消息" [ref=f5e61] [cursor=pointer]:
+        - generic [ref=f5e62]:
+          - generic [ref=f5e63]: 
+          - generic [ref=f5e64]: "3"
+        - generic [ref=f5e65]: 消息
+      - tab " 我的" [selected] [ref=f5e66] [cursor=pointer]:
+        - generic [ref=f5e67]: 
+        - generic [ref=f5e69]: 我的
+  - text:  

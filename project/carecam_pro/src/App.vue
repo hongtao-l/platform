@@ -7,12 +7,23 @@
         </keep-alive>
       </router-view>
 
+      <!-- 版本升级弹窗 -->
+      <VersionUpgradePopup
+        v-model:visible="showUpgrade"
+        :info="upgradeInfo"
+        @upgrade="onUpgrade"
+        @dismiss="onDismiss"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import VersionUpgradePopup from '@/components/VersionUpgradePopup.vue'
+import { useVersionCheck } from '@/composables/useVersionCheck'
+
+const { showUpgrade, upgradeInfo, checkAuto, onUpgrade, onDismiss } = useVersionCheck()
 
 const vw = ref(window.innerWidth)
 const vh = ref(window.innerHeight)
@@ -25,7 +36,10 @@ const onResize = () => {
   vh.value = window.innerHeight
 }
 
-onMounted(() => { window.addEventListener('resize', onResize) })
+onMounted(() => {
+  window.addEventListener('resize', onResize)
+  checkAuto()
+})
 onUnmounted(() => { window.removeEventListener('resize', onResize) })
 </script>
 

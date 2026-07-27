@@ -1,0 +1,33 @@
+- generic [ref=f5e4]:
+  - generic [ref=f5e86]:
+    - generic [ref=f5e87]:
+      - generic [ref=f5e88] [cursor=pointer]: 
+      - heading "关于" [level=2] [ref=f5e90]
+    - generic [ref=f5e91]:
+      - generic [ref=f5e92]:
+        - generic [ref=f5e93]: 
+        - generic [ref=f5e95]: CareCam Pro
+        - generic [ref=f5e96]: 当前版本 v1.0.0
+      - generic [ref=f5e97]:
+        - generic [ref=f5e98] [cursor=pointer]:
+          - generic [ref=f5e99]: 
+          - generic [ref=f5e101]: 版本更新
+          - generic [ref=f5e102]: 
+        - generic [ref=f5e103] [cursor=pointer]:
+          - generic [ref=f5e104]: 
+          - generic [ref=f5e106]: 用户协议
+          - generic [ref=f5e107]: 
+        - generic [ref=f5e108] [cursor=pointer]:
+          - generic [ref=f5e109]: 
+          - generic [ref=f5e111]: 隐私政策
+          - generic [ref=f5e112]: 
+  - dialog [ref=f5e72]:
+    - generic [ref=f5e73]:
+      - generic [ref=f5e74]: 
+      - heading "发现新版本 v1.2.0" [level=3] [ref=f5e77]
+      - generic [ref=f5e78]:
+        - generic [ref=f5e79]: 更新内容：
+        - generic [ref=f5e80]: • 修复夜间模式白平衡异常 • 新增 AI 人形检测联动 • 优化 P2P 连接速度 • 支持全彩夜视模式
+      - button "立即更新" [ref=f5e81] [cursor=pointer]
+      - generic [ref=f5e84] [cursor=pointer]: 稍后提醒
+    - button "" [ref=f5e85] [cursor=pointer]

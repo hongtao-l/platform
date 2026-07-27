@@ -1,0 +1,112 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]: IoT 平台
+    - navigation [ref=e10]:
+      - generic [ref=e11] [cursor=pointer]: 工作台
+      - generic [ref=e16]:
+        - generic [ref=e17] [cursor=pointer]: 物模型管理
+        - generic:
+          - generic [ref=e26] [cursor=pointer]: IOT类目
+          - generic [ref=e31] [cursor=pointer]: 能力库
+          - generic [ref=e39] [cursor=pointer]: 算法库
+          - generic [ref=e45] [cursor=pointer]: 事件库
+      - generic [ref=e50]:
+        - generic [ref=e51] [cursor=pointer]: 产品管理
+        - generic:
+          - generic [ref=e61] [cursor=pointer]: 产品开发
+          - generic [ref=e68] [cursor=pointer]: 产品审核
+      - generic [ref=e73]:
+        - generic [ref=e74] [cursor=pointer]: 套餐管理
+        - generic:
+          - generic [ref=e85] [cursor=pointer]: 套餐配置
+          - generic [ref=e92] [cursor=pointer]: 服务类型
+      - generic [ref=e100]:
+        - generic [ref=e101] [cursor=pointer]: 智能体管理
+        - generic:
+          - generic [ref=e109] [cursor=pointer]: 智能体配置
+          - generic [ref=e114] [cursor=pointer]: 模型管理
+      - generic [ref=e122]:
+        - generic [ref=e123] [cursor=pointer]: 运营管理
+        - generic [ref=e239]:
+          - generic [ref=e131] [cursor=pointer]: 商城位运营
+          - generic [ref=e136] [cursor=pointer]: 推荐位运营
+          - generic [ref=e141] [cursor=pointer]: 活动位运营
+          - generic [ref=e149] [cursor=pointer]: 用户分群
+          - generic [ref=e154] [cursor=pointer]: A/B Test
+    - generic [ref=e159]: 收起菜单
+  - generic [ref=e165]:
+    - banner [ref=e166]:
+      - navigation "面包屑" [ref=e168]:
+        - generic [ref=e169]:
+          - link "首页" [ref=e170]
+          - text: /
+        - link "推荐位运营" [ref=e240]
+      - generic [ref=e173]:
+        - superscript [ref=e180] [cursor=pointer]: "3"
+        - button "管理员" [ref=e182] [cursor=pointer]
+    - main [ref=e191]:
+      - generic [ref=e241]:
+        - generic [ref=e242]:
+          - generic [ref=e243] [cursor=pointer]: 弹窗类型
+          - generic [ref=e244] [cursor=pointer]: 固定类型
+        - generic [ref=e245]:
+          - generic [ref=e246]:
+            - generic [ref=e247]: 应用 / 推荐位
+            - generic [ref=e248]:
+              - generic [ref=e249] [cursor=pointer]: 牵心PRO
+              - generic [ref=e254]: QX_PRO_001
+              - generic [ref=e255]:
+                - generic [ref=e256] [cursor=pointer]:
+                  - text: 首页推荐位
+                  - generic [ref=e257]: rec_slot_home
+                - generic [ref=e258] [cursor=pointer]:
+                  - text: 活动推荐位
+                  - generic [ref=e259]: rec_slot_activity
+            - generic [ref=e260]: 鹤梦之家
+          - generic [ref=e266]:
+            - generic:
+              - generic: 首页推荐位 · 固定类型策略
+              - generic [ref=e319]:
+                - generic [ref=e320]:
+                  - generic [ref=e321]: 策略列表
+                  - button [active] [ref=e322] [cursor=pointer]
+                - generic:
+                  - generic:
+                    - table [ref=e327]:
+                      - rowgroup [ref=e337]:
+                        - row [ref=e338]:
+                          - columnheader "策略名称" [ref=e339]
+                          - columnheader "位置编码" [ref=e341]
+                          - columnheader "套餐数量" [ref=e343]
+                          - columnheader "冷却时间" [ref=e345]
+                          - columnheader "投放区域" [ref=e347]
+                          - columnheader "用户分群" [ref=e349]
+                          - columnheader "备注" [ref=e351]
+                          - columnheader "操作" [ref=e353]
+                    - table [ref=e356]:
+                      - rowgroup [ref=e366]:
+                        - row [ref=e367]:
+                          - cell "首页底部推荐策略" [ref=e368]
+                          - cell "home_bottom" [ref=e370]
+                          - cell "3 个" [ref=e374]
+                          - cell "2 小时" [ref=e376]
+                          - cell "国内" [ref=e378]
+                          - cell "高价值推荐用户" [ref=e382]
+                          - cell "首页底部常驻推荐" [ref=e386]
+                          - cell [ref=e388]:
+                            - generic [ref=e389]:
+                              - button "编辑" [ref=e390] [cursor=pointer]
+                              - button "删除" [ref=e392] [cursor=pointer]
+                        - row [ref=e394]:
+                          - cell "海外首页底部推荐" [ref=e395]
+                          - cell "home_bottom" [ref=e397]
+                          - cell "2 个" [ref=e401]
+                          - cell "4 小时" [ref=e403]
+                          - cell "海外" [ref=e405]
+                          - cell "全部用户" [ref=e409]
+                          - cell "—" [ref=e411]
+                          - cell [ref=e413]:
+                            - generic [ref=e414]:
+                              - button "编辑" [ref=e415] [cursor=pointer]
+                              - button "删除" [ref=e417] [cursor=pointer]
+        - text: "* * * *"

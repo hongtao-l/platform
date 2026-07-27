@@ -82,6 +82,12 @@ const routes = [
     meta: { title: '回放' }
   },
   {
+    path: '/about',
+    name: 'About',
+    component: () => import('@/views/about/index.vue'),
+    meta: { title: '关于' }
+  },
+  {
     path: '/settings',
     name: 'Settings',
     component: () => import('@/views/settings/index.vue'),

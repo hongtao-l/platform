@@ -1,13 +1,13 @@
 <template>
   <div class="page-container" style="display:flex;flex-direction:column;padding:0">
-    <!-- Top Tabs -->
-    <div class="ops-tabs">
+    <!-- Type Toggle -->
+    <div class="rec-type-tabs">
       <div
-        v-for="tab in opsTabs"
-        :key="tab.key"
-        :class="['ops-tab', { active: activeTab === tab.key }]"
-        @click="activeTab = tab.key"
-      >{{ tab.label }}</div>
+        v-for="t in recTypeTabs"
+        :key="t.key"
+        :class="['rec-type-tab', { active: activeRecType === t.key }]"
+        @click="switchRecType(t.key)"
+      >{{ t.label }}</div>
     </div>
 
     <!-- Panel Content -->
@@ -37,8 +37,20 @@
 
       <!-- Right Content -->
       <div class="ops-right">
-        <!-- Funnel Tab -->
-        <div v-show="activeTab === 'funnel'">
+        <!-- ===== Popup Type ===== -->
+        <div v-show="activeRecType === 'popup'">
+          <!-- Sub Tabs -->
+          <div class="ops-tabs">
+            <div
+              v-for="tab in opsTabs"
+              :key="tab.key"
+              :class="['ops-tab', { active: activeTab === tab.key }]"
+              @click="activeTab = tab.key"
+            >{{ tab.label }}</div>
+          </div>
+
+          <!-- Funnel Tab -->
+          <div v-show="activeTab === 'funnel'">
           <div class="ops-panel-title">{{ currentSlotName }} · 漏斗列表</div>
           <div class="card">
             <div class="card-header">
@@ -114,6 +126,57 @@
                   <el-button v-if="!row.isDefault" size="small" text type="danger">删除</el-button>
                 </template>
               </el-table-column>
+            </el-table>
+          </div>
+        </div>
+        </div>
+
+        <!-- ===== Fixed Type ===== -->
+        <div v-show="activeRecType === 'fixed'">
+          <div class="ops-panel-title">{{ currentSlotName }} · 固定类型策略</div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">策略列表</span>
+              <el-button type="primary" size="small" @click="openFixedStrategyDrawer('add')">
+                <el-icon><Plus /></el-icon>添加策略
+              </el-button>
+            </div>
+            <el-table :data="fixedStrategies" stripe>
+              <el-table-column label="策略名称" min-width="160">
+                <template #default="{ row }"><span class="text-medium">{{ row.name }}</span></template>
+              </el-table-column>
+              <el-table-column label="位置编码" width="130">
+                <template #default="{ row }"><el-tag size="small" type="info">{{ row.position }}</el-tag></template>
+              </el-table-column>
+              <el-table-column label="套餐数量" width="80">
+                <template #default="{ row }"><span class="cell-muted">{{ row.packages.length }} 个</span></template>
+              </el-table-column>
+              <el-table-column label="冷却时间" width="90">
+                <template #default="{ row }"><span class="cell-muted">{{ row.cooldownHours }} 小时</span></template>
+              </el-table-column>
+              <el-table-column label="投放区域" width="100">
+                <template #default="{ row }">
+                  <el-tag v-for="r in row.regions" :key="r" size="small" type="info" class="cell-tag">{{ r }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="用户分群" width="150">
+                <template #default="{ row }">
+                  <span v-if="!row.groups.length" class="cell-muted">全部用户</span>
+                  <el-tag v-for="g in row.groups" :key="g" size="small" class="cell-tag cell-tag-block">{{ g }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="备注" width="120">
+                <template #default="{ row }"><span class="cell-muted">{{ row.remark || '—' }}</span></template>
+              </el-table-column>
+              <el-table-column label="操作" width="140">
+                <template #default="{ row }">
+                  <el-button size="small" text type="primary" @click="openFixedStrategyDrawer('edit', row)">编辑</el-button>
+                  <el-button size="small" text type="danger" @click="deleteFixedStrategy(row)">删除</el-button>
+                </template>
+              </el-table-column>
+              <template #empty>
+                <div class="empty-state">暂无固定类型策略，点击上方按钮添加</div>
+              </template>
             </el-table>
           </div>
         </div>
@@ -317,6 +380,85 @@
       </template>
     </el-drawer>
 
+    <!-- ===== Drawer: Fixed Type Strategy (Add/Edit) ===== -->
+    <el-drawer v-model="fixedStrategyDrawerVisible" :title="fixedStrategyDrawerTitle" size="560px">
+      <div class="fixed-strategy-form">
+        <!-- 基础信息 -->
+        <div class="section-label">基础信息</div>
+        <el-form label-position="top">
+          <el-form-item label="策略名称" required>
+            <el-input v-model="fixedStrategyForm.name" placeholder="请输入策略名称" maxlength="50" />
+          </el-form-item>
+          <el-form-item label="位置编码" required>
+            <el-select v-model="fixedStrategyForm.position" placeholder="请选择展示位置" class="w-full">
+              <el-option v-for="p in positionOptions" :key="p.value" :label="p.label" :value="p.value" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="备注">
+            <el-input v-model="fixedStrategyForm.remark" type="textarea" :rows="3" placeholder="请输入备注信息" maxlength="200" />
+          </el-form-item>
+        </el-form>
+
+        <!-- 套餐配置 -->
+        <div class="section-label">套餐配置</div>
+        <div class="fixed-pkg-list">
+          <div v-if="!fixedStrategyForm.packages.length" class="fixed-pkg-empty">暂未添加套餐</div>
+          <div v-for="(pkg, idx) in fixedStrategyForm.packages" :key="idx" class="fixed-pkg-item">
+            <span class="fixed-pkg-num">#{{ idx + 1 }}</span>
+            <span class="fixed-pkg-code">{{ pkg.code }}</span>
+            <span class="fixed-pkg-dot">·</span>
+            <span class="fixed-pkg-name">{{ pkg.name }}</span>
+            <span class="fixed-pkg-tag">{{ pkg.category }}</span>
+            <span class="fixed-pkg-price">{{ pkg.price }}</span>
+            <div class="fixed-pkg-actions">
+              <el-button size="small" text :disabled="idx === 0" @click="moveFixedPkgUp(idx)">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+              </el-button>
+              <el-button size="small" text :disabled="idx === fixedStrategyForm.packages.length - 1" @click="moveFixedPkgDown(idx)">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              </el-button>
+              <el-button size="small" text type="danger" :disabled="fixedStrategyForm.packages.length <= 1" @click="removeFixedPkg(idx)">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              </el-button>
+            </div>
+          </div>
+          <div v-if="fixedStrategyForm.packages.length < 5" class="fixed-pkg-add" @click="openFixedPkgSelect">
+            <el-icon><Plus /></el-icon>添加套餐
+          </div>
+        </div>
+
+        <!-- 投放配置 -->
+        <div class="section-label">投放配置</div>
+        <el-form label-position="top">
+          <el-form-item label="冷却时间" required>
+            <el-input-number v-model="fixedStrategyForm.cooldownHours" :min="1" :max="720" style="width:200px" />
+            <span class="form-hint" style="margin-left:8px">小时</span>
+          </el-form-item>
+          <div class="form-hint" style="margin-top:-8px;margin-bottom:12px">用户关闭推荐位后，需等待 N 小时才会再次展示</div>
+          <el-form-item label="投放区域" required>
+            <div class="checkbox-group">
+              <label v-for="r in regionOptions" :key="r" class="checkbox-item">
+                <el-checkbox v-model="fixedStrategyForm.regions" :value="r" />{{ r }}
+              </label>
+            </div>
+          </el-form-item>
+          <el-form-item label="用户分群">
+            <div class="checkbox-group">
+              <label v-for="g in userGroupOptions" :key="g.name" class="checkbox-item">
+                <el-checkbox v-model="fixedStrategyForm.groups" :value="g.name" />
+                {{ g.name }}
+                <span class="checkbox-hint">{{ g.code }}</span>
+              </label>
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
+      <template #footer>
+        <el-button @click="fixedStrategyDrawerVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmFixedStrategy">确定</el-button>
+      </template>
+    </el-drawer>
+
     <!-- ===== Dialog: Template Management ===== -->
     <el-dialog v-model="templateDialogVisible" title="管理模板" width="640px" :z-index="9999" class="tpl-mgmt-dialog">
       <div class="tpl-mgmt-toolbar">
@@ -391,6 +533,23 @@
 import { ref, reactive, computed } from 'vue'
 import { Plus, ArrowDown, ArrowRight } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+
+const activeRecType = ref('popup')
+const recTypeTabs = [
+  { key: 'popup', label: '弹窗类型' },
+  { key: 'fixed', label: '固定类型' }
+]
+
+function switchRecType(key) {
+  if (key === activeRecType.value) return
+  if (fixedStrategyDrawerVisible.value) {
+    ElMessageBox.confirm('当前编辑内容未保存，确定切换吗？', '提示', { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' })
+      .then(() => { activeRecType.value = key; fixedStrategyDrawerVisible.value = false })
+      .catch(() => {})
+    return
+  }
+  activeRecType.value = key
+}
 
 const activeTab = ref('funnel')
 const opsTabs = [
@@ -685,10 +844,19 @@ const selectPkg = (pkg) => {
   pkgSelectSlot.value = pkg.code
 }
 
+const isFixedPkgSelectMode = ref(false)
+
 const confirmPkgSelect = () => {
   const pkg = allPkgList.find(p => p.code === pkgSelectSlot.value)
   if (!pkg) return
-  funnelForm.slots[currentFunnelSlot.value - 1] = pkg
+  if (isFixedPkgSelectMode.value) {
+    // Fixed type: add to package list (skip if already exists)
+    if (!fixedStrategyForm.packages.some(p => p.code === pkg.code)) {
+      fixedStrategyForm.packages.push({ ...pkg })
+    }
+  } else {
+    funnelForm.slots[currentFunnelSlot.value - 1] = pkg
+  }
   pkgSelectVisible.value = false
 }
 
@@ -817,6 +985,148 @@ const confirmStrategy = () => {
 const switchToFunnel = () => {
   strategyDrawerVisible.value = false
   activeTab.value = 'funnel'
+}
+
+// ===== Fixed Type Strategies ===== // TODO: 接入真实 API
+const fixedStrategies = ref([
+  {
+    name: '首页底部推荐策略',
+    position: 'home_bottom',
+    packages: [
+      { code: 'REC_001', name: '7天事件云存储基础版', price: '¥6.90 / $0.95', category: '云存储套餐' },
+      { code: 'REC_003', name: 'AI智能检测月卡', price: '¥9.90 / $1.49', category: 'AI智能服务' },
+      { code: 'REC_004', name: '全家桶年度套餐', price: '¥199.00 / $29.99', category: '综合套餐' }
+    ],
+    cooldownHours: 2,
+    regions: ['国内'],
+    groups: ['高价值推荐用户'],
+    remark: '首页底部常驻推荐'
+  },
+  {
+    name: '海外首页底部推荐',
+    position: 'home_bottom',
+    packages: [
+      { code: 'REC_005', name: 'Overseas-Pro云存储', price: '$12.99', category: '云存储套餐' },
+      { code: 'REC_002', name: '30天全时云存储Pro版', price: '¥19.90 / $2.99', category: '云存储套餐' }
+    ],
+    cooldownHours: 4,
+    regions: ['海外'],
+    groups: [],
+    remark: ''
+  }
+])
+
+const positionOptions = [
+  { label: '首页底部', value: 'home_bottom' }
+]
+
+const fixedStrategyDrawerVisible = ref(false)
+const fixedStrategyDrawerTitle = ref('添加固定类型策略')
+const isFixedStrategyEdit = ref(false)
+
+const fixedStrategyForm = reactive({
+  name: '',
+  position: '',
+  packages: [],
+  cooldownHours: 2,
+  regions: [],
+  groups: [],
+  remark: ''
+})
+
+function openFixedStrategyDrawer(mode, row) {
+  if (mode === 'edit' && row) {
+    fixedStrategyDrawerTitle.value = '编辑固定类型策略'
+    isFixedStrategyEdit.value = true
+    fixedStrategyForm.name = row.name
+    fixedStrategyForm.position = row.position
+    fixedStrategyForm.packages = row.packages.map(p => ({ ...p }))
+    fixedStrategyForm.cooldownHours = row.cooldownHours
+    fixedStrategyForm.regions = [...row.regions]
+    fixedStrategyForm.groups = [...row.groups]
+    fixedStrategyForm.remark = row.remark || ''
+  } else {
+    fixedStrategyDrawerTitle.value = '添加固定类型策略'
+    isFixedStrategyEdit.value = false
+    fixedStrategyForm.name = ''
+    fixedStrategyForm.position = ''
+    fixedStrategyForm.packages = []
+    fixedStrategyForm.cooldownHours = 2
+    fixedStrategyForm.regions = ['国内']
+    fixedStrategyForm.groups = []
+    fixedStrategyForm.remark = ''
+  }
+  fixedStrategyDrawerVisible.value = true
+}
+
+function confirmFixedStrategy() {
+  if (!fixedStrategyForm.name.trim()) return ElMessage.warning('请输入策略名称')
+  if (!fixedStrategyForm.position) return ElMessage.warning('请选择展示位置')
+  if (!fixedStrategyForm.packages.length) return ElMessage.warning('请至少添加 1 个套餐')
+  if (!fixedStrategyForm.cooldownHours || fixedStrategyForm.cooldownHours < 1) return ElMessage.warning('冷却时间需为正整数')
+  if (!fixedStrategyForm.regions.length) return ElMessage.warning('请选择投放区域')
+
+  if (isFixedStrategyEdit.value) {
+    const idx = fixedStrategies.value.findIndex(s => s.name === fixedStrategyForm.name)
+    if (idx >= 0) {
+      fixedStrategies.value[idx] = {
+        ...fixedStrategies.value[idx],
+        position: fixedStrategyForm.position,
+        packages: fixedStrategyForm.packages.map(p => ({ ...p })),
+        cooldownHours: fixedStrategyForm.cooldownHours,
+        regions: [...fixedStrategyForm.regions],
+        groups: [...fixedStrategyForm.groups],
+        remark: fixedStrategyForm.remark
+      }
+    }
+  } else {
+    fixedStrategies.value.push({
+      name: fixedStrategyForm.name,
+      position: fixedStrategyForm.position,
+      packages: fixedStrategyForm.packages.map(p => ({ ...p })),
+      cooldownHours: fixedStrategyForm.cooldownHours,
+      regions: [...fixedStrategyForm.regions],
+      groups: [...fixedStrategyForm.groups],
+      remark: fixedStrategyForm.remark
+    })
+  }
+  fixedStrategyDrawerVisible.value = false
+}
+
+function deleteFixedStrategy(row) {
+  ElMessageBox.confirm(`确定删除策略「${row.name}」？`, '确认删除', { confirmButtonText: '确定删除', cancelButtonText: '取消', type: 'warning' })
+    .then(() => {
+      fixedStrategies.value = fixedStrategies.value.filter(s => s.name !== row.name)
+      ElMessage.success('已删除')
+    })
+    .catch(() => {})
+}
+
+function openFixedPkgSelect() {
+  isFixedPkgSelectMode.value = true
+  pkgSelectSlot.value = ''
+  pkgFilter.category = ''
+  pkgFilter.region = ''
+  pkgFilter.app = ''
+  pkgFilter.slot = ''
+  pkgFilter.keyword = ''
+  pkgSelectVisible.value = true
+}
+
+function removeFixedPkg(idx) {
+  fixedStrategyForm.packages.splice(idx, 1)
+}
+
+function moveFixedPkgUp(idx) {
+  if (idx === 0) return
+  const arr = fixedStrategyForm.packages
+  ;[arr[idx - 1], arr[idx]] = [arr[idx], arr[idx - 1]]
+}
+
+function moveFixedPkgDown(idx) {
+  if (idx === fixedStrategyForm.packages.length - 1) return
+  const arr = fixedStrategyForm.packages
+  ;[arr[idx], arr[idx + 1]] = [arr[idx + 1], arr[idx]]
 }
 </script>
 
@@ -1246,6 +1556,143 @@ const switchToFunnel = () => {
 .filter-select { width: 120px; }
 .filter-select-md { width: 140px; }
 .filter-input { flex: 1; min-width: 180px; }
+
+// ===== Rec Type Tabs =====
+.rec-type-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-light);
+  background: var(--bg-color);
+  padding: 0 12px;
+  gap: 24px;
+}
+
+.rec-type-tab {
+  padding: 10px 4px;
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all .15s;
+  margin-bottom: -1px;
+
+  &:hover { color: var(--primary-color); }
+  &.active {
+    color: var(--primary-color);
+    font-weight: 600;
+    border-bottom-color: var(--primary-color);
+  }
+}
+
+// ===== Fixed Strategy Drawer =====
+.fixed-strategy-form {
+  .section-label {
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: var(--spacing-md) 0 8px;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-light);
+
+    &:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+  }
+}
+
+.fixed-pkg-list {
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.fixed-pkg-empty {
+  padding: 24px;
+  text-align: center;
+  font-size: var(--font-sm);
+  color: var(--gray-400);
+}
+
+.fixed-pkg-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--gray-100);
+  font-size: 12px;
+  color: var(--text-secondary);
+
+  &:last-child { border-bottom: none; }
+}
+
+.fixed-pkg-num {
+  color: var(--gray-400);
+  font-weight: 500;
+  min-width: 18px;
+}
+
+.fixed-pkg-code {
+  background: var(--gray-200);
+  padding: 0 4px;
+  border-radius: 3px;
+  font-size: 11px;
+  color: var(--gray-500);
+}
+
+.fixed-pkg-dot { color: var(--gray-400); }
+
+.fixed-pkg-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fixed-pkg-tag {
+  font-size: 10px;
+  color: var(--gray-500);
+  background: var(--gray-100);
+  padding: 1px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.fixed-pkg-price {
+  font-weight: 500;
+  color: var(--primary-color);
+  flex-shrink: 0;
+}
+
+.fixed-pkg-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.fixed-pkg-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px;
+  margin: 4px 8px;
+  border: 1px dashed var(--border-light);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: var(--font-sm);
+  color: var(--primary-color);
+  transition: all .15s;
+
+  &:hover { border-color: var(--primary-color); background: var(--primary-light); }
+}
+
+// ===== Empty State =====
+.empty-state {
+  padding: 40px;
+  text-align: center;
+  font-size: var(--font-sm);
+  color: var(--gray-400);
+}
 </style>
 
 <style lang="scss">

@@ -61,7 +61,7 @@
           <span class="menu-label">客服中心</span>
           <van-icon name="arrow" class="menu-arrow" />
         </div>
-        <div class="menu-item">
+        <div class="menu-item" @click="goToAbout">
           <div class="menu-icon" style="background-color: #F5F3FF;">
             <van-icon name="info-o" size="18" color="#7C3AED" />
           </div>
@@ -129,6 +129,11 @@ const goToStore = () => {
 // 跳转我的服务
 const goToMyServices = () => {
   router.push('/my-services')
+}
+
+// 跳转关于页面
+const goToAbout = () => {
+  router.push('/about')
 }
 
 // 退出登录

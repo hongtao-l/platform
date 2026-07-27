@@ -1,0 +1,23 @@
+- generic [ref=e4]:
+  - generic [ref=e87]:
+    - generic [ref=e88]:
+      - generic [ref=e89] [cursor=pointer]: 
+      - heading "关于" [level=2] [ref=e91]
+    - generic [ref=e92]:
+      - generic [ref=e93]:
+        - generic [ref=e94]: 
+        - generic [ref=e96]: CareCam Pro
+        - generic [ref=e97]: 当前版本 v1.0.0
+      - generic [ref=e98]:
+        - generic [ref=e99] [cursor=pointer]:
+          - generic [ref=e105]: 版本更新
+          - generic [ref=e106]: 
+        - generic [ref=e107] [cursor=pointer]:
+          - generic [ref=e108]: 
+          - generic [ref=e110]: 用户协议
+          - generic [ref=e111]: 
+        - generic [ref=e112] [cursor=pointer]:
+          - generic [ref=e113]: 
+          - generic [ref=e115]: 隐私政策
+          - generic [ref=e116]: 
+  - text:  
