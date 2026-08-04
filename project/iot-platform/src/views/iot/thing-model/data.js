@@ -35,7 +35,7 @@ const initialCapabilities = [
   { id: nextId(), moduleId: initialModules[1].id, capType: 'prop', name: '常规录制', identifier: 'NormalRecord', descr: '常规录制模式设置（全天/自定义/关闭）',
     dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'全天',val:0},{name:'自定义时段',val:1},{name:'关闭',val:2}], defaultVal:'0' } },
   { id: nextId(), moduleId: initialModules[1].id, capType: 'prop', name: '事件录制', identifier: 'EventRecord', descr: '是否开启事件触发录制',
-    dataDef: { dataType:'boolean', accessMode:'rw', trueLabel:'开启', falseLabel:'关闭', defaultVal:'1' } },
+    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'关闭',val:0},{name:'开启',val:1}], defaultVal:'1' } },
   { id: nextId(), moduleId: initialModules[1].id, capType: 'prop', name: '录制清晰度', identifier: 'RecordResolution', descr: '录制视频清晰度等级',
     dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'超清',val:0},{name:'高清',val:1},{name:'标清',val:2}], defaultVal:'1' } },
   { id: nextId(), moduleId: initialModules[1].id, capType: 'prop', name: '抓拍间隔', identifier: 'CaptureInterval', descr: '事件触发时连续抓拍的时间间隔',
@@ -43,7 +43,7 @@ const initialCapabilities = [
   { id: nextId(), moduleId: initialModules[1].id, capType: 'prop', name: '事件录制时长', identifier: 'EventRecordDuration', descr: '事件触发后单次录制时长',
     dataDef: { dataType:'int', accessMode:'rw', min:5, max:300, step:5, unit:'秒', defaultVal:'30' } },
   { id: nextId(), moduleId: initialModules[1].id, capType: 'svc', name: '格式化存储', identifier: 'FormatStorage', descr: '远程格式化设备存储卡',
-    dataDef: { dataType:'service', inputParams:[], outputParams:[{name:'操作结果',identifier:'result',dataType:'boolean',trueLabel:'成功',falseLabel:'失败',defaultVal:'1'}] } },
+    dataDef: { dataType:'service', inputParams:[], outputParams:[{name:'操作结果',identifier:'result',dataType:'enum',enumValues:[{name:'失败',val:0},{name:'成功',val:1}],defaultVal:'1'}] } },
 
   // 灯光模式模块
   { id: nextId(), moduleId: initialModules[2].id, capType: 'prop', name: '灯光模式', identifier: 'LightMode', descr: '灯光模式切换（全彩/红外/智能/自定义/关闭）',
@@ -63,7 +63,7 @@ const initialCapabilities = [
   { id: nextId(), moduleId: initialModules[4].id, capType: 'prop', name: '门铃铃声', identifier: 'BellRingtone', descr: '门铃铃声选择',
     dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'经典铃声',val:0},{name:'柔和铃声',val:1},{name:'轻快铃声',val:2}], defaultVal:'0' } },
   { id: nextId(), moduleId: initialModules[4].id, capType: 'svc', name: '远程开门', identifier: 'RemoteUnlock', descr: '远程控制门锁开启',
-    dataDef: { dataType:'service', inputParams:[], outputParams:[{name:'开门结果',identifier:'result',dataType:'boolean',trueLabel:'成功',falseLabel:'失败',defaultVal:'1'}] } },
+    dataDef: { dataType:'service', inputParams:[], outputParams:[{name:'开门结果',identifier:'result',dataType:'enum',enumValues:[{name:'失败',val:0},{name:'成功',val:1}],defaultVal:'1'}] } },
   { id: nextId(), moduleId: initialModules[4].id, capType: 'evt', name: '门铃呼叫', identifier: 'BellRing', descr: '访客按下门铃时上报',
     dataDef: { dataType:'event', eventType:'info', outputParams:[] } },
 
@@ -77,34 +77,44 @@ const initialCapabilities = [
 
   // 算法能力模块
   { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '算法开关', identifier: 'AlgorithmSwitch', descr: '控制算法是否启用',
-    dataDef: { dataType:'boolean', accessMode:'rw', trueLabel:'开启', falseLabel:'关闭', defaultVal:'1' } },
+    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'关闭',val:0},{name:'开启',val:1}], defaultVal:'1' } },
   { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '灵敏度', identifier: 'Sensitivity', descr: '算法侦测的灵敏度等级',
     dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'高',val:0},{name:'中',val:1},{name:'低',val:2}], defaultVal:'1' } },
   { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '侦测类型', identifier: 'DetectType', descr: '算法支持的侦测目标类型',
     dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'运动',val:0},{name:'人形',val:1},{name:'车辆',val:2}], defaultVal:'0' } },
-  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '定时侦测', identifier: 'ScheduledDetect', descr: '定时侦测时间段配置',
+  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '定时侦测', identifier: 'ScheduledDetect', descr: '定时侦测时间段配置（支持多个自定义时段，Week位图指定生效日）',
     dataDef: { dataType:'array', elementType:'struct', accessMode:'rw', maxLength:10,
       fields:[
-        { name:'启用', identifier:'Switch', dataType:'boolean', trueLabel:'开启', falseLabel:'关闭' },
-        { name:'开始时间', identifier:'StartTime', dataType:'string', maxLength:8 },
-        { name:'结束时间', identifier:'EndTime', dataType:'string', maxLength:8 },
-        { name:'循环周期', identifier:'WeekDays', dataType:'string', maxLength:32 }
+        { name:'启用', identifier:'Switch', dataType:'enum', enumValues:[{name:'关闭',val:0},{name:'开启',val:1}] },
+        { name:'开始时间', identifier:'StartTime', dataType:'int', min:0, max:86399, unit:'秒', descr:'一天内秒数，如 28800=08:00:00' },
+        { name:'结束时间', identifier:'EndTime', dataType:'int', min:0, max:86399, unit:'秒', descr:'一天内秒数，如 72000=20:00:00' },
+        { name:'Week', identifier:'Week', dataType:'int', min:0, max:127, defaultVal:'127', descr:'生效日掩码，bit0=周日(1) bit1=周一(2) bit2=周二(4) bit3=周三(8) bit4=周四(16) bit5=周五(32) bit6=周六(64)，对应位置1生效，多选叠加，全选=127' },
       ] } },
-  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '区域侦测', identifier: 'ZoneDetect', descr: '侦测区域配置',
+  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '区域侦测', identifier: 'ZoneDetect', descr: '自定义侦测区域配置（支持多个区域，4边形填1-4号顶点，6边形填1-6号顶点）',
     dataDef: { dataType:'array', elementType:'struct', accessMode:'rw', maxLength:8,
       fields:[
-        { name:'区域名称', identifier:'Name', dataType:'string', maxLength:32 },
-        { name:'顶点X坐标', identifier:'PointsX', dataType:'string', maxLength:64 },
-        { name:'顶点Y坐标', identifier:'PointsY', dataType:'string', maxLength:64 }
+        { name:'区域ID', identifier:'ZoneId', dataType:'int', min:1, max:8 },
+        { name:'顶点1X', identifier:'X1', dataType:'int', min:0, max:10000, descr:'归一化坐标×10000，如 3520 表示 0.3520' },
+        { name:'顶点1Y', identifier:'Y1', dataType:'int', min:0, max:10000, descr:'归一化坐标×10000' },
+        { name:'顶点2X', identifier:'X2', dataType:'int', min:0, max:10000 },
+        { name:'顶点2Y', identifier:'Y2', dataType:'int', min:0, max:10000 },
+        { name:'顶点3X', identifier:'X3', dataType:'int', min:0, max:10000 },
+        { name:'顶点3Y', identifier:'Y3', dataType:'int', min:0, max:10000 },
+        { name:'顶点4X', identifier:'X4', dataType:'int', min:0, max:10000 },
+        { name:'顶点4Y', identifier:'Y4', dataType:'int', min:0, max:10000 },
+        { name:'顶点5X', identifier:'X5', dataType:'int', min:0, max:10000 },
+        { name:'顶点5Y', identifier:'Y5', dataType:'int', min:0, max:10000 },
+        { name:'顶点6X', identifier:'X6', dataType:'int', min:0, max:10000 },
+        { name:'顶点6Y', identifier:'Y6', dataType:'int', min:0, max:10000 }
       ] } },
   { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '声音告警开关', identifier: 'SoundAlarmSwitch', descr: '是否开启声音告警',
-    dataDef: { dataType:'boolean', accessMode:'rw', trueLabel:'开启', falseLabel:'关闭', defaultVal:'0' } },
-  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '声音告警次数', identifier: 'SoundAlarmCount', descr: '声音告警触发次数阈值',
-    dataDef: { dataType:'int', accessMode:'rw', min:1, max:10, step:1, unit:'次', defaultVal:'3' } },
+    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'关闭',val:0},{name:'开启',val:1}], defaultVal:'0' } },
+  { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '声音告警次数', identifier: 'SoundAlarmCount', descr: '声音告警触发次数',
+    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'1次',val:1},{name:'2次',val:2},{name:'3次',val:3},{name:'5次',val:5},{name:'10次',val:10}], defaultVal:'3' } },
   { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '自定义告警音频', identifier: 'CustomAlarmAudio', descr: '自定义告警音频内容',
     dataDef: { dataType:'string', accessMode:'rw', maxLength:255, defaultVal:'' } },
   { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '灯光告警开关', identifier: 'LightAlarmSwitch', descr: '是否开启灯光告警',
-    dataDef: { dataType:'boolean', accessMode:'rw', trueLabel:'开启', falseLabel:'关闭', defaultVal:'0' } },
+    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'关闭',val:0},{name:'开启',val:1}], defaultVal:'0' } },
   { id: nextId(), moduleId: initialModules[6].id, capType: 'prop', name: '灯光告警时长', identifier: 'LightAlarmDuration', descr: '灯光告警持续时长',
     dataDef: { dataType:'int', accessMode:'rw', min:1, max:60, step:1, unit:'秒', defaultVal:'5' } }
 ]
@@ -213,13 +223,13 @@ const initialLegacyCapabilities = [
 
   // 唤醒能力
   { id: nextId(), moduleId: initialLegacyModules[5].id, identifier: 'WakeOnMotion', name: '运动唤醒', descr: '检测到运动时唤醒设备',
-    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"开启","falseLabel":"关闭"}', createTime: '2025-01-15 10:00:00' },
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","enumValues":[{"name":"关闭","val":0},{"name":"开启","val":1}]}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[5].id, identifier: 'WakeOnPir', name: 'PIR唤醒', descr: 'PIR传感器触发唤醒',
-    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"开启","falseLabel":"关闭"}', createTime: '2025-01-15 10:00:00' },
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","enumValues":[{"name":"关闭","val":0},{"name":"开启","val":1}]}', createTime: '2025-01-15 10:00:00' },
 
   // OTA能力
   { id: nextId(), moduleId: initialLegacyModules[6].id, identifier: 'OtaSwitch', name: 'OTA升级开关', descr: '是否允许OTA远程升级',
-    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"允许","falseLabel":"禁止"}', createTime: '2025-01-15 10:00:00' },
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","enumValues":[{"name":"禁止","val":0},{"name":"允许","val":1}]}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[6].id, identifier: 'OtaProgress', name: '升级进度', descr: '当前OTA升级进度',
     jsonContent: '{"type":"prop","dataType":"int","accessMode":"ro","min":0,"max":100,"unit":"%"}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[6].id, identifier: 'OtaVersion', name: '固件版本', descr: '当前固件版本号',
@@ -227,13 +237,13 @@ const initialLegacyCapabilities = [
 
   // 指示灯
   { id: nextId(), moduleId: initialLegacyModules[7].id, identifier: 'StatusLightSwitch', name: '状态指示灯', descr: '状态指示灯开关',
-    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"开启","falseLabel":"关闭"}', createTime: '2025-01-15 10:00:00' },
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","enumValues":[{"name":"关闭","val":0},{"name":"开启","val":1}]}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[7].id, identifier: 'IndicatorBrightness', name: '指示灯亮度', descr: '指示灯亮度级别',
     jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","labels":["低","中","高"]}', createTime: '2025-01-15 10:00:00' },
 
   // 报警录制
   { id: nextId(), moduleId: initialLegacyModules[8].id, identifier: 'AlarmRecordSwitch', name: '报警录制开关', descr: '报警触发时是否自动录制',
-    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"开启","falseLabel":"关闭"}', createTime: '2025-01-15 10:00:00' },
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","enumValues":[{"name":"关闭","val":0},{"name":"开启","val":1}]}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[8].id, identifier: 'AlarmRecordDuration', name: '录制时长', descr: '报警录制持续时间',
     jsonContent: '{"type":"prop","dataType":"int","accessMode":"rw","min":5,"max":60,"unit":"秒"}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[8].id, identifier: 'AlarmRecordResolution', name: '录制清晰度', descr: '报警录制视频清晰度',
@@ -241,13 +251,13 @@ const initialLegacyCapabilities = [
 
   // 红外灯
   { id: nextId(), moduleId: initialLegacyModules[9].id, identifier: 'IrLightSwitch', name: '红外灯开关', descr: '红外补光灯开关',
-    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"开启","falseLabel":"关闭"}', createTime: '2025-01-15 10:00:00' },
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","enumValues":[{"name":"关闭","val":0},{"name":"开启","val":1}]}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[9].id, identifier: 'IrLightMode', name: '红外灯模式', descr: '红外灯工作模式',
     jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","labels":["自动","手动","关闭"]}', createTime: '2025-01-15 10:00:00' },
 
   // 声音侦测
   { id: nextId(), moduleId: initialLegacyModules[10].id, identifier: 'SoundDetectSwitch', name: '声音侦测开关', descr: '声音侦测功能开关',
-    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"开启","falseLabel":"关闭"}', createTime: '2025-01-15 10:00:00' },
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","enumValues":[{"name":"关闭","val":0},{"name":"开启","val":1}]}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[10].id, identifier: 'SoundDetectSensitive', name: '侦测灵敏度', descr: '声音侦测灵敏度',
     jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","labels":["1档","2档","3档","4档"]}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[10].id, identifier: 'SoundEvent', name: '声音事件上报', descr: '检测到异常声音时上报告警',
@@ -255,13 +265,13 @@ const initialLegacyCapabilities = [
 
   // 算法能力
   { id: nextId(), moduleId: initialLegacyModules[11].id, identifier: 'AlgorithmSwitch', name: '算法开关', descr: '算法功能总开关',
-    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"开启","falseLabel":"关闭"}', createTime: '2025-01-15 10:00:00' },
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","enumValues":[{"name":"关闭","val":0},{"name":"开启","val":1}]}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[11].id, identifier: 'AlgorithmSensitivity', name: '算法灵敏度', descr: '算法整体灵敏度',
     jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","labels":["低","中","高"]}', createTime: '2025-01-15 10:00:00' },
 
   // 屏显配置
   { id: nextId(), moduleId: initialLegacyModules[12].id, identifier: 'HasDisplay', name: '是否有屏显', descr: '设备是否具备屏显模块',
-    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"是","falseLabel":"否"}', createTime: '2025-01-15 10:00:00' },
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","enumValues":[{"name":"否","val":0},{"name":"是","val":1}]}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[12].id, identifier: 'SupportedResolutions', name: '支持的分辨率', descr: '屏显支持的输出分辨率',
     jsonContent: '{"type":"prop","dataType":"bitmap","accessMode":"rw","labels":["1920*1080","1280*720","640*480","640*360","320*240"]}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[12].id, identifier: 'ScreenOffTime', name: '屏息时间', descr: '无操作后自动息屏的时间',
@@ -273,15 +283,15 @@ const initialLegacyCapabilities = [
 
   // 喇叭配置
   { id: nextId(), moduleId: initialLegacyModules[13].id, identifier: 'HasSpeaker', name: '是否有喇叭', descr: '设备是否具备喇叭模块',
-    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"是","falseLabel":"否"}', createTime: '2025-01-15 10:00:00' },
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","enumValues":[{"name":"否","val":0},{"name":"是","val":1}]}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[13].id, identifier: 'EncodeFormats', name: '支持的编码方式', descr: '喇叭支持的音频编码格式',
     jsonContent: '{"type":"prop","dataType":"bitmap","accessMode":"rw","labels":["PCM","G711A","g711u","ACC"]}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[13].id, identifier: 'VolumeAdjustable', name: '音量调节', descr: '是否支持音量调节',
-    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"支持","falseLabel":"不支持"}', createTime: '2025-01-15 10:00:00' },
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","enumValues":[{"name":"不支持","val":0},{"name":"支持","val":1}]}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[13].id, identifier: 'Volume', name: '音量', descr: '喇叭音量大小',
     jsonContent: '{"type":"prop","dataType":"int","accessMode":"rw","min":0,"max":100,"unit":"%"}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[13].id, identifier: 'CustomRingtone', name: '自定义铃声', descr: '是否支持自定义铃声',
-    jsonContent: '{"type":"prop","dataType":"boolean","accessMode":"rw","trueLabel":"支持","falseLabel":"不支持"}', createTime: '2025-01-15 10:00:00' },
+    jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","enumValues":[{"name":"不支持","val":0},{"name":"支持","val":1}]}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[13].id, identifier: 'BitDepth', name: '采样位深', descr: '音频采样位深度',
     jsonContent: '{"type":"prop","dataType":"enum","accessMode":"rw","labels":["16bit","24bit"]}', createTime: '2025-01-15 10:00:00' },
   { id: nextId(), moduleId: initialLegacyModules[13].id, identifier: 'SampleRate', name: '采样率', descr: '音频采样率',

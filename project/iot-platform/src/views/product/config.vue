@@ -61,6 +61,10 @@
 
           <!-- 设备能力 -->
           <template v-if="ft.key === 'deviceCap'">
+                  <div class="tip-bar" style="margin-bottom:16px">
+                    <el-icon><InfoFilled /></el-icon>
+                    <span>该模块配置影响APP控制面板及设置页功能展示（公版APP及固件不受此处配置影响，详情参考<el-link type="primary" href="#" target="_blank">SDK文档</el-link>）</span>
+                  </div>
                   <div class="config-layout">
                     <el-segmented
                       v-model="selectedCapModule"
@@ -332,6 +336,10 @@
                   </div>
 
                   <!-- 标准能力 + 自定义能力 -->
+                  <div class="tip-bar" style="margin-top:16px;margin-bottom:16px">
+                    <el-icon><InfoFilled /></el-icon>
+                    <span>标准/自定义能力共同定义产品物模型能力，影响APP控制面板和固件，请根据设备实际能力配置</span>
+                  </div>
                   <div class="cap-section">
                     <div class="cap-section-header">
                       <h3 class="cap-section-title">
@@ -520,6 +528,12 @@
                                   <el-radio value="gps">支持GPS定位</el-radio>
                                 </el-radio-group>
                               </el-form-item>
+                              <el-form-item v-if="activeCamera.cfg.ptz.supported" label="PTZ转速">
+                                <el-radio-group v-model="activeCamera.cfg.ptz.ptzSpeed">
+                                  <el-radio :value="true">支持</el-radio>
+                                  <el-radio :value="false">不支持</el-radio>
+                                </el-radio-group>
+                              </el-form-item>
                             </template>
 
                             <!-- ===== 视频码流 ===== -->
@@ -668,6 +682,12 @@
 
                             <!-- ===== 水印 ===== -->
                             <template v-if="activeLensModule === 'watermark'">
+                              <el-form-item label="LOGO水印开关能力">
+                                <el-radio-group v-model="activeCamera.cfg.watermark.logoWatermarkSupported">
+                                  <el-radio :value="true">支持</el-radio>
+                                  <el-radio :value="false">不支持</el-radio>
+                                </el-radio-group>
+                              </el-form-item>
                               <el-form-item label="水印能力">
                                 <el-radio-group v-model="activeCamera.cfg.watermark.type">
                                   <el-radio value="device">设备水印</el-radio>
@@ -2024,7 +2044,8 @@ function defaultCameraCfg() {
       capabilities: ['平移'],
       presetSupported: true,
       cruiseSupported: true,
-      spatialPositioning: 'none'
+      spatialPositioning: 'none',
+      ptzSpeed: false
     },
     // 视频码流
     streams: [defaultStreamCfg()],
@@ -2041,6 +2062,7 @@ function defaultCameraCfg() {
     privacyZone: { supported: true },
     // 水印
     watermark: {
+      logoWatermarkSupported: true,
       type: 'device', customSupported: true,
       content: '', position: 'device_default', defaultOn: true
     },

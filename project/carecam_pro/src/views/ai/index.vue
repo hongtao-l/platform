@@ -10,103 +10,145 @@
     <!-- ===== 未开通态 ===== -->
     <template v-if="!isActivated">
       <div class="scroll-content">
-        <!-- 顶部 Banner -->
-        <div class="hero-banner">
-          <div class="hero-icon">🤖</div>
-          <div class="hero-text">
-            <div class="title">全能AI · 智能看护管家</div>
-            <div class="sub">让摄像头"看懂"画面，主动守护家人</div>
-          </div>
-        </div>
-        <div class="cap-row">
-          <div class="cap-card"><div class="cap-icon">🤖</div><div class="cap-name">AI消息</div><div class="cap-desc">关注事件推送</div></div>
-          <div class="cap-card"><div class="cap-icon">📋</div><div class="cap-name">AI日报</div><div class="cap-desc">一键总结</div></div>
-          <div class="cap-card"><div class="cap-icon">🔍</div><div class="cap-name">AI搜索</div><div class="cap-desc">快速查找</div></div>
+        <!-- 设备筛选 -->
+        <div class="device-filter-bar">
+          <span
+            v-for="(d, i) in deviceOptions"
+            :key="i"
+            :class="['dev-filter-chip', { active: selectedDevice === d }]"
+            @click="selectedDevice = d"
+          >{{ d }}</span>
         </div>
 
-        <!-- 套餐选择 -->
-        <div class="section-title">选择套餐</div>
-        <div class="plan-cards">
-          <div
-            :class="['plan-card', { selected: selectedPlan === 'monthly' }]"
-            @click="selectedPlan = 'monthly'"
-          >
-            <div class="plan-card-name">全能AI套餐</div>
-            <div class="plan-card-price">¥9.9 <span>/月</span></div>
-            <div class="plan-card-tag">连续订阅</div>
-            <div class="plan-feats">
-              <div class="feat">✓ AI消息推送</div>
-              <div class="feat">✓ AI日报</div>
-              <div class="feat">✓ AI搜索</div>
-              <div class="feat">✓ 关注事件管理</div>
+        <!-- 功能Tab切换 -->
+        <div class="feature-tabs-section">
+          <div class="ft-card">
+            <div class="fs-desc">{{ activeFeature.desc }}</div>
+            <div class="fs-preview">
+              <div class="fs-phone">
+                <div class="fs-notch"></div>
+                <div class="fs-content">
+                  <template v-if="activeFeature.key === 'message'">
+                    <div class="fsp-msg">
+                      <div class="fsp-msg-time">刚刚</div>
+                      <div class="fsp-msg-card">
+                        <div class="fsp-msg-title">🚶 老人看护 · 奶奶出门</div>
+                        <div class="fsp-msg-body">奶奶于 09:20 从正门走出，身穿蓝色外套，手拿拐杖，状态正常</div>
+                        <div class="fsp-msg-thumb" style="background:linear-gradient(135deg,#0d2e1a,#1a5c34)"></div>
+                      </div>
+                    </div>
+                  </template>
+                  <template v-else-if="activeFeature.key === 'daily'">
+                    <div class="fsp-card"><div class="fsp-card-title">💡 AI总结</div><div class="fsp-summary-title">今日一切安好</div><div class="fsp-summary-text">今天一切正常，奶奶出门1次，猫咪很活跃…</div></div>
+                    <div class="fsp-card"><div class="fsp-card-title">📊 事件汇总</div><div class="fsp-event"><span>人员经过</span><span>3 件</span></div><div class="fsp-event"><span>宠物活动</span><span>5 件</span></div></div>
+                  </template>
+                  <template v-else-if="activeFeature.key === 'search'">
+                    <div class="fsp-search-bar"><van-icon name="search" size="12" color="#9CA3AF" /><span>奶奶今天出门了吗</span></div>
+                    <div class="fsp-card fsp-result"><div class="fsp-result-thumb" style="background:linear-gradient(135deg,#0d2e1a,#1a5c34)"></div><div class="fsp-result-info"><div class="fsp-result-text">奶奶从后门走出，身穿蓝色外套，手拿拐杖</div><div class="fsp-result-meta"><span class="fsp-tag">老人看护</span><span>09:20</span></div></div></div>
+                  </template>
+                  <template v-else>
+                    <div class="fsp-card"><div class="fsp-card-title">🎯 我的关注</div><div class="fsp-event"><span>儿童守护</span><span class="fsp-on">已开启</span></div><div class="fsp-event"><span>包裹送达</span><span class="fsp-on">已开启</span></div><div class="fsp-event"><span>厨房守护</span><span class="fsp-on">已开启</span></div><div class="fsp-event"><span>宠物守护</span><span class="fsp-on">已开启</span></div></div>
+                  </template>
+                </div>
+              </div>
             </div>
-          </div>
-          <div
-            :class="['plan-card', { selected: selectedPlan === 'yearly' }]"
-            @click="selectedPlan = 'yearly'"
-          >
-            <div class="plan-card-name">全能AI套餐</div>
-            <div class="plan-card-price">¥99 <span>/年</span></div>
-            <div class="plan-card-tag yearly">买断制</div>
-            <div class="plan-feats">
-              <div class="feat">✓ AI消息推送</div>
-              <div class="feat">✓ AI日报</div>
-              <div class="feat">✓ AI搜索</div>
-              <div class="feat">✓ 关注事件管理</div>
+            <div class="ft-tabs">
+              <span
+                v-for="(f, i) in features"
+                :key="i"
+                :class="['ft-tab', { active: featureTabIdx === i }]"
+                @click="featureTabIdx = i"
+              >{{ f.name }}</span>
             </div>
           </div>
         </div>
-        <div v-if="selectedPlan === 'monthly'" class="renew-hint">
-          连续订阅套餐，到期自动按9.9元/月自动续费，可随时取消
+
+        <!-- 套餐选择 — 首屏可见 -->
+        <div class="section plan-section">
+          <div class="plan-cards">
+            <div
+              :class="['plan-card', { selected: selectedPlan === 'monthly' }]"
+              @click="selectedPlan = 'monthly'"
+            >
+              <div class="plan-top">
+                <div class="plan-name">月订阅</div>
+                <div class="plan-price">¥9.9<span>/月</span></div>
+                <div class="plan-tag">连续订阅</div>
+              </div>
+              <div class="plan-feats">
+                <div class="feat">✓ 全部AI功能</div>
+                <div class="feat">✓ 4个关注事件</div>
+                <div class="feat">✓ 每日3次AI日报</div>
+                <div class="feat">✓ 无限AI搜索</div>
+              </div>
+              <div class="plan-check" v-if="selectedPlan === 'monthly'"><van-icon name="success" size="16" /></div>
+            </div>
+            <div
+              :class="['plan-card', { selected: selectedPlan === 'yearly' }]"
+              @click="selectedPlan = 'yearly'"
+            >
+              <div class="plan-save">省 ¥19.8</div>
+              <div class="plan-top">
+                <div class="plan-name">年订阅</div>
+                <div class="plan-price">¥99<span>/年</span></div>
+                <div class="plan-tag yearly">买断制</div>
+              </div>
+              <div class="plan-feats">
+                <div class="feat">✓ 全部AI功能</div>
+                <div class="feat">✓ 4个关注事件</div>
+                <div class="feat">✓ 每日3次AI日报</div>
+                <div class="feat">✓ 无限AI搜索</div>
+              </div>
+              <div class="plan-check" v-if="selectedPlan === 'yearly'"><van-icon name="success" size="16" /></div>
+            </div>
+          </div>
+          <div v-if="selectedPlan === 'monthly'" class="renew-hint">
+            连续订阅套餐，到期自动按9.9元/月续费，可随时取消
+          </div>
         </div>
 
         <!-- 支付方式 -->
-        <div class="section-title">支付方式</div>
-        <div class="pay-methods">
-          <div :class="['pay-method', { selected: payMethod === 'wechat' }]" @click="payMethod = 'wechat'">
-            <div class="pay-m-icon" style="background:#07C160"><van-icon name="wechat" size="18" color="#fff" /></div>
-            <span>微信支付</span>
-            <div class="pay-radio" :class="{ checked: payMethod === 'wechat' }"></div>
-          </div>
-          <div :class="['pay-method', { selected: payMethod === 'alipay' }]" @click="payMethod = 'alipay'">
-            <div class="pay-m-icon" style="background:#1677FF"><van-icon name="alipay" size="18" color="#fff" /></div>
-            <span>支付宝</span>
-            <div class="pay-radio" :class="{ checked: payMethod === 'alipay' }"></div>
+        <div class="section pay-section">
+          <div class="section-title">支付方式</div>
+          <div class="pay-methods">
+            <div :class="['pay-method', { selected: payMethod === 'wechat' }]" @click="payMethod = 'wechat'">
+              <div class="pay-m-icon" style="background:#07C160"><van-icon name="wechat" size="18" color="#fff" /></div>
+              <span>微信支付</span>
+              <div class="pay-radio" :class="{ checked: payMethod === 'wechat' }"></div>
+            </div>
+            <div :class="['pay-method', { selected: payMethod === 'alipay' }]" @click="payMethod = 'alipay'">
+              <div class="pay-m-icon" style="background:#1677FF"><van-icon name="alipay" size="18" color="#fff" /></div>
+              <span>支付宝</span>
+              <div class="pay-radio" :class="{ checked: payMethod === 'alipay' }"></div>
+            </div>
           </div>
         </div>
 
-        <!-- 功能介绍 -->
-        <div class="section-title">服务介绍</div>
-        <div class="intro-section">
-          <div class="intro-item">
-            <div class="intro-icon">🤖</div>
-            <div class="intro-text">
-              <div class="intro-title">AI消息推送</div>
-              <div class="intro-desc">摄像头自动识别画面中的人、宠物、车辆等，只推送你关注的事件，告别无关告警打扰</div>
-            </div>
+        <!-- 场景故事 -->
+        <div class="section">
+          <div class="section-header">
+            <div class="section-title">懂你所关心，守护每一个重要时刻</div>
+            <div class="section-sub">AI自动分析画面，精准识别你关注的人和事</div>
           </div>
-          <div class="intro-item">
-            <div class="intro-icon">📋</div>
-            <div class="intro-text">
-              <div class="intro-title">AI日报总结</div>
-              <div class="intro-desc">每日自动生成一份图文报告，汇总关注事件的完整时间线和一句话总结，一眼了解家中动态</div>
-            </div>
-          </div>
-          <div class="intro-item">
-            <div class="intro-icon">🔍</div>
-            <div class="intro-text">
-              <div class="intro-title">AI搜索</div>
-              <div class="intro-desc">用自然语言搜索事件记录，快速定位关键片段</div>
-            </div>
-          </div>
-          <div class="intro-item">
-            <div class="intro-icon">🎯</div>
-            <div class="intro-text">
-              <div class="intro-title">关注事件管理</div>
-              <div class="intro-desc">自定义关注的人和事物，设置关键词，AI精准识别并优先推送</div>
+          <div class="scene-list">
+            <div class="scene-card" v-for="(s, i) in scenes" :key="i">
+              <div class="scene-img" :style="{ background: s.bg }">
+                <span class="scene-emoji">{{ s.emoji }}</span>
+              </div>
+              <div class="scene-info">
+                <div class="scene-name">{{ s.name }}</div>
+                <div class="scene-desc">{{ s.desc }}</div>
+                <div class="scene-items">
+                  <span class="scene-item" v-for="(t, j) in s.tags" :key="j">{{ t }}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- 场景故事 -->
+
+        <div class="ai-disclaimer">本功能由AI大模型提供，识别结果可能存在误差，仅供参考。请以实际情况为准，勿完全依赖AI判断。</div>
 
         <div style="height:100px"></div>
       </div>
@@ -122,7 +164,7 @@
           </span>
         </div>
         <button class="btn-buy" @click="handleBuyClick">
-          立即开通 {{ selectedPlan === 'monthly' ? '¥9.9' : '¥99' }}
+          立即开通 {{ selectedPlan === 'monthly' ? '¥9.9/月' : '¥99/年' }}
         </button>
       </div>
     </template>
@@ -174,26 +216,94 @@
 <script setup>
 import { ref, reactive, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { aiStatus } from '@/store/devStatus'
+import { aiStatus, deviceAiStatus, defaultActivatedDevice, isDeviceActivated } from '@/store/devStatus'
 import { showToast } from '@/utils/toast'
 
 const router = useRouter()
 const route = useRoute()
 const goBack = () => router.back()
 
-// 从全局store读取调试状态；query.show=activate 强制显示服务介绍开通页
+// 设备筛选
+const deviceOptions = Object.keys(deviceAiStatus.value)
+const selectedDevice = ref(defaultActivatedDevice.value)
+
+// 选中设备是否已开通
 const isActivated = computed(() => {
   if (route.query.show === 'activate') return false
-  return aiStatus.value !== 'not_activated'
+  return aiStatus.value !== 'not_activated' && isDeviceActivated(selectedDevice.value)
 })
 
-// 套餐选择：monthly | yearly
+// 场景故事
+const scenes = [
+  {
+    name: '老人看护',
+    desc: '自动识别老人出入、跌倒、久坐等行为，异常情况实时推送，随时掌握长辈动态',
+    emoji: '👴',
+    bg: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)',
+    tags: ['出入识别', '跌倒检测']
+  },
+  {
+    name: '儿童守护',
+    desc: '检测孩子奔跑、独自出门等场景，第一时间通知家长，让孩子安全成长',
+    emoji: '👶',
+    bg: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)',
+    tags: ['出门检测']
+  },
+  {
+    name: '宠物陪伴',
+    desc: '记录宠物吃饭、喝水、玩耍等日常活动，自动生成萌宠日记，远程也能陪伴毛孩子',
+    emoji: '🐱',
+    bg: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)',
+    tags: ['活动记录', '进食监测', '异常行为告警']
+  }
+]
+
+// 四大功能
+const features = [
+  {
+    key: 'message',
+    name: 'AI消息推送',
+    badge: '实时',
+    icon: '🤖',
+    iconBg: '#EEF5FF',
+    cardBg: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)',
+    desc: '摄像头自动识别画面中的人、宠物、车辆等，只推送你关注的事件，告别无关告警打扰'
+  },
+  {
+    key: 'daily',
+    name: 'AI日报总结',
+    badge: '每日',
+    icon: '📋',
+    iconBg: '#FFF7ED',
+    cardBg: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)',
+    desc: '每日自动生成图文报告，汇总关注事件的完整时间线，一句话总结家中动态，一目了然'
+  },
+  {
+    key: 'search',
+    name: 'AI智能搜索',
+    badge: '秒搜',
+    icon: '🔍',
+    iconBg: '#F5F3FF',
+    cardBg: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)',
+    desc: '用自然语言搜索事件记录，快速定位关键片段。支持模糊描述，AI精准匹配'
+  },
+  {
+    key: 'events',
+    name: '关注事件管理',
+    badge: '灵活',
+    icon: '🎯',
+    iconBg: '#FFF3E0',
+    cardBg: 'linear-gradient(135deg, #FEF3C7, #FDE68A)',
+    desc: '自定义关注目标，设置检测关键词，AI精准识别并按优先级推送，只收到你关心的消息'
+  }
+]
+
+// 功能Tab切换
+const featureTabIdx = ref(0)
+const activeFeature = computed(() => features[featureTabIdx.value])
+
 const selectedPlan = ref('monthly')
-
-// 支付方式
 const payMethod = ref('wechat')
-
-// 协议
 const agreed = ref(false)
 const showAgreementDialog = ref(false)
 
@@ -208,21 +318,17 @@ const handleBuyClick = () => {
     showAgreementDialog.value = true
     return
   }
-  // 已同意 → 执行购买流程
 }
 
 const agreeAndPay = () => {
   agreed.value = true
   showAgreementDialog.value = false
-  // 执行购买流程
 }
 
 const validUntil = ref('2026-05-28')
 
-// 智能推送
 const smartPush = ref(true)
 
-// 关注事件
 const showAddDialog = ref(false)
 const editingIndex = ref(-1)
 const editingName = ref('')
@@ -259,52 +365,106 @@ const saveEvent = () => {
 <style lang="scss" scoped>
 .ai-page { height: 100%; background: $bg-page; display: flex; flex-direction: column; }
 .ai-header { background: $bg-color; padding: 12px 16px; border-bottom: 1px solid $border-color; display: flex; align-items: center; gap: 12px; flex-shrink: 0; position: relative; z-index: 1; h2 { font-size: 18px; font-weight: 700; color: $text-primary; flex: 1; } }
-.back-btn, .header-right { width: 32px; height: 32px; border-radius: 50%; background: $bg-page; display: flex; align-items: center; justify-content: center; color: $text-secondary; flex-shrink: 0; }
+.back-btn { width: 32px; height: 32px; border-radius: 50%; background: $bg-page; display: flex; align-items: center; justify-content: center; color: $text-secondary; flex-shrink: 0; }
 .scroll-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
-.hero-banner { margin: 16px; padding: 18px; border-radius: $radius-lg; background: linear-gradient(135deg, #0F2A5E, #1A73E8); display: flex; align-items: center; gap: 14px; .hero-icon { width: 48px; height: 48px; border-radius: 14px; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; } .hero-text { flex: 1; } .title { font-size: 16px; font-weight: 700; color: #fff; } .sub { font-size: 12px; color: rgba(255,255,255,0.75); margin-top: 4px; } }
-.cap-row { margin: 0 16px 16px; display: flex; gap: 8px; }
-.cap-card { flex: 1; background: $bg-card; border-radius: $radius-md; padding: 12px 8px; text-align: center; box-shadow: $shadow-card; .cap-icon { font-size: 24px; margin-bottom: 6px; } .cap-name { font-size: 13px; font-weight: 600; color: $text-primary; } .cap-desc { font-size: 11px; color: $text-secondary; margin-top: 2px; } }
-.section-title { padding: 0 16px; margin-bottom: 10px; font-size: 15px; font-weight: 700; color: $text-primary; }
+/* ======== 设备筛选 ======== */
+.device-filter-bar { background: $bg-color; padding: 8px 16px; display: flex; gap: 6px; flex-shrink: 0; border-bottom: 1px solid $border-color; overflow-x: auto; }
+.dev-filter-chip { flex-shrink: 0; padding: 4px 12px; border-radius: 14px; font-size: 11px; font-weight: 500; color: $text-secondary; background: $bg-page; border: 1px solid $border-color; cursor: pointer; white-space: nowrap; &.active { background: $primary-color; color: #fff; border-color: $primary-color; } }
 
-/* 功能介绍卡片 */
-.intro-section { margin: 0 16px 20px; }
-.intro-item { background: $bg-card; border-radius: $radius-lg; padding: 14px; display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px; box-shadow: $shadow-card; }
-.intro-icon { width: 36px; height: 36px; border-radius: 10px; background: $primary-bg; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-.intro-text { flex: 1; }
-.intro-title { font-size: 14px; font-weight: 600; color: $text-primary; }
-.intro-desc { font-size: 12px; color: $text-secondary; margin-top: 3px; line-height: 1.5; }
-/* 套餐卡片 */
-.plan-cards { padding: 0 16px; display: flex; gap: 10px; margin-bottom: 8px; }
-.plan-card { flex: 1; background: $bg-card; border-radius: $radius-lg; padding: 16px 14px; border: 2px solid $border-color; cursor: pointer; transition: all 0.2s; &.selected { border-color: $primary-color; background: $primary-bg; } }
-.plan-card-name { font-size: 14px; font-weight: 700; color: $text-primary; }
-.plan-card-price { font-size: 22px; font-weight: 800; color: $primary-color; margin-top: 6px; span { font-size: 11px; font-weight: 500; color: $text-secondary; } }
-.plan-card-tag { display: inline-block; margin-top: 6px; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 8px; background: #DBEAFE; color: #1D4ED8; &.yearly { background: #D1FAE5; color: #065F46; } }
-.plan-feats { margin-top: 12px; display: flex; flex-direction: column; gap: 4px; .feat { font-size: 11px; color: $text-secondary; } }
-.plan-radio { display: none; }
-.renew-hint { margin: 0 16px 8px; font-size: 11px; color: $text-secondary; line-height: 1.4; }
+/* ======== 功能Tab ======== */
+.feature-tabs-section { padding: 12px 16px 0; }
+.ft-tabs { display: flex; gap: 0; background: $bg-page; border-radius: $radius-md; padding: 3px; margin-top: 10px; }
+.ft-tab { flex: 1; padding: 7px 0; font-size: 11px; font-weight: 600; color: $text-secondary; text-align: center; border-radius: 6px; cursor: pointer; transition: all 0.15s; white-space: nowrap; &.active { background: $primary-color; color: #fff; } }
+.ft-card { background: $bg-card; border-radius: $radius-lg; padding: 10px 12px; margin-top: 10px; box-shadow: $shadow-card; }
 
-/* 支付方式 */
-.pay-methods { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-.pay-method { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: $bg-card; border: 2px solid $border-color; border-radius: $radius-md; cursor: pointer; transition: border-color 0.2s; &.selected { border-color: $primary-color; } span { flex: 1; font-size: 13px; font-weight: 600; color: $text-primary; } }
+/* ======== Section 通用 ======== */
+.section { padding: 16px 16px 0; }
+.plan-section { padding-top: 10px; }
+.pay-section { padding-top: 10px; }
+.section-header { margin-bottom: 14px; }
+.section-title { font-size: 15px; font-weight: 700; color: $text-primary; }
+.section-sub { font-size: 12px; color: $text-secondary; margin-top: 4px; }
+
+/* ======== 套餐卡片 ======== */
+.plan-cards { display: flex; gap: 10px; }
+.plan-card { flex: 1; background: $bg-card; border-radius: $radius-lg; padding: 14px 12px; border: 2px solid $border-color; cursor: pointer; position: relative; overflow: hidden; &.selected { border-color: $primary-color; background: $primary-bg; } }
+.plan-top { margin-bottom: 10px; }
+.plan-name { font-size: 13px; font-weight: 700; color: $text-primary; }
+.plan-price { font-size: 24px; font-weight: 800; color: $primary-color; margin-top: 2px; span { font-size: 11px; font-weight: 500; color: $text-secondary; } }
+.plan-tag { display: inline-block; margin-top: 4px; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 6px; background: #DBEAFE; color: #1D4ED8; &.yearly { background: #D1FAE5; color: #065F46; } }
+.plan-feats { display: flex; flex-direction: column; gap: 3px; .feat { font-size: 11px; color: $text-secondary; } }
+.plan-check { position: absolute; top: 0; right: 0; width: 28px; height: 28px; background: $primary-color; border-radius: 0 0 0 12px; display: flex; align-items: center; justify-content: center; color: #fff; }
+.plan-save { position: absolute; top: 0; right: 0; font-size: 10px; font-weight: 700; color: #fff; background: #EA4335; padding: 3px 8px; border-radius: 0 6px 0 8px; }
+.renew-hint { margin-top: 8px; font-size: 11px; color: $text-secondary; line-height: 1.4; }
+
+/* ======== 支付方式 ======== */
+.pay-methods { display: flex; flex-direction: column; gap: 8px; }
+.pay-method { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: $bg-card; border: 2px solid $border-color; border-radius: $radius-md; cursor: pointer; &.selected { border-color: $primary-color; } span { flex: 1; font-size: 13px; font-weight: 600; color: $text-primary; } }
 .pay-m-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .pay-radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid $border-color; flex-shrink: 0; &.checked { border-color: $primary-color; background: $primary-color; position: relative; &::after { content: ''; position: absolute; top: 3px; left: 5px; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); } } }
 
-/* 底部栏 */
+/* ======== 场景故事 ======== */
+.scene-list { display: flex; flex-direction: column; gap: 10px; }
+.scene-card { background: $bg-card; border-radius: $radius-lg; padding: 14px; display: flex; gap: 14px; align-items: center; box-shadow: $shadow-card; }
+.scene-img { width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.scene-emoji { font-size: 28px; }
+.scene-info { flex: 1; min-width: 0; }
+.scene-name { font-size: 15px; font-weight: 700; color: $text-primary; }
+.scene-desc { font-size: 12px; color: $text-secondary; margin-top: 4px; line-height: 1.5; }
+.scene-items { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.scene-item { font-size: 10px; color: $primary-color; background: $primary-bg; padding: 2px 8px; border-radius: 10px; }
+
+/* ======== 功能展示 ======== */
+.fs-card { background: $bg-card; border-radius: $radius-lg; padding: 16px; box-shadow: $shadow-card; }
+.fs-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.fs-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.fs-title-row { flex: 1; display: flex; align-items: center; gap: 8px; }
+.fs-name { font-size: 15px; font-weight: 700; color: $text-primary; }
+.fs-badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 8px; background: $primary-bg; color: $primary-color; }
+.fs-desc { font-size: 12px; color: $text-secondary; line-height: 1.5; margin-bottom: 10px; }
+.fs-preview { display: flex; justify-content: center; }
+.fs-phone { width: 100%; max-width: 240px; border: 2px solid #e5e7eb; border-radius: 16px; overflow: hidden; background: #fafafa; }
+.fs-notch { width: 40px; height: 4px; background: #d1d5db; border-radius: 2px; margin: 6px auto; }
+.fs-content { padding: 4px 8px 10px; display: flex; flex-direction: column; gap: 5px; }
+
+.fsp-msg { display: flex; flex-direction: column; gap: 5px; }
+.fsp-msg-time { font-size: 9px; color: #9CA3AF; text-align: center; }
+.fsp-msg-card { background: #fff; border-radius: 8px; padding: 8px 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+.fsp-msg-title { font-size: 10px; font-weight: 600; color: #333; margin-bottom: 3px; }
+.fsp-msg-body { font-size: 9px; color: #666; line-height: 1.4; }
+.fsp-msg-thumb { width: 100%; height: 40px; border-radius: 6px; margin-top: 6px; }
+.fsp-card { background: #fff; border-radius: 8px; padding: 8px 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+.fsp-card-title { font-size: 10px; font-weight: 700; color: #333; margin-bottom: 5px; }
+.fsp-summary-title { font-size: 11px; font-weight: 600; color: #333; margin-bottom: 3px; }
+.fsp-summary-text { font-size: 9px; color: #666; line-height: 1.4; }
+.fsp-event { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; border-bottom: 1px solid #f3f4f6; font-size: 10px; &:last-child { border-bottom: none; } }
+.fsp-on { font-size: 9px; color: #16A34A; }
+.fsp-search-bar { display: flex; align-items: center; gap: 5px; padding: 5px 8px; background: #fff; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 10px; color: #333; }
+.fsp-result { display: flex; gap: 8px; }
+.fsp-result-thumb { width: 48px; height: 36px; border-radius: 6px; flex-shrink: 0; }
+.fsp-result-info { flex: 1; min-width: 0; }
+.fsp-result-text { font-size: 10px; font-weight: 500; color: #333; line-height: 1.3; margin-bottom: 3px; }
+.fsp-result-meta { display: flex; justify-content: space-between; align-items: center; font-size: 8px; color: #9CA3AF; }
+.fsp-tag { color: $primary-color; background: $primary-bg; padding: 1px 4px; border-radius: 4px; }
+
+/* ======== 常见问题 ======== */
+.ai-disclaimer { text-align: center; font-size: 11px; color: $text-placeholder; padding: 16px 24px 0; line-height: 1.5; }
+
+/* ======== 底部栏 ======== */
 .bottom-bar { flex-shrink: 0; background: $bg-color; padding: 10px 16px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 8px)); border-top: 1px solid $border-color; .agreement-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; cursor: pointer; } .agreement-checkbox { width: 16px; height: 16px; border-radius: 3px; border: 1.5px solid #9CA3AF; display: flex; align-items: center; justify-content: center; flex-shrink: 0; &.checked { background: $primary-color; border-color: $primary-color; } } .agreement-text { font-size: 11px; color: $text-secondary; } .agreement-link { color: $primary-color; } .btn-buy { width: 100%; padding: 12px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 15px; font-weight: 700; cursor: pointer; } }
 .agreement-dialog-content { padding: 20px; font-size: 14px; color: $text-primary; text-align: center; }
 
+/* ======== 已开通态 ======== */
 .config { padding: 16px; }
 .status-card { background: $bg-card; border-radius: $radius-lg; overflow: hidden; box-shadow: $shadow-card; margin-bottom: 16px; }
 .status-top { padding: 16px; display: flex; justify-content: space-between; align-items: center; }
 .status-plan { font-size: 16px; font-weight: 700; color: $text-primary; }
 .status-date { font-size: 11px; color: $text-secondary; margin-top: 2px; }
 .remain-area { text-align: center; .remain-num { font-size: 24px; font-weight: 800; color: $primary-color; } .remain-label { font-size: 11px; color: $text-secondary; } }
-.upgrade-row { padding: 10px 16px; border-top: 1px solid $border-color; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: $primary-color; cursor: pointer; &:active { background: $bg-page; } }
 .config-section { background: $bg-card; border-radius: $radius-lg; padding: 16px; margin-bottom: 12px; box-shadow: $shadow-card; }
 .config-section-title { font-size: 14px; font-weight: 700; color: $text-primary; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
 .add-btn { font-size: 13px; font-weight: 600; color: $primary-color; cursor: pointer; }
-.config-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid $border-light; font-size: 13px; color: $text-primary; &:last-child { border-bottom: none; } }
 .event-tip { font-size: 11px; color: $text-secondary; margin-bottom: 12px; }
 .config-toggle { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid $border-light; font-size: 13px; color: $text-primary; }
 .event-item { display: flex; align-items: center; gap: 10px; padding: 12px 0; border-bottom: 1px solid $border-light; &:last-child { border-bottom: none; } }

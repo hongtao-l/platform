@@ -20,12 +20,34 @@
       >{{ d }}</span>
     </div>
 
-    <!-- 当前设备未开通 → 内联引导提示 -->
+    <!-- 当前设备未开通 → 截图预览 + 开通引导 -->
     <template v-if="!isActivated">
-      <div class="not-activated-inline">
-        <div class="na-inline-icon">📋</div>
-        <div class="na-inline-title">AI日报</div>
-        <div class="na-inline-desc">每日自动生成图文报告，AI总结家中动态，一目了然</div>
+      <div class="not-activated-area">
+        <div class="screenshot-phone">
+          <div class="phone-notch"></div>
+          <div class="screenshot-content">
+            <div class="ss-badge">开通后</div>
+            <!-- 模拟已开通的日报页面 -->
+            <div class="ss-device-bar">
+              <span class="ss-chip ss-chip-active">Front Door</span>
+              <span class="ss-chip">Backyard</span>
+            </div>
+            <!-- AI总结 -->
+            <div class="ss-card">
+              <div class="ss-card-title">💡 AI总结</div>
+              <div class="ss-summary-title">今日一切安好</div>
+              <div class="ss-summary-text">今天一切正常，奶奶出门1次，猫咪很活跃。全天未检测到异常告警…</div>
+            </div>
+            <!-- 事件汇总 -->
+            <div class="ss-card">
+              <div class="ss-card-title">📊 事件汇总</div>
+              <div class="ss-event" v-for="(e, i) in ['人员经过','宠物活动','告警','其他']" :key="i">
+                <span class="ss-event-name">{{ e }}</span>
+                <span class="ss-event-count">{{ [3,5,1,4][i] }} 件</span>
+              </div>
+            </div>
+          </div>
+        </div>
         <button class="na-inline-btn" @click="goToAiHome">立即开通全能AI</button>
       </div>
     </template>
@@ -56,6 +78,19 @@
 
         <!-- 已生成态 -->
         <template v-else-if="dailyStatus === 'done'">
+          <!-- AI总结 -->
+          <div class="section-card summary-card">
+            <div class="section-title">💡 AI总结</div>
+            <div class="summary-title-text">{{ summaryTitle }}</div>
+            <div class="summary-text" v-show="summaryExpanded">{{ aiSummary }}</div>
+            <div class="summary-expand" v-if="!summaryExpanded" @click="summaryExpanded = true">
+              点击查看详情 <van-icon name="arrow-down" size="12" />
+            </div>
+            <div class="summary-collapse" v-if="summaryExpanded" @click="summaryExpanded = false">
+              收起 <van-icon name="arrow-up" size="12" />
+            </div>
+          </div>
+
           <!-- 各关注事件数量汇总（含时间线消息） -->
           <div class="section-card">
             <div class="section-title">📊 事件汇总</div>
@@ -89,12 +124,6 @@
                 </div>
               </div>
             </div>
-          </div>
-
-          <!-- AI总结 -->
-          <div class="section-card">
-            <div class="section-title">💡 AI总结</div>
-            <div class="summary-text">{{ aiSummary }}</div>
           </div>
 
           <div style="height:20px"></div>
@@ -231,6 +260,8 @@ const eventMsgMap = {
 }
 
 const aiSummary = ref('今天一切正常，奶奶出门1次，猫咪很活跃。全天未检测到异常告警，家中安全状况良好。')
+const summaryTitle = ref('今日一切安好')
+const summaryExpanded = ref(false)
 
 const openEventDetail = (evt) => {
   const msgs = eventMsgMap[evt.name] || []
@@ -340,12 +371,31 @@ const handleGenerate = () => {
 .ai-header { background: $bg-color; padding: 12px 16px; border-bottom: 1px solid $border-color; display: flex; align-items: center; gap: 12px; flex-shrink: 0; h2 { font-size: 18px; font-weight: 700; color: $text-primary; flex: 1; } }
 .back-btn, .header-right { width: 32px; height: 32px; border-radius: 50%; background: $bg-page; display: flex; align-items: center; justify-content: center; color: $text-secondary; flex-shrink: 0; }
 
-/* 内联未开通引导 */
-.not-activated-inline { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; }
-.na-inline-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.6; }
-.na-inline-title { font-size: 16px; font-weight: 700; color: $text-primary; }
-.na-inline-desc { font-size: 12px; color: $text-secondary; margin-top: 6px; text-align: center; max-width: 260px; line-height: 1.5; }
-.na-inline-btn { margin-top: 20px; padding: 10px 28px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 14px; font-weight: 600; cursor: pointer; }
+/* 未开通区域 — 截图预览 */
+.not-activated-area { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 16px 20px; overflow-y: auto; }
+
+/* 手机框截图 */
+.screenshot-phone { width: 100%; max-width: 360px; border: 3px solid #1f2937; border-radius: 28px; overflow: hidden; background: $bg-page; box-shadow: 0 8px 30px rgba(0,0,0,0.15); margin-bottom: 20px; position: relative; }
+.phone-notch { width: 70px; height: 7px; background: #1f2937; border-radius: 4px; margin: 12px auto 8px; }
+.screenshot-content { padding: 10px 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.ss-badge { align-self: flex-start; font-size: 10px; color: $primary-color; background: $primary-bg; padding: 2px 8px; border-radius: 4px; margin-bottom: 2px; }
+
+.ss-device-bar { display: flex; gap: 4px; }
+.ss-chip { font-size: 10px; padding: 3px 10px; border-radius: 12px; background: #f3f4f6; color: #9CA3AF; }
+.ss-chip-active { background: $primary-color; color: #fff; }
+
+.ss-card { background: #fff; border-radius: 10px; padding: 10px 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.ss-card-title { font-size: 12px; font-weight: 700; color: $text-primary; margin-bottom: 6px; }
+.ss-summary-title { font-size: 13px; font-weight: 600; color: $text-primary; margin-bottom: 4px; }
+.ss-summary-text { font-size: 11px; color: $text-secondary; line-height: 1.5; }
+
+.ss-event { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid #f3f4f6; }
+.ss-event:last-child { border-bottom: none; }
+.ss-event-name { font-size: 11px; font-weight: 500; color: $text-primary; }
+.ss-event-count { font-size: 10px; color: $primary-color; font-weight: 600; }
+
+/* 开通按钮 */
+.na-inline-btn { width: 100%; max-width: 300px; padding: 12px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 15px; font-weight: 600; cursor: pointer; }
 
 /* 设备筛选 */
 .device-filter-bar { background: $bg-color; padding: 8px 16px; display: flex; gap: 6px; flex-shrink: 0; border-bottom: 1px solid $border-color; overflow-x: auto; }
@@ -376,6 +426,9 @@ const handleGenerate = () => {
 .ft-text { font-size: 12px; color: $text-primary; }
 .ft-ellipsis .ft-text { font-size: 14px; letter-spacing: 2px; color: $text-placeholder; }
 .summary-text { font-size: 14px; color: $text-primary; line-height: 1.6; }
+.summary-title-text { font-size: 15px; font-weight: 600; color: $text-primary; line-height: 1.4; margin-bottom: 8px; }
+.summary-expand { font-size: 12px; color: $primary-color; margin-top: 8px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+.summary-collapse { font-size: 12px; color: var(--text-placeholder, #9CA3AF); margin-top: 10px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
 
 /* 空态 */
 .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; }

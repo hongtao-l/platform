@@ -41,12 +41,39 @@
       </div>
     </div>
 
-    <!-- 当前设备未开通 → 内联引导提示 -->
+    <!-- 当前设备未开通 → 截图预览 + 开通引导 -->
     <template v-if="!isActivated">
-      <div class="not-activated-inline">
-        <div class="na-inline-icon">🔍</div>
-        <div class="na-inline-title">AI搜索</div>
-        <div class="na-inline-desc">用自然语言搜索事件记录，快速定位关键片段</div>
+      <div class="not-activated-area">
+        <div class="screenshot-phone">
+          <div class="phone-notch"></div>
+          <div class="screenshot-content">
+            <div class="ss-badge">开通后</div>
+            <!-- 模拟已开通的搜索页面 -->
+            <div class="ss-search-box">
+              <van-icon name="search" size="14" color="#9CA3AF" />
+              <span class="ss-query-text">奶奶今天出门了吗</span>
+            </div>
+            <div class="ss-section-title">猜你想搜</div>
+            <div class="ss-tags">
+              <span class="ss-tag">奶奶今天出门了吗</span>
+              <span class="ss-tag">猫咪上午在干嘛</span>
+              <span class="ss-tag">门口有快递</span>
+              <span class="ss-tag">晚上有人经过</span>
+            </div>
+            <div class="ss-results">
+              <div class="ss-result-item" v-for="(r, i) in previewResults" :key="i">
+                <div class="ss-thumb" :style="{ background: r.bg }"></div>
+                <div class="ss-info">
+                  <div class="ss-summary">{{ r.summary }}</div>
+                  <div class="ss-meta">
+                    <span class="ss-tag-label">{{ r.eventName }}</span>
+                    <span class="ss-time">{{ r.time }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <button class="na-inline-btn" @click="goToAiHome">立即开通全能AI</button>
       </div>
     </template>
@@ -136,6 +163,22 @@ const searchResults = ref([
   }
 ])
 
+// 开通后效果示例
+const previewResults = [
+  {
+    summary: '奶奶从后门走出，身穿蓝色外套，手拿拐杖',
+    eventName: '老人看护',
+    time: '09:20',
+    bg: 'linear-gradient(135deg, #0d2e1a, #1a5c34)'
+  },
+  {
+    summary: '奶奶买菜回家，手里提着菜袋，精神不错',
+    eventName: '老人看护',
+    time: '11:05',
+    bg: 'linear-gradient(135deg, #0d1b3e, #1a3a6e)'
+  }
+]
+
 // 猜你想搜
 const guessList = ['奶奶今天出门了吗', '猫咪上午在干嘛', '门口有快递', '晚上有人经过']
 
@@ -172,12 +215,33 @@ const openDetail = (r) => {
 .ai-header { background: $bg-color; padding: 12px 16px; border-bottom: 1px solid $border-color; display: flex; align-items: center; gap: 12px; flex-shrink: 0; h2 { font-size: 18px; font-weight: 700; color: $text-primary; flex: 1; } }
 .back-btn { width: 32px; height: 32px; border-radius: 50%; background: $bg-page; display: flex; align-items: center; justify-content: center; color: $text-secondary; flex-shrink: 0; }
 
-/* 内联未开通引导 */
-.not-activated-inline { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; }
-.na-inline-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.6; }
-.na-inline-title { font-size: 16px; font-weight: 700; color: $text-primary; }
-.na-inline-desc { font-size: 12px; color: $text-secondary; margin-top: 6px; text-align: center; max-width: 260px; line-height: 1.5; }
-.na-inline-btn { margin-top: 20px; padding: 10px 28px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 14px; font-weight: 600; cursor: pointer; }
+/* 未开通区域 — 截图预览 */
+.not-activated-area { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 16px 20px; overflow-y: auto; }
+
+/* 手机框截图 */
+.screenshot-phone { width: 100%; max-width: 360px; border: 3px solid #1f2937; border-radius: 28px; overflow: hidden; background: $bg-page; box-shadow: 0 8px 30px rgba(0,0,0,0.15); margin-bottom: 20px; position: relative; }
+.phone-notch { width: 70px; height: 7px; background: #1f2937; border-radius: 4px; margin: 12px auto 8px; }
+.screenshot-content { padding: 10px 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.ss-badge { align-self: flex-start; font-size: 10px; color: $primary-color; background: $primary-bg; padding: 2px 8px; border-radius: 4px; margin-bottom: 2px; }
+
+.ss-search-box { display: flex; align-items: center; gap: 6px; padding: 7px 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; }
+.ss-query-text { font-size: 12px; color: $text-primary; }
+
+.ss-section-title { font-size: 12px; font-weight: 600; color: $text-primary; }
+.ss-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.ss-tag { font-size: 10px; padding: 4px 10px; border: 1px solid #e5e7eb; border-radius: 12px; color: $text-secondary; background: #fff; }
+
+.ss-results { display: flex; flex-direction: column; gap: 6px; }
+.ss-result-item { display: flex; gap: 8px; padding: 8px; border-radius: 10px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.ss-thumb { width: 56px; height: 42px; border-radius: 6px; flex-shrink: 0; }
+.ss-info { flex: 1; min-width: 0; }
+.ss-summary { font-size: 11px; font-weight: 500; color: $text-primary; line-height: 1.4; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ss-meta { display: flex; justify-content: space-between; align-items: center; }
+.ss-tag-label { font-size: 9px; color: $primary-color; background: $primary-bg; padding: 2px 6px; border-radius: 6px; }
+.ss-time { font-size: 9px; color: $text-placeholder; }
+
+/* 开通按钮 */
+.na-inline-btn { width: 100%; max-width: 300px; padding: 12px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 15px; font-weight: 600; cursor: pointer; }
 
 /* 设备筛选 */
 .device-filter-bar { background: $bg-color; padding: 8px 16px; display: flex; gap: 6px; flex-shrink: 0; border-bottom: 1px solid $border-color; overflow-x: auto; }

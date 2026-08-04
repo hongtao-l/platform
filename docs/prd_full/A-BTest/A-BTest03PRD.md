@@ -548,4 +548,220 @@ APP发版（内置Key+两版落地页） → 运营创建实验 → 启动 → �
 
 ---
 
+## 十一、实验案例：推荐位弹窗样式 A/B Test
+
+> 以下为真实实验案例，展示如何用本系统对首页推荐位各层漏斗的弹窗样式进行 A/B Test。案例与上方功能描述独立，便于研发按功能+案例对照查阅。
+
+### 11.1 案例背景
+
+首页推荐位是用户触达套餐推荐的核心运营位。用户打开 App 后按漏斗层级（共四层）依次弹窗展示套餐。本期对四层弹窗样式进行 A/B Test，对比当前样式（A）与新版样式（B）在各层的曝光、点击和转化效果。
+
+| 维度 | 说明 |
+|------|------|
+| 实验页面 | 首页推荐位弹窗（漏斗四层） |
+| 覆盖用户 | 命中推荐位策略的全部用户 |
+| 实验周期 | ≥ 7天，每组转化事件 ≥ 500 |
+
+### 11.2 漏斗层级说明
+
+推荐位弹窗按漏斗层级依次展示，每层独立配置模板（弹窗样式）：
+
+```
+首页打开 → 层1 弹窗 → 关闭/点击 → 层2 弹窗 → 关闭/点击 → 层3 弹窗 → 关闭/点击 → 层4 弹窗 → 一轮结束 → 进入冷却期
+```
+
+| 层级 | 说明 | 模板独立 |
+|:----:|------|:-------:|
+| 层1 | 首次触达弹窗 | ✓ |
+| 层2 | 第二次弹窗 | ✓ |
+| 层3 | 第三次弹窗 | ✓ |
+| 层4 | 第四次弹窗 | ✓ |
+
+> 每层独立 A/B，运营可针对某层单独开启实验（如仅层1做 A/B），也可四层同时实验。
+
+### 11.3 实验配置
+
+| 属性 | 值 |
+|------|------|
+| 实验Key | `rec_layer_popup_ab` |
+| 实验名称 | 推荐位弹窗样式A/B Test |
+| A（对照组） | 当前线上弹窗样式 |
+| B（实验组） | 新版弹窗样式 |
+
+> 变体A/B的具体弹窗样式由APP端原生实现，运营后台仅管理实验配置和流量分配。每层漏斗的样式变更由APP开发者按模板ID映射。
+
+### 11.4 分流规则
+
+**分流算法**：`Hash(user_id + "rec_layer_popup_ab") % 100` → 桶 0~99
+
+**海内外独立分流**：
+
+| 用户区域 | 判定条件 | A组桶区间 | B组桶区间 | A:B |
+|------|------|------|------|------|
+| 国内（CN） | country = "CN" | 0 ~ 49 | 50 ~ 99 | 50:50 |
+| 海外（非CN） | country ≠ "CN" | 0 ~ 49 | 50 ~ 99 | 50:50 |
+
+> 海内外各自独立分流，同一用户+同一实验始终看到同一变体。暂停后全部回A，异常兜底返回A。
+
+### 11.5 埋点事件
+
+#### 事件清单
+
+| 事件ID | 事件名称 | 触发时机 | event_type | 优先级 |
+|------|------|------|------|:--:|
+| rec_popup_show | 弹窗曝光 | 每层弹窗展示时 | 1 | P0 |
+| rec_popup_click | 弹窗点击 | 用户点击弹窗中套餐进入详情 | 1 | P0 |
+| rec_popup_close | 弹窗关闭 | 用户点击关闭按钮关闭弹窗 | 1 | P0 |
+| rec_popup_skip | 弹窗跳过 | 用户点击弹窗外区域或返回键 | 1 | P0 |
+| rec_pay_click | 点击支付 | 从弹窗进入后点击支付按钮 | 1 | P0 |
+| rec_pay_success | 支付成功 | 收到支付成功回调 | 1 | P0 |
+
+#### 公共参数（所有事件必带）
+
+| 参数 | 类型 | 必填 | 说明 | 示例值 |
+|------|------|------|------|------|
+| event_type | String | 是 | 0=普通事件，1=额外参数事件，2=错误事件 | "1" |
+| event_id | String | 是 | 事件ID | "rec_popup_show" |
+| event_time | Int64 | 是 | 事件发生时间戳(ms) | 1716192000000 |
+| user_id | String | 是 | 用户唯一标识 | "usr_123456" |
+| session_id | String | 是 | 会话ID | "sess_abc123" |
+| app_id | String | 是 | 应用ID | "app_xxx" |
+| app_version | String | 是 | 应用版本号 | "2.1.0" |
+| brand | String | 是 | 手机品牌 | "apple" |
+| os_type | String | 是 | 系统类型 | "iOS" |
+| os_version | String | 是 | 手机系统版本 | "17.0" |
+| company_id | String | 是 | 用户的从属企业ID | "0000213ed0cdb8bc" |
+| country | String | 是 | 国家 | "CN" |
+| city | String | 是 | 城市 | "深圳" |
+
+#### 业务参数（按事件）
+
+**rec_popup_show**（弹窗曝光）：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| experiment_key | String | 是 | 实验标识：`rec_layer_popup_ab` |
+| variant | String | 是 | 分流结果：A / B |
+| layer | Number | 是 | 漏斗层级：1 / 2 / 3 / 4 |
+| strategy_id | String | 是 | 命中策略ID |
+| pkg_list | String | 是 | 弹窗内展示的套餐ID列表，逗号分隔 |
+
+**rec_popup_click**（弹窗点击）：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| experiment_key | String | 是 | 实验标识：`rec_layer_popup_ab` |
+| variant | String | 是 | 分流结果：A / B |
+| layer | Number | 是 | 漏斗层级：1 / 2 / 3 / 4 |
+| strategy_id | String | 是 | 命中策略ID |
+| pkg_id | String | 是 | 被点击的套餐ID |
+
+**rec_popup_close**（弹窗关闭）：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| experiment_key | String | 是 | 实验标识：`rec_layer_popup_ab` |
+| variant | String | 是 | 分流结果：A / B |
+| layer | Number | 是 | 漏斗层级：1 / 2 / 3 / 4 |
+| strategy_id | String | 是 | 命中策略ID |
+| stay_duration | Number | 是 | 弹窗停留时长（秒） |
+
+**rec_popup_skip**（弹窗跳过）：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| experiment_key | String | 是 | 实验标识：`rec_layer_popup_ab` |
+| variant | String | 是 | 分流结果：A / B |
+| layer | Number | 是 | 漏斗层级：1 / 2 / 3 / 4 |
+| strategy_id | String | 是 | 命中策略ID |
+
+**rec_pay_click**（点击支付）：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| experiment_key | String | 是 | 实验标识：`rec_layer_popup_ab` |
+| variant | String | 是 | 分流结果：A / B |
+| layer | Number | 是 | 来源漏斗层级：1 / 2 / 3 / 4 |
+| strategy_id | String | 是 | 命中策略ID |
+| pkg_id | String | 是 | 购买套餐ID |
+| pay_method | String | 是 | 支付方式：wechat / alipay |
+
+**rec_pay_success**（支付成功）：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| experiment_key | String | 是 | 实验标识：`rec_layer_popup_ab` |
+| variant | String | 是 | 分流结果：A / B |
+| layer | Number | 是 | 来源漏斗层级：1 / 2 / 3 / 4 |
+| strategy_id | String | 是 | 命中策略ID |
+| pkg_id | String | 是 | 购买套餐ID |
+| pay_method | String | 是 | 支付方式：wechat / alipay |
+| amount | Number | 是 | 实际支付金额（分） |
+| order_id | String | 是 | 订单ID |
+
+### 11.6 转化漏斗
+
+**整体漏斗**：
+
+```
+弹窗曝光 (rec_popup_show)       100%
+    ↓
+弹窗点击 (rec_popup_click)      ~15%
+    ↓
+点击支付 (rec_pay_click)         ~8%
+    ↓
+支付成功 (rec_pay_success)        ~5%
+```
+
+**分层漏斗**：
+
+| 漏斗节点 | 层1-A | 层1-B | 层2-A | 层2-B | 层3-A | 层3-B | 层4-A | 层4-B |
+|------|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+| 弹窗曝光 | — | — | — | — | — | — | — | — |
+| 弹窗点击 | — | — | — | — | — | — | — | — |
+| 点击支付 | — | — | — | — | — | — | — | — |
+| 支付成功 | — | — | — | — | — | — | — | — |
+
+### 11.7 核心指标
+
+| 序号 | 指标 | 计算方式 | 维度 | 周期 |
+|:--:|------|------|------|:--:|
+| 1 | A/B 各层曝光UV | COUNT(DISTINCT user_id) WHERE event=rec_popup_show GROUP BY variant,layer | variant + layer | 日 |
+| 2 | A/B 弹窗点击率 | rec_popup_click UV / rec_popup_show UV（按variant+layer） | variant + layer | 日 |
+| 3 | A/B 弹窗关闭率 | rec_popup_close UV / rec_popup_show UV（按variant+layer） | variant + layer | 日 |
+| 4 | A/B 跳过率 | rec_popup_skip UV / rec_popup_show UV（按variant+layer） | variant + layer | 日 |
+| 5 | A/B 端到端转化率 | rec_pay_success UV / rec_popup_show UV（按variant） | variant | 日 |
+| 6 | A/B 支付成功率 | rec_pay_success UV / rec_pay_click UV（按variant） | variant | 日 |
+| 7 | A/B 总收入 | SUM(amount) WHERE event=rec_pay_success（按variant） | variant | 日 |
+| 8 | 流量均匀度 | max(A_show, B_show) / min(A_show, B_show) | — | 日 |
+| 9 | 漏斗完成率 | 到达层4用户数 / 层1曝光用户数 | variant | 日 |
+
+### 11.8 胜出判定
+
+同第五章业务规则（R11~R14）：每组转化 ≥ 500 + 运行 ≥ 7天 + 置信度 ≥ 95%，三项达标后对比转化率声明胜出。
+
+分层判定时，每层独立评估转化率差异；整体判定以端到端转化率为准。
+
+### 11.9 实验生命周期
+
+```
+APP发版（内置Key+各层双版弹窗样式） → 运营创建实验 → 启动 → 运行 ≥7天 → 数据达标 → 声明胜出 → 全量应用 → APP下次发版收敛
+```
+
+### 11.10 埋点测试验证
+
+| 测试场景 | 预期结果 | 验证方式 |
+|------|------|------|
+| 用户进入首页命中策略 | rec_popup_show 上报，variant=A/B，layer=1 | 抓包验证 |
+| 逐层弹出至层4 | 每层 rec_popup_show 上报，layer递增 | 抓包验证 |
+| 点击弹窗套餐 | rec_popup_click 上报，含 pkg_id、layer | 抓包验证 |
+| 点击关闭按钮 | rec_popup_close 上报，含 stay_duration | 抓包验证 |
+| 点击弹窗外区域 | rec_popup_skip 上报 | 抓包验证 |
+| 进入订单确认页点击支付 | rec_pay_click 上报，含 pkg_id、pay_method | 抓包验证 |
+| 支付成功 | rec_pay_success 上报，order_id非空 | 抓包验证 |
+| 同一用户重复进入 | variant一致（Hash确定性） | 多次进入验证 |
+| 公共参数完整性 | 13项公共参数均非空 | 逐项校验 |
+
+---
+
 > **本文档为纯业务PRD，面向产品和开发团队。不包含API定义、路由路径、代码文件路径等技术实现细节。**

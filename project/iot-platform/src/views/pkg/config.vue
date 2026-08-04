@@ -370,6 +370,10 @@
         </el-select>
       </el-form-item>
 
+      <el-form-item label="其他标签配置">
+        <div class="form-hint" style="color:var(--text-placeholder);font-size:12px;margin-bottom:8px">仅作为标签配置，不作APP投放</div>
+      </el-form-item>
+
       <!-- ===== 上架配置 ===== -->
       <span class="section-label">上架配置</span>
       <div class="section-block">

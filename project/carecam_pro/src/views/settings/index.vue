@@ -63,9 +63,9 @@
     </div>
     
     <!-- 删除确认弹窗 -->
-    <van-dialog 
-      v-model:show="showDeleteConfirm" 
-      title="删除设备？" 
+    <van-dialog
+      v-model:show="showDeleteConfirm"
+      title="删除设备？"
       message="删除设备后，您将无法查看和接收来自该设备的视频和消息"
       show-cancel-button
       @confirm="deleteDevice"
@@ -203,6 +203,8 @@ const handleSetting = (item) => {
     router.push('/settings/record-mode')
   } else if (item.action === 'time_album') {
     router.push({ path: '/time-album', query: { deviceId: deviceId.value, deviceName: deviceName.value } })
+  } else if (item.action === 'display') {
+    router.push('/settings/display')
   }
 }
 
@@ -388,4 +390,5 @@ const deleteDevice = () => {
 .delete-section {
   padding: 12px 16px;
 }
+
 </style>

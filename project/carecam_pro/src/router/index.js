@@ -106,6 +106,12 @@ const routes = [
     meta: { title: '录制模式' }
   },
   {
+    path: '/settings/display',
+    name: 'DisplaySettings',
+    component: () => import('@/views/settings/display.vue'),
+    meta: { title: '画面设置' }
+  },
+  {
     path: '/battery',
     name: 'Battery',
     component: () => import('@/views/battery/index.vue'),
