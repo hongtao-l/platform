@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8B3A15"/>
+      <stop offset="100%" stop-color="#C56A3A"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <circle cx="256" cy="256" r="256" fill="url(#bg)"/>
+  <!-- Paw icon -->
+  <g transform="translate(256, 200)" fill="#FFF">
+    <!-- Main pad -->
+    <path d="M-32,8 C-42,28 -36,52 -18,60 C0,68 18,60 32,8 C18,-4 0,-8 -14,-8 C-22,-8 -28,0 -32,8Z"/>
+    <!-- Toe 1 (left) -->
+    <ellipse cx="-54" cy="-28" rx="22" ry="28" transform="rotate(-20 -54 -28)"/>
+    <!-- Toe 2 (center-left) -->
+    <ellipse cx="-18" cy="-40" rx="18" ry="26"/>
+    <!-- Toe 3 (center-right) -->
+    <ellipse cx="22" cy="-40" rx="18" ry="26"/>
+    <!-- Toe 4 (right) -->
+    <ellipse cx="58" cy="-28" rx="22" ry="28" transform="rotate(20 58 -28)"/>
+  </g>
+  <!-- Brand name -->
+  <text x="256" y="350" text-anchor="middle" font-family="'Inter','Segoe UI',system-ui,-apple-system,sans-serif" font-size="56" font-weight="800" fill="#FFF" letter-spacing="-1.5">seemorcam</text>
+  <!-- Tagline -->
+  <text x="256" y="390" text-anchor="middle" font-family="'Inter','Segoe UI',system-ui,-apple-system,sans-serif" font-size="22" font-weight="500" fill="rgba(255,255,255,0.55)" letter-spacing="2">PET GUARDIAN</text>
+</svg>

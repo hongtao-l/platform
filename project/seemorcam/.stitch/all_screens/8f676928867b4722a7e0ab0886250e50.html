@@ -1,0 +1,191 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Kitchen Feeder Control Panel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#eae1dc",
+                        "on-primary-fixed": "#360f00",
+                        "outline-variant": "#dbc1b7",
+                        "on-tertiary-fixed-variant": "#474744",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#6b2600",
+                        "surface-dim": "#e1d8d4",
+                        "surface-container-high": "#efe6e2",
+                        "surface-bright": "#fff8f5",
+                        "tertiary-fixed-dim": "#c8c6c2",
+                        "on-secondary-fixed": "#002020",
+                        "on-primary-fixed-variant": "#7a3008",
+                        "on-tertiary-container": "#3c3c39",
+                        "on-surface": "#1f1b18",
+                        "secondary": "#0c696a",
+                        "on-background": "#1f1b18",
+                        "surface-tint": "#98461e",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#e5e2de",
+                        "on-surface-variant": "#55433b",
+                        "secondary-fixed-dim": "#87d3d4",
+                        "tertiary-container": "#a8a6a3",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#004f50",
+                        "secondary-fixed": "#a3f0f0",
+                        "surface-variant": "#eae1dc",
+                        "on-secondary-container": "#186f70",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#88726a",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#fbf2ed",
+                        "on-tertiary-fixed": "#1c1c1a",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#ffdbcd",
+                        "inverse-surface": "#34302d",
+                        "surface": "#fff8f5",
+                        "secondary-container": "#a3f0f0",
+                        "primary-fixed-dim": "#ffb596",
+                        "inverse-on-surface": "#f8efea",
+                        "error": "#ba1a1a",
+                        "tertiary": "#5f5e5b",
+                        "primary": "#98461e",
+                        "primary-container": "#f28c5e",
+                        "inverse-primary": "#ffb596",
+                        "background": "#fff8f5",
+                        "surface-container": "#f5ece8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-md": "16px",
+                        "gutter-card": "16px",
+                        "stack-lg": "32px",
+                        "margin-page": "20px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-xl": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom range slider styling for a softer, more integrated look */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #98461e;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 2px 6px rgba(152, 70, 30, 0.3);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: #eae1dc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased font-body-md min-h-screen pb-12">
+<!-- Top Navigation (Task-focused page, so we use a contextual header instead of global nav) -->
+<header class="flex justify-between items-center px-margin-page h-16 w-full pt-4 sticky top-0 z-10 bg-surface/80 backdrop-blur-md">
+<button aria-label="Go back" class="w-10 h-10 flex items-center justify-start hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined text-[28px]">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Kitchen Feeder</h1>
+<button aria-label="Settings" class="w-10 h-10 flex items-center justify-end hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined text-[28px]">settings</span>
+</button>
+</header>
+<main class="flex flex-col items-center">
+<!-- Status Indicator -->
+<div class="flex items-center gap-2 mt-4 bg-surface-container-low px-3 py-1 rounded-full">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<span class="text-secondary font-label-sm text-label-sm">Online</span>
+</div>
+<!-- 3D Product Hero Section -->
+<div class="w-full max-w-sm px-margin-page mt-6 mb-8 relative flex justify-center bg-transparent" style="mask-image: radial-gradient(circle, black 40%, transparent 95%);">
+<!-- Using mix-blend-multiply to ensure the solid background of the render integrates perfectly with the surface color if there are any slight tonal differences -->
+<img alt="Smart pet feeder device" class="w-full h-auto object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLux9oAwaxJ-B3RGjMXC2vz1KZer8pFRMJ7ITdubU1Uvj62rbL2dtvwFmJS_h3T6TjjJvkvuonZruR4wjZiEjtu1rAGj7OhKUYmtC71dfnGHH526e5TZfACcbIjD6T3Zzv2i1H20oSPGvcrvOJC5k5Yc82-p1KFkUKQMB51ZrQ3iU4Z8nu7I8Vf-hax27ep8EB6i0xscJqd44y7q2z_FxkT46jCBI8lVxjPdig04dmPC1PgLbfQOE5OV3Ow">
+</div>
+<!-- Feeding Information -->
+<div class="text-center mb-8">
+<h2 class="font-headline-lg-mobile text-[16px] text-on-surface mb-1">Next Feed</h2>
+<p class="font-body-md text-on-surface-variant">5 Portions / 2025.01.25 18:00</p>
+</div>
+<!-- Control Cards Stack -->
+<div class="w-full max-w-md px-margin-page flex flex-col gap-4">
+<!-- Manual Feeding Action Card -->
+<button class="w-full bg-surface-container-lowest rounded-[16px] p-4 flex items-center justify-between shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:scale-[0.98] transition-transform duration-200 border border-outline-variant/10">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+</div>
+<span class="font-headline-lg-mobile text-[16px] font-semibold text-on-surface tracking-tight">Manual Feeding</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</button>
+<!-- Scheduled Feeding Action Card -->
+<button class="w-full bg-surface-container-lowest rounded-[16px] p-4 flex items-center justify-between shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:scale-[0.98] transition-transform duration-200 border border-outline-variant/10">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">schedule</span>
+</div>
+<span class="font-headline-lg-mobile text-[16px] font-semibold text-on-surface tracking-tight">Scheduled Feeding</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-body-md text-on-surface-variant">Off</span>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</div>
+</button>
+<!-- Feeding Speed Control Card (Slider component instead of list item) -->
+<div class="w-full bg-surface-container-lowest rounded-[16px] p-4 pt-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-outline-variant/10 flex flex-col gap-5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-[#f0ecff] flex items-center justify-center text-[#6355ff]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<span class="font-headline-lg-mobile text-[16px] font-semibold text-on-surface tracking-tight">Feeding Speed</span>
+</div>
+<div class="px-2 pb-2">
+<input class="w-full appearance-none bg-transparent" max="5" min="1" type="range" value="3">
+<div class="flex justify-between font-label-sm text-[10px] text-on-surface-variant mt-3 px-1 uppercase tracking-wider">
+<span class="">Slow</span>
+<span class="">Normal</span>
+<span class="">Fast</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+
+</body></html>

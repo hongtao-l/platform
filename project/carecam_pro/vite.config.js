@@ -13,29 +13,45 @@ export default defineConfig({
     }),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg'],
+      includeAssets: ['favicon.svg', 'app-icon.svg', 'apple-touch-icon.png', 'pet-home.html'],
       manifest: {
-        name: 'CareCam Pro',
-        short_name: 'CareCam',
-        description: '智能摄像机管理应用',
-        theme_color: '#1890FF',
-        background_color: '#F5F5F5',
+        name: 'PetCam — Pet Guardian',
+        short_name: 'PetCam',
+        description: 'AI-powered pet monitoring. Live cameras, smart alerts, and activity tracking for your furry family.',
+        theme_color: '#1A3A2A',
+        background_color: '#FAFAF8',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
+        start_url: '/demo',
         scope: '/',
+        categories: ['lifestyle', 'utilities'],
         icons: [
           {
-            src: 'favicon.svg',
+            src: 'app-icon-192.png',
             sizes: '192x192',
-            type: 'image/svg+xml',
+            type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: 'favicon.svg',
+            src: 'app-icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable'
+          },
+          {
+            src: 'app-icon.svg',
             sizes: '512x512',
             type: 'image/svg+xml',
             purpose: 'any maskable'
+          }
+        ],
+        screenshots: [
+          {
+            src: 'app-icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: 'PetCam Home Screen'
           }
         ]
       },

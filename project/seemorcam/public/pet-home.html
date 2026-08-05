@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PetCam — Pet Guardian</title>
+<style>
+  :root {
+    --green-deep: #1A3A2A;
+    --green-mid: #2D5A3D;
+    --green-light: #E8F5E9;
+    --amber: #F5A623;
+    --coral: #E8734A;
+    --blue-dark: #1A2A3D;
+    --gray-50: #FAFAF8;
+    --gray-100: #F4F4F1;
+    --gray-200: #E8E8E5;
+    --gray-400: #9CA3AF;
+    --gray-600: #6B7280;
+    --gray-900: #1A1A2E;
+    --white: #FFFFFF;
+    --red: #EA4335;
+    --green: #34A853;
+    --radius-sm: 12px;
+    --radius-md: 16px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+    --radius-full: 100px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+    --shadow-md: 0 2px 12px rgba(0,0,0,0.06);
+    --shadow-lg: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+    background: #E8E8E5;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .phone-frame {
+    width: 390px;
+    min-height: 100vh;
+    background: var(--gray-50);
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.05), 0 20px 60px rgba(0,0,0,0.15);
+  }
+
+  /* ====== Top Bar ====== */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(250,250,248,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .tb-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .tb-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #F5A623, #F7C948);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 18px; font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .tb-avatar:active { transform: scale(0.94); }
+  .tb-greeting { font-size: 12px; color: var(--gray-400); line-height: 1.3; }
+  .tb-name { font-size: 16px; font-weight: 700; color: var(--gray-900); line-height: 1.3; }
+  .tb-actions { display: flex; gap: 10px; }
+  .tb-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    position: relative;
+    border: none;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s;
+  }
+  .tb-btn:active { transform: scale(0.94); }
+  .tb-btn svg { width: 20px; height: 20px; color: var(--gray-900); }
+  .tb-badge {
+    position: absolute; top: 4px; right: 4px;
+    min-width: 18px; height: 18px;
+    border-radius: 9px;
+    background: var(--red);
+    color: #fff; font-size: 10px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--white);
+    padding: 0 5px;
+  }
+
+  /* ====== Story Row ====== */
+  .story-row {
+    display: flex; gap: 18px;
+    padding: 8px 20px 24px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .story-row::-webkit-scrollbar { display: none; }
+  .story-item {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    cursor: pointer; flex-shrink: 0; scroll-snap-align: start;
+    transition: transform 0.15s;
+  }
+  .story-item:active { transform: scale(0.94); }
+  .story-ring {
+    width: 72px; height: 72px; border-radius: 50%; padding: 3px;
+    border: 2.5px solid var(--gray-200);
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .story-ring.live { border-color: var(--green); }
+  .story-ring.add { border: 2.5px dashed var(--gray-400); }
+  .story-inner {
+    width: 100%; height: 100%; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .story-inner.add-inner { background: var(--gray-100); }
+  .story-inner svg.add-icon { width: 28px; height: 28px; color: var(--gray-400); }
+  .story-inner img, .story-inner video {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .story-badge {
+    position: absolute; bottom: 0; right: 0;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--green);
+    border: 2.5px solid var(--white);
+    animation: pulse-ring 2s ease-in-out infinite;
+  }
+  @keyframes pulse-ring {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(52,168,83,0.4); }
+    50% { box-shadow: 0 0 0 7px rgba(52,168,83,0); }
+  }
+  .story-label {
+    font-size: 11px; font-weight: 600; color: var(--gray-900);
+    max-width: 72px; text-align: center;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  /* ====== Featured Card ====== */
+  .featured {
+    margin: 0 20px 24px;
+    border-radius: var(--radius-xl);
+    height: 230px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .featured:active { transform: scale(0.97); }
+  .feat-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, #1A3A2A 0%, #2D5A3D 40%, #4A8A5A 80%);
+  }
+  .feat-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 70% 30%, rgba(168,218,168,0.2) 0%, transparent 60%),
+      radial-gradient(ellipse at 30% 80%, rgba(255,213,153,0.12) 0%, transparent 50%);
+  }
+  .feat-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 45%, transparent 100%);
+  }
+  .feat-body {
+    position: absolute; bottom: 36px; left: 20px; right: 20px; z-index: 2;
+  }
+  .feat-tag {
+    display: inline-block;
+    padding: 4px 10px; border-radius: var(--radius-full);
+    background: rgba(255,255,255,0.18); backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    font-size: 10px; font-weight: 700; color: #fff;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .feat-title {
+    font-size: 21px; font-weight: 800; color: #fff;
+    line-height: 1.25; margin-bottom: 6px; letter-spacing: -0.3px;
+  }
+  .feat-meta { font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 500; display: flex; gap: 8px; }
+  .feat-dots {
+    position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 6px; z-index: 2;
+  }
+  .feat-dot {
+    width: 6px; height: 6px; border-radius: 3px;
+    background: rgba(255,255,255,0.35);
+    transition: all 0.3s;
+  }
+  .feat-dot.active { width: 22px; background: #fff; }
+
+  /* ====== Quick Stats ====== */
+  .quick-stats {
+    display: flex; justify-content: space-evenly;
+    padding: 0 8px 28px;
+  }
+  .qs-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .qs-ring {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-md);
+  }
+  .qs-value { font-size: 20px; font-weight: 800; color: var(--gray-900); }
+  .qs-label {
+    font-size: 10px; font-weight: 700; color: var(--gray-400);
+    text-transform: uppercase; letter-spacing: 0.8px;
+  }
+
+  /* ====== Section Label ====== */
+  .sect-label {
+    padding: 0 20px 14px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .sect-label span {
+    font-size: 16px; font-weight: 800; color: var(--gray-900); letter-spacing: -0.3px;
+  }
+  .sect-label a {
+    font-size: 13px; font-weight: 600; color: var(--green-mid); text-decoration: none;
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  .sect-label a:active { opacity: 0.7; }
+
+  /* ====== Moments (Horizontal Scroll Cards) ====== */
+  .moments-scroll {
+    display: flex; gap: 14px;
+    padding: 0 20px 28px;
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .moments-scroll::-webkit-scrollbar { display: none; }
+  .moment-card {
+    min-width: 155px;
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    overflow: hidden;
+    cursor: pointer;
+    flex-shrink: 0; scroll-snap-align: start;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.15s;
+  }
+  .moment-card:active { transform: scale(0.96); }
+  .mc-media {
+    height: 115px; position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mc-bg-1 { background: linear-gradient(135deg, #FEF9E7, #FDEBD0); }
+  .mc-bg-2 { background: linear-gradient(135deg, #F3EEF9, #E8DAF0); }
+  .mc-bg-3 { background: linear-gradient(135deg, #E8F5E9, #D0E8D0); }
+  .mc-bg-4 { background: linear-gradient(135deg, #FFEBEE, #FFCDD2); }
+  .mc-icon-wrap {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(255,255,255,0.8);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mc-icon-wrap svg { width: 28px; height: 28px; }
+  .mc-time {
+    position: absolute; top: 8px; right: 8px;
+    padding: 3px 8px; border-radius: var(--radius-sm);
+    background: rgba(0,0,0,0.35); backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    font-size: 10px; font-weight: 600; color: #fff;
+  }
+  .mc-body { padding: 14px; }
+  .mc-pet { font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 3px; }
+  .mc-desc { font-size: 12px; color: var(--gray-600); line-height: 1.3; }
+
+  /* ====== Bento Grid ====== */
+  .bento {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 165px 150px;
+    gap: 12px;
+    padding: 0 20px 24px;
+  }
+  .bento-item {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .bento-item:active { transform: scale(0.96); }
+  .bento-item.tall { grid-row: span 2; }
+  .bi-inner {
+    width: 100%; height: 100%;
+    padding: 18px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .bi-ai { background: linear-gradient(160deg, #1A3A2A, #3D6B4A); }
+  .bi-play { background: linear-gradient(160deg, #1A2A3D, #2D4A6E); }
+  .bi-settings { background: linear-gradient(160deg, #3D2A1A, #6E4A2D); }
+  .bi-icon { margin-bottom: auto; }
+  .bi-icon svg { width: 26px; height: 26px; color: #fff; }
+  .bi-title {
+    font-size: 16px; font-weight: 800; color: #fff;
+    margin-bottom: 2px; letter-spacing: -0.2px;
+  }
+  .bi-desc { font-size: 11px; color: rgba(255,255,255,0.7); line-height: 1.3; }
+  .bi-chip {
+    display: inline-block; align-self: flex-start; margin-top: 10px;
+    padding: 4px 10px; border-radius: var(--radius-full);
+    background: rgba(168,218,168,0.25);
+    font-size: 10px; font-weight: 700; color: #A8DAA8;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+
+  /* ====== Device Cards (vertical list) ====== */
+  .device-list { padding: 0 20px; display: flex; flex-direction: column; gap: 10px; }
+  .device-card {
+    background: var(--white); border-radius: var(--radius-md);
+    padding: 14px;
+    display: flex; align-items: center; gap: 14px;
+    cursor: pointer; box-shadow: var(--shadow-sm);
+    transition: transform 0.15s;
+  }
+  .device-card:active { transform: scale(0.98); }
+  .dc-thumb {
+    width: 56px; height: 56px; border-radius: var(--radius-sm);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .dc-thumb svg { width: 24px; height: 24px; color: rgba(255,255,255,0.6); }
+  .dc-info { flex: 1; min-width: 0; }
+  .dc-name { font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 2px; }
+  .dc-room { font-size: 12px; color: var(--gray-600); }
+  .dc-status { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+  .dc-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dc-dot.online { background: var(--green); }
+  .dc-dot.offline { background: var(--gray-400); }
+  .dc-text { font-size: 11px; font-weight: 600; color: var(--gray-600); }
+
+  /* ====== Bottom Safe ====== */
+  .bottom-safe { height: 40px; }
+
+  /* ====== Transitions / Misc ====== */
+  .fade-in { animation: fadeIn 0.5s ease-out both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .stagger-1 { animation-delay: 0.05s; }
+  .stagger-2 { animation-delay: 0.1s; }
+  .stagger-3 { animation-delay: 0.15s; }
+  .stagger-4 { animation-delay: 0.2s; }
+  .stagger-5 { animation-delay: 0.25s; }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+
+  <!-- Top Bar -->
+  <div class="top-bar fade-in">
+    <div class="tb-user">
+      <div class="tb-avatar">J</div>
+      <div>
+        <div class="tb-greeting">Good morning</div>
+        <div class="tb-name">James</div>
+      </div>
+    </div>
+    <div class="tb-actions">
+      <button class="tb-btn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="tb-badge">3</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Story Row -->
+  <div class="story-row fade-in stagger-1">
+    <div class="story-item">
+      <div class="story-ring live">
+        <div class="story-inner" style="background:linear-gradient(135deg,#1A3A2A,#2D5A3D)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" style="width:30px;height:30px"><rect x="2" y="3" width="20" height="18" rx="4"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <span class="story-badge"></span>
+      </div>
+      <span class="story-label">Living Room</span>
+    </div>
+    <div class="story-item">
+      <div class="story-ring live">
+        <div class="story-inner" style="background:linear-gradient(135deg,#5A7A3A,#8AAA4D)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" style="width:30px;height:30px"><rect x="2" y="3" width="20" height="18" rx="4"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <span class="story-badge"></span>
+      </div>
+      <span class="story-label">Backyard</span>
+    </div>
+    <div class="story-item">
+      <div class="story-ring live">
+        <div class="story-inner" style="background:linear-gradient(135deg,#1A2A3D,#2D3D5A)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" style="width:30px;height:30px"><rect x="2" y="3" width="20" height="18" rx="4"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <span class="story-badge"></span>
+      </div>
+      <span class="story-label">Entrance</span>
+    </div>
+    <div class="story-item">
+      <div class="story-ring">
+        <div class="story-inner" style="background:linear-gradient(135deg,#3D2A1A,#5A3D2D)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" style="width:30px;height:30px"><rect x="2" y="3" width="20" height="18" rx="4"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+      </div>
+      <span class="story-label">Kitchen</span>
+    </div>
+    <div class="story-item">
+      <div class="story-ring add">
+        <div class="story-inner add-inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="add-icon" style="color:#9CA3AF"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+      </div>
+      <span class="story-label">Add</span>
+    </div>
+  </div>
+
+  <!-- Featured Card -->
+  <div class="featured fade-in stagger-2">
+    <div class="feat-bg"></div>
+    <div class="feat-overlay"></div>
+    <div class="feat-body">
+      <div class="feat-tag">Pet Activity</div>
+      <h2 class="feat-title">Max is playing with his new toy in the living room</h2>
+      <div class="feat-meta">
+        <span>Living Room Cam</span>
+        <span>·</span>
+        <span>Just now</span>
+      </div>
+    </div>
+    <div class="feat-dots">
+      <span class="feat-dot active"></span>
+      <span class="feat-dot"></span>
+      <span class="feat-dot"></span>
+    </div>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="quick-stats fade-in stagger-3">
+    <div class="qs-item">
+      <div class="qs-ring"><span class="qs-value">4</span></div>
+      <span class="qs-label">Cameras</span>
+    </div>
+    <div class="qs-item">
+      <div class="qs-ring"><span class="qs-value">3</span></div>
+      <span class="qs-label">Online</span>
+    </div>
+    <div class="qs-item">
+      <div class="qs-ring"><span class="qs-value">12</span></div>
+      <span class="qs-label">Events</span>
+    </div>
+    <div class="qs-item">
+      <div class="qs-ring"><span class="qs-value">7d</span></div>
+      <span class="qs-label">History</span>
+    </div>
+  </div>
+
+  <!-- Recent Moments -->
+  <div class="sect-label fade-in stagger-3">
+    <span>Recent Moments</span>
+    <a>See All</a>
+  </div>
+  <div class="moments-scroll fade-in stagger-4">
+    <div class="moment-card">
+      <div class="mc-media mc-bg-1">
+        <div class="mc-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2a7 7 0 0 1 7 7c0 2.5-1 5-3 7H8c-2-2-3-4.5-3-7a7 7 0 0 1 7-7z"/></svg>
+        </div>
+        <div class="mc-time">10m ago</div>
+      </div>
+      <div class="mc-body">
+        <div class="mc-pet">Max</div>
+        <div class="mc-desc">Running in the backyard chasing butterflies</div>
+      </div>
+    </div>
+    <div class="moment-card">
+      <div class="mc-media mc-bg-2">
+        <div class="mc-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#8E6FAD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        </div>
+        <div class="mc-time">28m ago</div>
+      </div>
+      <div class="mc-body">
+        <div class="mc-pet">Bella</div>
+        <div class="mc-desc">Napping peacefully on the couch</div>
+      </div>
+    </div>
+    <div class="moment-card">
+      <div class="mc-media mc-bg-3">
+        <div class="mc-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#34A853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="mc-time">1h ago</div>
+      </div>
+      <div class="mc-body">
+        <div class="mc-pet">Max</div>
+        <div class="mc-desc">Eating lunch by his food bowl</div>
+      </div>
+    </div>
+    <div class="moment-card">
+      <div class="mc-media mc-bg-4">
+        <div class="mc-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#EA4335" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        </div>
+        <div class="mc-time">2h ago</div>
+      </div>
+      <div class="mc-body">
+        <div class="mc-pet">Buddy</div>
+        <div class="mc-desc">Barking at the delivery person</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Devices -->
+  <div class="sect-label fade-in stagger-4">
+    <span>Devices</span>
+    <a>Manage</a>
+  </div>
+  <div class="device-list fade-in stagger-5">
+    <div class="device-card">
+      <div class="dc-thumb" style="background:linear-gradient(135deg,#1A3A2A,#2D5A3D)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="4"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <div class="dc-info">
+        <div class="dc-name">Living Room Cam</div>
+        <div class="dc-room">Max's favorite spot</div>
+      </div>
+      <div class="dc-status">
+        <span class="dc-dot online"></span>
+        <span class="dc-text">Live</span>
+      </div>
+    </div>
+    <div class="device-card">
+      <div class="dc-thumb" style="background:linear-gradient(135deg,#5A7A3A,#8AAA4D)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="4"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <div class="dc-info">
+        <div class="dc-name">Backyard Cam</div>
+        <div class="dc-room">Garden & play area</div>
+      </div>
+      <div class="dc-status">
+        <span class="dc-dot online"></span>
+        <span class="dc-text">Live</span>
+      </div>
+    </div>
+    <div class="device-card">
+      <div class="dc-thumb" style="background:linear-gradient(135deg,#1A2A3D,#2D3D5A)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="4"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <div class="dc-info">
+        <div class="dc-name">Entrance Cam</div>
+        <div class="dc-room">Front door monitoring</div>
+      </div>
+      <div class="dc-status">
+        <span class="dc-dot online"></span>
+        <span class="dc-text">Live</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bento Grid -->
+  <div class="sect-label fade-in stagger-5" style="margin-top:24px">
+    <span>Features</span>
+  </div>
+  <div class="bento fade-in stagger-5">
+    <div class="bento-item tall">
+      <div class="bi-inner bi-ai">
+        <div class="bi-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/><line x1="14.83" y1="9.17" x2="18.36" y2="5.64"/><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"/></svg>
+        </div>
+        <div class="bi-title">AI Guardian</div>
+        <div class="bi-desc">Smart alerts for bark, movement, and unusual activity</div>
+        <div class="bi-chip">Active</div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="bi-inner bi-play">
+        <div class="bi-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="bi-title">Playback</div>
+        <div class="bi-desc">Last 7 days</div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="bi-inner bi-settings">
+        <div class="bi-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </div>
+        <div class="bi-title">Settings</div>
+        <div class="bi-desc">4 devices</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-safe"></div>
+</div>
+</body>
+</html>

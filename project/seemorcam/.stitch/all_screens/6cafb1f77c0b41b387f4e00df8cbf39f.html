@@ -1,0 +1,260 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>seemorcam - Live Monitor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error-container": "#ffdad6",
+                    "outline-variant": "#dbc1b7",
+                    "error": "#ba1a1a",
+                    "on-surface": "#1f1b18",
+                    "on-error": "#ffffff",
+                    "surface-tint": "#98461e",
+                    "surface-bright": "#fff8f5",
+                    "secondary": "#0c696a",
+                    "secondary-fixed-dim": "#87d3d4",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed": "#a3f0f0",
+                    "tertiary-fixed": "#e5e2de",
+                    "surface-container": "#f5ece8",
+                    "surface-dim": "#e1d8d4",
+                    "on-primary-fixed": "#360f00",
+                    "surface-container-highest": "#eae1dc",
+                    "surface-container-high": "#efe6e2",
+                    "on-background": "#1f1b18",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#98461e",
+                    "surface-container-low": "#fbf2ed",
+                    "on-tertiary-fixed": "#1c1c1a",
+                    "inverse-on-surface": "#f8efea",
+                    "inverse-surface": "#34302d",
+                    "on-tertiary-container": "#3c3c39",
+                    "tertiary-fixed-dim": "#c8c6c2",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#ffdbcd",
+                    "primary-container": "#f28c5e",
+                    "on-secondary-container": "#186f70",
+                    "on-primary-fixed-variant": "#7a3008",
+                    "primary-fixed-dim": "#ffb596",
+                    "on-tertiary-fixed-variant": "#474744",
+                    "surface-variant": "#eae1dc",
+                    "tertiary-container": "#a8a6a3",
+                    "secondary-container": "#a3f0f0",
+                    "on-primary": "#ffffff",
+                    "outline": "#88726a",
+                    "on-error-container": "#93000a",
+                    "on-secondary-fixed-variant": "#004f50",
+                    "on-secondary-fixed": "#002020",
+                    "tertiary": "#5f5e5b",
+                    "on-primary-container": "#6b2600",
+                    "surface": "#fff8f5",
+                    "inverse-primary": "#ffb596",
+                    "on-surface-variant": "#55433b",
+                    "background": "#fff8f5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter-card": "16px",
+                    "stack-lg": "32px",
+                    "stack-md": "16px",
+                    "margin-page": "20px",
+                    "stack-sm": "8px"
+            },
+            "fontFamily": {
+                    "headline-xl": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "label-sm": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "headline-lg-mobile": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "body-md": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "headline-lg": [
+                            "Plus Jakarta Sans"
+                    ]
+            },
+            "fontSize": {
+                    "headline-xl": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+        },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md text-body-md overflow-x-hidden">
+<!-- Intent implies a task-focused screen (Playback/Monitor). Nav shell should be suppressed, but we include a back button in a custom header. -->
+<!-- Top App Bar (Custom for Task) -->
+<header class="flex justify-between items-center px-margin-page h-16 w-full bg-surface dark:bg-on-surface sticky top-0 z-40">
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity p-2 -ml-2 rounded-full focus:outline-none focus:ring-2 focus:ring-primary">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="flex items-center space-x-2">
+  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7OcxVw1V09UeCQwM-vvSAkDkc_1PW2ijDc-M5zAvHk0WDcI3mqNdZuITBoTwervwyO6eVw1sAatwYdt8MEQeV0_UQDAxw_iLJ3dmD9bK4WwgVR3G5qQStwcLF6ZId0tFMltMYhqWvvYh004LIz39m1Y4wilpyru_6LP2NPHy-yvRVMMb-wIo9lYBK4h5oIwLreLOttiPNnrItdD6NAjRaRuycwvoAdSnAEk3_jWkfRa4WTSMgXyBR" alt="seemorcam logo" class="h-8 w-8 object-contain">
+  <span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed-dim">seemorcam</span>
+</div>
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity p-2 -mr-2 rounded-full focus:outline-none focus:ring-2 focus:ring-primary">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</header>
+<main class="pb-24">
+<!-- Video Player Section -->
+<section class="w-full aspect-video bg-inverse-surface relative overflow-hidden shadow-md">
+<!-- Video Feed Placeholder -->
+<img alt="Live camera feed showing a grassy outdoor scene with animals." class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABWAtZdlFO_MH6I0LWM51wOulX15Ixgv4sJvKyAvrWS2OLDLyaAt54ooturcwLwq4vdCJW_CmPq15OwciB3bzpWZF3p_99GaQN3cr3HOI4kAPWuratzyYtWBkLr_qFYY9ukBShIGlEePe1El7KIQ5U_Pky9sxw9EqAPtKTRYKqpW80K6o_8q0QKZ67VVaQNrkK_4TJmGumZ3b1YhBD92oSX9NGcsXtmi7lnRwPlnUlAABkezD0LEg8oNzryJ42Uy--7Q">
+<!-- Glassmorphic Overlays -->
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/80 via-transparent to-transparent pointer-events-none"></div>
+<!-- Top Left Status -->
+<div class="absolute top-4 left-4 flex items-center space-x-2">
+<span class="flex h-3 w-3 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-error"></span>
+</span>
+<span class="text-on-error font-label-sm text-label-sm uppercase tracking-wider drop-shadow-md">Live</span>
+</div>
+<!-- Video Controls (Bottom) -->
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+<div class="flex space-x-4 text-on-error drop-shadow-md">
+<button class="p-2 bg-inverse-surface/40 backdrop-blur-md rounded-full hover:bg-inverse-surface/60 transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+</button>
+<button class="p-2 bg-inverse-surface/40 backdrop-blur-md rounded-full hover:bg-inverse-surface/60 transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">mic</span>
+</button>
+</div>
+<div class="flex space-x-4 text-on-error drop-shadow-md">
+<button class="p-2 bg-inverse-surface/40 backdrop-blur-md rounded-full hover:bg-inverse-surface/60 transition-colors">
+<span class="material-symbols-outlined">photo_camera</span>
+</button>
+<button class="p-2 bg-inverse-surface/40 backdrop-blur-md rounded-full hover:bg-inverse-surface/60 transition-colors">
+<span class="material-symbols-outlined">videocam</span>
+</button>
+<button class="p-2 bg-inverse-surface/40 backdrop-blur-md rounded-full hover:bg-inverse-surface/60 transition-colors">
+<span class="material-symbols-outlined">fullscreen</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Events and Timeline Section -->
+<section class="px-margin-page py-stack-md mt-4">
+<div class="flex justify-between items-center mb-stack-sm">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Recent Activity</h2>
+<button class="text-primary font-label-sm text-label-sm uppercase tracking-wider flex items-center">
+                    Filter <span class="material-symbols-outlined ml-1 text-[16px]">filter_list</span>
+</button>
+</div>
+<!-- Horizontal Timeline Scrubber (Conceptual) -->
+<div class="bg-surface-container-low rounded-xl p-4 shadow-sm mb-stack-lg border border-outline-variant/30 relative">
+<!-- Timeline Markers -->
+<div class="relative h-12 flex items-center">
+<div class="absolute left-0 right-0 h-1 bg-surface-variant rounded-full"></div>
+<!-- Event Dots -->
+<div class="absolute left-[15%] h-3 w-3 bg-primary rounded-full transform -translate-y-1/2 top-1/2 shadow-sm cursor-pointer hover:scale-125 transition-transform" title="10:45 AM - Motion Detected"></div>
+<div class="absolute left-[45%] h-3 w-3 bg-secondary rounded-full transform -translate-y-1/2 top-1/2 shadow-sm cursor-pointer hover:scale-125 transition-transform" title="12:30 PM - Pet Detected"></div>
+<div class="absolute left-[70%] h-4 w-4 bg-primary border-2 border-surface-container-low rounded-full transform -translate-y-1/2 top-1/2 shadow-md z-10" title="Current Playhead"></div> <!-- Active Playhead -->
+<div class="absolute left-[85%] h-3 w-3 bg-primary rounded-full transform -translate-y-1/2 top-1/2 shadow-sm cursor-pointer hover:scale-125 transition-transform" title="02:15 PM - Motion Detected"></div>
+<!-- Time Labels -->
+<span class="absolute left-0 bottom-[-20px] text-[10px] text-on-surface-variant">08:00</span>
+<span class="absolute left-1/2 transform -translate-x-1/2 bottom-[-20px] text-[10px] text-on-surface-variant">12:00</span>
+<span class="absolute right-0 bottom-[-20px] text-[10px] text-on-surface-variant">16:00</span>
+</div>
+</div>
+<!-- Event Cards (Vertical Stack) -->
+<div class="space-y-stack-sm">
+<!-- Active Event Card -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-l-4 border-primary flex space-x-4 items-center">
+<div class="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="A small, soft-focus thumbnail image showing a blurred outdoor scene with warm sunlight hitting tall grass. The aesthetic is clean and bright, acting as a functional UI element for a timeline event preview. The color palette emphasizes natural greens and warm golds." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQRDwjPNBVDQubJye6UH2pvEtCBhaxtdT6EV-psRUzFkM7NhreytxkB-Jhb6Tq0qtFLncvcSaKwU-ulmZF-LU7i4kVRFzMbPN663HRl7KMpi66lLOxEJE2Ux28wlwaCGfZlbvP7P9_ii8vqwQbz9X3GIVfIFNCQmWh2_rgpm90097WrLZK2aiNN02FzAa2sse8NgOvAWyepKhadCUFDoe4BzzwgquGfipKrZ6YT8Zx1PknqXc2iwNJ">
+<div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<h3 class="font-label-sm text-label-sm text-on-surface">Motion Detected</h3>
+<span class="text-[10px] text-on-surface-variant">2 mins ago</span>
+</div>
+<p class="text-sm text-on-surface-variant mt-1 line-clamp-1">Activity in backyard zone.</p>
+<div class="mt-2 flex space-x-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-primary-container text-on-primary-container">
+                                Human
+                            </span>
+</div>
+</div>
+</div>
+<!-- Secondary Event Card -->
+<div class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/30 flex space-x-4 items-center opacity-80">
+<div class="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-outline">pets</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<h3 class="font-label-sm text-label-sm text-on-surface">Pet Detected</h3>
+<span class="text-[10px] text-on-surface-variant">12:30 PM</span>
+</div>
+<p class="text-sm text-on-surface-variant mt-1 line-clamp-1">Dog spotted near fence.</p>
+<div class="mt-2 flex space-x-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-secondary-container text-on-secondary-container">
+                                Animal
+                            </span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+
+</body></html>

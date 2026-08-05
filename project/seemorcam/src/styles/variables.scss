@@ -1,0 +1,59 @@
+/* ===== SeemorCam Design Tokens ===== */
+/* UI-UX-Pro-Max: Organic Biophilic + Pet Tech App palette */
+
+// Colors — Pet Tech App
+$primary-color: #F97316;
+$primary-hover: #FB923C;
+$primary-active: #EA580C;
+$primary-light: rgba(249, 115, 22, 0.1);
+$primary-bg: #FFF7ED;
+
+$accent-color: #2563EB;
+$accent-light: rgba(37, 99, 235, 0.1);
+
+$success-color: #22C55E;
+$warning-color: #F59E0B;
+$danger-color: #DC2626;
+$info-color: #3B82F6;
+
+$text-primary: #9A3412;
+$text-regular: #92400E;
+$text-secondary: #A8A29E;
+$text-placeholder: #D6D3D1;
+$text-disabled: #E7E5E4;
+
+$bg-color: #FFFFFF;
+$bg-page: #FFF7ED;
+$bg-card: #FFFFFF;
+$bg-hover: #FED7AA;
+$bg-disabled: #F5F5F4;
+
+$border-color: #FED7AA;
+$border-light: #FFEDD5;
+
+// Gradient presets
+$gradient-card: linear-gradient(160deg, #F97316 0%, #FB923C 50%, #FDBA74 100%);
+$gradient-cool: linear-gradient(160deg, #2563EB 0%, #3B82F6 50%, #60A5FA 100%);
+$gradient-warm: linear-gradient(160deg, #EA580C 0%, #F97316 50%, #FB923C 100%);
+
+// Shadows — natural, soft
+$shadow-sm: 0 1px 3px rgba(249, 115, 22, 0.06);
+$shadow-md: 0 4px 16px rgba(249, 115, 22, 0.10);
+$shadow-lg: 0 8px 28px rgba(249, 115, 22, 0.12);
+$shadow-float: 0 16px 48px rgba(249, 115, 22, 0.14);
+
+// Radius — Organic Biophilic: 16-24px range
+$radius-sm: 14px;
+$radius-md: 18px;
+$radius-lg: 22px;
+$radius-xl: 28px;
+$radius-full: 100px;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 20px;
+$spacing-2xl: 24px;
+$spacing-3xl: 32px;

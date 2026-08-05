@@ -280,7 +280,7 @@ const router = createRouter({
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title ? `${to.meta.title} - CareCam Pro` : 'CareCam Pro'
+  document.title = to.meta.title ? `${to.meta.title}` : 'PetCam'
   next()
 })
 

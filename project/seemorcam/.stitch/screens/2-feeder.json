@@ -1,0 +1,250 @@
+{
+  "screenshot": {
+    "name": "projects/2518124356685777068/files/17178628156725019183",
+    "downloadUrl": "https://lh3.googleusercontent.com/aida/AP1WRLtlYcMWeMHlDQrVDN0f_cZHcnyTC47dpbMsvfoR2kQw4-q1yVvUkmhesadoPzyE4Hbeq2J1R9nggZdRrxe7BRFRZMlg8wp5S0MjaDYTPVkZlrqXNvOhZOUVdHCF5PDRNYjwuUm1RvFWTAUnBei4YYPmx4XDb4iEM6FJNuxDblXGC_wnfqZ2SULC-02xa24XkuiYxJlQpa7-P4whBRaB7VI4Tt41iO6y3IvgapNXWUlokbJMy4Rc48Fax_o"
+  },
+  "htmlCode": {
+    "name": "projects/2518124356685777068/files/727337943739489756",
+    "downloadUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzAwMDY1ODQ3YTE2YjE1ODUwOTM0ZjE2MjJkMDFjODI2EgsSBxD4h7qBmwsYAZIBIwoKcHJvamVjdF9pZBIVQhMyNTE4MTI0MzU2Njg1Nzc3MDY4&filename=&opi=89354086",
+    "mimeType": "text/html"
+  },
+  "id": "8f676928867b4722a7e0ab0886250e50",
+  "generatedBy": "figaro_agent",
+  "width": "780",
+  "height": "1994",
+  "title": "喂食器控制面板 (正式版)",
+  "prompt": "Create a comprehensive Kitchen Feeder Control Panel page. \nTop section: A navigation bar with a back button and settings icon. \nHero section: Display the 3D pet feeder model {{DATA:IMAGE:IMAGE_14}} prominently on the Kinship & Care surface background (#fff8f5). Include a status indicator (e.g., 'Online' with a green dot).\nInformation section: Show 'Next Feed' details (e.g., '5 Portions / 18:00').\nControl cards section (using the design system's card style):\n1. 'Manual Feeding' card with an arrow for quick action.\n2. 'Scheduled Feeding' card showing current status (e.g., '3 times daily').\n3. 'Feeding Speed' section: Instead of a list item, include a horizontal slider component for direct adjustment on this page, as requested in previous sessions.\nVisual style: Use Plus Jakarta Sans, ROUND_EIGHT (16px corners for cards), and the warm brand palette. Ensure plenty of whitespace and a clean, high-fidelity mobile app aesthetic.\n## Available Images\nYou MUST include the following images in this design. You must reference them\nby putting their exact placeholder IDs in `src` attributes or CSS\n`background-image` rules. Do NOT use external URLs or generate new\nplaceholders. Preserve these IDs exactly as written. Read each image's\nDescription to understand its subject, intended section, and visual role.\n\n- {{DATA:IMAGE:IMAGE_14}}\n  Description: High-quality 3D product render of a minimalist, modern smart pet feeder, sleek white matte finish, circular blue LED status button, elegant curved form factor. The product must be isolated on a PURE SOLID LIGHT BEIGE background (hex code #fff8f5) to match the Kinship & Care surface color perfectly. Professional studio lighting, soft shadows, high resolution, no checkered patterns, no grids. Same style as {{DATA:IMAGE:IMAGE_13}}.\n  Dimensions: 1024x1024\n  Aspect Ratio: 1.00\n",
+  "name": "projects/2518124356685777068/screens/8f676928867b4722a7e0ab0886250e50",
+  "theme": {
+    "colorMode": "LIGHT",
+    "font": "PLUS_JAKARTA_SANS",
+    "roundness": "ROUND_EIGHT",
+    "customColor": "#f28c5e",
+    "headlineFont": "PLUS_JAKARTA_SANS",
+    "bodyFont": "PLUS_JAKARTA_SANS",
+    "labelFont": "PLUS_JAKARTA_SANS",
+    "namedColors": {
+      "surface": "#fff8f5",
+      "inverse_surface": "#34302d",
+      "on_error": "#ffffff",
+      "tertiary_container": "#a8a6a3",
+      "on_primary": "#ffffff",
+      "surface_container_highest": "#eae1dc",
+      "on_surface": "#1f1b18",
+      "on_tertiary_fixed": "#1c1c1a",
+      "surface_variant": "#eae1dc",
+      "surface_bright": "#fff8f5",
+      "primary_fixed_dim": "#ffb596",
+      "primary": "#98461e",
+      "outline": "#88726a",
+      "secondary_fixed": "#a3f0f0",
+      "on_secondary_container": "#186f70",
+      "on_background": "#1f1b18",
+      "error": "#ba1a1a",
+      "on_primary_container": "#6b2600",
+      "on_surface_variant": "#55433b",
+      "secondary_container": "#a3f0f0",
+      "surface_tint": "#98461e",
+      "surface_container_low": "#fbf2ed",
+      "outline_variant": "#dbc1b7",
+      "on_tertiary": "#ffffff",
+      "inverse_primary": "#ffb596",
+      "primary_container": "#f28c5e",
+      "on_tertiary_container": "#3c3c39",
+      "on_secondary": "#ffffff",
+      "on_error_container": "#93000a",
+      "on_secondary_fixed_variant": "#004f50",
+      "background": "#fff8f5",
+      "inverse_on_surface": "#f8efea",
+      "primary_fixed": "#ffdbcd",
+      "surface_dim": "#e1d8d4",
+      "tertiary_fixed": "#e5e2de",
+      "on_tertiary_fixed_variant": "#474744",
+      "secondary_fixed_dim": "#87d3d4",
+      "on_secondary_fixed": "#002020",
+      "surface_container_high": "#efe6e2",
+      "tertiary_fixed_dim": "#c8c6c2",
+      "surface_container_lowest": "#ffffff",
+      "on_primary_fixed": "#360f00",
+      "surface_container": "#f5ece8",
+      "on_primary_fixed_variant": "#7a3008",
+      "tertiary": "#5f5e5b",
+      "secondary": "#0c696a",
+      "error_container": "#ffdad6"
+    },
+    "colorVariant": "FIDELITY",
+    "overridePrimaryColor": "#f28c5e",
+    "overrideSecondaryColor": "#4d9a9b",
+    "overrideTertiaryColor": "#f9f6f2",
+    "overrideNeutralColor": "#4a4542",
+    "spacingScale": 2,
+    "typography": {
+      "headline-xl": {
+        "fontFamily": "Plus Jakarta Sans",
+        "fontSize": "32px",
+        "fontWeight": "700",
+        "lineHeight": "40px",
+        "letterSpacing": "-0.02em"
+      },
+      "label-sm": {
+        "fontFamily": "Plus Jakarta Sans",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "lineHeight": "16px",
+        "letterSpacing": "0.05em"
+      },
+      "headline-lg-mobile": {
+        "fontFamily": "Plus Jakarta Sans",
+        "fontSize": "20px",
+        "fontWeight": "600",
+        "lineHeight": "28px"
+      },
+      "headline-lg": {
+        "fontFamily": "Plus Jakarta Sans",
+        "fontSize": "24px",
+        "fontWeight": "600",
+        "lineHeight": "32px"
+      },
+      "body-md": {
+        "fontFamily": "Plus Jakarta Sans",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "24px"
+      }
+    },
+    "spacing": {
+      "stack-lg": "32px",
+      "stack-md": "16px",
+      "gutter-card": "16px",
+      "margin-page": "20px",
+      "stack-sm": "8px"
+    },
+    "headlineFontFamily": "Plus Jakarta Sans",
+    "bodyFontFamily": "Plus Jakarta Sans",
+    "labelFontFamily": "Plus Jakarta Sans"
+  },
+  "deviceType": "MOBILE",
+  "screenType": "DESIGN",
+  "screenMetadata": {
+    "agentType": "PRO_AGENT",
+    "status": "COMPLETE",
+    "displayMode": "HTML"
+  },
+  "designSystem": {
+    "name": "assets/75aa1933ff054064a798d1b2ac06ed4f",
+    "designSystem": {
+      "displayName": "Kinship & Care",
+      "styleGuidelines": "## Brand & Style\nThe design system is centered on the concept of the \"Pet Guardian\"—a role that combines the vigilance of technology with the warmth of a caregiver. The brand personality is **nurturing, responsive, and sophisticated**. It aims to reduce the anxiety of pet owners by providing a UI that feels human and soft, rather than cold or industrial.\n\nThe visual style is a blend of **Minimalism** and **Glassmorphism**. It utilizes heavy whitespace to create a sense of calm, paired with soft, translucent layers for secondary information to maintain focus on the live video feed and pet interactions. The aesthetic is premium and \"lifestyle-oriented,\" moving away from the utilitarian look of standard security apps toward a domestic, friendly experience.\n\n## Layout & Spacing\nThe layout follows a **fluid grid** model with a focus on vertical stacking. Elements are contained within rounded cards that float against the soft background.\n\n- **Mobile:** A single-column layout with 20px side margins. Cards span the full width of the safe area.\n- **Tablet/Desktop:** A multi-column masonry-style grid for device management, where camera feeds occupy a 2-column span and secondary stats occupy 1 column.\n- **Safe Areas:** Generous padding (32px) is used between functional groups (e.g., separating the video player from the interaction controls) to prevent accidental taps.\n\n## Elevation & Depth\nThis design system uses **Tonal Layers** and **Ambient Shadows** to define hierarchy. \n- **Level 0 (Background):** The soft cream base layer.\n- **Level 1 (Cards):** Pure white cards with a very soft, diffused shadow (10% opacity, 20px blur) to appear \"lifted\" and touchable.\n- **Level 2 (Overlays):** Glassmorphic panels with a 20px backdrop blur and 60% opacity are used for in-video controls (like pan/tilt or record buttons) to ensure the user never loses sight of their pet.\n- **Outlines:** Low-contrast 1px borders in a slightly darker cream tone are used instead of shadows for inactive states or secondary list items.\n\n## Components\n- **Primary Button:** High-saturation orange with white text. High-contrast and rounded.\n- **Device Cards:** Feature a large-radius image top, with a tonal \"status bar\" at the bottom (Teal for online, Grey for offline).\n- **Timeline Scrubber:** A custom component with thick, rounded vertical bars for \"motion events,\" using the primary orange to highlight significant activity.\n- **Action Chips:** Used for filtering event types (e.g., \"Human Detected\", \"Dog Barking\"). These use a pill-shape with a secondary teal background when active.\n- **Input Fields:** Soft-filled (Level 0 background color) with no border until focused, then gaining a 2px primary orange stroke.\n- **Pet Profiles:** Circular avatars with a \"status ring\" indicating the pet's last detected activity time.",
+      "theme": {
+        "colorMode": "LIGHT",
+        "font": "PLUS_JAKARTA_SANS",
+        "roundness": "ROUND_EIGHT",
+        "customColor": "#f28c5e",
+        "headlineFont": "PLUS_JAKARTA_SANS",
+        "bodyFont": "PLUS_JAKARTA_SANS",
+        "labelFont": "PLUS_JAKARTA_SANS",
+        "namedColors": {
+          "on_surface_variant": "#55433b",
+          "outline_variant": "#dbc1b7",
+          "inverse_primary": "#ffb596",
+          "on_primary_fixed_variant": "#7a3008",
+          "on_tertiary_fixed_variant": "#474744",
+          "surface_container_low": "#fbf2ed",
+          "background": "#fff8f5",
+          "on_tertiary_container": "#3c3c39",
+          "surface_container_high": "#efe6e2",
+          "surface_container_lowest": "#ffffff",
+          "on_secondary_fixed_variant": "#004f50",
+          "on_primary_fixed": "#360f00",
+          "surface_bright": "#fff8f5",
+          "on_background": "#1f1b18",
+          "secondary_fixed_dim": "#87d3d4",
+          "primary": "#98461e",
+          "error": "#ba1a1a",
+          "tertiary_container": "#a8a6a3",
+          "outline": "#88726a",
+          "primary_fixed_dim": "#ffb596",
+          "surface": "#fff8f5",
+          "secondary_container": "#a3f0f0",
+          "on_tertiary_fixed": "#1c1c1a",
+          "tertiary": "#5f5e5b",
+          "error_container": "#ffdad6",
+          "on_secondary_container": "#186f70",
+          "primary_fixed": "#ffdbcd",
+          "surface_container_highest": "#eae1dc",
+          "secondary": "#0c696a",
+          "on_error": "#ffffff",
+          "inverse_surface": "#34302d",
+          "on_primary_container": "#6b2600",
+          "on_surface": "#1f1b18",
+          "on_primary": "#ffffff",
+          "tertiary_fixed_dim": "#c8c6c2",
+          "surface_variant": "#eae1dc",
+          "on_secondary_fixed": "#002020",
+          "surface_container": "#f5ece8",
+          "tertiary_fixed": "#e5e2de",
+          "surface_dim": "#e1d8d4",
+          "inverse_on_surface": "#f8efea",
+          "primary_container": "#f28c5e",
+          "secondary_fixed": "#a3f0f0",
+          "on_error_container": "#93000a",
+          "surface_tint": "#98461e",
+          "on_tertiary": "#ffffff",
+          "on_secondary": "#ffffff"
+        },
+        "designMd": "---\nname: Kinship & Care\ncolors:\n  surface: '#fff8f5'\n  surface-dim: '#e1d8d4'\n  surface-bright: '#fff8f5'\n  surface-container-lowest: '#ffffff'\n  surface-container-low: '#fbf2ed'\n  surface-container: '#f5ece8'\n  surface-container-high: '#efe6e2'\n  surface-container-highest: '#eae1dc'\n  on-surface: '#1f1b18'\n  on-surface-variant: '#55433b'\n  inverse-surface: '#34302d'\n  inverse-on-surface: '#f8efea'\n  outline: '#88726a'\n  outline-variant: '#dbc1b7'\n  surface-tint: '#98461e'\n  primary: '#98461e'\n  on-primary: '#ffffff'\n  primary-container: '#f28c5e'\n  on-primary-container: '#6b2600'\n  inverse-primary: '#ffb596'\n  secondary: '#0c696a'\n  on-secondary: '#ffffff'\n  secondary-container: '#a3f0f0'\n  on-secondary-container: '#186f70'\n  tertiary: '#5f5e5b'\n  on-tertiary: '#ffffff'\n  tertiary-container: '#a8a6a3'\n  on-tertiary-container: '#3c3c39'\n  error: '#ba1a1a'\n  on-error: '#ffffff'\n  error-container: '#ffdad6'\n  on-error-container: '#93000a'\n  primary-fixed: '#ffdbcd'\n  primary-fixed-dim: '#ffb596'\n  on-primary-fixed: '#360f00'\n  on-primary-fixed-variant: '#7a3008'\n  secondary-fixed: '#a3f0f0'\n  secondary-fixed-dim: '#87d3d4'\n  on-secondary-fixed: '#002020'\n  on-secondary-fixed-variant: '#004f50'\n  tertiary-fixed: '#e5e2de'\n  tertiary-fixed-dim: '#c8c6c2'\n  on-tertiary-fixed: '#1c1c1a'\n  on-tertiary-fixed-variant: '#474744'\n  background: '#fff8f5'\n  on-background: '#1f1b18'\n  surface-variant: '#eae1dc'\ntypography:\n  headline-xl:\n    fontFamily: Plus Jakarta Sans\n    fontSize: 32px\n    fontWeight: '700'\n    lineHeight: 40px\n    letterSpacing: -0.02em\n  headline-lg:\n    fontFamily: Plus Jakarta Sans\n    fontSize: 24px\n    fontWeight: '600'\n    lineHeight: 32px\n  headline-lg-mobile:\n    fontFamily: Plus Jakarta Sans\n    fontSize: 20px\n    fontWeight: '600'\n    lineHeight: 28px\n  body-md:\n    fontFamily: Plus Jakarta Sans\n    fontSize: 16px\n    fontWeight: '400'\n    lineHeight: 24px\n  label-sm:\n    fontFamily: Plus Jakarta Sans\n    fontSize: 12px\n    fontWeight: '600'\n    lineHeight: 16px\n    letterSpacing: 0.05em\nrounded:\n  sm: 0.25rem\n  DEFAULT: 0.5rem\n  md: 0.75rem\n  lg: 1rem\n  xl: 1.5rem\n  full: 9999px\nspacing:\n  margin-page: 20px\n  gutter-card: 16px\n  stack-sm: 8px\n  stack-md: 16px\n  stack-lg: 32px\n---\n\n## Brand & Style\nThe design system is centered on the concept of the \"Pet Guardian\"—a role that combines the vigilance of technology with the warmth of a caregiver. The brand personality is **nurturing, responsive, and sophisticated**. It aims to reduce the anxiety of pet owners by providing a UI that feels human and soft, rather than cold or industrial.\n\nThe visual style is a blend of **Minimalism** and **Glassmorphism**. It utilizes heavy whitespace to create a sense of calm, paired with soft, translucent layers for secondary information to maintain focus on the live video feed and pet interactions. The aesthetic is premium and \"lifestyle-oriented,\" moving away from the utilitarian look of standard security apps toward a domestic, friendly experience.\n\n## Colors\nThe palette is inspired by natural tones and domestic warmth. \n- **Primary (Guardian Orange):** A soft, energetic orange used for calls-to-action and critical alerts, evoking the warmth of a sunlit home.\n- **Secondary (Calm Teal):** A muted teal used for \"Safe\" states and health-related notifications, providing a cooling balance to the orange.\n- **Backgrounds:** We avoid pure white in favor of a soft cream (#F9F6F2), which reduces eye strain during night-time checking of cameras.\n- **Neutrals:** Deep charcoals with a hint of brown are used for text to maintain high legibility while appearing softer than true black.\n\n## Typography\nThis design system utilizes **Plus Jakarta Sans** for its modern, friendly, and geometric characteristics. The font's open apertures and soft curves complement the \"pet-friendly\" brand narrative.\n\n- **Hierarchy:** We use bold weights for headlines to create a clear structure in data-heavy views like event logs.\n- **Scale:** On mobile devices, headlines scale down slightly to ensure the video player and control cards remain the focal point.\n- **Legibility:** All body text maintains a minimum line height of 1.5x to ensure ease of reading for long-form help documents or incident reports.\n\n## Layout & Spacing\nThe layout follows a **fluid grid** model with a focus on vertical stacking. Elements are contained within rounded cards that float against the soft background.\n\n- **Mobile:** A single-column layout with 20px side margins. Cards span the full width of the safe area.\n- **Tablet/Desktop:** A multi-column masonry-style grid for device management, where camera feeds occupy a 2-column span and secondary stats occupy 1 column.\n- **Safe Areas:** Generous padding (32px) is used between functional groups (e.g., separating the video player from the interaction controls) to prevent accidental taps.\n\n## Elevation & Depth\nThis design system uses **Tonal Layers** and **Ambient Shadows** to define hierarchy. \n- **Level 0 (Background):** The soft cream base layer.\n- **Level 1 (Cards):** Pure white cards with a very soft, diffused shadow (10% opacity, 20px blur) to appear \"lifted\" and touchable.\n- **Level 2 (Overlays):** Glassmorphic panels with a 20px backdrop blur and 60% opacity are used for in-video controls (like pan/tilt or record buttons) to ensure the user never loses sight of their pet.\n- **Outlines:** Low-contrast 1px borders in a slightly darker cream tone are used instead of shadows for inactive states or secondary list items.\n\n## Shapes\nThe shape language is defined by \"Organic Geometry.\" \n- **Main Containers:** Use a 16px (rounded-lg) corner radius to evoke a sense of safety and friendliness.\n- **Interactive Elements:** Buttons and input fields use a 12px radius. \n- **Media:** Live video feeds and pet snapshots use a slightly larger 24px (rounded-xl) radius to frame the content as a \"window\" into the home.\n- **Iconography:** System icons should have rounded caps and corners to match the typeface.\n\n## Components\n- **Primary Button:** High-saturation orange with white text. High-contrast and rounded.\n- **Device Cards:** Feature a large-radius image top, with a tonal \"status bar\" at the bottom (Teal for online, Grey for offline).\n- **Timeline Scrubber:** A custom component with thick, rounded vertical bars for \"motion events,\" using the primary orange to highlight significant activity.\n- **Action Chips:** Used for filtering event types (e.g., \"Human Detected\", \"Dog Barking\"). These use a pill-shape with a secondary teal background when active.\n- **Input Fields:** Soft-filled (Level 0 background color) with no border until focused, then gaining a 2px primary orange stroke.\n- **Pet Profiles:** Circular avatars with a \"status ring\" indicating the pet's last detected activity time.",
+        "colorVariant": "FIDELITY",
+        "overridePrimaryColor": "#f28c5e",
+        "overrideSecondaryColor": "#4d9a9b",
+        "overrideTertiaryColor": "#f9f6f2",
+        "overrideNeutralColor": "#4a4542",
+        "spacingScale": 2,
+        "typography": {
+          "headline-lg-mobile": {
+            "fontFamily": "Plus Jakarta Sans",
+            "fontSize": "20px",
+            "fontWeight": "600",
+            "lineHeight": "28px"
+          },
+          "headline-xl": {
+            "fontFamily": "Plus Jakarta Sans",
+            "fontSize": "32px",
+            "fontWeight": "700",
+            "lineHeight": "40px",
+            "letterSpacing": "-0.02em"
+          },
+          "body-md": {
+            "fontFamily": "Plus Jakarta Sans",
+            "fontSize": "16px",
+            "fontWeight": "400",
+            "lineHeight": "24px"
+          },
+          "headline-lg": {
+            "fontFamily": "Plus Jakarta Sans",
+            "fontSize": "24px",
+            "fontWeight": "600",
+            "lineHeight": "32px"
+          },
+          "label-sm": {
+            "fontFamily": "Plus Jakarta Sans",
+            "fontSize": "12px",
+            "fontWeight": "600",
+            "lineHeight": "16px",
+            "letterSpacing": "0.05em"
+          }
+        },
+        "spacing": {
+          "stack-lg": "32px",
+          "stack-sm": "8px",
+          "gutter-card": "16px",
+          "stack-md": "16px",
+          "margin-page": "20px"
+        },
+        "headlineFontFamily": "Plus Jakarta Sans",
+        "bodyFontFamily": "Plus Jakarta Sans",
+        "labelFontFamily": "Plus Jakarta Sans"
+      }
+    },
+    "version": "1"
+  }
+}

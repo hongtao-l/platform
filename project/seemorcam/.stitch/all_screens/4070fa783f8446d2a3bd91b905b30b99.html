@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Reset Password</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#1f1b18",
+                        "primary-fixed": "#ffdbcd",
+                        "surface-bright": "#fff8f5",
+                        "on-primary-fixed-variant": "#7a3008",
+                        "on-primary-fixed": "#360f00",
+                        "primary": "#98461e",
+                        "secondary": "#0c696a",
+                        "tertiary-fixed-dim": "#c8c6c2",
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#f8efea",
+                        "tertiary-fixed": "#e5e2de",
+                        "secondary-fixed-dim": "#87d3d4",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#5f5e5b",
+                        "background": "#fff8f5",
+                        "on-secondary-container": "#186f70",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#e1d8d4",
+                        "tertiary-container": "#a8a6a3",
+                        "on-background": "#1f1b18",
+                        "secondary-container": "#a3f0f0",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#6b2600",
+                        "inverse-primary": "#ffb596",
+                        "on-tertiary-fixed-variant": "#474744",
+                        "outline": "#88726a",
+                        "surface-variant": "#eae1dc",
+                        "primary-fixed-dim": "#ffb596",
+                        "on-tertiary-fixed": "#1c1c1a",
+                        "surface-container": "#f5ece8",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#004f50",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "outline-variant": "#dbc1b7",
+                        "secondary-fixed": "#a3f0f0",
+                        "surface-container-highest": "#eae1dc",
+                        "inverse-surface": "#34302d",
+                        "surface-container-low": "#fbf2ed",
+                        "on-error-container": "#93000a",
+                        "surface": "#fff8f5",
+                        "on-surface-variant": "#55433b",
+                        "on-tertiary-container": "#3c3c39",
+                        "primary-container": "#f28c5e",
+                        "surface-container-high": "#efe6e2",
+                        "surface-tint": "#98461e",
+                        "on-secondary-fixed": "#002020"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "16px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "32px",
+                        "stack-md": "16px",
+                        "gutter-card": "16px",
+                        "margin-page": "20px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .code-input:focus {
+            border-color: #98461e;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(152, 70, 30, 0.2);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col items-center">
+<!-- Mobile Container -->
+<div class="w-full max-w-md min-h-screen flex flex-col relative overflow-hidden bg-surface-container-lowest md:rounded-[32px] md:shadow-[0_20px_50px_rgba(0,0,0,0.05)] md:my-8">
+<!-- Header area with decorative soft gradient -->
+<div class="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-surface-container-low to-transparent z-0"></div>
+<!-- Top App Bar -->
+<header class="w-full h-16 flex items-center justify-between px-margin-page relative z-10 pt-4 pb-2">
+<button aria-label="Go back" class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-highest/50 backdrop-blur-md text-on-surface transition-transform active:scale-90">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<!-- Spacer to push button to left, title is handled in content -->
+<div class="flex-1"></div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col px-margin-page py-stack-lg relative z-10 w-full overflow-y-auto">
+<!-- Title & Subtitle -->
+<div class="mb-stack-lg animate-[slideDown_0.3s_ease-out]">
+<h1 class="font-headline-xl text-headline-xl text-on-surface mb-stack-sm">Reset Password</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[280px]">
+                    Enter the 6-digit code sent to your email and set your new password.
+                </p>
+</div>
+<form class="flex flex-col gap-stack-lg w-full flex-1">
+<!-- Verification Code Section -->
+<div class="flex flex-col gap-stack-sm">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Verification Code</label>
+<div class="flex justify-between gap-2 w-full" id="otp-container">
+<input class="code-input w-12 h-14 rounded-xl bg-surface-container-highest border border-transparent text-center font-headline-lg text-headline-lg text-on-surface transition-all focus:bg-surface-container-lowest" inputmode="numeric" maxlength="1" placeholder="-" type="text"/>
+<input class="code-input w-12 h-14 rounded-xl bg-surface-container-highest border border-transparent text-center font-headline-lg text-headline-lg text-on-surface transition-all focus:bg-surface-container-lowest" inputmode="numeric" maxlength="1" placeholder="-" type="text"/>
+<input class="code-input w-12 h-14 rounded-xl bg-surface-container-highest border border-transparent text-center font-headline-lg text-headline-lg text-on-surface transition-all focus:bg-surface-container-lowest" inputmode="numeric" maxlength="1" placeholder="-" type="text"/>
+<input class="code-input w-12 h-14 rounded-xl bg-surface-container-highest border border-transparent text-center font-headline-lg text-headline-lg text-on-surface transition-all focus:bg-surface-container-lowest" inputmode="numeric" maxlength="1" placeholder="-" type="text"/>
+<input class="code-input w-12 h-14 rounded-xl bg-surface-container-highest border border-transparent text-center font-headline-lg text-headline-lg text-on-surface transition-all focus:bg-surface-container-lowest" inputmode="numeric" maxlength="1" placeholder="-" type="text"/>
+<input class="code-input w-12 h-14 rounded-xl bg-surface-container-highest border border-transparent text-center font-headline-lg text-headline-lg text-on-surface transition-all focus:bg-surface-container-lowest" inputmode="numeric" maxlength="1" placeholder="-" type="text"/>
+</div>
+<div class="flex justify-between items-center mt-2 px-1">
+<span class="font-body-md text-[14px] text-on-surface-variant">Didn't receive it?</span>
+<button class="font-label-sm text-[14px] text-tertiary-container font-semibold cursor-not-allowed" disabled="" id="resend-btn" type="button">
+                            Resend Code (0:59)
+                        </button>
+</div>
+</div>
+<!-- Password Inputs Section -->
+<div class="flex flex-col gap-stack-md mt-4 bg-surface p-gutter-card rounded-[24px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-surface-variant/30">
+<!-- New Password -->
+<div class="flex flex-col gap-1 w-full">
+<label class="font-label-sm text-label-sm text-on-surface-variant pl-1" for="new-password">New Password</label>
+<div class="relative w-full group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant/60 group-focus-within:text-primary transition-colors">lock</span>
+</div>
+<input class="w-full h-14 bg-surface-container-highest border border-transparent rounded-xl pl-12 pr-12 font-body-md text-body-md text-on-surface placeholder-on-surface-variant/40 focus:bg-surface-container-lowest focus:border-primary focus:ring-0 transition-all" id="new-password" placeholder="Enter new password" type="password"/>
+<button aria-label="Toggle password visibility" class="absolute inset-y-0 right-0 pr-4 flex items-center text-on-surface-variant/60 hover:text-on-surface" onclick="togglePassword('new-password', 'icon-new-password')" type="button">
+<span class="material-symbols-outlined" id="icon-new-password">visibility_off</span>
+</button>
+</div>
+</div>
+<!-- Confirm Password -->
+<div class="flex flex-col gap-1 w-full mt-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant pl-1" for="confirm-password">Confirm New Password</label>
+<div class="relative w-full group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant/60 group-focus-within:text-primary transition-colors">lock_reset</span>
+</div>
+<input class="w-full h-14 bg-surface-container-highest border border-transparent rounded-xl pl-12 pr-12 font-body-md text-body-md text-on-surface placeholder-on-surface-variant/40 focus:bg-surface-container-lowest focus:border-primary focus:ring-0 transition-all" id="confirm-password" placeholder="Confirm password" type="password"/>
+<button aria-label="Toggle password visibility" class="absolute inset-y-0 right-0 pr-4 flex items-center text-on-surface-variant/60 hover:text-on-surface" onclick="togglePassword('confirm-password', 'icon-confirm-password')" type="button">
+<span class="material-symbols-outlined" id="icon-confirm-password">visibility_off</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Spacer to push button to bottom -->
+<div class="flex-1 min-h-[40px]"></div>
+<!-- Action Button -->
+<button class="w-full h-14 bg-primary text-on-primary rounded-xl font-headline-lg-mobile text-headline-lg-mobile flex items-center justify-center gap-2 shadow-[0_8px_16px_rgba(152,70,30,0.2)] active:scale-[0.98] transition-all mb-4" type="button">
+                    Update Password
+                    <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</form>
+</main>
+</div>
+<script>
+        // OTP Input Logic
+        const inputs = document.querySelectorAll('.code-input');
+        
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+            
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+            
+            // Allow pasting full codes
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pastedData = e.clipboardData.getData('text').slice(0, inputs.length).replace(/[^0-9]/g, '');
+                if (pastedData) {
+                    for (let i = 0; i < pastedData.length; i++) {
+                        if (inputs[i]) {
+                            inputs[i].value = pastedData[i];
+                            if (i < inputs.length - 1) inputs[i + 1].focus();
+                        }
+                    }
+                }
+            });
+        });
+
+        // Password Visibility Toggle
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility_off';
+            }
+        }
+
+        // Simple Countdown for Resend
+        let seconds = 59;
+        const resendBtn = document.getElementById('resend-btn');
+        
+        const countdown = setInterval(() => {
+            seconds--;
+            if (seconds > 0) {
+                resendBtn.textContent = `Resend Code (0:${seconds.toString().padStart(2, '0')})`;
+            } else {
+                clearInterval(countdown);
+                resendBtn.textContent = 'Resend Code';
+                resendBtn.classList.remove('text-tertiary-container', 'cursor-not-allowed');
+                resendBtn.classList.add('text-primary', 'cursor-pointer');
+                resendBtn.disabled = false;
+            }
+        }, 1000);
+    </script>
+</body></html>

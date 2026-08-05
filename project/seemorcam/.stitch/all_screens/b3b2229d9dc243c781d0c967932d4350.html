@@ -1,0 +1,220 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>seemorcam - Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#dbc1b7",
+                        "error": "#ba1a1a",
+                        "on-surface": "#1f1b18",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#98461e",
+                        "surface-bright": "#fff8f5",
+                        "secondary": "#0c696a",
+                        "secondary-fixed-dim": "#87d3d4",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#a3f0f0",
+                        "tertiary-fixed": "#e5e2de",
+                        "surface-container": "#f5ece8",
+                        "surface-dim": "#e1d8d4",
+                        "on-primary-fixed": "#360f00",
+                        "surface-container-highest": "#eae1dc",
+                        "surface-container-high": "#efe6e2",
+                        "on-background": "#1f1b18",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#98461e",
+                        "surface-container-low": "#fbf2ed",
+                        "on-tertiary-fixed": "#1c1c1a",
+                        "inverse-on-surface": "#f8efea",
+                        "inverse-surface": "#34302d",
+                        "on-tertiary-container": "#3c3c39",
+                        "tertiary-fixed-dim": "#c8c6c2",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#ffdbcd",
+                        "primary-container": "#f28c5e",
+                        "on-secondary-container": "#186f70",
+                        "on-primary-fixed-variant": "#7a3008",
+                        "primary-fixed-dim": "#ffb596",
+                        "on-tertiary-fixed-variant": "#474744",
+                        "surface-variant": "#eae1dc",
+                        "tertiary-container": "#a8a6a3",
+                        "secondary-container": "#a3f0f0",
+                        "on-primary": "#ffffff",
+                        "outline": "#88726a",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#004f50",
+                        "on-secondary-fixed": "#002020",
+                        "tertiary": "#5f5e5b",
+                        "on-primary-container": "#6b2600",
+                        "surface": "#fff8f5",
+                        "inverse-primary": "#ffb596",
+                        "on-surface-variant": "#55433b",
+                        "background": "#fff8f5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter-card": "16px",
+                        "stack-lg": "32px",
+                        "stack-md": "16px",
+                        "margin-page": "20px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-24 md:pb-0">
+<!-- TopAppBar -->
+
+<main class="max-w-7xl mx-auto px-margin-page pt-stack-md md:pt-stack-lg">
+<!-- Header Actions -->
+<div class="flex justify-between items-center mb-stack-lg">
+<h1 class="font-headline-xl text-headline-xl text-on-background">My Devices</h1>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-full font-label-sm text-label-sm flex items-center gap-2 hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+                Add Device
+            </button>
+</div>
+<!-- Devices Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter-card">
+<!-- Living Room Camera (Online) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-lg border border-outline-variant/20 overflow-hidden flex flex-col group">
+<div class="relative h-48 sm:h-56 w-full bg-surface-variant rounded-t-xl overflow-hidden">
+<div class="bg-cover bg-center w-full h-full transition-transform duration-500 group-hover:scale-105" data-alt="A wide-angle, bright indoor shot of a modern, minimalist living room seen from a security camera perspective. A golden retriever is sleeping peacefully on a beige rug. Soft natural sunlight streams through large windows. The overall tone is warm, calm, and nurturing with a light-mode aesthetic. High quality, clear, photorealistic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB7L5TfKLEoiBqjUQb1RCsHyk4jvRrpTV6mF_yl9WC4d2AMhBNS24d7Pkkji1pZZW1JROuM4_WSNfFQlC-QsswLMkXUeK07QwWKg-gs9_0p27uaErSDok-8l6qm8d4fG5y-zvHEch21RmIQoRR9htk_cWe4ZDBtSXxcqE7ErjG5q9ETQIvtwdpQfVZEK0mgWMQv35DMbhPZ5kP6SrotiwueYR_0erp-63z77T4Q4wFHZa17nmPiNQV2')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
+<!-- Live Badge -->
+<div class="absolute top-3 left-3 bg-secondary/80 backdrop-blur-md text-on-secondary px-2 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<div class="w-2 h-2 rounded-full bg-secondary-fixed animate-pulse"></div>
+                        Live
+                    </div>
+<!-- Overlays -->
+<div class="absolute top-3 right-3 flex gap-2">
+<button class="w-8 h-8 rounded-full bg-inverse-surface/60 backdrop-blur-md flex items-center justify-center text-inverse-on-surface hover:bg-primary/80 transition-colors">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-inverse-surface/60 backdrop-blur-md flex items-center justify-center text-inverse-on-surface hover:bg-primary/80 transition-colors">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+</button>
+</div>
+<!-- Play Overlay -->
+<button class="absolute inset-0 m-auto w-14 h-14 rounded-full bg-inverse-surface/40 backdrop-blur-md flex items-center justify-center text-inverse-on-surface hover:bg-primary/80 hover:scale-110 transition-all group-hover:opacity-100 opacity-80 md:opacity-0">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+<div class="p-4 flex justify-between items-center bg-surface-container-lowest">
+<div>
+<h3 class="font-body-md text-body-md font-bold text-on-surface">Living Room Cam</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]">nest_cam_indoor</span> Smart Camera
+                        </p>
+</div>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm hover:bg-surface-container-high transition-colors border border-outline-variant/30">
+<span class="material-symbols-outlined text-[16px]">cloud_sync</span>
+                        History
+                    </button>
+</div>
+</div>
+<!-- Kitchen Feeder (Online) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-lg border border-outline-variant/20 overflow-hidden flex flex-col group">
+<div class="relative h-48 sm:h-56 w-full bg-surface-variant rounded-t-xl overflow-hidden">
+<div class="bg-cover bg-center w-full h-full transition-transform duration-500 group-hover:scale-105" data-alt="A clean, bright kitchen counter featuring a sleek, modern automatic pet feeder with soft orange accents. A tabby cat is happily eating from the bowl. The lighting is bright and cheerful, highlighting the premium, lifestyle aesthetic of a modern smart home. Shot from a slightly elevated angle." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAjv5nJrKtIz4c5hMBQJPQPs7Vbox38wL-ha5Mo-SDEv6ajYNtkiYX6h1wdypwhWchxfk0EZ7ZRAp6lSfRVchXpiX8FkNqA6Ak6x-451B_qFIXlgfibs3HsDq8LuuW-7gicdW8ARS0yKyQWRAoNSwAAa6DwuPO-ClZTi-r13Rp63WAW9FpBaZgjDhThR7w4Td9C6SiOxIKW9nNM-yATayxSr9JzvXtWd0q8FkxoEsBuXBxhBTQNYMz5')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
+<div class="absolute top-3 left-3 bg-secondary/80 backdrop-blur-md text-on-secondary px-2 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                        Online
+                    </div>
+<div class="absolute top-3 right-3 flex gap-2">
+<button class="w-8 h-8 rounded-full bg-inverse-surface/60 backdrop-blur-md flex items-center justify-center text-inverse-on-surface hover:bg-primary/80 transition-colors">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+</button>
+</div>
+</div>
+<div class="p-4 flex justify-between items-center bg-surface-container-lowest">
+<div>
+<h3 class="font-body-md text-body-md font-bold text-on-surface">Kitchen Feeder</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]">restaurant</span> Next meal: 5:00 PM
+                        </p>
+</div>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">water_drop</span>
+                        Dispense
+                    </button>
+</div>
+</div>
+<!-- Hallway Cam (Offline/Privacy) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-lg border border-outline-variant/20 overflow-hidden flex flex-col group relative">
+<div class="relative h-48 sm:h-56 w-full bg-surface-dim rounded-t-xl overflow-hidden flex items-center justify-center flex-col text-on-surface-variant">
+<span class="material-symbols-outlined text-4xl mb-2 opacity-50">visibility_off</span>
+<p class="font-label-sm text-label-sm">Privacy Mode Active</p>
+<p class="font-label-sm text-label-sm text-[10px] mt-1 opacity-75">Recording Disabled</p>
+<div class="absolute top-3 left-3 bg-surface-container-high/80 backdrop-blur-md text-on-surface-variant px-2 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1 border border-outline-variant/30">
+<span class="material-symbols-outlined text-[14px]">power_off</span>
+                        Standby
+                    </div>
+</div>
+<div class="p-4 flex justify-between items-center bg-surface-container-lowest">
+<div>
+<h3 class="font-body-md text-body-md font-bold text-on-surface">Hallway Cam</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]">nest_cam_indoor</span> Smart Camera
+                        </p>
+</div>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm hover:bg-surface-container-high transition-colors border border-outline-variant/30">
+<span class="material-symbols-outlined text-[16px]">power_settings_new</span>
+                        Wake Up
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full h-20 flex justify-around items-center px-4 pb-safe bg-surface-container-lowest dark:bg-surface-container-lowest text-primary dark:text-primary-fixed-dim font-label-sm text-label-sm fixed bottom-0 w-full z-50 rounded-t-xl shadow-lg dark:shadow-none bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant/20 shadow-lg">
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim font-bold hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors Active: scale-90 transition-transform duration-150 p-2 rounded-lg w-16" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">home</span>
+            Home
+        </a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors p-2 rounded-lg w-16" href="#">
+<span class="material-symbols-outlined mb-1">chat_bubble</span>
+            Messages
+        </a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors p-2 rounded-lg w-16" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+            Profile
+        </a>
+</nav>
+
+
+</body></html>

@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+@import "tailwindcss";
+
+/* ===== Stitch Seemorcam Pet Guardian — Design Tokens ===== */
+
+@theme {
+  /* Colors — Material Design 3 semantic palette */
+  --color-primary: #98461e;
+  --color-primary-container: #f28c5e;
+  --color-primary-fixed: #ffdbcd;
+  --color-primary-fixed-dim: #ffb596;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #6b2600;
+  --color-on-primary-fixed: #360f00;
+  --color-on-primary-fixed-variant: #7a3008;
+  --color-inverse-primary: #ffb596;
+
+  --color-secondary: #0c696a;
+  --color-secondary-container: #a3f0f0;
+  --color-secondary-fixed: #a3f0f0;
+  --color-secondary-fixed-dim: #87d3d4;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #186f70;
+  --color-on-secondary-fixed: #002020;
+  --color-on-secondary-fixed-variant: #004f50;
+
+  --color-tertiary: #5f5e5b;
+  --color-tertiary-container: #a8a6a3;
+  --color-tertiary-fixed: #e5e2de;
+  --color-tertiary-fixed-dim: #c8c6c2;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #3c3c39;
+  --color-on-tertiary-fixed: #1c1c1a;
+  --color-on-tertiary-fixed-variant: #474744;
+
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error: #ffffff;
+  --color-on-error-container: #93000a;
+
+  --color-background: #fff8f5;
+  --color-on-background: #1f1b18;
+
+  --color-surface: #fff8f5;
+  --color-surface-bright: #fff8f5;
+  --color-surface-dim: #e1d8d4;
+  --color-surface-variant: #eae1dc;
+  --color-surface-container: #f5ece8;
+  --color-surface-container-low: #fbf2ed;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-high: #efe6e2;
+  --color-surface-container-highest: #eae1dc;
+  --color-surface-tint: #98461e;
+
+  --color-on-surface: #1f1b18;
+  --color-on-surface-variant: #55433b;
+
+  --color-outline: #88726a;
+  --color-outline-variant: #dbc1b7;
+
+  --color-inverse-surface: #34302d;
+  --color-inverse-on-surface: #f8efea;
+
+  /* Font families */
+  --font-headline-xl: 'Plus Jakarta Sans', sans-serif;
+  --font-headline-lg: 'Plus Jakarta Sans', sans-serif;
+  --font-headline-lg-mobile: 'Plus Jakarta Sans', sans-serif;
+  --font-body-md: 'Plus Jakarta Sans', sans-serif;
+  --font-label-sm: 'Plus Jakarta Sans', sans-serif;
+
+  /* Font sizes (matching Stitch typography) */
+  --text-headline-xl: 32px;
+  --text-headline-xl--line-height: 40px;
+  --text-headline-xl--font-weight: 700;
+  --text-headline-xl--letter-spacing: -0.02em;
+
+  --text-headline-lg: 24px;
+  --text-headline-lg--line-height: 32px;
+  --text-headline-lg--font-weight: 600;
+
+  --text-headline-lg-mobile: 20px;
+  --text-headline-lg-mobile--line-height: 28px;
+  --text-headline-lg-mobile--font-weight: 600;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 24px;
+  --text-body-md--font-weight: 400;
+
+  --text-label-sm: 12px;
+  --text-label-sm--line-height: 16px;
+  --text-label-sm--font-weight: 600;
+  --text-label-sm--letter-spacing: 0.05em;
+
+  /* Spacing scale (Stitch design spacing) */
+  --spacing-margin-page: 20px;
+  --spacing-stack-lg: 32px;
+  --spacing-stack-md: 16px;
+  --spacing-stack-sm: 8px;
+  --spacing-gutter-card: 16px;
+
+  /* Border radius */
+  --radius-DEFAULT: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
+}
+
+/* ===== Global Styles ===== */
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+}
+
+#app {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Material Symbols base style */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0;
+  user-select: none;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-outline-variant); border-radius: 4px; }
