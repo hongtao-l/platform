@@ -28,8 +28,8 @@
 
     <!-- Devices Grid -->
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter-card">
-      <!-- Kitchen Feeder Card — compact horizontal layout from Stitch -->
-      <div @click="$router.push('/feeder/control')" class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 p-4 flex gap-4 items-center group cursor-pointer hover:shadow-md transition-shadow">
+      <!-- Kitchen Feeder Card -->
+      <div v-if="store.device.sn" @click="$router.push('/feeder/control')" class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 p-4 flex gap-4 items-center group cursor-pointer hover:shadow-md transition-shadow">
         <div class="w-20 h-20 bg-surface-container rounded-lg overflow-hidden flex-shrink-0">
           <img src="/feeder.svg" alt="Kitchen Feeder" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
         </div>
