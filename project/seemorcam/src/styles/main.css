@@ -129,6 +129,18 @@ body {
   user-select: none;
 }
 
+/* Mobile responsive sizing */
+@media (max-width: 640px) {
+  :root {
+    --text-headline-xl: 24px;
+    --text-headline-xl--line-height: 30px;
+    --text-headline-lg: 20px;
+    --text-headline-lg--line-height: 26px;
+    --text-body-md: 14px;
+    --text-body-md--line-height: 20px;
+  }
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
