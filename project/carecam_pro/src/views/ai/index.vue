@@ -4,7 +4,10 @@
       <div class="back-btn" @click="goBack">
         <van-icon name="arrow-left" size="18" />
       </div>
-      <h2>{{ isActivated ? '全能AI配置' : '全能AI' }}</h2>
+      <h2>{{ pageTitle }}</h2>
+      <div class="header-right" v-if="isActivated" @click="$router.push('/agent-market')">
+        <van-icon name="shop-o" size="18" />
+      </div>
     </div>
 
     <!-- ===== 未开通态 ===== -->
@@ -174,13 +177,16 @@
       <div class="scroll-content config">
         <div class="status-card">
           <div class="status-top">
-            <div><div class="status-plan">全能AI</div><div class="status-date">有效期至 {{ validUntil }}</div></div>
+            <div><div class="status-plan">{{ currentAgent?.agentName || '全能AI' }}</div><div class="status-date">有效期至 {{ currentAgent?.expireDate || validUntil }}</div></div>
             <div class="remain-area"><div class="remain-num">✓</div><div class="remain-label">守护中</div></div>
           </div>
         </div>
 
         <div class="config-section">
-          <div class="config-section-title"><span>关注事件管理</span><span class="add-btn" @click="openAddEvent">+ 添加{{ events.length }}/{{ maxEvents }}</span></div>
+          <div class="config-section-title">
+            <span>关注事件管理</span>
+            <span v-if="canEdit" class="add-btn" @click="openAddEvent">+ 添加{{ events.length }}/{{ maxEvents }}</span>
+          </div>
           <div class="config-toggle">
             <span>智能推送</span>
             <van-switch v-model="smartPush" size="22" />
@@ -189,9 +195,20 @@
           <div v-for="(evt, i) in events" :key="i" class="event-item">
             <div class="event-left"><div class="event-name">{{ evt.name }}</div><div class="event-keywords">{{ evt.desc }}</div></div>
             <van-switch v-model="evt.enabled" size="20" />
-            <van-icon name="edit" size="16" color="#6B7280" @click="openEditEvent(i)" />
-            <van-icon name="delete" size="16" color="#EA4335" @click="deleteEvent(i)" />
+            <template v-if="canEdit">
+              <van-icon name="edit" size="16" color="#6B7280" @click="openEditEvent(i)" />
+              <van-icon name="delete" size="16" color="#EA4335" @click="deleteEvent(i)" />
+            </template>
           </div>
+        </div>
+
+        <!-- 我的Agent入口 -->
+        <div class="my-agent-entry" @click="$router.push('/my-agent')">
+          <div class="mae-left">
+            <span class="mae-icon">{{ currentAgent?.agentIcon || '🤖' }}</span>
+            <span class="mae-text">我的Agent</span>
+          </div>
+          <van-icon name="arrow" size="14" color="#9CA3AF" />
         </div>
         <div style="height:20px"></div>
       </div>
@@ -214,9 +231,9 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { aiStatus, deviceAiStatus, defaultActivatedDevice, isDeviceActivated } from '@/store/devStatus'
+import { deviceAgent, isDeviceAgentActive, getDeviceAgent, getAgentConfig } from '@/store/devStatus'
 import { showToast } from '@/utils/toast'
 
 const router = useRouter()
@@ -224,14 +241,32 @@ const route = useRoute()
 const goBack = () => router.back()
 
 // 设备筛选
-const deviceOptions = Object.keys(deviceAiStatus.value)
-const selectedDevice = ref(defaultActivatedDevice.value)
+const deviceOptions = Object.keys(deviceAgent.value)
+
+function getDefaultDevice() {
+  if (route.query.device) return route.query.device
+  for (const [dev, a] of Object.entries(deviceAgent.value)) {
+    if (a && a.status === 'active') return dev
+  }
+  return deviceOptions[0] || '标准摄像机'
+}
+const selectedDevice = ref(getDefaultDevice())
+
+const pageTitle = computed(() => {
+  if (!isActivated.value) return '全能AI'
+  const agent = currentAgent.value
+  if (!agent) return 'AI配置'
+  return agent.agentName + '配置'
+})
 
 // 选中设备是否已开通
 const isActivated = computed(() => {
   if (route.query.show === 'activate') return false
-  return aiStatus.value !== 'not_activated' && isDeviceActivated(selectedDevice.value)
+  return isDeviceAgentActive(selectedDevice.value)
 })
+
+// 当前设备绑定的Agent
+const currentAgent = computed(() => getDeviceAgent(selectedDevice.value))
 
 // 场景故事
 const scenes = [
@@ -327,6 +362,11 @@ const agreeAndPay = () => {
 
 const validUntil = ref('2026-05-28')
 
+const canEdit = computed(() => {
+  const agent = currentAgent.value
+  return agent && agent.agentId === 'all_in_one_v1'
+})
+
 const smartPush = ref(true)
 
 const showAddDialog = ref(false)
@@ -335,12 +375,56 @@ const editingName = ref('')
 const editingDesc = ref('')
 
 const maxEvents = 4
-const events = reactive([
-  { name: '儿童守护', desc: '小孩哭喊、跌倒、出门', enabled: true },
-  { name: '包裹送达', desc: '快递或者外卖送达', enabled: true },
-  { name: '厨房守护', desc: '厨房异常烟雾、明火', enabled: true },
-  { name: '宠物守护', desc: '宠物乱拉乱尿、吃饭、喝水', enabled: true }
-])
+
+const agentFocusDescMap = {
+  '宠物进食': '宠物在食盆旁进食行为',
+  '宠物排泄': '宠物使用猫砂盆等排泄行为',
+  '呕吐/异常': '宠物呕吐、跛行、异常抓挠',
+  '宠物玩耍': '宠物奔跑、追逐、跳跃',
+  '宠物睡眠': '宠物在窝里或地面长时间休息',
+  '包裹送达': '快递或外卖放置包裹',
+  '包裹取走': '包裹从门口被取走',
+  '包裹在门口': '门口有包裹停留',
+  '快递/外卖': '快递员或外卖骑手到访',
+  '陌生人到访': '陌生人靠近或逗留门口',
+  '家人出入': '家人开门进出',
+  '异常徘徊': '有人长时间在门口徘徊',
+  '多人聚集': '门口多人同时出现',
+  '儿童守护': '小孩哭喊、跌倒、出门',
+  '厨房守护': '厨房异常烟雾、明火',
+  '动物看护': '宠物乱拉乱尿、吃饭、喝水'
+}
+
+const events = reactive(buildEvents())
+
+watch(() => route.query.device, (newDevice) => {
+  if (newDevice) selectedDevice.value = newDevice
+})
+
+watch(selectedDevice, () => {
+  const newList = buildEvents()
+  events.length = 0
+  newList.forEach(e => events.push(e))
+})
+
+function buildEvents() {
+  const agent = getDeviceAgent(selectedDevice.value)
+  if (!agent) return defaultEvents()
+  const cfg = getAgentConfig(agent.agentId)
+  if (!cfg || !cfg.focusList) return defaultEvents()
+  return cfg.focusList.map(f => ({
+    name: f.name,
+    desc: agentFocusDescMap[f.name] || `${f.name}相关事件`,
+    enabled: true
+  }))
+}
+
+function defaultEvents() {
+  return [
+    { name: '运动侦测', desc: '画面内有运动物体', enabled: true },
+    { name: '人形侦测', desc: '检测到人形物体', enabled: true }
+  ]
+}
 
 const openAddEvent = () => {
   if (events.length >= maxEvents) {
@@ -364,7 +448,7 @@ const saveEvent = () => {
 
 <style lang="scss" scoped>
 .ai-page { height: 100%; background: $bg-page; display: flex; flex-direction: column; }
-.ai-header { background: $bg-color; padding: 12px 16px; border-bottom: 1px solid $border-color; display: flex; align-items: center; gap: 12px; flex-shrink: 0; position: relative; z-index: 1; h2 { font-size: 18px; font-weight: 700; color: $text-primary; flex: 1; } }
+.ai-header { background: $bg-color; padding: 12px 16px; border-bottom: 1px solid $border-color; display: flex; align-items: center; gap: 12px; flex-shrink: 0; position: relative; z-index: 1; h2 { font-size: 18px; font-weight: 700; color: $text-primary; flex: 1; } .header-right { width: 32px; height: 32px; border-radius: 50%; background: $bg-page; display: flex; align-items: center; justify-content: center; color: $text-secondary; flex-shrink: 0; cursor: pointer; } }
 .back-btn { width: 32px; height: 32px; border-radius: 50%; background: $bg-page; display: flex; align-items: center; justify-content: center; color: $text-secondary; flex-shrink: 0; }
 .scroll-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
@@ -471,6 +555,12 @@ const saveEvent = () => {
 .event-left { flex: 1; }
 .event-name { font-size: 13px; font-weight: 600; color: $text-primary; }
 .event-keywords { font-size: 11px; color: $text-secondary; margin-top: 2px; }
+
+/* 我的Agent入口 */
+.my-agent-entry { background: $bg-card; border-radius: $radius-lg; padding: 14px 16px; margin-top: 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: $shadow-card; cursor: pointer; &:active { background: $bg-page; } }
+.mae-left { display: flex; align-items: center; gap: 10px; }
+.mae-icon { font-size: 20px; }
+.mae-text { font-size: 13px; font-weight: 600; color: $text-primary; }
 
 .edit-dialog { padding: 16px; }
 .edit-field { margin-bottom: 14px; }

@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <!-- 设备筛选 — 始终可见 -->
+    <!-- 设备筛选 -->
     <div class="device-filter-bar">
       <span
         v-for="(d, i) in deviceOptions"
@@ -27,28 +27,24 @@
           <div class="phone-notch"></div>
           <div class="screenshot-content">
             <div class="ss-badge">开通后</div>
-            <!-- 模拟已开通的日报页面 -->
             <div class="ss-device-bar">
-              <span class="ss-chip ss-chip-active">Front Door</span>
-              <span class="ss-chip">Backyard</span>
+              <span class="ss-chip ss-chip-active">{{ selectedDevice }}</span>
             </div>
-            <!-- AI总结 -->
             <div class="ss-card">
               <div class="ss-card-title">💡 AI总结</div>
-              <div class="ss-summary-title">今日一切安好</div>
-              <div class="ss-summary-text">今天一切正常，奶奶出门1次，猫咪很活跃。全天未检测到异常告警…</div>
+              <div class="ss-summary-title">{{ agentConfig?.sampleReport?.summary || '今日一切安好' }}</div>
+              <div class="ss-summary-text">{{ agentConfig?.sampleReport?.summary || '全天未检测到异常事件，家中安全状况良好。' }}</div>
             </div>
-            <!-- 事件汇总 -->
             <div class="ss-card">
               <div class="ss-card-title">📊 事件汇总</div>
-              <div class="ss-event" v-for="(e, i) in ['人员经过','宠物活动','告警','其他']" :key="i">
-                <span class="ss-event-name">{{ e }}</span>
-                <span class="ss-event-count">{{ [3,5,1,4][i] }} 件</span>
+              <div class="ss-event" v-for="(s, i) in (agentConfig?.sampleReport?.sections || previewSections)" :key="i">
+                <span class="ss-event-name">{{ s.icon }} {{ s.label }}</span>
+                <span class="ss-event-count">{{ s.count }} 件</span>
               </div>
             </div>
           </div>
         </div>
-        <button class="na-inline-btn" @click="goToAiHome">立即开通全能AI</button>
+        <button class="na-inline-btn" @click="goToAgentPage">立即开通{{ agentConfig?.name || 'Agent' }}</button>
       </div>
     </template>
 
@@ -78,11 +74,10 @@
 
         <!-- 已生成态 -->
         <template v-else-if="dailyStatus === 'done'">
-          <!-- AI总结 -->
           <div class="section-card summary-card">
             <div class="section-title">💡 AI总结</div>
-            <div class="summary-title-text">{{ summaryTitle }}</div>
-            <div class="summary-text" v-show="summaryExpanded">{{ aiSummary }}</div>
+            <div class="summary-title-text">{{ currentSummaryTitle }}</div>
+            <div class="summary-text" v-show="summaryExpanded">{{ currentAiSummary }}</div>
             <div class="summary-expand" v-if="!summaryExpanded" @click="summaryExpanded = true">
               点击查看详情 <van-icon name="arrow-down" size="12" />
             </div>
@@ -91,7 +86,6 @@
             </div>
           </div>
 
-          <!-- 各关注事件数量汇总（含时间线消息） -->
           <div class="section-card">
             <div class="section-title">📊 事件汇总</div>
             <div
@@ -102,11 +96,10 @@
               @click="evt.name !== '其他' && openEventDetail(evt)"
             >
               <div class="focus-summary-top">
-                <span class="focus-summary-name">{{ evt.name }}</span>
+                <span class="focus-summary-name">{{ evt.icon }} {{ evt.name }}</span>
                 <span class="focus-summary-count">{{ evt.count }} 件</span>
               </div>
-              <!-- 时间线：最早 → ... → 最晚 -->
-              <div class="focus-timeline">
+              <div class="focus-timeline" v-if="getTimelineMsgs(evt.name).first.text">
                 <div class="ft-item">
                   <div class="ft-dot"></div>
                   <div class="ft-time">{{ getTimelineMsgs(evt.name).first.time }}</div>
@@ -139,9 +132,7 @@
         </template>
       </div>
 
-      <!-- 底部：生成日报按钮 / 次数用完提示 -->
       <div class="bottom-bar-daily" v-if="dailyStatus !== 'generating'">
-        <!-- idle 状态始终可生成（未生成过不限制） -->
         <template v-if="dailyStatus === 'idle' || remainFree > 0">
           <button class="btn-generate" @click="handleGenerate">
             {{ dailyStatus === 'done' ? '重新生成' : '生成日报' }} · 剩余{{ remainFree }}次
@@ -181,45 +172,52 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { aiStatus, deviceAiStatus, defaultActivatedDevice, isDeviceActivated } from '@/store/devStatus'
+import { deviceAgent, agentConfigs, isDeviceAgentActive, getDeviceAgent } from '@/store/devStatus'
 
 const router = useRouter()
 const goBack = () => router.back()
-// 全局已开通 + 当前设备已开通 → true
-const isActivated = computed(() =>
-  aiStatus.value !== 'not_activated' && isDeviceActivated(selectedDevice.value)
-)
 
-// 日期 — 仅支持今日
+const deviceOptions = Object.keys(deviceAgent.value)
+
+function getDefaultDevice() {
+  for (const [dev, a] of Object.entries(deviceAgent.value)) {
+    if (a && a.status === 'active') return dev
+  }
+  return deviceOptions[0] || '标准摄像机'
+}
+const selectedDevice = ref(getDefaultDevice())
+
+const currentAgentInfo = computed(() => getDeviceAgent(selectedDevice.value))
+const isActivated = computed(() => isDeviceAgentActive(selectedDevice.value))
+const agentConfig = computed(() => {
+  if (!currentAgentInfo.value) return null
+  return agentConfigs.value.find(a => a.id === currentAgentInfo.value.agentId)
+})
+
+const goToAgentPage = () => {
+  const info = currentAgentInfo.value
+  if (info && info.status === 'active') return
+  router.push('/agent-market')
+}
+
+// 日期
 const today = new Date()
 const todayStr = computed(() => `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`)
 
-// 日报状态: 'idle' | 'generating' | 'done'
 const dailyStatus = ref('idle')
 const genStep = ref(0)
 const showHistory = ref(false)
 
-// 设备筛选（必须在 genCountKey/todayGenCount 之前定义，因为 loadGenCount 会引用 selectedDevice）
-const deviceOptions = Object.keys(deviceAiStatus.value)
-const selectedDevice = ref(defaultActivatedDevice.value)
-
-// 每日生成次数限制（最多3次），基于当天日期+设备维度计数
 const maxDailyGen = 3
 const genCountKey = computed(() => `ai_daily_gen_${todayStr.value}_${selectedDevice.value}`)
 const autoGenKey = computed(() => `ai_daily_auto_${todayStr.value}_${selectedDevice.value}`)
 
 function loadGenCount() {
-  try {
-    const raw = localStorage.getItem(genCountKey.value)
-    return raw ? parseInt(raw, 10) : 0
-  } catch { return 0 }
+  try { return parseInt(localStorage.getItem(genCountKey.value), 10) || 0 } catch { return 0 }
 }
 const todayGenCount = ref(loadGenCount())
 
-watch(selectedDevice, () => {
-  todayGenCount.value = loadGenCount()
-})
-
+watch(selectedDevice, () => { todayGenCount.value = loadGenCount() })
 const remainFree = computed(() => Math.max(0, maxDailyGen - todayGenCount.value))
 
 const onDeviceChange = (device) => {
@@ -227,51 +225,62 @@ const onDeviceChange = (device) => {
   resetDaily()
 }
 
-// 日报数据 — 使用全能AI配置的关注事件
-const focusEvents = ref([
-  { name: '人员经过', count: 3 },
-  { name: '宠物活动', count: 5 },
-  { name: '告警', count: 1 },
-  { name: '其他', count: 4 }
-])
+// 预览用默认数据
+const previewSections = [
+  { icon: '👤', label: '人员经过', count: 3 },
+  { icon: '🐱', label: '宠物活动', count: 5 },
+  { icon: '⚠', label: '告警', count: 1 }
+]
 
-const eventMsgMap = {
-  '人员经过': [
-    { time: '07:45', text: '🚶 奶奶出门买菜经过门口' },
-    { time: '10:00', text: '🚶 快递员在门口放下包裹' },
-    { time: '11:20', text: '🚶 奶奶买菜回家经过门口' }
-  ],
-  '宠物活动': [
-    { time: '06:20', text: '🐱 猫咪在客厅跑酷' },
-    { time: '08:30', text: '🐱 猫咪在厨房吃猫粮' },
-    { time: '10:15', text: '🐱 猫咪在阳台晒太阳' },
-    { time: '14:00', text: '🐱 猫咪从沙发跳到茶几' },
-    { time: '16:30', text: '🐱 猫咪抓沙发被抓拍' }
-  ],
-  '告警': [
-    { time: '03:12', text: '🔔 后窗有异常移动，AI识别为树枝' }
-  ],
-  '其他': [
-    { time: '09:15', text: '📦 快递员在门口放置包裹' },
-    { time: '11:30', text: '📦 快递车进入小区配送' },
-    { time: '14:45', text: '📦 快递员按门铃送件上门' },
-    { time: '17:00', text: '📦 快递员在门口放下包裹后离开' }
-  ]
-}
+// 根据Agent动态生成日报数据
+const focusEvents = computed(() => {
+  const cfg = agentConfig.value
+  if (!cfg) return [{ name: '其他', icon: '📋', count: 4 }]
+  const counts = [3, 5, 2, 1, 4, 3, 2, 1]
+  return cfg.focusList.slice(0, 5).map((f, i) => ({
+    name: f.name,
+    icon: f.icon,
+    count: counts[i] || 1
+  }))
+})
 
-const aiSummary = ref('今天一切正常，奶奶出门1次，猫咪很活跃。全天未检测到异常告警，家中安全状况良好。')
-const summaryTitle = ref('今日一切安好')
+// 事件消息映射 — 从 agent sampleMessages 构建
+const eventMsgMap = computed(() => {
+  const cfg = agentConfig.value
+  if (!cfg || !cfg.focusList || !cfg.sampleMessages) return {}
+  const map = {}
+  cfg.sampleMessages.forEach((msg, i) => {
+    const focus = cfg.focusList[i % cfg.focusList.length]
+    if (focus) {
+      if (!map[focus.name]) map[focus.name] = []
+      map[focus.name].push({
+        time: msg.time,
+        text: `${focus.icon} ${msg.title}`
+      })
+    }
+  })
+  // 确保每个关注事件至少有一条
+  cfg.focusList.forEach(f => {
+    if (!map[f.name]) map[f.name] = [{ time: '--:--', text: `暂无${f.name}事件` }]
+  })
+  return map
+})
+
+const currentAiSummary = computed(() => agentConfig.value?.sampleReport?.summary || '今日一切正常，未检测到异常事件。')
+const currentSummaryTitle = computed(() => {
+  const s = currentAiSummary.value
+  return s.length > 15 ? s.slice(0, 15) + '…' : s
+})
 const summaryExpanded = ref(false)
 
 const openEventDetail = (evt) => {
-  const msgs = eventMsgMap[evt.name] || []
+  const msgs = eventMsgMap.value[evt.name] || []
   const listStr = encodeURIComponent(JSON.stringify(msgs))
   router.push(`/ai/daily-event?name=${encodeURIComponent(evt.name)}&list=${listStr}&index=0`)
 }
 
-// 每个关注事件取最早(first)和最晚(last)一条，中间用省略号
 function getTimelineMsgs(name) {
-  const msgs = eventMsgMap[name] || []
+  const msgs = eventMsgMap.value[name] || []
   return {
     first: msgs[0] || { time: '', text: '' },
     last: msgs.length > 1 ? msgs[msgs.length - 1] : (msgs[0] || { time: '', text: '' }),
@@ -279,50 +288,39 @@ function getTimelineMsgs(name) {
   }
 }
 
-const allHistory = [
-  { date: '2026-05-27', summary: '奶奶出门2次，猫咪很活跃' },
-  { date: '2026-05-26', summary: '一切正常，奶奶生活规律' },
-  { date: '2026-05-25', summary: '猫咪特别活跃，运动量满分' },
-  { date: '2026-05-24', summary: '奶奶今天在家一天没有出门' },
-  { date: '2026-05-23', summary: '快递较多，奶奶取快递3次' },
-  { date: '2026-05-22', summary: '一切正常，天气晴朗' },
-  { date: '2026-05-21', summary: '猫咪抓沙发5次，比较活跃' }
-]
+// Agent特定的历史数据
+const allHistory = computed(() => {
+  const name = agentConfig.value?.name || ''
+  return [
+    { date: '2026-05-27', summary: `${name}全天活动正常，无异常事件` },
+    { date: '2026-05-26', summary: `一切正常，${name}识别准确` },
+    { date: '2026-05-25', summary: `${name}活跃度较高，记录完整` },
+    { date: '2026-05-24', summary: `今日${name}安静，无特别事件` },
+    { date: '2026-05-23', summary: `${name}检测到多次活动，详情见报告` },
+    { date: '2026-05-22', summary: `一切正常，天气晴朗` },
+    { date: '2026-05-21', summary: `${name}模式正常，AI运行稳定` }
+  ]
+})
 
-// 仅展示近7日
 const historyList = computed(() => {
   const sevenAgo = new Date(today)
   sevenAgo.setDate(sevenAgo.getDate() - 7)
   const cutoff = `${sevenAgo.getFullYear()}-${String(sevenAgo.getMonth() + 1).padStart(2, '0')}-${String(sevenAgo.getDate()).padStart(2, '0')}`
-  return allHistory.filter(h => h.date >= cutoff && h.date <= todayStr.value)
+  return allHistory.value.filter(h => h.date >= cutoff && h.date <= todayStr.value)
 })
-
 const hasHistory = computed(() => historyList.value.length > 0)
 
-const openHistory = () => {
-  showHistory.value = true
-}
+const openHistory = () => { showHistory.value = true }
+const closeHistory = () => { showHistory.value = false }
 
-const closeHistory = () => {
-  showHistory.value = false
-}
-
-// 每日20:00自动生成（次数允许时，按设备本地时区）
 const shouldAutoGen = computed(() => {
   const now = new Date()
-  const hour = now.getHours()
-  return hour >= 20 && remainFree.value > 0 && dailyStatus.value === 'idle'
+  return now.getHours() >= 20 && remainFree.value > 0 && dailyStatus.value === 'idle'
 })
 
 onMounted(() => {
-  // 刷新/进入页面时重置次数，方便演示
-  try {
-    localStorage.removeItem(genCountKey.value)
-    localStorage.removeItem(autoGenKey.value)
-  } catch {}
+  try { localStorage.removeItem(genCountKey.value); localStorage.removeItem(autoGenKey.value) } catch {}
   todayGenCount.value = 0
-
-  // 检查今日是否已自动生成过
   try {
     const autoDone = localStorage.getItem(autoGenKey.value)
     if (!autoDone && shouldAutoGen.value) {
@@ -332,37 +330,18 @@ onMounted(() => {
   } catch {}
 })
 
-const loadHistory = (h) => {
-  showHistory.value = false
-  dailyStatus.value = 'done'
-}
+const loadHistory = (h) => { showHistory.value = false; dailyStatus.value = 'done' }
+const resetDaily = () => { dailyStatus.value = 'idle'; genStep.value = 0 }
 
-const resetDaily = () => {
-  dailyStatus.value = 'idle'
-  genStep.value = 0
-}
-
-// 生成日报（模拟逐步生成）
 const handleGenerate = () => {
-  // idle 状态始终允许生成（未生成过不限制）；非 idle 状态检查剩余次数
   if (dailyStatus.value !== 'idle' && remainFree.value <= 0) return
-
   dailyStatus.value = 'generating'
   genStep.value = 0
-
-  // 生成时立即扣减次数
   todayGenCount.value++
   try { localStorage.setItem(genCountKey.value, String(todayGenCount.value)) } catch {}
-
-  // 模拟逐步生成
   setTimeout(() => { genStep.value = 1 }, 800)
   setTimeout(() => { genStep.value = 2 }, 1800)
-  setTimeout(() => {
-    genStep.value = 3
-    setTimeout(() => {
-      dailyStatus.value = 'done'
-    }, 500)
-  }, 2800)
+  setTimeout(() => { genStep.value = 3; setTimeout(() => { dailyStatus.value = 'done' }, 500) }, 2800)
 }
 </script>
 
@@ -371,53 +350,37 @@ const handleGenerate = () => {
 .ai-header { background: $bg-color; padding: 12px 16px; border-bottom: 1px solid $border-color; display: flex; align-items: center; gap: 12px; flex-shrink: 0; h2 { font-size: 18px; font-weight: 700; color: $text-primary; flex: 1; } }
 .back-btn, .header-right { width: 32px; height: 32px; border-radius: 50%; background: $bg-page; display: flex; align-items: center; justify-content: center; color: $text-secondary; flex-shrink: 0; }
 
-/* 未开通区域 — 截图预览 */
 .not-activated-area { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 16px 20px; overflow-y: auto; }
-
-/* 手机框截图 */
 .screenshot-phone { width: 100%; max-width: 360px; border: 3px solid #1f2937; border-radius: 28px; overflow: hidden; background: $bg-page; box-shadow: 0 8px 30px rgba(0,0,0,0.15); margin-bottom: 20px; position: relative; }
 .phone-notch { width: 70px; height: 7px; background: #1f2937; border-radius: 4px; margin: 12px auto 8px; }
 .screenshot-content { padding: 10px 14px 16px; display: flex; flex-direction: column; gap: 8px; }
 .ss-badge { align-self: flex-start; font-size: 10px; color: $primary-color; background: $primary-bg; padding: 2px 8px; border-radius: 4px; margin-bottom: 2px; }
-
 .ss-device-bar { display: flex; gap: 4px; }
 .ss-chip { font-size: 10px; padding: 3px 10px; border-radius: 12px; background: #f3f4f6; color: #9CA3AF; }
 .ss-chip-active { background: $primary-color; color: #fff; }
-
 .ss-card { background: #fff; border-radius: 10px; padding: 10px 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
 .ss-card-title { font-size: 12px; font-weight: 700; color: $text-primary; margin-bottom: 6px; }
 .ss-summary-title { font-size: 13px; font-weight: 600; color: $text-primary; margin-bottom: 4px; }
 .ss-summary-text { font-size: 11px; color: $text-secondary; line-height: 1.5; }
-
-.ss-event { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid #f3f4f6; }
-.ss-event:last-child { border-bottom: none; }
+.ss-event { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid #f3f4f6; &:last-child { border-bottom: none; } }
 .ss-event-name { font-size: 11px; font-weight: 500; color: $text-primary; }
 .ss-event-count { font-size: 10px; color: $primary-color; font-weight: 600; }
-
-/* 开通按钮 */
 .na-inline-btn { width: 100%; max-width: 300px; padding: 12px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 15px; font-weight: 600; cursor: pointer; }
 
-/* 设备筛选 */
 .device-filter-bar { background: $bg-color; padding: 8px 16px; display: flex; gap: 6px; flex-shrink: 0; border-bottom: 1px solid $border-color; overflow-x: auto; }
 .dev-filter-chip { flex-shrink: 0; padding: 4px 12px; border-radius: 14px; font-size: 11px; font-weight: 500; color: $text-secondary; background: $bg-page; border: 1px solid $border-color; cursor: pointer; transition: all 0.15s; white-space: nowrap; &.active { background: $primary-color; color: #fff; border-color: $primary-color; } }
 
-/* 滚动区 */
 .scroll-area { flex: 1; overflow-y: auto; padding: 16px; }
-
-/* 生成中指示器 */
 .generating-indicator { padding: 20px; }
 .gen-step { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; font-size: 13px; color: $text-secondary; &.done { color: $success-color; } .gen-dot { width: 10px; height: 10px; border-radius: 50%; background: $border-color; flex-shrink: 0; } &.done .gen-dot { background: $success-color; } }
 
-/* 已生成卡片 */
 .section-card { background: $bg-card; border-radius: $radius-lg; padding: 16px; margin-bottom: 12px; box-shadow: $shadow-card; }
 .section-title { font-size: 14px; font-weight: 700; color: $text-primary; margin-bottom: 12px; }
-
 .focus-summary { margin-bottom: 12px; border-bottom: 1px solid $border-light; padding-bottom: 10px; cursor: pointer; &:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; } }
 .focus-summary-other { cursor: default; opacity: 0.85; }
 .focus-summary-top { display: flex; justify-content: space-between; align-items: center; }
 .focus-summary-name { font-size: 13px; font-weight: 600; color: $text-primary; }
 .focus-summary-count { font-size: 12px; color: $primary-color; font-weight: 600; }
-/* 每个关注事件下的时间线消息 */
 .focus-timeline { margin-top: 8px; padding-left: 4px; border-left: 2px solid $border-color; }
 .ft-item { display: flex; align-items: baseline; gap: 6px; margin-bottom: 6px; position: relative; &:last-child { margin-bottom: 0; } }
 .ft-dot { width: 6px; height: 6px; border-radius: 50%; background: $primary-color; flex-shrink: 0; margin-left: -13px; }
@@ -430,22 +393,17 @@ const handleGenerate = () => {
 .summary-expand { font-size: 12px; color: $primary-color; margin-top: 8px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
 .summary-collapse { font-size: 12px; color: var(--text-placeholder, #9CA3AF); margin-top: 10px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
 
-/* 空态 */
 .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; }
 .empty-icon { font-size: 56px; margin-bottom: 12px; }
 .empty-text { font-size: 16px; font-weight: 700; color: $text-primary; }
 .empty-sub { font-size: 13px; color: $text-secondary; margin-top: 8px; }
 
-/* 底部 */
 .bottom-bar-daily { flex-shrink: 0; padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 8px)); border-top: 1px solid $border-color; background: $bg-color; }
 .btn-generate { width: 100%; padding: 12px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 15px; font-weight: 600; cursor: pointer; }
 .no-free-hint { font-size: 12px; color: $text-secondary; text-align: center; margin-bottom: 8px; }
-.btn-buy { width: 100%; padding: 12px; background: $bg-card; color: $primary-color; border: 1.5px solid $primary-color; border-radius: $radius-md; font-size: 14px; font-weight: 600; cursor: pointer; }
 
-/* AI免责声明 */
 .ai-disclaimer { text-align: center; font-size: 11px; color: $text-placeholder; padding: 8px 16px; padding-bottom: calc(8px + env(safe-area-inset-bottom, 8px)); flex-shrink: 0; }
 
-/* 历史弹窗 */
 .history-popup { padding: 20px 16px 32px; }
 .popup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; h3 { font-size: 16px; font-weight: 700; color: $text-primary; } }
 .history-item { display: flex; align-items: center; gap: 10px; padding: 12px 0; border-bottom: 1px solid $border-light; cursor: pointer; &.active { background: $primary-bg; border-radius: $radius-sm; padding: 12px 10px; } &:last-child { border-bottom: none; } }

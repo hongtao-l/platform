@@ -72,11 +72,14 @@
             <span>回放</span>
           </div>
           <div class="dev-action" @click.stop="goToAi(device)">
-            <van-icon name="chat-o" size="18" />
-            <span>
-              <span v-if="isDeviceActivated(device.name)" class="ai-active-text">AI守护中</span>
-              <span v-else class="ai-tag">AI</span>
-            </span>
+            <template v-if="isDeviceAgentActive(device.name)">
+              <span :class="['ai-agent-icon', agentIconClass(device.name)]">{{ agentIcon(device.name) }}</span>
+              <span class="ai-active-text">{{ agentLabel(device.name) }}</span>
+            </template>
+            <template v-else>
+              <van-icon name="chat-o" size="18" />
+              <span class="ai-tag">AI</span>
+            </template>
           </div>
           <div class="dev-action" @click.stop="goToSettings(device)">
             <van-icon name="setting-o" size="18" />
@@ -132,7 +135,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { isDeviceActivated } from '@/store/devStatus'
+import { isDeviceAgentActive, getDeviceAgent, getAgentConfig } from '@/store/devStatus'
 import { resolveDeviceRoute } from '@/utils/deviceType'
 import { useActivityStore } from '@/store/activity'
 import { useRegion } from '@/composables/useRegion'
@@ -249,10 +252,11 @@ const goToPlayback = (device) => {
 }
 
 const goToAi = (device) => {
-  if (isDeviceActivated(device.name)) {
-    router.push('/ai')
+  const agent = getDeviceAgent(device.name)
+  if (agent && agent.status === 'active') {
+    router.push(`/ai?device=${encodeURIComponent(device.name)}`)
   } else {
-    router.push('/ai?show=activate')
+    router.push('/agent-market')
   }
 }
 
@@ -262,6 +266,30 @@ const goToSettings = (device) => {
 
 const goToMe = () => {
   router.push('/me')
+}
+
+const agentIcon = (deviceName) => {
+  const agent = getDeviceAgent(deviceName)
+  if (!agent) return '🌐'
+  const cfg = getAgentConfig(agent.agentId)
+  return cfg?.icon || '🌐'
+}
+
+const agentLabel = (deviceName) => {
+  const agent = getDeviceAgent(deviceName)
+  if (!agent) return 'AI守护中'
+  const nameMap = {
+    'pet_guardian_v1': '宠物看护中',
+    'door_guardian_v1': '家门看护中',
+    'all_in_one_v1': 'AI守护中'
+  }
+  return nameMap[agent.agentId] || 'AI守护中'
+}
+
+const agentIconClass = (deviceName) => {
+  const agent = getDeviceAgent(deviceName)
+  if (!agent) return ''
+  return 'ai-' + agent.agentId
 }
 
 </script>
@@ -511,6 +539,15 @@ const goToMe = () => {
   }
 }
 
+
+.ai-agent-icon {
+  font-size: 18px;
+  line-height: 1;
+
+  &.ai-pet_guardian_v1 { text-shadow: 0 0 8px rgba(245, 166, 35, 0.4); }
+  &.ai-door_guardian_v1 { text-shadow: 0 0 8px rgba(45, 74, 110, 0.4); }
+  &.ai-all_in_one_v1 { text-shadow: 0 0 8px rgba(26, 115, 232, 0.4); }
+}
 
 .ai-tag {
   font-size: 9px;

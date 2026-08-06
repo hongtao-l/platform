@@ -264,6 +264,25 @@ const routes = [
     component: () => import('@/views/ai/search.vue'),
     meta: { title: 'AI搜索' }
   },
+  // ===== Agent工厂 =====
+  {
+    path: '/agent-market',
+    name: 'AgentMarket',
+    component: () => import('@/views/agent/market.vue'),
+    meta: { title: 'Agent市场' }
+  },
+  {
+    path: '/agent-market/:agentId',
+    name: 'AgentLanding',
+    component: () => import('@/views/agent/landing.vue'),
+    meta: { title: 'Agent详情' }
+  },
+  {
+    path: '/my-agent',
+    name: 'MyAgent',
+    component: () => import('@/views/agent/my-agent.vue'),
+    meta: { title: '我的Agent' }
+  },
   // ===== 404 =====
   {
     path: '/:pathMatch(.*)*',
