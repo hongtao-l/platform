@@ -24,21 +24,14 @@
             </div>
             <span :class="['status-badge', statusClass]">{{ statusText }}</span>
           </div>
-          <div class="status-actions">
-            <button
-              v-if="currentDeviceAgent.status === 'active' && daysLeft <= 7"
-              class="btn-renew"
-              @click="handleRenew"
-            >续费</button>
-            <button class="btn-new-agent" @click="goToMarket">选购新Agent</button>
+          <div class="status-actions" v-if="currentDeviceAgent.status === 'active' && daysLeft <= 7">
+            <button class="btn-renew" @click="handleRenew">续费</button>
           </div>
         </div>
       </template>
-      <div v-else class="empty-card" @click="goToMarket">
+      <div v-else class="empty-card">
         <div class="empty-icon">🤖</div>
         <div class="empty-text">暂未开通Agent</div>
-        <div class="empty-sub">去Agent市场选购</div>
-        <van-icon name="arrow" size="14" color="#9CA3AF" />
       </div>
 
       <!-- 历史购买 -->
@@ -60,7 +53,6 @@
           </div>
           <div class="history-right">
             <span class="expired-badge">已到期</span>
-            <button class="btn-rebuy" @click="goToLanding(h.agentId)">再次购买</button>
           </div>
         </div>
       </template>
@@ -234,6 +226,8 @@ function handleRenew() {
   &.expired { background: $danger-bg; color: $danger-color; }
 }
 
+.empty-card .van-icon { display: none; }
+
 .status-actions {
   display: flex;
   gap: 8px;
@@ -252,18 +246,6 @@ function handleRenew() {
   &:active { opacity: 0.85; }
 }
 
-.btn-new-agent {
-  flex: 1;
-  padding: 8px;
-  background: $bg-card;
-  color: $primary-color;
-  border: 1.5px solid $primary-color;
-  border-radius: $radius-sm;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  &:active { background: $primary-bg; }
-}
 
 /* 空态卡片 */
 .empty-card {
@@ -342,15 +324,6 @@ function handleRenew() {
   border-radius: 8px;
 }
 
-.btn-rebuy {
-  font-size: 11px;
-  font-weight: 600;
-  color: $primary-color;
-  background: none;
-  border: none;
-  cursor: pointer;
-  &:active { opacity: 0.7; }
-}
 
 .empty-history {
   text-align: center;

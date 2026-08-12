@@ -18,16 +18,6 @@
         >{{ d }}</span>
       </div>
 
-      <!-- 已开通提示 -->
-      <div v-if="isSameAgent" class="active-tip">
-        <van-icon name="success" size="14" color="#16A34A" />
-        <span>当前设备已开通「{{ agent.name }}」，有效期至 {{ currentDeviceAgent.expireDate }}</span>
-      </div>
-      <div v-else-if="hasActive" class="active-tip warn">
-        <van-icon name="warning-o" size="14" color="#D97706" />
-        <span>当前设备已开通「{{ currentDeviceAgent.agentName }}」，到期后可更换Agent</span>
-      </div>
-
       <!-- 功能Tab预览 -->
       <div class="feature-tabs-section">
         <div class="ft-card">
@@ -97,6 +87,8 @@
           </div>
         </div>
       </div>
+
+      <div class="service-note">依赖设备侦测抓图，请确保已开启运动侦测或其他侦测服务</div>
 
       <!-- 套餐选择 -->
       <div class="section plan-section">
@@ -188,8 +180,7 @@
         </span>
       </div>
       <button
-        :class="['btn-buy', { disabled: hasActive }]"
-        :disabled="hasActive"
+        class="btn-buy"
         @click="handleBuyClick"
       >
         {{ buyText }}
@@ -200,6 +191,11 @@
     <van-dialog v-model:show="showAgreementDialog" title="提示" show-cancel-button cancel-text="取消" confirm-text="同意" @confirm="agreeAndPay">
       <div class="agreement-dialog-content">请先阅读并同意{{ agreementText }}</div>
     </van-dialog>
+
+    <!-- 订阅重复拦截弹窗 -->
+    <van-dialog v-model:show="showSubBlockDialog" title="无法重复订阅" confirm-text="知道了" @confirm="showSubBlockDialog = false">
+      <div class="agreement-dialog-content">当前设备已开通「{{ currentDeviceAgent?.agentName }}」，同类型服务无法重复订阅</div>
+    </van-dialog>
   </div>
 </template>
 
@@ -207,7 +203,6 @@
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { agentConfigs, deviceAgent } from '@/store/devStatus'
-import { showToast } from '@/utils/toast'
 
 const router = useRouter()
 const route = useRoute()
@@ -241,8 +236,6 @@ const agreementText = computed(() => {
 })
 
 const buyText = computed(() => {
-  if (isSameAgent.value) return '当前设备已开通此Agent'
-  if (hasActive.value) return `当前设备已开通「${currentDeviceAgent.value.agentName}」`
   return `立即开通 ${selectedPlan.value === 'monthly' ? '¥' + agent.value.priceMonthly + '/月' : '¥' + agent.value.priceYearly + '/年'}`
 })
 
@@ -268,13 +261,17 @@ const searchPlaceholder = computed(() => {
   return '今天家里发生了什么'
 })
 
+const showSubBlockDialog = ref(false)
+
+const isSubscription = computed(() => selectedPlan.value === 'monthly')
+
 const handleBuyClick = () => {
-  if (hasActive.value) {
-    showToast(isSameAgent.value ? '该设备已开通此Agent，无需重复订阅' : '当前设备已有其他Agent生效中')
-    return
-  }
   if (!agreed.value) {
     showAgreementDialog.value = true
+    return
+  }
+  if (isSubscription.value && hasActive.value) {
+    showSubBlockDialog.value = true
     return
   }
   doBuy()
@@ -283,6 +280,10 @@ const handleBuyClick = () => {
 const agreeAndPay = () => {
   agreed.value = true
   showAgreementDialog.value = false
+  if (isSubscription.value && hasActive.value) {
+    showSubBlockDialog.value = true
+    return
+  }
   doBuy()
 }
 
@@ -324,14 +325,11 @@ function doBuy() {
 
 .scroll-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
+.service-note { margin: 12px 16px 0; padding: 10px 12px; background: #EFF3FF; border: 1px solid #D6E4FD; border-radius: 8px; font-size: 12px; color: #4B5563; line-height: 1.5; }
+
 /* 设备筛选 */
 .device-filter-bar { background: $bg-color; padding: 8px 16px; display: flex; gap: 6px; flex-shrink: 0; border-bottom: 1px solid $border-color; overflow-x: auto; }
 .dev-filter-chip { flex-shrink: 0; padding: 4px 12px; border-radius: 14px; font-size: 11px; font-weight: 500; color: $text-secondary; background: $bg-page; border: 1px solid $border-color; cursor: pointer; white-space: nowrap; &.active { background: $primary-color; color: #fff; border-color: $primary-color; } }
-
-/* 已开通提示 */
-.active-tip { margin: 10px 16px 0; padding: 10px 12px; border-radius: $radius-md; background: #ECFDF5; border: 1px solid #A7F3D0; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #065F46; line-height: 1.4;
-  &.warn { background: #FFF7ED; border-color: #FED7AA; color: #92400E; }
-}
 
 /* 功能Tab */
 .feature-tabs-section { padding: 12px 16px 0; }
@@ -408,6 +406,6 @@ function doBuy() {
 .agreement-checkbox { width: 16px; height: 16px; border-radius: 3px; border: 1.5px solid #9CA3AF; display: flex; align-items: center; justify-content: center; flex-shrink: 0; &.checked { background: $primary-color; border-color: $primary-color; } }
 .agreement-text { font-size: 11px; color: $text-secondary; }
 .agreement-link { color: $primary-color; }
-.btn-buy { width: 100%; padding: 12px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 15px; font-weight: 700; cursor: pointer; &.disabled { background: $border-color; color: $text-placeholder; } }
+.btn-buy { width: 100%; padding: 12px; background: linear-gradient(135deg, #1A73E8, #1557B0); color: #fff; border: none; border-radius: $radius-md; font-size: 15px; font-weight: 700; cursor: pointer; }
 .agreement-dialog-content { padding: 20px; font-size: 14px; color: $text-primary; text-align: center; }
 </style>

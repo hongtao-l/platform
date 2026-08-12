@@ -5,8 +5,8 @@
         <van-icon name="arrow-left" size="18" />
       </div>
       <h2>{{ pageTitle }}</h2>
-      <div class="header-right" v-if="isActivated" @click="$router.push('/agent-market')">
-        <van-icon name="shop-o" size="18" />
+      <div class="header-right" v-if="isActivated" @click="$router.push('/my-agent')">
+        <van-icon name="user-o" size="18" />
       </div>
     </div>
 
@@ -202,11 +202,12 @@
           </div>
         </div>
 
-        <!-- 我的Agent入口 -->
-        <div class="my-agent-entry" @click="$router.push('/my-agent')">
+        <div class="config-note">依赖设备侦测抓图，请确保已开启运动侦测或其他侦测服务</div>
+
+        <div class="my-agent-entry" @click="$router.push('/agent-market')">
           <div class="mae-left">
-            <span class="mae-icon">{{ currentAgent?.agentIcon || '🤖' }}</span>
-            <span class="mae-text">我的Agent</span>
+            <span class="mae-icon">🤖</span>
+            <span class="mae-text">Agent市场</span>
           </div>
           <van-icon name="arrow" size="14" color="#9CA3AF" />
         </div>
@@ -217,6 +218,11 @@
     <!-- 协议确认弹窗 -->
     <van-dialog v-model:show="showAgreementDialog" title="提示" show-cancel-button cancel-text="取消" confirm-text="同意" @confirm="agreeAndPay">
       <div class="agreement-dialog-content">请先阅读并同意{{ agreementText }}</div>
+    </van-dialog>
+
+    <!-- 订阅重复拦截弹窗 -->
+    <van-dialog v-model:show="showSubBlockDialog" title="无法重复订阅" confirm-text="知道了" @confirm="showSubBlockDialog = false">
+      <div class="agreement-dialog-content">当前设备已开通「{{ currentDeviceAgent?.agentName }}」，同类型服务无法重复订阅</div>
     </van-dialog>
 
     <!-- 添加/编辑关注弹窗 -->
@@ -348,16 +354,44 @@ const agreementText = computed(() => {
     : '《云服务协议》'
 })
 
+const showSubBlockDialog = ref(false)
+const currentDeviceAgent = computed(() => deviceAgent.value[selectedDevice.value])
+const hasActive = computed(() => currentDeviceAgent.value && currentDeviceAgent.value.status === 'active')
+const isSubscription = computed(() => selectedPlan.value === 'monthly')
+
 const handleBuyClick = () => {
   if (!agreed.value) {
     showAgreementDialog.value = true
     return
   }
+  checkBeforeBuy()
 }
 
 const agreeAndPay = () => {
   agreed.value = true
   showAgreementDialog.value = false
+  checkBeforeBuy()
+}
+
+function checkBeforeBuy() {
+  if (isSubscription.value && hasActive.value) {
+    showSubBlockDialog.value = true
+    return
+  }
+  doBuy()
+}
+
+function doBuy() {
+  const expireDate = new Date()
+  expireDate.setDate(expireDate.getDate() + (selectedPlan.value === 'monthly' ? 30 : 365))
+  deviceAgent.value[selectedDevice.value] = {
+    agentId: 'all_in_one_v1',
+    agentName: '全能AI',
+    agentIcon: '🤖',
+    expireDate: expireDate.toISOString().split('T')[0],
+    status: 'active'
+  }
+  showToast('购买成功')
 }
 
 const validUntil = ref('2026-05-28')
@@ -541,6 +575,7 @@ const saveEvent = () => {
 
 /* ======== 已开通态 ======== */
 .config { padding: 16px; }
+.config-note { padding: 10px 12px; background: #EFF3FF; border: 1px solid #D6E4FD; border-radius: 8px; font-size: 12px; color: #4B5563; line-height: 1.5; }
 .status-card { background: $bg-card; border-radius: $radius-lg; overflow: hidden; box-shadow: $shadow-card; margin-bottom: 16px; }
 .status-top { padding: 16px; display: flex; justify-content: space-between; align-items: center; }
 .status-plan { font-size: 16px; font-weight: 700; color: $text-primary; }

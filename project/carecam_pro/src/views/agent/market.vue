@@ -5,6 +5,9 @@
         <van-icon name="arrow-left" size="18" />
       </div>
       <h2>Agent市场</h2>
+      <div class="header-right" @click="$router.push('/my-agent')">
+        <van-icon name="user-o" size="18" />
+      </div>
     </div>
 
     <!-- Agent列表 -->
@@ -91,6 +94,18 @@ function goToLanding(agent) {
   justify-content: center;
   color: $text-secondary;
   flex-shrink: 0;
+}
+
+.header-right {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: $bg-page;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text-secondary;
+  flex-shrink: 0;
+  cursor: pointer;
 }
 
 .scroll-content {
