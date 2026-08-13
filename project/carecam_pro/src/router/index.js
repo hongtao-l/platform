@@ -269,19 +269,19 @@ const routes = [
     path: '/agent-market',
     name: 'AgentMarket',
     component: () => import('@/views/agent/market.vue'),
-    meta: { title: 'Agent市场' }
+    meta: { title: '智能体市场' }
   },
   {
     path: '/agent-market/:agentId',
     name: 'AgentLanding',
     component: () => import('@/views/agent/landing.vue'),
-    meta: { title: 'Agent详情' }
+    meta: { title: '智能体详情' }
   },
   {
     path: '/my-agent',
     name: 'MyAgent',
     component: () => import('@/views/agent/my-agent.vue'),
-    meta: { title: '我的Agent' }
+    meta: { title: '我的智能体' }
   },
   // ===== 404 =====
   {

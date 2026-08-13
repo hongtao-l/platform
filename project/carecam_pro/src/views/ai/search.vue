@@ -17,6 +17,16 @@
       >{{ d }}</span>
     </div>
 
+    <!-- Agent选择器（多Agent时显示） -->
+    <div class="agent-selector-bar" v-if="deviceAgents.length > 1">
+      <span
+        v-for="a in deviceAgents"
+        :key="a.agentId"
+        :class="['agent-selector-chip', { active: (selectedAgentId || deviceAgents[0]?.agentId) === a.agentId }]"
+        @click="selectedAgentId = a.agentId"
+      >{{ a.agentIcon }} {{ a.agentName }}</span>
+    </div>
+
     <!-- 搜索输入区 -->
     <div class="search-input-area">
       <div class="search-input-box">
@@ -68,7 +78,7 @@
             </div>
           </div>
         </div>
-        <button class="na-inline-btn" @click="goToAgentPage">立即开通{{ agentConfig?.name || 'Agent' }}</button>
+        <button class="na-inline-btn" @click="goToAgentPage">立即开通{{ agentConfig?.name || '智能体' }}</button>
       </div>
     </template>
 
@@ -118,7 +128,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { deviceAgent, agentConfigs, isDeviceAgentActive, getDeviceAgent } from '@/store/devStatus'
+import { deviceAgent, agentConfigs, isDeviceAgentActive, getDeviceAgents, getAgentConfig } from '@/store/devStatus'
 
 const router = useRouter()
 const goBack = () => router.back()
@@ -126,23 +136,38 @@ const goBack = () => router.back()
 const deviceOptions = Object.keys(deviceAgent.value)
 
 function getDefaultDevice() {
-  for (const [dev, a] of Object.entries(deviceAgent.value)) {
-    if (a && a.status === 'active') return dev
+  for (const [dev, agents] of Object.entries(deviceAgent.value)) {
+    if (agents.some(a => a.status === 'active')) return dev
   }
   return deviceOptions[0] || '标准摄像机'
 }
 const selectedDevice = ref(getDefaultDevice())
 
-const currentAgentInfo = computed(() => getDeviceAgent(selectedDevice.value))
+// 当前设备的所有Agent
+const deviceAgents = computed(() => getDeviceAgents(selectedDevice.value).filter(a => a.status === 'active'))
 const isActivated = computed(() => isDeviceAgentActive(selectedDevice.value))
+
+// 当前选中的Agent类型
+const selectedAgentId = ref('')
 const agentConfig = computed(() => {
-  if (!currentAgentInfo.value) return null
-  return agentConfigs.value.find(a => a.id === currentAgentInfo.value.agentId)
+  const id = selectedAgentId.value || deviceAgents.value[0]?.agentId
+  return id ? getAgentConfig(id) : null
 })
+
+// 初始化/切换设备时选中第一个
+function syncSelectedAgent() {
+  if (deviceAgents.value.length > 0 && !deviceAgents.value.find(a => a.agentId === selectedAgentId.value)) {
+    selectedAgentId.value = deviceAgents.value[0].agentId
+  }
+}
+syncSelectedAgent()
 
 const goToAgentPage = () => router.push('/agent-market')
 
-const onDeviceChange = (device) => { selectedDevice.value = device }
+const onDeviceChange = (device) => {
+  selectedDevice.value = device
+  syncSelectedAgent()
+}
 
 // 搜索
 const queryText = ref('')
@@ -240,6 +265,9 @@ const openDetail = (r) => {
 
 .device-filter-bar { background: $bg-color; padding: 8px 16px; display: flex; gap: 6px; flex-shrink: 0; border-bottom: 1px solid $border-color; overflow-x: auto; }
 .dev-filter-chip { flex-shrink: 0; padding: 4px 12px; border-radius: 14px; font-size: 11px; font-weight: 500; color: $text-secondary; background: $bg-page; border: 1px solid $border-color; cursor: pointer; transition: all 0.15s; white-space: nowrap; &.active { background: $primary-color; color: #fff; border-color: $primary-color; } }
+
+.agent-selector-bar { background: $bg-color; padding: 6px 16px 8px; display: flex; gap: 8px; flex-shrink: 0; }
+.agent-selector-chip { flex-shrink: 0; padding: 5px 14px; border-radius: 16px; font-size: 12px; font-weight: 500; color: $text-secondary; background: $bg-page; border: 1px solid $border-color; cursor: pointer; transition: all 0.15s; white-space: nowrap; &.active { background: $primary-bg; color: $primary-color; border-color: $primary-color; font-weight: 600; } }
 
 .search-input-area { padding: 16px; flex-shrink: 0; }
 .search-input-box { display: flex; gap: 8px; align-items: center; }

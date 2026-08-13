@@ -4,12 +4,12 @@
       <div class="back-btn" @click="goBack">
         <van-icon name="arrow-left" size="18" />
       </div>
-      <h2>我的Agent</h2>
+      <h2>我的智能体</h2>
     </div>
 
     <div class="scroll-content">
       <!-- 当前Agent -->
-      <div class="section-label">当前Agent</div>
+      <div class="section-label">当前智能体</div>
       <template v-if="currentDeviceAgent && currentDeviceAgent.status === 'active'">
         <div class="agent-status-card">
           <div class="status-top">
@@ -31,7 +31,7 @@
       </template>
       <div v-else class="empty-card">
         <div class="empty-icon">🤖</div>
-        <div class="empty-text">暂未开通Agent</div>
+        <div class="empty-text">暂未开通智能体</div>
       </div>
 
       <!-- 历史购买 -->
@@ -77,7 +77,10 @@ const goBack = () => router.back()
 const deviceOptions = Object.keys(deviceAgent.value)
 const selectedDevice = ref(deviceOptions[0] || '标准摄像机')
 
-const currentDeviceAgent = computed(() => deviceAgent.value[selectedDevice.value])
+const currentDeviceAgent = computed(() => {
+  const agents = deviceAgent.value[selectedDevice.value] || []
+  return agents.find(a => a.status === 'active') || agents[0] || null
+})
 const agentConfig = computed(() => {
   if (!currentDeviceAgent.value) return null
   return agentConfigs.value.find(a => a.id === currentDeviceAgent.value.agentId)

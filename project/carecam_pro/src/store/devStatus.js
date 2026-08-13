@@ -21,6 +21,7 @@ export const deviceAiStatus = ref({
 export const agentConfigs = ref([
   {
     id: 'pet_guardian_v1',
+    serviceId: 'agent_factory',
     name: '宠物看护',
     slogan: '不在家，也能知道它好不好',
     icon: '🐱',
@@ -57,6 +58,7 @@ export const agentConfigs = ref([
   },
   {
     id: 'door_guardian_v1',
+    serviceId: 'agent_factory',
     name: '家门看护',
     slogan: '门口无小事，一眼看全程',
     icon: '🚪',
@@ -95,6 +97,7 @@ export const agentConfigs = ref([
   },
   {
     id: 'all_in_one_v1',
+    serviceId: 'all_in_one',
     name: '全能AI',
     slogan: '一机守护全家安全',
     icon: '🌐',
@@ -129,30 +132,19 @@ export const agentConfigs = ref([
   }
 ])
 
-// 设备-Agent绑定
+// 设备-Agent绑定（支持多Agent并存）
 export const deviceAgent = ref({
-  '标准摄像机': {
-    agentId: 'all_in_one_v1',
-    agentName: '全能AI',
-    agentIcon: '🌐',
-    expireDate: '2026-09-06',
-    status: 'active'
-  },
-  '广角摄像机': {
-    agentId: 'pet_guardian_v1',
-    agentName: '宠物看护',
-    agentIcon: '🐱',
-    expireDate: '2026-09-06',
-    status: 'active'
-  },
-  '多目摄像机': {
-    agentId: 'door_guardian_v1',
-    agentName: '家门看护',
-    agentIcon: '🚪',
-    expireDate: '2026-09-06',
-    status: 'active'
-  },
-  '360°全景摄像机': null
+  '标准摄像机': [
+    { agentId: 'all_in_one_v1', agentName: '全能AI', agentIcon: '🌐', expireDate: '2026-09-06', status: 'active' },
+    { agentId: 'pet_guardian_v1', agentName: '宠物看护', agentIcon: '🐱', expireDate: '2026-09-06', status: 'active' }
+  ],
+  '广角摄像机': [
+    { agentId: 'pet_guardian_v1', agentName: '宠物看护', agentIcon: '🐱', expireDate: '2026-09-06', status: 'active' }
+  ],
+  '多目摄像机': [
+    { agentId: 'door_guardian_v1', agentName: '家门看护', agentIcon: '🚪', expireDate: '2026-09-06', status: 'active' }
+  ],
+  '360°全景摄像机': []
 })
 
 // 购买历史
@@ -168,15 +160,27 @@ export const agentHistory = ref([
   }
 ])
 
-// 获取指定设备的Agent信息
-export function getDeviceAgent(deviceName) {
-  return deviceAgent.value[deviceName] || null
+// 获取指定设备的所有Agent
+export function getDeviceAgents(deviceName) {
+  return deviceAgent.value[deviceName] || []
 }
 
-// 设备是否已开通Agent
+// 获取指定设备的首个Agent（兼容旧逻辑）
+export function getDeviceAgent(deviceName) {
+  const agents = getDeviceAgents(deviceName)
+  return agents.length > 0 ? agents[0] : null
+}
+
+// 设备是否已开通任意Agent
 export function isDeviceAgentActive(deviceName) {
-  const agent = deviceAgent.value[deviceName]
-  return agent && agent.status === 'active'
+  const agents = getDeviceAgents(deviceName)
+  return agents.some(a => a.status === 'active')
+}
+
+// 设备是否已有指定serviceId的生效Agent
+export function hasActiveAgentServiceId(deviceName, serviceId) {
+  const agents = getDeviceAgents(deviceName)
+  return agents.some(a => a.status === 'active' && getAgentConfig(a.agentId)?.serviceId === serviceId)
 }
 
 // 根据agentId获取配置
@@ -186,10 +190,7 @@ export function getAgentConfig(agentId) {
 
 // 获取当前已开通Agent的设备列表
 export const agentActivatedDevices = computed(() => {
-  return Object.keys(deviceAgent.value).filter(k => {
-    const a = deviceAgent.value[k]
-    return a && a.status === 'active'
-  })
+  return Object.keys(deviceAgent.value).filter(k => getDeviceAgents(k).some(a => a.status === 'active'))
 })
 
 // 默认选中的Agent设备

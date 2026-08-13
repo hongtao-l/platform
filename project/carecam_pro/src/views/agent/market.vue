@@ -4,7 +4,7 @@
       <div class="back-btn" @click="goBack">
         <van-icon name="arrow-left" size="18" />
       </div>
-      <h2>Agent市场</h2>
+      <h2>智能体市场</h2>
       <div class="header-right" @click="$router.push('/my-agent')">
         <van-icon name="user-o" size="18" />
       </div>
@@ -14,7 +14,7 @@
     <div class="scroll-content">
       <div v-if="agentConfigs.length === 0" class="empty-state">
         <div class="empty-icon">🤖</div>
-        <div class="empty-text">暂无可用Agent</div>
+        <div class="empty-text">暂无可用智能体</div>
         <div class="empty-sub">敬请期待更多智能体上线</div>
       </div>
 
@@ -44,7 +44,7 @@
         </div>
       </div>
 
-      <div class="ai-disclaimer">Agent由AI大模型提供，识别结果可能存在误差，仅供参考</div>
+      <div class="ai-disclaimer">智能体由AI大模型提供，识别结果可能存在误差，仅供参考</div>
       <div style="height: 40px"></div>
     </div>
   </div>
@@ -58,11 +58,7 @@ const router = useRouter()
 const goBack = () => router.back()
 
 function goToLanding(agent) {
-  if (agent.id === 'all_in_one_v1') {
-    router.push('/ai?show=activate')
-  } else {
-    router.push(`/agent-market/${agent.id}`)
-  }
+  router.push(`/agent-market/${agent.id}`)
 }
 </script>
 

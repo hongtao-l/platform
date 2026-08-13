@@ -4,7 +4,7 @@
       <div class="back-btn" @click="goBack">
         <van-icon name="arrow-left" size="18" />
       </div>
-      <h2>{{ agent?.name || 'Agent' }}</h2>
+      <h2>{{ agent?.name || '智能体' }}</h2>
     </div>
 
     <div class="scroll-content" v-if="agent">
@@ -191,11 +191,6 @@
     <van-dialog v-model:show="showAgreementDialog" title="提示" show-cancel-button cancel-text="取消" confirm-text="同意" @confirm="agreeAndPay">
       <div class="agreement-dialog-content">请先阅读并同意{{ agreementText }}</div>
     </van-dialog>
-
-    <!-- 订阅重复拦截弹窗 -->
-    <van-dialog v-model:show="showSubBlockDialog" title="无法重复订阅" confirm-text="知道了" @confirm="showSubBlockDialog = false">
-      <div class="agreement-dialog-content">当前设备已开通「{{ currentDeviceAgent?.agentName }}」，同类型服务无法重复订阅</div>
-    </van-dialog>
   </div>
 </template>
 
@@ -212,16 +207,12 @@ const agent = computed(() => agentConfigs.value.find(a => a.id === route.params.
 const deviceOptions = Object.keys(deviceAgent.value)
 
 function resolveDevice() {
-  if (route.query.device && deviceAgent.value[route.query.device]) {
+  if (route.query.device && (deviceAgent.value[route.query.device] || []).length > 0) {
     return route.query.device
   }
   return deviceOptions[0] || '标准摄像机'
 }
 const selectedDevice = ref(resolveDevice())
-
-const currentDeviceAgent = computed(() => deviceAgent.value[selectedDevice.value])
-const hasActive = computed(() => currentDeviceAgent.value && currentDeviceAgent.value.status === 'active')
-const isSameAgent = computed(() => hasActive.value && currentDeviceAgent.value?.agentId === agent.value?.id)
 
 // 订阅
 const selectedPlan = ref('monthly')
@@ -261,17 +252,9 @@ const searchPlaceholder = computed(() => {
   return '今天家里发生了什么'
 })
 
-const showSubBlockDialog = ref(false)
-
-const isSubscription = computed(() => selectedPlan.value === 'monthly')
-
 const handleBuyClick = () => {
   if (!agreed.value) {
     showAgreementDialog.value = true
-    return
-  }
-  if (isSubscription.value && hasActive.value) {
-    showSubBlockDialog.value = true
     return
   }
   doBuy()
@@ -280,23 +263,22 @@ const handleBuyClick = () => {
 const agreeAndPay = () => {
   agreed.value = true
   showAgreementDialog.value = false
-  if (isSubscription.value && hasActive.value) {
-    showSubBlockDialog.value = true
-    return
-  }
   doBuy()
 }
 
 function doBuy() {
   const expireDate = new Date()
   expireDate.setDate(expireDate.getDate() + (selectedPlan.value === 'monthly' ? 30 : 365))
-  deviceAgent.value[selectedDevice.value] = {
+  if (!deviceAgent.value[selectedDevice.value]) {
+    deviceAgent.value[selectedDevice.value] = []
+  }
+  deviceAgent.value[selectedDevice.value].push({
     agentId: agent.value.id,
     agentName: agent.value.name,
     agentIcon: agent.value.icon,
     expireDate: expireDate.toISOString().split('T')[0],
     status: 'active'
-  }
+  })
   showToast('购买成功')
   if (agent.value?.id === 'all_in_one_v1') {
     setTimeout(() => router.replace('/ai'), 800)

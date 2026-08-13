@@ -20,6 +20,16 @@
       >{{ d }}</span>
     </div>
 
+    <!-- Agent选择器（多Agent时显示） -->
+    <div class="agent-selector-bar" v-if="isActivated && deviceAgents.length > 1">
+      <span
+        v-for="a in deviceAgents"
+        :key="a.agentId"
+        :class="['agent-selector-chip', { active: (selectedAgentId || deviceAgents[0]?.agentId) === a.agentId }]"
+        @click="selectedAgentId = a.agentId"
+      >{{ a.agentIcon }} {{ a.agentName }}</span>
+    </div>
+
     <!-- 当前设备未开通 → 截图预览 + 开通引导 -->
     <template v-if="!isActivated">
       <div class="not-activated-area">
@@ -44,7 +54,7 @@
             </div>
           </div>
         </div>
-        <button class="na-inline-btn" @click="goToAgentPage">立即开通{{ agentConfig?.name || 'Agent' }}</button>
+        <button class="na-inline-btn" @click="goToAgentPage">立即开通{{ agentConfig?.name || '智能体' }}</button>
       </div>
     </template>
 
@@ -172,7 +182,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { deviceAgent, agentConfigs, isDeviceAgentActive, getDeviceAgent } from '@/store/devStatus'
+import { deviceAgent, agentConfigs, isDeviceAgentActive, getDeviceAgents, getAgentConfig } from '@/store/devStatus'
 
 const router = useRouter()
 const goBack = () => router.back()
@@ -180,25 +190,30 @@ const goBack = () => router.back()
 const deviceOptions = Object.keys(deviceAgent.value)
 
 function getDefaultDevice() {
-  for (const [dev, a] of Object.entries(deviceAgent.value)) {
-    if (a && a.status === 'active') return dev
+  for (const [dev, agents] of Object.entries(deviceAgent.value)) {
+    if (agents.some(a => a.status === 'active')) return dev
   }
   return deviceOptions[0] || '标准摄像机'
 }
 const selectedDevice = ref(getDefaultDevice())
 
-const currentAgentInfo = computed(() => getDeviceAgent(selectedDevice.value))
+const deviceAgents = computed(() => getDeviceAgents(selectedDevice.value).filter(a => a.status === 'active'))
 const isActivated = computed(() => isDeviceAgentActive(selectedDevice.value))
+
+const selectedAgentId = ref('')
 const agentConfig = computed(() => {
-  if (!currentAgentInfo.value) return null
-  return agentConfigs.value.find(a => a.id === currentAgentInfo.value.agentId)
+  const id = selectedAgentId.value || deviceAgents.value[0]?.agentId
+  return id ? getAgentConfig(id) : null
 })
 
-const goToAgentPage = () => {
-  const info = currentAgentInfo.value
-  if (info && info.status === 'active') return
-  router.push('/agent-market')
+function syncSelectedAgent() {
+  if (deviceAgents.value.length > 0 && !deviceAgents.value.find(a => a.agentId === selectedAgentId.value)) {
+    selectedAgentId.value = deviceAgents.value[0].agentId
+  }
 }
+syncSelectedAgent()
+
+const goToAgentPage = () => router.push('/agent-market')
 
 // 日期
 const today = new Date()
@@ -222,6 +237,7 @@ const remainFree = computed(() => Math.max(0, maxDailyGen - todayGenCount.value)
 
 const onDeviceChange = (device) => {
   selectedDevice.value = device
+  syncSelectedAgent()
   resetDaily()
 }
 
@@ -369,6 +385,9 @@ const handleGenerate = () => {
 
 .device-filter-bar { background: $bg-color; padding: 8px 16px; display: flex; gap: 6px; flex-shrink: 0; border-bottom: 1px solid $border-color; overflow-x: auto; }
 .dev-filter-chip { flex-shrink: 0; padding: 4px 12px; border-radius: 14px; font-size: 11px; font-weight: 500; color: $text-secondary; background: $bg-page; border: 1px solid $border-color; cursor: pointer; transition: all 0.15s; white-space: nowrap; &.active { background: $primary-color; color: #fff; border-color: $primary-color; } }
+
+.agent-selector-bar { background: $bg-color; padding: 6px 16px 8px; display: flex; gap: 8px; flex-shrink: 0; }
+.agent-selector-chip { flex-shrink: 0; padding: 5px 14px; border-radius: 16px; font-size: 12px; font-weight: 500; color: $text-secondary; background: $bg-page; border: 1px solid $border-color; cursor: pointer; transition: all 0.15s; white-space: nowrap; &.active { background: $primary-bg; color: $primary-color; border-color: $primary-color; font-weight: 600; } }
 
 .scroll-area { flex: 1; overflow-y: auto; padding: 16px; }
 .generating-indicator { padding: 20px; }

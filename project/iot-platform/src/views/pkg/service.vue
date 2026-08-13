@@ -58,55 +58,6 @@
                 <span>{{ row.serviceId }}</span>
               </template>
             </el-table-column>
-            <el-table-column width="200" align="center">
-              <template #header>
-                <span>互斥服务</span>
-                <el-popover placement="bottom" :width="420" trigger="click">
-                  <template #reference>
-                    <el-icon style="margin-left:4px;cursor:pointer;font-size:14px;color:var(--text-secondary);vertical-align:middle"><QuestionFilled /></el-icon>
-                  </template>
-                  <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">互斥服务无法同时生效，设备购买时的校验与生效策略如下：</div>
-                  <table class="mutex-pop-table">
-                    <thead>
-                      <tr>
-                        <th>套餐类型</th>
-                        <th>相同/互斥服务</th>
-                        <th>不同且不互斥</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>订阅</td>
-                        <td>不可重复，弹窗拦截</td>
-                        <td>不限制</td>
-                      </tr>
-                      <tr>
-                        <td>非订阅</td>
-                        <td>可重复，直接下单，按序生效</td>
-                        <td>不限制</td>
-                      </tr>
-                      <tr>
-                        <td>不同套餐类型</td>
-                        <td>可重复，优先生效订阅，非订阅暂停</td>
-                        <td>不限制</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </el-popover>
-              </template>
-              <template #default="{ row }">
-                <template v-if="row.mutexServiceIds && row.mutexServiceIds.length">
-                  <el-tag
-                    v-for="(sid, i) in row.mutexServiceIds"
-                    :key="i"
-                    size="small"
-                    style="margin:1px 2px;cursor:pointer"
-                    @click="openMutexDrawer(row)"
-                  >{{ sid }}</el-tag>
-                </template>
-                <el-button v-else size="small" text type="primary" @click="openMutexDrawer(row)">配置</el-button>
-              </template>
-            </el-table-column>
             <el-table-column label="所属分类" width="120">
               <template #default="{ row }">
                 <el-tag size="small">{{ categoryName(row.categoryId) }}</el-tag>
@@ -168,7 +119,6 @@
       @closed="handleServiceDialogClosed"
     >
       <div class="service-drawer-body">
-        <!-- 基础字段 -->
         <el-form label-width="90px" class="service-basic-form">
           <el-form-item label="* 服务名称" required>
             <el-input v-model="serviceForm.name" placeholder="例如：全天云存" />
@@ -190,23 +140,6 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="互斥服务">
-            <el-select
-              v-model="serviceForm.mutexServiceIds"
-              multiple
-              filterable
-              placeholder="选择互斥服务，同互斥服务下仅可生效一个"
-              style="width:100%"
-            >
-              <el-option
-                v-for="s in mutexServiceOptions"
-                :key="s.serviceId"
-                :label="`${s.name} (${s.serviceId})`"
-                :value="s.serviceId"
-              />
-            </el-select>
-            <div class="form-tip">同互斥服务下仅可生效一个，用于 Agent 类服务的设备互斥控制</div>
-          </el-form-item>
         </el-form>
 
         <!-- 已绑定物模型（只读，由算法库绑定自动关联） -->
@@ -225,79 +158,11 @@
             <div v-if="boundAlgorithms.length === 0" class="transfer-empty">前往算法库绑定后自动关联</div>
           </div>
         </div>
-
       </div>
 
       <template #footer>
         <el-button @click="serviceDialogVisible = false">取消</el-button>
         <el-button type="primary" @click="saveService">保存</el-button>
-      </template>
-    </el-drawer>
-
-    <!-- 互斥服务配置侧边弹窗 -->
-    <el-drawer
-      v-model="mutexDrawerVisible"
-      title="配置互斥服务"
-      size="500px"
-      :close-on-click-modal="false"
-    >
-      <div class="mutex-drawer-body">
-        <div class="mutex-drawer-tip">
-          互斥服务无法同时生效，设备购买时的校验与生效策略如下：
-          <el-button
-            size="small"
-            text
-            type="primary"
-            style="padding:0;margin-left:4px"
-            @click="mutexTipExpanded = !mutexTipExpanded"
-          >
-            {{ mutexTipExpanded ? '收起' : '展开' }}
-          </el-button>
-          <div v-show="mutexTipExpanded" class="mutex-matrix">
-            <table class="mutex-matrix-table">
-              <thead>
-                <tr>
-                  <th>套餐类型</th>
-                  <th>相同/互斥服务</th>
-                  <th>不同且不互斥</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>订阅</td>
-                  <td>不可重复，弹窗拦截</td>
-                  <td>不限制</td>
-                </tr>
-                <tr>
-                  <td>非订阅</td>
-                  <td>可重复，直接下单，按序生效</td>
-                  <td>不限制</td>
-                </tr>
-                <tr>
-                  <td>不同套餐类型</td>
-                  <td>可重复，优先生效订阅，非订阅暂停</td>
-                  <td>不限制</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <el-checkbox-group v-model="mutexForm.selectedIds">
-          <div
-            v-for="s in mutexConfigOptions"
-            :key="s.serviceId"
-            class="mutex-checkbox-item"
-          >
-            <el-checkbox :label="s.serviceId" :value="s.serviceId">
-              {{ s.name }}（{{ s.serviceId }}）
-            </el-checkbox>
-          </div>
-        </el-checkbox-group>
-        <div v-if="mutexConfigOptions.length === 0" class="transfer-empty">暂无可选服务</div>
-      </div>
-      <template #footer>
-        <el-button @click="mutexDrawerVisible = false">取消</el-button>
-        <el-button type="primary" @click="saveMutexConfig">保存</el-button>
       </template>
     </el-drawer>
   </div>
@@ -306,7 +171,8 @@
 <script setup>
 import { ref, reactive, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus, Folder, Edit, QuestionFilled } from '@element-plus/icons-vue'
+import { Plus, Folder, Edit } from '@element-plus/icons-vue'
+
 // ===== 分类管理 =====
 const activeCategory = ref(1)
 const categoryList = ref([
@@ -413,12 +279,7 @@ const editingService = ref(null)
 const serviceForm = reactive({
   name: '',
   serviceId: '',
-  categoryId: 1,
-  mutexServiceIds: []
-})
-
-const mutexServiceOptions = computed(() => {
-  return serviceList.value.filter(s => s.serviceId !== serviceForm.serviceId)
+  categoryId: 1
 })
 
 // 已绑定算法 — 由算法库绑定自动关联，只读
@@ -448,13 +309,11 @@ const openServiceDialog = (mode, row) => {
     serviceForm.name = ''
     serviceForm.serviceId = ''
     serviceForm.categoryId = activeCategory.value
-    serviceForm.mutexServiceIds = []
   } else {
     editingService.value = row
     serviceForm.name = row.name
     serviceForm.serviceId = row.serviceId
     serviceForm.categoryId = row.categoryId
-    serviceForm.mutexServiceIds = row.mutexServiceIds || []
   }
   serviceDialogVisible.value = true
 }
@@ -471,7 +330,6 @@ const saveService = () => {
       name: serviceForm.name,
       serviceId: serviceForm.serviceId,
       categoryId: serviceForm.categoryId,
-      mutexServiceIds: [...serviceForm.mutexServiceIds],
       updatedAt: new Date().toLocaleString('zh-CN', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })
     }
     serviceList.value.unshift(newService)
@@ -480,38 +338,11 @@ const saveService = () => {
     if (editingService.value) {
       editingService.value.name = serviceForm.name
       editingService.value.categoryId = serviceForm.categoryId
-      editingService.value.mutexServiceIds = [...serviceForm.mutexServiceIds]
       editingService.value.updatedAt = new Date().toLocaleString('zh-CN', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })
     }
     ElMessage.success('服务已更新')
   }
   serviceDialogVisible.value = false
-}
-
-// ===== 互斥服务配置 =====
-const mutexDrawerVisible = ref(false)
-const mutexEditingService = ref(null)
-const mutexForm = reactive({ selectedIds: [] })
-const mutexTipExpanded = ref(false)
-
-const mutexConfigOptions = computed(() => {
-  if (!mutexEditingService.value) return []
-  return serviceList.value.filter(s => s.serviceId !== mutexEditingService.value.serviceId)
-})
-
-const openMutexDrawer = (row) => {
-  mutexEditingService.value = row
-  mutexForm.selectedIds = [...(row.mutexServiceIds || [])]
-  mutexDrawerVisible.value = true
-}
-
-const saveMutexConfig = () => {
-  if (mutexEditingService.value) {
-    mutexEditingService.value.mutexServiceIds = [...mutexForm.selectedIds]
-    mutexEditingService.value.updatedAt = new Date().toLocaleString('zh-CN', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })
-    ElMessage.success('互斥服务已更新')
-  }
-  mutexDrawerVisible.value = false
 }
 </script>
 
@@ -667,63 +498,6 @@ const saveMutexConfig = () => {
   font-size: 13px;
 }
 
-.form-tip {
-  margin-top: 4px;
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
-// ===== 互斥服务配置弹窗 =====
-.mutex-drawer-body {
-  padding-top: 20px;
-}
-
-.mutex-drawer-tip {
-  padding: 10px 12px;
-  margin-bottom: 16px;
-  background: #EFF3FF;
-  border: 1px solid #D6E4FD;
-  border-radius: 8px;
-  font-size: 12px;
-  color: #4B5563;
-  line-height: 1.5;
-}
-
-.mutex-matrix {
-  margin-top: 10px;
-}
-
-.mutex-matrix-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-
-  th, td {
-    padding: 6px 8px;
-    border: 1px solid var(--border-lighter);
-    text-align: left;
-  }
-
-  th {
-    background: var(--fill-light);
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-
-  td {
-    color: var(--text-secondary);
-  }
-}
-
-.mutex-checkbox-item {
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--border-lighter);
-
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
 </style>
 
 <style lang="scss">
@@ -734,29 +508,6 @@ const saveMutexConfig = () => {
 
 .service-drawer-body .el-form-item__label {
   font-size: 13px;
-}
-
-/* 互斥服务说明弹窗内表格 */
-.mutex-pop-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-
-  th, td {
-    padding: 5px 8px;
-    border: 1px solid #E5E7EB;
-    text-align: left;
-  }
-
-  th {
-    background: #F9FAFB;
-    font-weight: 500;
-    color: #374151;
-  }
-
-  td {
-    color: #6B7280;
-  }
 }
 
 </style>

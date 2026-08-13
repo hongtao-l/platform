@@ -175,6 +175,16 @@
     <!-- ===== 已开通态 · 配置页 ===== -->
     <template v-else>
       <div class="scroll-content config">
+        <!-- Agent选择器 -->
+        <div class="agent-selector-bar" v-if="deviceAgents.length > 1">
+          <span
+            v-for="a in deviceAgents"
+            :key="a.agentId"
+            :class="['agent-selector-chip', { active: (selectedAgentId || deviceAgents[0]?.agentId) === a.agentId }]"
+            @click="onAgentChange(a.agentId)"
+          >{{ a.agentIcon }} {{ a.agentName }}</span>
+        </div>
+
         <div class="status-card">
           <div class="status-top">
             <div><div class="status-plan">{{ currentAgent?.agentName || '全能AI' }}</div><div class="status-date">有效期至 {{ currentAgent?.expireDate || validUntil }}</div></div>
@@ -187,11 +197,7 @@
             <span>关注事件管理</span>
             <span v-if="canEdit" class="add-btn" @click="openAddEvent">+ 添加{{ events.length }}/{{ maxEvents }}</span>
           </div>
-          <div class="config-toggle">
-            <span>智能推送</span>
-            <van-switch v-model="smartPush" size="22" />
-          </div>
-          <div class="event-tip">开启后仅推送关注事件消息</div>
+          <div class="event-tip">关闭后将不再识别该类型事件</div>
           <div v-for="(evt, i) in events" :key="i" class="event-item">
             <div class="event-left"><div class="event-name">{{ evt.name }}</div><div class="event-keywords">{{ evt.desc }}</div></div>
             <van-switch v-model="evt.enabled" size="20" />
@@ -202,12 +208,20 @@
           </div>
         </div>
 
+        <div class="config-section">
+          <div class="config-toggle">
+            <span>智能推送</span>
+            <van-switch v-model="smartPush" size="22" />
+          </div>
+          <div class="event-tip" style="margin-bottom: 0;">开启后仅推送关注事件消息</div>
+        </div>
+
         <div class="config-note">依赖设备侦测抓图，请确保已开启运动侦测或其他侦测服务</div>
 
         <div class="my-agent-entry" @click="$router.push('/agent-market')">
           <div class="mae-left">
             <span class="mae-icon">🤖</span>
-            <span class="mae-text">Agent市场</span>
+            <span class="mae-text">智能体市场</span>
           </div>
           <van-icon name="arrow" size="14" color="#9CA3AF" />
         </div>
@@ -218,11 +232,6 @@
     <!-- 协议确认弹窗 -->
     <van-dialog v-model:show="showAgreementDialog" title="提示" show-cancel-button cancel-text="取消" confirm-text="同意" @confirm="agreeAndPay">
       <div class="agreement-dialog-content">请先阅读并同意{{ agreementText }}</div>
-    </van-dialog>
-
-    <!-- 订阅重复拦截弹窗 -->
-    <van-dialog v-model:show="showSubBlockDialog" title="无法重复订阅" confirm-text="知道了" @confirm="showSubBlockDialog = false">
-      <div class="agreement-dialog-content">当前设备已开通「{{ currentDeviceAgent?.agentName }}」，同类型服务无法重复订阅</div>
     </van-dialog>
 
     <!-- 添加/编辑关注弹窗 -->
@@ -239,7 +248,7 @@
 <script setup>
 import { ref, reactive, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { deviceAgent, isDeviceAgentActive, getDeviceAgent, getAgentConfig } from '@/store/devStatus'
+import { deviceAgent, isDeviceAgentActive, getDeviceAgents, getAgentConfig } from '@/store/devStatus'
 import { showToast } from '@/utils/toast'
 
 const router = useRouter()
@@ -251,8 +260,8 @@ const deviceOptions = Object.keys(deviceAgent.value)
 
 function getDefaultDevice() {
   if (route.query.device) return route.query.device
-  for (const [dev, a] of Object.entries(deviceAgent.value)) {
-    if (a && a.status === 'active') return dev
+  for (const [dev, agents] of Object.entries(deviceAgent.value)) {
+    if (agents.some(a => a.status === 'active')) return dev
   }
   return deviceOptions[0] || '标准摄像机'
 }
@@ -271,8 +280,29 @@ const isActivated = computed(() => {
   return isDeviceAgentActive(selectedDevice.value)
 })
 
-// 当前设备绑定的Agent
-const currentAgent = computed(() => getDeviceAgent(selectedDevice.value))
+// 当前设备的活跃Agent列表
+const deviceAgents = computed(() => getDeviceAgents(selectedDevice.value).filter(a => a.status === 'active'))
+
+// Agent选择器
+const selectedAgentId = ref('')
+function syncSelectedAgent() {
+  if (deviceAgents.value.length > 0 && !deviceAgents.value.find(a => a.agentId === selectedAgentId.value)) {
+    selectedAgentId.value = deviceAgents.value[0].agentId
+  }
+}
+syncSelectedAgent()
+
+// 当前选中的Agent（设备数据）
+const currentAgent = computed(() => {
+  const id = selectedAgentId.value || deviceAgents.value[0]?.agentId
+  return deviceAgents.value.find(a => a.agentId === id) || null
+})
+
+// 当前Agent配置
+const currentAgentConfig = computed(() => {
+  if (!currentAgent.value) return null
+  return getAgentConfig(currentAgent.value.agentId)
+})
 
 // 场景故事
 const scenes = [
@@ -354,51 +384,41 @@ const agreementText = computed(() => {
     : '《云服务协议》'
 })
 
-const showSubBlockDialog = ref(false)
-const currentDeviceAgent = computed(() => deviceAgent.value[selectedDevice.value])
-const hasActive = computed(() => currentDeviceAgent.value && currentDeviceAgent.value.status === 'active')
-const isSubscription = computed(() => selectedPlan.value === 'monthly')
-
 const handleBuyClick = () => {
   if (!agreed.value) {
     showAgreementDialog.value = true
     return
   }
-  checkBeforeBuy()
+  doBuy()
 }
 
 const agreeAndPay = () => {
   agreed.value = true
   showAgreementDialog.value = false
-  checkBeforeBuy()
-}
-
-function checkBeforeBuy() {
-  if (isSubscription.value && hasActive.value) {
-    showSubBlockDialog.value = true
-    return
-  }
   doBuy()
 }
 
 function doBuy() {
   const expireDate = new Date()
   expireDate.setDate(expireDate.getDate() + (selectedPlan.value === 'monthly' ? 30 : 365))
-  deviceAgent.value[selectedDevice.value] = {
+  if (!deviceAgent.value[selectedDevice.value]) {
+    deviceAgent.value[selectedDevice.value] = []
+  }
+  deviceAgent.value[selectedDevice.value].push({
     agentId: 'all_in_one_v1',
     agentName: '全能AI',
-    agentIcon: '🤖',
+    agentIcon: '🌐',
     expireDate: expireDate.toISOString().split('T')[0],
     status: 'active'
-  }
+  })
   showToast('购买成功')
 }
 
 const validUntil = ref('2026-05-28')
 
 const canEdit = computed(() => {
-  const agent = currentAgent.value
-  return agent && agent.agentId === 'all_in_one_v1'
+  const cfg = currentAgentConfig.value
+  return cfg && cfg.id === 'all_in_one_v1'
 })
 
 const smartPush = ref(true)
@@ -435,16 +455,22 @@ watch(() => route.query.device, (newDevice) => {
   if (newDevice) selectedDevice.value = newDevice
 })
 
+const onAgentChange = (agentId) => {
+  selectedAgentId.value = agentId
+  const newList = buildEvents()
+  events.length = 0
+  newList.forEach(e => events.push(e))
+}
+
 watch(selectedDevice, () => {
+  syncSelectedAgent()
   const newList = buildEvents()
   events.length = 0
   newList.forEach(e => events.push(e))
 })
 
 function buildEvents() {
-  const agent = getDeviceAgent(selectedDevice.value)
-  if (!agent) return defaultEvents()
-  const cfg = getAgentConfig(agent.agentId)
+  const cfg = currentAgentConfig.value
   if (!cfg || !cfg.focusList) return defaultEvents()
   return cfg.focusList.map(f => ({
     name: f.name,
@@ -576,6 +602,8 @@ const saveEvent = () => {
 /* ======== 已开通态 ======== */
 .config { padding: 16px; }
 .config-note { padding: 10px 12px; background: #EFF3FF; border: 1px solid #D6E4FD; border-radius: 8px; font-size: 12px; color: #4B5563; line-height: 1.5; }
+.agent-selector-bar { background: $bg-color; padding: 6px 0 12px; display: flex; gap: 8px; flex-shrink: 0; }
+.agent-selector-chip { flex-shrink: 0; padding: 5px 14px; border-radius: 16px; font-size: 12px; font-weight: 500; color: $text-secondary; background: $bg-page; border: 1px solid $border-color; cursor: pointer; transition: all 0.15s; white-space: nowrap; &.active { background: $primary-bg; color: $primary-color; border-color: $primary-color; font-weight: 600; } }
 .status-card { background: $bg-card; border-radius: $radius-lg; overflow: hidden; box-shadow: $shadow-card; margin-bottom: 16px; }
 .status-top { padding: 16px; display: flex; justify-content: space-between; align-items: center; }
 .status-plan { font-size: 16px; font-weight: 700; color: $text-primary; }
@@ -585,7 +613,7 @@ const saveEvent = () => {
 .config-section-title { font-size: 14px; font-weight: 700; color: $text-primary; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
 .add-btn { font-size: 13px; font-weight: 600; color: $primary-color; cursor: pointer; }
 .event-tip { font-size: 11px; color: $text-secondary; margin-bottom: 12px; }
-.config-toggle { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid $border-light; font-size: 13px; color: $text-primary; }
+.config-toggle { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 13px; color: $text-primary; }
 .event-item { display: flex; align-items: center; gap: 10px; padding: 12px 0; border-bottom: 1px solid $border-light; &:last-child { border-bottom: none; } }
 .event-left { flex: 1; }
 .event-name { font-size: 13px; font-weight: 600; color: $text-primary; }
