@@ -66,11 +66,17 @@
                   </div>
                 </template>
                 <template v-else>
-                  <div class="fsp-card">
-                    <div class="fsp-card-title">🎯 关注的{{ agent.name }}事件</div>
-                    <div class="fsp-event" v-for="(f, fi) in agent.focusList" :key="fi">
-                      <span>{{ f.icon }} {{ f.name }}</span>
-                      <span class="fsp-on">已开启</span>
+                  <div class="fsp-msg">
+                    <div class="fsp-msg-time">今天</div>
+                    <div class="fsp-msg-item">
+                      <div class="fsp-msg-thumb-sm" :style="{ background: agent.sampleMessages[0]?.bg }">
+                        <span>{{ agent.focusList[0]?.icon || '📷' }}</span>
+                      </div>
+                      <div class="fsp-msg-info">
+                        <div class="fsp-msg-title">{{ agent.sampleMessages[0]?.title }}</div>
+                        <div class="fsp-msg-body">{{ agent.sampleMessages[0]?.desc }}</div>
+                        <div class="fsp-msg-meta">{{ agent.sampleMessages[0]?.time }}</div>
+                      </div>
                     </div>
                   </div>
                 </template>
@@ -236,14 +242,14 @@ const landingFeatures = [
   { key: 'message', name: 'AI消息推送' },
   { key: 'daily', name: 'AI日报总结' },
   { key: 'search', name: 'AI智能搜索' },
-  { key: 'events', name: '关注事件管理' }
+  { key: 'events', name: 'AI消息摘要' }
 ]
 const activeFeature = computed(() => {
   const key = landingFeatures[featureTabIdx.value]?.key || 'message'
   if (key === 'message') return { key: 'message', desc: '摄像头自动识别画面，只推送你关注的' + (agent.value?.name || '') + '事件，告别无关告警打扰' }
   if (key === 'daily') return { key: 'daily', desc: '每日自动生成' + (agent.value?.name || '') + '图文报告，汇总关注事件的完整时间线' }
   if (key === 'search') return { key: 'search', desc: '用自然语言搜索' + (agent.value?.name || '') + '相关事件记录，快速定位关键片段' }
-  return { key: 'events', desc: '自定义关注目标，AI精准识别并按优先级推送' }
+  return { key: 'events', desc: 'AI智能分析画面，自动生成' + (agent.value?.name || '') + '场景的清晰描述' }
 })
 
 const searchPlaceholder = computed(() => {
@@ -371,7 +377,10 @@ function doBuy() {
 .fsp-card-title { font-size: 10px; font-weight: 700; color: #333; margin-bottom: 5px; }
 .fsp-summary-title { font-size: 11px; font-weight: 600; color: #333; margin-bottom: 3px; }
 .fsp-event { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; border-bottom: 1px solid #f3f4f6; font-size: 10px; &:last-child { border-bottom: none; } }
-.fsp-on { font-size: 9px; color: #16A34A; }
+.fsp-msg-item { display: flex; gap: 6px; background: #fff; border-radius: 8px; padding: 6px 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+.fsp-msg-thumb-sm { width: 34px; height: 34px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.fsp-msg-info { flex: 1; min-width: 0; }
+.fsp-msg-meta { font-size: 8px; color: #9CA3AF; margin-top: 2px; }
 .fsp-search-bar { display: flex; align-items: center; gap: 5px; padding: 5px 8px; background: #fff; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 10px; color: #333; }
 .fsp-result { display: flex; gap: 8px; }
 .fsp-result-thumb { width: 48px; height: 36px; border-radius: 6px; flex-shrink: 0; }
