@@ -10,8 +10,8 @@
       <div v-for="srv in state.services" :key="srv.id" class="service-card">
         <div class="srv-header">
           <span class="srv-name">{{ srv.name }}</span>
-          <span :class="['srv-type', srv.type === 'multi' ? 'type-multi' : 'type-single']">
-            {{ srv.type === 'multi' ? '多设备' : '单设备' }}
+          <span :class="['srv-type', srv.type === 'multi' ? 'type-multi' : srv.type === 'nvr' ? 'type-nvr' : 'type-single']">
+            {{ srv.type === 'multi' ? '多设备' : srv.type === 'nvr' ? '多通道' : '单设备' }}
           </span>
         </div>
 
@@ -29,14 +29,22 @@
 
         <div class="srv-devices">
           <div class="devices-label">
-            绑定设备
+            {{ srv.type === 'nvr' ? '绑定通道' : '绑定设备' }}
             <span class="devices-count">
               <template v-if="srv.type === 'multi'">{{ srv.boundDevices.length }}/{{ srv.maxDevices }} 台</template>
+              <template v-else-if="srv.type === 'nvr'">{{ srv.boundChannels.length }}/{{ srv.maxChannels }} 路</template>
               <template v-else>{{ srv.boundDevice ? '已绑定' : '未绑定' }}</template>
             </span>
           </div>
           <div
             v-if="srv.type === 'multi' && srv.boundDevices.length < srv.maxDevices"
+            class="bind-btn"
+            @click="goBind(srv.id)"
+          >
+            去绑定 <van-icon name="arrow" size="14" />
+          </div>
+          <div
+            v-else-if="srv.type === 'nvr' && srv.boundChannels.length < srv.maxChannels"
             class="bind-btn"
             @click="goBind(srv.id)"
           >
@@ -82,7 +90,12 @@ async function loadServices() {
 }
 
 function goBind(srvId) {
-  router.push(`/my-services/bind?srvId=${srvId}`)
+  const srv = state.services.find((s) => s.id === srvId)
+  if (srv?.type === 'nvr') {
+    router.push(`/my-services/bind-channel?srvId=${srvId}`)
+  } else {
+    router.push(`/my-services/bind?srvId=${srvId}`)
+  }
 }
 
 onMounted(() => { loadServices() })
@@ -132,6 +145,7 @@ onMounted(() => { loadServices() })
   padding: 2px 8px;
   border-radius: $radius-pill;
   &.type-multi { background-color: #EDE9FE; color: #7C3AED; }
+  &.type-nvr { background-color: #E3F2FD; color: #1A73E8; }
   &.type-single { background-color: #E8F5E9; color: #34A853; }
 }
 

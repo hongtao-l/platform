@@ -45,6 +45,31 @@
         class="device-card"
         @click="goToLiveView(device)"
       >
+        <!-- NVR 卡片（独立样式，区别于摄像机缩略图卡片） -->
+        <template v-if="device.type === 'nvr'">
+          <div class="nvr-row">
+            <div class="nvr-icon">
+              <van-icon name="apps-o" size="24" />
+            </div>
+            <div class="nvr-info">
+              <div class="nvr-name-row">
+                <span class="nvr-name">{{ device.name }}</span>
+                <span class="nvr-channel-tag">{{ device.channelCount }}路</span>
+              </div>
+              <div class="nvr-sub">
+                <span :class="['online-dot', device.status === 'online' ? 'is-online' : '']"></span>
+                <span class="nvr-status-text">{{ statusText(device.status) }}</span>
+              </div>
+            </div>
+            <div class="nvr-tail">
+              <van-button size="small" round type="primary" plain @click.stop="goToStoreNvr(device)">云存</van-button>
+              <van-icon name="arrow" size="14" color="#9CA3AF" />
+            </div>
+          </div>
+        </template>
+
+        <!-- 摄像机卡片 -->
+        <template v-else>
         <!-- 缩略图 -->
         <div class="device-thumb">
           <div class="cam-bg" :style="{ background: device.bgGradient }">
@@ -86,6 +111,7 @@
             <span>设置</span>
           </div>
         </div>
+        </template>
       </div>
       
       <!-- 添加设备 -->
@@ -204,6 +230,18 @@ const devices = ref([
     unreadCount: 0,
     bgGradient: 'linear-gradient(135deg, #0d1b3e, #1e3a6e)',
     group: '客厅'
+  },
+  {
+    id: 'nvr001',
+    name: '8路NVR',
+    type: 'nvr',
+    status: 'online',
+    isShared: false,
+    cloudPlan: '',
+    unreadCount: 0,
+    channelCount: 8,
+    bgGradient: 'linear-gradient(135deg, #2a1a3e, #4a2a6e)',
+    group: '客厅'
   }
 ])
 
@@ -243,8 +281,16 @@ const goToMessage = (device) => {
 }
 
 const goToLiveView = (device) => {
+  if (device.type === 'nvr') {
+    router.push({ path: `/nvr/${device.id}`, query: { deviceName: device.name } })
+    return
+  }
   const route = resolveDeviceRoute(device.name)
   router.push({ path: route, query: { deviceId: device.id, deviceName: device.name } })
+}
+
+const goToStoreNvr = (device) => {
+  router.push(`/store?tab=cloud&device=${device.id}`)
 }
 
 const goToPlayback = (device) => {
@@ -421,10 +467,85 @@ const agentIconClass = (deviceName) => {
   box-shadow: $shadow-card;
   overflow: hidden;
   transition: transform 0.15s;
-  
+
   &:active {
     transform: scale(0.98);
   }
+}
+
+// NVR 卡片（横向紧凑样式，区别于摄像机缩略图卡片）
+.nvr-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.nvr-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4F46E5, #7C3AED);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.nvr-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.nvr-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nvr-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.nvr-channel-tag {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: $radius-pill;
+  background: #EDE9FE;
+  color: #7C3AED;
+}
+
+.nvr-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.online-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #9E9E9E;
+  &.is-online { background: $success-color; }
+}
+
+.nvr-status-text {
+  font-size: 12px;
+  color: $text-secondary;
+}
+
+.nvr-tail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .device-thumb {

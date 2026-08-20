@@ -79,7 +79,11 @@
 
           <div class="field-group" v-if="['event','hybrid'].includes(form.captureMode)">
             <label class="field-label">触发事件类型</label>
-            <div class="checkbox-pills">
+            <el-radio-group v-model="form.captureEventMode">
+              <el-radio value="all">全部</el-radio>
+              <el-radio value="specified">指定</el-radio>
+            </el-radio-group>
+            <div v-if="form.captureEventMode === 'specified'" class="checkbox-pills event-pills">
               <el-checkbox
                 v-for="evt in captureEventOptions"
                 :key="evt.value"
@@ -92,6 +96,7 @@
                 }"
               />
             </div>
+            <p v-else class="toggle-desc">设备上报的全部事件均触发抓图</p>
           </div>
 
           <div class="field-group" v-if="['timed','hybrid'].includes(form.captureMode)">
@@ -121,13 +126,32 @@
 
           <template v-if="form.enableRecognition">
             <div class="field-group">
-              <label class="field-label">模型</label>
-              <el-select v-model="form.recogModel" style="width:100%">
-                <el-option label="豆包视觉 1.8" value="doubao-vision-1.8" />
-                <el-option label="千问-VL-Max" value="qwen-vl-max" />
-                <el-option label="千问-VL-Plus" value="qwen-vl-plus" />
-              </el-select>
+              <label class="field-label">事件配置</label>
+              <el-radio-group v-model="form.recogEventMode">
+                <el-radio value="specified">指定事件</el-radio>
+                <el-radio value="custom">自定义事件</el-radio>
+              </el-radio-group>
             </div>
+
+            <div class="field-group" v-if="form.recogEventMode === 'specified'">
+              <label class="field-label">指定事件</label>
+              <div class="event-select-box">
+                <div class="event-tags">
+                  <el-tag v-for="evt in form.recogEvents" :key="evt" size="small" closable @close="removeRecogEvent(evt)">
+                    {{ eventNameById(evt) }}
+                  </el-tag>
+                  <span v-if="!form.recogEvents.length" class="event-empty">未选择事件</span>
+                </div>
+                <el-button size="small" @click="openEventSelectDrawer">选择事件</el-button>
+              </div>
+            </div>
+
+            <div class="field-group" v-if="form.recogEventMode === 'custom'">
+              <div class="custom-event-hint">
+                <p class="toggle-desc">自定义事件由终端用户自行定义，平台不提供事件配置；终端用户可在 APP 中根据实际需求创建自定义事件。</p>
+              </div>
+            </div>
+
             <div class="field-group">
               <div class="param-label">温度</div>
               <div class="param-row">
@@ -212,24 +236,10 @@
           <template v-if="form.enableSummary">
             <div class="field-group">
               <label class="field-label">总结周期</label>
-              <el-select v-model="form.summaryCycle" style="width:200px" @change="onSummaryCycleChange">
-                <el-option label="每天" value="daily" />
-                <el-option label="每周一" value="weekly" />
-                <el-option label="自定义 Cron" value="cron" />
-              </el-select>
-            </div>
-            <div class="field-group" v-if="form.summaryCycle === 'cron'">
-              <label class="field-label">Cron 表达式</label>
-              <el-input v-model="form.summaryCron" placeholder="0 9 * * 1" />
-              <p class="toggle-desc">支持标准 5 位 Cron 表达式</p>
-            </div>
-            <div class="field-group">
-              <label class="field-label">模型</label>
-              <el-select v-model="form.summaryModel" style="width:200px">
-                <el-option label="豆包 1.8" value="doubao-1.8" />
-                <el-option label="千问-Max" value="qwen-max" />
-                <el-option label="千问-Plus" value="qwen-plus" />
-              </el-select>
+              <div class="cycle-fixed">
+                <el-tag size="small" type="info">日总结</el-tag>
+              </div>
+              <p class="toggle-desc">用户手动生成，单日最多生成3次，历史未生成总结的日期，仅支持生成1次</p>
             </div>
             <div class="field-group">
               <div class="field-label-row">
@@ -700,6 +710,23 @@
       </template>
     </el-dialog>
 
+    <!-- 事件选择侧边弹窗（指定事件多选） -->
+    <el-drawer v-model="showEventSelectDrawer" title="选择事件" direction="rtl" size="640px" :close-on-click-modal="false">
+      <el-table ref="eventSelectTableRef" :data="recogEventOptions" stripe @selection-change="onRecogEventSelectionChange">
+        <el-table-column type="selection" width="44" />
+        <el-table-column label="事件名称" min-width="140">
+          <template #default="{ row }">{{ row.name }}</template>
+        </el-table-column>
+        <el-table-column label="事件ID" min-width="120">
+          <template #default="{ row }">{{ row.id }}</template>
+        </el-table-column>
+      </el-table>
+      <template #footer>
+        <el-button @click="showEventSelectDrawer = false">取消</el-button>
+        <el-button type="primary" @click="confirmRecogEventSelect">保存</el-button>
+      </template>
+    </el-drawer>
+
   </div>
 </template>
 
@@ -743,12 +770,14 @@ const form = reactive({
   description: '',
   // ① 抓图配置（始终开启）
   captureMode: 'hybrid',    // event | timed | hybrid
+  captureEventMode: 'all',  // all | specified
   captureEvents: [],        // 事件触发：选中的事件类型
   captureInterval: 5,       // 定时：间隔（分钟）
   captureDailyLimit: 288,   // 每日抓图上限（张）
   // ② 事件识别
   enableRecognition: true,
-  recogModel: 'doubao-vision-1.8',
+  recogEventMode: 'specified',  // specified | custom
+  recogEvents: [],              // 指定事件：选中的事件 id
   recogTemperature: 0.2,
   recogSystemPrompt: '',
   recogOutputPrompt: '',
@@ -760,9 +789,6 @@ const form = reactive({
   searchThreshold: 0.7,
   // ④ 阶段总结
   enableSummary: false,
-  summaryCycle: 'weekly',   // daily | weekly | cron
-  summaryCron: '',
-  summaryModel: 'doubao-1.8',
   summaryPeriodPrompt: '',
   summarySuggestPrompt: '',
   // 高级设置（折叠）
@@ -786,6 +812,27 @@ const captureEventOptions = [
   { label: '温度告警', value: 'temp' }
 ]
 
+// 事件识别 - 指定事件可选列表（事件库算法ID 4003 关联事件，参考 carecam_pro 宠物看护/家门看护）
+const recogEventOptions = [
+  // 宠物看护
+  { id: '500001', name: '宠物进食', category: '宠物看护' },
+  { id: '500002', name: '宠物排泄', category: '宠物看护' },
+  { id: '500003', name: '呕吐/异常', category: '宠物看护' },
+  { id: '500004', name: '宠物玩耍', category: '宠物看护' },
+  { id: '500005', name: '宠物睡眠', category: '宠物看护' },
+  // 家门看护
+  { id: '600001', name: '包裹送达', category: '家门看护' },
+  { id: '600002', name: '包裹取走', category: '家门看护' },
+  { id: '600003', name: '包裹在门口', category: '家门看护' },
+  { id: '600004', name: '快递/外卖', category: '家门看护' },
+  { id: '600005', name: '陌生人到访', category: '家门看护' },
+  { id: '600006', name: '家人出入', category: '家门看护' },
+  { id: '600007', name: '异常徘徊', category: '家门看护' },
+  { id: '600008', name: '多人聚集', category: '家门看护' }
+]
+
+const eventNameById = (id) => recogEventOptions.find(e => e.id === id)?.name || id
+
 const isConfigValid = computed(() => {
   return !!form.name.trim()
 })
@@ -801,10 +848,34 @@ const openDebugDrawer = (title, promptContent) => {
   debugPanelVisible.value = true
 }
 
-const onSummaryCycleChange = (val) => {
-  if (val === 'cron' && !form.summaryCron) {
-    form.summaryCron = '0 9 * * 1'
-  }
+// ===== 事件选择抽屉（指定事件多选） =====
+const showEventSelectDrawer = ref(false)
+const eventSelectTableRef = ref(null)
+const tempRecogEvents = ref([])
+
+const openEventSelectDrawer = () => {
+  tempRecogEvents.value = [...form.recogEvents]
+  showEventSelectDrawer.value = true
+  nextTick(() => {
+    recogEventOptions.forEach(evt => {
+      if (tempRecogEvents.value.includes(evt.id)) {
+        eventSelectTableRef.value?.toggleRowSelection(evt, true)
+      }
+    })
+  })
+}
+
+const onRecogEventSelectionChange = (rows) => {
+  tempRecogEvents.value = rows.map(r => r.id)
+}
+
+const confirmRecogEventSelect = () => {
+  form.recogEvents = [...tempRecogEvents.value]
+  showEventSelectDrawer.value = false
+}
+
+const removeRecogEvent = (id) => {
+  form.recogEvents = form.recogEvents.filter(e => e !== id)
 }
 
 // 调试测试结果（面板内展示）
@@ -1543,6 +1614,47 @@ const sendDebugMessage = async () => {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.event-pills {
+  margin-top: 12px;
+}
+
+// ===== 事件配置（指定事件多选） =====
+.event-select-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.event-tags {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 6px 12px;
+  border: 1px dashed var(--border-lighter);
+  border-radius: 6px;
+  background: var(--bg-page);
+}
+
+.event-empty {
+  font-size: 13px;
+  color: var(--text-placeholder);
+}
+
+.custom-event-hint {
+  padding: 12px 16px;
+  background: var(--bg-page);
+  border-radius: 6px;
+
+  .toggle-desc { margin: 0; }
+}
+
+.cycle-fixed {
+  margin-bottom: 8px;
 }
 
 .time-sep {

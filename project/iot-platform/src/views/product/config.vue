@@ -59,287 +59,34 @@
             </el-divider>
           </div>
 
+          <!-- 网络配置 -->
+          <template v-if="ft.key === 'network'">
+            <div class="tip-bar" style="margin-bottom:16px">
+              <el-icon><InfoFilled /></el-icon>
+              <span>配置设备联网相关参数。</span>
+            </div>
+            <div class="card" style="padding:20px 24px;margin-bottom:16px">
+              <el-form label-width="200px" class="config-form">
+                <el-form-item v-for="p in visibleNetworkParams" :key="p.id" :label="p.name">
+                  <CapControl :cap="p.cap" />
+                </el-form-item>
+              </el-form>
+            </div>
+          </template>
+
           <!-- 设备能力 -->
           <template v-if="ft.key === 'deviceCap'">
                   <div class="tip-bar" style="margin-bottom:16px">
                     <el-icon><InfoFilled /></el-icon>
-                    <span>该模块配置影响APP控制面板及设置页功能展示（公版APP及固件不受此处配置影响，详情参考<el-link type="primary" href="#" target="_blank">SDK文档</el-link>）</span>
+                    <span>本配置需 APP 对接平台（走平台下发）才生效；若 APP 直接对接SDK（P2P方式）获取能力配置，则此处配置不生效。（具体可联系APP厂商）</span>
+                    <el-button link type="primary" class="tip-bar-toggle" @click="showPhoneDemo = !showPhoneDemo">
+                      {{ showPhoneDemo ? '收起示例' : '查看示例' }}
+                    </el-button>
                   </div>
-                  <div class="config-layout">
-                    <el-segmented
-                      v-model="selectedCapModule"
-                      :options="segmentedOptions"
-                      direction="vertical"
-                      block
-                      class="module-segmented"
-                    />
-                    <div class="config-detail">
-                      <el-scrollbar height="500px">
-                        <!-- 联网方式 -->
-                        <div v-show="selectedCapModule === 'network'">
-                          <el-form label-position="right" label-width="140px" class="config-form">
-                            <el-form-item label="联网方式">
-                              <el-checkbox-group v-model="networkCfg.netTypes">
-                                <el-checkbox label="有线">有线</el-checkbox>
-                                <el-checkbox label="WIFI">WIFI</el-checkbox>
-                                <el-checkbox label="移动网络">移动网络</el-checkbox>
-                              </el-checkbox-group>
-                            </el-form-item>
-                            <el-form-item label="配网方式">
-                              <el-checkbox-group v-model="networkCfg.distMethods">
-                                <el-checkbox label="AP">AP</el-checkbox>
-                                <el-checkbox label="声音">声音</el-checkbox>
-                                <el-checkbox label="smartlink">smartlink</el-checkbox>
-                                <el-checkbox label="摄像机识别二维码添加">摄像机识别二维码添加</el-checkbox>
-                                <el-checkbox label="局域网">局域网</el-checkbox>
-                                <el-checkbox label="APP扫码添加">APP扫码添加</el-checkbox>
-                                <el-checkbox label="蓝牙添加">蓝牙添加</el-checkbox>
-                              </el-checkbox-group>
-                            </el-form-item>
-                            <el-form-item label="默认配网方式">
-                              <el-select v-model="networkCfg.defaultDistMethod" size="small" style="width:200px">
-                                <el-option label="AP" value="AP" />
-                                <el-option label="smartlink" value="smartlink" />
-                                <el-option label="局域网" value="局域网" />
-                              </el-select>
-                            </el-form-item>
-                          </el-form>
-                        </div>
+                  <div class="device-cap-layout">
+                    <div class="device-cap-main">
+                      <CapModules :modules="deviceCapModules" />
 
-                        <!-- 对讲设置 -->
-                        <div v-show="selectedCapModule === 'intercom'">
-                          <el-form label-position="right" label-width="140px" class="config-form">
-                            <el-form-item label="支持对讲方式">
-                              <el-radio-group v-model="intercomCfg.mode">
-                                <el-radio value="none">不支持对讲</el-radio>
-                                <el-radio value="half">半双工</el-radio>
-                                <el-radio value="full">全双工</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                          </el-form>
-                        </div>
-
-                        <!-- 存储设置 -->
-                        <div v-show="selectedCapModule === 'storage'">
-                          <el-form label-position="right" label-width="140px" class="config-form">
-                            <el-form-item label="存储方式">
-                              <el-radio-group v-model="storageCfg.method">
-                                <el-radio value="none">不支持</el-radio>
-                                <el-radio value="tf">TF卡存储</el-radio>
-                                <el-radio value="disk">磁盘存储</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                            <el-form-item label="常规录制方式">
-                              <el-radio-group v-model="storageCfg.recordMode">
-                                <el-radio value="scheduled">定时录制</el-radio>
-                                <el-radio value="none">不录制</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                            <template v-if="storageCfg.recordMode === 'scheduled'">
-                              <el-form-item label="开始时间">
-                                <el-time-picker v-model="storageCfg.startTime" format="HH:mm:ss" placeholder="00:00:00" size="small" style="width:160px" />
-                              </el-form-item>
-                              <el-form-item label="结束时间">
-                                <el-time-picker v-model="storageCfg.endTime" format="HH:mm:ss" placeholder="23:59:59" size="small" style="width:160px" />
-                              </el-form-item>
-                            </template>
-                            <el-form-item label="重复">
-                              <el-checkbox-group v-model="storageCfg.repeatDays">
-                                <el-checkbox v-for="d in weekDays" :key="d" :label="d">{{ d }}</el-checkbox>
-                              </el-checkbox-group>
-                            </el-form-item>
-                          </el-form>
-                        </div>
-
-                        <!-- 电池设置 -->
-                        <div v-show="selectedCapModule === 'battery'">
-                          <el-form label-position="right" label-width="140px" class="config-form">
-                            <el-form-item label="是否有电池">
-                              <el-radio-group v-model="batteryCfg.hasBattery">
-                                <el-radio :value="true">有</el-radio>
-                                <el-radio :value="false">无</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                          </el-form>
-                        </div>
-
-                        <!-- 工作模式 -->
-                        <div v-show="selectedCapModule === 'workMode'">
-                          <el-form label-position="right" label-width="140px" class="config-form">
-                            <el-form-item label="是否支持切换工作模式">
-                              <el-radio-group v-model="workModeCfg.supportSwitch">
-                                <el-radio :value="true">支持</el-radio>
-                                <el-radio :value="false">不支持</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                          </el-form>
-                        </div>
-
-                        <!-- 唤醒能力 -->
-                        <div v-show="selectedCapModule === 'wakeup'">
-                          <el-form label-position="right" label-width="140px" class="config-form">
-                            <el-form-item label="是否支持唤醒">
-                              <el-radio-group v-model="wakeupCfg.mode">
-                                <el-radio value="none">不支持</el-radio>
-                                <el-radio value="local">本地唤醒</el-radio>
-                                <el-radio value="remote">远程唤醒</el-radio>
-                                <el-radio value="both">本地和远程</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                          </el-form>
-                        </div>
-
-                        <!-- OTA能力 -->
-                        <div v-show="selectedCapModule === 'ota'">
-                          <el-form label-position="right" label-width="140px" class="config-form">
-                            <el-form-item label="是否支持远程OTA">
-                              <el-radio-group v-model="otaCfg.supportRemote">
-                                <el-radio :value="true">支持</el-radio>
-                                <el-radio :value="false">不支持</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                          </el-form>
-                        </div>
-
-                        <!-- 指示灯 -->
-                        <div v-show="selectedCapModule === 'indicator'">
-                          <el-form label-position="right" label-width="140px" class="config-form">
-                            <el-form-item label="是否有状态指示灯">
-                              <el-radio-group v-model="indicatorCfg.hasIndicator">
-                                <el-radio :value="true">有</el-radio>
-                                <el-radio :value="false">无</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                          </el-form>
-                        </div>
-
-                        <!-- 报警录制 -->
-                        <div v-show="selectedCapModule === 'alarmRecord'">
-                          <el-form label-position="right" label-width="140px" class="config-form">
-                            <el-alert title="该报警配置仅针对卡录像生效" type="info" :closable="false" show-icon style="margin-bottom:16px" />
-                            <el-form-item label="是否打开报警录制">
-                              <el-switch v-model="alarmRecordCfg.enabled" />
-                            </el-form-item>
-                            <el-form-item v-if="alarmRecordCfg.enabled" label="报警时长（秒）">
-                              <el-input-number v-model="alarmRecordCfg.duration" :min="5" :max="300" :step="5" size="small" />
-                            </el-form-item>
-                          </el-form>
-                        </div>
-
-                        <!-- 红外灯 -->
-                        <div v-show="selectedCapModule === 'irLight'">
-                          <el-form label-position="right" label-width="140px" class="config-form">
-                            <el-form-item label="是否支持">
-                              <el-radio-group v-model="irLightCfg.supported">
-                                <el-radio :value="true">是</el-radio>
-                                <el-radio :value="false">否</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                          </el-form>
-                        </div>
-
-                        <!-- 屏显配置 -->
-                        <div v-show="selectedCapModule === 'display'">
-                          <el-form label-position="right" label-width="140px" class="config-form">
-                            <el-form-item label="是否有屏显">
-                              <el-radio-group v-model="displayCfg.hasDisplay">
-                                <el-radio :value="true">是</el-radio>
-                                <el-radio :value="false">否</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                            <el-form-item label="支持的分辨率">
-                              <el-checkbox-group v-model="displayCfg.resolutions">
-                                <el-checkbox label="1920*1080">1920*1080</el-checkbox>
-                                <el-checkbox label="1280*720">1280*720</el-checkbox>
-                                <el-checkbox label="640*480">640*480</el-checkbox>
-                                <el-checkbox label="640*360">640*360</el-checkbox>
-                                <el-checkbox label="320*240">320*240</el-checkbox>
-                              </el-checkbox-group>
-                            </el-form-item>
-                            <el-form-item label="屏息时间（秒）">
-                              <el-input-number v-model="displayCfg.sleepTime" :min="1" :max="3600" size="small" style="width:200px" />
-                            </el-form-item>
-                            <el-form-item label="支持的解码方式">
-                              <el-checkbox-group v-model="displayCfg.decodeTypes">
-                                <el-checkbox label="H264">H264</el-checkbox>
-                                <el-checkbox label="H265">H265</el-checkbox>
-                                <el-checkbox label="MJPG">MJPG</el-checkbox>
-                              </el-checkbox-group>
-                            </el-form-item>
-                            <el-form-item label="支持的屏显类型">
-                              <el-checkbox-group v-model="displayCfg.displayTypes">
-                                <el-checkbox label="文字">文字</el-checkbox>
-                                <el-checkbox label="背景图">背景图</el-checkbox>
-                                <el-checkbox label="图片">图片</el-checkbox>
-                                <el-checkbox label="视频">视频</el-checkbox>
-                              </el-checkbox-group>
-                            </el-form-item>
-                          </el-form>
-                        </div>
-
-                        <!-- 喇叭配置 -->
-                        <div v-show="selectedCapModule === 'speaker'">
-                          <el-form label-position="right" label-width="140px" class="config-form">
-                            <el-form-item label="是否有喇叭">
-                              <el-radio-group v-model="speakerCfg.hasSpeaker">
-                                <el-radio :value="true">是</el-radio>
-                                <el-radio :value="false">否</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                            <el-form-item label="支持的编码方式">
-                              <el-checkbox-group v-model="speakerCfg.encodeTypes">
-                                <el-checkbox label="PCM">PCM</el-checkbox>
-                                <el-checkbox label="G711A">G711A</el-checkbox>
-                                <el-checkbox label="g711u">g711u</el-checkbox>
-                                <el-checkbox label="ACC">ACC</el-checkbox>
-                              </el-checkbox-group>
-                            </el-form-item>
-                            <el-form-item label="音量调节">
-                              <el-radio-group v-model="speakerCfg.volumeAdjust">
-                                <el-radio :value="true">支持</el-radio>
-                                <el-radio :value="false">不支持</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                            <el-form-item label="音量">
-                              <el-input-number v-model="speakerCfg.volume" :min="0" :max="100" size="small" style="width:200px" />
-                            </el-form-item>
-                            <el-form-item label="自定义铃声">
-                              <el-radio-group v-model="speakerCfg.customRing">
-                                <el-radio :value="true">支持</el-radio>
-                                <el-radio :value="false">不支持</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                            <el-form-item label="采样位深">
-                              <el-radio-group v-model="speakerCfg.sampleDepth">
-                                <el-radio value="16bit">16bit</el-radio>
-                                <el-radio value="24bit">24bit</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                            <el-form-item label="采样率">
-                              <el-radio-group v-model="speakerCfg.sampleRate">
-                                <el-radio value="8000">8000 (电话音质)</el-radio>
-                                <el-radio value="16000">16000 (语音识别常用)</el-radio>
-                                <el-radio value="44100">44100 (CD音质)</el-radio>
-                                <el-radio value="48000">48000 (专业音频常用)</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                            <el-form-item label="声道数">
-                              <el-radio-group v-model="speakerCfg.channels">
-                                <el-radio value="单声道">单声道</el-radio>
-                                <el-radio value="双声道">双声道</el-radio>
-                              </el-radio-group>
-                            </el-form-item>
-                          </el-form>
-                        </div>
-                      </el-scrollbar>
-                    </div>
-                  </div>
-
-                  <!-- 标准能力 + 自定义能力 -->
-                  <div class="tip-bar" style="margin-top:16px;margin-bottom:16px">
-                    <el-icon><InfoFilled /></el-icon>
-                    <span>标准/自定义能力共同定义产品物模型能力，影响APP控制面板和固件，请根据设备实际能力配置</span>
-                  </div>
                   <div class="cap-section">
                     <div class="cap-section-header">
                       <h3 class="cap-section-title">
@@ -349,6 +96,10 @@
                         </el-tooltip>
                       </h3>
                       <el-button type="primary" size="small" @click="openCapabilityDialog('standard')">添加标准能力</el-button>
+                    </div>
+                    <div class="tip-bar" style="margin:16px 0">
+                      <el-icon><InfoFilled /></el-icon>
+                      <span>标准/自定义能力共同定义产品物模型能力，影响APP控制面板和固件，请根据设备实际能力配置</span>
                     </div>
                     <el-table v-if="standardCapList.length" :data="standardCapList" stripe>
                       <el-table-column label="类型" width="80" align="center">
@@ -410,355 +161,39 @@
                     </el-table>
                     <div v-else class="empty-state">暂无数据</div>
                   </div>
+                    </div>
+
+                    <!-- APP 控制面板预览（右侧页内，可展开/收起） -->
+                    <transition name="panel-slide">
+                    <div v-if="showPhoneDemo" class="device-cap-side">
+                      <AppPhonePreview />
+                    </div>
+                    </transition>
+                  </div>
                 </template>
 
                 <!-- 镜头配置 -->
                 <div v-if="ft.key === 'lens'" class="config-section">
                   <div v-if="activeCamera" class="lens-config-body">
-                    <!-- 全局配置 -->
-                    <div class="config-divider" style="margin-top:0">
-                      <el-divider>
-                        <el-icon><Setting /></el-icon>
-                        <span class="section-title">全局配置</span>
-                      </el-divider>
-                    </div>
-                    <el-form label-position="right" label-width="140px" class="config-form">
-                      <el-form-item label="摄像机工作模式">
-                        <el-radio-group v-model="activeCamera.cfg.workMode">
-                          <el-radio value="independent">独立工作</el-radio>
-                          <el-radio value="linked">联动工作</el-radio>
-                        </el-radio-group>
-                      </el-form-item>
-                    </el-form>
-
-                    <!-- 单目配置 -->
-                    <div class="config-divider">
-                      <el-divider>
-                        <el-icon><Setting /></el-icon>
-                        <span class="section-title">单目配置</span>
-                      </el-divider>
-                    </div>
                     <div class="lens-header">
                       <h3 class="camera-name">{{ activeCamera.name }}</h3>
-                      <el-select v-model="activeCameraIdx" size="small" style="width:200px" @change="switchCamera">
+                      <el-select v-model="activeCameraIdx" size="small" style="width:200px">
                         <el-option v-for="(cam, i) in cameraList" :key="cam.id" :label="cam.name" :value="i" />
                       </el-select>
                       <el-button size="small" text type="danger" @click="removeCamera(activeCameraIdx)">删除</el-button>
                       <el-button size="small" @click="addCamera"><el-icon><Plus /></el-icon>添加镜头</el-button>
                     </div>
 
-                    <div class="config-layout">
-                      <el-segmented
-                        v-model="activeLensModule"
-                        :options="lensModuleOptions"
-                        direction="vertical"
-                        block
-                        class="module-segmented"
-                      />
-                      <div class="config-detail">
-                        <el-scrollbar height="500px">
-                          <el-form label-position="right" label-width="140px" class="config-form camera-form">
-
-                            <!-- ===== 多目配置 ===== -->
-                            <template v-if="activeLensModule === 'multiLens'">
-                              <el-button type="primary" size="small" @click="addLensItem">
-                                <el-icon><Plus /></el-icon>添加镜头
-                              </el-button>
-                              <el-card v-for="(lens, li) in activeCamera.cfg.lensItems" :key="li" shadow="hover" class="lens-item-card">
-                                <template #header>
-                                  <div class="card-header-row">
-                                    <span class="card-title">镜头 {{ li + 1 }}</span>
-                                    <el-button size="small" text type="danger" @click="removeLensItem(li)">删除</el-button>
-                                  </div>
-                                </template>
-                                <el-form-item label="镜头类型">
-                                  <el-select v-model="lens.type" size="small" style="width:100%">
-                                    <el-option label="普通镜头" value="普通镜头" />
-                                    <el-option label="广角镜头" value="广角镜头" />
-                                    <el-option label="长焦镜头" value="长焦镜头" />
-                                    <el-option label="鱼眼镜头" value="鱼眼镜头" />
-                                  </el-select>
-                                </el-form-item>
-                                <el-row :gutter="16">
-                                  <el-col :span="12">
-                                    <el-form-item label="最大焦距">
-                                      <el-input-number v-model="lens.maxFocalLength" :min="0" :max="100" :precision="1" size="small" style="width:100%" />
-                                    </el-form-item>
-                                  </el-col>
-                                  <el-col :span="12">
-                                    <el-form-item label="最小焦距">
-                                      <el-input-number v-model="lens.minFocalLength" :min="0" :max="100" :precision="1" size="small" style="width:100%" />
-                                    </el-form-item>
-                                  </el-col>
-                                </el-row>
-                              </el-card>
-                            </template>
-
-                            <!-- ===== PTZ控制 ===== -->
-                            <template v-if="activeLensModule === 'ptz'">
-                              <el-form-item label="是否支持PTZ">
-                                <el-radio-group v-model="activeCamera.cfg.ptz.supported">
-                                  <el-radio :value="true">支持</el-radio>
-                                  <el-radio :value="false">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item v-if="activeCamera.cfg.ptz.supported" label="PTZ能力">
-                                <el-checkbox-group v-model="activeCamera.cfg.ptz.capabilities">
-                                  <el-checkbox label="平移">平移</el-checkbox>
-                                  <el-checkbox label="倾斜">倾斜</el-checkbox>
-                                  <el-checkbox label="变焦">变焦</el-checkbox>
-                                </el-checkbox-group>
-                              </el-form-item>
-                              <el-form-item v-if="activeCamera.cfg.ptz.supported" label="是否支持预置位">
-                                <el-radio-group v-model="activeCamera.cfg.ptz.presetSupported">
-                                  <el-radio :value="true">支持</el-radio>
-                                  <el-radio :value="false">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item v-if="activeCamera.cfg.ptz.supported" label="是否支持自动巡航">
-                                <el-radio-group v-model="activeCamera.cfg.ptz.cruiseSupported">
-                                  <el-radio :value="true">支持</el-radio>
-                                  <el-radio :value="false">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item v-if="activeCamera.cfg.ptz.supported" label="空间定位能力">
-                                <el-radio-group v-model="activeCamera.cfg.ptz.spatialPositioning">
-                                  <el-radio value="none">不支持</el-radio>
-                                  <el-radio value="3d">支持3D居中</el-radio>
-                                  <el-radio value="gps">支持GPS定位</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item v-if="activeCamera.cfg.ptz.supported" label="PTZ转速">
-                                <el-radio-group v-model="activeCamera.cfg.ptz.ptzSpeed">
-                                  <el-radio :value="true">支持</el-radio>
-                                  <el-radio :value="false">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                            </template>
-
-                            <!-- ===== 视频码流 ===== -->
-                            <template v-if="activeLensModule === 'stream'">
-                              <el-button type="primary" size="small" @click="addStream">
-                                <el-icon><Plus /></el-icon>添加码流
-                              </el-button>
-                              <el-card v-for="(stream, si) in activeCamera.cfg.streams" :key="si" shadow="hover" class="stream-item-card">
-                                <template #header>
-                                  <div class="card-header-row">
-                                    <span class="card-title">码流 {{ si + 1 }}</span>
-                                    <el-tag v-if="stream.isStorage" size="small" type="success" style="margin-left:8px">存储码流</el-tag>
-                                    <el-button v-else size="small" text type="primary" @click="setStorageStream(si)">设为存储码流</el-button>
-                                    <el-button size="small" text type="danger" style="margin-left:auto" @click="removeStream(si)">删除</el-button>
-                                  </div>
-                                </template>
-                                <el-form-item label="支持的分辨率及描述">
-                                  <div class="resolution-list">
-                                    <div v-for="r in resolutions" :key="r.val" class="resolution-item">
-                                      <el-checkbox :model-value="stream.resolutions.some(s => s.res === r.val)" @change="v => {
-                                        if (v) stream.resolutions.push({ res: r.val, selected: true, descr: '' })
-                                        else stream.resolutions = stream.resolutions.filter(s => s.res !== r.val)
-                                      }">
-                                        <div style="display:flex;align-items:center">
-                                          <span style="width:80px">{{ r.val }}</span>
-                                          <el-input v-if="stream.resolutions.some(s => s.res === r.val)" v-model="stream.resolutions.find(s => s.res === r.val).descr" size="small" placeholder="分辨率描述" style="width:120px;margin-left:8px" />
-                                        </div>
-                                      </el-checkbox>
-                                    </div>
-                                  </div>
-                                </el-form-item>
-                                <el-form-item label="默认分辨率">
-                                  <el-select v-model="stream.defaultResolution" size="small" style="width:160px">
-                                    <el-option v-for="r in resolutions" :key="r.val" :label="r.val" :value="r.val" />
-                                  </el-select>
-                                </el-form-item>
-                                <el-form-item label="码率控制类型">
-                                  <el-radio-group v-model="stream.bitrateControl">
-                                    <el-radio value="CBR">CBR</el-radio>
-                                    <el-radio value="VBR">VBR</el-radio>
-                                  </el-radio-group>
-                                </el-form-item>
-                                <el-form-item label="码率值kbps">
-                                  <el-input-number v-model="stream.bitrateValue" :min="64" :max="20480" size="small" style="width:100%" />
-                                </el-form-item>
-                                <el-form-item label="支持码率类型">
-                                  <el-checkbox-group v-model="stream.encodeTypes">
-                                    <el-checkbox label="H264">H.264</el-checkbox>
-                                    <el-checkbox label="H265">H.265</el-checkbox>
-                                    <el-checkbox label="MJPEG">MJPEG</el-checkbox>
-                                    <el-checkbox label="VP8">VP8</el-checkbox>
-                                  </el-checkbox-group>
-                                </el-form-item>
-                                <el-form-item label="默认编码类型">
-                                  <el-select v-model="stream.defaultEncodeType" size="small" style="width:160px">
-                                    <el-option label="H.264" value="H264" />
-                                    <el-option label="H.265" value="H265" />
-                                    <el-option label="MJPEG" value="MJPEG" />
-                                  </el-select>
-                                </el-form-item>
-                                <el-form-item label="智能编码">
-                                  <el-switch v-model="stream.smartEncode" size="small" />
-                                </el-form-item>
-                                <el-form-item label="关键帧间隔">
-                                  <el-input-number v-model="stream.keyFrameInterval" :min="1" :max="250" size="small" style="width:100%" />
-                                </el-form-item>
-                                <el-form-item label="帧率">
-                                  <el-input-number v-model="stream.frameRate" :min="1" :max="60" size="small" style="width:100%" />
-                                </el-form-item>
-                              </el-card>
-                            </template>
-
-                            <!-- ===== 图像参数 ===== -->
-                            <template v-if="activeLensModule === 'image'">
-                              <el-form-item label="图像翻转">
-                                <el-radio-group v-model="activeCamera.cfg.image.flip">
-                                  <el-radio value="1">支持</el-radio>
-                                  <el-radio value="0">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item v-if="activeCamera.cfg.image.flip === '1'" label="默认状态">
-                                <el-radio-group v-model="activeCamera.cfg.image.flipDefault">
-                                  <el-radio value="正放">正放</el-radio>
-                                  <el-radio value="翻转">翻转</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item label="镜像能力">
-                                <el-radio-group v-model="activeCamera.cfg.image.mirror">
-                                  <el-radio value="1">支持</el-radio>
-                                  <el-radio value="0">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item v-if="activeCamera.cfg.image.mirror === '1'" label="图像镜像">
-                                <el-radio-group v-model="activeCamera.cfg.image.mirrorDefault">
-                                  <el-radio value="打开">打开</el-radio>
-                                  <el-radio value="关闭">关闭</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item label="是否支持夜视能力">
-                                <el-radio-group v-model="activeCamera.cfg.image.nightVision">
-                                  <el-radio :value="true">支持</el-radio>
-                                  <el-radio :value="false">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item label="宽动态">
-                                <el-radio-group v-model="activeCamera.cfg.image.wdr">
-                                  <el-radio :value="true">支持</el-radio>
-                                  <el-radio :value="false">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item v-if="activeCamera.cfg.image.wdr" label="默认状态">
-                                <el-switch v-model="activeCamera.cfg.image.wdrDefault" size="small" />
-                              </el-form-item>
-                              <el-form-item label="高动态">
-                                <el-radio-group v-model="activeCamera.cfg.image.hdr">
-                                  <el-radio :value="true">支持</el-radio>
-                                  <el-radio :value="false">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item v-if="activeCamera.cfg.image.hdr" label="默认状态">
-                                <el-switch v-model="activeCamera.cfg.image.hdrDefault" size="small" />
-                              </el-form-item>
-                              <el-form-item label="抗闪烁">
-                                <el-radio-group v-model="activeCamera.cfg.image.antiFlicker">
-                                  <el-radio :value="true">支持</el-radio>
-                                  <el-radio :value="false">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item v-if="activeCamera.cfg.image.antiFlicker" label="默认扫描频率">
-                                <el-radio-group v-model="activeCamera.cfg.image.antiFlickerFreq">
-                                  <el-radio value="50">50</el-radio>
-                                  <el-radio value="60">60</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                            </template>
-
-                            <!-- ===== 隐私区域 ===== -->
-                            <template v-if="activeLensModule === 'privacy'">
-                              <el-form-item label="是否支持隐私区域">
-                                <el-radio-group v-model="activeCamera.cfg.privacyZone.supported">
-                                  <el-radio :value="true">支持</el-radio>
-                                  <el-radio :value="false">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                            </template>
-
-                            <!-- ===== 水印 ===== -->
-                            <template v-if="activeLensModule === 'watermark'">
-                              <el-form-item label="LOGO水印开关能力">
-                                <el-radio-group v-model="activeCamera.cfg.watermark.logoWatermarkSupported">
-                                  <el-radio :value="true">支持</el-radio>
-                                  <el-radio :value="false">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item label="水印能力">
-                                <el-radio-group v-model="activeCamera.cfg.watermark.type">
-                                  <el-radio value="device">设备水印</el-radio>
-                                  <el-radio value="app">App水印</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item label="是否支持自定义水印">
-                                <el-radio-group v-model="activeCamera.cfg.watermark.customSupported">
-                                  <el-radio :value="true">支持</el-radio>
-                                  <el-radio :value="false">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item label="水印内容">
-                                <el-input v-model="activeCamera.cfg.watermark.content" size="small" placeholder="请输入水印内容" style="width:240px" />
-                              </el-form-item>
-                              <el-form-item label="水印位置">
-                                <el-radio-group v-model="activeCamera.cfg.watermark.position">
-                                  <el-radio value="device_default">设备默认</el-radio>
-                                  <el-radio value="top_left">左上</el-radio>
-                                  <el-radio value="top_right">右上</el-radio>
-                                  <el-radio value="bottom_left">左下</el-radio>
-                                  <el-radio value="bottom_right">右下</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item label="是否默认打开水印">
-                                <el-switch v-model="activeCamera.cfg.watermark.defaultOn" size="small" />
-                              </el-form-item>
-                            </template>
-
-                            <!-- ===== 鱼眼矫正 ===== -->
-                            <template v-if="activeLensModule === 'fisheye'">
-                              <el-form-item label="鱼眼矫正">
-                                <div class="flex-col">
-                                  <el-radio-group v-model="activeCamera.cfg.fisheye.mode">
-                                    <el-radio value="device">设备矫正</el-radio>
-                                    <el-radio value="app">App矫正</el-radio>
-                                  </el-radio-group>
-                                  <span class="form-tip">如设备不支持此能力，则APP会进行矫正处理</span>
-                                </div>
-                              </el-form-item>
-                            </template>
-
-                            <!-- ===== 高级配置项 ===== -->
-                            <template v-if="activeLensModule === 'advanced'">
-                              <el-form-item label="抓图能力">
-                                <el-radio-group v-model="activeCamera.cfg.advanced.snapshot">
-                                  <el-radio :value="true">支持</el-radio>
-                                  <el-radio :value="false">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item label="人形坐标写入">
-                                <el-radio-group v-model="activeCamera.cfg.advanced.humanoidCoord">
-                                  <el-radio :value="true">支持</el-radio>
-                                  <el-radio :value="false">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item label="是否是合成流">
-                                <div class="flex-col">
-                                  <el-radio-group v-model="activeCamera.cfg.advanced.compositeStream">
-                                    <el-radio :value="true">支持</el-radio>
-                                    <el-radio :value="false">不支持</el-radio>
-                                  </el-radio-group>
-                                  <span class="form-tip">如果app上需要画中画功能，设备需要支持合成流</span>
-                                </div>
-                              </el-form-item>
-                            </template>
-
-                          </el-form>
-                        </el-scrollbar>
-                      </div>
+                    <div class="tip-bar" style="margin-bottom:16px">
+                      <el-icon><InfoFilled /></el-icon>
+                      <span>本配置需 APP 对接平台（走平台下发）才生效；若 APP 直接对接SDK（P2P方式）获取能力配置，则此处配置不生效。（具体可联系APP厂商）</span>
+                      <el-button link type="primary" class="tip-bar-toggle" @click="showPhoneDemo = !showPhoneDemo">
+                        {{ showPhoneDemo ? '收起示例' : '查看示例' }}
+                      </el-button>
                     </div>
+                    <div class="device-cap-layout">
+                    <div class="device-cap-main">
+                    <CapModules :modules="activeCamera.capabilityConfig" />
 
                     <!-- 标准能力 -->
                     <div class="cap-section">
@@ -828,6 +263,15 @@
                       </el-table>
                       <div v-else class="empty-state">暂无数据</div>
                     </div>
+                    </div>
+
+                    <!-- APP 控制面板预览（右侧页内，可展开/收起） -->
+                    <transition name="panel-slide">
+                    <div v-if="showPhoneDemo" class="device-cap-side">
+                      <AppPhonePreview />
+                    </div>
+                    </transition>
+                    </div>
                   </div>
 
                   <div v-else class="empty-state" style="padding:40px 0">暂无镜头配置，请先添加镜头</div>
@@ -836,106 +280,25 @@
                 <!-- 麦克风配置 -->
                 <div v-if="ft.key === 'mic'" class="config-section">
                   <div v-if="activeMic" class="lens-config-body">
-                    <div class="config-divider" style="margin-top:0">
-                      <el-divider>
-                        <el-icon><Setting /></el-icon>
-                        <span class="section-title">Microphone配置</span>
-                      </el-divider>
-                    </div>
                     <div class="lens-header">
                       <h3 class="camera-name">{{ activeMic.name }}</h3>
-                      <el-select v-model="activeMicIdx" size="small" style="width:200px" @change="activeMicModule = 'micParam'">
+                      <el-select v-model="activeMicIdx" size="small" style="width:200px">
                         <el-option v-for="(m, i) in micList" :key="m.id" :label="m.name" :value="i" />
                       </el-select>
                       <el-button size="small" text type="danger" @click="removeMic(activeMicIdx)">删除</el-button>
                       <el-button size="small" @click="addMic"><el-icon><Plus /></el-icon>添加Microphone</el-button>
                     </div>
 
-                    <div class="config-layout">
-                      <el-segmented
-                        v-model="activeMicModule"
-                        :options="micModuleOptions"
-                        direction="vertical"
-                        block
-                        class="module-segmented"
-                      />
-                      <div class="config-detail">
-                        <el-scrollbar height="500px">
-                          <el-form label-position="right" label-width="140px" class="config-form">
-
-                            <!-- 麦克风参数配置 -->
-                            <template v-if="activeMicModule === 'micParam'">
-                              <el-form-item label="麦克风开关">
-                                <el-switch v-model="activeMic.cfg.micSwitch" size="small" />
-                              </el-form-item>
-                              <el-form-item label="音量调节">
-                                <el-radio-group v-model="activeMic.cfg.volumeAdjust">
-                                  <el-radio :value="true">支持</el-radio>
-                                  <el-radio :value="false">不支持</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item label="采集音量">
-                                <el-input-number v-model="activeMic.cfg.captureVolume" :min="0" :max="100" size="small" style="width:200px" />
-                              </el-form-item>
-                              <el-form-item label="采样位深">
-                                <el-radio-group v-model="activeMic.cfg.sampleDepth">
-                                  <el-radio value="16bit">16bit</el-radio>
-                                  <el-radio value="24bit">24bit</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item label="采样率">
-                                <el-radio-group v-model="activeMic.cfg.sampleRate">
-                                  <el-radio value="8000">8000 (电话音质)</el-radio>
-                                  <el-radio value="16000">16000 (语音识别常用)</el-radio>
-                                  <el-radio value="44100">44100 (CD音质)</el-radio>
-                                  <el-radio value="48000">48000 (专业音频常用)</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                              <el-form-item label="声道数">
-                                <el-radio-group v-model="activeMic.cfg.channels">
-                                  <el-radio value="单声道">单声道</el-radio>
-                                  <el-radio value="双声道">双声道</el-radio>
-                                </el-radio-group>
-                              </el-form-item>
-                            </template>
-
-                            <!-- 音频码流配置 -->
-                            <template v-if="activeMicModule === 'audioStream'">
-                              <el-button type="primary" size="small" @click="addAudioStream">
-                                <el-icon><Plus /></el-icon>添加音频码流
-                              </el-button>
-                              <el-card v-for="(stream, si) in activeMic.cfg.audioStreams" :key="si" shadow="hover" class="stream-item-card">
-                                <template #header>
-                                  <div class="card-header-row">
-                                    <span class="card-title">码流 {{ si + 1 }}</span>
-                                    <el-button size="small" text type="danger" style="margin-left:auto" @click="removeAudioStream(si)">删除</el-button>
-                                  </div>
-                                </template>
-                                <el-form-item label="支持的编码类型">
-                                  <el-checkbox-group v-model="stream.encodeTypes">
-                                    <el-checkbox label="PCM">PCM</el-checkbox>
-                                    <el-checkbox label="G711A">G711A</el-checkbox>
-                                    <el-checkbox label="G711U">G711U</el-checkbox>
-                                    <el-checkbox label="AAC">AAC</el-checkbox>
-                                    <el-checkbox label="MP3">MP3</el-checkbox>
-                                  </el-checkbox-group>
-                                </el-form-item>
-                                <el-form-item label="默认编码类型">
-                                  <el-select v-model="stream.defaultEncodeType" size="small" style="width:160px">
-                                    <el-option label="PCM" value="PCM" />
-                                    <el-option label="G711A" value="G711A" />
-                                    <el-option label="G711U" value="G711U" />
-                                    <el-option label="AAC" value="AAC" />
-                                    <el-option label="MP3" value="MP3" />
-                                  </el-select>
-                                </el-form-item>
-                              </el-card>
-                            </template>
-
-                          </el-form>
-                        </el-scrollbar>
-                      </div>
+                    <div class="tip-bar" style="margin-bottom:16px">
+                      <el-icon><InfoFilled /></el-icon>
+                      <span>本配置需 APP 对接平台（走平台下发）才生效；若 APP 直接对接SDK（P2P方式）获取能力配置，则此处配置不生效。（具体可联系APP厂商）</span>
+                      <el-button link type="primary" class="tip-bar-toggle" @click="showPhoneDemo = !showPhoneDemo">
+                        {{ showPhoneDemo ? '收起示例' : '查看示例' }}
+                      </el-button>
                     </div>
+                    <div class="device-cap-layout">
+                    <div class="device-cap-main">
+                    <CapModules :modules="activeMic.capabilityConfig" />
 
                     <!-- 标准能力 -->
                     <div class="cap-section">
@@ -1004,6 +367,15 @@
                         </el-table-column>
                       </el-table>
                       <div v-else class="empty-state">暂无数据</div>
+                    </div>
+                    </div>
+
+                    <!-- APP 控制面板预览（右侧页内，可展开/收起） -->
+                    <transition name="panel-slide">
+                    <div v-if="showPhoneDemo" class="device-cap-side">
+                      <AppPhonePreview />
+                    </div>
+                    </transition>
                     </div>
                   </div>
 
@@ -1916,6 +1288,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { Plus, ArrowLeft, ArrowRight, Edit, Switch, Check, Setting, QuestionFilled, Delete, Search, InfoFilled, CircleCheck } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { listAlgorithms, listServices, allEvents, getCapabilitiesByIds, getModules, getAllCapabilities, getAlgorithmServiceId, getAlgorithmEvents, getAllAlgorithmServices } from '@/views/iot/thing-model/data'
+import CapControl from './cap-control.vue'
+import CapModules from './cap-modules.vue'
+import AppPhonePreview from './AppPhonePreview.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -1928,11 +1303,15 @@ const currentStep = ref(0)
 
 // ===== 功能配置子 Tab =====
 const funcTabs = [
+  { key: 'network', label: '网络配置' },
   { key: 'deviceCap', label: '设备能力' },
-  { key: 'lens', label: '镜头配置' },
-  { key: 'mic', label: '麦克风配置' }
+  { key: 'lens', label: '镜头能力配置' },
+  { key: 'mic', label: '麦克风能力配置' }
 ]
-const activeFuncTab = ref('deviceCap')
+const activeFuncTab = ref('network')
+
+// APP 控制面板示例展开状态
+const showPhoneDemo = ref(false)
 
 function prevFuncStep() {
   const idx = funcTabs.findIndex(t => t.key === activeFuncTab.value)
@@ -1958,160 +1337,175 @@ function saveNextFuncStep() {
   }
 }
 
-// ===== 模块分段控制器 =====
-const selectedCapModule = ref('network')
-const segmentedOptions = [
-  { label: '联网方式', value: 'network' },
-  { label: '对讲设置', value: 'intercom' },
-  { label: '存储设置', value: 'storage' },
-  { label: '电池设置', value: 'battery' },
-  { label: '工作模式', value: 'workMode' },
-  { label: '唤醒能力', value: 'wakeup' },
-  { label: 'OTA能力', value: 'ota' },
-  { label: '指示灯', value: 'indicator' },
-  { label: '报警录制', value: 'alarmRecord' },
-  { label: '红外灯', value: 'irLight' },
-  { label: '屏显配置', value: 'display' },
-  { label: '喇叭配置', value: 'speaker' }
-]
+// ===== 能力项配置模型 =====
+// 每个能力项：先选「支持/不支持」，选「支持」后展开默认值（下发固件）
+//   supported   — '1' 支持 / '0' 不支持
+//   defaultValue — 默认值控件，仅 supported==='1' 时显示
+//   children     — 级联子项（如 音量调节 → 音量），仅 supported==='1' 时显示
+// 控件 type: switch / checkbox / radio / select / number / time
+function capSwitch(value) { return { type: 'switch', value } }
+function capCheckbox(options, value) { return { type: 'checkbox', options, value } }
+function capRadio(options, value) { return { type: 'radio', options, value } }
+function capSelect(options, value) { return { type: 'select', options, value } }
+function capNumber(value, min, max, unit) { return { type: 'number', value, min, max, unit } }
+function capTime(value) { return { type: 'time', value } }
 
-// ===== 设备能力配置 =====
-const networkCfg = reactive({ netTypes: [], distMethods: [], defaultDistMethod: 'AP' })
-const intercomCfg = reactive({ mode: 'none' })
-const storageCfg = reactive({
-  method: 'none', recordMode: 'scheduled',
-  startTime: new Date(2000, 0, 1, 0, 0, 0),
-  endTime: new Date(2000, 0, 1, 23, 59, 59),
-  repeatDays: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+// ===== 网络配置（设备级网络相关参数）=====
+const networkParams = reactive([
+  { id: 'netTypes', name: '联网方式', cap: capCheckbox(['有线', 'WIFI', '移动网络'], ['WIFI']) },
+  { id: 'dualBand', name: '是否支持双频路由器(5Ghz)', cap: capRadio(['是', '否'], '否'), when: 'wifi' },
+  { id: 'distMethods', name: '配网方式', cap: capCheckbox(['AP', '声音', 'smartlink', '摄像机识别二维码添加', '局域网', 'APP扫码添加', '蓝牙添加'], ['AP']) },
+  { id: 'apPassword', name: 'AP是否支持设置密码', cap: capRadio(['是', '否'], '否'), when: 'ap' },
+  { id: 'defaultDistMethod', name: '默认配网方式', cap: capSelect(['AP', 'smartlink', '局域网'], 'AP') }
+])
+
+// 条件显隐：联网方式含 WIFI 显示双频路由器；配网方式含 AP 显示 AP 密码配置
+const visibleNetworkParams = computed(() => {
+  const netTypes = networkParams.find(p => p.id === 'netTypes')?.cap.value || []
+  const distMethods = networkParams.find(p => p.id === 'distMethods')?.cap.value || []
+  const conditions = {
+    wifi: netTypes.includes('WIFI'),
+    ap: distMethods.includes('AP')
+  }
+  return networkParams.filter(p => !p.when || conditions[p.when])
 })
-const weekDays = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-const batteryCfg = reactive({ hasBattery: false })
-const workModeCfg = reactive({ supportSwitch: false })
-const wakeupCfg = reactive({ mode: 'none' })
-const otaCfg = reactive({ supportRemote: false })
-const indicatorCfg = reactive({ hasIndicator: false })
-const alarmRecordCfg = reactive({ enabled: false, duration: 15 })
-const irLightCfg = reactive({ supported: false })
+
+// ===== 设备能力（设备级单例，17 项，按 7 模块分组）=====
+const deviceCapModules = reactive([
+  {
+    name: '扬声器模块',
+    items: [
+      { id: 'intercom', name: '对讲能力', supported: '0', defaultValue: capSelect(['半双工', '全双工'], '半双工'), access: 'ro' },
+      { id: 'hasSpeaker', name: '喇叭能力', supported: '0', defaultValue: null },
+      { id: 'volumeAdjust', name: '音量调节能力', supported: '0', defaultValue: null, children: [
+        { id: 'volume', name: '音量', defaultValue: capNumber(1, 0, 100, '') }
+      ] },
+      { id: 'customRing', name: '自定义铃声能力', supported: '0', defaultValue: null }
+    ]
+  },
+  {
+    name: '录制模块',
+    items: [
+      { id: 'storageMethod', name: '存储能力', supported: '0', defaultValue: capRadio(['TF卡存储', '磁盘存储'], 'TF卡存储'), access: 'ro' },
+      { id: 'recordMode', name: '常规录制能力', supported: '0', defaultValue: null, children: [
+        { id: 'recordStart', name: '录制开始时间', defaultValue: capTime('00:00:00') },
+        { id: 'recordEnd', name: '录制结束时间', defaultValue: capTime('23:59:59') },
+        { id: 'repeatDays', name: '录制重复', defaultValue: capCheckbox(['周一', '周二', '周三', '周四', '周五', '周六', '周日'], ['周一', '周二', '周三', '周四', '周五', '周六', '周日']) }
+      ] },
+      { id: 'alarmRecord', name: '报警录制能力', supported: '0', defaultValue: null, children: [
+        { id: 'alarmDuration', name: '报警时长', defaultValue: capNumber(15, 5, 300, '秒') }
+      ] }
+    ]
+  },
+  {
+    name: '电池模块',
+    items: [
+      { id: 'hasBattery', name: '电池能力', supported: '0', defaultValue: null },
+      { id: 'wakeup', name: '唤醒能力', supported: '0', defaultValue: capRadio(['本地唤醒', '远程唤醒', '本地和远程'], '本地唤醒'), access: 'ro' }
+    ]
+  },
+  {
+    name: '灯光模块',
+    items: [
+      { id: 'indicator', name: '状态指示灯能力', supported: '0', defaultValue: null },
+      { id: 'irLight', name: '红外灯能力', supported: '0', defaultValue: null }
+    ]
+  }
+])
+
+// ===== 镜头能力项（每个镜头实例一份，17 项，按 2 模块分组）=====
+function defaultLensCapabilityConfig() {
+  return [
+    {
+      name: 'PTZ模块',
+      items: [
+        { id: 'ptzSupported', name: 'PTZ能力', supported: '0', defaultValue: null, children: [
+          { id: 'ptzCaps', name: 'PTZ方向', defaultValue: capCheckbox(['平移', '倾斜', '变焦'], []), access: 'ro' }
+        ] },
+        { id: 'preset', name: '预置位能力', supported: '0', defaultValue: null },
+        { id: 'cruise', name: '自动巡航能力', supported: '0', defaultValue: null },
+        { id: 'spatial', name: '空间定位能力', supported: '0', defaultValue: capRadio(['支持3D居中', '支持GPS定位'], '支持3D居中'), access: 'ro' },
+        { id: 'ptzSpeed', name: 'PTZ转速能力', supported: '0', defaultValue: null }
+      ]
+    },
+    {
+      name: '图像采集模块',
+      items: [
+        { id: 'flip', name: '图像翻转能力', supported: '0', defaultValue: capRadio(['正放', '翻转'], '正放'), access: 'rw' },
+        { id: 'mirror', name: '镜像能力', supported: '0', defaultValue: capRadio(['打开', '关闭'], '关闭'), access: 'rw' },
+        { id: 'nightVision', name: '夜视能力', supported: '0', defaultValue: null },
+        { id: 'wdr', name: '宽动态能力', supported: '0', defaultValue: capSwitch(false), access: 'rw' },
+        { id: 'hdr', name: '高动态能力', supported: '0', defaultValue: capSwitch(false), access: 'rw' },
+        { id: 'antiFlicker', name: '抗闪烁能力', supported: '0', defaultValue: capRadio(['50', '60'], '50'), access: 'rw' },
+        { id: 'privacyZone', name: '隐私区域能力', supported: '0', defaultValue: null },
+        { id: 'logoWatermark', name: 'LOGO水印能力', supported: '0', defaultValue: null },
+        { id: 'fisheye', name: '鱼眼矫正能力', supported: '0', defaultValue: capRadio(['设备矫正', 'App矫正'], '设备矫正'), access: 'rw' },
+        { id: 'snapshot', name: '抓图能力', supported: '0', defaultValue: null },
+        { id: 'humanoidCoord', name: '人形坐标写入能力', supported: '0', defaultValue: null },
+        { id: 'compositeStream', name: '合成流能力', supported: '0', defaultValue: null }
+      ]
+    }
+  ]
+}
+
+// ===== 麦克风能力项（每个麦克风实例一份，2 项，1 模块）=====
+function defaultMicCapabilityConfig() {
+  return [
+    {
+      name: '麦克风模块',
+      items: [
+        { id: 'micSwitch', name: '麦克风开关能力', supported: '0', defaultValue: null },
+        { id: 'volumeAdjust', name: '音量调节能力', supported: '0', defaultValue: null, children: [
+          { id: 'captureVolume', name: '采集音量', defaultValue: capNumber(0, 0, 100, ''), access: 'rw' }
+        ] }
+      ]
+    }
+  ]
+}
+
+// ===== 出厂参数（归档，不维护；由设备固件上报，页面不渲染，后续按需接回）=====
+const factoryParams = [
+  { id: 'lensType', name: '镜头类型', type: 'select', options: ['普通镜头', '广角镜头', '长焦镜头', '鱼眼镜头'] },
+  { id: 'focalLength', name: '焦距', type: 'range', min: 0, max: 100 },
+  { id: 'resolutions', name: '支持的分辨率', type: 'checkbox', options: ['320*240', '640*360', '640*480', '1280*720', '1280*960', '1920*1080', '1600*1200', '2048*1536', '2560*1440', '2688*1520', '2560*1920'] },
+  { id: 'bitrateControl', name: '码率控制类型', type: 'radio', options: ['CBR', 'VBR'] },
+  { id: 'bitrateValue', name: '码率值', type: 'number', min: 64, max: 20480, unit: 'kbps' },
+  { id: 'streamEncodeTypes', name: '码流编码类型', type: 'checkbox', options: ['H264', 'H265', 'MJPEG', 'VP8'] },
+  { id: 'streamDefaultEncode', name: '码流默认编码', type: 'select', options: ['H264', 'H265', 'MJPEG'] },
+  { id: 'smartEncode', name: '智能编码', type: 'switch' },
+  { id: 'keyFrameInterval', name: '关键帧间隔', type: 'number', min: 1, max: 250 },
+  { id: 'frameRate', name: '帧率', type: 'number', min: 1, max: 60 },
+  { id: 'defaultResolution', name: '默认分辨率', type: 'select', options: ['320*240', '640*360', '640*480', '1280*720', '1280*960', '1920*1080', '1600*1200', '2048*1536', '2560*1440', '2688*1520', '2560*1920'] },
+  { id: 'otaSupport', name: '是否支持远程OTA', type: 'switch' },
+  { id: 'workMode', name: '摄像机工作模式', type: 'radio', options: ['独立工作', '联动工作'] },
+  { id: 'hasDisplay', name: '是否有屏显', type: 'switch' },
+  { id: 'displayResolutions', name: '屏显分辨率', type: 'checkbox', options: ['1920*1080', '1280*720', '640*480', '640*360', '320*240'] },
+  { id: 'displaySleepTime', name: '屏息时间', type: 'number', min: 1, max: 3600, unit: '秒' },
+  { id: 'displayDecodeTypes', name: '屏显解码方式', type: 'checkbox', options: ['H264', 'H265', 'MJPG'] },
+  { id: 'displayTypes', name: '屏显类型', type: 'checkbox', options: ['文字', '背景图', '图片', '视频'] },
+  { id: 'speakerEncodeTypes', name: '喇叭编码方式', type: 'checkbox', options: ['PCM', 'G711A', 'g711u', 'ACC'] },
+  { id: 'speakerSampleDepth', name: '喇叭采样位深', type: 'radio', options: ['16bit', '24bit'] },
+  { id: 'speakerSampleRate', name: '喇叭采样率', type: 'radio', options: ['8000', '16000', '44100', '48000'] },
+  { id: 'speakerChannels', name: '喇叭声道数', type: 'radio', options: ['单声道', '双声道'] },
+  { id: 'micEncodeTypes', name: '麦克风编码方式', type: 'checkbox', options: ['PCM', 'G711A', 'G711U', 'AAC', 'MP3'] },
+  { id: 'micDefaultEncode', name: '麦克风默认编码', type: 'select', options: ['PCM', 'G711A', 'G711U', 'AAC', 'MP3'] },
+  { id: 'micSampleDepth', name: '麦克风采样位深', type: 'radio', options: ['16bit', '24bit'] },
+  { id: 'micSampleRate', name: '麦克风采样率', type: 'radio', options: ['8000', '16000', '44100', '48000'] },
+  { id: 'micChannels', name: '麦克风声道数', type: 'radio', options: ['单声道', '双声道'] }
+]
 
 // ===== 镜头配置 =====
-const resolutions = [
-  { val: '320*240' }, { val: '640*360' }, { val: '640*480' },
-  { val: '1280*720' }, { val: '1280*960' }, { val: '1920*1080' },
-  { val: '1600*1200' }, { val: '2048*1536' }, { val: '2560*1440' },
-  { val: '2688*1520' }, { val: '2560*1920' }
-]
-
 const activeCameraIdx = ref(0)
-const activeLensModule = ref('multiLens')
-const lensModuleOptions = [
-  { label: '多目配置', value: 'multiLens' },
-  { label: 'PTZ控制', value: 'ptz' },
-  { label: '视频码流', value: 'stream' },
-  { label: '图像参数', value: 'image' },
-  { label: '隐私区域', value: 'privacy' },
-  { label: '水印', value: 'watermark' },
-  { label: '鱼眼矫正', value: 'fisheye' },
-  { label: '高级配置项', value: 'advanced' }
-]
-
-function defaultStreamCfg() {
-  return {
-    resolutions: [{ res: '320*240', selected: true, descr: '' }],
-    defaultResolution: '320*240',
-    bitrateControl: 'CBR',
-    bitrateValue: 1024,
-    encodeTypes: ['H264'],
-    defaultEncodeType: 'H264',
-    smartEncode: true,
-    keyFrameInterval: 50,
-    frameRate: 25
-  }
-}
-
-function defaultLensItem() {
-  return { type: '普通镜头', maxFocalLength: 6, minFocalLength: 2.8 }
-}
-
-function defaultCameraCfg() {
-  return {
-    // 全局配置
-    workMode: 'independent',
-    // 多目配置
-    lensItems: [defaultLensItem()],
-    // PTZ控制
-    ptz: {
-      supported: true,
-      capabilities: ['平移'],
-      presetSupported: true,
-      cruiseSupported: true,
-      spatialPositioning: 'none',
-      ptzSpeed: false
-    },
-    // 视频码流
-    streams: [defaultStreamCfg()],
-    // 图像参数
-    image: {
-      flip: '1', flipDefault: '正放',
-      mirror: '1', mirrorDefault: '打开',
-      nightVision: false,
-      wdr: true, wdrDefault: true,
-      hdr: true, hdrDefault: true,
-      antiFlicker: true, antiFlickerFreq: '50'
-    },
-    // 隐私区域
-    privacyZone: { supported: true },
-    // 水印
-    watermark: {
-      logoWatermarkSupported: true,
-      type: 'device', customSupported: true,
-      content: '', position: 'device_default', defaultOn: true
-    },
-    // 鱼眼矫正
-    fisheye: { mode: 'device' },
-    // 高级配置项
-    advanced: {
-      snapshot: true, humanoidCoord: true, compositeStream: true
-    }
-  }
-}
 
 const cameraList = ref([
-  { id: 1, name: 'Camera_ 1', cfg: defaultCameraCfg(), standardCaps: [], customCaps: [] }
+  { id: 1, name: 'Camera_ 1', capabilityConfig: defaultLensCapabilityConfig(), standardCaps: [], customCaps: [] }
 ])
 
 const activeCamera = computed(() => cameraList.value[activeCameraIdx.value] || null)
 
-function switchCamera() { activeLensModule.value = 'multiLens' }
-
-// 多目配置 - 增删镜头子项
-function addLensItem() {
-  if (!activeCamera.value) return
-  activeCamera.value.cfg.lensItems.push(defaultLensItem())
-}
-function removeLensItem(idx) {
-  if (!activeCamera.value) return
-  if (activeCamera.value.cfg.lensItems.length <= 1) { ElMessage.warning('至少保留一个镜头'); return }
-  activeCamera.value.cfg.lensItems.splice(idx, 1)
-}
-
-// 视频码流 - 增删码流
-function addStream() {
-  if (!activeCamera.value) return
-  activeCamera.value.cfg.streams.push(defaultStreamCfg())
-}
-function removeStream(idx) {
-  if (!activeCamera.value) return
-  if (activeCamera.value.cfg.streams.length <= 1) { ElMessage.warning('至少保留一个码流'); return }
-  activeCamera.value.cfg.streams.splice(idx, 1)
-}
-function setStorageStream(idx) {
-  if (!activeCamera.value) return
-  activeCamera.value.cfg.streams.forEach((s, i) => { s.isStorage = i === idx })
-}
-
 function addCamera() {
   const idx = cameraList.value.length + 1
-  cameraList.value.push({ id: Date.now(), name: `Camera_ ${idx}`, cfg: defaultCameraCfg(), standardCaps: [], customCaps: [] })
+  cameraList.value.push({ id: Date.now(), name: `Camera_ ${idx}`, capabilityConfig: defaultLensCapabilityConfig(), standardCaps: [], customCaps: [] })
   activeCameraIdx.value = cameraList.value.length - 1
   ElMessage.success(`镜头 Camera_ ${idx} 已添加`)
 }
@@ -2138,50 +1532,16 @@ function openLensCapDialog(type) {
 }
 
 // ===== 麦克风配置 =====
-function defaultAudioStreamCfg() {
-  return {
-    encodeTypes: ['PCM'],
-    defaultEncodeType: 'PCM'
-  }
-}
-
-function defaultMicCfg() {
-  return {
-    micSwitch: true,
-    volumeAdjust: true,
-    captureVolume: 0,
-    sampleDepth: '16bit',
-    sampleRate: '8000',
-    channels: '单声道',
-    audioStreams: [defaultAudioStreamCfg()]
-  }
-}
-
 const micList = ref([
-  { id: 1, name: 'Microphone_ 1', cfg: defaultMicCfg(), standardCaps: [], customCaps: [] }
+  { id: 1, name: 'Microphone_ 1', capabilityConfig: defaultMicCapabilityConfig(), standardCaps: [], customCaps: [] }
 ])
 const activeMicIdx = ref(0)
-const activeMicModule = ref('micParam')
-const micModuleOptions = [
-  { label: '麦克风参数配置', value: 'micParam' },
-  { label: '音频码流配置', value: 'audioStream' }
-]
 
 const activeMic = computed(() => micList.value[activeMicIdx.value] || null)
 
-function addAudioStream() {
-  if (!activeMic.value) return
-  activeMic.value.cfg.audioStreams.push(defaultAudioStreamCfg())
-}
-function removeAudioStream(idx) {
-  if (!activeMic.value) return
-  if (activeMic.value.cfg.audioStreams.length <= 1) { ElMessage.warning('至少保留一个音频码流'); return }
-  activeMic.value.cfg.audioStreams.splice(idx, 1)
-}
-
 function addMic() {
   const idx = micList.value.length + 1
-  micList.value.push({ id: Date.now(), name: `Microphone_ ${idx}`, cfg: defaultMicCfg(), standardCaps: [], customCaps: [] })
+  micList.value.push({ id: Date.now(), name: `Microphone_ ${idx}`, capabilityConfig: defaultMicCapabilityConfig(), standardCaps: [], customCaps: [] })
   activeMicIdx.value = micList.value.length - 1
   ElMessage.success(`Microphone_ ${idx} 已添加`)
 }
@@ -2203,27 +1563,6 @@ function openMicCapDialog(type) {
   expandedLeftModules.value = capModules.map(m => m.id)
   capDialogVisible.value = true
 }
-
-// ===== 屏显配置 =====
-const displayCfg = reactive({
-  hasDisplay: true,
-  resolutions: ['1920*1080'],
-  sleepTime: 1,
-  decodeTypes: ['H264'],
-  displayTypes: ['文字']
-})
-
-// ===== 喇叭配置 =====
-const speakerCfg = reactive({
-  hasSpeaker: true,
-  encodeTypes: ['PCM'],
-  volumeAdjust: true,
-  volume: 1,
-  customRing: true,
-  sampleDepth: '16bit',
-  sampleRate: '8000',
-  channels: '单声道'
-})
 
 // ===== 标准/自定义能力 =====
 const standardCapList = ref([])
@@ -3147,7 +2486,44 @@ onMounted(() => { loadAlgorithms(); loadEvents(); loadEventConfig(); loadPlatfor
   font-size: 13px;
   color: #2563EB;
   .el-icon { flex-shrink: 0; font-size: 16px; }
+  .tip-bar-toggle {
+    margin-left: auto;
+    flex-shrink: 0;
+    padding: 0;
+    font-size: 13px;
+  }
 }
+
+// ===== APP 控制面板预览（设备能力页内，右侧展开） =====
+.device-cap-layout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.device-cap-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.device-cap-side {
+  width: 300px;
+  max-width: 300px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.panel-slide-enter-active,
+.panel-slide-leave-active {
+  transition: max-width 0.3s ease, opacity 0.3s ease;
+  overflow: hidden;
+}
+.panel-slide-enter-from,
+.panel-slide-leave-to {
+  max-width: 0;
+  opacity: 0;
+}
+
 
 // ===== 配置布局 (分段控件 + 内容) =====
 .config-layout {

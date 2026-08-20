@@ -182,8 +182,44 @@
             </div>
           </div>
 
+          <!-- 绑定通道（NVR 多选） -->
+          <div v-if="isNvrMode" class="order-devices">
+            <div class="order-section-title">
+              绑定通道
+              <span class="order-section-hint">最多 {{ curMaxChannels }} 路</span>
+            </div>
+            <div v-if="nvrChannels.length" class="order-device-list">
+              <div
+                v-for="ch in nvrChannels"
+                :key="ch.chNo"
+                :class="['order-device-item', {
+                  'is-maxed': !selectedChannelNos.includes(ch.chNo) && nvrMaxReached,
+                  'is-disabled': !ch.online
+                }]"
+                @click="toggleChannel(ch)"
+              >
+                <van-checkbox
+                  :model-value="selectedChannelNos.includes(ch.chNo)"
+                  :disabled="!ch.online || (!selectedChannelNos.includes(ch.chNo) && nvrMaxReached)"
+                  checked-color="#4F46E5"
+                />
+                <div class="device-avatar small">
+                  <van-icon name="video-o" size="18" />
+                </div>
+                <div class="device-info">
+                  <span class="device-name">CH{{ ch.chNo }} {{ ch.name }}</span>
+                  <span class="device-id">{{ ch.online ? '在线' : '离线' }}</span>
+                </div>
+                <div class="device-tail">
+                  <span v-if="!ch.online" class="tag-unsupported">离线</span>
+                </div>
+              </div>
+            </div>
+            <div v-else class="no-device">暂无可选通道</div>
+          </div>
+
           <!-- 绑定设备（多选） -->
-          <div class="order-devices">
+          <div v-else class="order-devices">
             <div class="order-section-title">
               绑定设备
               <span class="order-section-hint">最多 {{ curMaxDevices }} 台</span>
@@ -219,7 +255,7 @@
             <div v-else class="no-device">暂无可选设备</div>
           </div>
 
-          <p class="order-hint">后续查看/管理绑定设备请前往【我的】→【我的服务】</p>
+          <p class="order-hint">{{ isNvrMode ? '后续查看/管理绑定通道请前往【我的】→【我的服务】' : '后续查看/管理绑定设备请前往【我的】→【我的服务】' }}</p>
         </div>
 
         <van-button block type="primary" @click="confirmOrder" class="order-btn">
@@ -234,7 +270,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { showToast } from 'vant'
-import { fetchMyServices, fetchAvailableDevices, buildDeviceServiceMap } from '@/mock/services'
+import { fetchMyServices, fetchAvailableDevices, buildDeviceServiceMap, fetchNvrChannels } from '@/mock/services'
 import { useServicesStore } from '@/composables/useServicesStore'
 
 const router = useRouter()
@@ -260,33 +296,47 @@ const showDevicePicker = ref(false)
 // 设备选择
 const allDevices = ref([])
 const selectedDeviceIds = ref([])
+const nvrChannels = ref([])
+const selectedChannelNos = ref([])
 
 const curPlan = computed(() => currentContent.value.plans[selectedPlan.value] || {})
 const curCategory = computed(() => currentContent.value.category || '')
 const curPlanType = computed(() => curPlan.value.type || 'single')
 const curMaxDevices = computed(() => curPlan.value.maxDevices || 1)
+const curMaxChannels = computed(() => curPlan.value.maxChannels || 1)
+
+const isCloudTab = computed(() => serviceTabs[activeTab.value] === '云存储')
+const isNvrSelected = computed(() => selectedDeviceIds.value.some((id) => allDevices.value.find((d) => d.id === id)?.type === 'nvr'))
+const isNvrMode = computed(() => isCloudTab.value && isNvrSelected.value)
 
 const activeCategoryMap = computed(() => buildDeviceServiceMap(state.services))
 
-const eligibleDevices = computed(() => {
+// 当前 Tab 相关的服务类别（云存储 Tab 下 IPC 与 NVR 均可选）
+const relevantCategories = computed(() => {
+  if (isCloudTab.value) return ['storage', 'storage_nvr']
   const cat = curCategory.value
-  if (!cat) return []
+  return cat ? [cat] : []
+})
+
+const eligibleDevices = computed(() => {
+  const cats = relevantCategories.value
+  if (!cats.length) return []
   return allDevices.value.filter((d) => {
-    if (!d.supportedCategories?.includes(cat)) return false
-    if (activeCategoryMap.value[d.id]?.has(cat)) return false
+    if (!d.supportedCategories?.some((c) => cats.includes(c))) return false
+    if (activeCategoryMap.value[d.id]?.has(curCategory.value)) return false
     return true
   })
 })
 
 // 所有设备列表（含不可选标记）
 const allDevicesWithStatus = computed(() => {
-  const cat = curCategory.value
-  if (!cat) return []
+  const cats = relevantCategories.value
+  if (!cats.length) return []
   return allDevices.value.map((d) => {
-    if (!d.supportedCategories?.includes(cat)) {
+    if (!d.supportedCategories?.some((c) => cats.includes(c))) {
       return { ...d, _status: 'unsupported', _disabled: true }
     }
-    if (activeCategoryMap.value[d.id]?.has(cat)) {
+    if (activeCategoryMap.value[d.id]?.has(curCategory.value)) {
       return { ...d, _status: 'active', _disabled: true }
     }
     return { ...d, _status: 'available', _disabled: false }
@@ -302,6 +352,7 @@ const maxSlots = computed(() => {
 })
 
 const isMaxReached = computed(() => selectedDeviceIds.value.length >= maxSlots.value)
+const nvrMaxReached = computed(() => selectedChannelNos.value.length >= curMaxChannels.value)
 
 const selectedDeviceNames = computed(() => {
   if (!selectedDeviceIds.value.length) return '点击选择'
@@ -314,16 +365,41 @@ const selectedDeviceNames = computed(() => {
 
 function selectPlan(index) {
   selectedPlan.value = index
+  if (isNvrMode.value) {
+    selectedChannelNos.value = []
+    return
+  }
   selectedDeviceIds.value = eligibleDevices.value.slice(0, 1).map((d) => d.id)
 }
 
 function toggleDevice(device) {
   if (device._disabled) return
+  if (device.type === 'nvr') {
+    // NVR 单选：选中即切换到 NVR 模式
+    selectedDeviceIds.value = [device.id]
+    selectedPlan.value = 0
+    return
+  }
+  const wasNvr = isNvrSelected.value
+  if (wasNvr) {
+    selectedDeviceIds.value = []
+    selectedPlan.value = 0
+  }
   const idx = selectedDeviceIds.value.indexOf(device.id)
   if (idx > -1) {
     selectedDeviceIds.value.splice(idx, 1)
   } else if (selectedDeviceIds.value.length < maxSlots.value) {
     selectedDeviceIds.value.push(device.id)
+  }
+}
+
+function toggleChannel(ch) {
+  if (!ch.online) return
+  const idx = selectedChannelNos.value.indexOf(ch.chNo)
+  if (idx > -1) {
+    selectedChannelNos.value.splice(idx, 1)
+  } else if (selectedChannelNos.value.length < curMaxChannels.value) {
+    selectedChannelNos.value.push(ch.chNo)
   }
 }
 
@@ -333,15 +409,62 @@ function openOrder() {
   }
   if (curPlanType.value === 'multi') {
     showOrderModal.value = true
+  } else if (curPlanType.value === 'nvr') {
+    openNvrOrder()
   } else {
     // 单设备直接购买
     showToast('购买成功')
   }
 }
 
-function confirmOrder() {
-  showOrderModal.value = false
+async function openNvrOrder() {
+  const nvrId = selectedDeviceIds.value[0]
+  if (!nvrId) return
+  try {
+    const res = await fetchNvrChannels(nvrId)
+    if (res.code === 0) {
+      nvrChannels.value = res.data.channels || []
+      selectedChannelNos.value = []
+    }
+  } catch { /* ignore */ }
+  showOrderModal.value = true
+}
+
+function buyNvrPackage() {
+  const plan = curPlan.value
+  const nvrId = selectedDeviceIds.value[0]
+  const nvr = allDevices.value.find((d) => d.id === nvrId)
+  if (!nvr) return
+  const srvId = 'srv-nvr-' + Date.now()
+  const boundChannels = nvrChannels.value
+    .filter((ch) => selectedChannelNos.value.includes(ch.chNo))
+    .map((ch) => ({ chNo: ch.chNo, name: ch.name, online: ch.online }))
+  state.services.push({
+    id: srvId,
+    name: 'NVR云存 ' + plan.name,
+    type: 'nvr',
+    category: 'storage_nvr',
+    maxChannels: plan.maxChannels,
+    expireDate: '2026-09-13',
+    features: plan.features || [],
+    nvrDevice: { id: nvr.id, deviceId: nvr.deviceId, name: nvr.name, channelCount: nvr.channelCount },
+    boundChannels
+  })
   showToast('购买成功')
+  router.push(`/nvr/${nvr.id}?deviceName=${encodeURIComponent(nvr.name)}`)
+}
+
+function confirmOrder() {
+  if (isNvrMode.value && !selectedChannelNos.value.length) {
+    showToast('请选择要绑定的通道')
+    return
+  }
+  showOrderModal.value = false
+  if (isNvrMode.value) {
+    buyNvrPackage()
+  } else {
+    showToast('购买成功')
+  }
 }
 
 function goBack() {
@@ -359,6 +482,14 @@ onMounted(async () => {
     if (devRes.code === 0) {
       allDevices.value = devRes.data
       selectedDeviceIds.value = eligibleDevices.value.slice(0, 1).map((d) => d.id)
+      // 支持 /store?device=nvr001 自动选中 NVR 设备
+      if (route.query.device) {
+        const target = allDevices.value.find((d) => d.id === route.query.device)
+        if (target) {
+          selectedDeviceIds.value = [target.id]
+          selectedPlan.value = 0
+        }
+      }
     }
   } catch { /* ignore */ }
 })
@@ -373,6 +504,17 @@ const serviceContent = {
       { name: 'Basic', price: '¥9.9', unit: '/月', tag: '最划算', tagClass: 'best', discount: '7折', type: 'single', features: ['15天事件录像', '运动人形侦测', '事件告警'] },
       { name: 'Pro', price: '¥19.9', unit: '/月', tag: '热门', tagClass: 'hot', discount: '7折', type: 'multi', maxDevices: 4, features: ['支持4台设备', '30天24h录像', '万物识别AI', '优先告警'] },
       { name: 'Super Pro', price: '¥29.9', unit: '/月', tag: '', tagClass: '', discount: '7折', type: 'single', features: ['30天24h录像', '万物识别AI', 'AI超级搜索'] }
+    ]
+  },
+  '云存储-NVR': {
+    bannerTitle: 'NVR 云存储',
+    bannerSub: '按通道购买云存，灵活分配摄像机通道。',
+    category: 'storage_nvr',
+    plans: [
+      { name: '1路', price: '¥9.9', unit: '/月', tag: '', tagClass: '', discount: '', type: 'nvr', maxChannels: 1, features: ['支持1个通道', '15天事件录像', '运动人形侦测'] },
+      { name: '4路', price: '¥29.9', unit: '/月', tag: '最划算', tagClass: 'best', discount: '', type: 'nvr', maxChannels: 4, features: ['支持4个通道', '15天事件录像', '运动人形侦测'] },
+      { name: '8路', price: '¥49.9', unit: '/月', tag: '热门', tagClass: 'hot', discount: '', type: 'nvr', maxChannels: 8, features: ['支持8个通道', '30天事件录像', '运动人形侦测'] },
+      { name: '16路', price: '¥89.9', unit: '/月', tag: '', tagClass: '', discount: '', type: 'nvr', maxChannels: 16, features: ['支持16个通道', '30天事件录像', '运动人形侦测'] }
     ]
   },
   'AI智能服务': {
@@ -414,6 +556,7 @@ const serviceContent = {
 }
 
 const currentContent = computed(() => {
+  if (isNvrMode.value) return serviceContent['云存储-NVR']
   return serviceContent[serviceTabs[activeTab.value]] || serviceContent['云存储']
 })
 

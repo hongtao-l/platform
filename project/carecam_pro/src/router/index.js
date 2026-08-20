@@ -46,6 +46,18 @@ const routes = [
     meta: { title: '绑定设备' }
   },
   {
+    path: '/my-services/bind-channel',
+    name: 'MyServicesBindChannel',
+    component: () => import('@/views/my-services/bind-channel.vue'),
+    meta: { title: '绑定通道' }
+  },
+  {
+    path: '/nvr/:deviceId',
+    name: 'NvrChannels',
+    component: () => import('@/views/nvr/channels.vue'),
+    meta: { title: 'NVR 通道' }
+  },
+  {
     path: '/liveview',
     name: 'LiveView',
     component: () => import('@/views/liveview/index.vue'),
