@@ -69,11 +69,11 @@ export const agentConfigs = ref([
       { icon: '📦', name: '包裹全追踪', desc: '送达→在门口→被取走，全程记录' },
       { icon: '👤', name: '访客分类', desc: '快递/外卖/家人/陌生人自动识别' },
       { icon: '🔒', name: '安全监测', desc: '异常徘徊、多人聚集及时发现' },
-      { icon: '🚪', name: '出入记录', desc: '家人进出自动记录' }
+      { icon: '🚪', name: '出入记录', desc: '人员进出自动记录' }
     ],
     sampleMessages: [
       { time: '14:32', title: '快递员在门口放置包裹', desc: '一名穿红色制服的快递员正在门口地面放置一个棕色纸箱包裹。', bg: 'linear-gradient(135deg, #FFF7ED, #FFEDD5)' },
-      { time: '16:45', title: '家人开门进入家中', desc: '一名女性从门外用钥匙开门并进入屋内。', bg: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
+      { time: '16:45', title: '有人开门进入家中', desc: '一名女性从门外用钥匙开门并进入屋内。', bg: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)' },
       { time: '21:10', title: '陌生男子在门口徘徊张望 ⚠', desc: '一名穿深色卫衣的男子站在家门口附近四处张望。', bg: 'linear-gradient(135deg, #FFEBEE, #FFCDD2)' }
     ],
     sampleReport: {
@@ -81,18 +81,14 @@ export const agentConfigs = ref([
       sections: [
         { icon: '📦', label: '包裹动态', count: 1 },
         { icon: '👤', label: '访客记录', count: 2 },
-        { icon: '🚪', label: '家人出入', count: 2 }
+        { icon: '🚪', label: '人员出入', count: 2 }
       ]
     },
     focusList: [
-      { id: 600001, name: '包裹送达', icon: '📦' },
-      { id: 600002, name: '包裹取走', icon: '📤' },
-      { id: 600003, name: '包裹在门口', icon: '📦' },
-      { id: 600004, name: '快递/外卖', icon: '🧑‍💼' },
-      { id: 600005, name: '陌生人到访', icon: '👤' },
-      { id: 600006, name: '家人出入', icon: '🚪' },
-      { id: 600007, name: '异常徘徊', icon: '⚠' },
-      { id: 600008, name: '多人聚集', icon: '👥' }
+      { id: 400310, name: '包裹动态', icon: '📦' },
+      { id: 400311, name: '访客到访', icon: '👤' },
+      { id: 400312, name: '人员出入', icon: '🚪' },
+      { id: 400313, name: '安全异常', icon: '⚠' }
     ]
   },
   {

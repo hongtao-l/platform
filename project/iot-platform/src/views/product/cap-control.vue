@@ -1,5 +1,8 @@
 <template>
-  <el-switch v-if="cap.type === 'switch'" v-model="cap.value" />
+  <el-radio-group v-if="cap.type === 'switch'" v-model="cap.value">
+    <el-radio :value="true">开启</el-radio>
+    <el-radio :value="false">关闭</el-radio>
+  </el-radio-group>
   <el-checkbox-group v-else-if="cap.type === 'checkbox'" v-model="cap.value">
     <el-checkbox v-for="o in cap.options" :key="o" :label="o">{{ o }}</el-checkbox>
   </el-checkbox-group>

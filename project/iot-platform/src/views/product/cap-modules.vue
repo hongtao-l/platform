@@ -11,7 +11,7 @@
         <div class="cap-grid cap-grid-head">
           <span class="cap-col-name">能力名称</span>
           <span class="cap-col-support">支持状态<span class="cap-col-note">（影响APP控制面板显示）</span></span>
-          <span class="cap-col-default">默认值<span class="cap-col-note">（“<span class="cap-col-em">读写</span>”属性值将同步下发至设备）</span></span>
+          <span class="cap-col-default">默认值<span class="cap-col-note">（<span class="cap-access rw">读写</span>属性值将同步下发至设备）</span></span>
         </div>
         <template v-for="item in mod.items" :key="item.id">
           <div class="cap-grid">
@@ -26,7 +26,7 @@
           </div>
           <template v-if="item.supported === '1'">
             <div v-if="item.defaultValue" class="cap-grid cap-grid-sub">
-              <span class="cap-col-name cap-sub-label">└ 默认值</span>
+              <span class="cap-col-name cap-sub-label">└ {{ item.defaultName || '默认值' }}</span>
               <span class="cap-col-support"></span>
               <span class="cap-col-default">
                 <CapControl :cap="item.defaultValue" />
@@ -130,10 +130,6 @@ function toggleCollapse(name) {
 
 .cap-col-note {
   margin-left: 6px;
-}
-.cap-col-em {
-  font-weight: 600;
-  color: #e6a23c;
 }
 
 .cap-col-name {

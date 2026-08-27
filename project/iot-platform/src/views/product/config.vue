@@ -78,7 +78,7 @@
           <template v-if="ft.key === 'deviceCap'">
                   <div class="tip-bar" style="margin-bottom:16px">
                     <el-icon><InfoFilled /></el-icon>
-                    <span>本配置需 APP 对接平台（走平台下发）才生效；若 APP 直接对接SDK（P2P方式）获取能力配置，则此处配置不生效。（具体可联系APP厂商）</span>
+                    <span>设备激活时能力配置经平台下发生效。若 APP 通过 SDK 直连设备（P2P）读取能力，本配置不生效，请以设备端为准。（具体请咨询APP厂商）</span>
                     <el-button link type="primary" class="tip-bar-toggle" @click="showPhoneDemo = !showPhoneDemo">
                       {{ showPhoneDemo ? '收起示例' : '查看示例' }}
                     </el-button>
@@ -186,7 +186,7 @@
 
                     <div class="tip-bar" style="margin-bottom:16px">
                       <el-icon><InfoFilled /></el-icon>
-                      <span>本配置需 APP 对接平台（走平台下发）才生效；若 APP 直接对接SDK（P2P方式）获取能力配置，则此处配置不生效。（具体可联系APP厂商）</span>
+                      <span>设备激活时能力配置经平台下发生效。若 APP 通过 SDK 直连设备（P2P）读取能力，本配置不生效，请以设备端为准。（具体请咨询APP厂商）</span>
                       <el-button link type="primary" class="tip-bar-toggle" @click="showPhoneDemo = !showPhoneDemo">
                         {{ showPhoneDemo ? '收起示例' : '查看示例' }}
                       </el-button>
@@ -291,7 +291,7 @@
 
                     <div class="tip-bar" style="margin-bottom:16px">
                       <el-icon><InfoFilled /></el-icon>
-                      <span>本配置需 APP 对接平台（走平台下发）才生效；若 APP 直接对接SDK（P2P方式）获取能力配置，则此处配置不生效。（具体可联系APP厂商）</span>
+                      <span>设备激活时能力配置经平台下发生效。若 APP 通过 SDK 直连设备（P2P）读取能力，本配置不生效，请以设备端为准。（具体请咨询APP厂商）</span>
                       <el-button link type="primary" class="tip-bar-toggle" @click="showPhoneDemo = !showPhoneDemo">
                         {{ showPhoneDemo ? '收起示例' : '查看示例' }}
                       </el-button>
@@ -1375,7 +1375,7 @@ const deviceCapModules = reactive([
   {
     name: '扬声器模块',
     items: [
-      { id: 'intercom', name: '对讲能力', supported: '0', defaultValue: capSelect(['半双工', '全双工'], '半双工'), access: 'ro' },
+      { id: 'intercom', name: '对讲能力', supported: '0', defaultValue: capSelect(['半双工', '全双工'], '半双工'), defaultName: '对讲类型', access: 'ro' },
       { id: 'hasSpeaker', name: '喇叭能力', supported: '0', defaultValue: null },
       { id: 'volumeAdjust', name: '音量调节能力', supported: '0', defaultValue: null, children: [
         { id: 'volume', name: '音量', defaultValue: capNumber(1, 0, 100, '') }
@@ -1386,14 +1386,10 @@ const deviceCapModules = reactive([
   {
     name: '录制模块',
     items: [
-      { id: 'storageMethod', name: '存储能力', supported: '0', defaultValue: capRadio(['TF卡存储', '磁盘存储'], 'TF卡存储'), access: 'ro' },
-      { id: 'recordMode', name: '常规录制能力', supported: '0', defaultValue: null, children: [
-        { id: 'recordStart', name: '录制开始时间', defaultValue: capTime('00:00:00') },
-        { id: 'recordEnd', name: '录制结束时间', defaultValue: capTime('23:59:59') },
-        { id: 'repeatDays', name: '录制重复', defaultValue: capCheckbox(['周一', '周二', '周三', '周四', '周五', '周六', '周日'], ['周一', '周二', '周三', '周四', '周五', '周六', '周日']) }
-      ] },
-      { id: 'alarmRecord', name: '报警录制能力', supported: '0', defaultValue: null, children: [
-        { id: 'alarmDuration', name: '报警时长', defaultValue: capNumber(15, 5, 300, '秒') }
+      { id: 'storageMethod', name: '存储能力', supported: '0', defaultValue: capRadio(['TF卡存储', '磁盘存储'], 'TF卡存储'), defaultName: '存储方式', access: 'ro' },
+      { id: 'recordMode', name: 'SD卡全天录制能力', supported: '0', defaultValue: capSwitch(false), defaultName: '全天录制开关' },
+      { id: 'alarmRecord', name: 'SD卡事件录制能力', supported: '0', defaultValue: null, children: [
+        { id: 'alarmDuration', name: '事件录制时长', defaultValue: capNumber(15, 5, 300, '秒') }
       ] }
     ]
   },
@@ -1401,7 +1397,7 @@ const deviceCapModules = reactive([
     name: '电池模块',
     items: [
       { id: 'hasBattery', name: '电池能力', supported: '0', defaultValue: null },
-      { id: 'wakeup', name: '唤醒能力', supported: '0', defaultValue: capRadio(['本地唤醒', '远程唤醒', '本地和远程'], '本地唤醒'), access: 'ro' }
+      { id: 'wakeup', name: '唤醒能力', supported: '0', defaultValue: capRadio(['本地唤醒', '远程唤醒', '本地和远程'], '本地唤醒'), defaultName: '唤醒方式', access: 'ro' }
     ]
   },
   {
@@ -1409,6 +1405,22 @@ const deviceCapModules = reactive([
     items: [
       { id: 'indicator', name: '状态指示灯能力', supported: '0', defaultValue: null },
       { id: 'irLight', name: '红外灯能力', supported: '0', defaultValue: null }
+    ]
+  },
+  {
+    name: '云端抓图模块',
+    items: [
+      { id: 'cloudCapture', name: '云端抓图能力', supported: '0', defaultValue: null, children: [
+        { id: 'ccDefaultOn', name: '默认开启', defaultValue: capRadio(['开启', '关闭'], '开启') },
+        { id: 'ccSupportGif', name: '支持动图', defaultValue: capRadio(['是', '否'], '否') },
+        { id: 'ccGifEnabled', name: '动图开关', defaultValue: capRadio(['开启', '关闭'], '关闭') },
+        { id: 'ccQuality', name: '抓图质量', defaultValue: capSelect(['小图', '标清', '高清'], '小图') },
+        { id: 'ccStorageDays', name: '存储时长', defaultValue: capNumber(1, 1, 30, '天') },
+        { id: 'ccStorageMode', name: '存储方式', defaultValue: capRadio(['事件', '定时'], '事件') },
+        { id: 'ccStorageFormat', name: '存储格式', defaultValue: capRadio(['已有格式，带有私有头', '标准jpg'], '已有格式，带有私有头') },
+        { id: 'ccCaptureCount', name: '抓图数目', defaultValue: capNumber(1, 0, 99, '') },
+        { id: 'ccCaptureInterval', name: '抓拍间隔', defaultValue: capNumber(30, 5, 300, '秒') }
+      ] }
     ]
   }
 ])
@@ -1424,22 +1436,22 @@ function defaultLensCapabilityConfig() {
         ] },
         { id: 'preset', name: '预置位能力', supported: '0', defaultValue: null },
         { id: 'cruise', name: '自动巡航能力', supported: '0', defaultValue: null },
-        { id: 'spatial', name: '空间定位能力', supported: '0', defaultValue: capRadio(['支持3D居中', '支持GPS定位'], '支持3D居中'), access: 'ro' },
+        { id: 'spatial', name: '空间定位能力', supported: '0', defaultValue: capRadio(['支持3D居中', '支持GPS定位'], '支持3D居中'), defaultName: '定位方式', access: 'ro' },
         { id: 'ptzSpeed', name: 'PTZ转速能力', supported: '0', defaultValue: null }
       ]
     },
     {
       name: '图像采集模块',
       items: [
-        { id: 'flip', name: '图像翻转能力', supported: '0', defaultValue: capRadio(['正放', '翻转'], '正放'), access: 'rw' },
-        { id: 'mirror', name: '镜像能力', supported: '0', defaultValue: capRadio(['打开', '关闭'], '关闭'), access: 'rw' },
+        { id: 'flip', name: '图像翻转能力', supported: '0', defaultValue: capRadio(['正放', '翻转'], '正放'), defaultName: '翻转方向', access: 'rw' },
+        { id: 'mirror', name: '镜像能力', supported: '0', defaultValue: capRadio(['打开', '关闭'], '关闭'), defaultName: '镜像状态', access: 'rw' },
         { id: 'nightVision', name: '夜视能力', supported: '0', defaultValue: null },
-        { id: 'wdr', name: '宽动态能力', supported: '0', defaultValue: capSwitch(false), access: 'rw' },
-        { id: 'hdr', name: '高动态能力', supported: '0', defaultValue: capSwitch(false), access: 'rw' },
-        { id: 'antiFlicker', name: '抗闪烁能力', supported: '0', defaultValue: capRadio(['50', '60'], '50'), access: 'rw' },
+        { id: 'wdr', name: '宽动态能力', supported: '0', defaultValue: capSwitch(false), defaultName: '宽动态开关', access: 'rw' },
+        { id: 'hdr', name: '高动态能力', supported: '0', defaultValue: capSwitch(false), defaultName: '高动态开关', access: 'rw' },
+        { id: 'antiFlicker', name: '抗闪烁能力', supported: '0', defaultValue: capRadio(['50', '60'], '50'), defaultName: '抗闪烁频率', access: 'rw' },
         { id: 'privacyZone', name: '隐私区域能力', supported: '0', defaultValue: null },
         { id: 'logoWatermark', name: 'LOGO水印能力', supported: '0', defaultValue: null },
-        { id: 'fisheye', name: '鱼眼矫正能力', supported: '0', defaultValue: capRadio(['设备矫正', 'App矫正'], '设备矫正'), access: 'rw' },
+        { id: 'fisheye', name: '鱼眼矫正能力', supported: '0', defaultValue: capRadio(['设备矫正', 'App矫正'], '设备矫正'), defaultName: '矫正方式', access: 'rw' },
         { id: 'snapshot', name: '抓图能力', supported: '0', defaultValue: null },
         { id: 'humanoidCoord', name: '人形坐标写入能力', supported: '0', defaultValue: null },
         { id: 'compositeStream', name: '合成流能力', supported: '0', defaultValue: null }
