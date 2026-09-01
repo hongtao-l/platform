@@ -147,9 +147,24 @@
             </div>
 
             <div class="field-group" v-if="form.recogEventMode === 'custom'">
-              <div class="custom-event-hint">
-                <p class="toggle-desc">自定义事件由终端用户自行定义，平台不提供事件配置；终端用户可在 APP 中根据实际需求创建自定义事件。</p>
+              <label class="field-label">默认事件</label>
+              <div class="default-event-list">
+                <div v-for="(evt, idx) in form.recogDefaultEvents" :key="evt.id" class="default-event-item">
+                  <div class="default-event-head">
+                    <span class="default-event-id">事件 ID：{{ evt.id }}</span>
+                    <el-button text size="small" @click="removeDefaultEvent(idx)">
+                      <el-icon><Close /></el-icon>
+                    </el-button>
+                  </div>
+                  <el-input v-model="evt.name" placeholder="请输入事件名称" :maxlength="30" class="default-event-name" />
+                  <el-input v-model="evt.description" type="textarea" :rows="2" placeholder="请输入事件描述，AI 将根据描述识别并匹配事件" class="default-event-desc" />
+                </div>
+                <div v-if="!form.recogDefaultEvents.length" class="default-event-empty">未配置默认事件</div>
               </div>
+              <el-button size="small" :disabled="form.recogDefaultEvents.length >= 4" @click="addDefaultEvent">
+                <el-icon><Plus /></el-icon>添加默认事件
+              </el-button>
+              <p class="toggle-desc">输入事件名称和描述，AI 将根据描述识别并匹配事件；最多配置 4 个默认事件（事件 ID 从 400000 递增），下发给终端用户后可在 APP 侧修改。</p>
             </div>
 
             <div class="field-group">
@@ -778,6 +793,7 @@ const form = reactive({
   enableRecognition: true,
   recogEventMode: 'specified',  // specified | custom
   recogEvents: [],              // 指定事件：选中的事件 id
+  recogDefaultEvents: [],       // 自定义事件：默认事件列表 [{id, name, description}]，ID 从 400000 递增，最多 4 个
   recogTemperature: 0.2,
   recogSystemPrompt: '',
   recogOutputPrompt: '',
@@ -876,6 +892,20 @@ const confirmRecogEventSelect = () => {
 
 const removeRecogEvent = (id) => {
   form.recogEvents = form.recogEvents.filter(e => e !== id)
+}
+
+// ===== 自定义事件 - 默认事件配置 =====
+const addDefaultEvent = () => {
+  if (form.recogDefaultEvents.length >= 4) {
+    ElMessage.warning('最多支持配置 4 个默认事件')
+    return
+  }
+  const maxId = form.recogDefaultEvents.reduce((max, e) => Math.max(max, Number(e.id) || 399999), 399999)
+  form.recogDefaultEvents.push({ id: String(maxId + 1), name: '', description: '' })
+}
+
+const removeDefaultEvent = (idx) => {
+  form.recogDefaultEvents.splice(idx, 1)
 }
 
 // 调试测试结果（面板内展示）
@@ -1645,12 +1675,46 @@ const sendDebugMessage = async () => {
   color: var(--text-placeholder);
 }
 
-.custom-event-hint {
-  padding: 12px 16px;
-  background: var(--bg-page);
-  border-radius: 6px;
+// ===== 自定义事件默认事件配置 =====
+.default-event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+}
 
-  .toggle-desc { margin: 0; }
+.default-event-item {
+  padding: 12px;
+  border: 1px solid var(--border-lighter);
+  border-radius: 6px;
+  background: var(--bg-page);
+}
+
+.default-event-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  .default-event-id {
+    font-size: 13px;
+    font-family: monospace;
+    color: var(--text-secondary);
+  }
+}
+
+.default-event-name {
+  margin-bottom: 8px;
+}
+
+.default-event-empty {
+  padding: 12px 16px;
+  border: 1px dashed var(--border-lighter);
+  border-radius: 6px;
+  background: var(--bg-page);
+  font-size: 13px;
+  color: var(--text-placeholder);
+  text-align: center;
 }
 
 .cycle-fixed {
