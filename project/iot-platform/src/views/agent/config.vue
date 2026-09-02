@@ -164,7 +164,7 @@
               <el-button size="small" :disabled="form.recogDefaultEvents.length >= 4" @click="addDefaultEvent">
                 <el-icon><Plus /></el-icon>添加默认事件
               </el-button>
-              <p class="toggle-desc">输入事件名称和描述，AI 将根据描述识别并匹配事件；最多配置 4 个默认事件（事件 ID 从 400000 递增），下发给终端用户后可在 APP 侧修改。</p>
+              <p class="toggle-desc">输入事件名称和描述，AI 将根据描述识别并匹配事件；最多配置 4 个默认事件（事件 ID 从 400390 递增），下发给终端用户后可在 APP 侧修改。</p>
             </div>
 
             <div class="field-group">
@@ -793,7 +793,7 @@ const form = reactive({
   enableRecognition: true,
   recogEventMode: 'specified',  // specified | custom
   recogEvents: [],              // 指定事件：选中的事件 id
-  recogDefaultEvents: [],       // 自定义事件：默认事件列表 [{id, name, description}]，ID 从 400000 递增，最多 4 个
+  recogDefaultEvents: [],       // 自定义事件：默认事件列表 [{id, name, description}]，ID 从 400390 递增，最多 4 个
   recogTemperature: 0.2,
   recogSystemPrompt: '',
   recogOutputPrompt: '',
@@ -900,7 +900,7 @@ const addDefaultEvent = () => {
     ElMessage.warning('最多支持配置 4 个默认事件')
     return
   }
-  const maxId = form.recogDefaultEvents.reduce((max, e) => Math.max(max, Number(e.id) || 399999), 399999)
+  const maxId = form.recogDefaultEvents.reduce((max, e) => Math.max(max, Number(e.id) || 400389), 400389)
   form.recogDefaultEvents.push({ id: String(maxId + 1), name: '', description: '' })
 }
 
