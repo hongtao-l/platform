@@ -156,8 +156,18 @@
                       <el-icon><Close /></el-icon>
                     </el-button>
                   </div>
-                  <el-input v-model="evt.name" placeholder="请输入事件名称" :maxlength="30" class="default-event-name" />
-                  <el-input v-model="evt.description" type="textarea" :rows="2" placeholder="请输入事件描述，AI 将根据描述识别并匹配事件" class="default-event-desc" />
+                  <div class="lang-input-row">
+                    <el-input v-model="evt.name['1']" placeholder="请输入事件名称" :maxlength="30" class="default-event-name" />
+                    <span class="i18n-icon" title="多语言配置" @click="openDefaultEventLang('name', idx)">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    </span>
+                  </div>
+                  <div class="lang-input-row">
+                    <el-input v-model="evt.description['1']" type="textarea" :rows="2" placeholder="请输入事件描述，AI 将根据描述识别并匹配事件" class="default-event-desc" />
+                    <span class="i18n-icon" title="多语言配置" @click="openDefaultEventLang('description', idx)">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    </span>
+                  </div>
                 </div>
                 <div v-if="!form.recogDefaultEvents.length" class="default-event-empty">未配置默认事件</div>
               </div>
@@ -725,6 +735,9 @@
       </template>
     </el-dialog>
 
+    <!-- 默认事件多语言弹窗 -->
+    <LangDialog v-model:visible="showDefaultEventLangDialog" v-model:data="langData" :title="langTitle" />
+
     <!-- 事件选择侧边弹窗（指定事件多选） -->
     <el-drawer v-model="showEventSelectDrawer" title="选择事件" direction="rtl" size="640px" :close-on-click-modal="false">
       <el-table ref="eventSelectTableRef" :data="recogEventOptions" stripe @selection-change="onRecogEventSelectionChange">
@@ -755,6 +768,7 @@ import {
   Connection, Grid, Close, Select
 } from '@element-plus/icons-vue'
 import { modelList, findAgent } from './data'
+import LangDialog from '../algorithm/LangDialog.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -793,7 +807,7 @@ const form = reactive({
   enableRecognition: true,
   recogEventMode: 'specified',  // specified | custom
   recogEvents: [],              // 指定事件：选中的事件 id
-  recogDefaultEvents: [],       // 自定义事件：默认事件列表 [{id, name, description}]，ID 从 400390 递增，最多 4 个
+  recogDefaultEvents: [],       // 自定义事件：默认事件列表 [{id, name, description}]，name/description 为多语言对象，ID 从 400390 递增，最多 4 个
   recogTemperature: 0.2,
   recogSystemPrompt: '',
   recogOutputPrompt: '',
@@ -901,11 +915,35 @@ const addDefaultEvent = () => {
     return
   }
   const maxId = form.recogDefaultEvents.reduce((max, e) => Math.max(max, Number(e.id) || 400389), 400389)
-  form.recogDefaultEvents.push({ id: String(maxId + 1), name: '', description: '' })
+  form.recogDefaultEvents.push({ id: String(maxId + 1), name: { '1': '' }, description: { '1': '' } })
 }
 
 const removeDefaultEvent = (idx) => {
   form.recogDefaultEvents.splice(idx, 1)
+}
+
+// ===== 默认事件多语言 =====
+const showDefaultEventLangDialog = ref(false)
+const langEdit = reactive({ type: 'name', index: -1 })
+
+const langTitle = computed(() =>
+  langEdit.type === 'name'
+    ? `配置多语言事件名称（ID ${form.recogDefaultEvents[langEdit.index]?.id ?? '-'}）`
+    : `配置多语言事件描述（ID ${form.recogDefaultEvents[langEdit.index]?.id ?? '-'}）`
+)
+
+const langData = computed({
+  get: () => form.recogDefaultEvents[langEdit.index]?.[langEdit.type] ?? {},
+  set: (val) => {
+    const target = form.recogDefaultEvents[langEdit.index]
+    if (target) target[langEdit.type] = val
+  }
+})
+
+const openDefaultEventLang = (type, idx) => {
+  langEdit.type = type
+  langEdit.index = idx
+  showDefaultEventLangDialog.value = true
 }
 
 // 调试测试结果（面板内展示）
@@ -926,6 +964,12 @@ watch(agent, (a) => {
   if (a.scenarioConfig) {
     Object.assign(form, a.scenarioConfig)
   }
+  // 兼容旧数据：默认事件 name/description 为字符串时转换为多语言对象
+  form.recogDefaultEvents = (form.recogDefaultEvents || []).map(e => ({
+    id: String(e.id),
+    name: typeof e.name === 'string' ? { '1': e.name } : (e.name || { '1': '' }),
+    description: typeof e.description === 'string' ? { '1': e.description } : (e.description || { '1': '' })
+  }))
 }, { immediate: true })
 
 const handleObserve = () => {
@@ -1703,8 +1747,23 @@ const sendDebugMessage = async () => {
   }
 }
 
-.default-event-name {
+.lang-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 8px;
+
+  .default-event-name,
+  .default-event-desc { flex: 1; }
+
+  .i18n-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-top: -8px;
+    padding: 4px;
+    color: var(--primary-color);
+    cursor: pointer;
+  }
 }
 
 .default-event-empty {
