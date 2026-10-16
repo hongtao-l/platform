@@ -2,10 +2,12 @@
   <div class="page-container" style="display:flex;flex-direction:column;height:calc(100vh - 56px)">
     <!-- 主体：标签页 -->
     <el-tabs v-model="activeMainTab" class="main-tabs">
-      <el-tab-pane label="标准能力" name="capability">
-        <el-tabs v-model="activeSubTab" class="sub-tabs">
-          <el-tab-pane label="能力池" name="pool">
-        <div class="main-layout">
+      <el-tab-pane name="capability">
+        <template #label>
+          标准能力
+          <el-tooltip content="由平台定义的新物模型能力" placement="top"><el-icon class="tab-tag-icon"><QuestionFilled /></el-icon></el-tooltip>
+        </template>
+<div class="main-layout">
           <!-- 左栏：模块列表 -->
           <div class="module-sidebar">
             <div class="module-sidebar-header">
@@ -91,436 +93,11 @@
             </div>
           </div>
         </div>
-          </el-tab-pane>
-          <el-tab-pane label="能力池（老）" name="legacy">
-            <div class="main-layout" style="height:100%">
-              <!-- 左栏：模块列表 -->
-              <div class="module-sidebar">
-                <div class="module-sidebar-header">
-                  <span class="module-sidebar-title">能力模块</span>
-                  <el-button size="small" type="primary" text @click="openAddLegacyModule">+ 添加</el-button>
-                </div>
-                <div class="module-list">
-                  <div
-                    v-for="m in store.legacyModules"
-                    :key="m.id"
-                    :class="['module-item', { active: currentLegacyModuleId === m.id }]"
-                    @click="currentLegacyModuleId = m.id"
-                  >
-                    <span class="module-name">{{ m.name }}</span>
-                    <span class="module-ident">{{ m.identifier }}</span>
-                    <span class="module-actions" @click.stop>
-                      <el-button size="small" text @click="openEditLegacyModule(m)"><el-icon><Edit /></el-icon></el-button>
-                      <el-button size="small" text type="danger" @click="handleDeleteLegacyModule(m)"><el-icon><Delete /></el-icon></el-button>
-                    </span>
-                  </div>
-                </div>
-              </div>
 
-              <!-- 右栏：配置表单 -->
-              <div class="capability-right">
-                <div class="card" style="flex:1;display:flex;flex-direction:column">
-                  <div class="card-header">
-                    <span class="card-title">配置选项</span>
-                    <el-button type="primary" size="small" @click="saveCurrentLegacyCfg">保存配置</el-button>
-                  </div>
-                  <div class="card-body" style="padding:16px 20px 20px;overflow-y:auto;flex:1">
-                    <!-- 联网方式 -->
-                    <div v-if="showLegacyForm('NetworkModule')" class="cfg-form">
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">联网方式</div>
-                        <el-checkbox-group v-model="legacyCfg.networkModes" size="small">
-                          <el-checkbox label="有线" />
-                          <el-checkbox label="WIFI" />
-                          <el-checkbox label="移动网络" />
-                        </el-checkbox-group>
-                      </div>
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">配网方式</div>
-                        <el-checkbox-group v-model="legacyCfg.distMethods" size="small">
-                          <el-checkbox label="AP" />
-                          <el-checkbox label="声音" />
-                          <el-checkbox label="smartlink" />
-                          <el-checkbox label="摄像机识别二维码添加" />
-                          <el-checkbox label="局域网" />
-                          <el-checkbox label="APP扫码添加" />
-                          <el-checkbox label="蓝牙添加" />
-                        </el-checkbox-group>
-                      </div>
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">AP热点是否支持设置密码</div>
-                        <el-radio-group v-model="legacyCfg.apHasPassword" size="small">
-                          <el-radio :value="true">支持</el-radio>
-                          <el-radio :value="false">不支持</el-radio>
-                        </el-radio-group>
-                      </div>
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">默认配网方式</div>
-                        <el-select v-model="legacyCfg.defaultDistMethod" size="small" style="width:200px">
-                          <el-option label="AP" value="AP" />
-                          <el-option label="smartlink" value="smartlink" />
-                          <el-option label="局域网" value="局域网" />
-                        </el-select>
-                      </div>
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">WIFI频段</div>
-                        <el-radio-group v-model="legacyCfg.wifiBand" size="small">
-                          <el-radio value="2.4G">2.4G</el-radio>
-                          <el-radio value="5G">5G</el-radio>
-                          <el-radio value="双频">双频</el-radio>
-                        </el-radio-group>
-                      </div>
-                    </div>
-
-                    <!-- 对讲设置 -->
-                    <div v-if="showLegacyForm('IntercomModule')" class="cfg-form">
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">支持对讲方式</div>
-                        <el-radio-group v-model="legacyCfg.voiceCallType" size="small">
-                          <el-radio value="none">不支持对讲</el-radio>
-                          <el-radio value="half">半双工（对讲机）</el-radio>
-                          <el-radio value="full">全双工（电话）</el-radio>
-                        </el-radio-group>
-                      </div>
-                    </div>
-
-                    <!-- 存储设置 -->
-                    <div v-if="showLegacyForm('StorageModule')" class="cfg-form">
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">存储方式</div>
-                        <el-radio-group v-model="legacyCfg.storageMethod" size="small">
-                          <el-radio value="none">不支持</el-radio>
-                          <el-radio value="tf">TF卡存储</el-radio>
-                          <el-radio value="disk">磁盘存储</el-radio>
-                        </el-radio-group>
-                      </div>
-                      <template v-if="legacyCfg.storageMethod !== 'none'">
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">文件系统格式</div>
-                          <el-radio-group v-model="legacyCfg.fileSystem" size="small">
-                            <el-radio value="fat32">FAT32</el-radio>
-                            <el-radio value="exfat">exFAT</el-radio>
-                          </el-radio-group>
-                        </div>
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">内存显示方式</div>
-                          <el-radio-group v-model="legacyCfg.storageDisplayMode" size="small">
-                            <el-radio value="capacity">显示容量</el-radio>
-                            <el-radio value="ratio">显示剩余比例</el-radio>
-                          </el-radio-group>
-                        </div>
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">常规录制方式</div>
-                          <el-radio-group v-model="legacyCfg.recordMode" size="small">
-                            <el-radio value="scheduled">定时录制</el-radio>
-                            <el-radio value="none">不录制</el-radio>
-                          </el-radio-group>
-                        </div>
-                        <template v-if="legacyCfg.recordMode === 'scheduled'">
-                          <div class="cfg-block">
-                            <div class="cfg-block-label">开始时间</div>
-                            <el-time-picker v-model="legacyCfg.storageStartTime" format="HH:mm:ss" placeholder="00:00:00" size="small" style="width:160px" />
-                          </div>
-                          <div class="cfg-block">
-                            <div class="cfg-block-label">结束时间</div>
-                            <el-time-picker v-model="legacyCfg.storageEndTime" format="HH:mm:ss" placeholder="23:59:59" size="small" style="width:160px" />
-                          </div>
-                          <div class="cfg-block">
-                            <div class="cfg-block-label">是否录制声音</div>
-                            <el-radio-group v-model="legacyCfg.recordSound" size="small">
-                              <el-radio :value="true">是</el-radio>
-                              <el-radio :value="false">否</el-radio>
-                            </el-radio-group>
-                          </div>
-                        </template>
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">重复</div>
-                          <el-checkbox-group v-model="legacyCfg.storageRepeatDays" size="small">
-                            <el-checkbox v-for="d in weekDays" :key="d" :label="d">{{ d }}</el-checkbox>
-                          </el-checkbox-group>
-                        </div>
-                      </template>
-                    </div>
-
-                    <!-- 电池设置 -->
-                    <div v-if="showLegacyForm('BatteryModule')" class="cfg-form">
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">是否有电池</div>
-                        <el-radio-group v-model="legacyCfg.hasBattery" size="small">
-                          <el-radio :value="true">有</el-radio>
-                          <el-radio :value="false">无</el-radio>
-                        </el-radio-group>
-                      </div>
-                      <template v-if="legacyCfg.hasBattery">
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">充电时显示电量</div>
-                          <el-switch v-model="legacyCfg.showBatteryOnCharge" size="small" />
-                        </div>
-                      </template>
-                    </div>
-
-                    <!-- 工作模式 -->
-                    <div v-if="showLegacyForm('WorkModeModule')" class="cfg-form">
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">是否支持切换工作模式</div>
-                        <el-radio-group v-model="legacyCfg.supportWorkModeSwitch" size="small">
-                          <el-radio :value="true">支持</el-radio>
-                          <el-radio :value="false">不支持</el-radio>
-                        </el-radio-group>
-                      </div>
-                      <template v-if="legacyCfg.supportWorkModeSwitch">
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">支持的工作模式</div>
-                          <el-checkbox-group v-model="legacyCfg.workModes" size="small">
-                            <el-checkbox label="超低功耗" />
-                            <el-checkbox label="低功耗" />
-                            <el-checkbox label="AOV" />
-                            <el-checkbox label="长电" />
-                            <el-checkbox label="自定义" />
-                          </el-checkbox-group>
-                        </div>
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">AOV拍照帧率（秒/帧）</div>
-                          <el-input-number v-model="legacyCfg.aovFrameRate" :min="0" :max="10" size="small" />
-                        </div>
-                      </template>
-                    </div>
-
-                    <!-- 唤醒能力 -->
-                    <div v-if="showLegacyForm('WakeupModule')" class="cfg-form">
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">是否支持唤醒</div>
-                        <el-radio-group v-model="legacyCfg.wakeMode" size="small">
-                          <el-radio value="none">不支持</el-radio>
-                          <el-radio value="local">本地唤醒</el-radio>
-                          <el-radio value="remote">远程唤醒</el-radio>
-                          <el-radio value="both">本地和远程</el-radio>
-                        </el-radio-group>
-                      </div>
-                    </div>
-
-                    <!-- OTA能力 -->
-                    <div v-if="showLegacyForm('OtaModule')" class="cfg-form">
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">是否支持远程OTA</div>
-                        <el-radio-group v-model="legacyCfg.otaEnabled" size="small">
-                          <el-radio :value="true">支持</el-radio>
-                          <el-radio :value="false">不支持</el-radio>
-                        </el-radio-group>
-                      </div>
-                    </div>
-
-                    <!-- 指示灯 -->
-                    <div v-if="showLegacyForm('IndicatorModule')" class="cfg-form">
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">是否有状态指示灯</div>
-                        <el-radio-group v-model="legacyCfg.hasIndicator" size="small">
-                          <el-radio :value="true">有</el-radio>
-                          <el-radio :value="false">无</el-radio>
-                        </el-radio-group>
-                      </div>
-                      <template v-if="legacyCfg.hasIndicator">
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">默认状态</div>
-                          <el-radio-group v-model="legacyCfg.indicatorDefaultOn" size="small">
-                            <el-radio :value="true">开启</el-radio>
-                            <el-radio :value="false">关闭</el-radio>
-                          </el-radio-group>
-                        </div>
-                      </template>
-                    </div>
-
-                    <!-- 报警录制 -->
-                    <div v-if="showLegacyForm('AlarmRecordModule')" class="cfg-form">
-                      <el-alert title="该报警配置仅针对卡录像生效" type="info" :closable="false" show-icon style="margin-bottom:16px" />
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">是否打开报警录制</div>
-                        <el-switch v-model="legacyCfg.alarmRecordEnabled" size="small" />
-                      </div>
-                      <template v-if="legacyCfg.alarmRecordEnabled">
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">报警时长（秒）</div>
-                          <el-input-number v-model="legacyCfg.alarmRecordDuration" :min="5" :max="300" :step="5" size="small" />
-                        </div>
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">录制清晰度</div>
-                          <el-radio-group v-model="legacyCfg.alarmRecordResolution" size="small">
-                            <el-radio value="超清">超清</el-radio>
-                            <el-radio value="高清">高清</el-radio>
-                            <el-radio value="标清">标清</el-radio>
-                          </el-radio-group>
-                        </div>
-                      </template>
-                    </div>
-
-                    <!-- 红外灯 -->
-                    <div v-if="showLegacyForm('IrLightModule')" class="cfg-form">
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">是否支持</div>
-                        <el-radio-group v-model="legacyCfg.irLightEnabled" size="small">
-                          <el-radio :value="true">是</el-radio>
-                          <el-radio :value="false">否</el-radio>
-                        </el-radio-group>
-                      </div>
-                      <template v-if="legacyCfg.irLightEnabled">
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">红外灯模式</div>
-                          <el-radio-group v-model="legacyCfg.irLightMode" size="small">
-                            <el-radio value="自动">自动</el-radio>
-                            <el-radio value="手动">手动</el-radio>
-                            <el-radio value="关闭">关闭</el-radio>
-                          </el-radio-group>
-                        </div>
-                      </template>
-                    </div>
-
-                    <!-- 声音侦测 -->
-                    <div v-if="showLegacyForm('SoundDetectModule')" class="cfg-form">
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">声音侦测</div>
-                        <el-switch v-model="legacyCfg.soundDetectEnabled" size="small" />
-                      </div>
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">灵敏度</div>
-                        <el-radio-group v-model="legacyCfg.soundDetectSensitive" size="small">
-                          <el-radio :value="1">1档</el-radio>
-                          <el-radio :value="2">2档</el-radio>
-                          <el-radio :value="3">3档</el-radio>
-                          <el-radio :value="4">4档</el-radio>
-                        </el-radio-group>
-                      </div>
-                    </div>
-
-                    <!-- 算法能力 -->
-                    <div v-if="showLegacyForm('AlgorithmModule')" class="cfg-form">
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">算法总开关</div>
-                        <el-switch v-model="legacyCfg.algorithmEnabled" size="small" />
-                      </div>
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">灵敏度</div>
-                        <el-radio-group v-model="legacyCfg.algorithmSensitive" size="small">
-                          <el-radio label="低">低</el-radio>
-                          <el-radio label="中">中</el-radio>
-                          <el-radio label="高">高</el-radio>
-                        </el-radio-group>
-                      </div>
-                    </div>
-
-                    <!-- 屏显配置 -->
-                    <div v-if="showLegacyForm('DisplayModule')" class="cfg-form">
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">是否有屏显</div>
-                        <el-radio-group v-model="legacyCfg.hasDisplay" size="small">
-                          <el-radio :value="true">是</el-radio>
-                          <el-radio :value="false">否</el-radio>
-                        </el-radio-group>
-                      </div>
-                      <template v-if="legacyCfg.hasDisplay">
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">支持的分辨率</div>
-                          <el-checkbox-group v-model="legacyCfg.supportedResolutions" size="small">
-                            <el-checkbox label="1920*1080" />
-                            <el-checkbox label="1280*720" />
-                            <el-checkbox label="640*480" />
-                            <el-checkbox label="640*360" />
-                            <el-checkbox label="320*240" />
-                          </el-checkbox-group>
-                        </div>
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">屏息时间（秒）</div>
-                          <el-input-number v-model="legacyCfg.screenOffTime" :min="0" :max="3600" size="small" />
-                        </div>
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">支持的解码方式</div>
-                          <el-checkbox-group v-model="legacyCfg.decodeFormats" size="small">
-                            <el-checkbox label="H264" />
-                            <el-checkbox label="H265" />
-                            <el-checkbox label="MJPG" />
-                          </el-checkbox-group>
-                        </div>
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">支持的屏显类型</div>
-                          <el-checkbox-group v-model="legacyCfg.displayTypes" size="small">
-                            <el-checkbox label="文字" />
-                            <el-checkbox label="背景图" />
-                            <el-checkbox label="图片" />
-                            <el-checkbox label="视频" />
-                          </el-checkbox-group>
-                        </div>
-                      </template>
-                    </div>
-
-                    <!-- 喇叭配置 -->
-                    <div v-if="showLegacyForm('SpeakerModule')" class="cfg-form">
-                      <div class="cfg-block">
-                        <div class="cfg-block-label">是否有喇叭</div>
-                        <el-radio-group v-model="legacyCfg.hasSpeaker" size="small">
-                          <el-radio :value="true">是</el-radio>
-                          <el-radio :value="false">否</el-radio>
-                        </el-radio-group>
-                      </div>
-                      <template v-if="legacyCfg.hasSpeaker">
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">支持的编码方式</div>
-                          <el-checkbox-group v-model="legacyCfg.encodeFormats" size="small">
-                            <el-checkbox label="PCM" />
-                            <el-checkbox label="G711A" />
-                            <el-checkbox label="g711u" />
-                            <el-checkbox label="ACC" />
-                          </el-checkbox-group>
-                        </div>
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">音量调节</div>
-                          <el-radio-group v-model="legacyCfg.volumeAdjustable" size="small">
-                            <el-radio :value="true">支持</el-radio>
-                            <el-radio :value="false">不支持</el-radio>
-                          </el-radio-group>
-                        </div>
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">音量</div>
-                          <el-input-number v-model="legacyCfg.volume" :min="0" :max="100" size="small" />
-                        </div>
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">自定义铃声</div>
-                          <el-radio-group v-model="legacyCfg.customRingtone" size="small">
-                            <el-radio :value="true">支持</el-radio>
-                            <el-radio :value="false">不支持</el-radio>
-                          </el-radio-group>
-                        </div>
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">采样位深</div>
-                          <el-radio-group v-model="legacyCfg.bitDepth" size="small">
-                            <el-radio value="16bit">16bit</el-radio>
-                            <el-radio value="24bit">24bit</el-radio>
-                          </el-radio-group>
-                        </div>
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">采样率</div>
-                          <el-radio-group v-model="legacyCfg.sampleRate" size="small">
-                            <el-radio value="8000">8000 (电话音质)</el-radio>
-                            <el-radio value="16000">16000 (语音识别常用)</el-radio>
-                            <el-radio value="44100">44100 (CD音质)</el-radio>
-                            <el-radio value="48000">48000 (专业音频常用)</el-radio>
-                          </el-radio-group>
-                        </div>
-                        <div class="cfg-block">
-                          <div class="cfg-block-label">声道数</div>
-                          <el-radio-group v-model="legacyCfg.channels" size="small">
-                            <el-radio value="mono">单声道</el-radio>
-                            <el-radio value="stereo">双声道</el-radio>
-                          </el-radio-group>
-                        </div>
-                      </template>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </el-tab-pane>
-        </el-tabs>
       </el-tab-pane>
-      <el-tab-pane label="自定义能力" name="custom">
+
+      
+<el-tab-pane label="自定义能力" name="custom">
         <div class="main-layout">
           <!-- 左栏：模块列表 -->
           <div class="module-sidebar">
@@ -607,6 +184,51 @@
             </div>
           </div>
         </div>
+      </el-tab-pane>
+<el-tab-pane name="legacy">
+        <template #label>
+          （旧）能力
+          <el-tooltip content="历史由SDK定义的物模型能力" placement="top"><el-icon class="tab-tag-icon"><QuestionFilled /></el-icon></el-tooltip>
+        </template>
+<el-tabs v-model="legacyActiveTab" class="legacy-tabs">
+              <el-tab-pane label="设备能力" name="device">
+                <div class="capability-right" style="padding:16px 24px 24px">
+                  <CapModules :modules="legacyDeviceModules" />
+                </div>
+              </el-tab-pane>
+              <el-tab-pane label="镜头能力配置" name="lens">
+                <div class="capability-right" style="padding:16px 24px 24px">
+                  <div v-if="activeLens" class="lens-config-body">
+                    <div class="lens-header">
+                      <h3 class="camera-name">{{ activeLens.name }}</h3>
+                      <el-select v-model="activeLensIdx" size="small" style="width:200px">
+                        <el-option v-for="(cam, i) in legacyLensList" :key="cam.id" :label="cam.name" :value="i" />
+                      </el-select>
+                      <el-button size="small" text type="danger" @click="removeLens(activeLensIdx)">删除</el-button>
+                      <el-button size="small" @click="addLens"><el-icon><Plus /></el-icon>添加镜头</el-button>
+                    </div>
+                    <CapModules :modules="activeLens.capabilityConfig" />
+                  </div>
+                  <div v-else class="empty-state" style="padding:40px 0">暂无镜头配置，请先添加镜头</div>
+                </div>
+              </el-tab-pane>
+              <el-tab-pane label="麦克风能力配置" name="mic">
+                <div class="capability-right" style="padding:16px 24px 24px">
+                  <div v-if="activeMic" class="lens-config-body">
+                    <div class="lens-header">
+                      <h3 class="camera-name">{{ activeMic.name }}</h3>
+                      <el-select v-model="activeMicIdx" size="small" style="width:200px">
+                        <el-option v-for="(m, i) in legacyMicList" :key="m.id" :label="m.name" :value="i" />
+                      </el-select>
+                      <el-button size="small" text type="danger" @click="removeMic(activeMicIdx)">删除</el-button>
+                      <el-button size="small" @click="addMic"><el-icon><Plus /></el-icon>添加Microphone</el-button>
+                    </div>
+                    <CapModules :modules="activeMic.capabilityConfig" />
+                  </div>
+                  <div v-else class="empty-state" style="padding:40px 0">暂无Microphone配置，请先添加Microphone</div>
+                </div>
+              </el-tab-pane>
+            </el-tabs>
       </el-tab-pane>
     </el-tabs>
 
@@ -1027,10 +649,9 @@
 
 <script setup>
 import { ref, reactive, computed, watch } from 'vue'
-import { Plus, Edit, Delete } from '@element-plus/icons-vue'
+import { Plus, Edit, Delete, QuestionFilled } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-const activeSubTab = ref('pool')
 import {
   store, addModule, updateModule, removeModule,
   addCapability, updateCapability, removeCapability,
@@ -1039,8 +660,10 @@ import {
   addCustomModule, updateCustomModule, removeCustomModule,
   addCustomCapability, updateCustomCapability, removeCustomCapability,
   addLegacyModule, updateLegacyModule, removeLegacyModule,
-  isLegacyModuleIdentifierUnique
+  isLegacyModuleIdentifierUnique,
+  legacyDeviceDef, legacyLensDef, legacyMicDef
 } from './data'
+import CapModules from '@/views/product/cap-modules.vue'
 
 // ===== 主标签页 =====
 const activeMainTab = ref('capability')
@@ -1083,6 +706,63 @@ function currentLegacyModule() {
 function showLegacyForm(identifier) {
   const m = currentLegacyModule()
   return m && m.identifier === identifier
+}
+
+// ===== 能力池（老）— 复用产品开发「功能定义与配置」三套结构（共享定义 data.js） =====
+const legacyActiveTab = ref('device')
+
+// 设备能力（设备级，按 5 模块分组）— 与 data.js 同源
+const legacyDeviceModules = reactive(legacyDeviceDef())
+
+// 镜头能力配置模板（每镜头实例一份，按 2 模块分组）— 与 data.js 同源
+function defaultLensCapabilityConfig() {
+  return legacyLensDef()
+}
+
+// ===== 镜头多实例 =====
+const legacyLensList = ref([
+  { id: 1, name: 'Camera_ 1', capabilityConfig: defaultLensCapabilityConfig() }
+])
+const activeLensIdx = ref(0)
+const activeLens = computed(() => legacyLensList.value[activeLensIdx.value] || null)
+
+function addLens() {
+  const idx = legacyLensList.value.length + 1
+  legacyLensList.value.push({ id: Date.now(), name: `Camera_ ${idx}`, capabilityConfig: defaultLensCapabilityConfig() })
+  activeLensIdx.value = legacyLensList.value.length - 1
+  ElMessage.success(`镜头 Camera_ ${idx} 已添加`)
+}
+
+function removeLens(idx) {
+  if (legacyLensList.value.length <= 1) { ElMessage.warning('至少保留一个镜头'); return }
+  legacyLensList.value.splice(idx, 1)
+  if (activeLensIdx.value >= legacyLensList.value.length) activeLensIdx.value = legacyLensList.value.length - 1
+  ElMessage.success('镜头已删除')
+}
+
+// 麦克风能力配置模板（每麦克风实例一份，1 模块）
+function defaultMicCapabilityConfig() {
+  return legacyMicDef()
+}
+
+// ===== 麦克风多实例 =====
+const legacyMicList = ref([
+  { id: 1, name: 'Microphone_ 1', capabilityConfig: defaultMicCapabilityConfig() }
+])
+const activeMicIdx = ref(0)
+const activeMic = computed(() => legacyMicList.value[activeMicIdx.value] || null)
+
+function addMic() {
+  const idx = legacyMicList.value.length + 1
+  legacyMicList.value.push({ id: Date.now(), name: `Microphone_ ${idx}`, capabilityConfig: defaultMicCapabilityConfig() })
+  activeMicIdx.value = legacyMicList.value.length - 1
+  ElMessage.success(`Microphone_ ${idx} 已添加`)
+}
+
+function removeMic(idx) {
+  if (legacyMicList.value.length <= 1) { ElMessage.warning('至少保留一个Microphone'); return }
+  legacyMicList.value.splice(idx, 1)
+  if (activeMicIdx.value >= legacyMicList.value.length) activeMicIdx.value = legacyMicList.value.length - 1
 }
 
 // Legacy 配置默认值（硬编码表单）
@@ -1899,6 +1579,26 @@ function openEditStructField(idx) {
 }
 
 // 空状态
+// ===== 镜头/麦克风多实例 =====
+.lens-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+}
+
+.lens-config-body {
+  padding-top: 4px;
+}
+
+.camera-name { font-size: 15px; font-weight: 600; color: var(--text-primary); margin: 0; }
+
+.tab-tag-icon {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: -2px;
+  color: var(--text-placeholder);
+  cursor: help;
+  margin-left: 4px;
+}
+
 .empty-state {
   flex: 1;
   display: flex;

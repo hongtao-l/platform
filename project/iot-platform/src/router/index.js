@@ -52,6 +52,37 @@ const routes = [
     component: () => import('@/views/product/app.vue'),
     meta: { title: 'App功能配置' }
   },
+  // ===== 产品管理（new） =====
+  {
+    path: '/product-new',
+    name: 'ProductNew',
+    component: () => import('@/views/product-new/index.vue'),
+    meta: { title: '产品管理（new）' }
+  },
+  {
+    path: '/product-new/development',
+    name: 'ProductNewDevelopment',
+    component: () => import('@/views/product-new/development.vue'),
+    meta: { title: '产品开发（new）' }
+  },
+  {
+    path: '/product-new/config',
+    name: 'ProductNewConfig',
+    component: () => import('@/views/product-new/config.vue'),
+    meta: { title: '产品功能配置（new）' }
+  },
+  {
+    path: '/product-new/audit',
+    name: 'ProductNewAudit',
+    component: () => import('@/views/product-new/audit.vue'),
+    meta: { title: '产品审核（new）' }
+  },
+  {
+    path: '/product-new/audit/detail',
+    name: 'ProductNewAuditDetail',
+    component: () => import('@/views/product-new/audit/detail.vue'),
+    meta: { title: '产品详情（new）' }
+  },
   {
     path: '/abtest',
     name: 'AbTest',
@@ -133,6 +164,26 @@ const routes = [
     name: 'ThingModelEvent',
     component: () => import('@/views/iot/thing-model/EventPanel.vue'),
     meta: { title: '事件库' }
+  },
+  // ===== 物模型管理（new） =====
+  // 注：不带算法库/事件库（按需求去掉），对应页面文件未复制
+  {
+    path: '/thing-model-new/category',
+    name: 'ThingModelNewCategory',
+    component: () => import('@/views/iot/thing-model-new/category.vue'),
+    meta: { title: 'IOT类目（new）' }
+  },
+  {
+    path: '/thing-model-new/category/:id/capabilities',
+    name: 'ThingModelNewCategoryCapabilities',
+    component: () => import('@/views/iot/thing-model-new/category-capability.vue'),
+    meta: { title: '类目能力详情（new）' }
+  },
+  {
+    path: '/thing-model-new/capability',
+    name: 'ThingModelNewCapability',
+    component: () => import('@/views/iot/thing-model-new/capability.vue'),
+    meta: { title: '能力库（new）' }
   },
   {
     path: '/pkg',

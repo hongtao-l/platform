@@ -17,7 +17,8 @@
       "mcp__playwright__browser_resize",
       "mcp__playwright__browser_tabs",
       "Bash(mkdir -p \"d:/Tool/kiro project/.claude/skills/agreement-generator\")",
-      "Edit(/.claude/skills/agreement-generator/**)"
+      "Edit(/.claude/skills/agreement-generator/**)",
+      "Bash(npx vite *)"
     ],
     "additionalDirectories": [
       "C:\\Users\\LHT\\.feicod\\lib",

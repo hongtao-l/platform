@@ -6,17 +6,28 @@
         <el-button @click="$router.push('/thing-model/category')" :icon="ArrowLeft">返回</el-button>
         <div>
           <div class="top-title">类目：{{ categoryName }}</div>
-          <div class="top-sub">共 {{ linkedCaps.length }} 个标准能力</div>
         </div>
       </div>
       <div class="top-actions">
-        <el-button type="primary" size="small" plain @click="openImportDialog">
+        <el-button
+          v-if="mode === 'standard'"
+          type="primary" size="small" plain @click="openImportDialog"
+        >
+          <el-icon><Plus /></el-icon>导入能力
+        </el-button>
+        <el-button
+          v-else
+          type="primary" size="small" plain @click="openLegacyImportDialog"
+        >
           <el-icon><Plus /></el-icon>导入能力
         </el-button>
       </div>
     </div>
 
-    <!-- 主体 -->
+    <!-- 主体 tab 容器 -->
+    <el-tabs v-model="mode" class="detail-body-tabs">
+      <el-tab-pane name="standard">
+        <template #label>标准能力（{{ linkedCaps.length }}）</template>
     <div class="main-layout">
       <!-- 左栏：模块列表 -->
       <div class="module-sidebar">
@@ -94,6 +105,49 @@
         </div>
       </div>
     </div>
+      </el-tab-pane>
+
+      <el-tab-pane name="legacy">
+        <template #label>（旧）能力</template>
+        <div class="main-layout legacy-body">
+          <div class="capability-right legacy-scroll">
+            <el-tabs v-model="legacySubTab" class="legacy-subtabs">
+              <el-tab-pane label="设备能力" name="device">
+                <CapModules :modules="legacyDeviceModules" />
+              </el-tab-pane>
+              <el-tab-pane label="镜头能力配置" name="lens">
+                <div v-if="activeLegacyLens" class="lens-config-body">
+                  <div class="lens-header">
+                    <h3 class="camera-name">{{ activeLegacyLens.name }}</h3>
+                    <el-select v-model="activeLegacyLensIdx" size="small" style="width:200px">
+                      <el-option v-for="(cam, i) in legacyLensList" :key="cam.id" :label="cam.name" :value="i" />
+                    </el-select>
+                    <el-button size="small" text type="danger" @click="removeLegacyLens(activeLegacyLensIdx)">删除</el-button>
+                    <el-button size="small" @click="addLegacyLens"><el-icon><Plus /></el-icon>添加镜头</el-button>
+                  </div>
+                  <CapModules :modules="activeLegacyLens.capabilityConfig" />
+                </div>
+                <div v-else class="empty-state" style="padding:40px 0">暂无镜头配置，请先添加镜头</div>
+              </el-tab-pane>
+              <el-tab-pane label="麦克风能力配置" name="mic">
+                <div v-if="activeLegacyMic" class="lens-config-body">
+                  <div class="lens-header">
+                    <h3 class="camera-name">{{ activeLegacyMic.name }}</h3>
+                    <el-select v-model="activeLegacyMicIdx" size="small" style="width:200px">
+                      <el-option v-for="(m, i) in legacyMicList" :key="m.id" :label="m.name" :value="i" />
+                    </el-select>
+                    <el-button size="small" text type="danger" @click="removeLegacyMic(activeLegacyMicIdx)">删除</el-button>
+                    <el-button size="small" @click="addLegacyMic"><el-icon><Plus /></el-icon>添加Microphone</el-button>
+                  </div>
+                  <CapModules :modules="activeLegacyMic.capabilityConfig" />
+                </div>
+                <div v-else class="empty-state" style="padding:40px 0">暂无Microphone配置，请先添加Microphone</div>
+              </el-tab-pane>
+            </el-tabs>
+          </div>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
 
     <!-- 导入能力弹窗（穿梭框） -->
     <el-dialog
@@ -205,6 +259,108 @@
         <el-button @click="importDialogVisible = false">取消</el-button>
         <el-button type="primary" :disabled="!importSelectedIds.length" @click="handleImportConfirm">
           导入（{{ importSelectedIds.length }}）
+        </el-button>
+      </template>
+    </el-dialog>
+
+    <!-- 导入旧能力弹窗（旧能力穿梭框） -->
+    <el-dialog
+      v-model="legacyImportDialogVisible"
+      title="导入能力"
+      width="960px"
+      :close-on-click-modal="false"
+      top="3vh"
+    >
+      <div class="transfer-container">
+        <div class="transfer-panel">
+          <div class="transfer-panel-header">
+            <span>可选旧能力</span>
+            <span v-if="legacyCheckedIds.length" class="transfer-selected-count">已选 <span class="count-num">{{ legacyCheckedIds.length }}</span> 个</span>
+          </div>
+          <div class="transfer-panel-search">
+            <el-input v-model="legacySearchText" placeholder="搜索能力名称或标识" clearable size="small">
+              <template #prefix><el-icon><Search /></el-icon></template>
+            </el-input>
+          </div>
+          <div class="transfer-panel-body">
+            <div v-if="!legacyImportAvailableByModule.length" class="transfer-empty">暂无可导入的旧能力</div>
+            <div
+              v-for="mod in legacyImportAvailableByModule"
+              :key="mod.id"
+              :class="['transfer-category-item', { expanded: legacyExpandedLeftModules.includes(mod.id) }]"
+            >
+              <div class="transfer-cat-header" @click="toggleLegacyLeftModuleExpand(mod.id)">
+                <el-icon class="transfer-cat-arrow"><ArrowRight /></el-icon>
+                <span class="transfer-cat-name">{{ mod.name }}</span>
+                <span class="transfer-cat-count">{{ mod.caps.length }} 个能力</span>
+              </div>
+              <div class="transfer-cat-body">
+                <label
+                  v-for="cap in mod.caps"
+                  :key="cap.id"
+                  :class="['transfer-pkg-item', { selected: legacyCheckedIds.includes(cap.id) }]"
+                >
+                  <el-checkbox :model-value="legacyCheckedIds.includes(cap.id)" @change="toggleLegacyCheck(cap.id)" />
+                  <div class="transfer-pkg-info">
+                    <div class="transfer-pkg-name">{{ cap.name }}</div>
+                    <div class="transfer-pkg-meta">{{ cap.identifier }}</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="transfer-actions">
+          <el-button size="small" :disabled="!legacyCheckedIds.length" @click="legacyTransferToRight">
+            <el-icon><ArrowRight /></el-icon>
+          </el-button>
+          <el-button size="small" :disabled="!legacySelectedIds.length" @click="legacyTransferToLeft">
+            <el-icon><ArrowLeft /></el-icon>
+          </el-button>
+        </div>
+
+        <div class="transfer-panel">
+          <div class="transfer-panel-header">
+            <span>待导入</span>
+            <span class="transfer-count">{{ legacySelectedIds.length }} 项</span>
+          </div>
+          <div class="transfer-panel-body">
+            <div v-if="!legacySelectedIds.length" class="transfer-empty">请从左侧勾选旧能力后点击 → 添加</div>
+            <div
+              v-for="mod in legacyImportSelectedByModule"
+              :key="mod.id"
+              :class="['transfer-category-item', { expanded: legacyExpandedModules.includes(mod.id) }]"
+            >
+              <div class="transfer-cat-header" @click="toggleLegacyModuleExpand(mod.id)">
+                <el-icon class="transfer-cat-arrow"><ArrowRight /></el-icon>
+                <span class="transfer-cat-name">{{ mod.name }}</span>
+                <span class="transfer-cat-count">{{ mod.caps.length }} 个能力</span>
+              </div>
+              <div class="transfer-cat-body">
+                <div
+                  v-for="cap in mod.caps"
+                  :key="cap.id"
+                  class="transfer-pkg-item selected"
+                >
+                  <div class="transfer-pkg-info" style="flex:1">
+                    <div class="transfer-pkg-name">{{ cap.name }}</div>
+                    <div class="transfer-pkg-meta">{{ cap.identifier }}</div>
+                  </div>
+                  <el-button size="small" text type="danger" @click="legacyRemoveFromSelected(cap.id)">
+                    <el-icon><Delete /></el-icon>
+                  </el-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <template #footer>
+        <el-button @click="legacyImportDialogVisible = false">取消</el-button>
+        <el-button type="primary" :disabled="!legacySelectedIds.length" @click="handleLegacyImportConfirm">
+          导入（{{ legacySelectedIds.length }}）
         </el-button>
       </template>
     </el-dialog>
@@ -536,7 +692,9 @@ import { ref, reactive, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { Plus, ArrowLeft, Search, ArrowRight, Edit, Delete } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { store, getCategoryLinkedCapIds, linkCapToCategory, unlinkCapFromCategory, updateCapability } from './data'
+import { store, getCategoryLinkedCapIds, linkCapToCategory, unlinkCapFromCategory, updateCapability,
+  legacyDeviceDef, legacyLensDef, legacyMicDef } from './data'
+import CapModules from '@/views/product/cap-modules.vue'
 
 const route = useRoute()
 const categoryId = Number(route.params.id)
@@ -551,6 +709,58 @@ const linkedCaps = computed(() => {
   const capIds = new Set(getCategoryLinkedCapIds(categoryId))
   return store.capabilities.filter(c => capIds.has(c.id))
 })
+
+// ===== 视图模式（标准能力 / 老能力） =====
+const mode = ref('standard')
+
+// ===== 已导入的旧能力（前端维护，随导入增长） =====
+const legacyLinkedCapIds = ref([])
+const legacyLinkedCaps = computed(() => legacyOptionList.value.filter(c => legacyLinkedCapIds.value.includes(c.id)))
+
+// ===== 旧能力三子 tab + 多实例（复刻产品开发「功能定义与配置」，与能力库同源） =====
+const legacySubTab = ref('device')
+
+// 设备能力（reactive，保证 CapModules 内 v-model 响应式）
+const legacyDeviceModules = reactive(legacyDeviceDef())
+
+// 镜头多实例（每镜头一份能力配置）
+const legacyLensList = ref([
+  { id: Date.now(), name: 'Camera_ 1', capabilityConfig: legacyLensDef() }
+])
+const activeLegacyLensIdx = ref(0)
+const activeLegacyLens = computed(() => legacyLensList.value[activeLegacyLensIdx.value] || null)
+
+function addLegacyLens() {
+  const idx = legacyLensList.value.length + 1
+  legacyLensList.value.push({ id: Date.now(), name: `Camera_ ${idx}`, capabilityConfig: legacyLensDef() })
+  activeLegacyLensIdx.value = legacyLensList.value.length - 1
+  ElMessage.success(`镜头 Camera_ ${idx} 已添加`)
+}
+function removeLegacyLens(idx) {
+  if (legacyLensList.value.length <= 1) { ElMessage.warning('至少保留一个镜头'); return }
+  legacyLensList.value.splice(idx, 1)
+  if (activeLegacyLensIdx.value >= legacyLensList.value.length) activeLegacyLensIdx.value = legacyLensList.value.length - 1
+  ElMessage.success('镜头已删除')
+}
+
+// 麦克风多实例（每麦克风一份能力配置）
+const legacyMicList = ref([
+  { id: Date.now(), name: 'Microphone_ 1', capabilityConfig: legacyMicDef() }
+])
+const activeLegacyMicIdx = ref(0)
+const activeLegacyMic = computed(() => legacyMicList.value[activeLegacyMicIdx.value] || null)
+
+function addLegacyMic() {
+  const idx = legacyMicList.value.length + 1
+  legacyMicList.value.push({ id: Date.now(), name: `Microphone_ ${idx}`, capabilityConfig: legacyMicDef() })
+  activeLegacyMicIdx.value = legacyMicList.value.length - 1
+  ElMessage.success(`Microphone_ ${idx} 已添加`)
+}
+function removeLegacyMic(idx) {
+  if (legacyMicList.value.length <= 1) { ElMessage.warning('至少保留一个Microphone'); return }
+  legacyMicList.value.splice(idx, 1)
+  if (activeLegacyMicIdx.value >= legacyMicList.value.length) activeLegacyMicIdx.value = legacyMicList.value.length - 1
+}
 
 // ===== 模块侧栏（仅显示有关联能力的模块） =====
 const displayModules = computed(() => {
@@ -771,6 +981,116 @@ function handleImportConfirm() {
   })
   ElMessage.success(`已导入 ${importSelectedIds.value.length} 个能力`)
   importDialogVisible.value = false
+}
+
+// ===== 导入老能力（能力池（老）穿梭框） =====
+const legacyImportDialogVisible = ref(false)
+const legacySearchText = ref('')
+const legacyCheckedIds = ref([])
+const legacySelectedIds = ref([])
+const legacyExpandedLeftModules = ref([])
+const legacyExpandedModules = ref([])
+
+// 三套旧能力定义 → 可勾选清单（每个能力项一个条目，含 scope/模块名，与能力库同源）
+const legacyOptionList = computed(() => {
+  const defs = [
+    { scope: '设备能力', modules: legacyDeviceDef() },
+    { scope: '镜头能力', modules: legacyLensDef() },
+    { scope: '麦克风能力', modules: legacyMicDef() }
+  ]
+  const list = []
+  defs.forEach(d => {
+    d.modules.forEach(mod => {
+      mod.items.forEach(item => {
+        list.push({ id: item.id, name: item.name, scope: d.scope, moduleName: mod.name })
+      })
+    })
+  })
+  return list
+})
+
+function buildLegacyModuleGroups(capList) {
+  const moduleMap = {}
+  const orphanCaps = []
+  capList.forEach(cap => {
+    if (cap.moduleName) {
+      if (!moduleMap[cap.moduleName]) moduleMap[cap.moduleName] = { name: cap.moduleName, caps: [] }
+      moduleMap[cap.moduleName].caps.push(cap)
+    } else {
+      orphanCaps.push(cap)
+    }
+  })
+  const groups = Object.keys(moduleMap).map(name => ({ id: name, name, caps: moduleMap[name].caps }))
+  if (orphanCaps.length) groups.push({ id: '_other', name: '其他', caps: orphanCaps })
+  return groups
+}
+
+function buildLegacySearchCaps(caps) {
+  if (!legacySearchText.value) return caps
+  const kw = legacySearchText.value.toLowerCase()
+  return caps.filter(c => c.name.toLowerCase().includes(kw) || c.scope.toLowerCase().includes(kw))
+}
+
+const legacyImportAvailableByModule = computed(() => {
+  const excludedIds = new Set([...legacyLinkedCapIds.value, ...legacySelectedIds.value])
+  const available = legacyOptionList.value.filter(c => !excludedIds.has(c.id))
+  return buildLegacyModuleGroups(buildLegacySearchCaps(available))
+})
+
+const legacyImportSelectedByModule = computed(() => {
+  const caps = legacySelectedIds.value.map(id => legacyOptionList.value.find(c => c.id === id)).filter(Boolean)
+  return buildLegacyModuleGroups(caps)
+})
+
+function toggleLegacyCheck(capId) {
+  const idx = legacyCheckedIds.value.indexOf(capId)
+  if (idx > -1) legacyCheckedIds.value.splice(idx, 1)
+  else legacyCheckedIds.value.push(capId)
+}
+
+function toggleLegacyLeftModuleExpand(modId) {
+  const idx = legacyExpandedLeftModules.value.indexOf(modId)
+  if (idx > -1) legacyExpandedLeftModules.value.splice(idx, 1)
+  else legacyExpandedLeftModules.value.push(modId)
+}
+
+function toggleLegacyModuleExpand(modId) {
+  const idx = legacyExpandedModules.value.indexOf(modId)
+  if (idx > -1) legacyExpandedModules.value.splice(idx, 1)
+  else legacyExpandedModules.value.push(modId)
+}
+
+function legacyTransferToRight() {
+  const newModIds = new Set()
+  legacyCheckedIds.value.forEach(id => {
+    if (!legacySelectedIds.value.includes(id)) {
+      legacySelectedIds.value.push(id)
+      const cap = legacyOptionList.value.find(c => c.id === id)
+      if (cap) newModIds.add(cap.moduleName)
+    }
+  })
+  newModIds.forEach(mid => { if (!legacyExpandedModules.value.includes(mid)) legacyExpandedModules.value.push(mid) })
+  legacyCheckedIds.value = []
+}
+
+function legacyTransferToLeft() { legacySelectedIds.value = [] }
+function legacyRemoveFromSelected(id) { legacySelectedIds.value = legacySelectedIds.value.filter(i => i !== id) }
+
+function openLegacyImportDialog() {
+  legacySelectedIds.value = []
+  legacyCheckedIds.value = []
+  legacySearchText.value = ''
+  legacyExpandedModules.value = []
+  legacyExpandedLeftModules.value = [...new Set(legacyOptionList.value.map(c => c.moduleName))]
+  legacyImportDialogVisible.value = true
+}
+
+function handleLegacyImportConfirm() {
+  legacySelectedIds.value.forEach(capId => {
+    if (!legacyLinkedCapIds.value.includes(capId)) legacyLinkedCapIds.value.push(capId)
+  })
+  ElMessage.success(`已导入 ${legacySelectedIds.value.length} 个旧能力`)
+  legacyImportDialogVisible.value = false
 }
 
 // ===== 编辑能力参数 =====
@@ -1091,6 +1411,56 @@ function handleRemoveCap(cap) {
 .cell-module { font-size: 13px; color: var(--text-regular); }
 
 // 空状态
+// ===== 主体 tab 容器（约束高度，让内部可滚） =====
+.detail-body-tabs {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  :deep(.el-tabs__content) {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+  :deep(.el-tabs__content .el-tab-pane) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+  }
+}
+
+// ===== 旧能力子 tab + 多 camera =====
+.legacy-body {
+  height: 100%;
+  overflow-y: auto;
+}
+.legacy-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 24px 24px;
+}
+.legacy-subtabs {
+  :deep(.el-tabs__content) {
+    padding-top: 8px;
+  }
+}
+.lens-config-body {
+  padding-top: 4px;
+}
+.lens-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.camera-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
 .empty-state {
   flex: 1;
   display: flex;

@@ -18,7 +18,7 @@
         <span class="meta-sep">|</span>
         <span>产品型号: TEST-MODEL-388537</span>
         <span class="meta-sep">|</span>
-        <span>产品类目: UITest_Edit_285367</span>
+        <span>产品类目: {{ productCategory || '-' }}</span>
         <span class="meta-sep">|</span>
         <span>联网方式: -</span>
       </div>
@@ -1288,6 +1288,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { Plus, ArrowLeft, ArrowRight, Edit, Switch, Check, Setting, QuestionFilled, Delete, Search, InfoFilled, CircleCheck } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { listAlgorithms, listServices, allEvents, getCapabilitiesByIds, getModules, getAllCapabilities, getAlgorithmServiceId, getAlgorithmEvents, getAllAlgorithmServices } from '@/views/iot/thing-model/data'
+import { store, getCategoryLinkedCapIds, getCategoryLinkedLegacyCapIds } from '@/views/iot/thing-model/data'
 import CapControl from './cap-control.vue'
 import CapModules from './cap-modules.vue'
 import AppPhonePreview from './AppPhonePreview.vue'
@@ -1297,6 +1298,7 @@ const router = useRouter()
 
 const productName = ref(route.query.name || 'API测试产品_388537')
 const productId = ref(route.query.id || 'PDRSAs9HaSQzNPrG')
+const productCategory = ref(route.query.category || '')
 
 // ===== 步骤导航 =====
 const currentStep = ref(0)
@@ -2394,7 +2396,95 @@ function finishDev() {
 function handleBack() { router.push('/product/development') }
 function handleEditProduct() { ElMessage.info('编辑产品基础信息') }
 
-onMounted(() => { loadAlgorithms(); loadEvents(); loadEventConfig(); loadPlatformServices() })
+// ===== 按产品类目代入新/老能力 =====
+const categoryCapIds = ref([])
+const categoryLegacyCapIds = ref([])
+
+const categoryCapsList = computed(() => {
+  const cat = store.categories.find(c => c.name === productCategory.value)
+  if (!cat) return []
+  return store.capabilities.filter(cap => categoryCapIds.value.includes(cap.id))
+})
+
+const categoryLegacyCapsList = computed(() => {
+  const cat = store.categories.find(c => c.name === productCategory.value)
+  if (!cat) return []
+  return store.legacyCapabilities.filter(cap => categoryLegacyCapIds.value.includes(cap.id))
+})
+
+// 迭代 buildModuleGroups：把物模型能力按模块分组为 { name, items } 供 CapModules 渲染
+function moduleItemsFromCaps(caps) {
+  const moduleMap = {}
+  caps.forEach(cap => {
+    const mod = store.modules.find(m => m.id === cap.moduleId)
+    const modName = mod ? mod.name : '其他'
+    if (!moduleMap[modName]) moduleMap[modName] = []
+    moduleMap[modName].push({
+      id: cap.identifier,
+      name: cap.name,
+      supported: '1',
+      defaultValue: null,
+      defaultName: cap.name,
+      access: cap.dataDef?.accessMode === 'ro' ? 'ro' : 'rw',
+      identifier: cap.identifier
+    })
+  })
+  return Object.entries(moduleMap).map(([name, items]) => ({ name, items }))
+}
+
+function loadCategoryConfig() {
+  const cat = store.categories.find(c => c.name === productCategory.value)
+  if (!cat) return
+  categoryCapIds.value = getCategoryLinkedCapIds(cat.id)
+  categoryLegacyCapIds.value = getCategoryLinkedLegacyCapIds(cat.id)
+  if (categoryCapIds.value.length) {
+    // 新能力 → 标准能力表
+    const modMap = Object.fromEntries(store.modules.map(m => [String(m.id), m]))
+    standardCapList.value = store.capabilities
+      .filter(cap => categoryCapIds.value.includes(cap.id))
+      .map(cap => ({
+        capType: cap.capType,
+        name: cap.name,
+        identifier: cap.identifier,
+        dataType: cap.dataDef?.dataType || '',
+        dataDef: cap.dataDef || {},
+        descr: cap.descr || '',
+        moduleName: modMap[String(cap.moduleId)]?.name || ''
+      }))
+  }
+  if (categoryLegacyCapIds.value.length) {
+    // 老能力 → 设备能力 tab（上面的 CapModules）
+    const legacyByModule = {}
+    categoryLegacyCapsList.value.forEach(cap => {
+      const mod = store.legacyModules.find(m => m.id === cap.moduleId)
+      const modName = mod ? mod.name : '其他'
+      if (!legacyByModule[modName]) legacyByModule[modName] = []
+      const jc = (() => { try { return JSON.parse(cap.jsonContent || '{}') } catch { return {} } })()
+      legacyByModule[modName].push({
+        id: cap.identifier,
+        name: cap.name,
+        supported: '1',
+        defaultValue: jc.dataType === 'int' ? { type: 'number', value: jc.min ?? 0, min: jc.min ?? 0, max: jc.max ?? 100, unit: jc.unit || '' } : null,
+        defaultName: cap.name,
+        access: jc.accessMode === 'ro' ? 'ro' : 'rw',
+        identifier: cap.identifier
+      })
+    })
+    Object.keys(legacyByModule).forEach(modName => {
+      const existing = deviceCapModules.find(m => m.name === modName)
+      if (existing) {
+        existing.items = legacyByModule[modName]
+      } else {
+        deviceCapModules.push({ name: modName, items: legacyByModule[modName] })
+      }
+    })
+  }
+}
+
+onMounted(() => {
+  loadAlgorithms(); loadEvents(); loadEventConfig(); loadPlatformServices()
+  loadCategoryConfig()
+})
 </script>
 
 <style lang="scss" scoped>

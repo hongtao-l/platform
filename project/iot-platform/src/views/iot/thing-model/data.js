@@ -306,6 +306,7 @@ export const store = reactive({
   modules: JSON.parse(JSON.stringify(initialModules)),
   capabilities: JSON.parse(JSON.stringify(initialCapabilities)),
   categoryCaps: JSON.parse(JSON.stringify(initialCategoryCaps)),
+  categoryLegacyCaps: [],  // 类目↔老能力关联
   customModules: [],       // 企业自定义模块
   customCapabilities: [],  // 企业自定义能力
   legacyModules: JSON.parse(JSON.stringify(initialLegacyModules)),
@@ -325,6 +326,7 @@ export function updateCategory(id, item) {
 export function removeCategory(id) {
   store.categories = store.categories.filter(c => c.id !== id)
   store.categoryCaps = store.categoryCaps.filter(cc => cc.categoryId !== id)
+  store.categoryLegacyCaps = store.categoryLegacyCaps.filter(cc => cc.categoryId !== id)
 }
 
 // ===== 模块操作 =====
@@ -381,6 +383,21 @@ export function getCategoryLinkedCapIds(categoryId) {
   return store.categoryCaps.filter(cc => cc.categoryId === categoryId).map(cc => cc.capabilityId)
 }
 
+// ===== 类目↔老能力（能力池（老））关联 =====
+export function linkLegacyCapToCategory(categoryId, capabilityId) {
+  if (!store.categoryLegacyCaps.some(cc => cc.categoryId === categoryId && cc.capabilityId === capabilityId)) {
+    store.categoryLegacyCaps.push({ categoryId, capabilityId })
+  }
+}
+
+export function unlinkLegacyCapFromCategory(categoryId, capabilityId) {
+  store.categoryLegacyCaps = store.categoryLegacyCaps.filter(cc => !(cc.categoryId === categoryId && cc.capabilityId === capabilityId))
+}
+
+export function getCategoryLinkedLegacyCapIds(categoryId) {
+  return store.categoryLegacyCaps.filter(cc => cc.categoryId === categoryId).map(cc => cc.capabilityId)
+}
+
 export function getCapLinkedCategoryIds(capabilityId) {
   return store.categoryCaps.filter(cc => cc.capabilityId === capabilityId).map(cc => cc.categoryId)
 }
@@ -402,7 +419,8 @@ export function getCategoryStats(categoryId) {
     const cap = store.capabilities.find(c => c.id === cid)
     if (cap) moduleIds.add(cap.moduleId)
   })
-  return { moduleCount: moduleIds.size, capabilityCount: capIds.length }
+  const legacyCapIds = getCategoryLinkedLegacyCapIds(categoryId)
+  return { moduleCount: moduleIds.size, capabilityCount: capIds.length, legacyCapabilityCount: legacyCapIds.length }
 }
 
 // ===== 标识符唯一性校验 =====
@@ -528,6 +546,122 @@ export function isLegacyCapIdentifierUnique(identifier, excludeCapId) {
     if (cap.identifier === identifier) return false
   }
   return true
+}
+
+// ========================================================================
+// 旧能力共享定义（设备/镜头/麦克风三套） — 能力库与类目页同源
+// ========================================================================
+export function capSwitch(value) { return { type: 'switch', value } }
+export function capCheckbox(options, value) { return { type: 'checkbox', options, value } }
+export function capRadio(options, value) { return { type: 'radio', options, value } }
+export function capSelect(options, value) { return { type: 'select', options, value } }
+export function capNumber(value, min, max, unit) { return { type: 'number', value, min, max, unit } }
+
+// 设备能力（设备级，按 5 模块分组）
+export function legacyDeviceDef() {
+  return [
+    {
+      name: '扬声器模块',
+      items: [
+        { id: 'intercom', name: '对讲能力', supported: '0', defaultValue: capSelect(['半双工', '全双工'], '半双工'), defaultName: '对讲类型', access: 'ro' },
+        { id: 'hasSpeaker', name: '喇叭能力', supported: '0', defaultValue: null },
+        { id: 'volumeAdjust', name: '音量调节能力', supported: '0', defaultValue: null, children: [
+          { id: 'volume', name: '音量', defaultValue: capNumber(1, 0, 100, '') }
+        ] },
+        { id: 'customRing', name: '自定义铃声能力', supported: '0', defaultValue: null }
+      ]
+    },
+    {
+      name: '录制模块',
+      items: [
+        { id: 'storageMethod', name: '存储能力', supported: '0', defaultValue: capRadio(['TF卡存储', '磁盘存储'], 'TF卡存储'), defaultName: '存储方式', access: 'ro' },
+        { id: 'recordMode', name: 'SD卡全天录制能力', supported: '0', defaultValue: capSwitch(false), defaultName: '全天录制开关' },
+        { id: 'alarmRecord', name: 'SD卡事件录制能力', supported: '0', defaultValue: null, children: [
+          { id: 'alarmDuration', name: '事件录制时长', defaultValue: capNumber(15, 5, 300, '秒') }
+        ] }
+      ]
+    },
+    {
+      name: '电池模块',
+      items: [
+        { id: 'hasBattery', name: '电池能力', supported: '0', defaultValue: null },
+        { id: 'wakeup', name: '唤醒能力', supported: '0', defaultValue: capRadio(['本地唤醒', '远程唤醒', '本地和远程'], '本地唤醒'), defaultName: '唤醒方式', access: 'ro' }
+      ]
+    },
+    {
+      name: '灯光模块',
+      items: [
+        { id: 'indicator', name: '状态指示灯能力', supported: '0', defaultValue: null },
+        { id: 'irLight', name: '红外灯能力', supported: '0', defaultValue: null }
+      ]
+    },
+    {
+      name: '云端抓图模块',
+      items: [
+        { id: 'cloudCapture', name: '云端抓图能力', supported: '0', defaultValue: null, children: [
+          { id: 'ccDefaultOn', name: '默认开启', defaultValue: capRadio(['开启', '关闭'], '开启') },
+          { id: 'ccSupportGif', name: '支持动图', defaultValue: capRadio(['是', '否'], '否') },
+          { id: 'ccGifEnabled', name: '动图开关', defaultValue: capRadio(['开启', '关闭'], '关闭') },
+          { id: 'ccQuality', name: '抓图质量', defaultValue: capSelect(['小图', '标清', '高清'], '小图') },
+          { id: 'ccStorageDays', name: '存储时长', defaultValue: capNumber(1, 1, 30, '天') },
+          { id: 'ccStorageMode', name: '存储方式', defaultValue: capRadio(['事件', '定时'], '事件') },
+          { id: 'ccStorageFormat', name: '存储格式', defaultValue: capRadio(['已有格式，带有私有头', '标准jpg'], '已有格式，带有私有头') },
+          { id: 'ccCaptureCount', name: '抓图数目', defaultValue: capNumber(1, 0, 99, '') },
+          { id: 'ccCaptureInterval', name: '抓拍间隔', defaultValue: capNumber(30, 5, 300, '秒') }
+        ] }
+      ]
+    }
+  ]
+}
+
+// 镜头能力（每镜头实例一份，按 2 模块分组）
+export function legacyLensDef() {
+  return [
+    {
+      name: 'PTZ模块',
+      items: [
+        { id: 'ptzSupported', name: 'PTZ能力', supported: '0', defaultValue: null, children: [
+          { id: 'ptzCaps', name: 'PTZ方向', defaultValue: capCheckbox(['平移', '倾斜', '变焦'], []), access: 'ro' }
+        ] },
+        { id: 'preset', name: '预置位能力', supported: '0', defaultValue: null },
+        { id: 'cruise', name: '自动巡航能力', supported: '0', defaultValue: null },
+        { id: 'spatial', name: '空间定位能力', supported: '0', defaultValue: capRadio(['支持3D居中', '支持GPS定位'], '支持3D居中'), defaultName: '定位方式', access: 'ro' },
+        { id: 'ptzSpeed', name: 'PTZ转速能力', supported: '0', defaultValue: null }
+      ]
+    },
+    {
+      name: '图像采集模块',
+      items: [
+        { id: 'flip', name: '图像翻转能力', supported: '0', defaultValue: capRadio(['正放', '翻转'], '正放'), defaultName: '翻转方向', access: 'rw' },
+        { id: 'mirror', name: '镜像能力', supported: '0', defaultValue: capRadio(['打开', '关闭'], '关闭'), defaultName: '镜像状态', access: 'rw' },
+        { id: 'nightVision', name: '夜视能力', supported: '0', defaultValue: null },
+        { id: 'wdr', name: '宽动态能力', supported: '0', defaultValue: capSwitch(false), defaultName: '宽动态开关', access: 'rw' },
+        { id: 'hdr', name: '高动态能力', supported: '0', defaultValue: capSwitch(false), defaultName: '高动态开关', access: 'rw' },
+        { id: 'antiFlicker', name: '抗闪烁能力', supported: '0', defaultValue: capRadio(['50', '60'], '50'), defaultName: '抗闪烁频率', access: 'rw' },
+        { id: 'privacyZone', name: '隐私区域能力', supported: '0', defaultValue: null },
+        { id: 'logoWatermark', name: 'LOGO水印能力', supported: '0', defaultValue: null },
+        { id: 'fisheye', name: '鱼眼矫正能力', supported: '0', defaultValue: capRadio(['设备矫正', 'App矫正'], '设备矫正'), defaultName: '矫正方式', access: 'rw' },
+        { id: 'snapshot', name: '抓图能力', supported: '0', defaultValue: null },
+        { id: 'humanoidCoord', name: '人形坐标写入能力', supported: '0', defaultValue: null },
+        { id: 'compositeStream', name: '合成流能力', supported: '0', defaultValue: null }
+      ]
+    }
+  ]
+}
+
+// 麦克风能力（每麦克风实例一份，1 模块）
+export function legacyMicDef() {
+  return [
+    {
+      name: '麦克风模块',
+      items: [
+        { id: 'micSwitch', name: '麦克风开关能力', supported: '0', defaultValue: null },
+        { id: 'volumeAdjust', name: '音量调节能力', supported: '0', defaultValue: null, children: [
+          { id: 'captureVolume', name: '采集音量', defaultValue: capNumber(0, 0, 100, ''), access: 'rw' }
+        ] }
+      ]
+    }
+  ]
 }
 
 // ========================================================================

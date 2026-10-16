@@ -1,44 +1,44 @@
 <template>
   <div class="page-container">
+    <!-- 页头 -->
+    <div class="page-header">
+      <div class="page-header-title">产品开发</div>
+      <div class="page-header-row">
+        <span class="page-header-desc">产品是一组具有相关功能定义的设备集合，创建产品是使用平台的开始。创建产品后通过功能定义 → 设备交互 → 硬件开发 → 产品配置 → 产品调试，简单五步即可完成产品智能化。</span>
+        <a class="doc-link" @click="openDocs">产品开发操作文档</a>
+      </div>
+    </div>
+
     <!-- 筛选区 -->
     <div class="card filter-bar">
-      <el-form :model="filter" inline>
-        <el-form-item label="产品名称">
-          <el-input v-model="filter.name" placeholder="请输入产品名称" clearable style="width:180px" />
-        </el-form-item>
-        <el-form-item label="产品状态">
-          <el-select v-model="filter.status" placeholder="全部" clearable style="width:130px">
-            <el-option label="开发中" value="developing" />
-            <el-option label="发布中" value="publishing" />
-            <el-option label="已发布" value="published" />
-            <el-option label="引用产品" value="referenced" />
+      <el-form :model="filter" inline class="filter-form">
+        <el-form-item>
+          <el-select v-model="filter.tag" placeholder="标签" clearable style="width:110px">
+            <el-option label="全部" value="" />
+            <el-option label="wifi" value="wifi" />
           </el-select>
         </el-form-item>
-        <el-form-item label="开发方式">
-          <el-select v-model="filter.devMethod" placeholder="全部" clearable style="width:130px">
-            <el-option label="标准开发" value="standard" />
-            <el-option label="自定义开发" value="custom" />
+        <el-form-item>
+          <el-select v-model="filter.sortType" placeholder="创建时间顺序" clearable style="width:150px">
+            <el-option label="创建时间" value="createTime" />
+            <el-option label="更新时间" value="updateTime" />
           </el-select>
         </el-form-item>
-        <el-form-item label="产品类目">
-          <el-select v-model="filter.category" placeholder="全部" clearable style="width:150px">
-            <el-option v-for="c in categoryOptions" :key="c" :label="c" :value="c" />
-          </el-select>
+        <el-form-item label="产品ID">
+          <el-input v-model="filter.productId" placeholder="产品ID" clearable style="width:120px" />
         </el-form-item>
-        <el-form-item label="创建时间">
-          <el-date-picker
-            v-model="filter.dateRange"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            value-format="YYYY-MM-DD"
-            style="width:240px"
-          />
+        <el-form-item label="产品ID / 产品名称 / 产品型号">
+          <el-input v-model="filter.name" placeholder="产品ID / 产品名称 / 产品型号" clearable style="width:260px" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSearch">搜索</el-button>
           <el-button @click="handleReset">重置</el-button>
+        </el-form-item>
+        <div style="flex:1"></div>
+        <el-form-item>
+          <el-button type="plain" @click="handleCreate">
+            <el-icon><Plus /></el-icon>创建产品
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -82,17 +82,20 @@
     <!-- 表格卡片 -->
     <div class="card" style="margin-top:12px;overflow:hidden">
       <div class="card-header">
-        <span class="card-title">产品列表</span>
-        <el-button type="primary" size="small" @click="handleCreate">
-          <el-icon><Plus /></el-icon>创建产品
-        </el-button>
+        <span class="card-title">产品信息</span>
       </div>
       <el-table v-if="filteredData.length" :data="pagedData" stripe>
-        <el-table-column label="产品信息" min-width="200">
+        <el-table-column label="产品信息" min-width="260">
           <template #default="{ row }">
             <div class="product-info">
-              <span class="product-name" @click="handleManageProduct(row)">{{ row.name }}</span>
-              <span class="product-id">{{ row.productId }}</span>
+              <div class="product-icon">{{ row.name.charAt(0) }}</div>
+              <div class="product-meta">
+                <div class="product-line1">
+                  <span class="product-name" @click="handleManageProduct(row)">{{ row.name }}</span>
+                  <span class="product-tag">{{ row.devMethod === 'custom' ? '自定义' : '免开发' }}</span>
+                </div>
+                <div class="product-id">产品ID: {{ row.productId }}</div>
+              </div>
             </div>
           </template>
         </el-table-column>
@@ -230,7 +233,10 @@ const filter = reactive({
   status: '',
   devMethod: '',
   category: '',
-  dateRange: null
+  dateRange: null,
+  tag: '',
+  productId: '',
+  sortType: 'createTime'
 })
 
 const categoryOptions = ['IPC摄像机', '智能门铃', '传感安防']
@@ -245,7 +251,14 @@ function handleReset() {
   filter.devMethod = ''
   filter.category = ''
   filter.dateRange = null
+  filter.tag = ''
+  filter.productId = ''
+  filter.sortType = 'createTime'
   pagination.page = 1
+}
+
+function openDocs() {
+  ElMessage.info('打开产品开发操作文档')
 }
 
 // ===== Mock 数据 =====
@@ -331,6 +344,10 @@ const filteredData = computed(() => {
     const kw = filter.name.toLowerCase()
     list = list.filter(p => p.name.toLowerCase().includes(kw) || p.productId.toLowerCase().includes(kw))
   }
+  if (filter.productId) {
+    const pid = filter.productId.toLowerCase()
+    list = list.filter(p => p.productId.toLowerCase().includes(pid))
+  }
   if (filter.status) list = list.filter(p => p.status === filter.status)
   if (filter.devMethod) list = list.filter(p => p.devMethod === filter.devMethod)
   if (filter.category) list = list.filter(p => p.category === filter.category)
@@ -415,7 +432,7 @@ async function handleCreateSubmit() {
 }
 
 function handleContinueDev(row) {
-  router.push(`/product/config?id=${row.productId}&name=${row.name}`)
+  router.push(`/product/config?id=${row.productId}&name=${row.name}&category=${row.category}`)
 }
 
 function handleManageProduct(row) {
@@ -458,6 +475,32 @@ function handleMore(cmd, row) {
 
 .filter-bar {
   padding: var(--spacing-md) var(--spacing-lg);
+
+  .filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    width: 100%;
+
+    :deep(.el-form-item) {
+      margin-right: 0;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.page-header {
+  margin-bottom: 12px;
+  .page-header-title { font-size: 20px; font-weight: 600; color: var(--text-primary); }
+  .page-header-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-top: 8px;
+    .page-header-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+    .doc-link { font-size: 13px; color: var(--primary-color); cursor: pointer; white-space: nowrap; &:hover { text-decoration: underline; } }
+  }
 }
 
 .tip-bar {
@@ -476,9 +519,57 @@ function handleMore(cmd, row) {
 
 .product-info {
   display: flex;
-  flex-direction: column;
-  .product-name { font-weight: 500; color: var(--text-primary); cursor: pointer; &:hover { color: var(--primary-color); } }
-  .product-id { font-size: 13px; color: var(--text-placeholder); font-family: monospace; margin-top: 2px; }
+  align-items: center;
+  gap: 12px;
+
+  .product-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: #EFF2F7;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .product-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+
+    .product-line1 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .product-name {
+        font-weight: 500;
+        color: var(--text-primary);
+        cursor: pointer;
+        &:hover { color: var(--primary-color); }
+      }
+
+      .product-tag {
+        font-size: 12px;
+        color: var(--primary-color);
+        background: #EFF6FF;
+        border-radius: 4px;
+        padding: 1px 8px;
+        white-space: nowrap;
+      }
+    }
+
+    .product-id {
+      font-size: 12px;
+      color: var(--text-placeholder);
+      font-family: monospace;
+    }
+  }
 }
 
 .status-tag {

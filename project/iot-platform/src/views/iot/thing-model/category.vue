@@ -18,10 +18,10 @@
             <span class="cell-id">{{ row.identifier }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="标准能力" width="120" align="center">
+        <el-table-column label="能力项" width="110" align="center">
           <template #default="{ row }">
             <el-button size="small" text type="primary" @click="$router.push(`/thing-model/category/${row.id}/capabilities`)">
-              {{ getCapCount(row) }} 个
+              {{ getCapTotal(row) }} 个
             </el-button>
           </template>
         </el-table-column>
@@ -33,7 +33,7 @@
         <el-table-column label="操作" width="240">
           <template #default="{ row }">
             <div style="white-space:nowrap">
-              <el-button size="small" text type="primary" @click="openImportDialog(row.id)">导入能力</el-button>
+              <el-button size="small" text type="primary" @click="openImportTabDialog(row.id)">导入能力</el-button>
               <el-button size="small" text type="primary" @click="openEdit(row)">编辑</el-button>
               <el-button size="small" text type="danger" @click="handleDelete(row)">删除</el-button>
             </div>
@@ -68,122 +68,155 @@
       </template>
     </el-dialog>
 
-    <!-- 导入能力弹窗（穿梭框） -->
-    <el-dialog
-      v-model="importDialogVisible"
-      title="导入能力"
-      width="960px"
-      :close-on-click-modal="false"
-      top="3vh"
-    >
-      <div class="transfer-container">
-        <!-- 左侧：可选能力（按模块分组） -->
-        <div class="transfer-panel">
-          <div class="transfer-panel-header">
-            <span>可选能力</span>
-            <span v-if="importCheckedIds.length" class="transfer-selected-count">已选 <span class="count-num">{{ importCheckedIds.length }}</span> 个</span>
-          </div>
-          <div class="transfer-panel-search">
-            <el-input v-model="importSearchText" placeholder="搜索能力名称或标识" clearable size="small">
-              <template #prefix><el-icon><Search /></el-icon></template>
-            </el-input>
-          </div>
-          <div class="transfer-panel-body">
-            <div v-if="!importAvailableByModule.length" class="transfer-empty">暂无可导入的能力</div>
-            <div
-              v-for="mod in importAvailableByModule"
-              :key="mod.id"
-              :class="['transfer-category-item', { expanded: expandedLeftModules.includes(mod.id) }]"
-            >
-              <div class="transfer-cat-header" @click="toggleLeftModuleExpand(mod.id)">
-                <el-icon class="transfer-cat-arrow"><ArrowRight /></el-icon>
-                <el-checkbox
-                  :model-value="isModuleAllChecked(mod)"
-                  :indeterminate="isModuleIndeterminate(mod)"
-                  @change="toggleModuleAllCheck(mod)"
-                  @click.stop
-                />
-                <span class="transfer-cat-name">{{ mod.name }}</span>
-                <span class="transfer-cat-count">{{ mod.caps.length }} 个能力</span>
+    <!-- 导入能力弹窗（可分新/旧能力） -->
+    <el-dialog v-model="importTabDialogVisible" title="导入能力" width="960px" :close-on-click-modal="false" top="3vh">
+      <el-tabs v-model="importActiveTab" class="import-tabs">
+        <el-tab-pane label="标准能力" name="standard">
+<div class="transfer-container">
+            <div class="transfer-panel">
+              <div class="transfer-panel-header">
+                <span>可选能力</span>
+                <span v-if="importCheckedIds.length" class="transfer-selected-count">已选 <span class="count-num">{{ importCheckedIds.length }}</span> 个</span>
               </div>
-              <div class="transfer-cat-body">
-                <label
-                  v-for="cap in mod.caps"
-                  :key="cap.id"
-                  :class="['transfer-pkg-item', { selected: importCheckedIds.includes(cap.id), hidden: !isImportCapVisible(cap) }]"
-                >
-                  <el-checkbox :model-value="importCheckedIds.includes(cap.id)" @change="toggleImportCheck(cap.id)" />
-                  <div class="transfer-pkg-info">
-                    <div class="transfer-pkg-name">
-                      <span :class="['type-tag', typeTagCls(cap.capType)]">{{ typeLabel(cap.capType) }}</span>
-                      {{ cap.name }}
-                    </div>
-                    <div class="transfer-pkg-meta">{{ cap.identifier }}</div>
+              <div class="transfer-panel-search">
+                <el-input v-model="importSearchText" placeholder="搜索能力名称或标识" clearable size="small">
+                  <template #prefix><el-icon><Search /></el-icon></template>
+                </el-input>
+              </div>
+              <div class="transfer-panel-body">
+                <div v-if="!importAvailableByModule.length" class="transfer-empty">暂无可导入的能力</div>
+                <div v-for="mod in importAvailableByModule" :key="mod.id" :class="['transfer-category-item', { expanded: expandedLeftModules.includes(mod.id) }]">
+                  <div class="transfer-cat-header" @click="toggleLeftModuleExpand(mod.id)">
+                    <el-icon class="transfer-cat-arrow"><ArrowRight /></el-icon>
+                    <el-checkbox :model-value="isModuleAllChecked(mod)" :indeterminate="isModuleIndeterminate(mod)" @change="toggleModuleAllCheck(mod)" @click.stop />
+                    <span class="transfer-cat-name">{{ mod.name }}</span>
+                    <span class="transfer-cat-count">{{ mod.caps.length }} 个能力</span>
                   </div>
-                </label>
+                  <div class="transfer-cat-body">
+                    <label v-for="cap in mod.caps" :key="cap.id" :class="['transfer-pkg-item', { selected: importCheckedIds.includes(cap.id) }]">
+                      <el-checkbox :model-value="importCheckedIds.includes(cap.id)" @change="toggleImportCheck(cap.id)" />
+                      <div class="transfer-pkg-info">
+                        <div class="transfer-pkg-name">
+                          <span :class="['type-tag', typeTagCls(cap.capType)]">{{ typeLabel(cap.capType) }}</span>
+                          {{ cap.name }}
+                        </div>
+                        <div class="transfer-pkg-meta">{{ cap.identifier }}</div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <!-- 中间操作按钮 -->
-        <div class="transfer-actions">
-          <el-button size="small" :disabled="!importCheckedIds.length" @click="transferToRight">
-            <el-icon><ArrowRight /></el-icon>
-          </el-button>
-          <el-button size="small" :disabled="!importSelectedIds.length" @click="transferToLeft">
-            <el-icon><ArrowLeft /></el-icon>
-          </el-button>
-        </div>
+            <div class="transfer-actions">
+              <el-button size="small" :disabled="!importCheckedIds.length" @click="transferToRight"><el-icon><ArrowRight /></el-icon></el-button>
+              <el-button size="small" :disabled="!importSelectedIds.length" @click="transferToLeft"><el-icon><ArrowLeft /></el-icon></el-button>
+            </div>
 
-        <!-- 右侧：已选能力（按模块分组） -->
-        <div class="transfer-panel">
-          <div class="transfer-panel-header">
-            <span>待导入</span>
-            <span class="transfer-count">{{ importSelectedIds.length }} 项</span>
-          </div>
-          <div class="transfer-panel-body">
-            <div v-if="!importSelectedIds.length" class="transfer-empty">请从左侧勾选能力后点击 → 添加</div>
-            <div
-              v-for="mod in importSelectedByModule"
-              :key="mod.id"
-              :class="['transfer-category-item', { expanded: expandedModules.includes(mod.id) }]"
-            >
-              <div class="transfer-cat-header" @click="toggleModuleExpand(mod.id)">
-                <el-icon class="transfer-cat-arrow"><ArrowRight /></el-icon>
-                <span class="transfer-cat-name">{{ mod.name }}</span>
-                <span class="transfer-cat-count">{{ mod.caps.length }} 个能力</span>
+            <div class="transfer-panel">
+              <div class="transfer-panel-header">
+                <span>待导入</span>
+                <span class="transfer-count">{{ importSelectedIds.length }} 项</span>
               </div>
-              <div class="transfer-cat-body">
-                <div
-                  v-for="cap in mod.caps"
-                  :key="cap.id"
-                  class="transfer-pkg-item selected"
-                >
-                  <div class="transfer-pkg-info" style="flex:1">
-                    <div class="transfer-pkg-name">
-                      <span :class="['type-tag', typeTagCls(cap.capType)]">{{ typeLabel(cap.capType) }}</span>
-                      {{ cap.name }}
-                    </div>
-                    <div class="transfer-pkg-meta">{{ cap.identifier }}</div>
+              <div class="transfer-panel-body">
+                <div v-if="!importSelectedIds.length" class="transfer-empty">请从左侧勾选能力后点击 → 添加</div>
+                <div v-for="mod in importSelectedByModule" :key="mod.id" :class="['transfer-category-item', { expanded: expandedModules.includes(mod.id) }]">
+                  <div class="transfer-cat-header" @click="toggleModuleExpand(mod.id)">
+                    <el-icon class="transfer-cat-arrow"><ArrowRight /></el-icon>
+                    <span class="transfer-cat-name">{{ mod.name }}</span>
+                    <span class="transfer-cat-count">{{ mod.caps.length }} 个能力</span>
                   </div>
-                  <el-button size="small" text type="danger" @click="removeFromSelected(cap.id)">
-                    <el-icon><Delete /></el-icon>
-                  </el-button>
+                  <div class="transfer-cat-body">
+                    <div v-for="cap in mod.caps" :key="cap.id" class="transfer-pkg-item selected">
+                      <div class="transfer-pkg-info" style="flex:1">
+                        <div class="transfer-pkg-name">
+                          <span :class="['type-tag', typeTagCls(cap.capType)]">{{ typeLabel(cap.capType) }}</span>
+                          {{ cap.name }}
+                        </div>
+                        <div class="transfer-pkg-meta">{{ cap.identifier }}</div>
+                      </div>
+                      <el-button size="small" text type="danger" @click="removeFromSelected(cap.id)"><el-icon><Delete /></el-icon></el-button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </el-tab-pane>
+        <el-tab-pane label="（旧）能力" name="legacy">
+<div class="transfer-container">
+            <div class="transfer-panel">
+              <div class="transfer-panel-header">
+                <span>可选旧能力</span>
+                <span v-if="legacyCheckedIds.length" class="transfer-selected-count">已选 <span class="count-num">{{ legacyCheckedIds.length }}</span> 个</span>
+              </div>
+              <div class="transfer-panel-search">
+                <el-input v-model="legacySearchText" placeholder="搜索能力名称或标识" clearable size="small">
+                  <template #prefix><el-icon><Search /></el-icon></template>
+                </el-input>
+              </div>
+              <div class="transfer-panel-body">
+                <div v-if="!legacyAvailableByModule.length" class="transfer-empty">暂无可导入的旧能力</div>
+                <div v-for="mod in legacyAvailableByModule" :key="mod.id" :class="['transfer-category-item', { expanded: legacyExpandedLeftModules.includes(mod.id) }]">
+                  <div class="transfer-cat-header" @click="toggleLegacyLeftModuleExpand(mod.id)">
+                    <el-icon class="transfer-cat-arrow"><ArrowRight /></el-icon>
+                    <span class="transfer-cat-name">{{ mod.name }}</span>
+                    <span class="transfer-cat-count">{{ mod.caps.length }} 个能力</span>
+                  </div>
+                  <div class="transfer-cat-body">
+                    <label v-for="cap in mod.caps" :key="cap.id" :class="['transfer-pkg-item', { selected: legacyCheckedIds.includes(cap.id) }]">
+                      <el-checkbox :model-value="legacyCheckedIds.includes(cap.id)" @change="toggleLegacyCheck(cap.id)" />
+                      <div class="transfer-pkg-info">
+                        <div class="transfer-pkg-name">{{ cap.name }}</div>
+                        <div class="transfer-pkg-meta">{{ cap.scope }}</div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
 
+            <div class="transfer-actions">
+              <el-button size="small" :disabled="!legacyCheckedIds.length" @click="legacyTransferToRight"><el-icon><ArrowRight /></el-icon></el-button>
+              <el-button size="small" :disabled="!legacySelectedIds.length" @click="legacyTransferToLeft"><el-icon><ArrowLeft /></el-icon></el-button>
+            </div>
+
+            <div class="transfer-panel">
+              <div class="transfer-panel-header">
+                <span>待导入</span>
+                <span class="transfer-count">{{ legacySelectedIds.length }} 项</span>
+              </div>
+              <div class="transfer-panel-body">
+                <div v-if="!legacySelectedIds.length" class="transfer-empty">请从左侧勾选旧能力后点击 → 添加</div>
+                <div v-for="mod in legacySelectedByModule" :key="mod.id" :class="['transfer-category-item', { expanded: legacyExpandedModules.includes(mod.id) }]">
+                  <div class="transfer-cat-header" @click="toggleLegacyModuleExpand(mod.id)">
+                    <el-icon class="transfer-cat-arrow"><ArrowRight /></el-icon>
+                    <span class="transfer-cat-name">{{ mod.name }}</span>
+                    <span class="transfer-cat-count">{{ mod.caps.length }} 个能力</span>
+                  </div>
+                  <div class="transfer-cat-body">
+                    <div v-for="cap in mod.caps" :key="cap.id" class="transfer-pkg-item selected">
+                      <div class="transfer-pkg-info" style="flex:1">
+                        <div class="transfer-pkg-name">{{ cap.name }}</div>
+                        <div class="transfer-pkg-meta">{{ cap.scope }}</div>
+                      </div>
+                      <el-button size="small" text type="danger" @click="legacyRemoveFromSelected(cap.id)"><el-icon><Delete /></el-icon></el-button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
       <template #footer>
-        <el-button @click="importDialogVisible = false">取消</el-button>
-        <el-button type="primary" :disabled="!importSelectedIds.length" @click="handleImportConfirm">
-          导入（{{ importSelectedIds.length }}）
+        <el-button @click="importTabDialogVisible = false">取消</el-button>
+        <el-button type="primary" :disabled="!docImportCount" @click="handleImportTabConfirm">
+          导入（{{ docImportCount }}）
         </el-button>
       </template>
     </el-dialog>
+
 
   </div>
 </template>
@@ -194,7 +227,9 @@ import { Plus, Search, ArrowRight, ArrowLeft, Delete } from '@element-plus/icons
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   store, addCategory, updateCategory, removeCategory, getCategoryStats, isIdentifierUnique,
-  getCategoryLinkedCapIds, linkCapToCategory
+  getCategoryLinkedCapIds, linkCapToCategory,
+  getCategoryLinkedLegacyCapIds, linkLegacyCapToCategory,
+  legacyDeviceDef, legacyLensDef, legacyMicDef
 } from './data'
 
 const dialogVisible = ref(false)
@@ -217,6 +252,15 @@ const rules = {
 
 function getCapCount(row) {
   return getCategoryStats(row.id).capabilityCount
+}
+
+function getLegacyCapCount(row) {
+  return getCategoryStats(row.id).legacyCapabilityCount
+}
+
+function getCapTotal(row) {
+  const st = getCategoryStats(row.id)
+  return st.capabilityCount + st.legacyCapabilityCount
 }
 
 function openAdd() {
@@ -275,6 +319,47 @@ function typeTagCls(t) { return typeTagClsMap[t] || '' }
 // ===== 导入能力（穿梭框） =====
 const importDialogVisible = ref(false)
 const activeCategoryId = ref(null)
+
+// ===== 分 tab 导入弹窗（新/旧能力） =====
+const importTabDialogVisible = ref(false)
+const importActiveTab = ref('standard')
+
+const docImportCount = computed(() =>
+  importActiveTab.value === 'legacy' ? legacySelectedIds.value.length : importSelectedIds.value.length
+)
+
+function openImportTabDialog(categoryId) {
+  activeCategoryId.value = categoryId
+  importActiveTab.value = 'standard'
+  importSelectedIds.value = []
+  importCheckedIds.value = []
+  importSearchText.value = ''
+  expandedModules.value = []
+  expandedLeftModules.value = store.modules.map(m => m.id)
+  legacySelectedIds.value = []
+  legacyCheckedIds.value = []
+  legacySearchText.value = ''
+  legacyExpandedModules.value = []
+  legacyLinkedCapIds.value = getCategoryLinkedLegacyCapIds(categoryId).map(String)
+  legacyExpandedLeftModules.value = [...new Set(legacyOptionList.value.map(c => c.moduleName))]
+  importTabDialogVisible.value = true
+}
+
+function handleImportTabConfirm() {
+  if (importActiveTab.value === 'legacy') {
+    legacySelectedIds.value.forEach(capId => {
+      if (!legacyLinkedCapIds.value.includes(capId)) legacyLinkedCapIds.value.push(capId)
+    })
+    legacyLinkedCapIds.value.forEach(capId => linkLegacyCapToCategory(activeCategoryId.value, capId))
+    ElMessage.success(`已导入 ${legacySelectedIds.value.length} 个旧能力`)
+  } else {
+    importSelectedIds.value.forEach(capId => {
+      linkCapToCategory(activeCategoryId.value, capId)
+    })
+    ElMessage.success(`已导入 ${importSelectedIds.value.length} 个能力`)
+  }
+  importTabDialogVisible.value = false
+}
 const importSelectedIds = ref([])
 const importCheckedIds = ref([])
 const importSearchText = ref('')
@@ -415,6 +500,133 @@ function handleImportConfirm() {
   })
   ElMessage.success(`已导入 ${importSelectedIds.value.length} 个能力`)
   importDialogVisible.value = false
+}
+
+// ===== 导入老能力（能力池（老）穿梭框） =====
+const legacyImportDialogVisible = ref(false)
+const legacyActiveCategoryId = ref(null)
+const legacySelectedIds = ref([])
+const legacyCheckedIds = ref([])
+const legacySearchText = ref('')
+const legacyExpandedLeftModules = ref([])
+const legacyExpandedModules = ref([])
+const legacyLinkedCapIds = ref([])
+
+// 三套旧能力定义 → 可勾选清单（与能力库同源）
+const legacyOptionList = computed(() => {
+  const defs = [
+    { scope: '设备能力', modules: legacyDeviceDef() },
+    { scope: '镜头能力', modules: legacyLensDef() },
+    { scope: '麦克风能力', modules: legacyMicDef() }
+  ]
+  const list = []
+  defs.forEach(d => {
+    d.modules.forEach(mod => {
+      mod.items.forEach(item => {
+        list.push({ id: item.id, name: item.name, scope: d.scope, moduleName: mod.name })
+      })
+    })
+  })
+  return list
+})
+
+function buildLegacyModuleGroups(capList) {
+  const moduleMap = {}
+  const orphanCaps = []
+  capList.forEach(cap => {
+    if (cap.moduleName) {
+      if (!moduleMap[cap.moduleName]) moduleMap[cap.moduleName] = { name: cap.moduleName, caps: [] }
+      moduleMap[cap.moduleName].caps.push(cap)
+    } else {
+      orphanCaps.push(cap)
+    }
+  })
+  const groups = Object.keys(moduleMap).map(name => ({ id: name, name, caps: moduleMap[name].caps }))
+  if (orphanCaps.length) groups.push({ id: '_other', name: '其他', caps: orphanCaps })
+  return groups
+}
+
+const legacyAvailableByModule = computed(() => {
+  const excludedIds = new Set([...legacyLinkedCapIds.value, ...legacySelectedIds.value])
+  const available = legacyOptionList.value.filter(c => !excludedIds.has(c.id))
+  return buildLegacyModuleGroups(available)
+})
+
+function legacyCapVisible(cap) {
+  if (!legacySearchText.value) return true
+  const kw = legacySearchText.value.toLowerCase()
+  return cap.name.toLowerCase().includes(kw) || cap.identifier.toLowerCase().includes(kw)
+}
+
+const legacySelectedByModule = computed(() => {
+  const caps = legacySelectedIds.value.map(id => legacyOptionList.value.find(c => c.id === id)).filter(Boolean)
+  return buildLegacyModuleGroups(caps)
+})
+
+function toggleLegacyCheck(capId) {
+  const idx = legacyCheckedIds.value.indexOf(capId)
+  if (idx > -1) legacyCheckedIds.value.splice(idx, 1)
+  else legacyCheckedIds.value.push(capId)
+}
+
+function toggleLegacyLeftModuleExpand(modId) {
+  const idx = legacyExpandedLeftModules.value.indexOf(modId)
+  if (idx > -1) legacyExpandedLeftModules.value.splice(idx, 1)
+  else legacyExpandedLeftModules.value.push(modId)
+}
+
+function toggleLegacyModuleExpand(modId) {
+  const idx = legacyExpandedModules.value.indexOf(modId)
+  if (idx > -1) legacyExpandedModules.value.splice(idx, 1)
+  else legacyExpandedModules.value.push(modId)
+}
+
+function legacyGetVisibleCaps(mod) {
+  if (!legacySearchText.value) return mod.caps
+  return mod.caps.filter(c => legacyCapVisible(c))
+}
+
+function legacyTransferToRight() {
+  const newModIds = new Set()
+  legacyCheckedIds.value.forEach(id => {
+    if (!legacySelectedIds.value.includes(id)) {
+      legacySelectedIds.value.push(id)
+      const cap = legacyOptionList.value.find(c => c.id === id)
+      if (cap) newModIds.add(cap.moduleName)
+    }
+  })
+  newModIds.forEach(mid => {
+    if (!legacyExpandedModules.value.includes(mid)) legacyExpandedModules.value.push(mid)
+  })
+  legacyCheckedIds.value = []
+}
+
+function legacyTransferToLeft() {
+  legacySelectedIds.value = []
+}
+
+function legacyRemoveFromSelected(id) {
+  legacySelectedIds.value = legacySelectedIds.value.filter(i => i !== id)
+}
+
+function openLegacyImportDialog(categoryId) {
+  legacyActiveCategoryId.value = categoryId
+  legacyLinkedCapIds.value = getCategoryLinkedLegacyCapIds(categoryId).map(String)
+  legacySelectedIds.value = []
+  legacyCheckedIds.value = []
+  legacySearchText.value = ''
+  legacyExpandedModules.value = []
+  legacyExpandedLeftModules.value = [...new Set(legacyOptionList.value.map(c => c.moduleName))]
+  legacyImportDialogVisible.value = true
+}
+
+function handleLegacyImportConfirm() {
+  legacySelectedIds.value.forEach(capId => {
+    if (!legacyLinkedCapIds.value.includes(capId)) legacyLinkedCapIds.value.push(capId)
+  })
+  legacyLinkedCapIds.value.forEach(capId => linkLegacyCapToCategory(legacyActiveCategoryId.value, capId))
+  ElMessage.success(`已导入 ${legacySelectedIds.value.length} 个旧能力`)
+  legacyImportDialogVisible.value = false
 }
 
 </script>

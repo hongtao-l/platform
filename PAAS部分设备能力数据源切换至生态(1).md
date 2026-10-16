@@ -216,25 +216,25 @@ ModelInfo {
 
 | 文档章节 | 能力项 | 对外字段 | 生态字段 |
 |-------|------|------|------|
-| 3. 电池设置 | 是否有电池 | `Prop.EnergyType` | `DeviceInfo.BatteryAbility` |
-| 3. 电池设置 | 充电状态显示电量能力 | `Prop.SupplyShowPowerAbility` | `DeviceInfo.ShowPowerInChargeAbility` |
-| 5. 唤醒能力 | 是否支持唤醒 | `Prop.AwakeAbility` | `DeviceInfo.AwakeAbility` |
-| 6. 指示灯 | 是否有状态指示灯 | `Prop.StatusLampAbility` | `DeviceInfo.IndicatorLightAbility` |
-| 7. 红外灯 | 红外切换模式 | `Prop.IrcutType` | `DeviceInfo.IrcutType` |
-| 7. 红外灯 | 是否支持红外灯 | `SupportFlag` | `DeviceInfo.IrcutOpenFlag > 0`（或 `IrcutType > 0`） |
-| 8. 喇叭配置 | 是否有喇叭 | `Prop.VoicePlayAbility` | `DeviceInfo.VoicePlayAbility` |
-| 8. 喇叭配置 | 音量调节 | `Prop.VolumeSetAbility` | `SpeakerInfo.SetVolumeAbility` |
-| 8. 喇叭配置 | 自定义铃声 | `Prop.RingToneSetAbility` | `SpeakerInfo.RingToneAbility` |
-| 二.1 PTZ控制 | 是否支持PTZ | `Prop.PTZAbility` | `CamList[0].PTZAbility`（位掩码原值透传） |
-| 二.1 PTZ控制 | 预置位支持 | `Prop.SetPresetAbility` | `CamList[0].SetPresetAbility` |
-| 二.1 PTZ控制 | 自动巡航支持 | `Prop.CruiseAbility` | `CamList[0].CruiseAbility` |
-| 二.1 PTZ控制 | 空间定位能力 | `Prop.CamList[].PositionAbility` | `CamList[i].PositionAbility` |
-| 二.1 PTZ控制 | PTZ能力（平移/倾斜/变焦） | `Prop.CamList[].Sensor.ZoomAbility` | `CamList[i].SupportPTZMode` 位掩码含 4(Z) 推导 |
-| 二.2 图像参数 | 翻转/镜像/夜视/WDR/HDR/抗闪烁 | `Prop.CamList[]` 透传 | `CamList[i]` 同名（InversionAbility/MirrorAbility/NightVisionAbility/WDRAbility/HDRAbility/AntiFlickerAbility） |
-| 二.3 隐私区域 | 是否支持隐私区域 | `Prop.CamList[]` 透传 | `CamList[i].PrivacyMaskAbility` |
-| 二.4 水印 | OSD LOGO显示开关能力 | `Prop.CamList[].OSDSetAbility`/`OSDAblity` | `CamList[i].CustomOSDAbility`/`ShowOSDAbility`（字段名映射） |
-| 二.5 高级配置项 | 人形坐标能力 | `Prop.CamList[].HumanRgnAblity`（注意拼写） | `CamList[i].HumanRgnAbility` |
-| 二.1 PTZ控制 | 鱼眼矫正能力 | `Prop.CamList[].Sensor.RectifyAbility` | `CamList[i].RectifyAbility`（生态在 Camera 顶层，对外在 Sensor 内） |
+| 3. 电池设置 | 是否有电池 | `Prop.EnergyType` | `DeviceInfo.BatteryAbility` |pass无
+| 3. 电池设置 | 充电状态显示电量能力 | `Prop.SupplyShowPowerAbility` | pass无`DeviceInfo.ShowPowerInChargeAbility` |
+| 5. 唤醒能力 | 是否支持唤醒 | `Prop.AwakeAbility` | `DeviceInfo.AwakeAbility` |0
+| 6. 指示灯 | 是否有状态指示灯 | `Prop.StatusLampAbility` | `DeviceInfo.IndicatorLightAbility` |pass无
+| 7. 红外灯 | 红外切换模式 | `Prop.IrcutType` | `DeviceInfo.IrcutType` |1
+| 7. 红外灯 | 是否支持红外灯 | `SupportFlag` | `DeviceInfo.IrcutOpenFlag > 0`（或 `IrcutType > 0`） |1
+| 8. 喇叭配置 | 是否有喇叭 | `Prop.VoicePlayAbility` | `DeviceInfo.VoicePlayAbility` |待定
+| 8. 喇叭配置 | 音量调节 | `Prop.VolumeSetAbility` | `SpeakerInfo.SetVolumeAbility` |0
+| 8. 喇叭配置 | 自定义铃声 | `Prop.RingToneSetAbility` | `SpeakerInfo.RingToneAbility` |0
+| 二.1 PTZ控制 | 是否支持PTZ | `Prop.PTZAbility` | `CamList[0].PTZAbility`（位掩码原值透传） |0
+| 二.1 PTZ控制 | 预置位支持 | `Prop.SetPresetAbility` | `CamList[0].SetPresetAbility` |1
+| 二.1 PTZ控制 | 自动巡航支持 | `Prop.CruiseAbility` | `CamList[0].CruiseAbility` |1
+| 二.1 PTZ控制 | 空间定位能力 | `Prop.CamList[].PositionAbility` | `CamList[i].PositionAbility` |paas无
+| 二.1 PTZ控制 | PTZ能力（平移/倾斜/变焦） | `Prop.CamList[].Sensor.ZoomAbility` | 待定`CamList[i].SupportPTZMode` 位掩码含 4(Z) 推导 |
+| 二.2 图像参数 | 翻转/镜像/夜视/WDR/HDR/抗闪烁 | `Prop.CamList[]` 透传 | `CamList[i]` 同名（InversionAbility/MirrorAbility/NightVisionAbility/WDRAbility/HDRAbility/AntiFlickerAbility） |1/1/1/1/1/1
+| 二.3 隐私区域 | 是否支持隐私区域 | `Prop.CamList[]` 透传 | `CamList[i].PrivacyMaskAbility` |1
+| 二.4 水印 | OSD LOGO显示开关能力 | `Prop.CamList[].OSDSetAbility`/`OSDAblity` | `CamList[i].CustomOSDAbility`/`ShowOSDAbility`（字段名映射） |Paas无
+| 二.5 高级配置项 | 人形坐标能力 | `Prop.CamList[].HumanRgnAblity`（注意拼写） | `CamList[i].HumanRgnAbility` |1
+| 二.1 PTZ控制 | 鱼眼矫正能力 | `Prop.CamList[].Sensor.RectifyAbility` | `CamList[i].RectifyAbility`（生态在 Camera 顶层，对外在 Sensor 内） |1
 
 ## 二、未切换（保持 hmd 原逻辑）
 
@@ -242,12 +242,12 @@ ModelInfo {
 |-------|------|------|------|
 | 1. 联网方式 | 联网方式/配网方式/当前网络类型 | `Prop.NetAccessAbility` 等 | **用户明确不要** |
 | 4. 工作模式 | 切换工作模式/AOV能力 | `Prop.SwithAbility`/`AOVAbility` | **用户明确不要** |
-| 2. 对讲设置 | 支持对讲方式 | `Prop.AudioEncAbility` | 生态 JSON 无对应字段（MicphoneInfo.MicList 为 null） |
-| 8. 喇叭配置 | 一键报警能力 | `Prop.ClickAlarm` | 生态 JSON 无对应字段 |
+| 2. 对讲设置 | 支持对讲方式 | `Prop.AudioEncAbility` | 生态 JSON 无对应字段（MicphoneInfo.MicList 为 null） |0
+| 8. 喇叭配置 | 一键报警能力 | `Prop.ClickAlarm` | 生态 JSON 无对应字段 |生态无
 | 8. 喇叭配置 | 自定义铃声（解码能力） | `Prop.RingToneDecAbility` | 生态只有 `RingToneAbility` 一个字段（已映射给 Set 能力） |
-| 6. 指示灯 | 指示灯模式 | `Buss.StatusLedMode` | 生态 `IndicatorLightSwitch` 是"开关"非"模式"，语义不等价 |
-| 三.1 麦克风 | 麦克风能力 | `Prop.MicroPhoneAbility` | 生态 JSON 无对应字段 |
-| 三.1 麦克风 | 麦克风音量调节 | `Buss.Volumn` | 生态 JSON 无对应字段（且为设备动态状态值） |
+| 6. 指示灯 | 指示灯模式 | `Buss.StatusLedMode` | 生态 `IndicatorLightSwitch` 是"开关"非"模式"，语义不等价 |paas无
+| 三.1 麦克风 | 麦克风能力 | `Prop.MicroPhoneAbility` | 生态 JSON 无对应字段 |生态无
+| 三.1 麦克风 | 麦克风音量调节 | `Buss.Volumn` | 生态 JSON 无对应字段（且为设备动态状态值） |1
 
 另外所有 `Buss` 类动态状态值（PreSets/Cruises/WatchPoint/Sensor 动态值/StreamList/IDRDay/IDRNight/PowerLevel 等）均保持 hmd。
 
