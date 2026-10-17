@@ -50,7 +50,7 @@
     </div>
 
     <!-- 创建产品弹窗 -->
-    <el-dialog v-model="createDialogVisible" title="创建产品" width="560px" top="8vh" :close-on-click-modal="false">
+    <el-dialog v-model="createDialogVisible" title="创建产品" width="560px" top="8vh" :close-on-click-modal="false" class="app-dialog">
       <el-form ref="createFormRef" :model="createForm" label-width="80px">
         <el-form-item label="产品ID" required>
           <el-input v-model="createForm.productId" placeholder="例: IPC_PRO_001" maxlength="64" />
@@ -238,7 +238,7 @@ const filter = reactive({
   sortType: 'createTime'
 })
 
-const categoryOptions = ['IPC摄像机', '智能门铃', '传感安防']
+const categoryOptions = ['香薰机', 'IPC摄像机', '智能门铃', '传感安防', '低功耗摄像机', '长电球机']
 
 function handleSearch() {
   pagination.page = 1
@@ -262,6 +262,12 @@ function openDocs() {
 
 // ===== Mock 数据 =====
 const productList = ref([
+  {
+    id: 0, productId: 'AROMA_001', name: '智能香薰机',
+    category: '香薰机', devMethod: 'standard', sourceCompany: '本公司',
+    status: 'developing', authInfo: '未授权', operator: '张三',
+    company: '本公司', createTime: '2026-09-01', updateTime: '2026-09-05'
+  },
   {
     id: 1, productId: 'IPC_PRO_001', name: 'IPC Pro 智能摄像机',
     category: 'IPC摄像机', devMethod: 'standard', sourceCompany: '本公司',
@@ -603,4 +609,10 @@ function handleMore(cmd, row) {
   justify-content: flex-end;
   padding: 16px 0;
 }
+</style>
+
+<style lang="scss">
+// 弹窗样式（非 scoped，因 el-dialog 被 teleport 到 body）：顶部留白，避免第一个字段紧贴分割线
+// 弹窗顶部留白（非 scoped，弹窗被 teleport 到 body）
+.app-dialog .el-dialog__body { padding-top: 20px; }
 </style>

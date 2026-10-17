@@ -140,7 +140,7 @@
     </div>
 
     <!-- 审核弹窗 -->
-    <el-dialog v-model="auditDialogVisible" :title="'审核产品 - ' + auditingProduct?.name" width="500px" top="8vh" :close-on-click-modal="false">
+    <el-dialog v-model="auditDialogVisible" :title="'审核产品 - ' + auditingProduct?.name" width="500px" top="8vh" :close-on-click-modal="false" class="app-dialog">
       <el-form label-width="80px">
         <el-form-item label="审核结果">
           <el-radio-group v-model="auditResult">
@@ -159,7 +159,7 @@
     </el-dialog>
 
     <!-- 赠送授权弹窗 -->
-    <el-dialog v-model="grantDialogVisible" :title="'赠送授权 - ' + grantingProduct?.name" width="500px" top="8vh" :close-on-click-modal="false">
+    <el-dialog v-model="grantDialogVisible" :title="'赠送授权 - ' + grantingProduct?.name" width="500px" top="8vh" :close-on-click-modal="false" class="app-dialog">
       <el-form label-width="100px">
         <el-form-item label="测试授权数量">
           <el-input-number v-model="grantForm.testCount" :min="0" :max="999" />
@@ -175,7 +175,7 @@
     </el-dialog>
 
     <!-- 自动赠送授权配置弹窗 -->
-    <el-dialog v-model="autoAuthConfigVisible" title="自动赠送授权配置" width="500px" top="8vh" :close-on-click-modal="false">
+    <el-dialog v-model="autoAuthConfigVisible" title="自动赠送授权配置" width="500px" top="8vh" :close-on-click-modal="false" class="app-dialog">
       <el-form label-width="120px">
         <el-form-item label="赠送测试授权">
           <el-input-number v-model="autoAuthConfig.testCount" :min="0" :max="999" />
@@ -414,4 +414,10 @@ function handleDelete(row) {
   font-size: 13px;
   color: var(--text-secondary);
 }
+</style>
+
+<style lang="scss">
+// 弹窗样式（非 scoped，因 el-dialog 被 teleport 到 body）：顶部留白，避免第一个字段紧贴分割线
+// 弹窗顶部留白（非 scoped，弹窗被 teleport 到 body）
+.app-dialog .el-dialog__body { padding-top: 20px; }
 </style>

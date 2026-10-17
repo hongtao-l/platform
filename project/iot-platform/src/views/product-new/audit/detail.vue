@@ -152,7 +152,7 @@
       top="5vh"
       :close-on-click-modal="false"
       destroy-on-close
-    >
+     class="app-dialog">
           <div class="tm-config-section">
             <div class="cap-section">
                 <div class="cap-section-header">
@@ -337,7 +337,7 @@
     </el-drawer>
 
     <!-- 导入能力穿梭框 -->
-    <el-dialog v-model="capDialogVisible" :title="capDialogTitle" width="960px" top="3vh" :close-on-click-modal="false">
+    <el-dialog v-model="capDialogVisible" :title="capDialogTitle" width="960px" top="3vh" :close-on-click-modal="false" class="app-dialog">
       <div class="transfer-container">
         <div class="transfer-panel">
           <div class="transfer-panel-header">
@@ -1806,4 +1806,6 @@ onMounted(() => { loadAlgoServices(); loadPlatformServices() })
   .el-form-item { margin-bottom: 18px; }
   .el-divider { margin: 24px 0 20px; }
 }
+// 弹窗顶部留白（非 scoped，弹窗被 teleport 到 body）
+.app-dialog .el-dialog__body { padding-top: 20px; }
 </style>

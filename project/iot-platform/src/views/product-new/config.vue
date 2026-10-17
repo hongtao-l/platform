@@ -37,8 +37,8 @@
           <div class="cap-section">
                     <div class="cap-section-header">
                       <h3 class="cap-section-title">
-                        标准能力
-                        <el-tooltip content="设备固件支持的标准能力列表" placement="top">
+                        平台能力项
+                        <el-tooltip content="平台预置的标准能力项列表" placement="top">
                           <el-icon style="margin-left:4px;color:var(--text-placeholder);cursor:help"><QuestionFilled /></el-icon>
                         </el-tooltip>
                       </h3>
@@ -46,35 +46,61 @@
                         <el-button size="small" @click="tslDialogVisible = true">
                           <el-icon><Document /></el-icon>查看TSL
                         </el-button>
-                        <el-button type="primary" size="small" @click="openCapabilityDialog('standard')">添加标准能力</el-button>
+                        <el-button type="primary" size="small" @click="openCapabilityDialog('standard')">添加平台能力项</el-button>
                       </div>
                     </div>
                     <div class="tip-bar" style="margin:16px 0">
                       <el-icon><InfoFilled /></el-icon>
-                      <span>标准/自定义能力共同定义产品物模型能力，影响APP控制面板和固件，请根据设备实际能力配置</span>
+                      <span>平台/自定义能力项共同定义产品物模型能力，影响APP控制面板和固件，请根据设备实际能力配置</span>
                       <el-button link type="primary" class="tip-bar-toggle" @click="showPhoneDemo = !showPhoneDemo">
                         {{ showPhoneDemo ? '收起示例' : '查看示例' }}
                       </el-button>
                     </div>
-                    <el-table v-if="standardCapList.length" :data="standardCapList" stripe>
-                      <el-table-column label="类型" width="80" align="center">
+                    <el-table v-if="standardCapTree.length" :data="standardCapTree" row-key="id" stripe>
+                      <el-table-column type="expand" width="44">
+                        <template #default="{ row }">
+                          <div class="param-panel">
+                            <el-table :data="row.params" size="small">
+                              <el-table-column label="类型" width="80" align="center">
+                                <template #default="{ row: p }">
+                                  <span :class="['type-tag', p.capType === 'prop' ? 'type-prop' : p.capType === 'svc' ? 'type-svc' : 'type-evt']">{{ capTypeLabel(p.capType) }}</span>
+                                </template>
+                              </el-table-column>
+                              <el-table-column label="参数名称" min-width="140" prop="name" />
+                              <el-table-column label="参数标识" width="180" prop="identifier" />
+                              <el-table-column label="数据类型" width="100" prop="dataType" />
+                              <el-table-column label="数据定义" min-width="180">
+                                <template #default="{ row: p }">{{ dataDefSummary(p.dataDef) }}</template>
+                              </el-table-column>
+                              <el-table-column label="描述" min-width="140" prop="descr" />
+                              <el-table-column label="所属模块" width="120" prop="moduleName" align="center" />
+                              <el-table-column label="操作" width="130" align="center">
+                                <template #default="{ row: p }">
+                                  <div class="row-actions">
+                                    <el-button size="small" text type="primary" @click="editStandardCapParam(p)">编辑</el-button>
+                                    <el-button size="small" text type="danger" @click="removeStandardCapParam(p)">删除</el-button>
+                                  </div>
+                                </template>
+                              </el-table-column>
+                              <template #empty><div class="param-empty">暂无参数</div></template>
+                            </el-table>
+                          </div>
+                        </template>
+                      </el-table-column>
+                      <el-table-column label="类型" width="90" align="center">
                         <template #default="{ row }">
                           <span :class="['type-tag', row.capType === 'prop' ? 'type-prop' : row.capType === 'svc' ? 'type-svc' : 'type-evt']">{{ capTypeLabel(row.capType) }}</span>
                         </template>
                       </el-table-column>
-                      <el-table-column label="能力名称" min-width="120" prop="name" />
-                      <el-table-column label="能力标识" min-width="120" prop="identifier" />
-                      <el-table-column label="数据类型" width="100" prop="dataType" />
-                      <el-table-column label="数据定义" min-width="160">
-                        <template #default="{ row }">{{ dataDefSummary(row.dataDef) }}</template>
+                      <el-table-column label="能力项名称" min-width="180" prop="name" />
+                      <el-table-column label="能力项ID" min-width="180" prop="identifier" align="center" />
+                      <el-table-column label="参数数量" width="100" align="center">
+                        <template #default="{ row }">{{ row.paramCount }} 个</template>
                       </el-table-column>
-                      <el-table-column label="描述" min-width="120" prop="descr" />
-                      <el-table-column label="所属模块" width="120" prop="moduleName" align="center" />
-                      <el-table-column label="操作" width="140" align="center" fixed="right">
-                        <template #default="{ row, $index }">
+                      <el-table-column label="操作" width="120" align="center" fixed="right">
+                        <template #default="{ row }">
                           <div class="row-actions">
-                            <el-button size="small" text type="primary" @click="editCapability(row, $index)">编辑</el-button>
-                            <el-button size="small" text type="danger" @click="removeCapability($index)">删除</el-button>
+                            <el-button size="small" text type="danger" @click="removeStandardCapItem(row)">移除</el-button>
                           </div>
                         </template>
                       </el-table-column>
@@ -86,34 +112,60 @@
                     <div class="cap-section-header">
                       <div>
                         <h3 class="cap-section-title">
-                          自定义能力
+                          自定义能力项
                           <el-tooltip content="用户自定义的扩展能力" placement="top">
                             <el-icon style="margin-left:4px;color:var(--text-placeholder);cursor:help"><QuestionFilled /></el-icon>
                           </el-tooltip>
                         </h3>
                         <span class="cap-section-desc">您所定义的每一个功能，都与固件、APP控制台面板相关</span>
                       </div>
-                      <el-button type="primary" size="small" @click="openCustomCapCreate">添加自定义能力</el-button>
+                      <el-button type="primary" size="small" @click="openAddCustomCapItem">添加自定义能力项</el-button>
                     </div>
-                    <el-table v-if="customCapList.length" :data="customCapList" stripe>
-                      <el-table-column label="类型" width="80" align="center">
+                    <el-table v-if="customCapTree.length" :data="customCapTree" row-key="id" stripe>
+                      <el-table-column type="expand" width="44">
+                        <template #default="{ row }">
+                          <div class="param-panel">
+                            <el-table :data="row.params" size="small">
+                              <el-table-column label="类型" width="80" align="center">
+                                <template #default="{ row: p }">
+                                  <span :class="['type-tag', p.capType === 'prop' ? 'type-prop' : p.capType === 'svc' ? 'type-svc' : 'type-evt']">{{ capTypeLabel(p.capType) }}</span>
+                                </template>
+                              </el-table-column>
+                              <el-table-column label="参数名称" min-width="140" prop="name" />
+                              <el-table-column label="参数标识" width="180" prop="identifier" />
+                              <el-table-column label="数据类型" width="100" prop="dataType" />
+                              <el-table-column label="数据定义" min-width="180">
+                                <template #default="{ row: p }">{{ dataDefSummary(p.dataDef) }}</template>
+                              </el-table-column>
+                              <el-table-column label="描述" min-width="140" prop="descr" />
+                              <el-table-column label="操作" width="130" align="center">
+                                <template #default="{ row: p }">
+                                  <div class="row-actions">
+                                    <el-button size="small" text type="primary" @click="editCustomCapParam(p)">编辑</el-button>
+                                    <el-button size="small" text type="danger" @click="removeCustomCapParam(p)">删除</el-button>
+                                  </div>
+                                </template>
+                              </el-table-column>
+                              <template #empty><div class="param-empty">暂无参数</div></template>
+                            </el-table>
+                          </div>
+                        </template>
+                      </el-table-column>
+                      <el-table-column label="类型" width="90" align="center">
                         <template #default="{ row }">
                           <span :class="['type-tag', row.capType === 'prop' ? 'type-prop' : row.capType === 'svc' ? 'type-svc' : 'type-evt']">{{ capTypeLabel(row.capType) }}</span>
                         </template>
                       </el-table-column>
-                      <el-table-column label="能力名称" min-width="120" prop="name" />
-                      <el-table-column label="能力标识" min-width="120" prop="identifier" />
-                      <el-table-column label="数据类型" width="100" prop="dataType" />
-                      <el-table-column label="数据定义" min-width="160">
-                        <template #default="{ row }">{{ dataDefSummary(row.dataDef) }}</template>
+                      <el-table-column label="能力项名称" min-width="180" prop="name" />
+                      <el-table-column label="能力项ID" min-width="180" prop="identifier" align="center" />
+                      <el-table-column label="参数数量" width="100" align="center">
+                        <template #default="{ row }">{{ row.paramCount }} 个</template>
                       </el-table-column>
-                      <el-table-column label="描述" min-width="120" prop="descr" />
-                      <el-table-column label="所属模块" width="120" prop="moduleName" align="center" />
-                      <el-table-column label="操作" width="140" align="center" fixed="right">
-                        <template #default="{ row, $index }">
+                      <el-table-column label="操作" width="200" align="center" fixed="right">
+                        <template #default="{ row }">
                           <div class="row-actions">
-                            <el-button size="small" text type="primary" @click="editCapability(row, $index)">编辑</el-button>
-                            <el-button size="small" text type="danger" @click="removeCapability($index)">删除</el-button>
+                            <el-button size="small" text type="primary" @click="openCustomCapCreate(row)">添加参数</el-button>
+                            <el-button size="small" text type="danger" @click="removeCustomCapItem(row)">删除</el-button>
                           </div>
                         </template>
                       </el-table-column>
@@ -176,6 +228,30 @@
       </div>
     </template>
 
+    <!-- 自定义能力项弹窗 -->
+    <el-dialog v-model="customCapItemDialogVisible" title="添加能力项" width="480px" :close-on-click-modal="false" class="app-dialog">
+      <el-form :model="customCapItemForm" label-width="110px">
+        <el-form-item label="类型" required>
+          <el-radio-group v-model="customCapItemForm.capType">
+            <el-radio-button value="prop">属性</el-radio-button>
+            <el-radio-button value="svc">服务</el-radio-button>
+            <el-radio-button value="evt">事件</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="能力项名称" required>
+          <el-input v-model="customCapItemForm.name" placeholder="请输入能力项名称" />
+        </el-form-item>
+        <el-form-item label="能力项ID" required>
+          <el-input v-model="customCapItemForm.identifier" placeholder="例如 MySettingItem" />
+          <span class="form-hint">字母开头，仅允许字母、数字、下划线</span>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="customCapItemDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleCustomCapItemConfirm">确定</el-button>
+      </template>
+    </el-dialog>
+
     <!-- ===== TSL（下发给设备的物模型 JSON）===== -->
     <el-dialog
       v-model="tslDialogVisible"
@@ -212,7 +288,7 @@
     <!-- ===== 弹窗 ===== -->
 
     <!-- 能力穿梭框弹窗（按模块选择） -->
-    <el-dialog v-model="capDialogVisible" :title="capDialogTitle" width="960px" top="3vh" :close-on-click-modal="false">
+    <el-dialog v-model="capDialogVisible" :title="capDialogTitle" width="960px" top="3vh" :close-on-click-modal="false" class="app-dialog">
       <div class="transfer-container cap-transfer-container">
         <div class="transfer-panel">
           <div class="transfer-panel-header">
@@ -253,6 +329,7 @@
                     <div class="transfer-pkg-name">
                       <span :class="['type-tag', cap.capType === 'prop' ? 'type-prop' : cap.capType === 'svc' ? 'type-svc' : 'type-evt']">{{ capTypeLabel(cap.capType) }}</span>
                       {{ cap.name }}
+                      <span class="pkg-param-count">{{ cap.paramCount }} 个参数</span>
                     </div>
                     <div class="transfer-pkg-meta">{{ cap.identifier }}</div>
                   </div>
@@ -299,6 +376,7 @@
                     <div class="transfer-pkg-name">
                       <span :class="['type-tag', cap.capType === 'prop' ? 'type-prop' : cap.capType === 'svc' ? 'type-svc' : 'type-evt']">{{ capTypeLabel(cap.capType) }}</span>
                       {{ cap.name }}
+                      <span class="pkg-param-count">{{ cap.paramCount }} 个参数</span>
                     </div>
                     <div class="transfer-pkg-meta">{{ cap.identifier }}</div>
                   </div>
@@ -505,7 +583,7 @@
     </el-drawer>
 
     <!-- 能力参数编辑/创建弹窗 -->
-    <el-dialog v-model="algoCapEditVisible" :title="isAlgoCreateMode ? '创建自定义能力' : '编辑能力参数 - ' + (algoCapEditRef?.cap?.name || '')" width="860px" top="3vh" :close-on-click-modal="false" class="cap-dialog">
+    <el-dialog v-model="algoCapEditVisible" :title="isAlgoCreateMode ? '创建参数' : '编辑参数 - ' + (algoCapEditRef?.cap?.name || '')" width="860px" top="3vh" :close-on-click-modal="false" class="cap-dialog">
       <el-form v-if="isAlgoCreateMode || algoCapEditRef" label-width="100px">
         <el-form-item label="能力类型">
           <div class="type-cards">
@@ -893,7 +971,7 @@
 import { ref, reactive, computed, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Plus, ArrowLeft, ArrowRight, Edit, Switch, Check, Setting, QuestionFilled, Delete, Search, InfoFilled, CircleCheck, Document, CopyDocument } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { listAlgorithms, listServices, allEvents, getCapabilitiesByIds, getModules, getAllCapabilities, getAlgorithmServiceId, getAlgorithmEvents, getAllAlgorithmServices } from '@/views/iot/thing-model-new/data'
 import { store, getCategoryLinkedCapIds, getCategoryLinkedLegacyCapIds } from '@/views/iot/thing-model-new/data'
 import CapModules from './cap-modules.vue'
@@ -1111,7 +1189,7 @@ function openLensCapDialog(type) {
   lensCapType.value = type
   // reuse the same transfer dialog and mechanism
   currentCapType.value = type
-  capDialogTitle.value = type === 'standard' ? '添加标准能力' : '添加自定义能力'
+  capDialogTitle.value = type === 'standard' ? '添加平台能力项 — 导入能力' : '添加自定义能力项 — 导入能力'
   importSelectedIds.value = []
   importCheckedIds.value = []
   importSearchText.value = ''
@@ -1144,7 +1222,7 @@ const micCapType = ref('standard')
 function openMicCapDialog(type) {
   micCapType.value = type
   currentCapType.value = type
-  capDialogTitle.value = type === 'standard' ? '添加标准能力' : '添加自定义能力'
+  capDialogTitle.value = type === 'standard' ? '添加平台能力项 — 导入能力' : '添加自定义能力项 — 导入能力'
   importSelectedIds.value = []
   importCheckedIds.value = []
   importSearchText.value = ''
@@ -1155,6 +1233,110 @@ function openMicCapDialog(type) {
 // ===== 标准/自定义能力 =====
 const standardCapList = ref([])
 const customCapList = ref([])
+
+// ===== 自定义能力项（先定义能力项，再在它下面加参数）=====
+const customCapItems = ref([])
+const customCapItemDialogVisible = ref(false)
+const customCapItemForm = reactive({ name: '', identifier: '', capType: 'prop' })
+const pendingCapItemId = ref(null)
+
+// 标准能力：按能力项分组成二级
+const standardCapTree = computed(() => {
+  const map = new Map()
+  standardCapList.value.forEach(c => {
+    const key = c.capItemId ?? '_none'
+    if (!map.has(key)) {
+      const it = store.capItems.find(x => x.id === c.capItemId)
+      map.set(key, {
+        id: 'std_' + key,
+        _rawId: c.capItemId,
+        capType: it?.capType || c.capType || 'prop',
+        name: it?.name || '未归属参数',
+        identifier: it?.identifier || '—',
+        params: [],
+        paramCount: 0
+      })
+    }
+    const g = map.get(key)
+    g.params.push(c)
+    g.paramCount = g.params.length
+  })
+  return [...map.values()]
+})
+
+function editStandardCapParam(p) {
+  currentCapType.value = 'standard'
+  editCapability(p, standardCapList.value.indexOf(p))
+}
+
+function removeStandardCapParam(p) {
+  standardCapList.value = standardCapList.value.filter(c => c.id !== p.id)
+}
+
+function removeStandardCapItem(item) {
+  ElMessageBox.confirm(
+    '确定移除能力项「' + item.name + '」？其下的 ' + item.paramCount + ' 个参数将一并移除。',
+    '移除确认',
+    { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }
+  ).then(() => {
+    const ids = new Set(item.params.map(p => p.identifier))
+    standardCapList.value = standardCapList.value.filter(c => !ids.has(c.identifier))
+    ElMessage.success('已移除')
+  }).catch(() => {})
+}
+
+const customCapTree = computed(() =>
+  customCapItems.value.map(it => {
+    const params = customCapList.value.filter(c => c.capItemId === it.id)
+    return { ...it, params, paramCount: params.length }
+  })
+)
+
+function openAddCustomCapItem() {
+  customCapItemForm.name = ''
+  customCapItemForm.identifier = ''
+  customCapItemForm.capType = 'prop'
+  customCapItemDialogVisible.value = true
+}
+
+function handleCustomCapItemConfirm() {
+  if (!customCapItemForm.name.trim()) { ElMessage.warning('请输入能力项名称'); return }
+  if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(customCapItemForm.identifier || '')) { ElMessage.warning('能力项ID不合法：字母开头，仅允许字母、数字、下划线'); return }
+  if (customCapItems.value.some(x => x.identifier === customCapItemForm.identifier)) { ElMessage.warning('能力项ID已存在'); return }
+  const d = new Date()
+  const pad = (v) => String(v).padStart(2, '0')
+  customCapItems.value.push({
+    id: Date.now() + Math.random(),
+    name: customCapItemForm.name.trim(),
+    identifier: customCapItemForm.identifier.trim(),
+    capType: customCapItemForm.capType,
+    updateTime: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
+  })
+  customCapItemDialogVisible.value = false
+  ElMessage.success('能力项已创建')
+}
+
+function removeCustomCapItem(item) {
+  ElMessageBox.confirm(
+    `确定删除能力项「${item.name}」？其下的 ${item.paramCount} 个参数将一并删除。`,
+    '删除确认',
+    { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }
+  ).then(() => {
+    customCapList.value = customCapList.value.filter(c => c.capItemId !== item.id)
+    customCapItems.value = customCapItems.value.filter(x => x.id !== item.id)
+    ElMessage.success('已删除')
+  }).catch(() => {})
+}
+
+function editCustomCapParam(param) {
+  currentCapType.value = 'custom'
+  editCapability(param, customCapList.value.indexOf(param))
+}
+
+function removeCustomCapParam(param) {
+  customCapList.value = customCapList.value.filter(c => c.id !== param.id)
+  ElMessage.success('已删除')
+}
 
 // ===== TSL（下发给设备的物模型 JSON）=====
 // 一级键为模块标识符，二级键为能力标识符。属性给默认值，服务/事件给描述，
@@ -1316,10 +1498,14 @@ function onAlgoDataTypeChange() {
   Object.keys(def).forEach(k => { if (k !== 'dataType' && k !== 'accessMode') algoCapEditForm[k] = def[k] })
 }
 
-function openCustomCapCreate() {
+// 在某个自定义能力项下添加参数
+function openCustomCapCreate(item) {
+  if (!item) { ElMessage.warning('请先在能力项那一行点「添加参数」'); return }
   isAlgoCreateMode.value = true
   algoCapEditRef.value = null
   resetAlgoCapForm()
+  pendingCapItemId.value = item.id
+  algoCapEditForm.capType = item.capType || 'prop'
   algoCapEditVisible.value = true
 }
 
@@ -1373,16 +1559,23 @@ function saveAlgoCapEdit() {
   if (isAlgoCreateMode.value) {
     if (!algoCapEditForm.name.trim()) { ElMessage.warning('请输入能力名称'); return }
     if (!algoCapEditForm.identifier.trim()) { ElMessage.warning('请输入能力标识'); return }
+    const parent = customCapItems.value.find(x => x.id === pendingCapItemId.value)
+    if (!parent) { ElMessage.warning('请从能力项的「添加参数」进入'); return }
+    if (parent.capType !== algoCapEditForm.capType) {
+      ElMessage.warning(`该能力项是「${capTypeLabel(parent.capType)}」类型，只能添加${capTypeLabel(parent.capType)}参数`); return
+    }
     const cap = {
       id: Date.now() + Math.random(),
+      capItemId: parent.id,
       capType: algoCapEditForm.capType,
       name: algoCapEditForm.name.trim(),
       identifier: algoCapEditForm.identifier.trim(),
       descr: algoCapEditForm.descr.trim(),
+      dataType: algoCapEditForm.dataType,
       dataDef: buildDataDefFromForm()
     }
     customCapList.value.push(cap)
-    ElMessage.success('自定义能力已创建')
+    ElMessage.success('参数已创建')
   } else {
     const cap = algoCapEditRef.value?.cap
     if (!cap) return
@@ -1509,7 +1702,7 @@ function dataDefSummary(dd) {
 
 // ===== 自定义导入穿梭框 =====
 const capDialogVisible = ref(false)
-const capDialogTitle = ref('添加标准能力')
+const capDialogTitle = ref('添加平台能力项')
 const importSelectedIds = ref([])
 const importCheckedIds = ref([])
 const importSearchText = ref('')
@@ -1569,29 +1762,43 @@ function getAlgoCapPool() {
 
 // new：去掉「设备算法服务」步骤后，能力池取物模型「标准能力」池，
 // 并按**产品所属类目**过滤 —— 只出该类目已绑定的能力项（类目↔能力关联见物模型管理）
-function getStandardCapPool() {
+// 可选单位是「能力项」：只列出该类目已绑定的能力项，选中后连带其全部参数
+function getStandardCapItemPool() {
   const cat = resolveProductCategory()
   if (!cat) return []
-  // getCategoryLinkedCapIds 返回的是能力记录的数字 id，不能走 getCapabilitiesByIds（那个按 identifier 匹配）
   const linkedIds = getCategoryLinkedCapIds(cat.id)
   if (!linkedIds.length) return []
-  const modules = getModules()
-  const modMap = Object.fromEntries(modules.map(m => [m.id, m]))
-  return store.capabilities
-    .filter(cap => linkedIds.includes(cap.id))
-    .map(cap => ({
-      capType: cap.capType,
-      name: cap.name,
-      identifier: cap.identifier,
-      descr: cap.descr || '',
-      dataDef: cap.dataDef || {},
-      moduleId: String(cap.moduleId),
-      moduleName: modMap[cap.moduleId]?.name || ''
-    }))
+  const modMap = Object.fromEntries(getModules().map(m => [m.id, m]))
+  return store.capItems
+    .map(it => {
+      const modName = modMap[String(it.moduleId)]?.name || ''
+      const params = store.capabilities
+        .filter(c => c.capItemId === it.id && linkedIds.includes(c.id))
+        .map(c => ({
+          capType: c.capType,
+          name: c.name,
+          identifier: c.identifier,
+          descr: c.descr || '',
+          dataDef: c.dataDef || {},
+          moduleId: String(c.moduleId),
+          moduleName: modName
+        }))
+      return {
+        id: it.id,
+        name: it.name,
+        identifier: it.identifier,
+        capType: it.capType || 'prop',
+        moduleId: String(it.moduleId),
+        moduleName: modName,
+        params,
+        paramCount: params.length
+      }
+    })
+    .filter(it => it.paramCount > 0)
 }
 
 // 穿梭框左侧分组的展开键（用真实模块名，跟 buildModuleGroups 的 group.id 对齐）
-const capPoolModuleNames = () => [...new Set(getStandardCapPool().map(c => c.moduleName).filter(Boolean))]
+const capPoolModuleNames = () => [...new Set(getStandardCapItemPool().map(c => c.moduleName).filter(Boolean))]
 
 // 路由 query 里的 category 传的是类目名称（如「智能门铃」），兼容按标识符匹配
 function resolveProductCategory() {
@@ -1601,17 +1808,19 @@ function resolveProductCategory() {
 }
 
 const importAvailableByModule = computed(() => {
-  const pool = getStandardCapPool()
+  const pool = getStandardCapItemPool()
   const existingIds = getExistingIds()
-  const excludedIds = new Set([...existingIds, ...importSelectedIds.value])
-  const available = pool.filter(c => !excludedIds.has(c.identifier))
+  // 参数已全部加入的能力项不再列出
+  const available = pool.filter(it =>
+    !importSelectedIds.value.includes(it.identifier) && !it.params.every(p => existingIds.has(p.identifier))
+  )
   return buildModuleGroups(available)
 })
 
 const importSelectedByModule = computed(() => {
-  const pool = getStandardCapPool()
-  const caps = importSelectedIds.value.map(id => pool.find(c => c.identifier === id)).filter(Boolean)
-  return buildModuleGroups(caps)
+  const pool = getStandardCapItemPool()
+  const items = importSelectedIds.value.map(id => pool.find(c => c.identifier === id)).filter(Boolean)
+  return buildModuleGroups(items)
 })
 
 function isImportCapVisible(cap) {
@@ -1667,7 +1876,7 @@ function transferToRight() {
   importCheckedIds.value.forEach(id => {
     if (!importSelectedIds.value.includes(id)) importSelectedIds.value.push(id)
     // expand target module
-    const cap = getStandardCapPool().find(c => c.identifier === id)
+    const cap = getStandardCapItemPool().find(c => c.identifier === id)
     if (cap?.moduleId && !expandedModules.value.includes(cap.moduleId)) expandedModules.value.push(cap.moduleId)
   })
   importCheckedIds.value = []
@@ -1683,7 +1892,7 @@ function removeFromSelected(id) {
 
 function openCapabilityDialog(type) {
   currentCapType.value = type
-  capDialogTitle.value = type === 'standard' ? '添加标准能力 — 导入能力' : '添加自定义能力 — 导入能力'
+  capDialogTitle.value = type === 'standard' ? '添加平台能力项 — 导入能力' : '添加自定义能力项 — 导入能力'
   importSelectedIds.value = []
   importCheckedIds.value = []
   importSearchText.value = ''
@@ -1698,20 +1907,25 @@ function getCapTarget() {
 }
 
 function handleImportConfirm() {
-  if (!importSelectedIds.value.length) { ElMessage.warning('请选择要添加的能力'); return }
+  if (!importSelectedIds.value.length) { ElMessage.warning('请选择要添加的能力项'); return }
   const target = getCapTarget()
-  const pool = getStandardCapPool()
-  importSelectedIds.value.forEach(key => {
-    const c = pool.find(c => c.identifier === key)
-    if (!c) return
-    const newCap = {
-      id: Date.now() + Math.random(), capType: c.capType, name: c.name,
-      identifier: c.identifier, descr: c.descr, dataType: c.dataDef?.dataType || '—',
-      dataDef: JSON.parse(JSON.stringify(c.dataDef)), moduleName: c.moduleName
-    }
-    target.push(newCap)
+  const pool = getStandardCapItemPool()
+  let added = 0
+  importSelectedIds.value.forEach(itemId => {
+    const it = pool.find(c => c.identifier === itemId)
+    if (!it) return
+    it.params.forEach(c => {
+      if (target.some(x => x.identifier === c.identifier)) return
+      target.push({
+        id: Date.now() + Math.random(), capType: c.capType, name: c.name,
+        identifier: c.identifier, descr: c.descr, dataType: c.dataDef?.dataType || '—',
+        dataDef: JSON.parse(JSON.stringify(c.dataDef)), moduleName: c.moduleName,
+        capItemId: it.id
+      })
+      added++
+    })
   })
-  ElMessage.success(`已添加 ${importSelectedIds.value.length} 项能力`)
+  ElMessage.success(`已添加 ${importSelectedIds.value.length} 个能力项（${added} 个参数）`)
   capDialogVisible.value = false
 }
 
@@ -2089,6 +2303,7 @@ function loadCategoryConfig() {
     standardCapList.value = store.capabilities
       .filter(cap => categoryCapIds.value.includes(cap.id) && cap.capType === 'prop')
       .map(cap => ({
+        capItemId: cap.capItemId,
         capType: cap.capType,
         name: cap.name,
         identifier: cap.identifier,
@@ -2586,6 +2801,22 @@ onMounted(() => {
 }
 
 // 穿梭框搜索栏
+.pkg-param-count { margin-left: 8px; font-size: 12px; color: var(--text-placeholder); }
+
+// 参数子表：内嵌面板
+.param-panel {
+  padding: 12px 16px 14px 56px;
+  background: var(--bg-page, #f5f7fa);
+  :deep(.el-table) {
+    border: 1px solid var(--border-lighter, #e4e7ed);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg-card, #fff);
+  }
+  :deep(th.el-table__cell) { background: var(--bg-card, #fff); }
+}
+.param-empty { padding: 28px 0; text-align: center; font-size: 13px; color: var(--text-placeholder); }
+
 .transfer-panel-search {
   padding: 8px 12px;
   border-bottom: 1px solid var(--border-lighter, #e4e7ed);
@@ -2686,4 +2917,6 @@ onMounted(() => {
     &-name { font-size: 13px; color: var(--text-secondary); }
   }
 }
+// 弹窗顶部留白（非 scoped，弹窗被 teleport 到 body）
+.app-dialog .el-dialog__body { padding-top: 20px; }
 </style>

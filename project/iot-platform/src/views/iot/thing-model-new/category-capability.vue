@@ -45,49 +45,60 @@
       <!-- 右栏：能力表格 -->
       <div class="capability-right">
         <div class="card" style="flex:1;display:flex;flex-direction:column">
-          <el-table :data="filteredCapabilities" stripe>
-            <el-table-column label="类型" width="80" align="center">
+          <el-table v-if="linkedCapTree.length" :data="linkedCapTree" row-key="id" stripe>
+            <el-table-column type="expand" width="44">
+              <template #default="{ row }">
+                <div class="param-panel">
+                  <el-table :data="row.params" size="small">
+                    <el-table-column label="类型" width="80" align="center">
+                      <template #default="{ row: p }">
+                        <span :class="['type-tag', typeTagCls(p.capType)]">{{ typeLabel(p.capType) }}</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="参数名称" min-width="140">
+                      <template #default="{ row: p }"><span class="cell-name">{{ p.name }}</span></template>
+                    </el-table-column>
+                    <el-table-column label="参数标识" width="180" align="center">
+                      <template #default="{ row: p }"><span class="cell-id">{{ p.identifier || '—' }}</span></template>
+                    </el-table-column>
+                    <el-table-column label="数据类型" width="100" align="center">
+                      <template #default="{ row: p }"><span class="cell-datatype">{{ dataTypeLabel(p) || '—' }}</span></template>
+                    </el-table-column>
+                    <el-table-column label="数据定义" min-width="190" show-overflow-tooltip>
+                      <template #default="{ row: p }"><span class="cell-def">{{ dataDefDetail(p) || '—' }}</span></template>
+                    </el-table-column>
+                    <el-table-column label="描述" min-width="140" show-overflow-tooltip>
+                      <template #default="{ row: p }"><span class="cell-desc">{{ p.descr || '—' }}</span></template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="130" align="center">
+                      <template #default="{ row: p }">
+                        <div class="row-actions">
+                          <el-button size="small" text type="primary" @click="openEditCap(p)">编辑</el-button>
+                          <el-button size="small" text type="danger" @click="handleRemoveCap(p)">移除</el-button>
+                        </div>
+                      </template>
+                    </el-table-column>
+                    <template #empty><div class="param-empty">暂无参数</div></template>
+                  </el-table>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="类型" width="90" align="center">
               <template #default="{ row }">
                 <span :class="['type-tag', typeTagCls(row.capType)]">{{ typeLabel(row.capType) }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="能力名称" min-width="120">
-              <template #default="{ row }">
-                <span class="cell-name">{{ row.name }}</span>
-              </template>
+            <el-table-column label="能力项名称" min-width="180">
+              <template #default="{ row }"><span class="cell-item-name">{{ row.name }}</span></template>
             </el-table-column>
-            <el-table-column label="能力标识" width="170" align="center">
-              <template #default="{ row }">
-                <span class="cell-id">{{ row.identifier }}</span>
-              </template>
+            <el-table-column label="能力项ID" min-width="180" align="center">
+              <template #default="{ row }"><span class="cell-id">{{ row.identifier || '—' }}</span></template>
             </el-table-column>
-            <el-table-column label="数据类型" width="100" align="center">
-              <template #default="{ row }">
-                <span class="cell-datatype">{{ dataTypeLabel(row) }}</span>
-              </template>
+            <el-table-column label="所属模块" min-width="140" align="center">
+              <template #default="{ row }"><span class="cell-module">{{ row.moduleName || '—' }}</span></template>
             </el-table-column>
-            <el-table-column label="数据定义" min-width="200" show-overflow-tooltip>
-              <template #default="{ row }">
-                <span class="cell-def">{{ dataDefDetail(row) }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="描述" min-width="140" show-overflow-tooltip>
-              <template #default="{ row }">
-                <span class="cell-desc">{{ row.descr }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="所属模块" width="130" align="center">
-              <template #default="{ row }">
-                <span class="cell-module">{{ row._moduleName }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" width="150" fixed="right">
-              <template #default="{ row }">
-                <div style="white-space:nowrap;display:flex;gap:4px">
-                  <el-button size="small" text type="primary" @click="openEditCap(row)">编辑</el-button>
-                  <el-button size="small" text type="danger" @click="handleRemoveCap(row)">移除</el-button>
-                </div>
-              </template>
+            <el-table-column label="参数数量" width="100" align="center">
+              <template #default="{ row }">{{ row.paramCount }} 个</template>
             </el-table-column>
           </el-table>
           <div v-if="!linkedCaps.length" class="empty-state">该类目暂无绑定能力</div>
@@ -102,7 +113,7 @@
       width="960px"
       :close-on-click-modal="false"
       top="3vh"
-    >
+     class="app-dialog">
       <div class="transfer-container">
         <div class="transfer-panel">
           <div class="transfer-panel-header">
@@ -216,7 +227,7 @@
       width="960px"
       :close-on-click-modal="false"
       top="3vh"
-    >
+     class="app-dialog">
       <div class="transfer-container">
         <div class="transfer-panel">
           <div class="transfer-panel-header">
@@ -545,7 +556,7 @@
     </el-dialog>
 
     <!-- 参数编辑弹窗 -->
-    <el-dialog v-model="paramDialogVisible" :title="paramDialogTitle" width="600px" :close-on-click-modal="false">
+    <el-dialog v-model="paramDialogVisible" :title="paramDialogTitle" width="600px" :close-on-click-modal="false" class="app-dialog">
       <el-form ref="paramFormRef" :model="paramForm" label-width="100px">
         <el-form-item label="参数名称" required>
           <el-input v-model="paramForm.name" placeholder="请输入参数名称" />
@@ -651,6 +662,30 @@ const categoryName = computed(() => {
 })
 
 // ===== 已关联的能力 =====
+// 按能力项分组成二级：父行是能力项，子行是参数
+const linkedCapTree = computed(() => {
+  const map = new Map()
+  filteredCapabilities.value.forEach(c => {
+    const key = c.capItemId ?? '_none'
+    if (!map.has(key)) {
+      const it = store.capItems.find(x => x.id === c.capItemId)
+      map.set(key, {
+        id: 'item_' + key,
+        capType: it?.capType || c.capType || 'prop',
+        name: it?.name || '未归属参数',
+        identifier: it?.identifier || '—',
+        moduleName: c._moduleName || '—',
+        params: [],
+        paramCount: 0
+      })
+    }
+    const g = map.get(key)
+    g.params.push(c)
+    g.paramCount = g.params.length
+  })
+  return [...map.values()]
+})
+
 const linkedCaps = computed(() => {
   const capIds = new Set(getCategoryLinkedCapIds(categoryId))
   return store.capabilities.filter(c => capIds.has(c.id))
@@ -1350,7 +1385,26 @@ function handleRemoveCap(cap) {
 }
 
 .cell-name { font-weight: 500; color: var(--text-primary); }
+.cell-item-name { font-weight: 600; color: var(--text-primary); }
 .cell-id { font-size: 13px; color: var(--text-secondary); font-family: monospace; }
+
+// 参数子表：内嵌面板
+.param-panel {
+  padding: 12px 16px 14px 56px;
+  background: var(--bg-page, #f5f7fa);
+  :deep(.el-table) {
+    border: 1px solid var(--border-lighter, #e4e7ed);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg-card, #fff);
+  }
+  :deep(th.el-table__cell) { background: var(--bg-card, #fff); }
+}
+// 表格操作列按钮组：强制一行
+.row-actions {
+  display: flex; align-items: center; white-space: nowrap;
+  :deep(.el-button + .el-button) { margin-left: 4px; }
+}
 .cell-datatype { font-size: 13px; color: var(--text-regular); }
 .cell-def { font-size: 12px; color: var(--text-secondary); }
 .cell-desc { font-size: 13px; color: var(--text-secondary); }
@@ -1482,4 +1536,6 @@ function handleRemoveCap(cap) {
   .el-form-item { margin-bottom: 18px; }
   .el-divider { margin: 24px 0 20px; }
 }
+// 弹窗顶部留白（非 scoped，弹窗被 teleport 到 body）
+.app-dialog .el-dialog__body { padding-top: 20px; }
 </style>

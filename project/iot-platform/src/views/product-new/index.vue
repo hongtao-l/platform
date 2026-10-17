@@ -105,7 +105,7 @@
       :title="dialogType === 'add' ? '添加产品' : '编辑产品'"
       width="480px"
       :close-on-click-modal="false"
-    >
+     class="app-dialog">
       <el-form
         ref="formRef"
         :model="productForm"
@@ -422,4 +422,10 @@ const handlePageChange = (page) => {
     margin-top: 4px;
   }
 }
+</style>
+
+<style lang="scss">
+// 弹窗样式（非 scoped，因 el-dialog 被 teleport 到 body）：顶部留白，避免第一个字段紧贴分割线
+// 弹窗顶部留白（非 scoped，弹窗被 teleport 到 body）
+.app-dialog .el-dialog__body { padding-top: 20px; }
 </style>

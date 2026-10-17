@@ -56,6 +56,7 @@
       :title="dialogTitle"
       width="480px"
       :close-on-click-modal="false"
+      class="category-dialog"
     >
       <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="父级类目">
@@ -88,7 +89,7 @@
     </el-dialog>
 
     <!-- 导入能力弹窗（new：已去掉「（旧）能力」tab，只保留标准能力） -->
-    <el-dialog v-model="importTabDialogVisible" title="导入能力" width="960px" :close-on-click-modal="false" top="3vh">
+    <el-dialog v-model="importTabDialogVisible" title="导入能力" width="960px" :close-on-click-modal="false" top="3vh" class="import-dialog">
       <div class="transfer-container">
             <div class="transfer-panel">
               <div class="transfer-panel-header">
@@ -116,6 +117,7 @@
                         <div class="transfer-pkg-name">
                           <span :class="['type-tag', typeTagCls(cap.capType)]">{{ typeLabel(cap.capType) }}</span>
                           {{ cap.name }}
+                          <span class="pkg-param-count">{{ cap.paramCount }} 个参数</span>
                         </div>
                         <div class="transfer-pkg-meta">{{ cap.identifier }}</div>
                       </div>
@@ -149,6 +151,7 @@
                         <div class="transfer-pkg-name">
                           <span :class="['type-tag', typeTagCls(cap.capType)]">{{ typeLabel(cap.capType) }}</span>
                           {{ cap.name }}
+                          <span class="pkg-param-count">{{ cap.paramCount }} 个参数</span>
                         </div>
                         <div class="transfer-pkg-meta">{{ cap.identifier }}</div>
                       </div>
@@ -177,7 +180,7 @@ import { Plus, Search, ArrowRight, ArrowLeft, Delete } from '@element-plus/icons
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   store, addCategory, updateCategory, removeCategory, getCategoryStats, isIdentifierUnique,
-  getCategoryLinkedCapIds, linkCapToCategory,
+  getCategoryLinkedCapIds, linkCapToCategory, getCapsByCapItem,
   getCategoryLinkedLegacyCapIds, linkLegacyCapToCategory,
   legacyDeviceDef, legacyLensDef, legacyMicDef,
   buildCategoryTree, getCategoryDescendantIds
@@ -303,10 +306,14 @@ function openImportTabDialog(categoryId) {
 }
 
 function handleImportTabConfirm() {
-  importSelectedIds.value.forEach(capId => {
-    linkCapToCategory(activeCategoryId.value, capId)
+  let paramCount = 0
+  importSelectedIds.value.forEach(itemId => {
+    getCapsByCapItem(itemId).forEach(param => {
+      linkCapToCategory(activeCategoryId.value, param.id)
+      paramCount++
+    })
   })
-  ElMessage.success(`已导入 ${importSelectedIds.value.length} 个能力`)
+  ElMessage.success(`已导入 ${importSelectedIds.value.length} 个能力项（${paramCount} 个参数）`)
   importTabDialogVisible.value = false
 }
 const importSelectedIds = ref([])
@@ -340,11 +347,22 @@ function buildModuleGroups(capList) {
   return groups
 }
 
+// 可选单位是「能力项」：选中后连带导入它下面的全部参数
+const capItemOptions = computed(() =>
+  store.capItems.map(it => {
+    const params = getCapsByCapItem(it.id)
+    return { ...it, params, paramCount: params.length }
+  })
+)
+
 const importAvailableByModule = computed(() => {
   if (!activeCategoryId.value) return []
   const linkedIds = new Set(getCategoryLinkedCapIds(activeCategoryId.value))
-  const excludedIds = new Set([...linkedIds, ...importSelectedIds.value])
-  const available = store.capabilities.filter(c => !excludedIds.has(c.id))
+  // 参数已全部挂到该类目的能力项不再列出
+  const available = capItemOptions.value.filter(it =>
+    !importSelectedIds.value.includes(it.id) &&
+    !(it.paramCount && it.params.every(p => linkedIds.has(p.id)))
+  )
   return buildModuleGroups(available)
 })
 
@@ -400,8 +418,8 @@ function getCapById(id) {
 }
 
 const importSelectedByModule = computed(() => {
-  const caps = importSelectedIds.value.map(id => getCapById(id)).filter(Boolean)
-  return buildModuleGroups(caps)
+  const items = importSelectedIds.value.map(id => capItemOptions.value.find(it => it.id === id)).filter(Boolean)
+  return buildModuleGroups(items)
 })
 
 function toggleModuleExpand(modId) {
@@ -584,6 +602,12 @@ function handleLegacyImportConfirm() {
 .cell-name { font-weight: 500; color: var(--text-primary); }
 .cell-id { font-size: 13px; color: var(--text-secondary); font-family: monospace; }
 .cell-desc { font-size: 13px; color: var(--text-secondary); }
+// 穿梭框里的「N 个参数」小字
+.pkg-param-count {
+  margin-left: 8px;
+  font-size: 12px;
+  color: var(--text-placeholder);
+}
 
 // 类型标签
 .type-tag {
@@ -610,5 +634,14 @@ function handleLegacyImportConfirm() {
   font-size: 12px;
   font-weight: 400;
   color: var(--text-secondary);
+}
+</style>
+
+<style lang="scss">
+// 弹窗样式（非 scoped，因 el-dialog 被 teleport 到 body）
+.category-dialog,
+.import-dialog {
+  .el-dialog__body { padding-top: 20px; }
+  .el-dialog__header { padding-bottom: 12px; }
 }
 </style>
