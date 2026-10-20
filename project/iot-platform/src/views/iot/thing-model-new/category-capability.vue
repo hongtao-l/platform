@@ -1526,6 +1526,37 @@ function handleRemoveCap(cap) {
 .param-name { font-size: 13px; color: var(--text-primary); }
 .param-meta { font-size: 11px; color: var(--text-placeholder); margin-left: 8px; }
 .param-empty { font-size: 12px; color: var(--text-placeholder); padding: 8px 0; }
+
+/* ===== 样式对齐 Stitch「IoT Dashboard Redesign」===== */
+.card { border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: none; }
+
+.page-container :deep(.el-table__header th.el-table__cell) {
+  height: 42px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
+  border-bottom: 1px solid #e2e8f0;
+}
+.page-container :deep(.el-table__body td.el-table__cell) { padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+.page-container :deep(.el-table__expanded-cell) { padding: 0 !important; background: #f8fafc; }
+.page-container :deep(.el-table__body tr:hover > td.el-table__cell) { background: #f8fafc; }
+.page-container :deep(.el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell) { background: #fff; }
+.page-container :deep(.el-table__inner-wrapper::before) { display: none; }
+
+.cell-id { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; color: #64748b; }
+.cell-name { font-size: 13px; font-weight: 500; color: #334155; }
+.cell-desc { font-size: 12px; color: #64748b; }
+
+.type-tag {
+  display: inline-flex; align-items: center;
+  height: 18px; padding: 0 7px;
+  border-radius: 4px; font-size: 11px; font-weight: 500; line-height: 1;
+  &.type-prop { background: #f0f7ff; color: #0369a1; }
+  &.type-svc  { background: #ecfdf5; color: #047857; }
+  &.type-evt  { background: #fffbeb; color: #b45309; }
+}
+
 </style>
 
 <style lang="scss">
@@ -1538,4 +1569,13 @@ function handleRemoveCap(cap) {
 }
 // 弹窗顶部留白（非 scoped，弹窗被 teleport 到 body）
 .app-dialog .el-dialog__body { padding-top: 20px; }
+
+/* ===== 弹窗视觉优化（仅样式）===== */
+.cap-dialog {
+  .el-dialog__header { padding: 18px 20px 14px; }
+  .el-dialog__title { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+  .el-dialog__body { padding: 20px 20px 20px; }
+  .el-dialog__footer { padding: 12px 20px; border-top: 1px solid var(--border-lighter, #F0F0F0); }
+  .el-form-item { margin-bottom: 18px; }
+}
 </style>

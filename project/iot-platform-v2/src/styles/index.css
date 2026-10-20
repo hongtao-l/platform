@@ -1,0 +1,671 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Base
+   ============================================================ */
+:root {
+  --brand-50: #f0f7ff;
+  --brand-100: #e0effe;
+  --brand-500: #0284c7;
+  --brand-600: #0369a1;
+  --brand-700: #075985;
+  --ink-900: #0f172a;
+  --ink-700: #334155;
+  --ink-500: #64748b;
+  --ink-400: #94a3b8;
+  --line-200: #e2e8f0;
+  --line-100: #f1f5f9;
+  --surface: #ffffff;
+  --surface-50: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
+  color: #1e293b;
+  background: #f8fafc;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: #e0f2fe;
+  color: #075985;
+}
+
+/* Subtle minimalist scrollbars (stitch) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ============================================================
+   Element Plus theme → stitch
+   ============================================================ */
+:root {
+  --el-color-primary: #0284c7;
+  --el-color-primary-light-3: #38bdf8;
+  --el-color-primary-light-5: #7dd3fc;
+  --el-color-primary-light-7: #bae6fd;
+  --el-color-primary-light-8: #e0f2fe;
+  --el-color-primary-light-9: #f0f9ff;
+  --el-color-primary-dark-2: #0369a1;
+  --el-color-success: #10b981;
+  --el-color-warning: #f59e0b;
+  --el-color-danger: #f43f5e;
+  --el-color-error: #f43f5e;
+  --el-color-info: #64748b;
+  --el-text-color-primary: #0f172a;
+  --el-text-color-regular: #334155;
+  --el-text-color-secondary: #64748b;
+  --el-text-color-placeholder: #94a3b8;
+  --el-border-color: #e2e8f0;
+  --el-border-color-light: #e2e8f0;
+  --el-border-color-lighter: #f1f5f9;
+  --el-fill-color-light: #f8fafc;
+  --el-fill-color-lighter: #f8fafc;
+  --el-fill-color-blank: #ffffff;
+  --el-bg-color: #ffffff;
+  --el-bg-color-page: #f8fafc;
+  --el-font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
+  --el-font-size-base: 12px;
+  --el-border-radius-base: 6px;
+  --el-border-radius-small: 5px;
+  --el-box-shadow-light: 0 8px 24px -8px rgb(15 23 42 / 0.12), 0 2px 6px -2px rgb(15 23 42 / 0.06);
+}
+
+/* ---------- Buttons ---------- */
+.el-button {
+  --el-button-font-weight: 500;
+  font-size: 12px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+.el-button--large {
+  height: 36px;
+  font-size: 13px;
+}
+.el-button--small {
+  height: 26px;
+  padding: 0 9px;
+  font-size: 11px;
+  border-radius: 5px;
+}
+.el-button--primary {
+  --el-button-bg-color: #0284c7;
+  --el-button-border-color: #0284c7;
+  --el-button-hover-bg-color: #0ea5e9;
+  --el-button-hover-border-color: #0ea5e9;
+  --el-button-active-bg-color: #0369a1;
+  --el-button-active-border-color: #0369a1;
+  box-shadow: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+  font-weight: 600;
+}
+.el-button--primary.is-plain {
+  --el-button-bg-color: #f0f9ff;
+  --el-button-text-color: #0369a1;
+  --el-button-border-color: #bae6fd;
+}
+.el-button--danger {
+  --el-button-bg-color: #f43f5e;
+  --el-button-border-color: #f43f5e;
+}
+.el-button.is-text,
+.el-button.is-link {
+  height: auto;
+  padding: 0 2px;
+  box-shadow: none;
+  font-size: 12px;
+}
+.el-button.is-text:hover,
+.el-button.is-link:hover {
+  background: transparent;
+}
+.el-button--primary.is-text,
+.el-button--primary.is-link {
+  color: #0284c7;
+}
+.el-button--danger.is-text,
+.el-button--danger.is-link {
+  color: #f43f5e;
+}
+.el-button + .el-button {
+  margin-left: 8px;
+}
+
+/* ---------- Inputs ---------- */
+.el-input__wrapper,
+.el-select__wrapper,
+.el-textarea__inner {
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px #e2e8f0 inset;
+  background-color: #fff;
+  transition: box-shadow 0.15s ease;
+}
+.el-input__wrapper:hover,
+.el-select__wrapper:hover,
+.el-textarea__inner:hover {
+  box-shadow: 0 0 0 1px #cbd5e1 inset;
+}
+.el-input__wrapper.is-focus,
+.el-select__wrapper.is-focused,
+.el-textarea__inner:focus {
+  box-shadow: 0 0 0 1px #0ea5e9 inset, 0 0 0 3px rgb(14 165 233 / 0.1) !important;
+}
+.el-input__inner,
+.el-select__selected-item {
+  font-size: 12px;
+}
+.el-input__wrapper {
+  min-height: 30px;
+  padding: 0 10px;
+}
+.el-textarea__inner {
+  font-size: 12px;
+  padding: 8px 10px;
+}
+.el-input-number {
+  width: 150px;
+}
+.el-input-number .el-input__wrapper {
+  padding-left: 10px;
+  padding-right: 34px;
+}
+.el-form-item {
+  margin-bottom: 16px;
+}
+.el-form-item__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  line-height: 30px;
+}
+.el-form-item__error {
+  font-size: 11px;
+  padding-top: 3px;
+}
+.el-form--inline .el-form-item {
+  margin-right: 12px;
+}
+
+/* ---------- Table ---------- */
+.el-table {
+  --el-table-border-color: #f1f5f9;
+  --el-table-header-bg-color: #f8fafc;
+  --el-table-header-text-color: #64748b;
+  --el-table-text-color: #334155;
+  --el-table-row-hover-bg-color: #f8fafc;
+  --el-table-tr-bg-color: #ffffff;
+  font-size: 12px;
+  color: #334155;
+}
+.el-table th.el-table__cell {
+  background: #f8fafc !important;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  padding: 9px 0;
+}
+.el-table td.el-table__cell {
+  padding: 10px 0;
+}
+.el-table .cell {
+  padding: 0 14px;
+  line-height: 20px;
+}
+.el-table__inner-wrapper::before {
+  display: none;
+}
+.el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell {
+  background-color: #f8fafc;
+}
+.el-table__expanded-cell {
+  padding: 10px 16px 12px 50px !important;
+  background: #f8fafc;
+}
+.el-table__expanded-cell:hover {
+  background: #f8fafc !important;
+}
+.el-table__expand-icon {
+  color: #94a3b8;
+  font-size: 11px;
+}
+.el-table__expand-icon--expanded {
+  color: #0284c7;
+}
+.el-table__empty-block {
+  min-height: 140px;
+}
+.el-table .el-table__fixed-right::before,
+.el-table .el-table__fixed::before {
+  display: none;
+}
+
+/* ---------- Tags ---------- */
+.el-tag {
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  height: 20px;
+  padding: 0 7px;
+  border: 1px solid transparent;
+}
+
+/* ---------- Dialog / MessageBox ---------- */
+.el-overlay {
+  backdrop-filter: blur(2px);
+  background-color: rgb(15 23 42 / 0.45);
+}
+.el-dialog {
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 24px 48px -12px rgb(15 23 42 / 0.25), 0 8px 16px -8px rgb(15 23 42 / 0.1);
+  padding: 0;
+  overflow: hidden;
+}
+.el-dialog__header {
+  margin: 0;
+  padding: 15px 24px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+}
+.el-dialog__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+.el-dialog__headerbtn {
+  top: 12px;
+  right: 14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+}
+.el-dialog__headerbtn:hover {
+  background: #f1f5f9;
+}
+.el-dialog__body {
+  padding: 20px 24px;
+  color: #334155;
+}
+.el-dialog__footer {
+  padding: 12px 24px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+.el-message-box {
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 18px 20px;
+}
+.el-message-box__title {
+  font-size: 14px;
+  font-weight: 700;
+}
+.el-message-box__message {
+  font-size: 12px;
+  color: #475569;
+}
+.el-message {
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 24px -8px rgb(15 23 42 / 0.15);
+}
+.el-message__content {
+  font-size: 12px;
+}
+
+/* ---------- Tabs / Steps / Divider ---------- */
+.el-divider {
+  --el-border-color: #e2e8f0;
+  margin: 18px 0;
+}
+.el-divider__text {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  background: #fff;
+  letter-spacing: 0.02em;
+}
+.el-tabs__header {
+  margin-bottom: 16px;
+}
+.el-tabs__item {
+  font-size: 12px;
+  height: 38px;
+  font-weight: 500;
+}
+.el-tabs__item.is-active {
+  font-weight: 600;
+}
+.el-tabs__nav-wrap::after {
+  height: 1px;
+  background: #e2e8f0;
+}
+.el-tabs__active-bar {
+  height: 2px;
+  border-radius: 2px;
+}
+.el-steps {
+  --el-color-primary: #0284c7;
+}
+.el-step__title {
+  font-size: 12px;
+}
+.el-step__head.is-process {
+  color: #0284c7;
+  border-color: #0284c7;
+}
+.el-step__head.is-finish {
+  color: #0284c7;
+  border-color: #0284c7;
+}
+.el-step__title.is-process {
+  font-weight: 600;
+  color: #0369a1;
+}
+.el-step__title.is-finish {
+  color: #0369a1;
+}
+
+/* ---------- Checkbox / Radio / Switch ---------- */
+.el-radio {
+  --el-radio-text-color: #475569;
+  font-size: 12px;
+  margin-right: 16px;
+}
+.el-radio__label {
+  font-size: 12px;
+  padding-left: 6px;
+}
+.el-radio-button__inner {
+  font-size: 12px;
+  padding: 7px 14px;
+  border-color: #e2e8f0;
+  color: #475569;
+  font-weight: 500;
+}
+.el-radio-button:first-child .el-radio-button__inner {
+  border-radius: 6px 0 0 6px;
+}
+.el-radio-button:last-child .el-radio-button__inner {
+  border-radius: 0 6px 6px 0;
+}
+.el-radio-button__original-radio:checked + .el-radio-button__inner {
+  background: #f0f9ff;
+  border-color: #7dd3fc;
+  color: #0369a1;
+  box-shadow: -1px 0 0 0 #7dd3fc;
+  font-weight: 600;
+}
+.el-checkbox {
+  --el-checkbox-text-color: #475569;
+  font-size: 12px;
+  margin-right: 14px;
+}
+.el-checkbox__label {
+  font-size: 12px;
+  padding-left: 6px;
+}
+.el-switch.is-checked .el-switch__core {
+  background-color: #0284c7;
+  border-color: #0284c7;
+}
+
+/* ---------- Dropdown / Select / Date picker ---------- */
+.el-popper.is-light {
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 16px 32px -8px rgb(15 23 42 / 0.16), 0 4px 8px -4px rgb(15 23 42 / 0.08);
+}
+.el-dropdown-menu__item {
+  font-size: 12px;
+  padding: 7px 16px;
+}
+.el-select-dropdown__item {
+  font-size: 12px;
+  height: 32px;
+  line-height: 32px;
+  padding: 0 12px;
+}
+.el-select-dropdown__item.is-selected {
+  color: #0369a1;
+  font-weight: 600;
+}
+.el-picker-panel {
+  font-size: 12px;
+}
+
+/* ---------- Pagination ---------- */
+.el-pagination {
+  --el-pagination-font-size: 12px;
+  --el-pagination-button-width: 26px;
+  --el-pagination-button-height: 26px;
+  --el-pagination-button-bg-color: #fff;
+  --el-pagination-hover-color: #0284c7;
+  font-weight: 500;
+}
+.el-pagination button,
+.el-pagination .el-pager li {
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  margin: 0 2px;
+  font-size: 12px;
+  background: #fff;
+}
+.el-pagination .el-pager li.is-active {
+  background: #f0f9ff;
+  color: #0369a1;
+  border-color: #bae6fd;
+  font-weight: 600;
+}
+.el-pagination .el-select .el-input {
+  width: 100px;
+}
+
+/* ---------- Drawer ---------- */
+.el-drawer {
+  border-left: 1px solid #e2e8f0;
+}
+.el-drawer__header {
+  margin: 0;
+  padding: 15px 22px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.el-drawer__body {
+  padding: 18px 22px;
+}
+.el-drawer__footer {
+  padding: 12px 22px;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+/* ---------- Tooltip ---------- */
+.el-popper.is-dark {
+  font-size: 11px;
+  border-radius: 6px;
+  padding: 6px 9px;
+}
+
+/* ============================================================
+   Stitch component classes
+   ============================================================ */
+@layer components {
+  .panel {
+    @apply bg-white border border-slate-200 rounded-lg shadow-2xs;
+  }
+
+  .page-title {
+    @apply text-base font-bold text-slate-900 tracking-tight;
+  }
+
+  .panel-title {
+    @apply text-[11px] font-bold uppercase tracking-wider text-slate-500;
+  }
+
+  .toolbar {
+    @apply px-4 py-3 border-b border-slate-200 bg-white flex flex-wrap items-center justify-between gap-3;
+  }
+
+  .search-box {
+    @apply relative;
+  }
+
+  .search-box input {
+    @apply w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg
+      placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500
+      focus:border-sky-500 focus:bg-white transition-all;
+  }
+
+  .seg-control {
+    @apply inline-flex items-center rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs font-medium text-slate-600 shadow-2xs;
+  }
+
+  .seg-item {
+    @apply px-2.5 py-1 rounded-[6px] transition-all cursor-pointer whitespace-nowrap border border-transparent;
+  }
+
+  .seg-item.active {
+    @apply bg-sky-50 text-sky-600 border-sky-400 shadow-2xs font-semibold;
+  }
+
+  .type-tag {
+    @apply inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-medium border whitespace-nowrap;
+  }
+
+  .type-prop {
+    @apply bg-sky-50 text-sky-700 border-sky-200/80;
+  }
+
+  .type-svc {
+    @apply bg-emerald-50 text-emerald-700 border-emerald-200/80;
+  }
+
+  .type-evt {
+    @apply bg-amber-50 text-amber-700 border-amber-200/80;
+  }
+
+  .status-tag {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border whitespace-nowrap;
+  }
+
+  .s-dev {
+    @apply bg-sky-50 text-sky-700 border-sky-200/80;
+  }
+
+  .s-pubing {
+    @apply bg-amber-50 text-amber-700 border-amber-200/80;
+  }
+
+  .s-pubed {
+    @apply bg-emerald-50 text-emerald-700 border-emerald-200/80;
+  }
+
+  .s-ref {
+    @apply bg-slate-100 text-slate-500 border-slate-200;
+  }
+
+  .s-pending {
+    @apply bg-amber-50 text-amber-700 border-amber-200/80;
+  }
+
+  .s-approved {
+    @apply bg-emerald-50 text-emerald-700 border-emerald-200/80;
+  }
+
+  .s-rejected {
+    @apply bg-rose-50 text-rose-600 border-rose-200/80;
+  }
+
+  .link-action {
+    @apply text-sky-600 hover:text-sky-800 font-medium transition-colors text-xs cursor-pointer;
+  }
+
+  .link-danger {
+    @apply text-rose-500 hover:text-rose-700 font-medium transition-colors text-xs cursor-pointer;
+  }
+
+  .mono-id {
+    @apply font-mono text-xs text-slate-600;
+  }
+
+  .table-scroll {
+    @apply flex-1 overflow-auto bg-white;
+  }
+
+  .table-footer {
+    @apply h-12 border-t border-slate-200 bg-white px-5 flex items-center justify-between text-xs text-slate-500 flex-shrink-0;
+  }
+
+  .empty-box {
+    @apply flex flex-col items-center justify-center py-16 text-slate-400 text-xs gap-2;
+  }
+
+  .tip-bar {
+    @apply flex items-start gap-2 px-3.5 py-2.5 bg-sky-50/70 border border-sky-200/70 rounded-lg text-xs text-sky-800 leading-relaxed;
+  }
+
+  .form-hint {
+    @apply block text-[11px] text-slate-400 mt-1 leading-relaxed;
+  }
+
+  .step-divider {
+    @apply relative py-1 flex items-center justify-center my-1;
+  }
+
+  .step-divider::before {
+    content: '';
+    @apply absolute inset-x-0 top-1/2 border-t border-slate-200;
+  }
+
+  .step-divider > span {
+    @apply relative bg-white px-3 text-[11px] font-semibold text-slate-400;
+  }
+
+  .criteria-chip {
+    @apply flex items-center gap-1.5 bg-white border border-slate-200 rounded-md px-2 py-1 shadow-2xs text-[11px];
+  }
+}
+
+/* Transitions */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}

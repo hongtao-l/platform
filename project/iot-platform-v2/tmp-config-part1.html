@@ -1,0 +1,297 @@
+    <!-- 页面头部 -->
+    <div class="w-full max-w-[1280px] mx-auto p-6 space-y-5 flex-1">
+      <PageBackBar title="开发产品" back-label="返回列表" @back="handleBack" />
+
+      <!-- 产品信息卡片 -->
+      <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-sm space-y-4">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+          <div class="flex items-center space-x-3 min-w-0">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center text-white shadow-sm shadow-sky-500/20 flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-2.5">
+                <h2 class="text-lg font-bold text-slate-900 truncate">{{ productName }}</h2>
+                <button class="text-xs text-sky-600 hover:text-sky-700 font-medium inline-flex items-center space-x-1 hover:underline" @click="handleEditProduct">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /></svg>
+                  <span>编辑产品</span>
+                </button>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200/80">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5 animate-pulse" />开发中
+                </span>
+              </div>
+              <p class="text-xs text-slate-500 mt-0.5">{{ productDescription }}</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 text-xs flex-shrink-0">
+            <span class="text-slate-400">固件 SDK 版本:</span>
+            <span class="font-mono font-medium px-2 py-0.5 bg-slate-100 rounded text-slate-700">v2.4.1-rc</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-slate-50/70 p-3 rounded border border-slate-100">
+            <div class="text-[11px] font-medium text-slate-400">产品 ID (Product ID)</div>
+            <div class="mt-1 flex items-center justify-between gap-2">
+              <span class="font-mono text-xs font-semibold text-slate-800 truncate">{{ productId }}</span>
+              <button class="text-slate-400 hover:text-slate-700 transition-colors flex-shrink-0" title="复制 ID" @click="copyProductId">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect height="13" rx="2" ry="2" stroke-width="2" width="13" x="9" y="9" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke-width="2" /></svg>
+              </button>
+            </div>
+          </div>
+          <div class="bg-slate-50/70 p-3 rounded border border-slate-100">
+            <div class="text-[11px] font-medium text-slate-400">产品型号 (Product Model)</div>
+            <div class="mt-1 font-mono text-xs font-semibold text-slate-800 truncate" title="TEST-MODEL-388537">TEST-MODEL-388537</div>
+          </div>
+          <div class="bg-slate-50/70 p-3 rounded border border-slate-100">
+            <div class="text-[11px] font-medium text-slate-400">产品品类 (Category)</div>
+            <div class="mt-1 text-xs font-semibold text-slate-800 truncate">{{ productCategory || '—' }}</div>
+          </div>
+          <div class="bg-slate-50/70 p-3 rounded border border-slate-100">
+            <div class="text-[11px] font-medium text-slate-400">通信协议 / 联网方式</div>
+            <div class="mt-1 text-xs font-semibold text-slate-800 flex items-center space-x-1.5">
+              <span class="inline-block w-2 h-2 rounded-full bg-emerald-500" />
+              <span>Wi-Fi + BLE 双模协议</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 步骤条 -->
+      <nav class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm">
+        <ol class="flex items-center w-full">
+          <li class="flex items-center space-x-3 flex-shrink-0 cursor-pointer" @click="currentStep = 0">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full border-2 bg-white font-mono text-xs font-bold" :class="currentStep === 0 ? 'border-sky-600 text-sky-600' : (currentStep > 0 ? 'border-sky-500 text-sky-500' : 'border-slate-200 text-slate-400')">1</span>
+            <div class="text-xs">
+              <span class="block" :class="currentStep === 0 ? 'font-semibold text-sky-700' : 'font-medium text-slate-600'">功能定义与配置</span>
+              <span class="text-[10px] text-slate-400 font-normal">物模型能力配置 ({{ standardCapTree.length }}项就绪)</span>
+            </div>
+          </li>
+          <div aria-hidden="true" class="stepper-connector mx-4" />
+          <li class="flex items-center space-x-3 flex-shrink-0 cursor-pointer" @click="currentStep = 2">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full border-2 bg-white font-mono text-xs font-bold" :class="currentStep === 2 ? 'border-sky-600 text-sky-600' : (currentStep > 2 ? 'border-sky-500 text-sky-500' : 'border-slate-200 text-slate-400')">2</span>
+            <div class="text-xs">
+              <span class="block" :class="currentStep === 2 ? 'font-semibold text-sky-700' : 'font-medium text-slate-600'">APP 控制面板配置</span>
+              <span class="text-[10px] text-slate-400 font-normal">UI模版、多语言设定</span>
+            </div>
+          </li>
+          <div aria-hidden="true" class="stepper-connector mx-4" />
+          <li class="flex items-center space-x-3 flex-shrink-0 cursor-pointer" @click="currentStep = 3">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full border-2 bg-white font-mono text-xs font-bold" :class="currentStep === 3 ? 'border-sky-600 text-sky-600' : 'border-slate-200 text-slate-400'">3</span>
+            <div class="text-xs">
+              <span class="block" :class="currentStep === 3 ? 'font-semibold text-sky-700' : 'font-medium text-slate-600'">平台服务 &amp; 发布</span>
+              <span class="text-[10px] text-slate-400 font-normal">数据流转规则与固件联调</span>
+            </div>
+          </li>
+        </ol>
+      </nav>
+
+      <!-- ===== 步骤0: 功能定义与配置 ===== -->
+      <template v-if="currentStep === 0">
+        <div class="device-cap-layout">
+          <div class="device-cap-main space-y-5">
+            <!-- 平台标准能力项 -->
+            <section class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+              <div class="px-5 py-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center space-x-2">
+                  <h3 class="font-semibold text-sm text-slate-900">平台标准能力项</h3>
+                  <el-tooltip content="由行业标准物模型库推荐的通用能力，可保证各类主流客户端及生态的即插即用互通性。" placement="top">
+                    <el-icon class="text-slate-400 cursor-help"><QuestionFilled /></el-icon>
+                  </el-tooltip>
+                  <span class="text-xs text-slate-400 font-mono">({{ standardCapTree.length }})</span>
+                </div>
+                <div class="flex items-center space-x-2.5">
+                  <button class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-medium border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 shadow-sm transition-colors" @click="tslDialogVisible = true">
+                    <el-icon><Document /></el-icon><span>查看 TSL (Schema)</span>
+                  </button>
+                  <button class="inline-flex items-center space-x-1 px-3 py-1.5 rounded text-xs font-medium text-white bg-sky-600 hover:bg-sky-500 shadow-sm transition-colors" @click="openCapabilityDialog('standard')">
+                    <el-icon><Plus /></el-icon><span>添加平台能力项</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="mx-5 my-3 p-3 bg-sky-50/70 border border-sky-100 rounded-md flex items-center justify-between text-xs text-sky-900">
+                <div class="flex items-center space-x-2">
+                  <el-icon class="text-sky-600 flex-shrink-0"><InfoFilled /></el-icon>
+                  <span>平台与自定义能力项共同定义设备物模型，并将直接编译生成硬件固件头文件和手机 APP 控制面板，请根据模组真实管脚能力慎重配置。</span>
+                </div>
+                <button class="font-medium text-sky-700 hover:underline flex-shrink-0 ml-3" @click="showPhoneDemo = !showPhoneDemo">{{ showPhoneDemo ? '收起物模型示例' : '查看物模型示例' }}</button>
+              </div>
+
+              <div v-if="standardCapTree.length" class="overflow-x-auto">
+                <el-table ref="standardTableRef" :data="standardCapTree" row-key="id" class="config-table">
+                  <el-table-column type="expand" width="44">
+                    <template #default="{ row }">
+                      <div class="param-panel">
+                        <el-table :data="row.params" size="small">
+                          <el-table-column label="类型" width="80" align="center">
+                            <template #default="{ row: p }">
+                              <span :class="['type-tag', p.capType === 'prop' ? 'type-prop' : p.capType === 'svc' ? 'type-svc' : 'type-evt']">{{ capTypeLabel(p.capType) }}</span>
+                            </template>
+                          </el-table-column>
+                          <el-table-column label="参数名称" min-width="140" prop="name" />
+                          <el-table-column label="参数标识" width="180" prop="identifier" />
+                          <el-table-column label="数据类型" width="100" prop="dataType" />
+                          <el-table-column label="数据定义" min-width="180">
+                            <template #default="{ row: p }">{{ dataDefSummary(p.dataDef) }}</template>
+                          </el-table-column>
+                          <el-table-column label="描述" min-width="140" prop="descr" />
+                          <el-table-column label="操作" width="130" align="right">
+                            <template #default="{ row: p }">
+                              <div class="row-actions">
+                                <button class="link-action" @click="editStandardCapParam(p)">编辑</button>
+                                <button class="link-danger" @click="removeStandardCapParam(p)">删除</button>
+                              </div>
+                            </template>
+                          </el-table-column>
+                          <template #empty><div class="param-empty">暂无参数</div></template>
+                        </el-table>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="能力类型" width="100" align="left">
+                    <template #default="{ row }">
+                      <span :class="['type-tag', row.capType === 'prop' ? 'type-prop' : row.capType === 'svc' ? 'type-svc' : 'type-evt']">{{ capTypeLabel(row.capType) }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="能力项名称" min-width="200">
+                    <template #default="{ row }"><span class="cell-item-name">{{ row.name }}</span></template>
+                  </el-table-column>
+                  <el-table-column label="能力项 ID (Identifier)" min-width="220">
+                    <template #default="{ row }"><code class="cell-id">{{ row.identifier }}</code></template>
+                  </el-table-column>
+                  <el-table-column label="参数数量" width="120" align="center">
+                    <template #default="{ row }">
+                      <span class="inline-block px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-mono text-[11px]">{{ row.paramCount }} 个参数</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="更新时间" width="160">
+                    <template #default="{ row }"><span class="cell-time">{{ row.updateTime || '—' }}</span></template>
+                  </el-table-column>
+                  <el-table-column label="操作" width="140" align="right">
+                    <template #default="{ row }">
+                      <div class="row-actions">
+                        <button class="link-action" @click="toggleStandardRow(row)">配置</button>
+                        <span class="text-slate-200">|</span>
+                        <button class="link-danger" @click="removeStandardCapItem(row)">移除</button>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <template #empty><div class="empty-state">暂无数据</div></template>
+                </el-table>
+              </div>
+              <div v-else class="empty-state">暂无数据</div>
+            </section>
+
+            <!-- 自定义能力项 -->
+            <section class="bg-white rounded-lg border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <div class="flex items-center space-x-2">
+                    <h3 class="font-semibold text-sm text-slate-900">自定义能力项</h3>
+                    <span class="px-2 py-0.5 rounded text-[11px] bg-slate-100 text-slate-600 font-mono">{{ customCapTree.length }}</span>
+                  </div>
+                  <p class="text-xs text-slate-500 mt-1">您自定义的每一个功能（属性、服务、事件），都将直接同步生成固件数据结构与 APP 控制面板组件</p>
+                </div>
+                <button class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-medium text-white bg-sky-600 hover:bg-sky-500 shadow-sm transition-colors self-start sm:self-auto" @click="openAddCustomCapItem">
+                  <el-icon><Plus /></el-icon><span>添加自定义能力项</span>
+                </button>
+              </div>
+
+              <div v-if="customCapTree.length" class="overflow-x-auto">
+                <el-table ref="customTableRef" :data="customCapTree" row-key="id" class="config-table">
+                  <el-table-column type="expand" width="44">
+                    <template #default="{ row }">
+                      <div class="param-panel">
+                        <el-table :data="row.params" size="small">
+                          <el-table-column label="类型" width="80" align="center">
+                            <template #default="{ row: p }">
+                              <span :class="['type-tag', p.capType === 'prop' ? 'type-prop' : p.capType === 'svc' ? 'type-svc' : 'type-evt']">{{ capTypeLabel(p.capType) }}</span>
+                            </template>
+                          </el-table-column>
+                          <el-table-column label="参数名称" min-width="140" prop="name" />
+                          <el-table-column label="参数标识" width="180" prop="identifier" />
+                          <el-table-column label="数据类型" width="100" prop="dataType" />
+                          <el-table-column label="数据定义" min-width="180">
+                            <template #default="{ row: p }">{{ dataDefSummary(p.dataDef) }}</template>
+                          </el-table-column>
+                          <el-table-column label="描述" min-width="140" prop="descr" />
+                          <el-table-column label="操作" width="130" align="right">
+                            <template #default="{ row: p }">
+                              <div class="row-actions">
+                                <button class="link-action" @click="editCustomCapParam(p)">编辑</button>
+                                <button class="link-danger" @click="removeCustomCapParam(p)">删除</button>
+                              </div>
+                            </template>
+                          </el-table-column>
+                          <template #empty><div class="param-empty">暂无参数</div></template>
+                        </el-table>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="能力类型" width="100">
+                    <template #default="{ row }">
+                      <span :class="['type-tag', row.capType === 'prop' ? 'type-prop' : row.capType === 'svc' ? 'type-svc' : 'type-evt']">{{ capTypeLabel(row.capType) }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="能力项名称" min-width="200">
+                    <template #default="{ row }"><span class="cell-item-name">{{ row.name }}</span></template>
+                  </el-table-column>
+                  <el-table-column label="能力项 ID (Identifier)" min-width="220">
+                    <template #default="{ row }"><code class="cell-id">{{ row.identifier }}</code></template>
+                  </el-table-column>
+                  <el-table-column label="参数数量" width="120" align="center">
+                    <template #default="{ row }">
+                      <span class="inline-block px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-mono text-[11px]">{{ row.paramCount }} 个参数</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="操作" width="180" align="right">
+                    <template #default="{ row }">
+                      <div class="row-actions">
+                        <button class="link-action" @click="openCustomCapCreate(row)">添加参数</button>
+                        <span class="text-slate-200">|</span>
+                        <button class="link-danger" @click="removeCustomCapItem(row)">移除</button>
+                      </div>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+
+              <div v-else class="border-2 border-dashed border-slate-200 rounded-lg p-8 sm:p-12 text-center bg-slate-50/50">
+                <div class="w-12 h-12 mx-auto rounded-full bg-slate-100 border border-slate-200 text-slate-400 flex items-center justify-center mb-3">
+                  <svg class="w-6 h-6 stroke-slate-500" fill="none" viewBox="0 0 24 24">
+                    <rect height="16" rx="2" stroke-width="1.8" width="16" x="4" y="4" /><rect height="6" stroke-width="1.8" width="6" x="9" y="9" />
+                    <line stroke-linecap="round" stroke-width="1.8" x1="9" x2="9" y1="1" y2="4" /><line stroke-linecap="round" stroke-width="1.8" x1="15" x2="15" y1="1" y2="4" />
+                    <line stroke-linecap="round" stroke-width="1.8" x1="9" x2="9" y1="20" y2="23" /><line stroke-linecap="round" stroke-width="1.8" x1="15" x2="15" y1="20" y2="23" />
+                    <line stroke-linecap="round" stroke-width="1.8" x1="20" x2="23" y1="9" y2="9" /><line stroke-linecap="round" stroke-width="1.8" x1="20" x2="23" y1="14" y2="14" />
+                    <line stroke-linecap="round" stroke-width="1.8" x1="1" x2="4" y1="9" y2="9" /><line stroke-linecap="round" stroke-width="1.8" x1="1" x2="4" y1="14" y2="14" />
+                  </svg>
+                </div>
+                <h4 class="text-xs font-semibold text-slate-800">暂无自定义能力项</h4>
+                <p class="text-xs text-slate-500 max-w-sm mx-auto mt-1 leading-relaxed">
+                  当平台标准物模型无法满足「{{ productCategory || '该产品' }}」专属业务时，可在此进行自主扩展。
+                </p>
+                <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
+                  <button class="inline-flex items-center space-x-1 px-3 py-1.5 rounded text-xs font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 shadow-sm transition-all" @click="openCapabilityDialog('custom')">
+                    <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /></svg>
+                    <span>从能力模板库导入</span>
+                  </button>
+                  <button class="inline-flex items-center space-x-1 px-3 py-1.5 rounded text-xs font-medium text-sky-600 bg-sky-50 border border-sky-200 hover:bg-sky-100 transition-colors" @click="openAddCustomCapItem">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /></svg>
+                    <span>立即新建自定义属性</span>
+                  </button>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- APP 控制面板预览（右侧展开） -->
+          <transition name="panel-slide">
+            <div v-if="showPhoneDemo" class="device-cap-side">
+              <AppPhonePreview />
+            </div>
+          </transition>
+        </div>
+      </template>
+

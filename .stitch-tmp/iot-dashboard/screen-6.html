@@ -1,0 +1,361 @@
+<!DOCTYPE html><html class="h-full" lang="zh-CN" style="width: 1280px; height: 1024px; overflow: hidden; position: relative;"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>IoT 智能物联网中台 - 级联菜单交互设计</title>
+<!-- Tailwind CSS CDN with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- BEGIN: Custom Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#0284c7',
+              600: '#0ea5e9',
+              primary: '#0ea5e9',
+              dark: '#0a0e17'
+            },
+            navy: {
+              900: '#0b1120',
+              950: '#070b14',
+            }
+          },
+          boxShadow: {
+            'popover': '0 20px 40px -8px rgba(15, 23, 42, 0.16), 0 8px 16px -4px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.06)',
+            'glow-cyan': '0 0 12px 2px rgba(14, 165, 233, 0.35)',
+          }
+        }
+      }
+    }
+  </script>
+<!-- END: Custom Tailwind Configuration -->
+<!-- BEGIN: Custom Base Styles -->
+<style data-purpose="typography-and-effects">
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+  </style>
+<!-- END: Custom Base Styles -->
+<link data-snapdom="injected-import" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"></head>
+<body class="h-full bg-[#f8fafc] text-slate-800 antialiased overflow-hidden flex flex-col">
+<!-- BEGIN: TopHeader -->
+<header class="h-14 bg-white border-b border-slate-200/90 px-4 flex items-center justify-between shrink-0 select-none z-30" data-purpose="global-header">
+<!-- Breadcrumb & Workspace Info -->
+<div class="flex items-center space-x-3 text-xs md:text-sm pl-16">
+<div class="flex items-center space-x-2 text-slate-400">
+<span class="hover:text-slate-600 cursor-pointer font-medium">IoT Console</span>
+<svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg>
+<span class="text-slate-500 font-medium hover:text-slate-700 cursor-pointer">物模型管理中心 (TSL)</span>
+<svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg>
+<span class="text-slate-900 font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-800">标准能力库 (Registry)</span>
+</div>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/80">
+<span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        Prod · US-East-1
+      </span>
+</div>
+<!-- Search shortcut & Quick tools -->
+<div class="flex items-center space-x-3">
+<!-- Global Command Search Bar -->
+<div class="relative w-64 lg:w-80">
+<div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<input class="w-full pl-9 pr-12 py-1.5 text-xs bg-slate-100 hover:bg-slate-200/70 cursor-pointer text-slate-600 rounded-lg border-0 transition-colors focus:ring-1 focus:ring-sky-500" placeholder="快速检索物模型参数、网关、属性..." readonly="" type="text">
+<div class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
+<kbd class="text-[10px] bg-white border border-slate-300 text-slate-400 font-mono px-1.5 py-0.5 rounded shadow-2xs">⌘K</kbd>
+</div>
+</div>
+<!-- Action Icons -->
+<div class="flex items-center space-x-1 border-l border-slate-200 pl-3">
+<button class="relative p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors" title="通知消息">
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white"></span>
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors" title="开发文档">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<!-- User Profile Badge -->
+<div class="flex items-center space-x-2.5 border-l border-slate-200 pl-3">
+<div class="w-7 h-7 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white shadow-xs">
+          A
+        </div>
+<div class="hidden sm:block text-left text-xs leading-tight">
+<div class="font-medium text-slate-800">EdgeCloud.org</div>
+<div class="text-[10px] text-slate-400">超级管理员</div>
+</div>
+</div>
+</div>
+</header>
+<!-- END: TopHeader -->
+<!-- BEGIN: MainContentWrapper -->
+<div class="relative flex-1 flex overflow-hidden">
+<!-- BEGIN: PrimaryIconRail (Leftmost Dark Navigation) -->
+<!-- Matches exact visual styling of https://lh3.googleusercontent.com/aida-public/AB6AXuAlqtgjp2cY-TS3cdpbdFT0yDJZzQ6QN4paJqdpy4MAJVpIVm-2DLpcMTVlzjsJ7taAXxGTmAOcAFiqGaNHiqH7b_hXuaEO1QC3vYPRkckvBbCb4_BqeaUOZ3DnI8zWIPIEOBP7uwxDzb7vFJCk67uWkASgOSUsFRCAkUHBOb3Oda1vDjCGvqUhQegasRxLpNOCpJBwRiXRTunZ-Of2dsqzOe9ZoW67DZZEnYk4v7wkYiCaOVTzkvc6UoMqdDCEYOabOR8 -->
+<aside class="w-[62px] bg-[#080d19] border-r border-[#151d2f] flex flex-col items-center py-3.5 z-40 select-none justify-between shrink-0 shadow-xl" data-purpose="primary-icon-rail">
+<!-- Top Section: App Logo + Navigation Icons -->
+<div class="w-full flex flex-col items-center space-y-5">
+<!-- Brand Logo with gradient rounded square inspired by Image 4 -->
+<a class="group relative w-10 h-10 rounded-xl bg-gradient-to-b from-[#38bdf8] via-[#2563eb] to-[#4f46e5] flex items-center justify-center shadow-md shadow-sky-500/20 hover:scale-105 transition-transform" href="#" title="IoT 智能架构工作台">
+<svg class="w-5 h-5 text-white stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="m21 16-9 5-9-5V8l9-5 9 5v8Z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M12 3v18" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M3 8l18 8" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M21 8l-18 8" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="absolute left-full ml-3 px-2 py-1 bg-slate-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">中枢门户</span>
+</a>
+<!-- Divider line -->
+<div class="w-7 h-[1px] bg-slate-800/80 my-1"></div>
+<!-- Rail Navigation Icons Stack -->
+<nav class="w-full flex flex-col items-center space-y-2" data-purpose="rail-menu-items">
+<!-- 1. 工作台 (Grid / Overview) -->
+<button aria-label="工作台" class="group relative w-11 h-11 flex items-center justify-center rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-150">
+<svg class="w-[20px] h-[20px] stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<rect height="7" rx="1.5" width="7" x="3" y="3"></rect>
+<rect height="7" rx="1.5" width="7" x="14" y="3"></rect>
+<rect height="7" rx="1.5" width="7" x="14" y="14"></rect>
+<rect height="7" rx="1.5" width="7" x="3" y="14"></rect>
+</svg>
+<span class="absolute left-full ml-3 px-2 py-1 bg-slate-900 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">总览工作台</span>
+</button>
+<!-- 2. 芯片 / 硬件设备 (Microchip) -->
+<button aria-label="智能设备" class="group relative w-11 h-11 flex items-center justify-center rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-150">
+<svg class="w-[20px] h-[20px] stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<rect height="16" rx="2" width="16" x="4" y="4"></rect>
+<rect height="6" width="6" x="9" y="9"></rect>
+<path d="M15 2v2M9 2v2M15 20v2M9 20v2M20 15h2M20 9h2M2 15h2M2 9h2"></path>
+</svg>
+<span class="absolute left-full ml-3 px-2 py-1 bg-slate-900 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">设备实例与接入</span>
+</button>
+<!-- 3. 烧瓶 / 物模型实验台 (ACTIVE HOVERED ITEM - Triggering the Cascade Flyout) -->
+<div class="relative w-full flex justify-center">
+<button aria-label="物模型与能力中心" class="relative w-11 h-11 flex items-center justify-center rounded-xl bg-[#03203c] text-[#38bdf8] border border-[#0ea5e9]/50 shadow-glow-cyan transition-all duration-150 group">
+<!-- Flask Icon as in image snapshot -->
+<svg class="w-[21px] h-[21px] stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M10 2v5.5a2 2 0 0 1-.5 1.4L4.2 15.6A4 4 0 0 0 7.3 22h9.4a4 4 0 0 0 3.1-6.4l-5.3-6.7a2 2 0 0 1-.5-1.4V2M8 2h8M6.5 16h11" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<!-- Small pointer arrow indicator bridging to the flyout popover -->
+<div class="absolute -right-[7px] top-1/2 -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-r-[6px] border-r-white z-50"></div>
+</button>
+</div>
+<!-- 4. 闪电 (Energy / Automation Rules) -->
+<button aria-label="规则引擎" class="group relative w-11 h-11 flex items-center justify-center rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-150">
+<svg class="w-[20px] h-[20px] stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="absolute left-full ml-3 px-2 py-1 bg-slate-900 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">联动规则流</span>
+</button>
+<!-- 5. 固件上载 / OTA (Upload Tray) -->
+<button aria-label="OTA 升级" class="group relative w-11 h-11 flex items-center justify-center rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-150">
+<svg class="w-[20px] h-[20px] stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke-linecap="round" stroke-linejoin="round"></path>
+<polyline points="17 8 12 3 7 8"></polyline>
+<line x1="12" x2="12" y1="3" y2="15"></line>
+</svg>
+<span class="absolute left-full ml-3 px-2 py-1 bg-slate-900 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">OTA 固件升级</span>
+</button>
+<!-- 6. 安全盾牌 (Security) -->
+<button aria-label="安全凭证" class="group relative w-11 h-11 flex items-center justify-center rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-150">
+<svg class="w-[20px] h-[20px] stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="absolute left-full ml-3 px-2 py-1 bg-slate-900 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">安全认证 &amp; X.509</span>
+</button>
+<!-- 7. 数据分析 (Bar Chart / Metric) -->
+<button aria-label="遥测大盘" class="group relative w-11 h-11 flex items-center justify-center rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-150">
+<svg class="w-[20px] h-[20px] stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<rect height="18" rx="2" width="18" x="3" y="3"></rect>
+<path d="M7 16v-4M12 16v-8M17 16v-6"></path>
+</svg>
+<span class="absolute left-full ml-3 px-2 py-1 bg-slate-900 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">监控指标与时序</span>
+</button>
+</nav>
+</div>
+<!-- Bottom System Icons -->
+<div class="w-full flex flex-col items-center space-y-3 pt-4 border-t border-slate-800/80">
+<!-- System Configuration -->
+<button class="p-2 text-slate-500 hover:text-slate-200 transition-colors rounded-lg hover:bg-slate-800/50" title="全局设置">
+<svg class="w-5 h-5 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="3"></circle>
+<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+</svg>
+</button>
+<!-- Broker Health indicator dot -->
+<div class="flex items-center justify-center p-1" title="MQTT Broker: 健康连接">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-500/20"></span>
+</div>
+</div>
+</aside>
+<!-- END: PrimaryIconRail -->
+<!-- BEGIN: CascadingFlyoutOverlay (The Core Interaction Focus) -->
+<!-- Positioned directly adjacent to the rail, aligned with the hovered 'Lab / Flask' item -->
+<div class="absolute left-[62px] top-24 z-50 flex bg-white border border-slate-200 rounded-lg shadow-xl overflow-hidden text-xs select-none" data-purpose="cascading-flyout-container"><div class="w-44 bg-slate-50 border-r border-slate-200/80 py-1.5 flex flex-col"><div class="px-3 py-1.5 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">TSL 模块中心</div><nav class="px-1.5 space-y-0.5"><button class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-md font-medium text-sky-700 bg-white border border-slate-200/80 shadow-2xs text-left"><div class="flex items-center space-x-2"><span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span><span class="">物模型定义</span></div><svg class="w-3.5 h-3.5 text-sky-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg></button><button class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-md font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-200/50 transition-colors text-left"><div class="flex items-center space-x-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span><span class="">数据流转与编排</span></div></button><button class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-md font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-200/50 transition-colors text-left"><div class="flex items-center space-x-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span><span class="">设备影子映射</span></div></button><button class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-md font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-200/50 transition-colors text-left"><div class="flex items-center space-x-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span><span class="">协议转换插件</span></div></button><button class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-md font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-200/50 transition-colors text-left"><div class="flex items-center space-x-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span><span class="">在线虚拟仿真器</span></div></button></nav></div><div class="w-56 bg-white py-1.5 flex flex-col"><div class="px-3 py-1.5 flex items-center justify-between text-[10px] font-semibold text-slate-400 border-b border-slate-100"><span class="uppercase tracking-wider">功能菜单</span><span class="text-[10px] text-slate-400 font-normal">物模型定义</span></div><nav class="p-1.5 space-y-0.5"><a class="flex items-center justify-between px-2.5 py-1.5 rounded-md font-medium bg-sky-50 text-sky-700 transition-colors" href="#"><div class="flex items-center space-x-2"><span class="">能力库 (Registry)</span></div><span class="px-1.5 py-0.2 rounded-full text-[10px] bg-sky-100 text-sky-700 font-mono">14</span></a><a class="flex items-center justify-between px-2.5 py-1.5 rounded-md font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors" href="#"><div class="flex items-center space-x-2"><span class="">模块分类 (Categories)</span></div><span class="text-[10px] text-slate-400 font-mono">8</span></a><a class="flex items-center justify-between px-2.5 py-1.5 rounded-md font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors" href="#"><div class="flex items-center space-x-2"><span class="">规范模板 (Specifications)</span></div></a><a class="flex items-center justify-between px-2.5 py-1.5 rounded-md font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors" href="#"><div class="flex items-center space-x-2"><span class="">编解码脚本 (Scripts)</span></div></a></nav></div></div>
+<!-- END: CascadingFlyoutOverlay -->
+<!-- BEGIN: MainWorkspaceBackground (Underlying Real Application Context) -->
+<!-- Represents the loaded '能力库 (Registry)' page in the background with subtle soft blur -->
+<main class="flex-1 bg-[#f8fafc] flex flex-col overflow-y-auto" data-purpose="workspace-underlay">
+<!-- Filter Bar -->
+<div class="bg-white border-b border-slate-200/80 px-8 py-4">
+<div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+<div>
+<h1 class="text-xl font-bold text-slate-900 tracking-tight flex items-center space-x-2">
+<span class="">标准物模型能力库</span>
+<span class="text-xs bg-sky-100 text-sky-800 font-semibold px-2.5 py-0.5 rounded-full">已发布 14 个项</span>
+</h1>
+<p class="text-xs text-slate-500 mt-1">定义设备在云端数字化镜像的功能集合（属性 Properties、服务 Services、事件 Events）</p>
+</div>
+<!-- Workspace Operations -->
+<div class="flex items-center space-x-2">
+<button class="px-3 py-1.5 bg-white border border-slate-300 text-xs font-medium text-slate-700 rounded-lg hover:bg-slate-50 shadow-2xs inline-flex items-center space-x-1.5">
+<svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
+<span class="">导出 JSON Schema</span>
+</button>
+<button class="px-3.5 py-1.5 bg-sky-600 hover:bg-sky-500 text-xs font-medium text-white rounded-lg shadow-sm inline-flex items-center space-x-1.5">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
+<span class="">新增功能能力</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Functional Data Content Section -->
+<div class="p-8 max-w-7xl mx-auto w-full space-y-4">
+<!-- Search & Metric Filter Tabs -->
+<div class="flex items-center justify-between bg-white p-3 rounded-xl border border-slate-200/80 shadow-2xs">
+<div class="flex items-center space-x-1">
+<button class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-900 text-white">全部能力 (14)</button>
+<button class="px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg">属性 (8)</button>
+<button class="px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg">服务调用 (4)</button>
+<button class="px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg">事件告警 (2)</button>
+</div>
+<div class="text-xs text-slate-400 font-mono">
+            TSL Identifier: <span class="text-slate-700 font-semibold">iot.tsl.smart_inverter_v3</span>
+</div>
+</div>
+<!-- Capability Items Data Table -->
+<div class="bg-white rounded-xl border border-slate-200/80 shadow-2xs overflow-hidden">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-medium">
+<th class="py-3 px-4">能力名称 / 标识符</th>
+<th class="py-3 px-4">类型</th>
+<th class="py-3 px-4">数据类型</th>
+<th class="py-3 px-4">数据范围 / 单元</th>
+<th class="py-3 px-4">读写权限</th>
+<th class="py-3 px-4">最后更新</th>
+<th class="py-3 px-4 text-right">操作</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 text-slate-700 font-normal">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50/80 transition-colors">
+<td class="py-3 px-4">
+<div class="font-semibold text-slate-900">温度传感器数值 (temperature)</div>
+<div class="text-[11px] text-slate-400 font-mono">env_current_temp</div>
+</td>
+<td class="py-3 px-4">
+<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sky-50 text-sky-700 border border-sky-200">属性</span>
+</td>
+<td class="py-3 px-4 font-mono text-slate-600">Float (浮点型)</td>
+<td class="py-3 px-4 font-mono">-40.0 ~ 125.0 ℃</td>
+<td class="py-3 px-4">
+<span class="px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-600">只读 (R)</span>
+</td>
+<td class="py-3 px-4 text-slate-400">10 分钟前</td>
+<td class="py-3 px-4 text-right">
+<button class="text-sky-600 hover:text-sky-800 font-medium">编辑</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50/80 transition-colors">
+<td class="py-3 px-4">
+<div class="font-semibold text-slate-900">逆变器工作开关 (power_switch)</div>
+<div class="text-[11px] text-slate-400 font-mono">ctrl_inverter_power</div>
+</td>
+<td class="py-3 px-4">
+<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sky-50 text-sky-700 border border-sky-200">属性</span>
+</td>
+<td class="py-3 px-4 font-mono text-slate-600">Boolean (布尔值)</td>
+<td class="py-3 px-4 font-mono">0: 关 / 1: 开</td>
+<td class="py-3 px-4">
+<span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800">读写 (R/W)</span>
+</td>
+<td class="py-3 px-4 text-slate-400">昨天 16:42</td>
+<td class="py-3 px-4 text-right">
+<button class="text-sky-600 hover:text-sky-800 font-medium">编辑</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50/80 transition-colors">
+<td class="py-3 px-4">
+<div class="font-semibold text-slate-900">执行远程复位重启 (reboot_system)</div>
+<div class="text-[11px] text-slate-400 font-mono">rpc_reset_device</div>
+</td>
+<td class="py-3 px-4">
+<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">服务</span>
+</td>
+<td class="py-3 px-4 font-mono text-slate-600">Async RPC</td>
+<td class="py-3 px-4 text-slate-400">入参: timeout(int)</td>
+<td class="py-3 px-4">
+<span class="px-1.5 py-0.5 rounded text-[10px] bg-amber-100 text-amber-800">仅写执行</span>
+</td>
+<td class="py-3 px-4 text-slate-400">2024-05-18</td>
+<td class="py-3 px-4 text-right">
+<button class="text-sky-600 hover:text-sky-800 font-medium">调试</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50/80 transition-colors">
+<td class="py-3 px-4">
+<div class="font-semibold text-slate-900">电压超限过载报警 (over_voltage_alarm)</div>
+<div class="text-[11px] text-slate-400 font-mono">evt_voltage_surge</div>
+</td>
+<td class="py-3 px-4">
+<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">事件告警</span>
+</td>
+<td class="py-3 px-4 font-mono text-slate-600">Event (结构体)</td>
+<td class="py-3 px-4 font-mono text-rose-600 font-medium">&gt; 250.0 V</td>
+<td class="py-3 px-4">
+<span class="px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-600">上报</span>
+</td>
+<td class="py-3 px-4 text-slate-400">2024-05-12</td>
+<td class="py-3 px-4 text-right">
+<button class="text-sky-600 hover:text-sky-800 font-medium">配置</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- END: MainWorkspaceBackground -->
+</div>
+<!-- END: MainContentWrapper -->
+
+
+<div id="snapdom-sandbox" data-snapdom-sandbox="true" aria-hidden="true" style="position: absolute; left: -9999px; top: -9999px; width: 0px; height: 0px; overflow: hidden;"></div></body></html>

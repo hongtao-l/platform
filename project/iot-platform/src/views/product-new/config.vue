@@ -24,9 +24,10 @@
       </div>
     </div>
 
-    <!-- 步骤条（new：只保留 功能定义与配置 / 平台服务 两步） -->
-    <el-steps :active="currentStep === 3 ? 1 : 0" simple class="steps-bar">
+    <!-- 步骤条：功能定义与配置 → APP配置 → 平台服务 -->
+    <el-steps :active="currentStep === 3 ? 2 : currentStep === 2 ? 1 : 0" simple class="steps-bar">
       <el-step title="功能定义与配置" @click="currentStep = 0" />
+      <el-step title="APP配置" @click="currentStep = 2" />
       <el-step title="平台服务" @click="currentStep = 3" />
     </el-steps>
 
@@ -184,6 +185,158 @@
 
       <!-- 底部悬浮操作条 -->
       <div class="step-float-bar">
+        <el-button type="primary" class="w-160" @click="currentStep = 2">
+          <el-icon><Check /></el-icon>保存,下一步
+        </el-button>
+      </div>
+    </template>
+
+    <!-- ===== 步骤2: APP配置 ===== -->
+    <template v-if="currentStep === 2">
+      <div class="step-content-card">
+        <div class="app-config-form">
+          <div class="app-config-item">
+            <span class="app-config-label">分辨率显示模式</span>
+            <div class="app-config-col">
+              <el-radio-group v-model="appConfig.resolutionDisplayMode">
+                <el-radio value="friendly">通俗标识</el-radio>
+                <el-radio value="pixel">像素规格</el-radio>
+              </el-radio-group>
+              <span class="app-config-desc">{{ resolutionDisplayDesc }}</span>
+            </div>
+          </div>
+
+          <!-- 插值设置 -->
+          <div class="app-config-item">
+            <span class="app-config-label">插值设置</span>
+            <div class="app-config-col" style="gap:10px">
+              <div class="app-config-inline">
+                <span class="app-config-sub" style="margin-left:0">图片插值:</span>
+                <el-radio-group v-model="appConfig.imageInterp" :disabled="appConfig.videoInterp">
+                  <el-radio :value="true">开启</el-radio>
+                  <el-radio :value="false">关闭</el-radio>
+                </el-radio-group>
+                <span class="app-config-sub">尺寸:</span>
+                <el-input v-model="appConfig.imageHeight" placeholder="高度" style="width:90px" :disabled="!appConfig.imageInterp" />
+                <span class="app-config-hint">×</span>
+                <el-input v-model="appConfig.imageWidth" placeholder="宽度" style="width:90px" :disabled="!appConfig.imageInterp" />
+                <span class="app-config-hint">px</span>
+              </div>
+              <div class="app-config-inline">
+                <span class="app-config-sub" style="margin-left:0">视频插值:</span>
+                <el-radio-group v-model="appConfig.videoInterp">
+                  <el-radio :value="true">开启</el-radio>
+                  <el-radio :value="false">关闭</el-radio>
+                </el-radio-group>
+                <span v-if="appConfig.videoInterp" class="app-config-warn">
+                  <el-icon><WarningFilled /></el-icon>视频插值开启时，图片插值将强制同步开启且不可关闭
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="app-config-item">
+            <span class="app-config-label">App 安全策略</span>
+            <div class="app-config-col" style="gap:10px">
+              <div class="app-config-inline">
+                <span class="app-config-sublabel">视频播放时长限制</span>
+                <el-radio-group v-model="appConfig.videoLimit">
+                  <el-radio value="limited">开启限制</el-radio>
+                  <el-radio value="unlimited">无限制</el-radio>
+                </el-radio-group>
+                <el-input-number
+                  v-model="appConfig.videoLimitSeconds"
+                  :min="0" size="small" placeholder="时长"
+                  style="width:140px"
+                  :disabled="appConfig.videoLimit !== 'limited'"
+                />
+                <span class="app-config-hint">秒</span>
+              </div>
+              <!-- 只有「开启限制」才需要配置预警 -->
+              <template v-if="appConfig.videoLimit === 'limited'">
+                <div class="app-config-inline">
+                  <span class="app-config-sublabel">预警开关</span>
+                  <el-radio-group v-model="appConfig.warningSwitch">
+                    <el-radio :value="true">开启</el-radio>
+                    <el-radio :value="false">关闭</el-radio>
+                  </el-radio-group>
+                </div>
+                <span class="app-config-desc" style="padding-left:128px">开启后，App 在持续播放一定时间后会弹窗询问用户是否继续，防止无效流量消耗。</span>
+                <!-- 预警开关打开后才需要填预警时长 -->
+                <div v-if="appConfig.warningSwitch" class="app-config-inline">
+                  <span class="app-config-sublabel"><span style="color:#F56C6C">*</span> 预警时长</span>
+                  <el-input-number v-model="appConfig.warningSeconds" :min="0" size="small" style="width:140px" />
+                  <span class="app-config-desc">播放剩余 {{ appConfig.warningSeconds }} 秒时触发预警</span>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <div class="app-config-item">
+            <span class="app-config-label">假三目设置</span>
+            <div class="app-config-col">
+              <div class="app-config-inline">
+                <el-radio-group v-model="appConfig.fakeTriple">
+                  <el-radio value="on">开启</el-radio>
+                  <el-radio value="off">关闭</el-radio>
+                </el-radio-group>
+                <template v-if="appConfig.fakeTriple === 'on'">
+                  <span class="app-config-sub">原始流ID: 第</span>
+                  <el-input-number v-model="appConfig.fakeTripleStreamId" :min="1" size="small" style="width:100px" />
+                  <span class="app-config-sub" style="margin-left:0">个camera</span>
+                  <span class="app-config-sub">截取百分比:</span>
+                  <el-input-number v-model="appConfig.fakeTriplePercent" :min="1" :max="100" size="small" style="width:100px" />
+                  <span class="app-config-hint">%</span>
+                </template>
+              </div>
+              <span class="app-config-desc">用于多目产品在 App 端的混合流展示与裁剪逻辑配置。</span>
+            </div>
+          </div>
+
+          <div class="app-config-item">
+            <span class="app-config-label">灯控开关显示</span>
+            <div class="app-config-col">
+              <div class="app-config-inline">
+                <el-radio-group v-model="appConfig.lightSwitch">
+                  <el-radio value="hide">不显示</el-radio>
+                  <el-radio value="show">显示</el-radio>
+                </el-radio-group>
+                <span class="app-config-sub">灯光控制时长:</span>
+                <el-input-number v-model="appConfig.lightDuration" :min="0" :max="86400" :step="100" size="small" style="width:150px" />
+              </div>
+              <span class="app-config-desc">App首页是否显示灯控开关；灯光控制时长取值 0~86400 秒，默认 43200</span>
+            </div>
+          </div>
+
+          <div class="app-config-item">
+            <span class="app-config-label">低电量保护策略</span>
+            <div class="app-config-panel" style="flex:1">
+              <div class="app-config-inline">
+                <span class="app-config-sub" style="margin-left:0">启用</span>
+                <el-switch v-model="appConfig.lowBatteryEnabled" size="small" />
+              </div>
+              <div v-if="appConfig.lowBatteryEnabled" style="margin-top:12px">
+                <div class="app-config-inline">
+                  <span class="app-config-sub" style="margin-left:0">低电量阈值</span>
+                  <el-input-number v-model="appConfig.lowBatteryThreshold" :min="1" :max="100" size="small" style="width:110px" />
+                  <span class="app-config-hint">%</span>
+                </div>
+                <div class="app-config-desc" style="margin-top:6px">低于此电量将禁用所选功能</div>
+                <div class="app-config-sub" style="margin:12px 0 8px 0">禁用功能</div>
+                <el-checkbox-group v-model="appConfig.disabledFeatures">
+                  <el-checkbox value="ptz">PTZ控制</el-checkbox>
+                  <el-checkbox value="talk">语音对讲</el-checkbox>
+                  <el-checkbox value="sos">一键呼叫</el-checkbox>
+                </el-checkbox-group>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="step-float-bar">
+        <el-button class="w-160" @click="currentStep = 0">上一步</el-button>
         <el-button type="primary" class="w-160" @click="currentStep = 3">
           <el-icon><Check /></el-icon>保存,下一步
         </el-button>
@@ -221,7 +374,7 @@
 
       <!-- 底部悬浮操作条 -->
       <div class="step-float-bar">
-        <el-button class="w-160" @click="currentStep = 0">上一步</el-button>
+        <el-button class="w-160" @click="currentStep = 2">上一步</el-button>
         <el-button type="primary" class="w-160" @click="savePlatformTab">
           <el-icon><Check /></el-icon>保存
         </el-button>
@@ -244,6 +397,19 @@
         <el-form-item label="能力项ID" required>
           <el-input v-model="customCapItemForm.identifier" placeholder="例如 MySettingItem" />
           <span class="form-hint">字母开头，仅允许字母、数字、下划线</span>
+        </el-form-item>
+        <!-- 建能力项时可直接把参数一起定义好 -->
+        <el-form-item label="参数">
+          <div style="width:100%">
+            <div v-if="!customDraftParams.length" class="draft-empty">暂未添加参数</div>
+            <div v-for="(p, i) in customDraftParams" :key="i" class="draft-param">
+              <span :class="['type-tag', 'type-' + p.capType]">{{ capTypeLabel(p.capType) }}</span>
+              <span class="draft-name">{{ p.name }}</span>
+              <span class="draft-id">{{ p.identifier }}</span>
+              <el-button size="small" text type="danger" @click="customDraftParams.splice(i, 1)">删除</el-button>
+            </div>
+            <el-button size="small" style="margin-top:8px" @click="openDraftCustomParam">+ 添加参数</el-button>
+          </div>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -587,9 +753,9 @@
       <el-form v-if="isAlgoCreateMode || algoCapEditRef" label-width="100px">
         <el-form-item label="能力类型">
           <div class="type-cards">
-            <div :class="['type-card', { active: (isAlgoCreateMode ? algoCapEditForm.capType : algoCapEditRef?.cap?.capType) === 'prop' }]" :style="isAlgoCreateMode ? 'cursor:pointer' : 'pointer-events:none'" @click="isAlgoCreateMode && onAlgoCapTypeChange('prop')">属性</div>
-            <div :class="['type-card', { active: (isAlgoCreateMode ? algoCapEditForm.capType : algoCapEditRef?.cap?.capType) === 'svc' }]" :style="isAlgoCreateMode ? 'cursor:pointer' : 'pointer-events:none'" @click="isAlgoCreateMode && onAlgoCapTypeChange('svc')">服务</div>
-            <div :class="['type-card', { active: (isAlgoCreateMode ? algoCapEditForm.capType : algoCapEditRef?.cap?.capType) === 'evt' }]" :style="isAlgoCreateMode ? 'cursor:pointer' : 'pointer-events:none'" @click="isAlgoCreateMode && onAlgoCapTypeChange('evt')">事件</div>
+            <div :class="['type-card', { active: (isAlgoCreateMode ? algoCapEditForm.capType : algoCapEditRef?.cap?.capType) === 'prop' }]" :style="canPickType ? 'cursor:pointer' : 'pointer-events:none'" @click="canPickType && onAlgoCapTypeChange('prop')">属性</div>
+            <div :class="['type-card', { active: (isAlgoCreateMode ? algoCapEditForm.capType : algoCapEditRef?.cap?.capType) === 'svc' }]" :style="canPickType ? 'cursor:pointer' : 'pointer-events:none'" @click="canPickType && onAlgoCapTypeChange('svc')">服务</div>
+            <div :class="['type-card', { active: (isAlgoCreateMode ? algoCapEditForm.capType : algoCapEditRef?.cap?.capType) === 'evt' }]" :style="canPickType ? 'cursor:pointer' : 'pointer-events:none'" @click="canPickType && onAlgoCapTypeChange('evt')">事件</div>
           </div>
         </el-form-item>
         <el-form-item label="能力名称">
@@ -781,9 +947,9 @@
         <template v-if="editCapType === 'evt'">
           <el-form-item label="事件类型" required>
             <div class="type-cards">
-              <div :class="['type-card', { active: algoCapEditForm.eventType === 'info' }]" :style="isAlgoCreateMode ? 'cursor:pointer' : 'pointer-events:none'" @click="isAlgoCreateMode && (algoCapEditForm.eventType = 'info')">信息 (Info)</div>
-              <div :class="['type-card', { active: algoCapEditForm.eventType === 'alarm' }]" :style="isAlgoCreateMode ? 'cursor:pointer' : 'pointer-events:none'" @click="isAlgoCreateMode && (algoCapEditForm.eventType = 'alarm')">告警 (Alarm)</div>
-              <div :class="['type-card', { active: algoCapEditForm.eventType === 'fault' }]" :style="isAlgoCreateMode ? 'cursor:pointer' : 'pointer-events:none'" @click="isAlgoCreateMode && (algoCapEditForm.eventType = 'fault')">故障 (Fault)</div>
+              <div :class="['type-card', { active: algoCapEditForm.eventType === 'info' }]" :style="canPickType ? 'cursor:pointer' : 'pointer-events:none'" @click="isAlgoCreateMode && (algoCapEditForm.eventType = 'info')">信息 (Info)</div>
+              <div :class="['type-card', { active: algoCapEditForm.eventType === 'alarm' }]" :style="canPickType ? 'cursor:pointer' : 'pointer-events:none'" @click="isAlgoCreateMode && (algoCapEditForm.eventType = 'alarm')">告警 (Alarm)</div>
+              <div :class="['type-card', { active: algoCapEditForm.eventType === 'fault' }]" :style="canPickType ? 'cursor:pointer' : 'pointer-events:none'" @click="isAlgoCreateMode && (algoCapEditForm.eventType = 'fault')">故障 (Fault)</div>
             </div>
           </el-form-item>
           <el-form-item label="输出参数">
@@ -968,9 +1134,9 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, nextTick } from 'vue'
+import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Plus, ArrowLeft, ArrowRight, Edit, Switch, Check, Setting, QuestionFilled, Delete, Search, InfoFilled, CircleCheck, Document, CopyDocument } from '@element-plus/icons-vue'
+import { Plus, ArrowLeft, ArrowRight, Edit, Switch, Check, Setting, QuestionFilled, Delete, Search, InfoFilled, CircleCheck, Document, CopyDocument, WarningFilled } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { listAlgorithms, listServices, allEvents, getCapabilitiesByIds, getModules, getAllCapabilities, getAlgorithmServiceId, getAlgorithmEvents, getAllAlgorithmServices } from '@/views/iot/thing-model-new/data'
 import { store, getCategoryLinkedCapIds, getCategoryLinkedLegacyCapIds } from '@/views/iot/thing-model-new/data'
@@ -1234,6 +1400,39 @@ function openMicCapDialog(type) {
 const standardCapList = ref([])
 const customCapList = ref([])
 
+// ===== APP配置（继续开发第 2 步）=====
+const appConfig = reactive({
+  resolutionDisplayMode: 'friendly', // friendly=通俗标识(超清/高清) / pixel=像素规格(1080P/2K/4K)
+  // 插值设置
+  imageInterp: true,
+  imageHeight: '1080',
+  imageWidth: '1920',
+  videoInterp: true,
+  // 其他
+  videoLimit: 'unlimited',        // limited=开启限制 / unlimited=无限制
+  videoLimitSeconds: 0,           // 视频播放时长限制(秒)
+  warningSwitch: true,            // 播放预警开关
+  warningSeconds: 0,              // 播放剩余多少秒时触发预警
+  fakeTriple: 'on',               // on / off
+  fakeTripleStreamId: 1,
+  fakeTriplePercent: 100,
+  lightSwitch: 'show',            // hide / show
+  lightDuration: 43200,           // 0~86400 秒
+  lowBatteryEnabled: false,
+  lowBatteryThreshold: 20,
+  disabledFeatures: []
+})
+
+// 视频插值开启时，图片插值强制同步开启且不可关闭
+watch(() => appConfig.videoInterp, (v) => { if (v) appConfig.imageInterp = true })
+
+// 分辨率显示模式的说明文案
+const resolutionDisplayDesc = computed(() =>
+  appConfig.resolutionDisplayMode === 'pixel'
+    ? 'APP 端按设备实际像素规格显示，如「1080P」「2K」「4K」'
+    : 'APP 端按清晰度档位显示，如「超清」「高清」「标清」'
+)
+
 // ===== 自定义能力项（先定义能力项，再在它下面加参数）=====
 const customCapItems = ref([])
 const customCapItemDialogVisible = ref(false)
@@ -1293,10 +1492,31 @@ const customCapTree = computed(() =>
 )
 
 function openAddCustomCapItem() {
+  customDraftParams.value = []
   customCapItemForm.name = ''
   customCapItemForm.identifier = ''
   customCapItemForm.capType = 'prop'
   customCapItemDialogVisible.value = true
+}
+
+const customDraftParams = ref([])
+const customDraftMode = ref(false)
+// 参数类型跟随所属能力项时不可改
+const capTypeLocked = computed(() => !!(pendingCapItemId.value || customDraftMode.value))
+const canPickType = computed(() => isAlgoCreateMode.value && !capTypeLocked.value)
+
+function openDraftCustomParam() {
+  if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(customCapItemForm.identifier || '')) {
+    ElMessage.warning('请先填好能力项ID，再添加参数')
+    return
+  }
+  isAlgoCreateMode.value = true
+  algoCapEditRef.value = null
+  resetAlgoCapForm()
+  customDraftMode.value = true
+  pendingCapItemId.value = null
+  algoCapEditForm.capType = customCapItemForm.capType || 'prop'
+  algoCapEditVisible.value = true
 }
 
 function handleCustomCapItemConfirm() {
@@ -1312,8 +1532,14 @@ function handleCustomCapItemConfirm() {
     capType: customCapItemForm.capType,
     updateTime: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
   })
+  const newItem = customCapItems.value[customCapItems.value.length - 1]
+  const draftCount = customDraftParams.value.length
+  customDraftParams.value.forEach(dp => {
+    customCapList.value.push({ ...dp, capItemId: newItem.id })
+  })
+  customDraftParams.value = []
   customCapItemDialogVisible.value = false
-  ElMessage.success('能力项已创建')
+  ElMessage.success(draftCount ? '能力项已创建（含 ' + draftCount + ' 个参数）' : '能力项已创建')
 }
 
 function removeCustomCapItem(item) {
@@ -1501,6 +1727,7 @@ function onAlgoDataTypeChange() {
 // 在某个自定义能力项下添加参数
 function openCustomCapCreate(item) {
   if (!item) { ElMessage.warning('请先在能力项那一行点「添加参数」'); return }
+  customDraftMode.value = false
   isAlgoCreateMode.value = true
   algoCapEditRef.value = null
   resetAlgoCapForm()
@@ -1559,6 +1786,24 @@ function saveAlgoCapEdit() {
   if (isAlgoCreateMode.value) {
     if (!algoCapEditForm.name.trim()) { ElMessage.warning('请输入能力名称'); return }
     if (!algoCapEditForm.identifier.trim()) { ElMessage.warning('请输入能力标识'); return }
+    if (customDraftMode.value) {
+      if (customDraftParams.value.some(d => d.identifier === algoCapEditForm.identifier.trim())) {
+        ElMessage.warning('参数标识符重复，请更换'); return
+      }
+      customDraftParams.value.push({
+        id: Date.now() + Math.random(),
+        capType: algoCapEditForm.capType,
+        name: algoCapEditForm.name.trim(),
+        identifier: algoCapEditForm.identifier.trim(),
+        descr: algoCapEditForm.descr.trim(),
+        dataType: algoCapEditForm.dataType,
+        dataDef: buildDataDefFromForm()
+      })
+      customDraftMode.value = false
+      algoCapEditVisible.value = false
+      return
+    }
+
     const parent = customCapItems.value.find(x => x.id === pendingCapItemId.value)
     if (!parent) { ElMessage.warning('请从能力项的「添加参数」进入'); return }
     if (parent.capType !== algoCapEditForm.capType) {
@@ -2387,37 +2632,41 @@ onMounted(() => {
   padding: 13px 0;
   margin-bottom: 20px;
 
-  // 中间的 ">" 提示符：画在整条的正中（两个文案之间）
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 8px;
-    height: 8px;
-    border-top: 1px solid var(--el-text-color-placeholder, #a8abb2);
-    border-right: 1px solid var(--el-text-color-placeholder, #a8abb2);
-    transform: translate(-50%, -50%) rotate(45deg);
-    pointer-events: none;
-  }
+
 
   :deep(.el-steps) { display: flex; }
-  // 清掉 EP 自带的 13px 8% 内边距，让两个半区铺满整条
+  // 清掉 EP 自带的 13px 8% 内边距，让各步骤铺满整条
   :deep(.el-steps--simple) { padding: 0; background: transparent; }
 
-  // 每个步骤严格占一半，[图标 + 文案] 在自己那一半里居中。
+  // 每个步骤等分宽度（与步数无关），[图标 + 文案] 在自己那段里居中。
   // EP 默认 .el-step__main{flex-grow:1} + .el-step__arrow{flex-grow:1} 会把内容推向一端，
   // 这里把两者都收成内容宽，改由 .el-step 自身 justify-content:center 定位。
   // !important 用于压过 EP 可能打在 .el-step 上的行内 flex-basis。
   :deep(.el-step.is-simple) {
-    flex: 1 1 50% !important;
-    max-width: 50%;
+    flex: 1 1 0 !important;
+    max-width: none;
     min-width: 0;
     justify-content: center;
   }
   :deep(.el-step.is-simple .el-step__main) { flex-grow: 0; }
   :deep(.el-step.is-simple .el-step__title) { max-width: none; }
-  // EP 自带的箭头跟着第一步文案走，隐藏掉，改用上面 ::after 的那个居中箭头
+  // 步骤之间的 ">"：画在每个步骤的右边界，与步数无关
+  :deep(.el-step.is-simple:not(:last-of-type)) {
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      border-top: 1px solid var(--el-text-color-placeholder, #a8abb2);
+      border-right: 1px solid var(--el-text-color-placeholder, #a8abb2);
+      transform: translate(50%, -50%) rotate(45deg);
+      pointer-events: none;
+    }
+  }
+  // EP 自带的箭头跟着第一步文案走，隐藏掉，改由上面按步骤边界画的 ::after
   :deep(.el-step.is-simple .el-step__arrow) { display: none; }
 
   :deep(.el-step__title) {
@@ -2802,6 +3051,41 @@ onMounted(() => {
 
 // 穿梭框搜索栏
 .pkg-param-count { margin-left: 8px; font-size: 12px; color: var(--text-placeholder); }
+.draft-empty { font-size: 12px; color: var(--text-placeholder); padding: 4px 0; }
+.draft-param {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px; margin-bottom: 6px;
+  border: 1px solid var(--border-lighter, #e4e7ed);
+  border-radius: 6px;
+  .draft-name { font-size: 13px; color: var(--text-primary); }
+  .draft-id { font-size: 12px; color: var(--text-placeholder); font-family: monospace; }
+  :deep(.el-button) { margin-left: auto; }
+}
+
+// APP配置步骤
+.app-config-form { padding: 4px 24px; }
+.app-config-item {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-lighter, #e4e7ed);
+  &:last-child { border-bottom: none; }
+}
+.app-config-label { width: 120px; flex-shrink: 0; font-size: 14px; color: var(--text-primary); line-height: 32px; }
+.app-config-inline { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.app-config-col { display: flex; flex-direction: column; gap: 6px; }
+.app-config-desc { font-size: 12px; color: var(--text-placeholder); }
+.app-config-warn {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; color: #E6A23C;
+}
+.app-config-hint { font-size: 13px; color: var(--text-secondary); }
+.app-config-sub { font-size: 13px; color: var(--text-secondary); margin-left: 8px; }
+.app-config-sublabel { width: 120px; flex-shrink: 0; font-size: 13px; color: var(--text-primary); }
+.app-config-panel {
+  background: var(--bg-page, #f5f7fa);
+  border-radius: 6px;
+  padding: 12px 16px;
+}
 
 // 参数子表：内嵌面板
 .param-panel {

@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-slate-50" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>开发产品 - 物联网平台控制台</title>
+<!-- Tailwind CSS CDN with forms and container queries plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter & JetBrains Mono for clean developer typography -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+            },
+            slateRail: '#0f172a',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scrollbars">
+    /* Subtle custom scrollbars for professional industrial look */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+<style data-purpose="stepper-connectors">
+    /* Subtle dotted/solid wizard connectors */
+    .stepper-connector {
+      flex: 1 1 0%;
+      height: 2px;
+      background-color: #e2e8f0;
+      position: relative;
+      top: -1px;
+    }
+  </style>
+</head>
+<body class="h-full text-slate-800 antialiased font-sans flex flex-col overflow-hidden">
+<!-- BEGIN: TopHeader -->
+<header class="h-14 bg-white border-b border-slate-200 flex-shrink-0 flex items-center justify-between px-4 z-30">
+<!-- Left: Global Logo & Breadcrumbs -->
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-2.5 pr-4 border-r border-slate-200">
+<div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm shadow-blue-500/20">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewbox="0 0 24 24">
+<polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+<polyline points="2 17 12 22 22 17"></polyline>
+<polyline points="2 12 12 17 22 12"></polyline>
+</svg>
+</div>
+<span class="font-semibold text-sm tracking-tight text-slate-900">CloudIoT <span class="text-xs font-mono font-normal text-slate-500 px-1.5 py-0.5 bg-slate-100 rounded ml-1">OS</span></span>
+</div>
+<nav aria-label="Breadcrumb" class="hidden sm:flex items-center space-x-2 text-xs text-slate-500">
+<a class="hover:text-slate-800 transition-colors" href="#">首页</a>
+<span class="text-slate-300">/</span>
+<a class="hover:text-slate-800 transition-colors" href="#">产品管理</a>
+<span class="text-slate-300">/</span>
+<span class="text-slate-900 font-medium">开发产品</span>
+</nav>
+</div>
+<!-- Right: Global Utilities & Tenant Profile -->
+<div class="flex items-center space-x-3.5">
+<!-- Search Trigger Input -->
+<div class="relative hidden md:block w-52">
+<span class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-slate-400">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</span>
+<input class="w-full text-xs bg-slate-50 border-slate-200 rounded-md pl-8 pr-2.5 py-1.5 focus:bg-white focus:ring-1 focus:ring-blue-600 focus:border-blue-600 placeholder-slate-400" placeholder="全域搜索 Ctrl+K" type="text"/>
+</div>
+<!-- Quick Action Icons -->
+<button aria-label="帮助文档" class="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-md transition-colors" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="10" stroke-width="2"></circle>
+<path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<line stroke-linecap="round" stroke-width="2.5" x1="12" x2="12.01" y1="17" y2="17"></line>
+</svg>
+</button>
+<button aria-label="通知中心" class="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-md transition-colors relative" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white"></span>
+</button>
+<div class="h-4 w-px bg-slate-200"></div>
+<!-- Tenant & User Info -->
+<div class="flex items-center space-x-2 pl-1 cursor-pointer select-none">
+<div class="w-7 h-7 rounded-full bg-blue-600 text-white font-medium text-xs flex items-center justify-center font-mono ring-2 ring-blue-100">
+          AD
+        </div>
+<div class="hidden sm:block text-left text-xs leading-tight">
+<div class="font-medium text-slate-800 flex items-center">
+            IoT Console
+            <svg class="w-3 h-3 text-slate-400 ml-1" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="text-[11px] text-slate-400">我的空间 · 根组织</div>
+</div>
+</div>
+</div>
+</header>
+<!-- END: TopHeader -->
+<div class="flex flex-1 min-h-0 overflow-hidden">
+<!-- BEGIN: LeftPrimaryRail -->
+<!-- Minimalist dark primary icon rail for high-level module navigation -->
+<aside class="w-14 bg-slate-900 flex-shrink-0 flex flex-col items-center py-3.5 space-y-4 border-r border-slate-800">
+<button class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" title="控制台仪表盘">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<rect height="7" rx="1" stroke-width="2" width="7" x="3" y="3"></rect>
+<rect height="7" rx="1" stroke-width="2" width="7" x="14" y="3"></rect>
+<rect height="7" rx="1" stroke-width="2" width="7" x="14" y="14"></rect>
+<rect height="7" rx="1" stroke-width="2" width="7" x="3" y="14"></rect>
+</svg>
+</button>
+<button class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" title="设备接入与物模型">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="3" stroke-width="2"></circle>
+<path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<button class="w-9 h-9 rounded-lg flex items-center justify-center bg-blue-600 text-white shadow-md shadow-blue-500/30" title="产品开发中心 (当前)">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<button class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" title="OTA 固件升级">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<button class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" title="安全认证与凭证">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<button class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" title="数据统计与监控">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<line stroke-linecap="round" stroke-width="2" x1="18" x2="18" y1="20" y2="10"></line>
+<line stroke-linecap="round" stroke-width="2" x1="12" x2="12" y1="20" y2="4"></line>
+<line stroke-linecap="round" stroke-width="2" x1="6" x2="6" y1="20" y2="14"></line>
+</svg>
+</button>
+<div class="mt-auto w-full flex flex-col items-center pb-2">
+<button class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" title="系统设置">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<circle cx="12" cy="12" r="3" stroke-width="2"></circle>
+</svg>
+</button>
+</div>
+</aside>
+<!-- END: LeftPrimaryRail -->
+<!-- BEGIN: SecondarySubMenu -->
+<!-- Detailed tree/menu for Product Management submodule -->
+<aside class="w-60 bg-white border-r border-slate-200 flex-shrink-0 flex flex-col justify-between hidden md:flex">
+<div class="p-3.5 space-y-4">
+<!-- Module Header -->
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+<span class="font-semibold text-xs text-slate-900 tracking-wide">产品管理</span>
+<span class="text-[10px] uppercase font-bold text-blue-600 bg-blue-50 px-1 py-0.2 rounded border border-blue-200">NEW</span>
+</div>
+</div>
+<!-- Filter Search inside menu -->
+<div class="relative">
+<span class="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none text-slate-400">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-4-4m0 0a7 7 0 10-14 0 7 7 0 0014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</span>
+<input class="w-full text-xs bg-slate-50 border-slate-200 rounded pl-7 pr-2 py-1.5 focus:bg-white focus:ring-1 focus:ring-blue-600 focus:border-blue-600" placeholder="搜索产品..." type="text"/>
+</div>
+<!-- Primary Product Sub-navigation -->
+<nav class="space-y-1">
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded text-xs text-slate-600 hover:bg-slate-50 hover:text-slate-900" href="#">
+<span class="flex items-center space-x-2">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+<span>产品列表</span>
+</span>
+<span class="text-[11px] text-slate-400 font-mono">3</span>
+</a>
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-semibold text-blue-600 bg-blue-50/70 border border-blue-100" href="#">
+<span class="flex items-center space-x-2">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+<span>产品开发</span>
+</span>
+<span class="text-[11px] font-mono bg-blue-200 text-blue-800 px-1.5 rounded-full">13</span>
+</a>
+<a class="flex items-center justify-between px-2.5 py-1.5 rounded text-xs text-slate-600 hover:bg-slate-50 hover:text-slate-900" href="#">
+<span class="flex items-center space-x-2">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+<span>产品审核</span>
+</span>
+<span class="text-[11px] text-slate-400 font-mono">9</span>
+</a>
+</nav>
+<!-- Quick Filters -->
+<div class="pt-3 border-t border-slate-100">
+<div class="text-[11px] font-medium text-slate-400 tracking-wider mb-1.5 px-2">快捷筛选</div>
+<div class="space-y-0.5">
+<a class="flex items-center justify-between px-2 py-1 rounded text-xs text-slate-600 hover:bg-slate-50" href="#">
+<span class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-amber-400"></span>
+<span>开发中</span>
+</span>
+<span class="text-[11px] font-mono text-slate-400">13</span>
+</a>
+<a class="flex items-center justify-between px-2 py-1 rounded text-xs text-slate-600 hover:bg-slate-50" href="#">
+<span class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span>已发布</span>
+</span>
+<span class="text-[11px] font-mono text-slate-400">6</span>
+</a>
+<a class="flex items-center justify-between px-2 py-1 rounded text-xs text-slate-600 hover:bg-slate-50" href="#">
+<span class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-slate-400"></span>
+<span>引用产品</span>
+</span>
+<span class="text-[11px] font-mono text-slate-400">3</span>
+</a>
+</div>
+</div>
+<!-- Other System Modules -->
+<div class="pt-3 border-t border-slate-100">
+<div class="text-[11px] font-medium text-slate-400 tracking-wider mb-1.5 px-2">其它系统模块</div>
+<div class="space-y-1">
+<a class="flex items-center justify-between px-2 py-1 text-xs text-slate-600 hover:text-slate-900 group" href="#">
+<span class="flex items-center space-x-1.5">
+<svg class="w-3 h-3 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>物模型管理</span>
+</span>
+</a>
+<a class="flex items-center justify-between px-2 py-1 text-xs text-slate-600 hover:text-slate-900 group" href="#">
+<span class="flex items-center space-x-1.5">
+<svg class="w-3 h-3 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>套餐管理</span>
+</span>
+</a>
+<a class="flex items-center justify-between px-2 py-1 text-xs text-slate-600 hover:text-slate-900 group" href="#">
+<span class="flex items-center space-x-1.5">
+<svg class="w-3 h-3 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>运营管理</span>
+</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Bottom Status in sidebar -->
+<div class="p-3 border-t border-slate-100 bg-slate-50/50">
+<div class="flex items-center justify-between text-[11px] text-slate-400">
+<span>Product Center</span>
+<span class="font-mono">v3.18.2</span>
+</div>
+</div>
+</aside>
+<!-- END: SecondarySubMenu -->
+<!-- BEGIN: MainWorkflowContent -->
+<main class="flex-1 overflow-y-auto bg-slate-50 flex flex-col">
+<div class="p-6 max-w-7xl w-full mx-auto space-y-6 flex-1 pb-24">
+<!-- Top Navigation Bar / Back button & Title -->
+<div class="flex items-center space-x-3 text-sm">
+<button class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-md border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium shadow-sm transition-all hover:border-slate-300" type="button">
+<svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>返回列表</span>
+</button>
+<span class="h-4 w-px bg-slate-300"></span>
+<h1 class="text-base font-semibold text-slate-900 tracking-tight">开发产品</h1>
+</div>
+<!-- BEGIN: ProductMetadataCard -->
+<!-- Enhanced Product Card displaying key specifications with industrial clarity -->
+<div class="bg-white rounded-lg border border-slate-200 p-5 shadow-sm space-y-4">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center text-white shadow-sm shadow-blue-500/20 font-semibold text-lg">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-center space-x-2.5">
+<h2 class="text-lg font-bold text-slate-900">智能香薰机</h2>
+<button class="text-xs text-blue-600 hover:text-blue-700 font-medium inline-flex items-center space-x-1 hover:underline" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>编辑产品</span>
+</button>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200/80">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5 animate-pulse"></span>
+                    开发中
+                  </span>
+</div>
+<p class="text-xs text-slate-500 mt-0.5">支持超声波冷雾雾化、多色情境氛围灯联动及定时喷雾逻辑</p>
+</div>
+</div>
+<div class="flex items-center space-x-2 text-xs">
+<span class="text-slate-400">固件 SDK 版本:</span>
+<span class="font-mono font-medium px-2 py-0.5 bg-slate-100 rounded text-slate-700">v2.4.1-rc</span>
+</div>
+</div>
+<!-- Product Details Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-1">
+<div class="bg-slate-50/70 p-3 rounded border border-slate-100">
+<div class="text-[11px] font-medium text-slate-400">产品 ID (Product ID)</div>
+<div class="mt-1 flex items-center justify-between">
+<span class="font-mono text-xs font-semibold text-slate-800">AROMA_001</span>
+<button class="text-slate-400 hover:text-slate-700 transition-colors" title="复制 ID">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<rect height="13" rx="2" ry="2" stroke-width="2" width="13" x="9" y="9"></rect>
+<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</div>
+<div class="bg-slate-50/70 p-3 rounded border border-slate-100">
+<div class="text-[11px] font-medium text-slate-400">产品型号 (Product Model)</div>
+<div class="mt-1 font-mono text-xs font-semibold text-slate-800 truncate" title="TEST-MODEL-388537">
+                TEST-MODEL-388537
+              </div>
+</div>
+<div class="bg-slate-50/70 p-3 rounded border border-slate-100">
+<div class="text-[11px] font-medium text-slate-400">产品品类 (Category)</div>
+<div class="mt-1 text-xs font-semibold text-slate-800 flex items-center space-x-1 truncate">
+<span>环境电器 / 香薰机</span>
+</div>
+</div>
+<div class="bg-slate-50/70 p-3 rounded border border-slate-100">
+<div class="text-[11px] font-medium text-slate-400">通信协议 / 联网方式</div>
+<div class="mt-1 text-xs font-semibold text-slate-800 flex items-center space-x-1.5">
+<span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+<span>Wi-Fi + BLE 双模协议</span>
+</div>
+</div>
+</div>
+</div>
+<!-- END: ProductMetadataCard -->
+<!-- BEGIN: WizardStepper -->
+<!-- Clean linear horizontal workflow stepper -->
+<nav aria-label="Workflow Stepper" class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm">
+<ol class="flex items-center w-full">
+<!-- Step 1: Active -->
+<li class="flex items-center text-blue-600 space-x-3 flex-shrink-0">
+<span class="flex items-center justify-center w-6 h-6 rounded-full border-2 border-blue-600 bg-white font-mono text-xs font-bold text-blue-600">
+                1
+              </span>
+<div class="text-xs">
+<span class="font-semibold block">功能定义与配置</span>
+<span class="text-[10px] text-slate-400 font-normal">物模型能力配置 (4项就绪)</span>
+</div>
+</li>
+<!-- Connector 1 -->
+<div aria-hidden="true" class="stepper-connector mx-4"></div>
+<!-- Step 2: Next -->
+<li class="flex items-center text-slate-400 space-x-3 flex-shrink-0">
+<span class="flex items-center justify-center w-6 h-6 rounded-full border-2 border-slate-200 bg-white font-mono text-xs text-slate-400 font-medium">
+                2
+              </span>
+<div class="text-xs">
+<span class="font-medium text-slate-600 block">APP 控制面板配置</span>
+<span class="text-[10px] text-slate-400 font-normal">UI模版、多语言设定</span>
+</div>
+</li>
+<!-- Connector 2 -->
+<div aria-hidden="true" class="stepper-connector mx-4"></div>
+<!-- Step 3: Final -->
+<li class="flex items-center text-slate-400 space-x-3 flex-shrink-0">
+<span class="flex items-center justify-center w-6 h-6 rounded-full border-2 border-slate-200 bg-white font-mono text-xs text-slate-400 font-medium">
+                3
+              </span>
+<div class="text-xs">
+<span class="font-medium text-slate-600 block">平台服务 &amp; 发布</span>
+<span class="text-[10px] text-slate-400 font-normal">数据流转规则与固件联调</span>
+</div>
+</li>
+</ol>
+</nav>
+<!-- END: WizardStepper -->
+<!-- BEGIN: PlatformCapabilitiesSection -->
+<!-- Section A: Standard Platform Capabilities Table -->
+<section aria-labelledby="platform-cap-title" class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+<!-- Section Header Bar -->
+<div class="p-4 sm:px-6 sm:py-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white">
+<div class="flex items-center space-x-2">
+<h3 class="font-semibold text-sm text-slate-900" id="platform-cap-title">平台标准能力项</h3>
+<div class="group relative cursor-pointer text-slate-400 hover:text-slate-600">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="10" stroke-width="2"></circle>
+<path d="M12 16v-4m0-4h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:block w-64 p-2 bg-slate-900 text-slate-100 text-xs rounded shadow-lg z-20 pointer-events-none">
+                  由行业标准物模型库推荐的通用能力，可保证各类主流客户端及生态的即插即用互通性。
+                </div>
+</div>
+<span class="text-xs text-slate-400 ml-1 font-mono">(4)</span>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center space-x-2.5">
+<button class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-medium border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 transition-colors shadow-sm" type="button">
+<svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>查看 TSL (Schema)</span>
+</button>
+<button class="inline-flex items-center space-x-1 px-3 py-1.5 rounded text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-colors" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>添加平台能力项</span>
+</button>
+</div>
+</div>
+<!-- Notice Banner -->
+<div class="mx-4 sm:mx-6 my-3 p-3 bg-blue-50/70 border border-blue-100 rounded-md flex items-center justify-between text-xs text-blue-900">
+<div class="flex items-center space-x-2">
+<svg class="w-4 h-4 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="10" stroke-width="2"></circle>
+<line stroke-width="2" x1="12" x2="12" y1="8" y2="12"></line>
+<line stroke-width="2" x1="12" x2="12.01" y1="16" y2="16"></line>
+</svg>
+<span>平台与自定义能力项共同定义设备物模型，并将直接编译生成硬件固件头文件和手机 APP 控制面板，请根据模组真实管脚能力慎重配置。</span>
+</div>
+<a class="font-medium text-blue-700 hover:text-blue-800 hover:underline flex-shrink-0 ml-3" href="#">
+              查看物模型示例
+            </a>
+</div>
+<!-- Table Container -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="border-y border-slate-200 bg-slate-50/75 text-slate-500 font-medium">
+<th class="py-2.5 pl-4 sm:pl-6 w-10 text-center" scope="col">#</th>
+<th class="py-2.5 px-3 w-24" scope="col">能力类型</th>
+<th class="py-2.5 px-3" scope="col">能力项名称</th>
+<th class="py-2.5 px-3" scope="col">能力项 ID (Identifier)</th>
+<th class="py-2.5 px-3 w-28 text-center" scope="col">参数数量</th>
+<th class="py-2.5 px-3 w-36" scope="col">更新时间</th>
+<th class="py-2.5 pr-4 sm:pr-6 text-right w-28" scope="col">操作</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 text-slate-700">
+<!-- Row 1: 设备设置 -->
+<tr class="hover:bg-slate-50/80 transition-colors group">
+<td class="py-3 pl-4 sm:pl-6 text-center text-slate-400">
+<button class="p-1 hover:text-slate-800 rounded" title="展开参数预览" type="button">
+<svg class="w-3.5 h-3.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-sky-50 text-sky-700 border border-sky-200/80">
+                      属性
+                    </span>
+</td>
+<td class="py-3 px-3 font-medium text-slate-900">
+                    设备设置
+                  </td>
+<td class="py-3 px-3 font-mono text-slate-600">
+                    AromaDeviceItem
+                  </td>
+<td class="py-3 px-3 text-center">
+<span class="inline-block px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-mono text-[11px]">3 个参数</span>
+</td>
+<td class="py-3 px-3 text-slate-500 font-mono text-[11px]">
+                    2026-07-02 10:14
+                  </td>
+<td class="py-3 pr-4 sm:pr-6 text-right space-x-2">
+<button class="text-blue-600 hover:text-blue-800 font-medium" type="button">配置</button>
+<span class="text-slate-200">|</span>
+<button class="text-rose-600 hover:text-rose-700 font-medium" type="button">移除</button>
+</td>
+</tr>
+<!-- Row 2: 喷雾控制 -->
+<tr class="hover:bg-slate-50/80 transition-colors group">
+<td class="py-3 pl-4 sm:pl-6 text-center text-slate-400">
+<button class="p-1 hover:text-slate-800 rounded" title="展开参数预览" type="button">
+<svg class="w-3.5 h-3.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-sky-50 text-sky-700 border border-sky-200/80">
+                      属性
+                    </span>
+</td>
+<td class="py-3 px-3 font-medium text-slate-900">
+                    喷雾控制
+                  </td>
+<td class="py-3 px-3 font-mono text-slate-600">
+                    SprayControlItem
+                  </td>
+<td class="py-3 px-3 text-center">
+<span class="inline-block px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-mono text-[11px]">9 个参数</span>
+</td>
+<td class="py-3 px-3 text-slate-500 font-mono text-[11px]">
+                    2026-07-05 16:42
+                  </td>
+<td class="py-3 pr-4 sm:pr-6 text-right space-x-2">
+<button class="text-blue-600 hover:text-blue-800 font-medium" type="button">配置</button>
+<span class="text-slate-200">|</span>
+<button class="text-rose-600 hover:text-rose-700 font-medium" type="button">移除</button>
+</td>
+</tr>
+<!-- Row 3: 香薰机基础属性 -->
+<tr class="hover:bg-slate-50/80 transition-colors group">
+<td class="py-3 pl-4 sm:pl-6 text-center text-slate-400">
+<button class="p-1 hover:text-slate-800 rounded" title="展开参数预览" type="button">
+<svg class="w-3.5 h-3.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-sky-50 text-sky-700 border border-sky-200/80">
+                      属性
+                    </span>
+</td>
+<td class="py-3 px-3 font-medium text-slate-900">
+                    香薰机基础属性
+                  </td>
+<td class="py-3 px-3 font-mono text-slate-600">
+                    SprayProperty
+                  </td>
+<td class="py-3 px-3 text-center">
+<span class="inline-block px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-mono text-[11px]">5 个参数</span>
+</td>
+<td class="py-3 px-3 text-slate-500 font-mono text-[11px]">
+                    2026-07-08 09:12
+                  </td>
+<td class="py-3 pr-4 sm:pr-6 text-right space-x-2">
+<button class="text-blue-600 hover:text-blue-800 font-medium" type="button">配置</button>
+<span class="text-slate-200">|</span>
+<button class="text-rose-600 hover:text-rose-700 font-medium" type="button">移除</button>
+</td>
+</tr>
+<!-- Row 4: 香薰机喷头喷雾业务 -->
+<tr class="hover:bg-slate-50/80 transition-colors group">
+<td class="py-3 pl-4 sm:pl-6 text-center text-slate-400">
+<button class="p-1 hover:text-slate-800 rounded" title="展开参数预览" type="button">
+<svg class="w-3.5 h-3.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-sky-50 text-sky-700 border border-sky-200/80">
+                      属性
+                    </span>
+</td>
+<td class="py-3 px-3 font-medium text-slate-900">
+                    香薰机喷头喷雾业务
+                  </td>
+<td class="py-3 px-3 font-mono text-slate-600">
+                    SprayService
+                  </td>
+<td class="py-3 px-3 text-center">
+<span class="inline-block px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-mono text-[11px]">2 个参数</span>
+</td>
+<td class="py-3 px-3 text-slate-500 font-mono text-[11px]">
+                    2026-07-12 11:30
+                  </td>
+<td class="py-3 pr-4 sm:pr-6 text-right space-x-2">
+<button class="text-blue-600 hover:text-blue-800 font-medium" type="button">配置</button>
+<span class="text-slate-200">|</span>
+<button class="text-rose-600 hover:text-rose-700 font-medium" type="button">移除</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- END: PlatformCapabilitiesSection -->
+<!-- BEGIN: CustomCapabilitiesSection -->
+<!-- Section B: Custom Capabilities with refined Empty State -->
+<section aria-labelledby="custom-cap-title" class="bg-white rounded-lg border border-slate-200 shadow-sm p-4 sm:p-6 space-y-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div>
+<div class="flex items-center space-x-2">
+<h3 class="font-semibold text-sm text-slate-900" id="custom-cap-title">自定义能力项</h3>
+<span class="px-2 py-0.5 rounded text-[11px] bg-slate-100 text-slate-600 font-mono">0</span>
+</div>
+<p class="text-xs text-slate-500 mt-0.5">您自定义的每一个功能（属性、服务、事件），都将直接同步生成固件数据结构与 APP 控制面板组件</p>
+</div>
+<button class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-colors self-start sm:self-auto" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>添加自定义能力项</span>
+</button>
+</div>
+<!-- Elevated Minimalist Empty State Container -->
+<div class="border-2 border-dashed border-slate-200 rounded-lg p-8 sm:p-12 text-center bg-slate-50/50">
+<div class="w-12 h-12 mx-auto rounded-full bg-slate-100 border border-slate-200 text-slate-400 flex items-center justify-center mb-3">
+<!-- Microchip / Hardware feature icon -->
+<svg class="w-6 h-6 stroke-slate-500" fill="none" viewbox="0 0 24 24">
+<rect height="16" rx="2" stroke-width="1.8" width="16" x="4" y="4"></rect>
+<rect height="6" stroke-width="1.8" width="6" x="9" y="9"></rect>
+<line stroke-linecap="round" stroke-width="1.8" x1="9" x2="9" y1="1" y2="4"></line>
+<line stroke-linecap="round" stroke-width="1.8" x1="15" x2="15" y1="1" y2="4"></line>
+<line stroke-linecap="round" stroke-width="1.8" x1="9" x2="9" y1="20" y2="23"></line>
+<line stroke-linecap="round" stroke-width="1.8" x1="15" x2="15" y1="20" y2="23"></line>
+<line stroke-linecap="round" stroke-width="1.8" x1="20" x2="23" y1="9" y2="9"></line>
+<line stroke-linecap="round" stroke-width="1.8" x1="20" x2="23" y1="14" y2="14"></line>
+<line stroke-linecap="round" stroke-width="1.8" x1="1" x2="4" y1="9" y2="9"></line>
+<line stroke-linecap="round" stroke-width="1.8" x1="1" x2="4" y1="14" y2="14"></line>
+</svg>
+</div>
+<h4 class="text-xs font-semibold text-slate-800">暂无自定义能力项</h4>
+<p class="text-xs text-slate-500 max-w-sm mx-auto mt-1 leading-relaxed">
+              当平台标准物模型无法满足该香薰机专属业务（如精油余量探测、雾化片压电陶瓷振荡频段校准）时，可在此进行自主扩展。
+            </p>
+<div class="mt-4 flex items-center justify-center gap-3">
+<button class="inline-flex items-center space-x-1 px-3 py-1.5 rounded text-xs font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 shadow-sm transition-all" type="button">
+<svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>从能力模板库导入</span>
+</button>
+<button class="inline-flex items-center space-x-1 px-3 py-1.5 rounded text-xs font-medium text-blue-600 bg-blue-50 border border-blue-200 hover:bg-blue-100 transition-colors" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>立即新建自定义属性</span>
+</button>
+</div>
+</div>
+</section>
+<!-- END: CustomCapabilitiesSection -->
+</div>
+<!-- BEGIN: StickyFooterBar -->
+<!-- Fixed bottom bar for definitive workflow progressions -->
+<footer class="h-16 bg-white border-t border-slate-200 sticky bottom-0 z-20 px-6 flex items-center justify-between shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.03)]">
+<div class="flex items-center space-x-2 text-xs text-slate-500">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span>已自动保存至云端草稿</span>
+<span class="font-mono text-slate-400">14:28:09</span>
+</div>
+<div class="flex items-center space-x-3">
+<button class="px-4 py-2 rounded-md text-xs font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-100 transition-colors" type="button">
+            取消并退出
+          </button>
+<button class="inline-flex items-center space-x-1.5 px-5 py-2 rounded-md text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 shadow-sm shadow-blue-500/20 transition-all" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path>
+</svg>
+<span>保存并下一步: 配置 APP</span>
+</button>
+</div>
+</footer>
+<!-- END: StickyFooterBar -->
+</main>
+<!-- END: MainWorkflowContent -->
+</div>
+<script data-purpose="interactive-enhancements">
+    // Micro-interactions for table row expansion toggles
+    document.querySelectorAll('tbody tr button[title="展开参数预览"]').forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const svg = this.querySelector('svg');
+        if (svg) {
+          svg.classList.toggle('rotate-90');
+        }
+      });
+    });
+  </script>
+</body></html>

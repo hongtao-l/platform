@@ -145,10 +145,23 @@
           <el-input v-model="capItemForm.identifier" placeholder="例如 WorkModeItem" />
           <span class="form-hint">字母开头，仅允许字母、数字、下划线，全局唯一</span>
         </el-form-item>
-        <el-form-item label="所属模块" required>
-          <el-select v-model="capItemForm.moduleId" style="width:100%" placeholder="请选择能力模块">
+        <el-form-item label="所属模块">
+          <el-select v-model="capItemForm.moduleId" clearable style="width:100%" placeholder="不选则不归属任何模块">
             <el-option v-for="m in activeModules" :key="m.id" :label="`${m.name} (${m.identifier})`" :value="m.id" />
           </el-select>
+        </el-form-item>
+        <!-- 新增能力项时可直接把参数一起定义好 -->
+        <el-form-item v-if="!editingCapItemId" label="参数">
+          <div style="width:100%">
+            <div v-if="!draftParams.length" class="draft-empty">暂未添加参数</div>
+            <div v-for="(p, i) in draftParams" :key="i" class="draft-param">
+              <span :class="['type-tag', typeTagCls(p.capType)]">{{ typeLabel(p.capType) }}</span>
+              <span class="draft-name">{{ p.name }}</span>
+              <span class="draft-id">{{ p.identifier }}</span>
+              <el-button size="small" text type="danger" @click="draftParams.splice(i, 1)">删除</el-button>
+            </div>
+            <el-button size="small" style="margin-top:8px" @click="openDraftParam">+ 添加参数</el-button>
+          </div>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -167,8 +180,12 @@
       class="cap-dialog"
     >
       <el-form ref="capFormRef" label-width="100px">
-        <!-- 参数类型 -->
-        <el-form-item label="参数类型" required>
+        <!-- 参数类型：挂在能力项下时跟随能力项类型，不可改 -->
+        <el-form-item v-if="capForm.capItemId || inDraftMode" label="参数类型">
+          <span :class="['type-tag', typeTagCls(capForm.capType)]">{{ typeLabel(capForm.capType) }}</span>
+          <span class="form-hint" style="display:inline-block;margin:0 0 0 8px">跟随所属能力项，不可修改</span>
+        </el-form-item>
+        <el-form-item v-else label="参数类型" required>
           <div class="type-cards">
             <div
               v-for="t in capTypeOptions"
@@ -1025,6 +1042,7 @@ function onDataTypeChange() { capForm.defaultVal = '' }
 function openAddCapability(capItemRow) {
   editingCapId.value = null
   resetCapForm()
+  inDraftMode.value = false
   if (capItemRow?._isCapItem) {
     capForm.capItemId = capItemRow._rawId
     capForm.moduleId = capItemRow.moduleId
@@ -1037,12 +1055,30 @@ function openAddCapability(capItemRow) {
 
 // ===== 能力项增删改 =====
 const capItemDialogVisible = ref(false)
+// 新增能力项时可先把参数定义好，确定时一并创建
+const draftParams = ref([])
+const inDraftMode = ref(false)
+
+function openDraftParam() {
+  if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(capItemForm.identifier || '')) {
+    ElMessage.warning('请先填好能力项ID，再添加参数')
+    return
+  }
+  editingCapId.value = null
+  resetCapForm()
+  inDraftMode.value = true
+  // 类型跟随能力项，不可选
+  capForm.capType = capItemForm.capType || 'prop'
+  resetDataDefForType()
+  dialogVisible.value = true
+}
 const editingCapItemId = ref(null)
 const capItemForm = reactive({ name: '', identifier: '', moduleId: null, capType: 'prop' })
 const capItemDialogTitle = computed(() => editingCapItemId.value ? '编辑能力项' : '添加能力项')
 
 function openAddCapItem() {
   editingCapItemId.value = null
+  draftParams.value = []
   capItemForm.name = ''
   capItemForm.identifier = ''
   capItemForm.capType = 'prop'
@@ -1052,6 +1088,7 @@ function openAddCapItem() {
 
 function openEditCapItem(item) {
   editingCapItemId.value = item._rawId
+  draftParams.value = []
   capItemForm.name = item.name
   capItemForm.identifier = item.identifier
   capItemForm.capType = item.capType || 'prop'
@@ -1064,15 +1101,28 @@ function handleCapItemConfirm() {
   if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(capItemForm.identifier || '')) { ElMessage.warning('能力项ID不合法：字母开头，仅允许字母、数字、下划线'); return }
   const dup = store.capItems.some(x => x.identifier === capItemForm.identifier && x.id !== editingCapItemId.value)
   if (dup) { ElMessage.warning('能力项ID已存在，请更换'); return }
-  if (!capItemForm.moduleId) { ElMessage.warning('请选择所属模块'); return }
-
+  // 所属模块非必填
   if (editingCapItemId.value) {
     updateCapItem(editingCapItemId.value, { ...capItemForm })
     ElMessage.success('编辑成功')
   } else {
-    addCapItem({ ...capItemForm })
-    ElMessage.success('添加成功')
+    const newItemId = addCapItem({ ...capItemForm })
+    draftParams.value.forEach(dp => {
+      addCapability({
+        moduleId: capItemForm.moduleId,
+        capItemId: newItemId,
+        capType: dp.capType,
+        name: dp.name,
+        identifier: dp.identifier,
+        descr: dp.descr,
+        dataDef: JSON.parse(JSON.stringify(dp.dataDef))
+      })
+    })
+    ElMessage.success(draftParams.value.length
+      ? '添加成功（含 ' + draftParams.value.length + ' 个参数）'
+      : '添加成功')
   }
+  draftParams.value = []
   capItemDialogVisible.value = false
 }
 
@@ -1088,6 +1138,7 @@ function handleDeleteCapItem(item) {
 }
 
 function openEditCapability(cap) {
+  inDraftMode.value = false
   editingCapId.value = cap.id
   capForm.capItemId = cap.capItemId ?? null
   capForm.moduleId = cap.moduleId ?? null
@@ -1159,6 +1210,23 @@ function handleCapabilityConfirm() {
   }
   if (capForm.capType === 'evt' && !capForm.eventType) {
     ElMessage.warning('请选择事件类型'); return
+  }
+
+  // 草稿模式：新增能力项时先把参数攒起来，确定能力项时一并创建
+  if (inDraftMode.value) {
+    if (draftParams.value.some(d => d.identifier === capForm.identifier.trim())) {
+      ElMessage.warning('参数标识符重复，请更换'); return
+    }
+    draftParams.value.push({
+      capType: capForm.capType,
+      name: capForm.name.trim(),
+      identifier: capForm.identifier.trim(),
+      descr: capForm.descr.trim(),
+      dataDef: buildDataDef()
+    })
+    inDraftMode.value = false
+    dialogVisible.value = false
+    return
   }
 
   if (!editingCapId.value && !capForm.capItemId) {
@@ -1505,6 +1573,17 @@ function openEditStructField(idx) {
   }
   :deep(th.el-table__cell) { background: var(--bg-card, #fff); }
 }
+.draft-empty { font-size: 12px; color: var(--text-placeholder); padding: 4px 0; }
+.draft-param {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px; margin-bottom: 6px;
+  border: 1px solid var(--border-lighter, #e4e7ed);
+  border-radius: 6px;
+  .draft-name { font-size: 13px; color: var(--text-primary); }
+  .draft-id { font-size: 12px; color: var(--text-placeholder); font-family: monospace; }
+  :deep(.el-button) { margin-left: auto; }
+}
+
 .param-empty {
   padding: 28px 0;
   text-align: center;
@@ -1612,6 +1691,109 @@ function openEditStructField(idx) {
   color: var(--text-placeholder);
   font-size: var(--font-md);
 }
+
+/* ============================================
+   视觉规范取自 Stitch 项目「IoT Dashboard Redesign」
+   - 字体：Inter（界面）/ JetBrains Mono（标识符）
+   - 品牌色：sky  #0284c7 / #0369a1 / #f0f7ff
+   - 灰阶：slate（#f8fafc / #e2e8f0 / #64748b / #475569）
+   - 圆角 8px，1px 边框，无重阴影；滚动条 6px
+   （仅样式，结构与交互不变）
+   ============================================ */
+.capability-right .card {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: none;
+  background: #fff;
+}
+
+.cap-item-table {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  :deep(.el-table__header th.el-table__cell) {
+    height: 42px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 500;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  :deep(.el-table__body td.el-table__cell) {
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  :deep(.el-table__body tr:hover > td.el-table__cell) { background: #f8fafc; }
+  // Stitch 稿里没有斑马纹，用 hover 做行区分
+  :deep(.el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell) { background: #fff; }
+  :deep(.el-table__expanded-cell) { padding: 0 !important; background: #f8fafc; }
+  :deep(.el-table__expand-icon) { color: #94a3b8; }
+  :deep(.el-table__inner-wrapper::before) { display: none; }
+}
+
+// 标识符统一等宽字体（Stitch 稿的 font-mono 列）
+.cell-id {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: #64748b;
+}
+.cell-time {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  color: #94a3b8;
+}
+.cell-name { font-size: 13px; font-weight: 500; color: #334155; }
+.cell-item-name { font-size: 13px; font-weight: 600; color: #0f172a; }
+.cell-module, .cell-datatype { font-size: 12px; color: #475569; }
+.cell-def, .cell-desc { font-size: 12px; color: #64748b; }
+
+/* 类型标签：11px pill，sky / emerald / amber 三色（对齐 Stitch 稿） */
+.type-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding: 0 7px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  &.type-prop { background: #f0f7ff; color: #0369a1; }
+  &.type-svc  { background: #ecfdf5; color: #047857; }
+  &.type-evt  { background: #fffbeb; color: #b45309; }
+}
+
+/* 左侧模块栏：选中用品牌浅底 + 左侧细条 */
+.module-item {
+  position: relative;
+  border-radius: 6px;
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 2px;
+    height: 0;
+    border-radius: 0 2px 2px 0;
+    background: #0284c7;
+    transform: translateY(-50%);
+    transition: height .15s ease;
+  }
+  &.active {
+    background: #f0f7ff;
+    &::before { height: 14px; }
+    .module-name { color: #0369a1; }
+  }
+}
+.module-sidebar { border-right: 1px solid #e2e8f0; }
+.module-ident { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; color: #94a3b8; }
+
+/* 细滚动条（Stitch 稿的 custom-scrollbars） */
+.capability-right {
+  &::-webkit-scrollbar { width: 6px; height: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+  &::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+}
+
 </style>
 
 <style lang="scss">
@@ -1629,5 +1811,20 @@ function openEditStructField(idx) {
 .param-dialog {
   .el-dialog__body { padding-top: 20px; }
   .el-dialog__header { padding-bottom: 12px; }
+}
+
+/* ===== 弹窗视觉优化（仅样式）===== */
+.module-dialog,
+.cap-item-dialog,
+.param-dialog,
+.cap-dialog {
+  .el-dialog__header { padding: 18px 20px 14px; }
+  .el-dialog__title { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+  .el-dialog__body { padding: 20px 20px 20px; }
+  .el-dialog__footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border-lighter, #F0F0F0);
+  }
+  .el-form-item { margin-bottom: 18px; }
 }
 </style>

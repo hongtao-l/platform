@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-slate-50" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IoT Capability Registry · 物模型能力库</title>
+<!-- Tailwind CSS v3 with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scrollbars">
+    /* Subtle minimalist scrollbar for tables and side panels */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="h-full font-sans antialiased text-slate-800 flex overflow-hidden selection:bg-sky-100 selection:text-sky-800">
+<!-- BEGIN: PrimaryLeftSidebar -->
+<!-- Slim dark modern global navigation rail -->
+<aside class="w-52 flex-shrink-0 bg-slate-900 border-r border-slate-800 flex flex-col justify-between z-30 select-none" data-purpose="global-sidebar"><div class="flex flex-col w-full"><div class="h-14 px-4 flex items-center justify-between border-b border-slate-800/80"><div class="flex items-center space-x-2.5"><div class="h-8 w-8 rounded-lg bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-900/40 font-bold text-sm tracking-wider"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path></svg></div><div class="flex flex-col"><span class="text-xs font-bold text-white tracking-wide">IoT 平台</span><span class="text-[10px] text-slate-400 font-mono">v2.8 Enterprise</span></div></div><button class="p-1 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded transition-colors" title="收起侧栏"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></button></div><nav class="flex flex-col space-y-1 p-2.5"><a class="flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-100 hover:bg-slate-800/70 transition-colors group" href="#"><svg class="w-4 h-4 text-slate-400 group-hover:text-slate-200 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg><span>工作台</span></a><div class="space-y-0.5"><a class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold bg-sky-600/20 text-sky-400 border border-sky-500/30 transition-all" href="#"><div class="flex items-center space-x-2.5"><svg class="w-4 h-4 text-sky-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg><span>物模型管理</span></div><svg class="w-3 h-3 text-sky-400 transform rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a><div class="pl-7 pr-2 py-1 space-y-1"><a class="block px-2.5 py-1.5 rounded-md text-xs font-semibold text-sky-400 bg-slate-800/60" href="#">能力库 (new)</a><a class="block px-2.5 py-1.5 rounded-md text-xs text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 transition-colors" href="#">物模型类目</a></div></div><a class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-100 hover:bg-slate-800/70 transition-colors group" href="#"><div class="flex items-center space-x-2.5"><svg class="w-4 h-4 text-slate-400 group-hover:text-slate-200 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg><span>产品管理</span></div><span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-800 text-slate-400">new</span></a><a class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-100 hover:bg-slate-800/70 transition-colors group" href="#"><div class="flex items-center space-x-2.5"><svg class="w-4 h-4 text-slate-400 group-hover:text-slate-200 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg><span>套餐管理</span></div><svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a><a class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-100 hover:bg-slate-800/70 transition-colors group" href="#"><div class="flex items-center space-x-2.5"><svg class="w-4 h-4 text-slate-400 group-hover:text-slate-200 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg><span>智能体管理</span></div><svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a><a class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-100 hover:bg-slate-800/70 transition-colors group" href="#"><div class="flex items-center space-x-2.5"><svg class="w-4 h-4 text-slate-400 group-hover:text-slate-200 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg><span>运营管理</span></div><svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a></nav></div><div class="p-3 border-t border-slate-800 flex items-center justify-between"><div class="flex items-center space-x-2"><div class="w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20"></div><span class="text-[11px] text-slate-400">集群正常连接</span></div><button class="p-1 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded transition-colors" title="系统设置"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></button></div></aside>
+<!-- END: PrimaryLeftSidebar -->
+<!-- BEGIN: MainContentShell -->
+<div class="flex-1 flex flex-col h-full min-w-0 bg-white">
+<!-- Top Global App Header -->
+<header class="h-14 border-b border-slate-200/80 bg-white px-5 flex items-center justify-between flex-shrink-0 z-20" data-purpose="top-header">
+<!-- Left: Breadcrumbs & Environment Tag -->
+<div class="flex items-center space-x-3 text-sm">
+<button class="p-1.5 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 6h16M4 12h16M4 18h7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<nav class="flex items-center space-x-2 text-slate-500">
+<span class="hover:text-slate-800 transition-colors cursor-pointer">首页</span>
+<span class="text-slate-300">/</span>
+<span class="hover:text-slate-800 transition-colors cursor-pointer">物模型定义</span>
+<span class="text-slate-300">/</span>
+<span class="font-semibold text-slate-900 flex items-center gap-1.5">
+            能力库 (Registry)
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-sky-50 text-sky-700 border border-sky-200 uppercase tracking-wide">v2.4-new</span>
+</span>
+</nav>
+<div class="h-4 w-px bg-slate-200"></div>
+<!-- Environment Chip -->
+<div class="flex items-center space-x-1.5 px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200/70 rounded-full text-xs font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span>Prod · US-East-1</span>
+</div>
+</div>
+<!-- Right: Search, Docs, Notifications, Profile -->
+<div class="flex items-center space-x-3.5">
+<!-- Quick Command Search Input -->
+<div class="relative w-64">
+<div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<input class="block w-full pl-8 pr-12 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white transition-all shadow-xs" placeholder="快速检索能力或标识符..." type="text"/>
+<span class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none text-[10px] font-mono text-slate-400">
+<kbd class="px-1.5 py-0.5 bg-white border border-slate-200 rounded text-slate-400 shadow-2xs">⌘K</kbd>
+</span>
+</div>
+<div class="h-4 w-px bg-slate-200"></div>
+<!-- Help Documentation -->
+<button class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors" title="物模型规范文档">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<!-- Notification Bell with Ping -->
+<button class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors relative" title="消息通知">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white"></span>
+</button>
+<!-- User Workspace Badge -->
+<div class="flex items-center space-x-2 pl-1 cursor-pointer group">
+<div class="w-7 h-7 rounded-full bg-gradient-to-tr from-sky-600 to-indigo-500 text-white font-medium text-xs flex items-center justify-center ring-2 ring-slate-100 shadow-xs">
+            Admin
+          </div>
+<div class="flex flex-col text-left">
+<span class="text-xs font-semibold text-slate-700 leading-none group-hover:text-sky-600 transition-colors">IoT Console</span>
+<span class="text-[10px] text-slate-400 mt-0.5">我的空间 · 根组织</span>
+</div>
+<svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</header>
+<!-- Main Workspace: Split View (Module Tree Panel + Capabilities Table) -->
+<div class="flex-1 flex overflow-hidden">
+<!-- BEGIN: CapabilityModulesPanel -->
+<!-- Sub-sidebar: Capability Modules (能力模块) -->
+<aside class="w-64 border-r border-slate-200 bg-slate-50/70 flex flex-col flex-shrink-0" data-purpose="modules-tree-panel">
+<!-- Panel Header -->
+<div class="p-3.5 border-b border-slate-200/80 flex items-center justify-between">
+<div class="flex items-center space-x-1.5">
+<svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<h2 class="text-xs font-bold text-slate-700 uppercase tracking-wider">能力模块</h2>
+<span class="text-[11px] font-semibold text-slate-400">11</span>
+</div>
+<button class="inline-flex items-center space-x-1 px-2 py-1 text-xs font-medium text-sky-700 bg-sky-50 hover:bg-sky-100 border border-sky-200/70 rounded-md transition-all shadow-2xs">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+<span>添加</span>
+</button>
+</div>
+<!-- Quick filter for modules -->
+<div class="px-3 pt-2.5 pb-1">
+<div class="relative">
+<input class="w-full pl-7 pr-2.5 py-1 text-xs bg-white border border-slate-200 rounded-md placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500" placeholder="搜索模块名称/ID..." type="text"/>
+<svg class="w-3.5 h-3.5 text-slate-400 absolute left-2 top-2" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<!-- Modules List -->
+<div class="flex-1 overflow-y-auto p-2 space-y-0.5">
+<!-- All Modules (Active) -->
+<button class="w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-semibold bg-white text-sky-700 shadow-xs border border-sky-200/80 transition-colors">
+<div class="flex items-center space-x-2">
+<div class="w-1.5 h-1.5 rounded-full bg-sky-500"></div>
+<span>全部能力项</span>
+</div>
+<span class="text-[10px] font-mono px-1.5 py-0.5 bg-sky-50 text-sky-700 rounded-md">14</span>
+</button>
+<!-- Module Item: WorkModeModule -->
+<button class="w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-2xs border border-transparent hover:border-slate-200 transition-all group">
+<div class="flex flex-col text-left truncate">
+<span class="truncate">工作模式模块</span>
+<span class="text-[10px] font-mono text-slate-400 group-hover:text-slate-500">WorkModeModule</span>
+</div>
+<span class="text-[10px] font-mono text-slate-400">1</span>
+</button>
+<!-- Module Item: RecordModeModule -->
+<button class="w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-2xs border border-transparent hover:border-slate-200 transition-all group">
+<div class="flex flex-col text-left truncate">
+<span class="truncate">录制模式模块</span>
+<span class="text-[10px] font-mono text-slate-400 group-hover:text-slate-500">RecordModeModule</span>
+</div>
+<span class="text-[10px] font-mono text-slate-400">3</span>
+</button>
+<!-- Module Item: LightModeModule -->
+<button class="w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-2xs border border-transparent hover:border-slate-200 transition-all group">
+<div class="flex flex-col text-left truncate">
+<span class="truncate">灯光模式模块</span>
+<span class="text-[10px] font-mono text-slate-400 group-hover:text-slate-500">LightModeModule</span>
+</div>
+<span class="text-[10px] font-mono text-slate-400">1</span>
+</button>
+<!-- Module Item: EventDetectModule -->
+<button class="w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-2xs border border-transparent hover:border-slate-200 transition-all group">
+<div class="flex flex-col text-left truncate">
+<span class="truncate">事件侦测模块</span>
+<span class="text-[10px] font-mono text-slate-400 group-hover:text-slate-500">EventDetectModule</span>
+</div>
+<span class="text-[10px] font-mono text-slate-400">1</span>
+</button>
+<!-- Module Item: BellSettingModule -->
+<button class="w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-2xs border border-transparent hover:border-slate-200 transition-all group">
+<div class="flex flex-col text-left truncate">
+<span class="truncate">门铃设置模块</span>
+<span class="text-[10px] font-mono text-slate-400 group-hover:text-slate-500">BellSettingModule</span>
+</div>
+<span class="text-[10px] font-mono text-slate-400">3</span>
+</button>
+<!-- Module Item: SecurityDetectModule -->
+<button class="w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-2xs border border-transparent hover:border-slate-200 transition-all group">
+<div class="flex flex-col text-left truncate">
+<span class="truncate">安防侦测模块</span>
+<span class="text-[10px] font-mono text-slate-400 group-hover:text-slate-500">SecurityDetectModule</span>
+</div>
+<span class="text-[10px] font-mono text-slate-400">2</span>
+</button>
+<!-- Module Item: AlgorithmCapModule -->
+<button class="w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-2xs border border-transparent hover:border-slate-200 transition-all group">
+<div class="flex flex-col text-left truncate">
+<span class="truncate">算法能力模块</span>
+<span class="text-[10px] font-mono text-slate-400 group-hover:text-slate-500">AlgorithmCapModule</span>
+</div>
+<span class="text-[10px] font-mono text-slate-400">3</span>
+</button>
+<!-- Module Item: BatteryModule -->
+<button class="w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-2xs border border-transparent hover:border-slate-200 transition-all group">
+<div class="flex flex-col text-left truncate">
+<span class="truncate">电池管理模块</span>
+<span class="text-[10px] font-mono text-slate-400 group-hover:text-slate-500">BatteryModule</span>
+</div>
+<span class="text-[10px] font-mono text-slate-400">1</span>
+</button>
+<!-- Module Item: PtzModule -->
+<button class="w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-2xs border border-transparent hover:border-slate-200 transition-all group">
+<div class="flex flex-col text-left truncate">
+<span class="truncate">云台控制模块</span>
+<span class="text-[10px] font-mono text-slate-400 group-hover:text-slate-500">PtzModule</span>
+</div>
+<span class="text-[10px] font-mono text-slate-400">0</span>
+</button>
+<!-- Module Item: AromaModule -->
+<button class="w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-medium text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-2xs border border-transparent hover:border-slate-200 transition-all group">
+<div class="flex flex-col text-left truncate">
+<span class="truncate">香薰模块</span>
+<span class="text-[10px] font-mono text-slate-400 group-hover:text-slate-500">AromaModule</span>
+</div>
+<span class="text-[10px] font-mono text-slate-400">0</span>
+</button>
+</div>
+<!-- Panel Footer Stats -->
+<div class="p-3 border-t border-slate-200/70 text-[11px] text-slate-500 bg-white/50 flex items-center justify-between">
+<span>Schema Sync: <strong class="text-emerald-600 font-medium">Valid</strong></span>
+<span class="font-mono text-[10px]">JSON 2.0</span>
+</div>
+</aside>
+<!-- END: CapabilityModulesPanel -->
+<!-- BEGIN: MainCapabilityWorkspace -->
+<!-- Main Work Table Viewport -->
+<main class="flex-1 flex flex-col min-w-0 bg-white overflow-hidden" data-purpose="capabilities-datagrid-workspace">
+<!-- Controls & Filter Toolbar -->
+<div class="border-b border-slate-200 bg-white"><div class="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3"><div class="flex flex-wrap items-center gap-2.5"><button class="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-sky-600 hover:bg-sky-500 active:bg-sky-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-all"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path></svg><span>+ 添加能力项</span></button><div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs font-medium text-slate-600"><button class="px-2.5 py-1 rounded-[6px] hover:text-slate-900 hover:bg-white transition-all flex items-center space-x-1"><svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg><span>导入 Schema</span></button><button class="px-2.5 py-1 rounded-[6px] hover:text-slate-900 hover:bg-white transition-all flex items-center space-x-1"><svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg><span>导出 TS/JSON</span></button></div><div class="h-4 w-px bg-slate-200 hidden sm:block"></div><div class="flex items-center space-x-1 bg-slate-100/80 p-0.5 rounded-lg text-xs"><button class="px-2.5 py-1 font-semibold text-slate-900 bg-white rounded-md shadow-2xs">全部 (14)</button><button class="px-2 py-1 font-medium text-slate-600 hover:text-slate-900 flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span><span>属性 (8)</span></button><button class="px-2 py-1 font-medium text-slate-600 hover:text-slate-900 flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>服务 (2)</span></button><button class="px-2 py-1 font-medium text-slate-600 hover:text-slate-900 flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span>事件 (3)</span></button></div></div><div class="flex items-center space-x-2"><div class="relative w-64"><input class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 focus:bg-white transition-all" placeholder="搜索参数名 / 标识符..." type="text"/><svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></div><button class="px-2.5 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg flex items-center space-x-1 transition-colors"><svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg><span>高级筛选</span><span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span></button><button class="p-1.5 text-slate-500 hover:text-slate-800 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors" title="刷新列表"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button></div></div><div class="px-3.5 py-2.5 bg-slate-50/70 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-2 text-xs"><div class="flex flex-wrap items-center gap-2"><span class="text-[11px] font-semibold text-slate-500 flex items-center gap-1"><svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>筛选条件:</span><div class="flex items-center space-x-1.5 bg-white border border-slate-200 rounded-md px-2 py-1 shadow-2xs"><span class="text-slate-400 text-[11px]">所属模块:</span><span class="font-medium text-slate-700">全部模块</span><svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></div><div class="flex items-center space-x-1.5 bg-white border border-slate-200 rounded-md px-2 py-1 shadow-2xs"><span class="text-slate-400 text-[11px]">数据类型:</span><span class="font-medium text-slate-700">枚举型 (Enum)</span><button class="text-slate-400 hover:text-slate-600"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button></div><div class="flex items-center space-x-1.5 bg-white border border-slate-200 rounded-md px-2 py-1 shadow-2xs"><span class="text-slate-400 text-[11px]">读写模式:</span><span class="font-medium text-slate-700">读写 (RW)</span><svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></div><div class="flex items-center space-x-1.5 bg-white border border-slate-200 rounded-md px-2 py-1 shadow-2xs"><span class="text-slate-400 text-[11px]">更新时间:</span><span class="font-medium text-slate-700">近 30 天</span><svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></div></div><div class="flex items-center space-x-2"><button class="text-[11px] text-slate-500 hover:text-sky-600 transition-colors">重置筛选</button><span class="text-slate-300">|</span><button class="text-[11px] font-medium text-sky-600 hover:text-sky-700 transition-colors">保存当前视图</button></div></div></div>
+<!-- High-Density Enterprise Table -->
+<div class="flex-1 overflow-auto bg-white" data-purpose="table-container">
+<table class="w-full text-left border-collapse text-xs">
+<!-- Table Header -->
+<thead class="sticky top-0 bg-slate-50/95 backdrop-blur-xs border-b border-slate-200 z-10 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+<tr>
+<th class="w-10 px-3 py-3 text-center" scope="col">
+<span class="sr-only">展开详情</span>
+</th>
+<th class="w-24 px-3 py-3 font-semibold" scope="col">类型 (Type)</th>
+<th class="px-3.5 py-3 font-semibold" scope="col">能力项名称</th>
+<th class="px-3.5 py-3 font-semibold" scope="col">能力项 ID (Identifier)</th>
+<th class="px-3.5 py-3 font-semibold" scope="col">所属模块</th>
+<th class="px-3.5 py-3 font-semibold hidden md:table-cell" scope="col">数据规格 (Type/Mode)</th>
+<th class="px-3.5 py-3 font-semibold" scope="col">更新时间</th>
+<th class="px-4 py-3 text-right font-semibold" scope="col">操作</th>
+</tr>
+</thead>
+<!-- Table Body -->
+<tbody class="divide-y divide-slate-100 text-slate-700">
+<!-- ROW 1: 工作模式 (属性) -->
+<tr class="hover:bg-slate-50/80 transition-colors group">
+<td class="px-3 py-3 text-center text-slate-400">
+<button class="p-1 hover:text-slate-700 rounded transition-colors" title="展开参数">
+<svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="px-3 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/80">
+                    属性
+                  </span>
+</td>
+<td class="px-3.5 py-3 font-semibold text-slate-900 whitespace-nowrap">
+<div class="flex items-center space-x-1.5">
+<span>工作模式</span>
+<span class="text-[10px] text-slate-400 font-normal hidden xl:inline">设备基础运行档位</span>
+</div>
+</td>
+<td class="px-3.5 py-3 whitespace-nowrap">
+<code class="px-1.5 py-0.5 bg-slate-100 text-slate-800 font-mono text-[11px] rounded border border-slate-200/60 font-medium">WorkModeItem</code>
+</td>
+<td class="px-3.5 py-3 text-slate-600 whitespace-nowrap">工作模式模块</td>
+<td class="px-3.5 py-3 font-mono text-[11px] text-slate-500 hidden md:table-cell whitespace-nowrap">
+<span class="text-sky-700 font-semibold">enum</span> <span class="text-slate-400">[0, 1, 2] · rw</span>
+</td>
+<td class="px-3.5 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">2026-07-02 10:12:00</td>
+<td class="px-4 py-3 text-right whitespace-nowrap space-x-2">
+<button class="text-sky-600 hover:text-sky-800 font-medium transition-colors">添加参数</button>
+<button class="text-slate-600 hover:text-slate-900 font-medium transition-colors">编辑</button>
+<button class="text-rose-500 hover:text-rose-700 font-medium transition-colors">删除</button>
+</td>
+</tr>
+<!-- ROW 2: 录像设置 (属性) -->
+<tr class="hover:bg-slate-50/80 transition-colors group">
+<td class="px-3 py-3 text-center text-slate-400">
+<button class="p-1 hover:text-slate-700 rounded transition-colors">
+<svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="px-3 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/80">
+                    属性
+                  </span>
+</td>
+<td class="px-3.5 py-3 font-semibold text-slate-900 whitespace-nowrap">
+<div class="flex items-center space-x-1.5">
+<span>录像设置</span>
+<span class="text-[10px] text-slate-400 font-normal hidden xl:inline">分辨率与帧率编码</span>
+</div>
+</td>
+<td class="px-3.5 py-3 whitespace-nowrap">
+<code class="px-1.5 py-0.5 bg-slate-100 text-slate-800 font-mono text-[11px] rounded border border-slate-200/60 font-medium">RecordSettingItem</code>
+</td>
+<td class="px-3.5 py-3 text-slate-600 whitespace-nowrap">录制模式模块</td>
+<td class="px-3.5 py-3 font-mono text-[11px] text-slate-500 hidden md:table-cell whitespace-nowrap">
+<span class="text-indigo-600 font-semibold">struct</span> <span class="text-slate-400">{res, fps} · rw</span>
+</td>
+<td class="px-3.5 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">2026-07-05 14:30:00</td>
+<td class="px-4 py-3 text-right whitespace-nowrap space-x-2">
+<button class="text-sky-600 hover:text-sky-800 font-medium transition-colors">添加参数</button>
+<button class="text-slate-600 hover:text-slate-900 font-medium transition-colors">编辑</button>
+<button class="text-rose-500 hover:text-rose-700 font-medium transition-colors">删除</button>
+</td>
+</tr>
+<!-- ROW 3: 抓拍设置 (属性) -->
+<tr class="hover:bg-slate-50/80 transition-colors group">
+<td class="px-3 py-3 text-center text-slate-400">
+<button class="p-1 hover:text-slate-700 rounded transition-colors">
+<svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="px-3 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/80">
+                    属性
+                  </span>
+</td>
+<td class="px-3.5 py-3 font-semibold text-slate-900 whitespace-nowrap">
+<span>抓拍设置</span>
+</td>
+<td class="px-3.5 py-3 whitespace-nowrap">
+<code class="px-1.5 py-0.5 bg-slate-100 text-slate-800 font-mono text-[11px] rounded border border-slate-200/60 font-medium">CaptureSettingItem</code>
+</td>
+<td class="px-3.5 py-3 text-slate-600 whitespace-nowrap">录制模式模块</td>
+<td class="px-3.5 py-3 font-mono text-[11px] text-slate-500 hidden md:table-cell whitespace-nowrap">
+<span class="text-indigo-600 font-semibold">struct</span> <span class="text-slate-400">{quality, burst} · rw</span>
+</td>
+<td class="px-3.5 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">2026-07-05 14:32:00</td>
+<td class="px-4 py-3 text-right whitespace-nowrap space-x-2">
+<button class="text-sky-600 hover:text-sky-800 font-medium transition-colors">添加参数</button>
+<button class="text-slate-600 hover:text-slate-900 font-medium transition-colors">编辑</button>
+<button class="text-rose-500 hover:text-rose-700 font-medium transition-colors">删除</button>
+</td>
+</tr>
+<!-- ROW 4: 存储管理 (服务 Service) -->
+<tr class="hover:bg-slate-50/80 transition-colors group bg-slate-50/30">
+<td class="px-3 py-3 text-center text-slate-400">
+<button class="p-1 hover:text-slate-700 rounded transition-colors">
+<svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="px-3 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
+                    服务
+                  </span>
+</td>
+<td class="px-3.5 py-3 font-semibold text-slate-900 whitespace-nowrap">
+<div class="flex items-center space-x-1.5">
+<span>存储管理</span>
+<span class="text-[10px] text-emerald-600 font-normal">远程RPC调用</span>
+</div>
+</td>
+<td class="px-3.5 py-3 whitespace-nowrap">
+<code class="px-1.5 py-0.5 bg-slate-100 text-slate-800 font-mono text-[11px] rounded border border-slate-200/60 font-medium">StorageManageItem</code>
+</td>
+<td class="px-3.5 py-3 text-slate-600 whitespace-nowrap">录制模式模块</td>
+<td class="px-3.5 py-3 font-mono text-[11px] text-slate-500 hidden md:table-cell whitespace-nowrap">
+<span class="text-emerald-700 font-semibold">action</span> <span class="text-slate-400">async formatCard()</span>
+</td>
+<td class="px-3.5 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">2026-07-05 14:35:00</td>
+<td class="px-4 py-3 text-right whitespace-nowrap space-x-2">
+<button class="text-sky-600 hover:text-sky-800 font-medium transition-colors">添加参数</button>
+<button class="text-slate-600 hover:text-slate-900 font-medium transition-colors">编辑</button>
+<button class="text-rose-500 hover:text-rose-700 font-medium transition-colors">删除</button>
+</td>
+</tr>
+<!-- ROW 5: 灯光模式 (属性) -->
+<tr class="hover:bg-slate-50/80 transition-colors group">
+<td class="px-3 py-3 text-center text-slate-400">
+<button class="p-1 hover:text-slate-700 rounded transition-colors">
+<svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="px-3 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/80">
+                    属性
+                  </span>
+</td>
+<td class="px-3.5 py-3 font-semibold text-slate-900 whitespace-nowrap">
+<span>灯光模式</span>
+</td>
+<td class="px-3.5 py-3 whitespace-nowrap">
+<code class="px-1.5 py-0.5 bg-slate-100 text-slate-800 font-mono text-[11px] rounded border border-slate-200/60 font-medium">LightModeItem</code>
+</td>
+<td class="px-3.5 py-3 text-slate-600 whitespace-nowrap">灯光模式模块</td>
+<td class="px-3.5 py-3 font-mono text-[11px] text-slate-500 hidden md:table-cell whitespace-nowrap">
+<span class="text-sky-700 font-semibold">enum</span> <span class="text-slate-400">[IR, White, Auto]</span>
+</td>
+<td class="px-3.5 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">2026-07-08 09:20:00</td>
+<td class="px-4 py-3 text-right whitespace-nowrap space-x-2">
+<button class="text-sky-600 hover:text-sky-800 font-medium transition-colors">添加参数</button>
+<button class="text-slate-600 hover:text-slate-900 font-medium transition-colors">编辑</button>
+<button class="text-rose-500 hover:text-rose-700 font-medium transition-colors">删除</button>
+</td>
+</tr>
+<!-- ROW 6: 告警事件 (事件 Event) -->
+<tr class="hover:bg-slate-50/80 transition-colors group bg-amber-50/20">
+<td class="px-3 py-3 text-center text-slate-400">
+<button class="p-1 hover:text-slate-700 rounded transition-colors">
+<svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="px-3 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200/80">
+                    事件
+                  </span>
+</td>
+<td class="px-3.5 py-3 font-semibold text-slate-900 whitespace-nowrap">
+<div class="flex items-center space-x-1.5">
+<span>告警事件</span>
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+</div>
+</td>
+<td class="px-3.5 py-3 whitespace-nowrap">
+<code class="px-1.5 py-0.5 bg-slate-100 text-slate-800 font-mono text-[11px] rounded border border-slate-200/60 font-medium">AlarmEventItem</code>
+</td>
+<td class="px-3.5 py-3 text-slate-600 whitespace-nowrap">事件侦测模块</td>
+<td class="px-3.5 py-3 font-mono text-[11px] text-slate-500 hidden md:table-cell whitespace-nowrap">
+<span class="text-amber-700 font-semibold">alert_payload</span> <span class="text-slate-400">{type, img_url}</span>
+</td>
+<td class="px-3.5 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">2026-07-10 16:05:00</td>
+<td class="px-4 py-3 text-right whitespace-nowrap space-x-2">
+<button class="text-sky-600 hover:text-sky-800 font-medium transition-colors">添加参数</button>
+<button class="text-slate-600 hover:text-slate-900 font-medium transition-colors">编辑</button>
+<button class="text-rose-500 hover:text-rose-700 font-medium transition-colors">删除</button>
+</td>
+</tr>
+<!-- ROW 7: 门铃设置 (属性) -->
+<tr class="hover:bg-slate-50/80 transition-colors group">
+<td class="px-3 py-3 text-center text-slate-400">
+<button class="p-1 hover:text-slate-700 rounded transition-colors">
+<svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="px-3 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/80">
+                    属性
+                  </span>
+</td>
+<td class="px-3.5 py-3 font-semibold text-slate-900 whitespace-nowrap">
+<span>门铃设置</span>
+</td>
+<td class="px-3.5 py-3 whitespace-nowrap">
+<code class="px-1.5 py-0.5 bg-slate-100 text-slate-800 font-mono text-[11px] rounded border border-slate-200/60 font-medium">BellSettingItem</code>
+</td>
+<td class="px-3.5 py-3 text-slate-600 whitespace-nowrap">门铃设置模块</td>
+<td class="px-3.5 py-3 font-mono text-[11px] text-slate-500 hidden md:table-cell whitespace-nowrap">
+<span class="text-indigo-600 font-semibold">struct</span> <span class="text-slate-400">{volume, ringtone}</span>
+</td>
+<td class="px-3.5 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">2026-07-12 11:48:00</td>
+<td class="px-4 py-3 text-right whitespace-nowrap space-x-2">
+<button class="text-sky-600 hover:text-sky-800 font-medium transition-colors">添加参数</button>
+<button class="text-slate-600 hover:text-slate-900 font-medium transition-colors">编辑</button>
+<button class="text-rose-500 hover:text-rose-700 font-medium transition-colors">删除</button>
+</td>
+</tr>
+<!-- ROW 8: 远程开门 (服务) -->
+<tr class="hover:bg-slate-50/80 transition-colors group bg-slate-50/30">
+<td class="px-3 py-3 text-center text-slate-400">
+<button class="p-1 hover:text-slate-700 rounded transition-colors">
+<svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="px-3 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
+                    服务
+                  </span>
+</td>
+<td class="px-3.5 py-3 font-semibold text-slate-900 whitespace-nowrap">
+<div class="flex items-center space-x-1.5">
+<span>远程开门</span>
+<span class="text-[10px] text-emerald-600 font-normal">Security Relay</span>
+</div>
+</td>
+<td class="px-3.5 py-3 whitespace-nowrap">
+<code class="px-1.5 py-0.5 bg-slate-100 text-slate-800 font-mono text-[11px] rounded border border-slate-200/60 font-medium">RemoteUnlockItem</code>
+</td>
+<td class="px-3.5 py-3 text-slate-600 whitespace-nowrap">门铃设置模块</td>
+<td class="px-3.5 py-3 font-mono text-[11px] text-slate-500 hidden md:table-cell whitespace-nowrap">
+<span class="text-emerald-700 font-semibold">action</span> <span class="text-slate-400">async unlock(token)</span>
+</td>
+<td class="px-3.5 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">2026-07-12 11:50:00</td>
+<td class="px-4 py-3 text-right whitespace-nowrap space-x-2">
+<button class="text-sky-600 hover:text-sky-800 font-medium transition-colors">添加参数</button>
+<button class="text-slate-600 hover:text-slate-900 font-medium transition-colors">编辑</button>
+<button class="text-rose-500 hover:text-rose-700 font-medium transition-colors">删除</button>
+</td>
+</tr>
+<!-- ROW 9: 门铃呼叫 (事件) -->
+<tr class="hover:bg-slate-50/80 transition-colors group bg-amber-50/20">
+<td class="px-3 py-3 text-center text-slate-400">
+<button class="p-1 hover:text-slate-700 rounded transition-colors">
+<svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="px-3 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200/80">
+                    事件
+                  </span>
+</td>
+<td class="px-3.5 py-3 font-semibold text-slate-900 whitespace-nowrap">
+<span>门铃呼叫</span>
+</td>
+<td class="px-3.5 py-3 whitespace-nowrap">
+<code class="px-1.5 py-0.5 bg-slate-100 text-slate-800 font-mono text-[11px] rounded border border-slate-200/60 font-medium">BellRingItem</code>
+</td>
+<td class="px-3.5 py-3 text-slate-600 whitespace-nowrap">门铃设置模块</td>
+<td class="px-3.5 py-3 font-mono text-[11px] text-slate-500 hidden md:table-cell whitespace-nowrap">
+<span class="text-amber-700 font-semibold">event</span> <span class="text-slate-400">{channel_id, timestamp}</span>
+</td>
+<td class="px-3.5 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">2026-07-12 11:52:00</td>
+<td class="px-4 py-3 text-right whitespace-nowrap space-x-2">
+<button class="text-sky-600 hover:text-sky-800 font-medium transition-colors">添加参数</button>
+<button class="text-slate-600 hover:text-slate-900 font-medium transition-colors">编辑</button>
+<button class="text-rose-500 hover:text-rose-700 font-medium transition-colors">删除</button>
+</td>
+</tr>
+<!-- ROW 10: 告警灵敏度 (属性) -->
+<tr class="hover:bg-slate-50/80 transition-colors group">
+<td class="px-3 py-3 text-center text-slate-400">
+<button class="p-1 hover:text-slate-700 rounded transition-colors">
+<svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="px-3 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/80">
+                    属性
+                  </span>
+</td>
+<td class="px-3.5 py-3 font-semibold text-slate-900 whitespace-nowrap">
+<span>告警灵敏度</span>
+</td>
+<td class="px-3.5 py-3 whitespace-nowrap">
+<code class="px-1.5 py-0.5 bg-slate-100 text-slate-800 font-mono text-[11px] rounded border border-slate-200/60 font-medium">AlarmSensitivityItem</code>
+</td>
+<td class="px-3.5 py-3 text-slate-600 whitespace-nowrap">安防侦测模块</td>
+<td class="px-3.5 py-3 font-mono text-[11px] text-slate-500 hidden md:table-cell whitespace-nowrap">
+<span class="text-sky-700 font-semibold">int32</span> <span class="text-slate-400">range(1, 100)</span>
+</td>
+<td class="px-3.5 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">2026-07-15 15:08:00</td>
+<td class="px-4 py-3 text-right whitespace-nowrap space-x-2">
+<button class="text-sky-600 hover:text-sky-800 font-medium transition-colors">添加参数</button>
+<button class="text-slate-600 hover:text-slate-900 font-medium transition-colors">编辑</button>
+<button class="text-rose-500 hover:text-rose-700 font-medium transition-colors">删除</button>
+</td>
+</tr>
+<!-- ROW 11: 算法配置 (属性) -->
+<tr class="hover:bg-slate-50/80 transition-colors group">
+<td class="px-3 py-3 text-center text-slate-400">
+<button class="p-1 hover:text-slate-700 rounded transition-colors">
+<svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="px-3 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/80">
+                    属性
+                  </span>
+</td>
+<td class="px-3.5 py-3 font-semibold text-slate-900 whitespace-nowrap">
+<div class="flex items-center space-x-1.5">
+<span>算法配置</span>
+<span class="px-1 py-0.2 bg-indigo-50 text-indigo-700 rounded text-[9px] font-mono border border-indigo-100">NPU</span>
+</div>
+</td>
+<td class="px-3.5 py-3 whitespace-nowrap">
+<code class="px-1.5 py-0.5 bg-slate-100 text-slate-800 font-mono text-[11px] rounded border border-slate-200/60 font-medium">AlgorithmConfigItem</code>
+</td>
+<td class="px-3.5 py-3 text-slate-600 whitespace-nowrap">算法能力模块</td>
+<td class="px-3.5 py-3 font-mono text-[11px] text-slate-500 hidden md:table-cell whitespace-nowrap">
+<span class="text-indigo-600 font-semibold">json_string</span> <span class="text-slate-400">AI Model Weights</span>
+</td>
+<td class="px-3.5 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">2026-07-20 10:00:00</td>
+<td class="px-4 py-3 text-right whitespace-nowrap space-x-2">
+<button class="text-sky-600 hover:text-sky-800 font-medium transition-colors">添加参数</button>
+<button class="text-slate-600 hover:text-slate-900 font-medium transition-colors">编辑</button>
+<button class="text-rose-500 hover:text-rose-700 font-medium transition-colors">删除</button>
+</td>
+</tr>
+<!-- ROW 12: 电池管理 (属性) -->
+<tr class="hover:bg-slate-50/80 transition-colors group">
+<td class="px-3 py-3 text-center text-slate-400">
+<button class="p-1 hover:text-slate-700 rounded transition-colors">
+<svg class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</td>
+<td class="px-3 py-3 whitespace-nowrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/80">
+                    属性
+                  </span>
+</td>
+<td class="px-3.5 py-3 font-semibold text-slate-900 whitespace-nowrap">
+<span>电池管理</span>
+</td>
+<td class="px-3.5 py-3 whitespace-nowrap">
+<code class="px-1.5 py-0.5 bg-slate-100 text-slate-800 font-mono text-[11px] rounded border border-slate-200/60 font-medium">BatteryManageItem</code>
+</td>
+<td class="px-3.5 py-3 text-slate-600 whitespace-nowrap">电池管理模块</td>
+<td class="px-3.5 py-3 font-mono text-[11px] text-slate-500 hidden md:table-cell whitespace-nowrap">
+<span class="text-sky-700 font-semibold">int32</span> <span class="text-slate-400">% (0-100) · ro</span>
+</td>
+<td class="px-3.5 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">2026-08-02 09:15:00</td>
+<td class="px-4 py-3 text-right whitespace-nowrap space-x-2">
+<button class="text-sky-600 hover:text-sky-800 font-medium transition-colors">添加参数</button>
+<button class="text-slate-600 hover:text-slate-900 font-medium transition-colors">编辑</button>
+<button class="text-rose-500 hover:text-rose-700 font-medium transition-colors">删除</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer: Pagination & Meta -->
+<footer class="h-12 border-t border-slate-200 bg-white px-5 flex items-center justify-between text-xs text-slate-500 flex-shrink-0" data-purpose="table-pagination">
+<div class="flex items-center space-x-2">
+<span>显示第 <strong class="font-semibold text-slate-700">1 - 12</strong> 项，共 <strong class="font-semibold text-slate-700">14</strong> 项能力定义</span>
+<span class="text-slate-300">|</span>
+<select class="text-xs py-1 pl-2 pr-6 border-slate-200 rounded-md bg-slate-50 text-slate-700 focus:ring-1 focus:ring-sky-500">
+<option>20 条/页</option>
+<option>50 条/页</option>
+<option>100 条/页</option>
+</select>
+</div>
+<div class="flex items-center space-x-1">
+<button class="p-1.5 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 disabled:opacity-40 transition-colors" disabled="">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<button class="px-2.5 py-1 rounded-md text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200">1</button>
+<button class="px-2.5 py-1 rounded-md text-xs font-medium text-slate-600 hover:bg-slate-100">2</button>
+<button class="p-1.5 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</footer>
+</main>
+<!-- END: MainCapabilityWorkspace -->
+</div>
+</div>
+<!-- END: MainContentShell -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs" data-purpose="add-parameter-modal-overlay"><div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-2xl overflow-hidden flex flex-col transform transition-all"><div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between"><div class="flex items-center space-x-2"><h3 class="text-base font-bold text-slate-900">添加参数</h3><span class="px-2 py-0.5 rounded text-[10px] font-medium bg-sky-50 text-sky-700 border border-sky-200">物模型能力扩展</span></div><button class="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors" title="关闭"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button></div><div class="p-6 overflow-y-auto max-h-[78vh] space-y-4"><div class="flex items-start"><label class="w-24 flex-shrink-0 text-right pr-4 text-xs font-semibold text-slate-700 pt-1.5"><span class="text-rose-500 font-bold mr-0.5">*</span>参数类型</label><div class="flex-1 flex items-center space-x-2"><button class="px-4 py-1.5 rounded-md text-xs font-semibold bg-sky-50 text-sky-600 border border-sky-400 shadow-2xs" type="button">属性</button><button class="px-4 py-1.5 rounded-md text-xs font-normal text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-colors" type="button">服务</button><button class="px-4 py-1.5 rounded-md text-xs font-normal text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-colors" type="button">事件</button></div></div><div class="flex items-center"><label class="w-24 flex-shrink-0 text-right pr-4 text-xs font-semibold text-slate-700"><span class="text-rose-500 font-bold mr-0.5">*</span>参数名称</label><div class="flex-1"><input class="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-md placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 transition-all" placeholder="请输入参数名称（2-50字符）" type="text"/></div></div><div class="flex items-start"><label class="w-24 flex-shrink-0 text-right pr-4 text-xs font-semibold text-slate-700 pt-2"><span class="text-rose-500 font-bold mr-0.5">*</span>标识符</label><div class="flex-1 space-y-1"><input class="w-full px-3 py-2 text-xs font-mono bg-white border border-slate-200 rounded-md placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 transition-all" placeholder="例如 WorkMode" type="text"/><p class="text-[11px] text-slate-400">字母开头，仅允许字母、数字、下划线，全局唯一</p></div></div><div class="flex items-center"><label class="w-24 flex-shrink-0 text-right pr-4 text-xs font-semibold text-slate-700"><span class="text-rose-500 font-bold mr-0.5">*</span>数据类型</label><div class="flex-1"><div class="relative"><select class="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-md text-slate-800 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 transition-all appearance-none pr-8"><option selected="">枚举型 (Enum)</option><option>数值型 (int32)</option><option>浮点型 (float)</option><option>结构体 (struct)</option><option>字符串 (string)</option><option>布尔型 (bool)</option></select><svg class="w-4 h-4 text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></div></div></div><div class="flex items-center"><label class="w-24 flex-shrink-0 text-right pr-4 text-xs font-semibold text-slate-700">读写模式</label><div class="flex-1"><div class="relative"><select class="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-md text-slate-800 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 transition-all appearance-none pr-8"><option selected="">读写 (Read/Write)</option><option>只读 (Read Only)</option><option>只写 (Write Only)</option></select><svg class="w-4 h-4 text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></div></div></div><div class="flex items-start"><label class="w-24 flex-shrink-0 text-right pr-4 text-xs font-semibold text-slate-700 pt-2">描述</label><div class="flex-1"><textarea class="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-md placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 transition-all" placeholder="请输入能力描述" rows="3"></textarea></div></div><div class="relative py-1 flex items-center justify-center"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div><div class="relative bg-white px-3 text-[11px] font-semibold text-slate-400">数据定义</div></div><div class="flex items-start"><label class="w-24 flex-shrink-0 text-right pr-4 text-xs font-semibold text-slate-700 pt-2"><span class="text-rose-500 font-bold mr-0.5">*</span>枚举值定义</label><div class="flex-1 space-y-2"><div class="flex items-center space-x-2"><input class="flex-1 px-3 py-1.5 text-xs bg-white border border-slate-200 rounded-md placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500" placeholder="名称（如：低功耗模式）" type="text"/><div class="w-24 relative"><input class="w-full px-2.5 py-1.5 text-xs text-center font-mono bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500" type="number" value="0"/></div><button class="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded transition-colors" title="删除" type="button"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button></div><button class="inline-flex items-center space-x-1 px-3 py-1 text-xs text-slate-600 hover:text-sky-600 bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-300 rounded transition-all" type="button"><span class="text-sm font-bold leading-none">+</span><span>添加枚举值</span></button></div></div><div class="flex items-center"><label class="w-24 flex-shrink-0 text-right pr-4 text-xs font-semibold text-slate-700">默认值</label><div class="flex-1"><input class="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-md placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 transition-all" placeholder="请输入默认枚举值的 Value" type="text"/></div></div></div><div class="px-6 py-3.5 bg-slate-50 border-t border-slate-200/80 flex items-center justify-end space-x-3"><button class="px-4 py-1.5 rounded-md text-xs font-medium text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-800 transition-colors shadow-2xs" type="button">取消</button><button class="px-5 py-1.5 rounded-md text-xs font-semibold text-white bg-sky-500 hover:bg-sky-600 active:bg-sky-700 shadow-xs transition-colors" type="button">提交</button></div></div></div></body></html>
