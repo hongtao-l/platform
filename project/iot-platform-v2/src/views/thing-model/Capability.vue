@@ -281,11 +281,6 @@
       :close-on-click-modal="false"
       top="3vh"
     >
-      <div class="flex items-center justify-end -mt-1 mb-3">
-        <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-sky-50 text-sky-700 border border-sky-200">物模型能力扩展</span>
-        <span class="ml-2 text-[11px] text-slate-400 font-mono">{{ capForm.identifier || 'new_parameter' }}</span>
-      </div>
-
       <el-form ref="capFormRef" label-width="110px">
         <el-form-item v-if="capForm.capItemId || inDraftMode" label="参数类型">
           <span :class="['type-tag', typeTagCls(capForm.capType)]">{{ typeLabel(capForm.capType) }}</span>
