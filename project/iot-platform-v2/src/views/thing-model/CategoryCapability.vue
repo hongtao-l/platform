@@ -1,61 +1,5 @@
 <template>
   <div class="flex flex-1 min-w-0 overflow-hidden">
-    <!-- ===== Module panel ===== -->
-    <aside class="w-64 border-r border-slate-200 bg-slate-50 flex flex-col flex-shrink-0 select-none z-10">
-      <div class="p-3.5 border-b border-slate-200/80 bg-white">
-        <div class="flex items-center space-x-2">
-          <span class="w-2 h-2 rounded-full bg-sky-600" />
-          <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wide">模块</h2>
-        </div>
-        <p class="text-[11px] text-slate-400 leading-relaxed mt-1.5 truncate">仅展示已绑定能力</p>
-      </div>
-
-      <div class="p-2.5 border-b border-slate-200/70">
-        <div class="relative">
-          <input v-model="moduleSearch" class="w-full pl-7 pr-2.5 py-1 text-xs bg-white border border-slate-200 rounded-md placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500" placeholder="搜索模块..." />
-          <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /></svg>
-        </div>
-      </div>
-
-      <div class="flex-1 overflow-y-auto p-2 space-y-0.5">
-        <button
-          class="w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-all"
-          :class="currentModuleId === 'all' ? 'font-semibold text-slate-800 bg-white border border-slate-200/80 shadow-2xs' : 'font-medium text-slate-600 hover:text-slate-900 hover:bg-white'"
-          @click="currentModuleId = 'all'"
-        >
-          <div class="flex items-center space-x-1.5">
-            <span class="w-1.5 h-1.5 rounded-full" :class="currentModuleId === 'all' ? 'bg-sky-500' : 'bg-slate-300'" />
-            <span>全部模块</span>
-          </div>
-          <span class="text-[10px] font-mono" :class="currentModuleId === 'all' ? 'text-sky-700' : 'text-slate-400'">{{ linkedCaps.length }}</span>
-        </button>
-        <button
-          v-for="m in filteredModules"
-          :key="m.id"
-          class="w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-all group"
-          :class="currentModuleId === m.id ? 'font-semibold text-slate-800 bg-white border border-slate-200/80 shadow-2xs' : 'font-medium text-slate-600 hover:text-slate-900 hover:bg-white'"
-          @click="currentModuleId = m.id"
-        >
-          <div class="flex items-center space-x-1.5 truncate min-w-0">
-            <span class="w-1 h-1 rounded-full flex-shrink-0" :class="currentModuleId === m.id ? 'bg-sky-500' : 'bg-slate-300 group-hover:bg-sky-500'" />
-            <span class="truncate">{{ m.name }}</span>
-          </div>
-          <span class="text-[10px] font-mono text-slate-400 group-hover:text-slate-600">{{ moduleCounts[m.id] || 0 }}</span>
-        </button>
-        <div v-if="!filteredModules.length" class="px-2 py-4 text-[11px] text-slate-400 text-center">该类目暂无可展示模块</div>
-      </div>
-
-      <div class="p-3 border-t border-slate-200/70 text-[11px] text-slate-500 bg-white">
-        <div class="flex items-center justify-between">
-          <span>已绑定能力</span>
-          <span class="font-mono font-semibold text-slate-700">{{ linkedCaps.length }}</span>
-        </div>
-        <div class="flex items-center justify-between mt-1">
-          <span>能力模块</span>
-          <span class="font-mono font-semibold text-slate-700">{{ displayModules.length }}</span>
-        </div>
-      </div>
-    </aside>
 
     <!-- ===== Main ===== -->
     <main class="flex-1 flex flex-col min-w-0 bg-white overflow-hidden">
@@ -102,7 +46,57 @@
         </div>
       </div>
 
-      <div class="flex-1 overflow-auto bg-white">
+      <div class="flex-1 min-h-0 m-4 mt-3 flex bg-white border border-slate-200 rounded-lg overflow-hidden">
+        <!-- 模块筛选 -->
+        <aside class="w-56 border-r border-slate-200 bg-slate-50 flex flex-col flex-shrink-0 select-none">
+          <div class="p-3.5 border-b border-slate-200/80 bg-white">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-sky-600" />
+                <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wide">模块</h2>
+              </div>
+              <span class="text-[10px] font-mono text-slate-400">{{ linkedCaps.length }}</span>
+            </div>
+            <p class="text-[11px] text-slate-400 leading-relaxed mt-1.5 truncate">仅展示已绑定能力 · {{ displayModules.length }} 个模块</p>
+          </div>
+
+          <div class="p-2.5 border-b border-slate-200/70">
+            <div class="relative">
+              <input v-model="moduleSearch" class="w-full pl-7 pr-2.5 py-1 text-xs bg-white border border-slate-200 rounded-md placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500" placeholder="搜索模块..." />
+              <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /></svg>
+            </div>
+          </div>
+
+          <div class="flex-1 overflow-y-auto p-2 space-y-0.5">
+            <button
+              class="w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-all"
+              :class="currentModuleId === 'all' ? 'font-semibold text-slate-800 bg-white border border-slate-200/80 shadow-2xs' : 'font-medium text-slate-600 hover:text-slate-900 hover:bg-white'"
+              @click="currentModuleId = 'all'"
+            >
+              <div class="flex items-center space-x-1.5">
+                <span class="w-1.5 h-1.5 rounded-full" :class="currentModuleId === 'all' ? 'bg-sky-500' : 'bg-slate-300'" />
+                <span>全部模块</span>
+              </div>
+              <span class="text-[10px] font-mono" :class="currentModuleId === 'all' ? 'text-sky-700' : 'text-slate-400'">{{ linkedCaps.length }}</span>
+            </button>
+            <button
+              v-for="m in filteredModules"
+              :key="m.id"
+              class="w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-all group"
+              :class="currentModuleId === m.id ? 'font-semibold text-slate-800 bg-white border border-slate-200/80 shadow-2xs' : 'font-medium text-slate-600 hover:text-slate-900 hover:bg-white'"
+              @click="currentModuleId = m.id"
+            >
+              <div class="flex items-center space-x-1.5 truncate min-w-0">
+                <span class="w-1 h-1 rounded-full flex-shrink-0" :class="currentModuleId === m.id ? 'bg-sky-500' : 'bg-slate-300 group-hover:bg-sky-500'" />
+                <span class="truncate">{{ m.name }}</span>
+              </div>
+              <span class="text-[10px] font-mono text-slate-400 group-hover:text-slate-600">{{ moduleCounts[m.id] || 0 }}</span>
+            </button>
+            <div v-if="!filteredModules.length" class="px-2 py-4 text-[11px] text-slate-400 text-center">该类目暂无可展示模块</div>
+          </div>
+        </aside>
+
+        <div class="flex-1 overflow-auto">
         <el-table :data="filteredCapTree" row-key="id" class="stitch-table">
           <el-table-column type="expand" width="44">
             <template #default="{ row }">
@@ -155,6 +149,13 @@
           <el-table-column label="参数数量" width="110" align="center">
             <template #default="{ row }"><span class="text-xs text-slate-500">{{ row.paramCount }} 个</span></template>
           </el-table-column>
+          <el-table-column label="操作" width="90" align="right">
+            <template #default="{ row }">
+              <div class="row-actions">
+                <button class="link-danger" @click="handleRemoveCapItem(row)">移除</button>
+              </div>
+            </template>
+          </el-table-column>
           <template #empty>
             <div class="empty-box">
               <span>该类目暂无绑定能力</span>
@@ -162,6 +163,7 @@
             </div>
           </template>
         </el-table>
+        </div>
       </div>
 
       <footer class="h-12 border-t border-slate-200 bg-white px-5 flex items-center justify-between text-xs text-slate-500 flex-shrink-0">
@@ -169,6 +171,7 @@
         <span class="font-mono text-[11px] text-slate-400">类目 #{{ categoryId }}</span>
       </footer>
     </main>
+
 
     <!-- ===== Import dialog ===== -->
     <el-dialog v-model="importDialogVisible" title="关联能力" width="960px" :close-on-click-modal="false" top="3vh">
@@ -838,6 +841,17 @@ function handleRemoveCap(cap) {
     { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }
   ).then(() => {
     unlinkCapFromCategory(categoryId, cap.id)
+    ElMessage.success('已移除')
+  }).catch(() => {})
+}
+
+function handleRemoveCapItem(row) {
+  ElMessageBox.confirm(
+    `确定从该类目移除能力项「${row.name}」及其 ${row.paramCount} 个参数？`,
+    '移除确认',
+    { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }
+  ).then(() => {
+    row.params.forEach(p => unlinkCapFromCategory(categoryId, p.id))
     ElMessage.success('已移除')
   }).catch(() => {})
 }

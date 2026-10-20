@@ -123,7 +123,7 @@
               </div>
 
               <div v-if="standardCapTree.length" class="overflow-x-auto">
-                <el-table ref="standardTableRef" :data="standardCapTree" row-key="id" class="config-table">
+                <el-table :data="standardCapTree" row-key="id" class="config-table">
                   <el-table-column type="expand" width="44">
                     <template #default="{ row }">
                       <div class="param-panel">
@@ -172,11 +172,9 @@
                   <el-table-column label="更新时间" width="160">
                     <template #default="{ row }"><span class="cell-time">{{ row.updateTime || '—' }}</span></template>
                   </el-table-column>
-                  <el-table-column label="操作" width="140" align="right">
+                  <el-table-column label="操作" width="90" align="right">
                     <template #default="{ row }">
                       <div class="row-actions">
-                        <button class="link-action" @click="toggleStandardRow(row)">配置</button>
-                        <span class="text-slate-200">|</span>
                         <button class="link-danger" @click="removeStandardCapItem(row)">移除</button>
                       </div>
                     </template>
@@ -203,7 +201,7 @@
               </div>
 
               <div v-if="customCapTree.length" class="overflow-x-auto">
-                <el-table ref="customTableRef" :data="customCapTree" row-key="id" class="config-table">
+                <el-table :data="customCapTree" row-key="id" class="config-table">
                   <el-table-column type="expand" width="44">
                     <template #default="{ row }">
                       <div class="param-panel">
@@ -1278,11 +1276,6 @@ const customEmptyDesc = computed(() =>
 const footerNextLabel = computed(() =>
   currentStep.value === 0 ? '保存并下一步: 配置 APP' : currentStep.value === 2 ? '保存并下一步: 平台服务' : '保存并完成'
 )
-
-const standardTableRef = ref(null)
-const customTableRef = ref(null)
-function toggleStandardRow(row) { standardTableRef.value?.toggleRowExpansion(row) }
-function toggleCustomRow(row) { customTableRef.value?.toggleRowExpansion(row) }
 
 function copyProductId() {
   navigator.clipboard.writeText(productId.value)
