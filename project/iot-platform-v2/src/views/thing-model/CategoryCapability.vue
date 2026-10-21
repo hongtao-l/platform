@@ -102,9 +102,6 @@
             <template #default="{ row }">
               <div class="param-panel">
                 <el-table :data="row.params" size="small">
-                  <el-table-column label="类型" width="80" align="center">
-                    <template #default="{ row: p }"><span :class="['type-tag', typeTagCls(p.capType)]">{{ typeLabel(p.capType) }}</span></template>
-                  </el-table-column>
                   <el-table-column label="参数名称" min-width="140">
                     <template #default="{ row: p }"><span class="cell-name">{{ p.name }}</span></template>
                   </el-table-column>
@@ -261,7 +258,6 @@
     <el-dialog v-model="editDialogVisible" title="编辑能力参数" width="860px" :close-on-click-modal="false" top="3vh">
       <div class="flex items-center justify-between mb-5 pb-4 border-b border-slate-100">
         <div class="flex items-center space-x-2">
-          <span v-if="editCap" :class="['type-tag', typeTagCls(editCap.capType)]">{{ typeLabel(editCap.capType) }}</span>
           <h3 class="text-sm font-bold text-slate-900">{{ editCap?.name }}</h3>
         </div>
         <span class="font-mono text-[11px] text-slate-400">{{ editCap?.identifier }}</span>
@@ -276,7 +272,7 @@
         </el-form-item>
         <template v-if="editCap.capType === 'prop'">
           <el-form-item label="数据类型">
-            <el-input :model-value="dataTypeLabel(editCap)" disabled />
+            <el-input :model-value="dataTypeLabel({ capType: 'prop', dataDef: editForm })" disabled />
           </el-form-item>
           <el-form-item label="读写模式">
             <el-select v-model="editForm.accessMode" style="width:100%">
@@ -780,10 +776,12 @@ const editForm = reactive({
 })
 
 function openEditCap(cap) {
-  editCap.value = cap
-  const dd = cap.dataDef
+  // 参数统一按属性内容编辑；旧的服务/事件参数转为属性默认配置
+  editCap.value = { ...cap, capType: 'prop' }
+  const dd = cap.dataDef || {}
   editForm.descr = cap.descr || ''
-  if (cap.capType === 'prop') {
+  const propTypes = ['enum', 'int', 'boolean', 'string', 'array', 'struct']
+  if (cap.capType === 'prop' && propTypes.includes(dd.dataType)) {
     editForm.dataType = dd.dataType
     editForm.accessMode = dd.accessMode || 'rw'
     editForm.defaultVal = dd.defaultVal || ''
@@ -793,12 +791,12 @@ function openEditCap(cap) {
     editForm.maxLength = dd.limit || 64
     editForm.elementType = dd.elementType || 'int'; editForm.arrayCount = dd.maxLength || 100
     editForm.fields = dd.fields ? JSON.parse(JSON.stringify(dd.fields)) : []
-  } else if (cap.capType === 'svc') {
-    editForm.inputParams = JSON.parse(JSON.stringify(dd.inputParams || []))
-    editForm.outputParams = JSON.parse(JSON.stringify(dd.outputParams || []))
   } else {
-    editForm.eventType = dd.eventType || 'alarm'
-    editForm.outputParams = JSON.parse(JSON.stringify(dd.outputParams || []))
+    editForm.dataType = 'enum'; editForm.accessMode = 'rw'; editForm.defaultVal = ''
+    editForm.enumValues = [{ name: '', val: 0 }]
+    editForm.min = 0; editForm.max = 100; editForm.step = 1; editForm.unit = ''
+    editForm.trueLabel = '开启'; editForm.falseLabel = '关闭'
+    editForm.maxLength = 64; editForm.elementType = 'int'; editForm.arrayCount = 100; editForm.fields = []
   }
   editDialogVisible.value = true
 }

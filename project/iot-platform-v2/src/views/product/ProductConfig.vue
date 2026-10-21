@@ -128,11 +128,6 @@
                     <template #default="{ row }">
                       <div class="param-panel">
                         <el-table :data="row.params" size="small">
-                          <el-table-column label="类型" width="80" align="center">
-                            <template #default="{ row: p }">
-                              <span :class="['type-tag', p.capType === 'prop' ? 'type-prop' : p.capType === 'svc' ? 'type-svc' : 'type-evt']">{{ capTypeLabel(p.capType) }}</span>
-                            </template>
-                          </el-table-column>
                           <el-table-column label="参数名称" min-width="140" prop="name" />
                           <el-table-column label="参数标识" width="180" prop="identifier" />
                           <el-table-column label="数据类型" width="100" prop="dataType" />
@@ -206,11 +201,6 @@
                     <template #default="{ row }">
                       <div class="param-panel">
                         <el-table :data="row.params" size="small">
-                          <el-table-column label="类型" width="80" align="center">
-                            <template #default="{ row: p }">
-                              <span :class="['type-tag', p.capType === 'prop' ? 'type-prop' : p.capType === 'svc' ? 'type-svc' : 'type-evt']">{{ capTypeLabel(p.capType) }}</span>
-                            </template>
-                          </el-table-column>
                           <el-table-column label="参数名称" min-width="140" prop="name" />
                           <el-table-column label="参数标识" width="180" prop="identifier" />
                           <el-table-column label="数据类型" width="100" prop="dataType" />
@@ -510,7 +500,6 @@
           <div style="width:100%">
             <div v-if="!customDraftParams.length" class="draft-empty">暂未添加参数</div>
             <div v-for="(p, i) in customDraftParams" :key="i" class="draft-param">
-              <span :class="['type-tag', 'type-' + p.capType]">{{ capTypeLabel(p.capType) }}</span>
               <span class="draft-name">{{ p.name }}</span>
               <span class="draft-id">{{ p.identifier }}</span>
               <el-button size="small" text type="danger" @click="customDraftParams.splice(i, 1)">删除</el-button>
@@ -858,7 +847,7 @@
     <!-- 能力参数编辑/创建弹窗 -->
     <el-dialog v-model="algoCapEditVisible" :title="isAlgoCreateMode ? '创建参数' : '编辑参数 - ' + (algoCapEditRef?.cap?.name || '')" width="860px" top="3vh" :close-on-click-modal="false" class="cap-dialog">
       <el-form v-if="isAlgoCreateMode || algoCapEditRef" label-width="100px">
-        <el-form-item label="能力类型">
+        <el-form-item v-if="!capTypeLocked && (isAlgoCreateMode || !algoCapEditRef?.cap?.capItemId)" label="能力类型">
           <div class="type-cards">
             <div :class="['type-card', { active: (isAlgoCreateMode ? algoCapEditForm.capType : algoCapEditRef?.cap?.capType) === 'prop' }]" :style="canPickType ? 'cursor:pointer' : 'pointer-events:none'" @click="canPickType && onAlgoCapTypeChange('prop')">属性</div>
             <div :class="['type-card', { active: (isAlgoCreateMode ? algoCapEditForm.capType : algoCapEditRef?.cap?.capType) === 'svc' }]" :style="canPickType ? 'cursor:pointer' : 'pointer-events:none'" @click="canPickType && onAlgoCapTypeChange('svc')">服务</div>
@@ -1663,7 +1652,7 @@ function openDraftCustomParam() {
   resetAlgoCapForm()
   customDraftMode.value = true
   pendingCapItemId.value = null
-  algoCapEditForm.capType = customCapItemForm.capType || 'prop'
+  algoCapEditForm.capType = 'prop'
   algoCapEditVisible.value = true
 }
 
@@ -1817,7 +1806,13 @@ function dataTypeLabel(cap) {
 const algoCapEditVisible = ref(false)
 const algoCapEditRef = ref(null)
 const isAlgoCreateMode = ref(false)
-const editCapType = computed(() => isAlgoCreateMode.value ? algoCapEditForm.capType : algoCapEditRef.value?.cap?.capType)
+const editCapType = computed(() => {
+  if (isAlgoCreateMode.value) return algoCapEditForm.capType
+  const cap = algoCapEditRef.value?.cap
+  // 参数统一按属性内容配置
+  if (cap?.capItemId) return 'prop'
+  return cap?.capType
+})
 
 const algoCapEditForm = reactive({
   capType: 'prop', name: '', identifier: '',
@@ -1880,7 +1875,7 @@ function openCustomCapCreate(item) {
   algoCapEditRef.value = null
   resetAlgoCapForm()
   pendingCapItemId.value = item.id
-  algoCapEditForm.capType = item.capType || 'prop'
+  algoCapEditForm.capType = 'prop'
   algoCapEditVisible.value = true
 }
 
@@ -1889,20 +1884,31 @@ function openAlgoCapEdit(item) {
   algoCapEditRef.value = item
   const cap = item.cap
   const dd = cap.dataDef || {}
-  algoCapEditForm.capType = cap.capType
+  // 参数统一按属性内容配置；旧的服务/事件参数转为属性默认配置
+  const isParam = !!cap.capItemId
+  algoCapEditForm.capType = isParam ? 'prop' : cap.capType
   algoCapEditForm.name = cap.name
   algoCapEditForm.identifier = cap.identifier
   algoCapEditForm.descr = cap.descr || ''
-  if (cap.capType === 'prop') {
-    algoCapEditForm.dataType = dd.dataType || ''
-    algoCapEditForm.accessMode = dd.accessMode || 'rw'
-    algoCapEditForm.defaultVal = dd.defaultVal ?? ''
-    algoCapEditForm.enumValues = dd.enumValues ? JSON.parse(JSON.stringify(dd.enumValues)) : [{ name: '', val: 0 }]
-    algoCapEditForm.min = dd.min ?? 0; algoCapEditForm.max = dd.max ?? 100; algoCapEditForm.step = dd.step ?? 1; algoCapEditForm.unit = dd.unit || ''
-    algoCapEditForm.trueLabel = dd.trueLabel || '开启'; algoCapEditForm.falseLabel = dd.falseLabel || '关闭'
-    algoCapEditForm.maxLength = dd.maxLength ?? 64
-    algoCapEditForm.elementType = dd.elementType || 'int'; algoCapEditForm.arrayMaxLength = dd.arrayMaxLength ?? 100
-    algoCapEditForm.fields = dd.fields ? JSON.parse(JSON.stringify(dd.fields)) : []
+  const propTypes = ['enum', 'int', 'boolean', 'string', 'array', 'struct']
+  if (algoCapEditForm.capType === 'prop') {
+    if (cap.capType === 'prop' && propTypes.includes(dd.dataType)) {
+      algoCapEditForm.dataType = dd.dataType
+      algoCapEditForm.accessMode = dd.accessMode || 'rw'
+      algoCapEditForm.defaultVal = dd.defaultVal ?? ''
+      algoCapEditForm.enumValues = dd.enumValues ? JSON.parse(JSON.stringify(dd.enumValues)) : [{ name: '', val: 0 }]
+      algoCapEditForm.min = dd.min ?? 0; algoCapEditForm.max = dd.max ?? 100; algoCapEditForm.step = dd.step ?? 1; algoCapEditForm.unit = dd.unit || ''
+      algoCapEditForm.trueLabel = dd.trueLabel || '开启'; algoCapEditForm.falseLabel = dd.falseLabel || '关闭'
+      algoCapEditForm.maxLength = dd.maxLength ?? 64
+      algoCapEditForm.elementType = dd.elementType || 'int'; algoCapEditForm.arrayMaxLength = dd.arrayMaxLength ?? 100
+      algoCapEditForm.fields = dd.fields ? JSON.parse(JSON.stringify(dd.fields)) : []
+    } else {
+      algoCapEditForm.dataType = 'enum'; algoCapEditForm.accessMode = 'rw'; algoCapEditForm.defaultVal = ''
+      algoCapEditForm.enumValues = [{ name: '', val: 0 }]
+      algoCapEditForm.min = 0; algoCapEditForm.max = 100; algoCapEditForm.step = 1; algoCapEditForm.unit = ''
+      algoCapEditForm.trueLabel = '开启'; algoCapEditForm.falseLabel = '关闭'
+      algoCapEditForm.maxLength = 64; algoCapEditForm.elementType = 'int'; algoCapEditForm.arrayMaxLength = 100; algoCapEditForm.fields = []
+    }
   } else if (cap.capType === 'svc') {
     algoCapEditForm.inputParams = JSON.parse(JSON.stringify(dd.inputParams || []))
     algoCapEditForm.outputParams = JSON.parse(JSON.stringify(dd.outputParams || []))
@@ -1954,9 +1960,6 @@ function saveAlgoCapEdit() {
 
     const parent = customCapItems.value.find(x => x.id === pendingCapItemId.value)
     if (!parent) { ElMessage.warning('请从能力项的「添加参数」进入'); return }
-    if (parent.capType !== algoCapEditForm.capType) {
-      ElMessage.warning(`该能力项是「${capTypeLabel(parent.capType)}」类型，只能添加${capTypeLabel(parent.capType)}参数`); return
-    }
     const cap = {
       id: Date.now() + Math.random(),
       capItemId: parent.id,
@@ -1972,6 +1975,7 @@ function saveAlgoCapEdit() {
   } else {
     const cap = algoCapEditRef.value?.cap
     if (!cap) return
+    if (cap.capItemId) cap.capType = 'prop'
     cap.descr = algoCapEditForm.descr.trim()
     cap.dataDef = buildDataDefFromForm()
     ElMessage.success('参数已更新')

@@ -125,9 +125,6 @@
             <template #default="{ row }">
               <div class="param-panel">
                 <el-table :data="row.params" size="small">
-                  <el-table-column label="类型" width="80" align="center">
-                    <template #default="{ row: p }"><span :class="['type-tag', typeTagCls(p.capType)]">{{ typeLabel(p.capType) }}</span></template>
-                  </el-table-column>
                   <el-table-column label="参数名称" min-width="150">
                     <template #default="{ row: p }"><span class="cell-name">{{ p.name }}</span></template>
                   </el-table-column>
@@ -258,7 +255,6 @@
           <div class="w-full">
             <div v-if="!draftParams.length" class="text-[11px] text-slate-400 py-1">暂未添加参数</div>
             <div v-for="(p, i) in draftParams" :key="i" class="draft-param">
-              <span :class="['type-tag', typeTagCls(p.capType)]">{{ typeLabel(p.capType) }}</span>
               <span class="text-xs font-medium text-slate-800">{{ p.name }}</span>
               <span class="font-mono text-[11px] text-slate-400">{{ p.identifier }}</span>
               <button class="link-danger ml-auto" @click="draftParams.splice(i, 1)">删除</button>
@@ -282,22 +278,6 @@
       top="3vh"
     >
       <el-form ref="capFormRef" label-width="110px">
-        <el-form-item v-if="capForm.capItemId || inDraftMode" label="参数类型">
-          <span :class="['type-tag', typeTagCls(capForm.capType)]">{{ typeLabel(capForm.capType) }}</span>
-          <span class="form-hint inline !mt-0 ml-2">跟随所属能力项，不可修改</span>
-        </el-form-item>
-        <el-form-item v-else label="参数类型" required>
-          <div class="seg-control">
-            <span
-              v-for="t in capTypeOptions"
-              :key="t.value"
-              class="seg-item !px-4"
-              :class="{ active: capForm.capType === t.value }"
-              @click="onCapTypeChange(t.value)"
-            >{{ t.label }}</span>
-          </div>
-        </el-form-item>
-
         <el-form-item label="参数名称" required>
           <el-input v-model="capForm.name" placeholder="请输入参数名称（2-50字符）" maxlength="50" />
         </el-form-item>
@@ -987,7 +967,8 @@ function openAddCapability(capItemRow) {
   if (capItemRow?._isCapItem) {
     capForm.capItemId = capItemRow._rawId
     capForm.moduleId = capItemRow.moduleId
-    capForm.capType = capItemRow.capType || 'prop'
+    // 参数统一按属性内容配置，不再跟随能力项类型
+    capForm.capType = 'prop'
     resetDataDefForType()
   }
   dialogVisible.value = true
@@ -1001,7 +982,8 @@ function openDraftParam() {
   editingCapId.value = null
   resetCapForm()
   inDraftMode.value = true
-  capForm.capType = capItemForm.capType || 'prop'
+  // 参数统一按属性内容配置，不再跟随能力项类型
+  capForm.capType = 'prop'
   resetDataDefForType()
   dialogVisible.value = true
 }
@@ -1011,11 +993,13 @@ function openEditCapability(cap) {
   editingCapId.value = cap.id
   capForm.capItemId = cap.capItemId ?? null
   capForm.moduleId = cap.moduleId ?? null
-  const dd = cap.dataDef
-  capForm.capType = cap.capType
+  const dd = cap.dataDef || {}
+  // 参数统一按属性内容配置；旧的服务/事件参数在编辑时转为属性默认配置
+  capForm.capType = 'prop'
   capForm.name = cap.name; capForm.identifier = cap.identifier; capForm.descr = cap.descr
-  if (cap.capType === 'prop') {
-    capForm.dataType = dd.dataType; capForm.accessMode = dd.accessMode
+  const propTypes = ['enum', 'int', 'boolean', 'string', 'array', 'struct']
+  if (cap.capType === 'prop' && propTypes.includes(dd.dataType)) {
+    capForm.dataType = dd.dataType; capForm.accessMode = dd.accessMode || 'rw'
     capForm.enumValues = dd.enumValues ? JSON.parse(JSON.stringify(dd.enumValues)) : [{ name: '', val: 0 }]
     capForm.defaultVal = dd.defaultVal || ''
     capForm.min = dd.min || 0; capForm.max = dd.max || 100; capForm.step = dd.step || 1; capForm.unit = dd.unit || ''
@@ -1023,12 +1007,12 @@ function openEditCapability(cap) {
     capForm.maxLength = dd.limit || 64
     capForm.elementType = dd.elementType || 'int'; capForm.arrayCount = dd.maxLength || 100
     capForm.fields = dd.fields ? JSON.parse(JSON.stringify(dd.fields)) : []
-  } else if (cap.capType === 'svc') {
-    capForm.inputParams = JSON.parse(JSON.stringify(dd.inputParams || []))
-    capForm.outputParams = JSON.parse(JSON.stringify(dd.outputParams || []))
   } else {
-    capForm.eventType = dd.eventType || 'alarm'
-    capForm.outputParams = JSON.parse(JSON.stringify(dd.outputParams || []))
+    capForm.dataType = 'enum'; capForm.accessMode = 'rw'
+    capForm.enumValues = [{ name: '', val: 0 }]; capForm.defaultVal = ''
+    capForm.min = 0; capForm.max = 100; capForm.step = 1; capForm.unit = ''
+    capForm.trueLabel = '开启'; capForm.falseLabel = '关闭'
+    capForm.maxLength = 64; capForm.elementType = 'int'; capForm.arrayCount = 100; capForm.fields = []
   }
   dialogVisible.value = true
 }
@@ -1112,13 +1096,6 @@ function handleCapabilityConfirm() {
   if (!editingCapId.value && !capForm.capItemId) {
     ElMessage.warning('请从能力项的「添加参数」进入，参数必须归属于某个能力项'); return
   }
-  if (capForm.capItemId) {
-    const parent = store.capItems.find(x => x.id === capForm.capItemId)
-    if (parent && parent.capType && parent.capType !== capForm.capType) {
-      ElMessage.warning(`该能力项是「${typeLabel(parent.capType)}」类型，只能添加${typeLabel(parent.capType)}参数`); return
-    }
-  }
-
   const item = {
     moduleId: capFormModuleId(),
     capItemId: capForm.capItemId,

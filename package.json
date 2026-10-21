@@ -1,5 +1,10 @@
 {
   "dependencies": {
     "sharp": "^0.35.3"
+  },
+  "scripts": {
+    "dev:iot-v2": "npm --prefix \"project/iot-platform-v2\" run dev",
+    "build:iot-v2": "npm --prefix \"project/iot-platform-v2\" run build",
+    "install:iot-v2": "npm --prefix \"project/iot-platform-v2\" install"
   }
 }
