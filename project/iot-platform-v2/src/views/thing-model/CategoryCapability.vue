@@ -302,17 +302,17 @@
           <el-form-item label="默认值"><el-input v-model="editForm.defaultVal" placeholder="请输入默认枚举值的 Value" /></el-form-item>
         </template>
 
-        <template v-if="editCap.capType === 'prop' && editForm.dataType === 'int'">
+        <template v-if="editCap.capType === 'prop' && ['int', 'double'].includes(editForm.dataType)">
           <el-form-item label="取值范围" required>
             <div class="flex items-center gap-2 w-full">
-              <el-input-number v-model="editForm.min" :max="editForm.max - 1" style="flex:1" />
+              <el-input-number v-model="editForm.min" :max="editForm.max - 1" :step="editForm.dataType === 'double' ? 0.1 : 1" style="flex:1" />
               <span class="text-slate-400 text-xs">~</span>
-              <el-input-number v-model="editForm.max" :min="editForm.min + 1" style="flex:1" />
+              <el-input-number v-model="editForm.max" :min="editForm.min + 1" :step="editForm.dataType === 'double' ? 0.1 : 1" style="flex:1" />
             </div>
           </el-form-item>
-          <el-form-item label="步长"><el-input-number v-model="editForm.step" :min="1" style="width:150px" /></el-form-item>
+          <el-form-item label="步长"><el-input-number v-model="editForm.step" :min="editForm.dataType === 'double' ? 0.01 : 1" :step="editForm.dataType === 'double' ? 0.1 : 1" style="width:150px" /></el-form-item>
           <el-form-item label="单位"><el-input v-model="editForm.unit" style="width:150px" /></el-form-item>
-          <el-form-item label="默认值"><el-input-number v-model="editForm.defaultVal" :min="editForm.min" :max="editForm.max" style="width:200px" /></el-form-item>
+          <el-form-item label="默认值"><el-input-number v-model="editForm.defaultVal" :min="editForm.min" :max="editForm.max" :step="editForm.dataType === 'double' ? 0.1 : 1" style="width:200px" /></el-form-item>
         </template>
 
         <template v-if="editCap.capType === 'prop' && editForm.dataType === 'boolean'">
@@ -448,6 +448,7 @@
         <el-form-item label="数据类型" required>
           <el-select v-model="paramForm.dataType" style="width:100%">
             <el-option label="Int (数字)" value="int" />
+            <el-option label="Double (浮点数)" value="double" />
             <el-option label="String (字符串)" value="string" />
             <el-option label="Boolean (布尔)" value="boolean" />
             <el-option label="Enum (枚举)" value="enum" />
@@ -457,15 +458,15 @@
 
         <div class="step-divider my-4"><span>类型定义</span></div>
 
-        <template v-if="paramForm.dataType === 'int'">
+        <template v-if="['int', 'double'].includes(paramForm.dataType)">
           <el-form-item label="取值范围">
             <div class="flex items-center gap-2 w-full">
-              <el-input-number v-model="paramForm.min" :max="paramForm.max - 1" style="flex:1" />
+              <el-input-number v-model="paramForm.min" :max="paramForm.max - 1" :step="paramForm.dataType === 'double' ? 0.1 : 1" style="flex:1" />
               <span class="text-slate-400 text-xs">~</span>
-              <el-input-number v-model="paramForm.max" :min="paramForm.min + 1" style="flex:1" />
+              <el-input-number v-model="paramForm.max" :min="paramForm.min + 1" :step="paramForm.dataType === 'double' ? 0.1 : 1" style="flex:1" />
             </div>
           </el-form-item>
-          <el-form-item label="步长"><el-input-number v-model="paramForm.step" :min="1" style="width:150px" /></el-form-item>
+          <el-form-item label="步长"><el-input-number v-model="paramForm.step" :min="paramForm.dataType === 'double' ? 0.01 : 1" :step="paramForm.dataType === 'double' ? 0.1 : 1" style="width:150px" /></el-form-item>
           <el-form-item label="单位"><el-input v-model="paramForm.unit" style="width:150px" /></el-form-item>
         </template>
         <template v-if="paramForm.dataType === 'string'">
@@ -616,14 +617,14 @@ function resetFilters() {
 // ===== Labels =====
 const typeTagMap = { prop: '属性', svc: '服务', evt: '事件' }
 const typeTagClsMap = { prop: 'type-prop', svc: 'type-svc', evt: 'type-evt' }
-const paramTypeMap = { int: 'Int', string: 'String', boolean: 'Boolean', enum: 'Enum' }
+const paramTypeMap = { int: 'Int', double: 'Double', string: 'String', boolean: 'Boolean', enum: 'Enum' }
 function typeLabel(t) { return typeTagMap[t] || t }
 function typeTagCls(t) { return typeTagClsMap[t] || '' }
 function paramTypeLabel(t) { return paramTypeMap[t] || t }
 
 function dataTypeLabel(cap) {
   if (cap.capType === 'prop') {
-    const m = { enum: '枚举型', int: '数值型', boolean: '布尔型', string: '字符串', array: '数组型', struct: '结构体型' }
+    const m = { enum: '枚举型', int: '数值型', double: '浮点型', boolean: '布尔型', string: '字符串', array: '数组型', struct: '结构体型' }
     return m[cap.dataDef?.dataType] || ''
   }
   if (cap.capType === 'svc') return '服务'
@@ -634,7 +635,7 @@ function dataDefDetail(cap) {
   if (cap.capType === 'prop') {
     const dd = cap.dataDef
     if (dd.dataType === 'enum') return (dd.enumValues || []).map(ev => `${ev.name}(${ev.val})`).join(', ')
-    if (dd.dataType === 'int') {
+    if (['int', 'double'].includes(dd.dataType)) {
       let s = `${dd.min}~${dd.max}`
       if (dd.step && dd.step !== 1) s += `, 步长${dd.step}`
       if (dd.unit) s += ` ${dd.unit}`
@@ -780,7 +781,7 @@ function openEditCap(cap) {
   editCap.value = { ...cap, capType: 'prop' }
   const dd = cap.dataDef || {}
   editForm.descr = cap.descr || ''
-  const propTypes = ['enum', 'int', 'boolean', 'string', 'array', 'struct']
+  const propTypes = ['enum', 'int', 'double', 'boolean', 'string', 'array', 'struct']
   if (cap.capType === 'prop' && propTypes.includes(dd.dataType)) {
     editForm.dataType = dd.dataType
     editForm.accessMode = dd.accessMode || 'rw'
@@ -805,7 +806,7 @@ function buildEditDataDef() {
   if (cap.capType === 'prop') {
     const dd = { dataType: editForm.dataType, accessMode: editForm.accessMode, defaultVal: editForm.defaultVal }
     if (editForm.dataType === 'enum') dd.enumValues = editForm.enumValues.filter(ev => ev.name.trim())
-    else if (editForm.dataType === 'int') { dd.min = editForm.min; dd.max = editForm.max; dd.step = editForm.step; dd.unit = editForm.unit }
+    else if (['int', 'double'].includes(editForm.dataType)) { dd.min = editForm.min; dd.max = editForm.max; dd.step = editForm.step; dd.unit = editForm.unit }
     else if (editForm.dataType === 'boolean') { dd.trueLabel = editForm.trueLabel; dd.falseLabel = editForm.falseLabel }
     else if (editForm.dataType === 'string') dd.limit = editForm.maxLength
     else if (editForm.dataType === 'array') {
@@ -887,8 +888,8 @@ function openEditParam(target, idx) {
   editingParamTarget.value = target; editingParamIdx.value = idx
   const p = editForm[target + 'Params'][idx]
   paramForm.name = p.name; paramForm.identifier = p.identifier; paramForm.dataType = p.dataType || 'boolean'
-  if (p.dataType === 'int') {
-    paramForm.min = p.min || 0; paramForm.max = p.max || 100; paramForm.step = p.step || 1; paramForm.unit = p.unit || ''
+  if (['int', 'double'].includes(p.dataType)) {
+    paramForm.min = p.min || 0; paramForm.max = p.max || 100; paramForm.step = p.step || (p.dataType === 'double' ? 0.1 : 1); paramForm.unit = p.unit || ''
   }
   paramForm.maxLength = p.maxLength || 64
   if (p.dataType === 'array') {
@@ -902,7 +903,7 @@ function openEditParam(target, idx) {
 }
 function buildParam() {
   const p = { name: paramForm.name.trim(), identifier: paramForm.identifier.trim(), dataType: paramForm.dataType }
-  if (paramForm.dataType === 'int') { p.min = paramForm.min; p.max = paramForm.max; p.step = paramForm.step; p.unit = paramForm.unit }
+  if (['int', 'double'].includes(paramForm.dataType)) { p.min = paramForm.min; p.max = paramForm.max; p.step = paramForm.step; p.unit = paramForm.unit }
   else if (paramForm.dataType === 'string') p.maxLength = paramForm.maxLength
   else if (paramForm.dataType === 'boolean') { p.trueLabel = paramForm.trueLabel; p.falseLabel = paramForm.falseLabel }
   else if (paramForm.dataType === 'enum') p.enumValues = paramForm.enumValues.filter(ev => ev.name.trim())
@@ -933,8 +934,8 @@ function openEditStructField(idx) {
   editingParamTarget.value = 'field'; editingParamIdx.value = idx
   const f = editForm.fields[idx]
   paramForm.name = f.name; paramForm.identifier = f.identifier; paramForm.dataType = f.dataType || 'boolean'
-  if (f.dataType === 'int') {
-    paramForm.min = f.min || 0; paramForm.max = f.max || 100; paramForm.step = f.step || 1; paramForm.unit = f.unit || ''
+  if (['int', 'double'].includes(f.dataType)) {
+    paramForm.min = f.min || 0; paramForm.max = f.max || 100; paramForm.step = f.step || (f.dataType === 'double' ? 0.1 : 1); paramForm.unit = f.unit || ''
   }
   paramForm.maxLength = f.maxLength || 64
   paramForm.elementType = 'int'; paramForm.arrayCount = 10

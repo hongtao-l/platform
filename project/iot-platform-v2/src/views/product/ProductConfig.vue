@@ -868,6 +868,7 @@
             <el-select v-if="isAlgoCreateMode" v-model="algoCapEditForm.dataType" style="width:100%" @change="onAlgoDataTypeChange">
               <el-option label="枚举型 (enum)" value="enum" />
               <el-option label="数值型 (int)" value="int" />
+              <el-option label="浮点型 (double)" value="double" />
               <el-option label="布尔型 (boolean)" value="boolean" />
               <el-option label="字符串 (string)" value="string" />
               <el-option label="数组型 (array)" value="array" />
@@ -906,22 +907,22 @@
           </el-form-item>
         </template>
 
-        <template v-if="editCapType === 'prop' && algoCapEditForm.dataType === 'int'">
+        <template v-if="editCapType === 'prop' && ['int', 'double'].includes(algoCapEditForm.dataType)">
           <el-form-item label="取值范围" required>
             <div class="range-row">
-              <el-input-number v-model="algoCapEditForm.min" :max="algoCapEditForm.max - 1" style="flex:1" />
+              <el-input-number v-model="algoCapEditForm.min" :max="algoCapEditForm.max - 1" :step="algoCapEditForm.dataType === 'double' ? 0.1 : 1" style="flex:1" />
               <span style="color:var(--text-placeholder)">~</span>
-              <el-input-number v-model="algoCapEditForm.max" :min="algoCapEditForm.min + 1" style="flex:1" />
+              <el-input-number v-model="algoCapEditForm.max" :min="algoCapEditForm.min + 1" :step="algoCapEditForm.dataType === 'double' ? 0.1 : 1" style="flex:1" />
             </div>
           </el-form-item>
           <el-form-item label="步长">
-            <el-input-number v-model="algoCapEditForm.step" :min="1" style="width:150px" />
+            <el-input-number v-model="algoCapEditForm.step" :min="algoCapEditForm.dataType === 'double' ? 0.01 : 1" :step="algoCapEditForm.dataType === 'double' ? 0.1 : 1" style="width:150px" />
           </el-form-item>
           <el-form-item label="单位">
             <el-input v-model="algoCapEditForm.unit" style="width:150px" />
           </el-form-item>
           <el-form-item label="默认值">
-            <el-input-number v-model="algoCapEditForm.defaultVal" :min="algoCapEditForm.min" :max="algoCapEditForm.max" style="width:200px" />
+            <el-input-number v-model="algoCapEditForm.defaultVal" :min="algoCapEditForm.min" :max="algoCapEditForm.max" :step="algoCapEditForm.dataType === 'double' ? 0.1 : 1" style="width:200px" />
           </el-form-item>
         </template>
 
@@ -1078,8 +1079,9 @@
             <el-input v-model="paramForm.identifier" placeholder="例如 result" />
           </el-form-item>
           <el-form-item label="数据类型" required>
-            <el-select v-model="paramForm.dataType" style="width:100%">
+            <el-select v-model="paramForm.dataType" style="width:100%" @change="onParamDataTypeChange">
               <el-option label="Int (数字)" value="int" />
+              <el-option label="Double (浮点数)" value="double" />
               <el-option label="String (字符串)" value="string" />
               <el-option label="Boolean (布尔)" value="boolean" />
               <el-option label="Enum (枚举)" value="enum" />
@@ -1087,16 +1089,16 @@
             </el-select>
           </el-form-item>
           <el-divider>类型定义</el-divider>
-          <template v-if="paramForm.dataType === 'int'">
+          <template v-if="['int', 'double'].includes(paramForm.dataType)">
             <el-form-item label="取值范围">
               <div class="range-row">
-                <el-input-number v-model="paramForm.min" :max="paramForm.max - 1" style="flex:1" />
+                <el-input-number v-model="paramForm.min" :max="paramForm.max - 1" :step="paramForm.dataType === 'double' ? 0.1 : 1" style="flex:1" />
                 <span style="color:var(--text-placeholder)">~</span>
-                <el-input-number v-model="paramForm.max" :min="paramForm.min + 1" style="flex:1" />
+                <el-input-number v-model="paramForm.max" :min="paramForm.min + 1" :step="paramForm.dataType === 'double' ? 0.1 : 1" style="flex:1" />
               </div>
             </el-form-item>
             <el-form-item label="步长">
-              <el-input-number v-model="paramForm.step" :min="1" style="width:150px" />
+              <el-input-number v-model="paramForm.step" :min="paramForm.dataType === 'double' ? 0.01 : 1" :step="paramForm.dataType === 'double' ? 0.1 : 1" style="width:150px" />
             </el-form-item>
             <el-form-item label="单位">
               <el-input v-model="paramForm.unit" style="width:150px" />
@@ -1794,7 +1796,7 @@ function capTypeLabel(t) { return capTypeMap[t] || t }
 
 function dataTypeLabel(cap) {
   if (cap.capType === 'prop') {
-    const m = { enum: '枚举型', int: '数值型', boolean: '布尔型', string: '字符串', array: '数组型', struct: '结构体型' }
+    const m = { enum: '枚举型', int: '数值型', double: '浮点型', boolean: '布尔型', string: '字符串', array: '数组型', struct: '结构体型' }
     return m[cap.dataDef?.dataType] || ''
   }
   if (cap.capType === 'svc') return '服务'
@@ -1845,6 +1847,7 @@ function getDefaultDataDef() {
     switch (f.dataType) {
       case 'enum': return { ...base, enumValues: [{ name: '', val: 0 }], defaultVal: '' }
       case 'int': return { ...base, min: 0, max: 100, step: 1, unit: '', defaultVal: 0 }
+      case 'double': return { ...base, min: 0, max: 100, step: 0.1, unit: '', defaultVal: 0 }
       case 'boolean': return { ...base, trueLabel: '开启', falseLabel: '关闭', defaultVal: '0' }
       case 'string': return { ...base, maxLength: 64, defaultVal: '' }
       case 'array': return { ...base, elementType: 'int', arrayMaxLength: 100, fields: [] }
@@ -1890,7 +1893,7 @@ function openAlgoCapEdit(item) {
   algoCapEditForm.name = cap.name
   algoCapEditForm.identifier = cap.identifier
   algoCapEditForm.descr = cap.descr || ''
-  const propTypes = ['enum', 'int', 'boolean', 'string', 'array', 'struct']
+  const propTypes = ['enum', 'int', 'double', 'boolean', 'string', 'array', 'struct']
   if (algoCapEditForm.capType === 'prop') {
     if (cap.capType === 'prop' && propTypes.includes(dd.dataType)) {
       algoCapEditForm.dataType = dd.dataType
@@ -1924,7 +1927,7 @@ function buildDataDefFromForm() {
   if (f.capType === 'prop') {
     const dd = { dataType: f.dataType, accessMode: f.accessMode, defaultVal: f.defaultVal }
     if (f.dataType === 'enum') dd.enumValues = f.enumValues.filter(ev => ev.name.trim())
-    else if (f.dataType === 'int') { dd.min = f.min; dd.max = f.max; dd.step = f.step; dd.unit = f.unit }
+    else if (['int', 'double'].includes(f.dataType)) { dd.min = f.min; dd.max = f.max; dd.step = f.step; dd.unit = f.unit }
     else if (f.dataType === 'boolean') { dd.trueLabel = f.trueLabel; dd.falseLabel = f.falseLabel }
     else if (f.dataType === 'string') dd.maxLength = f.maxLength
     else if (f.dataType === 'array') { dd.elementType = f.elementType; dd.arrayMaxLength = f.arrayMaxLength; if (f.elementType === 'struct') dd.fields = f.fields.filter(fi => fi.name.trim()) }
@@ -1997,7 +2000,7 @@ const paramForm = reactive({
   enumValues: [{ name: '', val: 0 }]
 })
 
-function paramTypeLabel(t) { const m = { int: 'Int', string: 'String', boolean: 'Boolean', enum: 'Enum', array: 'Array' }; return m[t] || t }
+function paramTypeLabel(t) { const m = { int: 'Int', double: 'Double', string: 'String', boolean: 'Boolean', enum: 'Enum', array: 'Array' }; return m[t] || t }
 
 const paramDialogTitle = computed(() => {
   if (editingParamTarget.value === 'field') return editingParamIdx.value >= 0 ? '编辑结构体字段' : '添加结构体字段'
@@ -2023,8 +2026,8 @@ function openEditParam(target, idx) {
   editingParamTarget.value = target; editingParamIdx.value = idx
   const p = target === 'field' ? algoCapEditForm.fields[idx] : algoCapEditForm[target + 'Params'][idx]
   paramForm.name = p.name || ''; paramForm.identifier = p.identifier || ''; paramForm.dataType = p.dataType || 'boolean'
-  if (p.dataType === 'int') {
-    paramForm.min = p.min || 0; paramForm.max = p.max || 100; paramForm.step = p.step || 1; paramForm.unit = p.unit || ''
+  if (['int', 'double'].includes(p.dataType)) {
+    paramForm.min = p.min || 0; paramForm.max = p.max || 100; paramForm.step = p.step || (p.dataType === 'double' ? 0.1 : 1); paramForm.unit = p.unit || ''
   }
   paramForm.maxLength = p.maxLength || 64
   if (p.dataType === 'array') {
@@ -2048,9 +2051,14 @@ function openEditStructField(idx) {
   openEditParam('field', idx)
 }
 
+function onParamDataTypeChange() {
+  if (paramForm.dataType === 'double' && paramForm.step === 1) paramForm.step = 0.1
+  if (paramForm.dataType === 'int' && paramForm.step < 1) paramForm.step = 1
+}
+
 function buildParam() {
   const p = { name: paramForm.name.trim(), identifier: paramForm.identifier.trim(), dataType: paramForm.dataType }
-  if (paramForm.dataType === 'int') {
+  if (['int', 'double'].includes(paramForm.dataType)) {
     p.min = paramForm.min; p.max = paramForm.max; p.step = paramForm.step; p.unit = paramForm.unit
   } else if (paramForm.dataType === 'string') {
     p.maxLength = paramForm.maxLength
@@ -2092,6 +2100,7 @@ function dataDefSummary(dd) {
   if (dd.dataType === 'enum' && dd.enumValues) return '枚举: ' + dd.enumValues.map(e => e.name).join(' / ')
   if (dd.dataType === 'boolean') return '布尔型'
   if (dd.dataType === 'int') return `整数 (${dd.min || 0}~${dd.max || 100}${dd.unit ? ' ' + dd.unit : ''})`
+  if (dd.dataType === 'double') return `浮点数 (${dd.min || 0}~${dd.max || 100}${dd.unit ? ' ' + dd.unit : ''})`
   if (dd.dataType === 'event') return '事件' + (dd.eventType ? ` (${dd.eventType})` : '')
   if (dd.dataType === 'service') return '服务'
   return dd.dataType || '—'

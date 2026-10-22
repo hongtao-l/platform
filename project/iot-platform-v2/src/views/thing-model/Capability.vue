@@ -291,6 +291,7 @@
             <el-select v-model="capForm.dataType" style="width:100%" @change="onDataTypeChange">
               <el-option label="枚举型 (Enum)" value="enum" />
               <el-option label="数值型 (Int)" value="int" />
+              <el-option label="浮点型 (Double)" value="double" />
               <el-option label="布尔型 (Boolean)" value="boolean" />
               <el-option label="字符串 (String)" value="string" />
               <el-option label="数组型 (Array)" value="array" />
@@ -332,23 +333,23 @@
           </el-form-item>
         </template>
 
-        <!-- Int -->
-        <template v-if="capForm.capType === 'prop' && capForm.dataType === 'int'">
+        <!-- Int / Double -->
+        <template v-if="capForm.capType === 'prop' && ['int', 'double'].includes(capForm.dataType)">
           <el-form-item label="取值范围" required>
             <div class="flex items-center gap-2 w-full">
-              <el-input-number v-model="capForm.min" :max="capForm.max - 1" placeholder="最小值" style="flex:1" />
+              <el-input-number v-model="capForm.min" :max="capForm.max - 1" :step="capForm.dataType === 'double' ? 0.1 : 1" placeholder="最小值" style="flex:1" />
               <span class="text-slate-400 text-xs">~</span>
-              <el-input-number v-model="capForm.max" :min="capForm.min + 1" placeholder="最大值" style="flex:1" />
+              <el-input-number v-model="capForm.max" :min="capForm.min + 1" :step="capForm.dataType === 'double' ? 0.1 : 1" placeholder="最大值" style="flex:1" />
             </div>
           </el-form-item>
           <el-form-item label="步长">
-            <el-input-number v-model="capForm.step" :min="1" style="width:150px" />
+            <el-input-number v-model="capForm.step" :min="capForm.dataType === 'double' ? 0.01 : 1" :step="capForm.dataType === 'double' ? 0.1 : 1" style="width:150px" />
           </el-form-item>
           <el-form-item label="单位">
             <el-input v-model="capForm.unit" placeholder="例如：%、°C、ms" style="width:150px" />
           </el-form-item>
           <el-form-item label="默认值">
-            <el-input-number v-model="capForm.defaultVal" :min="capForm.min" :max="capForm.max" style="width:200px" />
+            <el-input-number v-model="capForm.defaultVal" :min="capForm.min" :max="capForm.max" :step="capForm.dataType === 'double' ? 0.1 : 1" style="width:200px" />
           </el-form-item>
         </template>
 
@@ -522,6 +523,7 @@
         <el-form-item label="数据类型" required>
           <el-select v-model="paramForm.dataType" style="width:100%" @change="onParamDataTypeChange">
             <el-option label="Int (数字)" value="int" />
+            <el-option label="Double (浮点数)" value="double" />
             <el-option label="String (字符串)" value="string" />
             <el-option label="Boolean (布尔)" value="boolean" />
             <el-option label="Enum (枚举)" value="enum" />
@@ -531,17 +533,17 @@
 
         <div class="step-divider my-4"><span>类型定义</span></div>
 
-        <template v-if="paramForm.dataType === 'int'">
+        <template v-if="['int', 'double'].includes(paramForm.dataType)">
           <el-form-item label="取值范围">
             <div class="flex items-center gap-2 w-full">
-              <el-input-number v-model="paramForm.min" :max="paramForm.max - 1" style="flex:1" />
+              <el-input-number v-model="paramForm.min" :max="paramForm.max - 1" :step="paramForm.dataType === 'double' ? 0.1 : 1" style="flex:1" />
               <span class="text-slate-400 text-xs">~</span>
-              <el-input-number v-model="paramForm.max" :min="paramForm.min + 1" style="flex:1" />
+              <el-input-number v-model="paramForm.max" :min="paramForm.min + 1" :step="paramForm.dataType === 'double' ? 0.1 : 1" style="flex:1" />
             </div>
           </el-form-item>
-          <el-form-item label="步长"><el-input-number v-model="paramForm.step" :min="1" style="width:150px" /></el-form-item>
+          <el-form-item label="步长"><el-input-number v-model="paramForm.step" :min="paramForm.dataType === 'double' ? 0.01 : 1" :step="paramForm.dataType === 'double' ? 0.1 : 1" style="width:150px" /></el-form-item>
           <el-form-item label="单位"><el-input v-model="paramForm.unit" placeholder="例如：%、°C、ms" style="width:150px" /></el-form-item>
-          <el-form-item label="默认值"><el-input-number v-model="paramForm.defaultVal" :min="paramForm.min" :max="paramForm.max" style="width:200px" /></el-form-item>
+          <el-form-item label="默认值"><el-input-number v-model="paramForm.defaultVal" :min="paramForm.min" :max="paramForm.max" :step="paramForm.dataType === 'double' ? 0.1 : 1" style="width:200px" /></el-form-item>
         </template>
 
         <template v-if="paramForm.dataType === 'string'">
@@ -718,14 +720,14 @@ function rowClassName() { return '' }
 // ===== Labels =====
 const typeTagMap = { prop: '属性', svc: '服务', evt: '事件' }
 const typeTagClsMap = { prop: 'type-prop', svc: 'type-svc', evt: 'type-evt' }
-const paramTypeMap = { int: 'Int', string: 'String', boolean: 'Boolean', enum: 'Enum' }
+const paramTypeMap = { int: 'Int', double: 'Double', string: 'String', boolean: 'Boolean', enum: 'Enum' }
 function typeLabel(t) { return typeTagMap[t] || t }
 function typeTagCls(t) { return typeTagClsMap[t] || '' }
 function paramTypeLabel(t) { return paramTypeMap[t] || t }
 
 function dataTypeLabel(cap) {
   if (cap.capType === 'prop') {
-    const m = { enum: '枚举型', int: '数值型', boolean: '布尔型', string: '字符串', array: '数组型', struct: '结构体型' }
+    const m = { enum: '枚举型', int: '数值型', double: '浮点型', boolean: '布尔型', string: '字符串', array: '数组型', struct: '结构体型' }
     return m[cap.dataDef?.dataType] || ''
   }
   if (cap.capType === 'svc') return '服务'
@@ -737,7 +739,7 @@ function dataDefDetail(cap) {
   if (cap.capType === 'prop') {
     const dd = cap.dataDef
     if (dd.dataType === 'enum') return (dd.enumValues || []).map(ev => `${ev.name}(${ev.val})`).join(', ')
-    if (dd.dataType === 'int') {
+    if (['int', 'double'].includes(dd.dataType)) {
       let s = `${dd.min}~${dd.max}`
       if (dd.step && dd.step !== 1) s += `, 步长${dd.step}`
       if (dd.unit) s += ` ${dd.unit}`
@@ -958,7 +960,11 @@ function resetDataDefForType() {
     capForm.eventType = 'alarm'; capForm.outputParams = []
   }
 }
-function onDataTypeChange() { capForm.defaultVal = '' }
+function onDataTypeChange() {
+  capForm.defaultVal = ''
+  if (capForm.dataType === 'double' && capForm.step === 1) capForm.step = 0.1
+  if (capForm.dataType === 'int' && capForm.step < 1) capForm.step = 1
+}
 
 function openAddCapability(capItemRow) {
   editingCapId.value = null
@@ -997,7 +1003,7 @@ function openEditCapability(cap) {
   // 参数统一按属性内容配置；旧的服务/事件参数在编辑时转为属性默认配置
   capForm.capType = 'prop'
   capForm.name = cap.name; capForm.identifier = cap.identifier; capForm.descr = cap.descr
-  const propTypes = ['enum', 'int', 'boolean', 'string', 'array', 'struct']
+  const propTypes = ['enum', 'int', 'double', 'boolean', 'string', 'array', 'struct']
   if (cap.capType === 'prop' && propTypes.includes(dd.dataType)) {
     capForm.dataType = dd.dataType; capForm.accessMode = dd.accessMode || 'rw'
     capForm.enumValues = dd.enumValues ? JSON.parse(JSON.stringify(dd.enumValues)) : [{ name: '', val: 0 }]
@@ -1038,7 +1044,7 @@ function buildDataDef() {
     const dd = { dataType: capForm.dataType, accessMode: capForm.accessMode, defaultVal: capForm.defaultVal }
     if (capForm.dataType === 'enum') {
       dd.enumValues = capForm.enumValues.filter(ev => ev.name.trim())
-    } else if (capForm.dataType === 'int') {
+    } else if (['int', 'double'].includes(capForm.dataType)) {
       dd.min = capForm.min; dd.max = capForm.max; dd.step = capForm.step; dd.unit = capForm.unit
     } else if (capForm.dataType === 'boolean') {
       dd.trueLabel = capForm.trueLabel; dd.falseLabel = capForm.falseLabel
@@ -1071,7 +1077,7 @@ function handleCapabilityConfirm() {
     if (capForm.dataType === 'enum' && capForm.enumValues.filter(ev => ev.name.trim()).length < 1) {
       ElMessage.warning('枚举值至少需要一个有效条目'); return
     }
-    if (capForm.dataType === 'int' && capForm.max <= capForm.min) {
+    if (['int', 'double'].includes(capForm.dataType) && capForm.max <= capForm.min) {
       ElMessage.warning('最大值必须大于最小值'); return
     }
   }
@@ -1136,7 +1142,11 @@ function resetParamForm() {
     enumValues: [{ name: '', val: 0 }]
   })
 }
-function onParamDataTypeChange() { paramForm.defaultVal = '' }
+function onParamDataTypeChange() {
+  paramForm.defaultVal = ''
+  if (paramForm.dataType === 'double' && paramForm.step === 1) paramForm.step = 0.1
+  if (paramForm.dataType === 'int' && paramForm.step < 1) paramForm.step = 1
+}
 
 const paramDialogTitle = computed(() => {
   if (editingParamTarget.value === 'field') return editingParamIdx.value >= 0 ? '编辑结构体字段' : '添加结构体字段'
@@ -1154,8 +1164,8 @@ function openEditParam(target, idx) {
   const p = capForm[target + 'Params'][idx]
   paramForm.name = p.name; paramForm.identifier = p.identifier; paramForm.dataType = p.dataType || 'boolean'
   paramForm.defaultVal = p.defaultVal || ''
-  if (p.dataType === 'int') {
-    paramForm.min = p.min || 0; paramForm.max = p.max || 100; paramForm.step = p.step || 1; paramForm.unit = p.unit || ''
+  if (['int', 'double'].includes(p.dataType)) {
+    paramForm.min = p.min || 0; paramForm.max = p.max || 100; paramForm.step = p.step || (p.dataType === 'double' ? 0.1 : 1); paramForm.unit = p.unit || ''
   } else {
     paramForm.min = 0; paramForm.max = 100; paramForm.step = 1; paramForm.unit = ''
   }
@@ -1177,7 +1187,7 @@ function buildParam() {
     dataType: paramForm.dataType,
     defaultVal: paramForm.defaultVal
   }
-  if (paramForm.dataType === 'int') {
+  if (['int', 'double'].includes(paramForm.dataType)) {
     p.min = paramForm.min; p.max = paramForm.max; p.step = paramForm.step; p.unit = paramForm.unit
   } else if (paramForm.dataType === 'string') {
     p.maxLength = paramForm.maxLength
@@ -1217,8 +1227,8 @@ function openEditStructField(idx) {
   const f = capForm.fields[idx]
   paramForm.name = f.name; paramForm.identifier = f.identifier; paramForm.dataType = f.dataType || 'boolean'
   paramForm.defaultVal = f.defaultVal || ''
-  if (f.dataType === 'int') {
-    paramForm.min = f.min || 0; paramForm.max = f.max || 100; paramForm.step = f.step || 1; paramForm.unit = f.unit || ''
+  if (['int', 'double'].includes(f.dataType)) {
+    paramForm.min = f.min || 0; paramForm.max = f.max || 100; paramForm.step = f.step || (f.dataType === 'double' ? 0.1 : 1); paramForm.unit = f.unit || ''
   }
   paramForm.maxLength = f.maxLength || 64
   paramForm.elementType = 'int'; paramForm.arrayCount = 10
