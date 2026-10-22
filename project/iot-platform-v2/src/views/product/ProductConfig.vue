@@ -1,12 +1,12 @@
 <template>
   <div class="flex flex-1 min-w-0 overflow-hidden">
-    <div class="page-container config-page flex-1 min-w-0 overflow-auto flex flex-col">
+    <div class="page-container config-page flex-1 min-w-0 overflow-auto flex flex-col" :class="{ 'embedded-config': definitionOnly }">
     <!-- 页面头部 -->
-    <div class="w-full p-4 pb-16 space-y-4 flex-1">
-      <PageBackBar title="开发产品" back-label="返回列表" @back="handleBack" />
+    <div :class="definitionOnly ? 'w-full p-0 space-y-4' : 'w-full p-4 pb-16 space-y-4 flex-1'">
+      <PageBackBar v-if="!definitionOnly" title="开发产品" back-label="返回列表" @back="handleBack" />
 
       <!-- 产品信息卡片 -->
-      <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-sm space-y-4">
+      <div v-if="!definitionOnly" class="bg-white rounded-lg border border-slate-200 p-5 shadow-sm space-y-4">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-100">
           <div class="flex items-center space-x-3 min-w-0">
             <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center text-white shadow-sm shadow-sky-500/20 flex-shrink-0">
@@ -62,7 +62,7 @@
       </div>
 
       <!-- 步骤条 -->
-      <nav class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm">
+      <nav v-if="!definitionOnly" class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm">
         <ol class="flex items-center w-full">
           <li class="flex items-center space-x-3 flex-shrink-0 cursor-pointer" @click="currentStep = 0">
             <span class="flex items-center justify-center w-6 h-6 rounded-full border-2 bg-white font-mono text-xs font-bold" :class="currentStep === 0 ? 'border-sky-600 text-sky-600' : (currentStep > 0 ? 'border-sky-500 text-sky-500' : 'border-slate-200 text-slate-400')">1</span>
@@ -285,7 +285,7 @@
       </template>
 
     <!-- ===== 步骤2: APP配置 ===== -->
-    <template v-if="currentStep === 2">
+    <template v-if="!definitionOnly && currentStep === 2">
       <div class="step-content-card">
         <div class="app-config-form">
           <div class="app-config-item">
@@ -431,7 +431,7 @@
     </template>
 
     <!-- ===== 步骤3: 平台服务 ===== -->
-    <template v-if="currentStep === 3">
+    <template v-if="!definitionOnly && currentStep === 3">
       <div class="step-content-card">
         <div class="algo-service-section">
           <el-table :data="platformServices" stripe>
@@ -463,7 +463,7 @@
     </div>
 
     <!-- 底部操作条 -->
-    <footer class="sticky bottom-0 z-20 h-16 bg-white border-t border-slate-200 px-4 flex items-center justify-between shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.03)] flex-shrink-0">
+    <footer v-if="!definitionOnly" class="sticky bottom-0 z-20 h-16 bg-white border-t border-slate-200 px-4 flex items-center justify-between shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.03)] flex-shrink-0">
       <div class="flex items-center space-x-2 text-xs text-slate-500">
         <span class="w-2 h-2 rounded-full bg-emerald-500" />
         <span>已自动保存至云端草稿</span>
@@ -1243,12 +1243,19 @@ import CapModules from './cap-modules.vue'
 import AppPhonePreview from './AppPhonePreview.vue'
 import PageBackBar from '@/components/layout/PageBackBar.vue'
 
+const props = defineProps({
+  definitionOnly: { type: Boolean, default: false },
+  initialId: { type: String, default: '' },
+  initialName: { type: String, default: '' },
+  initialCategory: { type: String, default: '' }
+})
+
 const route = useRoute()
 const router = useRouter()
 
-const productName = ref(route.query.name || 'API测试产品_388537')
-const productId = ref(route.query.id || 'PDRSAs9HaSQzNPrG')
-const productCategory = ref(route.query.category || '')
+const productName = ref(props.initialName || route.query.name || 'API测试产品_388537')
+const productId = ref(props.initialId || route.query.id || 'PDRSAs9HaSQzNPrG')
+const productCategory = ref(props.initialCategory || route.query.category || '')
 
 const savedAt = ref(new Date().toLocaleTimeString('zh-CN', { hour12: false }))
 const productDescription = computed(() =>
@@ -1288,7 +1295,7 @@ function handleFooterNext() {
 }
 
 // ===== 步骤导航 =====
-const initialStep = Number(route.query.step)
+const initialStep = props.definitionOnly ? 0 : Number(route.query.step)
 const currentStep = ref(initialStep === 2 ? 2 : initialStep === 3 ? 3 : 0)
 
 // new：已去掉 网络配置/设备能力/镜头能力配置/麦克风能力配置 四个子 tab
@@ -2653,11 +2660,20 @@ function confirmPackageBinding(pkgId) {
 }
 
 function finishDev() {
-  ElMessage.success('产品配置已完成，即将返回产品列表')
-  setTimeout(() => router.push('/product-new/development'), 1200)
+  ElMessage.success('产品配置已完成')
+  setTimeout(() => handleBack(), 1200)
 }
 
-function handleBack() { router.push('/product-new/development') }
+function handleBack() {
+  if (route.query.from === 'audit') {
+    router.push({
+      path: '/product-new/audit/detail',
+      query: { productId: productId.value, name: productName.value }
+    })
+  } else {
+    router.push('/product-new/development')
+  }
+}
 function handleEditProduct() { ElMessage.info('编辑产品基础信息') }
 
 // ===== 按产品类目代入新/老能力 =====
@@ -2755,6 +2771,13 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+
+// ===== 内嵌在弹窗中的功能定义（仅能力项配置） =====
+.embedded-config {
+  padding: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
 
 // ===== Wizard connectors =====
 .stepper-connector {

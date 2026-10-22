@@ -798,17 +798,19 @@ export function removeCustomCapability(capId) {
   store.customCapabilities = store.customCapabilities.filter(c => c.id !== capId)
 }
 
-export function isCustomCapIdentifierUnique(identifier, excludeCapId) {
+export function isCustomCapIdentifierUnique(identifier, excludeCapId, capItemId) {
   for (const cap of store.customCapabilities) {
     if (excludeCapId && cap.id === excludeCapId) continue
+    if (capItemId !== undefined && cap.capItemId !== capItemId) continue
     if (cap.identifier === identifier) return false
   }
   return true
 }
 
-export function isCapIdentifierUnique(identifier, excludeCapId) {
+export function isCapIdentifierUnique(identifier, excludeCapId, capItemId) {
   for (const cap of store.capabilities) {
     if (excludeCapId && cap.id === excludeCapId) continue
+    if (capItemId !== undefined && cap.capItemId !== capItemId) continue
     if (cap.identifier === identifier) return false
   }
   return true

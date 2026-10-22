@@ -1068,8 +1068,8 @@ function handleCapabilityConfirm() {
   if (!capForm.name || !capForm.name.trim()) { ElMessage.warning('请输入参数名称'); return }
   if (!capForm.identifier || !capForm.identifier.trim()) { ElMessage.warning('请输入标识符'); return }
   if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(capForm.identifier)) { ElMessage.warning('标识符格式不合法'); return }
-  const capUnique = isCapIdentifierUnique(capForm.identifier, editingCapId.value || undefined)
-    && isCustomCapIdentifierUnique(capForm.identifier, editingCapId.value || undefined)
+  const capUnique = isCapIdentifierUnique(capForm.identifier, editingCapId.value || undefined, capForm.capItemId)
+    && isCustomCapIdentifierUnique(capForm.identifier, editingCapId.value || undefined, capForm.capItemId)
   if (!capUnique) {
     ElMessage.warning('能力标识符已存在，请更换'); return
   }

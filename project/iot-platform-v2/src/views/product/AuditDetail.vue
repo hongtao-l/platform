@@ -139,64 +139,26 @@
       </div>
     </div>
 
-    <!-- 物模型配置 对话框 -->
+    <!-- 物模型配置弹窗：复用「继续开发」的功能定义与配置（仅标准/自定义能力项） -->
     <el-dialog
       v-model="thingModelDialogVisible"
-      title="设备配置"
-      width="900px"
-      top="5vh"
+      title="物模型配置"
+      width="1200px"
+      top="3vh"
       :close-on-click-modal="false"
-      destroy-on-close
-     class="app-dialog">
-          <div class="tm-config-section">
-            <div class="cap-section">
-                <div class="cap-section-header">
-                  <span class="cap-section-title">标准能力</span>
-                  <el-button size="small" type="primary">添加标准能力</el-button>
-                </div>
-                <el-table :data="[]" stripe>
-                  <el-table-column label="类型" prop="type" width="80" />
-                  <el-table-column label="能力名称" prop="name" min-width="140" />
-                  <el-table-column label="能力标识" prop="code" width="160" />
-                  <el-table-column label="数据类型" prop="dataType" width="100" />
-                  <el-table-column label="数据定义" prop="dataDef" min-width="120" />
-                  <el-table-column label="描述" prop="descr" min-width="140" />
-                  <el-table-column label="所属模块" prop="module" width="100" />
-                  <el-table-column label="操作" width="60" align="center">
-                    <template #default><el-button size="small" text type="danger">删除</el-button></template>
-                  </el-table-column>
-                  <template #empty><div class="empty-state">暂无数据</div></template>
-                </el-table>
-              </div>
-            <div class="cap-section">
-                <div class="cap-section-header">
-                  <div>
-                    <span class="cap-section-title">自定义能力</span>
-                    <p class="cap-tip">您所定义的每一个功能，都与固件、APP控制台面板相关</p>
-                  </div>
-                  <el-button size="small" type="primary">添加自定义能力</el-button>
-                </div>
-                <el-table :data="[]" stripe>
-                  <el-table-column label="类型" prop="type" width="80" />
-                  <el-table-column label="能力名称" prop="name" min-width="140" />
-                  <el-table-column label="能力标识" prop="code" width="160" />
-                  <el-table-column label="数据类型" prop="dataType" width="100" />
-                  <el-table-column label="数据定义" prop="dataDef" min-width="120" />
-                  <el-table-column label="描述" prop="descr" min-width="140" />
-                  <el-table-column label="所属模块" prop="module" width="100" />
-                  <el-table-column label="操作" width="60" align="center">
-                    <template #default><el-button size="small" text type="danger">删除</el-button></template>
-                  </el-table-column>
-                  <template #empty><div class="empty-state">暂无数据</div></template>
-                </el-table>
-              </div>
-          </div>
+      append-to-body
+    >
+      <div class="h-[72vh] overflow-y-auto">
+        <ProductConfig
+          definition-only
+          :initial-id="product.productId"
+          :initial-name="product.name"
+          :initial-category="product.category"
+        />
+      </div>
       <template #footer>
-        <div class="dialog-footer">
-          <el-button type="primary" @click="onThingModelNext">
-            {{ isLastThingModelTab ? '保存,完成' : '保存,下一步' }}
-          </el-button>
-        </div>
+        <el-button @click="thingModelDialogVisible = false">关闭</el-button>
+        <el-button type="primary" @click="thingModelDialogVisible = false">保存,完成</el-button>
       </template>
     </el-dialog>
 
@@ -769,6 +731,7 @@ import { SetUp, InfoFilled, QuestionFilled, Edit, Delete, ArrowRight, ArrowLeft,
 import { ElMessage } from 'element-plus'
 import { listAlgorithms, getAllAlgorithmServices, getAlgorithmEvents, allEvents } from '@/data/thing-model'
 import PageBackBar from '@/components/layout/PageBackBar.vue'
+import ProductConfig from './ProductConfig.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -789,52 +752,8 @@ const product = reactive({
 // ===== 物模型 =====
 const thingModelCount = ref(6)
 const thingModelDialogVisible = ref(false)
-const thingModelActiveTab = ref('capability')
-
-// new：设备配置弹窗只保留「标准能力 / 自定义能力」，不再分 tab 分步
-const thingModelTabs = ['capability']
-const thingModelTabIndex = computed(() => thingModelTabs.indexOf(thingModelActiveTab.value))
-const hasThingModelPrev = computed(() => thingModelTabIndex.value > 0)
-const isLastThingModelTab = computed(() => thingModelTabIndex.value === thingModelTabs.length - 1)
-
-function onThingModelNext() {
-  ElMessage.success('物模型配置已保存')
-  thingModelDialogVisible.value = false
-}
-
-// 设备能力
-const deviceCaps = reactive({
-  network: true, intercom: true, storage: true, battery: false,
-  workMode: true, wakeup: false, ota: true, indicator: true,
-  alarm: true, record: true, irLight: true
-})
-const deviceNetConf = reactive({
-  wired: true, wifi: true, mobile: false, dualBand: 'no',
-  ap: true, sound: true, smartlink: true, qrcode: true,
-  lan: false, appScan: true, ble: false, hotspot: false,
-  passwordEnabled: 'no'
-})
-
-// 屏显 / 喇叭
-const displayConfig = reactive({ hasDisplay: 'no' })
-const speakerConfig = reactive({ hasSpeaker: 'no' })
-
-// 云端抓图
-const cloudCaptureStorageDays = ref(1)
-const cloudCaptureConfig = reactive({
-  defaultOn: 'on',
-  supportGif: 'no',
-  gifEnabled: 'off',
-  quality: 'small',
-  storageMode: 'event',
-  storageFormat: 'privateHeader',
-  captureCount: 1,
-  captureInterval: 30
-})
 
 function onViewThingModel() {
-  thingModelActiveTab.value = 'capability'
-  cloudCaptureStorageDays.value = 1
   thingModelDialogVisible.value = true
 }
 
