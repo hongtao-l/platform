@@ -290,6 +290,9 @@ initialCapItems.forEach(item => {
     const cap = initialCapabilities.find(c => c.identifier === idt)
     if (cap) cap.capItemId = item.id
   })
+  // 读写模式归属能力项：组内参数全为只读时标记为只读，否则读写
+  const caps = initialCapabilities.filter(c => c.capItemId === item.id && c.dataDef)
+  item.accessMode = caps.length && caps.every(c => c.dataDef.accessMode === 'r') ? 'ro' : 'rw'
 })
 
 // ===== 类目-能力关联 =====
@@ -627,6 +630,7 @@ export function addCapItem(item) {
     capType: item.capType || 'prop',
     name: item.name,
     identifier: item.identifier,
+    accessMode: item.accessMode === 'ro' ? 'ro' : 'rw',
     updateTime: nowStamp()
   })
   return id
@@ -639,7 +643,12 @@ export function updateCapItem(id, item) {
     ci.capType = item.capType || 'prop'
     ci.name = item.name
     ci.identifier = item.identifier
+    ci.accessMode = item.accessMode === 'ro' ? 'ro' : 'rw'
     ci.updateTime = nowStamp()
+    // 读写模式归属能力项：变更后同步到该能力项下的所有参数
+    store.capabilities
+      .filter(c => c.capItemId === id && c.dataDef)
+      .forEach(c => { c.dataDef.accessMode = ci.accessMode })
   }
 }
 

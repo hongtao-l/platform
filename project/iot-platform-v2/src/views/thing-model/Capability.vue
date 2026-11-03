@@ -157,6 +157,11 @@
           <el-table-column label="类型" width="90" align="left">
             <template #default="{ row }"><span :class="['type-tag', typeTagCls(row.capType)]">{{ typeLabel(row.capType) }}</span></template>
           </el-table-column>
+          <el-table-column label="读写模式" width="100" align="left">
+            <template #default="{ row }">
+              <span :class="['type-tag', row.accessMode === 'ro' ? 'type-ro' : 'type-rw']">{{ row.accessMode === 'ro' ? '只读' : '读写' }}</span>
+            </template>
+          </el-table-column>
           <el-table-column label="能力项名称" min-width="220">
             <template #default="{ row }"><span class="cell-item-name">{{ row.name }}</span></template>
           </el-table-column>
@@ -239,6 +244,17 @@
             >{{ t.label }}</span>
           </div>
         </el-form-item>
+        <el-form-item label="读写模式">
+          <div class="seg-control">
+            <span
+              v-for="m in accessModeOptions"
+              :key="m.value"
+              class="seg-item"
+              :class="{ active: capItemForm.accessMode === m.value }"
+              @click="capItemForm.accessMode = m.value"
+            >{{ m.label }}</span>
+          </div>
+        </el-form-item>
         <el-form-item label="能力项名称" required>
           <el-input v-model="capItemForm.name" placeholder="请输入能力项名称" />
         </el-form-item>
@@ -298,12 +314,9 @@
               <el-option label="结构体型 (Struct)" value="struct" />
             </el-select>
           </el-form-item>
-          <el-form-item label="读写模式">
-            <el-select v-model="capForm.accessMode" style="width:100%">
-              <el-option label="读写 (Read/Write)" value="rw" />
-              <el-option label="只读 (Read Only)" value="ro" />
-            </el-select>
-          </el-form-item>
+          <div class="form-hint" style="margin:-4px 0 14px 110px">
+            读写模式由所属能力项决定（当前：{{ currentItemAccessMode() === 'ro' ? '只读' : '读写' }}）
+          </div>
         </template>
 
         <el-form-item label="描述">
@@ -679,6 +692,7 @@ const capItemTree = computed(() => {
       moduleId: item.moduleId,
       moduleName,
       capType: item.capType || 'prop',
+      accessMode: item.accessMode || 'rw',
       name: item.name,
       identifier: item.identifier,
       paramCount: params.length,
@@ -826,7 +840,11 @@ function handleDeleteModule(mod) {
 // ===== Capability item CRUD =====
 const capItemDialogVisible = ref(false)
 const editingCapItemId = ref(null)
-const capItemForm = reactive({ name: '', identifier: '', moduleId: null, capType: 'prop' })
+const capItemForm = reactive({ name: '', identifier: '', moduleId: null, capType: 'prop', accessMode: 'rw' })
+const accessModeOptions = [
+  { label: '读写', value: 'rw' },
+  { label: '只读', value: 'ro' }
+]
 const capItemDialogTitle = computed(() => editingCapItemId.value ? '编辑能力项' : '添加能力项')
 const draftParams = ref([])
 const inDraftMode = ref(false)
@@ -837,6 +855,7 @@ function openAddCapItem() {
   capItemForm.name = ''
   capItemForm.identifier = ''
   capItemForm.capType = 'prop'
+  capItemForm.accessMode = 'rw'
   capItemForm.moduleId = currentModuleId.value !== 'all' ? currentModuleId.value : (store.modules[0]?.id ?? null)
   capItemDialogVisible.value = true
 }
@@ -846,6 +865,7 @@ function openEditCapItem(item) {
   capItemForm.name = item.name
   capItemForm.identifier = item.identifier
   capItemForm.capType = item.capType || 'prop'
+  capItemForm.accessMode = item.accessMode || 'rw'
   capItemForm.moduleId = item.moduleId
   capItemDialogVisible.value = true
 }
@@ -869,7 +889,9 @@ function handleCapItemConfirm() {
         name: dp.name,
         identifier: dp.identifier,
         descr: dp.descr,
-        dataDef: JSON.parse(JSON.stringify(dp.dataDef))
+        dataDef: Object.assign(JSON.parse(JSON.stringify(dp.dataDef)), {
+          accessMode: capItemForm.accessMode === 'ro' ? 'ro' : 'rw'
+        })
       })
     })
     ElMessage.success(draftParams.value.length
@@ -1039,9 +1061,18 @@ function capFormModuleId() {
   return store.modules[0]?.id
 }
 
+// 读写模式归属能力项：参数不再单独选择，统一继承所属能力项
+function currentItemAccessMode() {
+  if (inDraftMode.value) return capItemForm.accessMode === 'ro' ? 'ro' : 'rw'
+  const itemId = capForm.capItemId
+    ?? (editingCapId.value ? store.capabilities.find(c => c.id === editingCapId.value)?.capItemId : null)
+  const item = store.capItems.find(x => x.id === itemId)
+  return item?.accessMode === 'ro' ? 'ro' : 'rw'
+}
+
 function buildDataDef() {
   if (capForm.capType === 'prop') {
-    const dd = { dataType: capForm.dataType, accessMode: capForm.accessMode, defaultVal: capForm.defaultVal }
+    const dd = { dataType: capForm.dataType, accessMode: currentItemAccessMode(), defaultVal: capForm.defaultVal }
     if (capForm.dataType === 'enum') {
       dd.enumValues = capForm.enumValues.filter(ev => ev.name.trim())
     } else if (['int', 'double'].includes(capForm.dataType)) {

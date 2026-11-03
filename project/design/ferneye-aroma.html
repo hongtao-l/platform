@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Ferneye · 香薰机</title>
+<style>
+:root{
+  --gold:#B0864F;
+  --green:#5FA34A;
+  --orange:#E08A2E;
+  --red:#D24A3E;
+  --gold-deep:#9C7440;
+  --gold-soft:#F3E7D6;
+  --ink:#2B2A28;
+  --ink-2:#6F6A63;
+  --ink-3:#A09990;
+  --card:#FFFFFF;
+  --track:#EFE8DE;
+  --bg-top:#FBF5EE;
+  --bg-bottom:#F3E7D8;
+  --radius-card:16px;
+  --page-pad:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+
+html,body{height:100%;}
+body{
+  display:flex;align-items:center;justify-content:center;
+  background:#E7E3DD;
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+  color:var(--ink);
+  overflow:hidden;
+}
+.phone{
+  position:relative;width:375px;height:812px;border-radius:40px;overflow:hidden;
+  background:linear-gradient(180deg,var(--bg-top) 0%,var(--bg-bottom) 100%);
+  box-shadow:0 24px 60px rgba(0,0,0,.22);
+}
+@media (max-width:480px){
+  body{background:var(--bg-top);overflow:auto;}
+  .phone{width:100%;height:100vh;height:100dvh;border-radius:0;box-shadow:none;}
+}
+
+/* ---------- 状态栏 ---------- */
+.statusbar{
+  height:44px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 22px;font-size:14px;font-weight:600;color:#111;
+}
+.statusbar .right{display:flex;align-items:center;gap:5px;}
+
+/* ---------- 顶部导航 ---------- */
+.nav{
+  position:relative;height:52px;display:flex;align-items:center;justify-content:center;
+  padding:0 14px;
+}
+.nav .back{
+  position:absolute;left:8px;top:50%;transform:translateY(-50%);
+  width:40px;height:40px;border:0;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#1c1c1e;
+}
+.nav .back:active{opacity:.5;}
+.title-wrap{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.title-wrap h1{font-size:17px;font-weight:700;letter-spacing:.2px;line-height:22px;}
+.battery-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:15px;padding:0 5px;border-radius:4px;
+  background:#8CC152;color:#fff;font-size:10px;font-weight:600;line-height:1;
+}
+.nav .actions{position:absolute;right:10px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:2px;}
+.nav .actions button{
+  width:38px;height:38px;border:0;background:none;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:#1c1c1e;
+}
+.nav .actions button:active{opacity:.5;}
+
+/* ---------- 内容区 ---------- */
+.scroll{
+  height:calc(100% - 96px);
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:0 var(--page-pad) 40px;
+}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* ---------- 产品图 ---------- */
+.hero{display:flex;align-items:center;justify-content:center;padding:6px 0 20px;}
+.hero svg{display:block;filter:drop-shadow(0 14px 22px rgba(160,130,90,.18));}
+
+/* ---------- 卡片 ---------- */
+.card{
+  background:var(--card);border-radius:var(--radius-card);
+  padding:16px;margin-bottom:12px;
+  box-shadow:0 2px 10px rgba(180,150,110,.06);
+}
+.card h2{font-size:16px;font-weight:600;line-height:22px;color:var(--ink);}
+.row-card{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;}
+.row-card .row-title{font-size:16px;font-weight:600;}
+.row-card .state{font-size:16px;font-weight:600;}
+
+/* 电源按钮 */
+.power-btn{
+  width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;
+  background:var(--gold-soft);color:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .18s ease,color .18s ease,transform .12s ease;
+}
+.power-btn.on{background:var(--gold);color:#fff;box-shadow:0 6px 14px rgba(176,134,79,.32);}
+.power-btn:active{transform:scale(.94);}
+
+/* ---------- 选项组 ---------- */
+.options{display:flex;margin-top:16px;}
+.options.three .opt{width:33.333%;}
+.options.two .opt{width:50%;}
+.opt{
+  border:0;background:none;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:9px;padding:0;
+}
+.opt .circle{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--gold-soft);color:#7C7368;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .18s ease,color .18s ease,box-shadow .18s ease;
+}
+.opt .label{font-size:13px;color:var(--ink-2);line-height:18px;transition:color .18s ease;}
+.opt.active .circle{background:var(--gold);color:#fff;box-shadow:0 6px 14px rgba(176,134,79,.28);}
+.opt.active .label{color:var(--gold-deep);font-weight:600;}
+.opt:active .circle{transform:scale(.96);}
+
+/* ---------- 标准模式：档位切换 ---------- */
+.gear-block{margin-top:20px;}
+.gear-title{font-size:15px;color:var(--ink);margin-bottom:12px;}
+.segmented{
+  display:flex;padding:4px;border-radius:12px;background:#F4F1EC;
+}
+.seg-item{
+  flex:1;height:38px;border:0;border-radius:9px;background:transparent;cursor:pointer;
+  font-size:15px;color:#8A8478;transition:background .16s ease,color .16s ease,box-shadow .16s ease;
+}
+.seg-item.active{
+  background:#fff;color:var(--ink);font-weight:600;
+  box-shadow:0 1px 4px rgba(150,120,80,.16);
+}
+.gear-summary{
+  display:flex;align-items:center;gap:8px;margin-top:14px;
+  font-size:14px;color:#8A8478;
+}
+.gear-summary .hint{font-size:13px;color:#B3ACA2;}
+
+/* ---------- 喷口参数块 ---------- */
+.nozzle{margin-top:20px;transition:opacity .18s ease;}
+.nozzle + .nozzle{margin-top:22px;}
+.nozzle-title{font-size:13px;color:var(--gold-deep);font-weight:600;margin-bottom:12px;}
+.nozzle.inactive{opacity:.42;}
+.slider-row.disabled{opacity:.42;pointer-events:none;}
+
+/* 定时时段行 */
+.warn-note{
+  display:none;align-items:center;gap:5px;margin-top:9px;
+  font-size:12px;line-height:17px;color:var(--red);
+}
+.warn-note.show{display:flex;}
+.warn-note svg{flex:none;}
+
+.timer-list{margin-top:6px;}
+.timer-item{
+  width:100%;display:flex;align-items:center;justify-content:space-between;
+  border:0;background:none;cursor:pointer;padding:14px 0;
+}
+.timer-item + .timer-item{border-top:1px solid #F4EFE7;}
+.timer-item:active{opacity:.6;}
+.ti-side{font-size:15px;color:var(--ink);}
+.ti-value{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:14px;color:var(--gold-deep);font-weight:600;font-variant-numeric:tabular-nums;
+}
+
+.slider-row + .slider-row{margin-top:18px;}
+.slider-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;}
+.slider-name{font-size:15px;color:var(--ink);}
+.slider-val{font-size:14px;color:var(--ink-2);display:flex;align-items:baseline;gap:6px;}
+.slider-val .hint{font-size:11px;color:var(--ink-3);}
+
+input[type="range"]{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:4px;border-radius:2px;outline:none;cursor:pointer;
+  background:linear-gradient(to right,var(--fill,var(--gold)) 0%,var(--fill,var(--gold)) var(--p,50%),var(--track) var(--p,50%),var(--track) 100%);
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:18px;height:18px;border-radius:50%;background:#fff;
+  box-shadow:0 1px 5px rgba(120,96,64,.28);
+  border:1px solid rgba(210,196,176,.6);
+  cursor:pointer;
+}
+input[type="range"]::-moz-range-thumb{
+  width:18px;height:18px;border-radius:50%;background:#fff;border:1px solid rgba(210,196,176,.6);
+  box-shadow:0 1px 5px rgba(120,96,64,.28);cursor:pointer;
+}
+input[type="range"]:disabled{cursor:default;}
+
+/* ---------- 开关 ---------- */
+.switch{
+  position:relative;width:48px;height:28px;border-radius:14px;border:0;cursor:pointer;
+  background:#DCD5CB;transition:background .2s ease;
+}
+.switch::after{
+  content:"";position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18);transition:transform .2s ease;
+}
+.switch.on{background:var(--gold);}
+.switch.on::after{transform:translateX(20px);}
+
+/* ---------- 定时入口 ---------- */
+.info-btn{
+  width:30px;height:30px;border:0;background:none;color:#7E786F;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.info-btn:active{opacity:.5;}
+
+/* ---------- 底部弹层 ---------- */
+.sheet-mask{
+  position:absolute;inset:0;background:rgba(0,0,0,.32);display:none;z-index:35;
+}
+.sheet-mask.on{display:block;}
+.sheet{
+  position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:20px 20px 0 0;
+  padding:8px 20px 28px;transform:translateY(100%);transition:transform .26s cubic-bezier(.2,.8,.3,1);
+}
+.sheet-mask.on .sheet{transform:translateY(0);}
+.sheet-handle{width:36px;height:4px;border-radius:4px;background:#E4DFD7;margin:6px auto 14px;}
+.sheet h3{font-size:16px;font-weight:600;margin-bottom:6px;}
+.sheet .sheet-tip{font-size:12px;color:var(--ink-3);margin-bottom:14px;line-height:18px;}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;padding:2px 0 4px;}
+.sheet-head h3{font-size:17px;font-weight:700;margin:0;}
+.sheet-close{
+  width:32px;height:32px;border-radius:50%;border:0;background:#F1F1F1;color:#6E6E6E;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+}
+.sheet-close:active{opacity:.6;}
+
+/* 滚轮选择器 */
+.wheel-wrap{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  height:200px;margin:6px 0 4px;overflow:hidden;
+  transition:opacity .18s ease;
+}
+.wheel-band{
+  position:absolute;left:0;right:0;top:80px;height:40px;border-radius:10px;
+  background:#F7F3EC;pointer-events:none;
+}
+.wheel-col{
+  position:relative;flex:1;height:200px;overflow-y:scroll;scroll-snap-type:y mandatory;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;z-index:1;
+}
+.wheel-col::-webkit-scrollbar{display:none;}
+.wheel-col::before,.wheel-col::after{content:"";display:block;height:80px;}
+.wheel-item{
+  height:40px;line-height:40px;text-align:center;font-size:20px;color:#C9C4BC;
+  scroll-snap-align:center;font-variant-numeric:tabular-nums;transition:color .12s ease;
+}
+.wheel-item.active{color:var(--gold-deep);font-weight:700;font-size:22px;}
+.wheel-dash{width:28px;text-align:center;color:#9C958C;font-size:20px;z-index:1;}
+.sheet .done{
+  width:100%;height:46px;border:0;border-radius:23px;background:var(--gold);color:#fff;
+  font-size:15px;font-weight:600;margin-top:16px;cursor:pointer;
+}
+.sheet .done:active{opacity:.85;}
+
+/* ---------- 轻提示 ---------- */
+.toast{
+  position:absolute;left:50%;bottom:120px;transform:translateX(-50%) translateY(6px);
+  padding:9px 16px;border-radius:20px;background:rgba(43,42,40,.88);color:#fff;font-size:13px;
+  opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:30;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* 底部安全区指示条 */
+.home-bar{
+  position:absolute;left:50%;bottom:9px;transform:translateX(-50%);
+  width:134px;height:5px;border-radius:3px;background:#1B1B1B;opacity:.9;
+}
+</style>
+</head>
+<body>
+
+<div class="phone" id="phone">
+
+  <!-- 状态栏 -->
+  <div class="statusbar">
+    <span>9:41</span>
+    <div class="right">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="#111"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2.5" width="3" height="9.5" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1"/></svg>
+      <svg width="17" height="12" viewBox="0 0 17 12" fill="#111"><path d="M8.5 10.6 6 8.1a3.6 3.6 0 0 1 5 0zM8.5 3.6c-2.2 0-4.2.9-5.7 2.3L1.4 4.5A11.2 11.2 0 0 1 8.5 1.5c2.7 0 5.3 1.1 7.1 3l-1.4 1.4a8.4 8.4 0 0 0-5.7-2.3z"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.2" stroke="#111" stroke-opacity=".35"/><rect x="2" y="2" width="18" height="8" rx="2" fill="#111"/><path d="M23.2 4.2c1 .4 1 3.2 0 3.6V4.2z" fill="#111" fill-opacity=".4"/></svg>
+    </div>
+  </div>
+
+  <!-- 顶部导航 -->
+  <div class="nav">
+    <button class="back" aria-label="返回">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 L8 12 L15 19"/></svg>
+    </button>
+
+    <div class="title-wrap">
+      <h1 id="devName">香薰机xxx</h1>
+      <span class="battery-badge" id="battBadge">98</span>
+    </div>
+
+    <div class="actions">
+      <button aria-label="免打扰" id="dndBtn">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18.2 15.4 H5.8 c1.3-1.4 1.8-3.1 1.8-5.2 0-2.8 1.9-4.8 4.4-4.8 2.5 0 4.4 2 4.4 4.8 0 2.1.5 3.8 1.8 5.2z"/>
+          <path d="M10.2 17.6 a2.2 2.2 0 0 0 3.6 0"/>
+          <path d="M4.5 4.5 L19.5 19.5"/>
+        </svg>
+      </button>
+      <button aria-label="设置">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+          <path d="M12 2.6 L19.2 6.8 V17.2 L12 21.4 L4.8 17.2 V6.8 Z"/><circle cx="12" cy="12" r="3.1"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- 内容 -->
+  <div class="scroll" id="scroll">
+
+    <!-- 产品图 -->
+    <div class="hero">
+      <svg width="150" height="176" viewBox="0 0 150 176" fill="none">
+        <defs>
+          <linearGradient id="bodyG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#FFFFFF"/>
+            <stop offset="0.62" stop-color="#FCFBF9"/>
+            <stop offset="1" stop-color="#F0EEEA"/>
+          </linearGradient>
+          <filter id="soft" x="-30%" y="-60%" width="160%" height="220%">
+            <feGaussianBlur stdDeviation="7"/>
+          </filter>
+          <pattern id="dots" width="9" height="9" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="1.25" fill="#C9C4BC"/>
+          </pattern>
+          <mask id="fade">
+            <rect x="34" y="60" width="82" height="72" fill="url(#mistMask)"/>
+          </mask>
+          <linearGradient id="mistMask" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#000"/>
+            <stop offset="0.55" stop-color="#fff"/>
+            <stop offset="1" stop-color="#333"/>
+          </linearGradient>
+        </defs>
+
+        <!-- 机身 -->
+        <rect x="24" y="8" width="102" height="156" rx="30" fill="url(#bodyG)" stroke="#E9E5DE" stroke-width="1"/>
+        <rect x="24" y="8" width="102" height="156" rx="30" fill="none" stroke="#fff" stroke-width="1.2" opacity=".8"/>
+
+        <!-- 雾化孔（点阵） -->
+        <ellipse cx="75" cy="62" rx="34" ry="9" fill="#8FCB6A" opacity=".16" filter="url(#soft)"/>
+        <rect x="34" y="60" width="82" height="72" fill="url(#dots)" mask="url(#fade)" opacity=".9"/>
+
+        <!-- 底部显示区 -->
+        <rect x="52" y="132" width="46" height="22" rx="5" fill="#2B2B2B"/>
+        <rect x="56" y="137" width="9" height="4" rx="2" fill="#8FCB6A"/>
+        <rect x="56" y="144" width="16" height="3" rx="1.5" fill="#6E6E6E"/>
+        <circle cx="92" cy="139.5" r="2.6" fill="#8FCB6A"/>
+        <circle cx="92" cy="147" r="2.6" fill="#4A4A4A"/>
+
+        <!-- 底座光影 -->
+        <ellipse cx="75" cy="168" rx="46" ry="5" fill="#000" opacity=".05"/>
+      </svg>
+    </div>
+
+    <!-- 电源状态 -->
+    <section class="card row-card">
+      <span class="state" id="powerState">已唤醒</span>
+      <button class="power-btn on" id="powerBtn" aria-label="开关">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M12 3.6 v8"/><path d="M7.2 6.6 a7 7 0 1 0 9.6 0"/>
+        </svg>
+      </button>
+    </section>
+
+    <!-- 喷口选择 -->
+    <section class="card">
+      <h2>喷口选择</h2>
+      <div class="options three" id="nozzleGroup">
+        <button class="opt active" data-nozzle="0">
+          <span class="circle">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+              <path d="M7 17c0-3 2.2-3.6 2.2-6.2S7 7 7 4.6"/><path d="M12 18c0-3.2 2.2-3.8 2.2-6.6S12 7.2 12 4.4"/><path d="M17 17c0-3 2.2-3.6 2.2-6.2S17 7 17 4.6"/>
+            </svg>
+          </span>
+          <span class="label">混合(L+R)</span>
+        </button>
+        <button class="opt" data-nozzle="1">
+          <span class="circle">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="4.6" r="1.3"/><circle cx="12" cy="9" r="1.3"/><circle cx="12" cy="13.4" r="1.3"/><circle cx="12" cy="17.8" r="1.3"/>
+              <circle cx="7.4" cy="6.8" r="1.1"/><circle cx="7.4" cy="11.2" r="1.1"/><circle cx="7.4" cy="15.6" r="1.1"/>
+              <circle cx="16.6" cy="6.8" r="1.1"/><circle cx="16.6" cy="11.2" r="1.1"/><circle cx="16.6" cy="15.6" r="1.1"/>
+            </svg>
+          </span>
+          <span class="label">左喷雾口</span>
+        </button>
+        <button class="opt" data-nozzle="2">
+          <span class="circle">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="4.6" r="1.3"/><circle cx="12" cy="9" r="1.3"/><circle cx="12" cy="13.4" r="1.3"/><circle cx="12" cy="17.8" r="1.3"/>
+              <circle cx="7.4" cy="6.8" r="1.1"/><circle cx="7.4" cy="11.2" r="1.1"/><circle cx="7.4" cy="15.6" r="1.1"/>
+              <circle cx="16.6" cy="6.8" r="1.1"/><circle cx="16.6" cy="11.2" r="1.1"/><circle cx="16.6" cy="15.6" r="1.1"/>
+            </svg>
+          </span>
+          <span class="label">右喷雾口</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 喷雾模式 + 参数 -->
+    <section class="card">
+      <h2>喷雾模式</h2>
+      <div class="options two" id="modeGroup">
+        <button class="opt" data-mode="0">
+          <span class="circle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+              <path d="M12 3.4 l2.6 5.4 5.9.8 -4.3 4.2 1 5.9 -5.2-2.8 -5.2 2.8 1-5.9 -4.3-4.2 5.9-.8z"/>
+            </svg>
+          </span>
+          <span class="label">标准</span>
+        </button>
+        <button class="opt active" data-mode="1">
+          <span class="circle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+              <path d="M5 7.5 h4"/><path d="M15 7.5 h4"/><path d="M5 16.5 h7"/><path d="M17.5 16.5 h1.5"/>
+              <circle cx="12" cy="7.5" r="2.2"/><circle cx="14.8" cy="16.5" r="2.2"/>
+            </svg>
+          </span>
+          <span class="label">自定义</span>
+        </button>
+      </div>
+
+      <!-- 标准模式：档位切换 -->
+      <div class="gear-block" id="gearBlock" hidden>
+        <div class="gear-title">档位切换</div>
+        <div class="segmented" id="gearSeg">
+          <button class="seg-item active" data-gear="1">1</button>
+          <button class="seg-item" data-gear="2">2</button>
+          <button class="seg-item" data-gear="3">3</button>
+          <button class="seg-item" data-gear="4">4</button>
+        </div>
+        <div class="gear-summary"><span id="gearSummary">时长20秒 间隔50分钟</span><span class="hint">淡香模式</span></div>
+      </div>
+
+      <!-- 自定义模式：左右参数 -->
+      <div class="custom-block" id="customBlock">
+      <!-- 左喷口 -->
+      <div class="nozzle" data-side="1">
+        <div class="nozzle-title">左喷口</div>
+        <div class="slider-row">
+          <div class="slider-head">
+            <span class="slider-name">喷香时长</span>
+            <span class="slider-val"><span data-val="leftDur">20秒</span></span>
+          </div>
+          <input type="range" min="3" max="20" step="1" value="20" data-key="leftDur">
+          <div class="warn-note" data-warn="leftDur"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3.2 L21.4 19.6 H2.6 Z"/><path d="M12 9.4 v4.4" stroke-linecap="round"/><circle cx="12" cy="16.6" r="0.9" fill="currentColor" stroke="none"/></svg>喷雾时长过长，存在漏液风险</div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-head">
+            <span class="slider-name">间隔时长</span>
+            <span class="slider-val"><span data-val="leftInt">50分钟</span><span class="hint">淡香模式</span></span>
+          </div>
+          <input type="range" min="3" max="50" step="1" value="50" data-key="leftInt">
+        </div>
+      </div>
+
+      <!-- 右喷口 -->
+      <div class="nozzle" data-side="2">
+        <div class="nozzle-title">右喷口</div>
+        <div class="slider-row">
+          <div class="slider-head">
+            <span class="slider-name">喷香时长</span>
+            <span class="slider-val"><span data-val="rightDur">20秒</span></span>
+          </div>
+          <input type="range" min="3" max="20" step="1" value="20" data-key="rightDur">
+          <div class="warn-note" data-warn="rightDur"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3.2 L21.4 19.6 H2.6 Z"/><path d="M12 9.4 v4.4" stroke-linecap="round"/><circle cx="12" cy="16.6" r="0.9" fill="currentColor" stroke="none"/></svg>喷雾时长过长，存在漏液风险</div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-head">
+            <span class="slider-name">间隔时长</span>
+            <span class="slider-val"><span data-val="rightInt">50分钟</span><span class="hint">淡香模式</span></span>
+          </div>
+          <input type="range" min="3" max="50" step="1" value="50" data-key="rightInt">
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- 喷雾时段（独立于喷雾模式，左右各一条） -->
+    <section class="card">
+      <h2>喷雾时段</h2>
+      <div class="timer-list">
+        <button class="timer-item" data-timer="1">
+          <span class="ti-side">左喷口</span>
+          <span class="ti-value">08:00 - 20:00<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5 L16 12 L9 19"/></svg></span>
+        </button>
+        <button class="timer-item" data-timer="2">
+          <span class="ti-side">右喷口</span>
+          <span class="ti-value">全天<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5 L16 12 L9 19"/></svg></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 屏显开关 -->
+    <section class="card row-card">
+      <span class="row-title">屏显开关</span>
+      <button class="switch on" id="screenSwitch" aria-label="屏显开关"></button>
+    </section>
+
+  </div>
+
+  <!-- 喷雾定时弹层（滚轮选择） -->
+  <div class="sheet-mask" id="timerMask">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h3 id="timerTitle">喷雾定时</h3>
+        <button class="sheet-close" id="timerClose" aria-label="关闭">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6 L18 18"/><path d="M18 6 L6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="wheel-wrap" id="wheelWrap">
+        <div class="wheel-band"></div>
+        <div class="wheel-col" data-col="sh"></div>
+        <div class="wheel-col" data-col="sm"></div>
+        <div class="wheel-dash">—</div>
+        <div class="wheel-col" data-col="eh"></div>
+        <div class="wheel-col" data-col="em"></div>
+      </div>
+
+      <button class="done" id="timerDone">确定</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <div class="home-bar"></div>
+</div>
+
+<script>
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+const state = {
+  awake: true,
+  nozzle: 0,      // 0 混合 / 1 左 / 2 右
+  mode: 1,        // 0 标准 / 1 自定义
+  screen: true,
+  leftDur: 20, leftInt: 50,
+  rightDur: 20, rightInt: 50,
+  timers: {
+    1: { start: '08:00', end: '20:00' },
+    2: { start: '00:00', end: '23:59' }
+  },
+  gear: 1        // 标准模式档位 1~4（参数由固件内置映射）
+};
+
+let toastTimer = null;
+function toast(msg) {
+  const el = $('#toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 1500);
+}
+
+/* ---------- 电源 ---------- */
+$('#powerBtn').addEventListener('click', () => {
+  state.awake = !state.awake;
+  $('#powerBtn').classList.toggle('on', state.awake);
+  $('#powerState').textContent = state.awake ? '已唤醒' : '已休眠';
+  toast(state.awake ? '设备已唤醒' : '设备已休眠');
+});
+
+/* ---------- 喷口选择 ---------- */
+$$('#nozzleGroup .opt').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    state.nozzle = Number(btn.dataset.nozzle);
+    $$('#nozzleGroup .opt').forEach((b) => b.classList.toggle('active', b === btn));
+    const name = ['混合(L+R)', '左喷雾口', '右喷雾口'][state.nozzle];
+    toast(`已切换为${name}`);
+    render();
+  });
+});
+
+/* ---------- 喷雾模式 ---------- */
+$$('#modeGroup .opt').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    state.mode = Number(btn.dataset.mode);
+    $$('#modeGroup .opt').forEach((b) => b.classList.toggle('active', b === btn));
+    toast(state.mode === 0 ? '标准模式：参数由档位决定' : '自定义模式：参数可手动调整');
+    render();
+  });
+});
+
+/* ---------- 滑块 ---------- */
+// 喷香时长分档：≤8 绿 / ≤12 橙 / >12 红（过长有漏液风险）
+function toneOf(v) {
+  return v <= 8 ? 'var(--green)' : v <= 12 ? 'var(--orange)' : 'var(--red)';
+}
+function applyTone(key, value) {
+  if (!key.endsWith('Dur')) return;
+  const input = $('input[data-key="' + key + '"]');
+  const valEl = $('[data-val="' + key + '"]');
+  const warn = $('[data-warn="' + key + '"]');
+  const color = toneOf(value);
+  if (input) input.style.setProperty('--fill', color);
+  if (valEl) valEl.style.color = color;
+  if (warn) warn.classList.toggle('show', value > 12);
+}
+
+$$('input[type="range"]').forEach((input) => {
+  const paint = () => {
+    const p = ((input.value - input.min) / (input.max - input.min)) * 100;
+    input.style.setProperty('--p', p + '%');
+  };
+  input.addEventListener('input', () => {
+    const key = input.dataset.key;
+    state[key] = Number(input.value);
+    const isDur = key.endsWith('Dur');
+    $('[data-val="' + key + '"]').textContent = input.value + (isDur ? '秒' : '分钟');
+    applyTone(key, Number(input.value));
+    paint();
+  });
+  paint();
+  applyTone(input.dataset.key, Number(input.value));
+});
+
+/* ---------- 标准模式：档位切换 ---------- */
+// 档位 → 参数（占位，最终以固件内置映射为准）
+const GEAR_MAP = {
+  1: { dur: 20, int: 50, label: '淡香模式' },
+  2: { dur: 15, int: 40, label: '清香模式' },
+  3: { dur: 10, int: 30, label: '标准模式' },
+  4: { dur: 5,  int: 15, label: '浓香模式' }
+};
+
+$$('#gearSeg .seg-item').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    state.gear = Number(btn.dataset.gear);
+    $$('#gearSeg .seg-item').forEach((b) => b.classList.toggle('active', b === btn));
+    render();
+    toast('已切换到 ' + state.gear + ' 档');
+  });
+});
+
+/* ---------- 屏显开关 ---------- */
+$('#screenSwitch').addEventListener('click', () => {
+  state.screen = !state.screen;
+  $('#screenSwitch').classList.toggle('on', state.screen);
+  toast(state.screen ? '屏显已开启' : '屏显已关闭');
+});
+
+/* ---------- 定时弹层 ---------- */
+/* ---------- 喷雾定时（左右各自，滚轮选择） ---------- */
+let editingSide = '1';
+const ITEM_H = 40;
+
+function timerText(t) {
+  return (t.start === '00:00' && t.end === '23:59') ? '全天' : t.start + ' - ' + t.end;
+}
+function renderTimers() {
+  $$('[data-timer]').forEach((btn) => {
+    const t = state.timers[btn.dataset.timer];
+    $('.ti-value', btn).firstChild.textContent = timerText(t);
+  });
+}
+
+const pad = (n) => String(n).padStart(2, '0');
+
+function buildCol(el, max, value) {
+  let html = '';
+  for (let i = 0; i <= max; i++) {
+    html += '<div class="wheel-item" data-i="' + i + '">' + pad(i) + '</div>';
+  }
+  el.innerHTML = html;
+  el.scrollTop = value * ITEM_H;
+  syncCol(el);
+}
+
+function syncCol(el) {
+  const idx = Math.round(el.scrollTop / ITEM_H);
+  $$('.wheel-item', el).forEach((item, i) => {
+    item.classList.toggle('active', i === idx);
+    const d = Math.abs(i - idx);
+    item.style.opacity = d === 0 ? '1' : d === 1 ? '0.75' : d === 2 ? '0.45' : '0.22';
+  });
+}
+
+function colValue(el) {
+  return Math.round(el.scrollTop / ITEM_H);
+}
+
+$$('.wheel-col').forEach((col) => {
+  let t = null;
+  col.addEventListener('scroll', () => {
+    syncCol(col);
+    clearTimeout(t);
+    t = setTimeout(() => {
+      const idx = colValue(col);
+      col.scrollTo({ top: idx * ITEM_H, behavior: 'smooth' });
+    }, 120);
+  });
+});
+
+function openTimer(side) {
+  editingSide = side;
+  const t = state.timers[side];
+  $('#timerTitle').textContent = (side === '1' ? '左喷口' : '右喷口') + ' · 喷雾定时';
+
+  $('#timerMask').classList.add('on');
+
+  // 弹层显示后再定位，否则容器无高度、scrollTop 不生效
+  requestAnimationFrame(() => {
+    const [sh, sm] = t.start.split(':').map(Number);
+    const [eh, em] = t.end.split(':').map(Number);
+    buildCol($('[data-col="sh"]'), 23, sh);
+    buildCol($('[data-col="sm"]'), 59, sm);
+    buildCol($('[data-col="eh"]'), 23, eh);
+    buildCol($('[data-col="em"]'), 59, em);
+  });
+}
+
+$$('[data-timer]').forEach((btn) => {
+  btn.addEventListener('click', () => openTimer(btn.dataset.timer));
+});
+
+function closeTimer() { $('#timerMask').classList.remove('on'); }
+$('#timerClose').addEventListener('click', closeTimer);
+$('#timerMask').addEventListener('click', (e) => { if (e.target === $('#timerMask')) closeTimer(); });
+
+$('#timerDone').addEventListener('click', () => {
+  const start = pad(colValue($('[data-col="sh"]'))) + ':' + pad(colValue($('[data-col="sm"]')));
+  const end = pad(colValue($('[data-col="eh"]'))) + ':' + pad(colValue($('[data-col="em"]')));
+  if (start >= end) { toast('结束时间需晚于开始时间'); return; }
+  state.timers[editingSide] = { start: start, end: end };
+  renderTimers();
+  closeTimer();
+  toast((editingSide === '1' ? '左' : '右') + '喷口喷雾时段已更新');
+});
+
+/* ---------- 渲染联动 ---------- */
+function render() {
+  const isStd = state.mode === 0;
+
+  $('#gearBlock').hidden = !isStd;
+  $('#customBlock').hidden = isStd;
+
+  if (isStd) {
+    const g = GEAR_MAP[state.gear];
+    $('#gearSummary').textContent = '时长' + g.dur + '秒 间隔' + g.int + '分钟';
+    $('.gear-summary .hint').textContent = g.label;
+    return;
+  }
+
+  const dimLeft = state.nozzle === 2;
+  const dimRight = state.nozzle === 1;
+
+  $$('.nozzle').forEach((block) => {
+    const side = Number(block.dataset.side);
+    const inactive = side === 1 ? dimLeft : dimRight;
+    // 喷口未被选中：整块变淡，参数值保留
+    block.classList.toggle('inactive', inactive);
+    $$('.slider-row', block).forEach((row) => {
+      row.classList.toggle('disabled', inactive);
+      $$('input[type="range"]', row).forEach((i) => { i.disabled = inactive; });
+    });
+  });
+
+  $('[data-val="leftDur"]').textContent = state.leftDur + '秒';
+  $('[data-val="leftInt"]').textContent = state.leftInt + '分钟';
+  $('[data-val="rightDur"]').textContent = state.rightDur + '秒';
+  $('[data-val="rightInt"]').textContent = state.rightInt + '分钟';
+  applyTone('leftDur', state.leftDur);
+  applyTone('rightDur', state.rightDur);
+}
+
+renderTimers();
+render();
+</script>
+</body>
+</html>

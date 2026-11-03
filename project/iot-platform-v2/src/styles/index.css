@@ -578,6 +578,15 @@ body {
     @apply bg-amber-50 text-amber-700 border-amber-200/80;
   }
 
+  /* 能力项读写模式 */
+  .type-rw {
+    @apply bg-slate-50 text-slate-600 border-slate-200;
+  }
+
+  .type-ro {
+    @apply bg-rose-50 text-rose-600 border-rose-200/80;
+  }
+
   .status-tag {
     @apply inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border whitespace-nowrap;
   }
