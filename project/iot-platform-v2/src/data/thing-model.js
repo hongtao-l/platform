@@ -10,385 +10,785 @@ const _catBell = nextId()
 const _catSensor = nextId()
 const _catLowCam = nextId()
 const _catPtz = nextId()
+const _catMeter = nextId()
 
-// 香薰机放在最前（演示主设备）
+// 香薰机放最前（演示主设备）
 const initialCategories = [
   { id: _catAroma, parentId: null, name: '香薰机', identifier: 'AromaDiffuser', descr: '香薰机设备类目，包含喷雾控制、定时、档位相关能力' },
-  // —— 顶级类目 ——
   { id: _catIpc, parentId: null, name: 'IPC摄像机', identifier: 'IpcCamera', descr: 'IPC摄像机设备类目，包含视频监控、事件侦测相关能力' },
   { id: _catBell, parentId: null, name: '智能门铃', identifier: 'SmartDoorbell', descr: '智能门铃设备类目，包含门铃呼叫、门锁联动相关能力' },
   { id: _catSensor, parentId: null, name: '传感安防', identifier: 'SensorSecurity', descr: '传感器和安防设备类目，包含环境监测和安防告警能力' },
-  // —— IPC摄像机 子类目 ——
+  { id: _catMeter, parentId: null, name: '智能电表', identifier: 'SmartMeter', descr: '电能计量类目，包含实时电气量、分时电量、预付费与拉合闸能力' },
   { id: _catLowCam, parentId: _catIpc, name: '低功耗摄像机', identifier: 'LowPowerCamera', descr: '电池供电的低功耗摄像机' },
   { id: _catPtz, parentId: _catIpc, name: '长电球机', identifier: 'LongPowerPtzCamera', descr: '长电供电的云台球机' }
 ]
 
-// ===== 能力模块（独立池） =====
-// 用具名常量声明模块，能力按常量引用，避免依赖数组下标（顺序可自由调整）
-const MOD_AROMA   = { id: nextId(), name: '香薰模块', identifier: 'AromaModule' }
+// ===== 能力模块 + 能力项 + 参数（由 v4.1 物模型生成）=====
+const MOD_DEV = { id: nextId(), name: '设备模块', identifier: 'DeviceModule' }
+const MOD_IMAGE = { id: nextId(), name: '图像模块', identifier: 'ImageModule' }
+const MOD_AUDIO = { id: nextId(), name: '声音模块', identifier: 'AudioModule' }
+const MOD_DISPLAY = { id: nextId(), name: '屏幕模块', identifier: 'DisplayModule' }
+const MOD_IOT = { id: nextId(), name: 'IoT子设备模块', identifier: 'IotModule' }
+const MOD_TIME = { id: nextId(), name: '时间模块', identifier: 'TimeModule' }
+const MOD_STORAGE = { id: nextId(), name: '存储模块', identifier: 'StorageModule' }
+const MOD_OTA = { id: nextId(), name: 'OTA模块', identifier: 'OtaModule' }
+const MOD_POWER = { id: nextId(), name: '电源模块', identifier: 'PowerModule' }
+const MOD_NETWORK = { id: nextId(), name: '网络模块', identifier: 'NetworkModule' }
+const MOD_RECORD = { id: nextId(), name: '录像模块', identifier: 'RecordModule' }
 const MOD_WORKMODE = { id: nextId(), name: '工作模式模块', identifier: 'WorkModeModule' }
-const MOD_RECORD  = { id: nextId(), name: '录制模式模块', identifier: 'RecordModeModule' }
-const MOD_LIGHT   = { id: nextId(), name: '灯光模式模块', identifier: 'LightModeModule' }
-const MOD_EVENT   = { id: nextId(), name: '事件侦测模块', identifier: 'EventDetectModule' }
-const MOD_BELL    = { id: nextId(), name: '门铃设置模块', identifier: 'BellSettingModule' }
-const MOD_SENSOR  = { id: nextId(), name: '安防侦测模块', identifier: 'SecurityDetectModule' }
-const MOD_ALGO    = { id: nextId(), name: '算法能力模块', identifier: 'AlgorithmCapModule' }
-const MOD_BATTERY = { id: nextId(), name: '电池管理模块', identifier: 'BatteryModule' }
-const MOD_PTZ     = { id: nextId(), name: '云台模块', identifier: 'PtzModule' }
+const MOD_LIGHT = { id: nextId(), name: '灯光模块', identifier: 'LightModule' }
+const MOD_ALGO = { id: nextId(), name: '算法模块', identifier: 'AlgoModule' }
+const MOD_GPS = { id: nextId(), name: '定位模块', identifier: 'GpsModule' }
+const MOD_SENSOR = { id: nextId(), name: '传感模块', identifier: 'SensorModule' }
+const MOD_CALL = { id: nextId(), name: '呼叫模块', identifier: 'CallModule' }
+const MOD_AROMA = { id: nextId(), name: '香薰模块', identifier: 'AromaModule' }
+const MOD_METER = { id: nextId(), name: '电能计量模块', identifier: 'MeterModule' }
 
-// 香薰模块放在最前
 const initialModules = [
-  MOD_AROMA,
-  MOD_WORKMODE, MOD_RECORD, MOD_LIGHT, MOD_EVENT,
-  MOD_BELL, MOD_SENSOR, MOD_ALGO, MOD_BATTERY, MOD_PTZ
+  MOD_DEV, MOD_IMAGE, MOD_AUDIO, MOD_DISPLAY, MOD_IOT, MOD_TIME, MOD_STORAGE, MOD_OTA, MOD_POWER, MOD_NETWORK, MOD_RECORD, MOD_WORKMODE, MOD_LIGHT, MOD_ALGO, MOD_GPS, MOD_SENSOR, MOD_CALL, MOD_AROMA, MOD_METER
 ]
 
-// ===== 标准能力（独立池） =====
-const initialCapabilities = [
-  // 工作模式模块
-  { id: nextId(), moduleId: MOD_WORKMODE.id, capType: 'prop', name: '工作模式', identifier: 'WorkMode', descr: '设备工作模式切换（低功耗/AOV/长电/自定义）',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'低功耗模式',val:0},{name:'AOV模式',val:1},{name:'长电模式',val:2},{name:'自定义模式',val:3}], defaultVal:'0' } },
-  { id: nextId(), moduleId: MOD_WORKMODE.id, capType: 'prop', name: 'AOV拍照帧率', identifier: 'AovCaptureFrameRate', descr: 'AOV模式下拍照的时间间隔',
-    dataDef: { dataType:'int', accessMode:'rw', min:1, max:10, step:1, unit:'秒/帧', defaultVal:'1' } },
-  { id: nextId(), moduleId: MOD_WORKMODE.id, capType: 'prop', name: 'AOV切换低功耗电量', identifier: 'AovAutoSwitchPower', descr: 'AOV模式下自动切换到低功耗的电量阈值',
-    dataDef: { dataType:'int', accessMode:'rw', min:0, max:100, step:1, unit:'%', defaultVal:'30' } },
-
-  // 录制模式模块
-  { id: nextId(), moduleId: MOD_RECORD.id, capType: 'prop', name: '常规录制', identifier: 'NormalRecord', descr: '常规录制模式设置（全天/自定义/关闭）',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'全天',val:0},{name:'自定义时段',val:1},{name:'关闭',val:2}], defaultVal:'0' } },
-  { id: nextId(), moduleId: MOD_RECORD.id, capType: 'prop', name: '事件录制', identifier: 'EventRecord', descr: '是否开启事件触发录制',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'关闭',val:0},{name:'开启',val:1}], defaultVal:'1' } },
-  { id: nextId(), moduleId: MOD_RECORD.id, capType: 'prop', name: '录制清晰度', identifier: 'RecordResolution', descr: '录制视频清晰度等级',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'超清',val:0},{name:'高清',val:1},{name:'标清',val:2}], defaultVal:'1' } },
-  { id: nextId(), moduleId: MOD_RECORD.id, capType: 'prop', name: '抓拍间隔', identifier: 'CaptureInterval', descr: '事件触发时连续抓拍的时间间隔',
-    dataDef: { dataType:'int', accessMode:'rw', min:100, max:10000, step:100, unit:'ms', defaultVal:'500' } },
-  { id: nextId(), moduleId: MOD_RECORD.id, capType: 'prop', name: '事件录制时长', identifier: 'EventRecordDuration', descr: '事件触发后单次录制时长',
-    dataDef: { dataType:'int', accessMode:'rw', min:5, max:300, step:5, unit:'秒', defaultVal:'30' } },
-  { id: nextId(), moduleId: MOD_RECORD.id, capType: 'svc', name: '格式化存储', identifier: 'FormatStorage', descr: '远程格式化设备存储卡',
-    dataDef: { dataType:'service', inputParams:[], outputParams:[{name:'操作结果',identifier:'result',dataType:'enum',enumValues:[{name:'失败',val:0},{name:'成功',val:1}],defaultVal:'1'}] } },
-
-  // 灯光模式模块
-  { id: nextId(), moduleId: MOD_LIGHT.id, capType: 'prop', name: '灯光模式', identifier: 'LightMode', descr: '灯光模式切换（全彩/红外/智能/自定义/关闭）',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'全彩模式',val:0},{name:'红外模式',val:1},{name:'智能模式',val:2},{name:'自定义模式',val:3},{name:'关闭',val:4}], defaultVal:'1' } },
-
-  // 事件侦测模块
-  { id: nextId(), moduleId: MOD_EVENT.id, capType: 'evt', name: '移动侦测', identifier: 'MotionDetect', descr: '设备检测到物体移动时上报告警事件',
-    dataDef: { dataType:'event', eventType:'alarm', outputParams:[] } },
-  { id: nextId(), moduleId: MOD_EVENT.id, capType: 'evt', name: '电量不足告警', identifier: 'LowBattery', descr: '设备电量低于阈值时上报',
-    dataDef: { dataType:'event', eventType:'alarm', outputParams:[{name:'当前电量',identifier:'battery',dataType:'int',min:0,max:100,step:1,unit:'%',defaultVal:'0'}] } },
-  { id: nextId(), moduleId: MOD_EVENT.id, capType: 'evt', name: '设备上线通知', identifier: 'DeviceOnline', descr: '设备从离线变为在线时上报',
-    dataDef: { dataType:'event', eventType:'info', outputParams:[] } },
-
-  // 门铃设置模块
-  { id: nextId(), moduleId: MOD_BELL.id, capType: 'prop', name: '门铃音量', identifier: 'BellVolume', descr: '门铃音量大小设置',
-    dataDef: { dataType:'int', accessMode:'rw', min:0, max:100, step:5, unit:'%', defaultVal:'50' } },
-  { id: nextId(), moduleId: MOD_BELL.id, capType: 'prop', name: '门铃铃声', identifier: 'BellRingtone', descr: '门铃铃声选择',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'经典铃声',val:0},{name:'柔和铃声',val:1},{name:'轻快铃声',val:2}], defaultVal:'0' } },
-  { id: nextId(), moduleId: MOD_BELL.id, capType: 'svc', name: '远程开门', identifier: 'RemoteUnlock', descr: '远程控制门锁开启',
-    dataDef: { dataType:'service', inputParams:[], outputParams:[{name:'开门结果',identifier:'result',dataType:'enum',enumValues:[{name:'失败',val:0},{name:'成功',val:1}],defaultVal:'1'}] } },
-  { id: nextId(), moduleId: MOD_BELL.id, capType: 'evt', name: '门铃呼叫', identifier: 'BellRing', descr: '访客按下门铃时上报',
-    dataDef: { dataType:'event', eventType:'info', outputParams:[] } },
-
-  // 安防侦测模块
-  { id: nextId(), moduleId: MOD_SENSOR.id, capType: 'prop', name: '告警灵敏度', identifier: 'AlarmSensitivity', descr: '安防告警的触发灵敏度',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'高',val:0},{name:'中',val:1},{name:'低',val:2}], defaultVal:'1' } },
-  { id: nextId(), moduleId: MOD_SENSOR.id, capType: 'evt', name: '烟雾告警', identifier: 'SmokeAlarm', descr: '检测到烟雾时上报',
-    dataDef: { dataType:'event', eventType:'alarm', outputParams:[] } },
-  { id: nextId(), moduleId: MOD_SENSOR.id, capType: 'evt', name: '水浸告警', identifier: 'WaterLeak', descr: '检测到水浸时上报',
-    dataDef: { dataType:'event', eventType:'alarm', outputParams:[] } },
-
-  // 算法能力模块
-  { id: nextId(), moduleId: MOD_ALGO.id, capType: 'prop', name: '算法开关', identifier: 'AlgorithmSwitch', descr: '控制算法是否启用',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'关闭',val:0},{name:'开启',val:1}], defaultVal:'1' } },
-  { id: nextId(), moduleId: MOD_ALGO.id, capType: 'prop', name: '灵敏度', identifier: 'Sensitivity', descr: '算法侦测的灵敏度等级',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'高',val:0},{name:'中',val:1},{name:'低',val:2}], defaultVal:'1' } },
-  { id: nextId(), moduleId: MOD_ALGO.id, capType: 'prop', name: '侦测类型', identifier: 'DetectType', descr: '算法支持的侦测目标类型',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'运动',val:0},{name:'人形',val:1},{name:'车辆',val:2}], defaultVal:'0' } },
-  { id: nextId(), moduleId: MOD_ALGO.id, capType: 'prop', name: '定时侦测', identifier: 'ScheduledDetect', descr: '定时侦测时间段配置（支持多个自定义时段，Week位图指定生效日）',
-    dataDef: { dataType:'array', elementType:'struct', accessMode:'rw', maxLength:10,
-      fields:[
-        { name:'启用', identifier:'Switch', dataType:'enum', enumValues:[{name:'关闭',val:0},{name:'开启',val:1}] },
-        { name:'开始时间', identifier:'StartTime', dataType:'int', min:0, max:86399, unit:'秒', descr:'一天内秒数，如 28800=08:00:00' },
-        { name:'结束时间', identifier:'EndTime', dataType:'int', min:0, max:86399, unit:'秒', descr:'一天内秒数，如 72000=20:00:00' },
-        { name:'Week', identifier:'Week', dataType:'int', min:0, max:127, defaultVal:'127', descr:'生效日掩码，bit0=周日(1) bit1=周一(2) bit2=周二(4) bit3=周三(8) bit4=周四(16) bit5=周五(32) bit6=周六(64)，对应位置1生效，多选叠加，全选=127' },
-      ] } },
-  { id: nextId(), moduleId: MOD_ALGO.id, capType: 'prop', name: '区域侦测', identifier: 'ZoneDetect', descr: '自定义侦测区域配置（支持多个区域，4边形填1-4号顶点，6边形填1-6号顶点）',
-    dataDef: { dataType:'array', elementType:'struct', accessMode:'rw', maxLength:8,
-      fields:[
-        { name:'区域ID', identifier:'ZoneId', dataType:'int', min:1, max:8 },
-        { name:'顶点1X', identifier:'X1', dataType:'int', min:0, max:10000, descr:'归一化坐标×10000，如 3520 表示 0.3520' },
-        { name:'顶点1Y', identifier:'Y1', dataType:'int', min:0, max:10000, descr:'归一化坐标×10000' },
-        { name:'顶点2X', identifier:'X2', dataType:'int', min:0, max:10000 },
-        { name:'顶点2Y', identifier:'Y2', dataType:'int', min:0, max:10000 },
-        { name:'顶点3X', identifier:'X3', dataType:'int', min:0, max:10000 },
-        { name:'顶点3Y', identifier:'Y3', dataType:'int', min:0, max:10000 },
-        { name:'顶点4X', identifier:'X4', dataType:'int', min:0, max:10000 },
-        { name:'顶点4Y', identifier:'Y4', dataType:'int', min:0, max:10000 },
-        { name:'顶点5X', identifier:'X5', dataType:'int', min:0, max:10000 },
-        { name:'顶点5Y', identifier:'Y5', dataType:'int', min:0, max:10000 },
-        { name:'顶点6X', identifier:'X6', dataType:'int', min:0, max:10000 },
-        { name:'顶点6Y', identifier:'Y6', dataType:'int', min:0, max:10000 }
-      ] } },
-  { id: nextId(), moduleId: MOD_ALGO.id, capType: 'prop', name: '声音告警开关', identifier: 'SoundAlarmSwitch', descr: '是否开启声音告警',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'关闭',val:0},{name:'开启',val:1}], defaultVal:'0' } },
-  { id: nextId(), moduleId: MOD_ALGO.id, capType: 'prop', name: '声音告警次数', identifier: 'SoundAlarmCount', descr: '声音告警触发次数',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'1次',val:1},{name:'2次',val:2},{name:'3次',val:3},{name:'5次',val:5},{name:'10次',val:10}], defaultVal:'3' } },
-  { id: nextId(), moduleId: MOD_ALGO.id, capType: 'prop', name: '自定义告警音频', identifier: 'CustomAlarmAudio', descr: '自定义告警音频内容',
-    dataDef: { dataType:'string', accessMode:'rw', maxLength:255, defaultVal:'' } },
-  { id: nextId(), moduleId: MOD_ALGO.id, capType: 'prop', name: '灯光告警开关', identifier: 'LightAlarmSwitch', descr: '是否开启灯光告警',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'关闭',val:0},{name:'开启',val:1}], defaultVal:'0' } },
-  { id: nextId(), moduleId: MOD_ALGO.id, capType: 'prop', name: '灯光告警时长', identifier: 'LightAlarmDuration', descr: '灯光告警持续时长',
-    dataDef: { dataType:'int', accessMode:'rw', min:1, max:60, step:1, unit:'秒', defaultVal:'5' } },
-
-  // ===== 低功耗摄像机 专属（电池管理模块）=====
-  { id: nextId(), moduleId: MOD_BATTERY.id, capType: 'prop', name: '电池电量', identifier: 'BatteryLevel', descr: '设备当前电量百分比',
-    dataDef: { dataType:'int', accessMode:'r', min:0, max:100, step:1, unit:'%', defaultVal:'100' } },
-  { id: nextId(), moduleId: MOD_BATTERY.id, capType: 'prop', name: '休眠唤醒', identifier: 'WakeSwitch', descr: '低功耗设备的休眠与唤醒控制',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'休眠',val:0},{name:'唤醒',val:1}], defaultVal:'1' } },
-  { id: nextId(), moduleId: MOD_BATTERY.id, capType: 'prop', name: '低电量提醒阈值', identifier: 'LowBatteryThreshold', descr: '电量低于该阈值时触发低电量提醒',
-    dataDef: { dataType:'int', accessMode:'rw', min:1, max:100, step:1, unit:'%', defaultVal:'20' } },
-  { id: nextId(), moduleId: MOD_BATTERY.id, capType: 'prop', name: 'PIR侦测开关', identifier: 'PirDetectSwitch', descr: '是否开启 PIR 人体红外侦测（低功耗唤醒源）',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'关闭',val:0},{name:'开启',val:1}], defaultVal:'1' } },
-
-  // ===== 长电球机 专属（云台模块）=====
-  { id: nextId(), moduleId: MOD_PTZ.id, capType: 'svc', name: '云台控制', identifier: 'PtzControl', descr: '控制云台上下左右转动或停止',
-    dataDef: { dataType:'service', inputParams:[{ name:'方向', identifier:'direction', dataType:'enum', enumValues:[{name:'上',val:0},{name:'下',val:1},{name:'左',val:2},{name:'右',val:3},{name:'停止',val:4}], defaultVal:'4' }], outputParams:[] } },
-  { id: nextId(), moduleId: MOD_PTZ.id, capType: 'prop', name: '预置位', identifier: 'PresetPosition', descr: '云台预置位调用',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'预置位1',val:1},{name:'预置位2',val:2},{name:'预置位3',val:3},{name:'预置位4',val:4}], defaultVal:'1' } },
-  { id: nextId(), moduleId: MOD_PTZ.id, capType: 'prop', name: '自动巡航', identifier: 'AutoCruise', descr: '是否开启云台自动巡航',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'关闭',val:0},{name:'开启',val:1}], defaultVal:'0' } },
-  { id: nextId(), moduleId: MOD_PTZ.id, capType: 'prop', name: '变焦倍数', identifier: 'ZoomLevel', descr: '当前光学/数字变焦倍数',
-    dataDef: { dataType:'int', accessMode:'rw', min:1, max:10, step:1, unit:'倍', defaultVal:'1' } },
-
-  // ===== 香薰机 专属（香薰模块）=====
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '休眠唤醒', identifier: 'SprayWakeSwitch', descr: '整机休眠/唤醒控制，休眠时停止雾化并关闭屏显与指示灯',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'休眠',val:0},{name:'唤醒',val:1}], defaultVal:'1' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '喷口选择', identifier: 'NozzleSelect', descr: '雾化喷口选择（混合/左喷口/右喷口）',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'混合',val:0},{name:'左喷雾口',val:1},{name:'右喷雾口',val:2}], defaultVal:'0' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '屏显开关', identifier: 'ScreenSwitch', descr: '设备屏显开关',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'关闭',val:0},{name:'开启',val:1}], defaultVal:'1' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '喷雾定时时段', identifier: 'SprayTimerSchedule', descr: '每日单个喷雾时段，无开关、无星期周期',
-    dataDef: { dataType:'struct', accessMode:'rw', fields:[
-      { name:'开始时间', identifier:'StartTime', dataType:'int', min:0, max:86399, step:1, unit:'秒', descr:'一天内秒数，如 28800 = 08:00' },
-      { name:'结束时间', identifier:'EndTime', dataType:'int', min:0, max:86399, step:1, unit:'秒', descr:'一天内秒数，如 72000 = 20:00，需大于 StartTime' }
-    ] } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '喷雾模式', identifier: 'SprayMode', descr: '标准模式按档位执行，自定义模式由用户设置时长与间隔',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'标准',val:0},{name:'自定义',val:1}], defaultVal:'0' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '喷雾档位', identifier: 'GearLevel', descr: '喷雾档位，仅标准模式下生效',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'1档',val:1},{name:'2档',val:2},{name:'3档',val:3}], defaultVal:'1' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '档位喷香时长', identifier: 'GearSprayDuration', descr: '当前档位对应的喷香时长，设备上报',
-    dataDef: { dataType:'int', accessMode:'r', min:3, max:20, step:1, unit:'秒', defaultVal:'5' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '档位喷香间隔', identifier: 'GearSprayInterval', descr: '当前档位对应的喷香间隔，设备上报',
-    dataDef: { dataType:'int', accessMode:'r', min:3, max:50, step:1, unit:'分钟', defaultVal:'10' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '左喷口喷香时长', identifier: 'LeftSprayDuration', descr: '左喷口单次喷香时长',
-    dataDef: { dataType:'int', accessMode:'rw', min:3, max:20, step:1, unit:'秒', defaultVal:'5' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '左喷口喷香间隔', identifier: 'LeftSprayInterval', descr: '左喷口两次喷香之间的停喷间隔',
-    dataDef: { dataType:'int', accessMode:'rw', min:3, max:50, step:1, unit:'分钟', defaultVal:'10' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '右喷口喷香时长', identifier: 'RightSprayDuration', descr: '右喷口单次喷香时长',
-    dataDef: { dataType:'int', accessMode:'rw', min:3, max:20, step:1, unit:'秒', defaultVal:'5' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '右喷口喷香间隔', identifier: 'RightSprayInterval', descr: '右喷口两次喷香之间的停喷间隔',
-    dataDef: { dataType:'int', accessMode:'rw', min:3, max:50, step:1, unit:'分钟', defaultVal:'10' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'svc', name: '恢复出厂设置', identifier: 'FactoryReset', descr: '清空所有用户配置并重启设备',
-    dataDef: { dataType:'service', inputParams:[], outputParams:[{ name:'操作结果', identifier:'result', dataType:'enum', enumValues:[{name:'失败',val:0},{name:'成功',val:1}], defaultVal:'1' }] } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'evt', name: '香薰液不足告警', identifier: 'LiquidLowAlarm', descr: '香薰液余量低于阈值时上报',
-    dataDef: { dataType:'event', eventType:'alarm', outputParams:[{ name:'余量百分比', identifier:'liquidLevel', dataType:'int', min:0, max:100, step:1, unit:'%', defaultVal:'0' }] } },
-
-  // ===== 香薰机：按设备端能力项规格补充（SprayProperty / SprayService）=====
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '香薰机开关', identifier: 'spray_enable', descr: '香薰机总开关',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'关',val:0},{name:'开',val:1}], defaultVal:'1' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '显示状态', identifier: 'display_state', descr: '屏显显示状态',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'关',val:0},{name:'开',val:1}], defaultVal:'0' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '提示音状态', identifier: 'voice_state', descr: '提示音开关状态',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'关',val:0},{name:'开',val:1}], defaultVal:'0' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '喷雾模式（规格）', identifier: 'spray_mode', descr: '喷雾模式：1=标准，2=自定义',
-    dataDef: { dataType:'enum', accessMode:'rw', enumValues:[{name:'标准',val:1},{name:'自定义',val:2}], defaultVal:'1' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '喷头数量', identifier: 'spray_count', descr: '设备喷头数量',
-    dataDef: { dataType:'int', accessMode:'r', min:1, max:4, step:1, unit:'个', defaultVal:'2' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '默认喷雾时长', identifier: 'spray_time', descr: '单次喷雾时长',
-    dataDef: { dataType:'int', accessMode:'rw', min:1, max:60, step:1, unit:'秒', defaultVal:'5' } },
-  { id: nextId(), moduleId: MOD_AROMA.id, capType: 'prop', name: '默认喷雾间隔', identifier: 'spray_interval', descr: '两次喷雾之间的间隔',
-    dataDef: { dataType:'int', accessMode:'rw', min:1, max:3600, step:1, unit:'秒', defaultVal:'300' } }
-]
-
-// ===== 能力项（层级：能力模块 → 能力项 → 参数）=====
-// 参数用能力标识符声明，下面回填到 capabilities.capItemId，避免维护两套 id
-const initialCapItems = [
-  // 工作模式模块
-  { id: nextId(), moduleId: MOD_WORKMODE.id, name: '设备工作模式', identifier: 'WorkModeItem', capType: 'prop', updateTime: '2026-07-02 10:12:00',
-    params: ['WorkMode', 'AovCaptureFrameRate', 'AovAutoSwitchPower'] },
-
-  // 录制模式模块
-  { id: nextId(), moduleId: MOD_RECORD.id, name: '录像业务', identifier: 'RecordSettingItem', capType: 'prop', updateTime: '2026-07-05 14:32:00',
-    params: ['NormalRecord', 'EventRecord', 'RecordResolution', 'EventRecordDuration', 'CaptureInterval'] },
-  { id: nextId(), moduleId: MOD_RECORD.id, name: '存储管理', identifier: 'StorageManageItem', capType: 'svc', updateTime: '2026-07-05 14:35:00',
-    params: ['FormatStorage'] },
-
-  // 灯光模式模块
-  { id: nextId(), moduleId: MOD_LIGHT.id, name: '灯光设置', identifier: 'LightModeItem', capType: 'prop', updateTime: '2026-07-08 09:20:00',
-    params: ['LightMode'] },
-
-  // 事件侦测模块
-  { id: nextId(), moduleId: MOD_EVENT.id, name: '设备告警', identifier: 'AlarmEventItem', capType: 'evt', updateTime: '2026-07-10 16:05:00',
-    params: ['MotionDetect', 'LowBattery', 'DeviceOnline'] },
-
-  // 门铃设置模块
-  { id: nextId(), moduleId: MOD_BELL.id, name: '门铃设置', identifier: 'BellSettingItem', capType: 'prop', updateTime: '2026-07-12 11:48:00',
-    params: ['BellVolume', 'BellRingtone'] },
-  { id: nextId(), moduleId: MOD_BELL.id, name: '远程开门', identifier: 'RemoteUnlockItem', capType: 'svc', updateTime: '2026-07-12 11:50:00',
-    params: ['RemoteUnlock'] },
-  { id: nextId(), moduleId: MOD_BELL.id, name: '门铃呼叫', identifier: 'BellRingItem', capType: 'evt', updateTime: '2026-07-12 11:52:00',
-    params: ['BellRing'] },
-
-  // 安防侦测模块
-  { id: nextId(), moduleId: MOD_SENSOR.id, name: '告警灵敏度', identifier: 'AlarmSensitivityItem', capType: 'prop', updateTime: '2026-07-15 15:08:00',
-    params: ['AlarmSensitivity'] },
-  { id: nextId(), moduleId: MOD_SENSOR.id, name: '安防告警', identifier: 'SecurityAlarmItem', capType: 'evt', updateTime: '2026-07-15 15:10:00',
-    params: ['SmokeAlarm', 'WaterLeak'] },
-
-  // 算法能力模块
-  { id: nextId(), moduleId: MOD_ALGO.id, name: '算法配置', identifier: 'AlgorithmConfigItem', capType: 'prop', updateTime: '2026-07-20 10:00:00',
-    params: ['AlgorithmSwitch', 'Sensitivity', 'DetectType'] },
-  { id: nextId(), moduleId: MOD_ALGO.id, name: '侦测计划', identifier: 'DetectPlanItem', capType: 'prop', updateTime: '2026-07-20 10:04:00',
-    params: ['ScheduledDetect', 'ZoneDetect'] },
-  { id: nextId(), moduleId: MOD_ALGO.id, name: '声光告警', identifier: 'AlarmLinkageItem', capType: 'prop', updateTime: '2026-07-20 10:08:00',
-    params: ['SoundAlarmSwitch', 'SoundAlarmCount', 'CustomAlarmAudio', 'LightAlarmSwitch', 'LightAlarmDuration'] },
-
-  // 电池管理模块
-  { id: nextId(), moduleId: MOD_BATTERY.id, name: '电池管理', identifier: 'BatteryManageItem', capType: 'prop', updateTime: '2026-08-02 09:18:00',
-    params: ['BatteryLevel', 'WakeSwitch', 'LowBatteryThreshold', 'PirDetectSwitch'] },
-
-  // 云台模块
-  { id: nextId(), moduleId: MOD_PTZ.id, name: '云台设置', identifier: 'PtzSettingItem', capType: 'prop', updateTime: '2026-08-10 13:38:00',
-    params: ['PresetPosition', 'AutoCruise', 'ZoomLevel'] },
-  { id: nextId(), moduleId: MOD_PTZ.id, name: '云台控制', identifier: 'PtzControlItem', capType: 'svc', updateTime: '2026-08-10 13:40:00',
-    params: ['PtzControl'] },
-
-  // 香薰模块
-  { id: nextId(), moduleId: MOD_AROMA.id, name: '喷雾控制', identifier: 'SprayControlItem', capType: 'prop', updateTime: '2026-09-01 09:00:00',
-    params: ['NozzleSelect', 'SprayMode', 'GearLevel', 'GearSprayDuration', 'GearSprayInterval',
-             'LeftSprayDuration', 'LeftSprayInterval', 'RightSprayDuration', 'RightSprayInterval'] },
-  { id: nextId(), moduleId: MOD_AROMA.id, name: '设备设置', identifier: 'AromaDeviceItem', capType: 'prop', updateTime: '2026-09-01 09:06:00',
-    params: ['SprayWakeSwitch', 'ScreenSwitch', 'SprayTimerSchedule'] },
-  { id: nextId(), moduleId: MOD_AROMA.id, name: '恢复出厂设置', identifier: 'FactoryResetItem', capType: 'svc', updateTime: '2026-09-01 09:08:00',
-    params: ['FactoryReset'] },
-  { id: nextId(), moduleId: MOD_AROMA.id, name: '香薰告警', identifier: 'AromaAlarmItem', capType: 'evt', updateTime: '2026-09-01 09:10:00',
-    params: ['LiquidLowAlarm'] },
-
-  // 香薰机：按设备端能力项规格补充
-  { id: nextId(), moduleId: MOD_AROMA.id, name: '香薰机基础属性', identifier: 'SprayProperty', capType: 'prop', updateTime: '2026-09-05 10:00:00',
-    params: ['spray_enable', 'display_state', 'voice_state', 'spray_mode', 'spray_count'] },
-  { id: nextId(), moduleId: MOD_AROMA.id, name: '香薰机喷头喷雾业务', identifier: 'SprayService', capType: 'prop', updateTime: '2026-09-05 10:05:00',
-    params: ['spray_time', 'spray_interval'] }
-]
-
-// 香薰机的能力项置顶展示（stable sort，组内相对顺序不变）
-initialCapItems.sort((x, y) => (x.moduleId === MOD_AROMA.id ? 0 : 1) - (y.moduleId === MOD_AROMA.id ? 0 : 1))
-
-// 回填参数归属：把能力项声明的标识符写回能力记录的 capItemId
-initialCapItems.forEach(item => {
-  item.params.forEach(idt => {
-    const cap = initialCapabilities.find(c => c.identifier === idt)
-    if (cap) cap.capItemId = item.id
-  })
-  // 读写模式归属能力项：组内参数全为只读时标记为只读，否则读写
-  const caps = initialCapabilities.filter(c => c.capItemId === item.id && c.dataDef)
-  item.accessMode = caps.length && caps.every(c => c.dataDef.accessMode === 'r') ? 'ro' : 'rw'
+// 参数构造：dataDef.accessMode 仅供平台兼容读取（'r' 只读 / 'rw' 读写 / '-' 服务与事件）
+const C = (dataType, identifier, name, descr, extra = {}) => ({ dataType, identifier, name, descr, extra })
+const mk = (moduleId, capType, am, c) => ({
+  id: nextId(), moduleId, capType, name: c.name, identifier: c.identifier, descr: c.descr,
+  dataDef: am === '-' ? { dataType: c.dataType, ...c.extra } : { dataType: c.dataType, accessMode: am, ...c.extra }
 })
 
-// ===== 类目-能力关联 =====
-// IPC摄像机: WorkMode, AovCaptureFrameRate, AovAutoSwitchPower, NormalRecord, EventRecord, RecordResolution, CaptureInterval, EventRecordDuration, FormatStorage, LightMode, MotionDetect, LowBattery, DeviceOnline
-// 智能门铃: BellVolume, BellRingtone, RemoteUnlock, BellRing, MotionDetect, LowBattery, DeviceOnline
-// 传感安防: AlarmSensitivity, MotionDetect, SmokeAlarm, WaterLeak, LowBattery, DeviceOnline
-// 香薰机: SprayWakeSwitch, NozzleSelect, ScreenSwitch, SprayTimerSchedule, SprayMode, GearLevel, GearSprayDuration, GearSprayInterval, Left/RightSprayDuration, Left/RightSprayInterval
-// 低功耗摄像机: BatteryLevel, WakeSwitch, LowBatteryThreshold, PirDetectSwitch + 摄像机通用
-// 长电球机: PtzControl, PresetPosition, AutoCruise, ZoomLevel + 摄像机通用
-
-// 按标识符取能力 id —— 新增绑定用它，避免依赖数组下标（下标会随能力增删漂移）
-const capId = (identifier) => initialCapabilities.find(c => c.identifier === identifier).id
-
-const initialCategoryCaps = [
-  // IPC摄像机 — 工作模式模块
-  { categoryId: _catIpc, capabilityId: initialCapabilities[0].id },
-  { categoryId: _catIpc, capabilityId: initialCapabilities[1].id },
-  { categoryId: _catIpc, capabilityId: initialCapabilities[2].id },
-  // IPC摄像机 — 录制模式模块
-  { categoryId: _catIpc, capabilityId: initialCapabilities[3].id },
-  { categoryId: _catIpc, capabilityId: initialCapabilities[4].id },
-  { categoryId: _catIpc, capabilityId: initialCapabilities[5].id },
-  { categoryId: _catIpc, capabilityId: initialCapabilities[6].id },
-  { categoryId: _catIpc, capabilityId: initialCapabilities[7].id },
-  { categoryId: _catIpc, capabilityId: initialCapabilities[8].id },
-  // IPC摄像机 — 灯光模式模块
-  { categoryId: _catIpc, capabilityId: initialCapabilities[9].id },
-  // IPC摄像机 — 事件侦测模块
-  { categoryId: _catIpc, capabilityId: initialCapabilities[10].id },
-  { categoryId: _catIpc, capabilityId: initialCapabilities[11].id },
-  { categoryId: _catIpc, capabilityId: initialCapabilities[12].id },
-
-  // 智能门铃 — 门铃设置模块
-  { categoryId: _catBell, capabilityId: initialCapabilities[13].id },
-  { categoryId: _catBell, capabilityId: initialCapabilities[14].id },
-  { categoryId: _catBell, capabilityId: initialCapabilities[15].id },
-  { categoryId: _catBell, capabilityId: initialCapabilities[16].id },
-  // 智能门铃 — 事件侦测模块（共享）
-  { categoryId: _catBell, capabilityId: initialCapabilities[10].id }, // motion_detect
-  { categoryId: _catBell, capabilityId: initialCapabilities[11].id }, // low_battery
-  { categoryId: _catBell, capabilityId: initialCapabilities[12].id }, // device_online
-
-  // 传感安防 — 安防侦测模块
-  { categoryId: _catSensor, capabilityId: initialCapabilities[17].id },
-  { categoryId: _catSensor, capabilityId: initialCapabilities[18].id },
-  { categoryId: _catSensor, capabilityId: initialCapabilities[19].id },
-  // 传感安防 — 事件侦测模块（共享）
-  { categoryId: _catSensor, capabilityId: initialCapabilities[10].id }, // motion_detect
-  { categoryId: _catSensor, capabilityId: initialCapabilities[11].id }, // low_battery
-  { categoryId: _catSensor, capabilityId: initialCapabilities[12].id }, // device_online
-
-  // —— 香薰机（独立 IoT 设备类目）——
-  { categoryId: _catAroma, capabilityId: capId('SprayWakeSwitch') },
-  { categoryId: _catAroma, capabilityId: capId('NozzleSelect') },
-  { categoryId: _catAroma, capabilityId: capId('ScreenSwitch') },
-  { categoryId: _catAroma, capabilityId: capId('SprayTimerSchedule') },
-  { categoryId: _catAroma, capabilityId: capId('SprayMode') },
-  { categoryId: _catAroma, capabilityId: capId('GearLevel') },
-  { categoryId: _catAroma, capabilityId: capId('GearSprayDuration') },
-  { categoryId: _catAroma, capabilityId: capId('GearSprayInterval') },
-  { categoryId: _catAroma, capabilityId: capId('LeftSprayDuration') },
-  { categoryId: _catAroma, capabilityId: capId('LeftSprayInterval') },
-  { categoryId: _catAroma, capabilityId: capId('RightSprayDuration') },
-  { categoryId: _catAroma, capabilityId: capId('RightSprayInterval') },
-  { categoryId: _catAroma, capabilityId: capId('FactoryReset') },
-  { categoryId: _catAroma, capabilityId: capId('LiquidLowAlarm') },
-  { categoryId: _catAroma, capabilityId: capId('DeviceOnline') }, // 事件侦测模块（共享）
-  // 香薰机：按设备端规格补充的两个能力项
-  { categoryId: _catAroma, capabilityId: capId('spray_enable') },
-  { categoryId: _catAroma, capabilityId: capId('display_state') },
-  { categoryId: _catAroma, capabilityId: capId('voice_state') },
-  { categoryId: _catAroma, capabilityId: capId('spray_mode') },
-  { categoryId: _catAroma, capabilityId: capId('spray_count') },
-  { categoryId: _catAroma, capabilityId: capId('spray_time') },
-  { categoryId: _catAroma, capabilityId: capId('spray_interval') },
-
-  // —— 低功耗摄像机（电池类专属 + 摄像机通用）——
-  { categoryId: _catLowCam, capabilityId: capId('BatteryLevel') },
-  { categoryId: _catLowCam, capabilityId: capId('WakeSwitch') },
-  { categoryId: _catLowCam, capabilityId: capId('LowBatteryThreshold') },
-  { categoryId: _catLowCam, capabilityId: capId('PirDetectSwitch') },
-  { categoryId: _catLowCam, capabilityId: capId('WorkMode') },
-  { categoryId: _catLowCam, capabilityId: capId('MotionDetect') },
-  { categoryId: _catLowCam, capabilityId: capId('LowBattery') },
-  { categoryId: _catLowCam, capabilityId: capId('DeviceOnline') },
-
-  // —— 长电球机（云台类专属 + 摄像机通用）——
-  { categoryId: _catPtz, capabilityId: capId('PtzControl') },
-  { categoryId: _catPtz, capabilityId: capId('PresetPosition') },
-  { categoryId: _catPtz, capabilityId: capId('AutoCruise') },
-  { categoryId: _catPtz, capabilityId: capId('ZoomLevel') },
-  { categoryId: _catPtz, capabilityId: capId('WorkMode') },
-  { categoryId: _catPtz, capabilityId: capId('NormalRecord') },
-  { categoryId: _catPtz, capabilityId: capId('LightMode') },
-  { categoryId: _catPtz, capabilityId: capId('MotionDetect') }
+const initialCapabilities = [
+  // DeviceInfoProperty · 设备信息
+  mk(MOD_DEV.id, 'prop', 'r', C('string', 'company_id', '企业ID', '企业唯一标识', { maxLength: 32 })),
+  mk(MOD_DEV.id, 'prop', 'r', C('string', 'product_id', '产品ID', '产品唯一标识', { maxLength: 32 })),
+  mk(MOD_DEV.id, 'prop', 'r', C('string', 'ctei', '设备授权ID', '设备授权标识', { maxLength: 64 })),
+  mk(MOD_DEV.id, 'prop', 'r', C('string', 'did', '设备DID', '设备唯一ID', { maxLength: 64 })),
+  mk(MOD_DEV.id, 'prop', 'r', C('string', 'gid', '绑定组ID', '设备绑定组', { maxLength: 64 })),
+  // DeviceProperty · 设备设置
+  mk(MOD_DEV.id, 'prop', 'rw', C('string', 'device_name', '设备名称', '仅此项可修改', { maxLength: 32 })),
+  // CaptureInfoProperty · 图像信息
+  mk(MOD_IMAGE.id, 'prop', 'r', C('int', 'capture_stream_id', '采集码流ID', '主键，从0开始', { min: 0, max: 3, unit: '', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('enum', 'conbine_stream_type', '合成流类型', '镜头合并方式', { enumValues: [{ name: '非合并', val: 0 }, { name: '双镜头左右', val: 1 }, { name: '双镜头上下', val: 2 }, { name: '三镜头上下', val: 3 }, { name: '三镜头上2下1', val: 4 }, { name: '三镜头上1下2', val: 5 }, { name: '三镜头左右', val: 6 }, { name: '四镜头上下', val: 7 }, { name: '四镜头2×2', val: 8 }], defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('array', 'conbine_lens_ids', '合并镜头ID', '类型为0时为空', { elementType: 'struct', maxLength: 8, fields: [{ name: '镜头ID', identifier: 'lens_id', dataType: 'int' }] })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('enum', 'focal_type', '焦距类型', '变焦实现方式', { enumValues: [{ name: '固定焦距', val: 0 }, { name: '机械变焦', val: 1 }, { name: '电子变焦(设备)', val: 2 }, { name: '电子变焦(APP)', val: 3 }], defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('int', 'focal_length_min', '最小焦距', '支持的最小焦距', { min: 1, max: 100, unit: '', defaultVal: '1' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('int', 'focal_length_max', '最大焦距', '支持的最大焦距', { min: 1, max: 100, unit: '', defaultVal: '28' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('int', 'encode_stream_count', '编码流数量', '每路采集流的编码流数', { min: 1, max: 8, unit: '个', defaultVal: '1' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('int', 'lens_count', '镜头数量', '设备镜头数', { min: 1, max: 8, unit: '个', defaultVal: '2' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('int', 'show_stream_count', '显示流数量', '客户端显示流数', { min: 1, max: 8, unit: '个', defaultVal: '1' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('boolean', 'snap_ability', '支持抓图', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('boolean', 'wdr_ability', '支持WDR', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('boolean', 'hdr_ability', '支持HDR', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('boolean', 'anti_flicker_ability', '支持防闪', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('boolean', 'privacy_mask_ability', '支持隐私遮挡', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('boolean', 'region_sign_ability', '支持区域标记', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('boolean', 'custom_osd_ability', '支持自定义OSD', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('enum', 'osd_show_ability', 'OSD显示位置', '显示位置', { enumValues: [{ name: 'APP端显示', val: 0 }, { name: '设备端显示', val: 1 }], defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('enum', 'lens_corrent_type', '镜头矫正类型', '是否需要矫正', { enumValues: [{ name: '不需要矫正', val: 0 }, { name: '需要矫正', val: 1 }], defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('struct', 'lens_correct_algorithm', '镜头矫正算法', '需要矫正时下发', { fields: [{ name: '算法ID', identifier: 'correct_algorithm_id', dataType: 'string' }, { name: '算法参数', identifier: 'correct_algorithm_param', dataType: 'string' }] })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('enum', 'pt_control_type', 'PT控制类型', '云台控制方式', { enumValues: [{ name: '不支持', val: 0 }, { name: '设备控制', val: 1 }, { name: '分镜头控制', val: 2 }], defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('array', 'pt_ability', '镜头PT能力', '每镜头能力值', { elementType: 'struct', maxLength: 8, fields: [{ name: '能力值', identifier: 'ability', dataType: 'int' }] })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('boolean', 'ptz_3d_position_ability', '支持PTZ3D居中', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('boolean', 'ptz_preset_ability', '支持预置位', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('boolean', 'ptz_cruise_ability', '支持巡航', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'r', C('boolean', 'ptz_speed_ability', '支持速度调节', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  // CaptureProperty · 图像设置
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('int', 'capture_stream_id', '采集码流ID', '主键', { min: 0, max: 3, unit: '', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('enum', 'flip_type', '翻转类型', '画面方向', { enumValues: [{ name: '不翻转', val: 0 }, { name: '水平', val: 1 }, { name: '垂直', val: 2 }, { name: '水平+垂直', val: 3 }], defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('int', 'focal_length', '当前焦距', '当前变焦值', { min: 1, max: 100, unit: '', defaultVal: '10' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('int', 'encode_stream_id', '编码码流ID', '主键', { min: 0, max: 7, unit: '', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('int', 'width', '宽度', '分辨率宽', { min: 160, max: 8192, unit: 'px', defaultVal: '1920' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('int', 'height', '高度', '分辨率高', { min: 120, max: 4320, unit: 'px', defaultVal: '1080' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('enum', 'video_encode_type', '编码类型', '视频编码格式', { enumValues: [{ name: 'mJpg', val: 1 }, { name: 'H264', val: 2 }, { name: 'H265', val: 4 }, { name: 'SVAC', val: 8 }, { name: 'SVAC3', val: 16 }], defaultVal: '2' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('int', 'frame_rate', '帧率', '每秒帧数', { min: 1, max: 60, unit: 'fps', defaultVal: '25' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('enum', 'video_encode_mode', '编码模式', '码率控制', { enumValues: [{ name: 'CBR', val: 0 }, { name: 'VBR', val: 1 }, { name: 'AVBR', val: 2 }], defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('boolean', 'wdr_mode', 'WDR开关', '宽动态', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('boolean', 'hdr_mode', 'HDR开关', '高动态', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('boolean', 'anti_flicker_mode', '防闪开关', '抗频闪', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('enum', 'scan_frequency', '扫描频率', '工频', { enumValues: [{ name: '50Hz', val: 50 }, { name: '60Hz', val: 60 }], defaultVal: '50' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('boolean', 'osd_enable', 'OSD总开关', '水印开关', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('array', 'osd_list', 'OSD列表', '上限 8', { elementType: 'struct', maxLength: 8, fields: [{ name: 'OSD ID', identifier: 'osd_id', dataType: 'int' }, { name: '内容', identifier: 'osd_content', dataType: 'string' }, { name: '位置', identifier: 'osd_position', dataType: 'int' }, { name: '字号', identifier: 'osd_size', dataType: 'int' }] })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('array', 'privacy_mask_list', '隐私遮挡', '上限 8', { elementType: 'struct', maxLength: 8, fields: [{ name: '区域ID', identifier: 'privacy_mask_id', dataType: 'int' }, { name: '名称', identifier: 'privacy_mask_name', dataType: 'string' }, { name: '启用', identifier: 'privacy_mask_enable', dataType: 'boolean' }, { name: 'X', identifier: 'privacy_mask_x', dataType: 'int' }, { name: 'Y', identifier: 'privacy_mask_y', dataType: 'int' }, { name: '宽', identifier: 'privacy_mask_width', dataType: 'int' }, { name: '高', identifier: 'privacy_mask_height', dataType: 'int' }] })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('int', 'ptz_speed', 'PTZ速度', '转动速度 1~5', { min: 1, max: 5, unit: '', defaultVal: '2' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('array', 'pt_position_list', '预置位', '上限 10', { elementType: 'struct', maxLength: 8, fields: [{ name: '预置位ID', identifier: 'pt_position_id', dataType: 'int' }, { name: '名称', identifier: 'pt_position_name', dataType: 'string' }, { name: '图片ID', identifier: 'pt_position_pic_id', dataType: 'string' }, { name: 'X', identifier: 'pt_position_x', dataType: 'int' }, { name: 'Y', identifier: 'pt_position_y', dataType: 'int' }, { name: '倍率', identifier: 'pt_position_z', dataType: 'int' }] })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('int', 'guard_pt_position_id', '看守位', '看守预置位ID', { min: 0, max: 10, unit: '', defaultVal: '1' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('int', 'guard_return_interval', '看守返回间隔', '秒', { min: 0, max: 3600, unit: '秒', defaultVal: '300' })),
+  mk(MOD_IMAGE.id, 'prop', 'rw', C('array', 'cruise_list', '巡航路线', '上限 8', { elementType: 'struct', maxLength: 8, fields: [{ name: '巡航ID', identifier: 'cruise_id', dataType: 'int' }, { name: '途经点', identifier: 'cruise_points', dataType: 'array' }] })),
+  // PTZControlService · 云台转动控制
+  mk(MOD_IMAGE.id, 'svc', '-', C('int', 'lens_id', '镜头索引', '设备控制取 -1', { min: -1, max: 7, unit: '', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'svc', '-', C('enum', 'ptz_control_type', 'PTZ控制类型', '手动或预置位', { enumValues: [{ name: '手动', val: 0 }, { name: '预置位', val: 1 }], defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'svc', '-', C('int', 'pt_position_id', '预置位ID', '预置位控制时使用', { min: 0, max: 10, unit: '', defaultVal: '1' })),
+  mk(MOD_IMAGE.id, 'svc', '-', C('enum', 'ptz_control', '控制方向', 'PTZ 方向', { enumValues: [{ name: '停止', val: 0 }, { name: '上', val: 1 }, { name: '下', val: 2 }, { name: '左', val: 3 }, { name: '右', val: 4 }, { name: '放大', val: 5 }, { name: '缩小', val: 6 }], defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'svc', '-', C('int', 'ptz_step', '步长', '单次位移量', { min: 1, max: 100, unit: '', defaultVal: '5' })),
+  // PTZResetService · 云台位置重置
+  mk(MOD_IMAGE.id, 'svc', '-', C('int', 'lens_id', '镜头索引', '设备控制取 -1', { min: -1, max: 7, unit: '', defaultVal: '0' })),
+  // SnapPictureService · 抓图
+  mk(MOD_IMAGE.id, 'svc', '-', C('enum', 'snap_type', '抓图原因', '触发方式', { enumValues: [{ name: '手动', val: 1 }, { name: '定时', val: 2 }, { name: '事件', val: 3 }, { name: '巡检', val: 4 }], defaultVal: '1' })),
+  mk(MOD_IMAGE.id, 'svc', '-', C('enum', 'snap_picture_type', '抓图范围', '全图或单镜头', { enumValues: [{ name: '全图', val: 0 }, { name: '单镜头', val: 1 }], defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'svc', '-', C('enum', 'picture_size_type', '图片规格', '清晰度', { enumValues: [{ name: '高清', val: 0 }, { name: '普通', val: 1 }, { name: '小图', val: 2 }, { name: '局部', val: 3 }], defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'svc', '-', C('int', 'capture_stream_id', '采集码流ID', '抓图或开关适用', { min: 0, max: 3, unit: '', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'svc', '-', C('int', 'snap_picture_interval', '抓图间隔', '抓多张时的间隔', { min: 0, max: 60000, unit: 'ms', defaultVal: '300' })),
+  mk(MOD_IMAGE.id, 'svc', '-', C('int', 'snap_picture_count', '抓图张数', '张数', { min: 1, max: 50, unit: '张', defaultVal: '1' })),
+  // CaptureStreamSwitchService · 采集码流开关
+  mk(MOD_IMAGE.id, 'svc', '-', C('int', 'capture_stream_id', '采集码流ID', '抓图或开关适用', { min: 0, max: 3, unit: '', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'svc', '-', C('boolean', 'capture_stream_enable', '采集流开关', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  // CruiseService · 执行巡航
+  mk(MOD_IMAGE.id, 'svc', '-', C('int', 'cruise_id', '巡航ID', '巡航编号', { min: 0, max: 7, unit: '', defaultVal: '0' })),
+  mk(MOD_IMAGE.id, 'svc', '-', C('int', 'cruise_interval', '巡航间隔', '0 表示只执行一次', { min: 0, max: 86400, unit: '秒', defaultVal: '0' })),
+  // MicrophoneInfoProperty · 麦克风信息
+  mk(MOD_AUDIO.id, 'prop', 'r', C('boolean', 'volumn_ability', '支持音量调节', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_AUDIO.id, 'prop', 'r', C('int', 'audio_encode_ability', '支持编码格式', '位掩码', { min: 0, max: 63, unit: '', defaultVal: '7' })),
+  mk(MOD_AUDIO.id, 'prop', 'r', C('int', 'channel', '声道数', '声道', { min: 1, max: 2, unit: '声道', defaultVal: '1' })),
+  mk(MOD_AUDIO.id, 'prop', 'r', C('int', 'sample_rate', '采样率', '采样频率', { min: 8000, max: 48000, unit: 'Hz', defaultVal: '8000' })),
+  mk(MOD_AUDIO.id, 'prop', 'r', C('boolean', 'nr_ability', '支持降噪', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_AUDIO.id, 'prop', 'r', C('boolean', 'aec_ability', '支持回声消除', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  // MicrophoneProperty · 麦克风设置
+  mk(MOD_AUDIO.id, 'prop', 'rw', C('boolean', 'microphone_enable', '拾音开关', '关闭停止拾音', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_AUDIO.id, 'prop', 'rw', C('int', 'volumn', '音量', '1~100', { min: 1, max: 100, unit: '', defaultVal: '30' })),
+  mk(MOD_AUDIO.id, 'prop', 'rw', C('int', 'audio_encode_type', '编码类型', '当前编码', { min: 0, max: 63, unit: '', defaultVal: '4' })),
+  mk(MOD_AUDIO.id, 'prop', 'rw', C('enum', 'nr_level', '降噪等级', '噪声抑制强度', { enumValues: [{ name: '低', val: 1 }, { name: '中', val: 2 }, { name: '高', val: 3 }], defaultVal: '1' })),
+  mk(MOD_AUDIO.id, 'prop', 'rw', C('boolean', 'aec_enable', '回声消除', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  // MicrophoneVolumnService · 麦克风音量调节
+  mk(MOD_AUDIO.id, 'svc', '-', C('int', 'volumn', '音量', '1~100', { min: 1, max: 100, unit: '', defaultVal: '30' })),
+  // MicrophoneCloseService · 麦克风拾音开关
+  mk(MOD_AUDIO.id, 'svc', '-', C('boolean', 'microphone_enable', '拾音开关', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  // SpeakerInfoProperty · 扬声器信息
+  mk(MOD_AUDIO.id, 'prop', 'r', C('boolean', 'volumn_ability', '支持音量调节', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_AUDIO.id, 'prop', 'r', C('int', 'audio_encode_ability', '支持解码格式', '位掩码', { min: 0, max: 63, unit: '', defaultVal: '7' })),
+  // SpeakerProperty · 扬声器设置
+  mk(MOD_AUDIO.id, 'prop', 'rw', C('boolean', 'speaker_enable', '播放开关', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_AUDIO.id, 'prop', 'rw', C('int', 'volumn', '音量', '1~100', { min: 1, max: 100, unit: '', defaultVal: '30' })),
+  // SoundFileProperty · 自定义语音
+  mk(MOD_AUDIO.id, 'prop', 'rw', C('int', 'support_sound_file_format', '支持语音格式', '位掩码', { min: 0, max: 63, unit: '', defaultVal: '3' })),
+  mk(MOD_AUDIO.id, 'prop', 'rw', C('boolean', 'audio_upload_ability', '支持自定义上传', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_AUDIO.id, 'prop', 'rw', C('boolean', 'tts_ability', '支持TTS', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_AUDIO.id, 'prop', 'rw', C('int', 'max_audio_size', '单文件大小上限', '字节', { min: 0, max: 99999999, unit: '字节', defaultVal: '1024000' })),
+  mk(MOD_AUDIO.id, 'prop', 'rw', C('int', 'max_sound_size', '语音文件数量上限', '个', { min: 0, max: 100, unit: '个', defaultVal: '10' })),
+  mk(MOD_AUDIO.id, 'prop', 'rw', C('array', 'sound_file_list', '语音文件清单', '上限 10', { elementType: 'struct', maxLength: 10, fields: [{ name: '文件ID', identifier: 'sound_file_id', dataType: 'string' }, { name: '文件名称', identifier: 'sound_file_name', dataType: 'string' }, { name: '文件类型', identifier: 'sound_file_type', dataType: 'int' }, { name: '文件URL', identifier: 'sound_file_url', dataType: 'string' }, { name: '文件大小', identifier: 'sound_file_size', dataType: 'int' }, { name: 'TTS文本', identifier: 'tts_text', dataType: 'string' }] })),
+  // SpeakerVolumnService · 扬声器音量调节
+  mk(MOD_AUDIO.id, 'svc', '-', C('int', 'volumn', '音量', '1~100', { min: 1, max: 100, unit: '', defaultVal: '30' })),
+  // SpeakerEnableService · 扬声器播放开关
+  mk(MOD_AUDIO.id, 'svc', '-', C('boolean', 'speaker_enable', '播放开关', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  // SoundFilePlayService · 语音播报
+  mk(MOD_AUDIO.id, 'svc', '-', C('enum', 'sound_play_mode', '播放模式', '', { enumValues: [{ name: '单次', val: 0 }, { name: '循环', val: 1 }], defaultVal: '0' })),
+  mk(MOD_AUDIO.id, 'svc', '-', C('int', 'sound_play_priority', '优先级', '1~10', { min: 1, max: 10, unit: '', defaultVal: '1' })),
+  mk(MOD_AUDIO.id, 'svc', '-', C('int', 'sound_play_interval', '循环间隔', '毫秒', { min: 0, max: 60000, unit: 'ms', defaultVal: '3000' })),
+  mk(MOD_AUDIO.id, 'svc', '-', C('int', 'sound_play_count', '循环次数', '', { min: 1, max: 100, unit: '次', defaultVal: '1' })),
+  mk(MOD_AUDIO.id, 'svc', '-', C('array', 'sound_file_list', '待播文件', '', { elementType: 'struct', maxLength: 8, fields: [{ name: '文件ID', identifier: 'sound_file_id', dataType: 'string' }] })),
+  // DisplayInfoProperty · 屏幕信息
+  mk(MOD_DISPLAY.id, 'prop', 'r', C('boolean', 'display_text_ability', '支持文字', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_DISPLAY.id, 'prop', 'r', C('boolean', 'display_richtext_ability', '支持富文本', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_DISPLAY.id, 'prop', 'r', C('boolean', 'display_picture_ability', '支持图片', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_DISPLAY.id, 'prop', 'r', C('boolean', 'display_video_ability', '支持视频', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_DISPLAY.id, 'prop', 'r', C('boolean', 'url_download_ability', '支持URL下载', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_DISPLAY.id, 'prop', 'r', C('boolean', 'display_screen_split_ability', '支持分屏', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_DISPLAY.id, 'prop', 'r', C('int', 'screen_width', '屏幕宽度', '像素', { min: 1, max: 8192, unit: 'px', defaultVal: '1920' })),
+  mk(MOD_DISPLAY.id, 'prop', 'r', C('int', 'screen_height', '屏幕高度', '像素', { min: 1, max: 8192, unit: 'px', defaultVal: '1080' })),
+  mk(MOD_DISPLAY.id, 'prop', 'r', C('int', 'support_picture_format', '支持图片格式', '位掩码', { min: 0, max: 31, unit: '', defaultVal: '7' })),
+  mk(MOD_DISPLAY.id, 'prop', 'r', C('int', 'support_video_encode_format', '支持视频格式', '位掩码', { min: 0, max: 15, unit: '', defaultVal: '7' })),
+  mk(MOD_DISPLAY.id, 'prop', 'r', C('int', 'support_text_encode_format', '支持文字编码', '位掩码', { min: 0, max: 7, unit: '', defaultVal: '7' })),
+  // DisplayProperty · 屏幕设置
+  mk(MOD_DISPLAY.id, 'prop', 'rw', C('int', 'screen_saver_timeout', '屏保时长', '0 表示不休眠', { min: 0, max: 3600, unit: '秒', defaultVal: '60' })),
+  mk(MOD_DISPLAY.id, 'prop', 'rw', C('boolean', 'auto_play_mode', '自动播放', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  // DisPlayContentService · 屏显内容下发
+  mk(MOD_DISPLAY.id, 'svc', '-', C('enum', 'display_content_type', '内容类型', '', { enumValues: [{ name: '文字', val: 0 }, { name: '图片', val: 1 }, { name: '视频', val: 2 }, { name: '富文本', val: 3 }, { name: 'URL', val: 4 }], defaultVal: '0' })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('enum', 'display_mode', '展示模式', '', { enumValues: [{ name: '单次', val: 0 }, { name: '循环', val: 1 }], defaultVal: '0' })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('string', 'text_content', '文字内容', '[type=0]', { maxLength: 1024 })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('int', 'text_encode_format', '文字编码格式', '[type=0] 位掩码', { min: 0, max: 7, unit: '', defaultVal: '1' })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('string', 'text_color', '文字颜色', '[type=0]', { maxLength: 9 })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('int', 'text_size', '文字大小', '[type=0]', { min: 8, max: 128, unit: '', defaultVal: '16' })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('struct', 'text_position', '文字位置', '[type=0] x/y 坐标', { fields: [{ name: 'X', identifier: 'x', dataType: 'int' }, { name: 'Y', identifier: 'y', dataType: 'int' }] })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('int', 'picture_count', '图片数量', '[type=1]', { min: 1, max: 8, unit: '张', defaultVal: '1' })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('array', 'picture_list', '图片列表', '[type=1]', { elementType: 'struct', maxLength: 8, fields: [{ name: '图片URL', identifier: 'picture_url', dataType: 'string' }, { name: '格式', identifier: 'picture_format', dataType: 'int' }] })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('string', 'video_url', '视频URL', '[type=2]', { maxLength: 512 })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('int', 'video_format', '视频格式', '[type=2]', { min: 0, max: 15, unit: '', defaultVal: '1' })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('string', 'richtext_content', '富文本内容', '[type=3]', { maxLength: 4096 })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('int', 'richtext_encode_format', '富文本编码格式', '[type=3] 位掩码', { min: 0, max: 7, unit: '', defaultVal: '1' })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('string', 'richtext_color', '富文本颜色', '[type=3]', { maxLength: 9 })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('int', 'richtext_size', '富文本大小', '[type=3]', { min: 8, max: 128, unit: '', defaultVal: '16' })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('struct', 'richtext_position', '富文本位置', '[type=3] x/y 坐标', { fields: [{ name: 'X', identifier: 'x', dataType: 'int' }, { name: 'Y', identifier: 'y', dataType: 'int' }] })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('string', 'url_content', 'URL内容', '[type=4]', { maxLength: 512 })),
+  // DisPlayBackgroundService · 屏显背景图设置
+  mk(MOD_DISPLAY.id, 'svc', '-', C('string', 'background_picture_url', '背景图URL', '', { maxLength: 512 })),
+  mk(MOD_DISPLAY.id, 'svc', '-', C('int', 'background_picture_format', '背景图格式', '', { min: 0, max: 31, unit: '', defaultVal: '1' })),
+  // IoTGatewayInfoProperty · 子设备信息
+  mk(MOD_IOT.id, 'prop', 'r', C('int', 'max_sub_device_count', '最大子设备数', '上限', { min: 0, max: 128, unit: '个', defaultVal: '10' })),
+  mk(MOD_IOT.id, 'prop', 'r', C('array', 'sub_device_list', '子设备列表', '上限 32', { elementType: 'struct', maxLength: 8, fields: [{ name: '子设备ID', identifier: 'sub_device_id', dataType: 'string' }, { name: '名称', identifier: 'sub_device_name', dataType: 'string' }, { name: '类型', identifier: 'sub_device_type', dataType: 'string' }, { name: '状态', identifier: 'sub_device_status', dataType: 'int' }] })),
+  // IoTGatewayManageService · 子设备管理（增删改）
+  mk(MOD_IOT.id, 'svc', '-', C('enum', 'sub_device_edit_type', '编辑类型', '0 删除；1 编辑；2 添加', { enumValues: [{ name: '删除', val: 0 }, { name: '编辑', val: 1 }, { name: '添加', val: 2 }], defaultVal: '2' })),
+  mk(MOD_IOT.id, 'svc', '-', C('string', 'sub_device_id', '子设备ID', '目标子设备', { maxLength: 64 })),
+  mk(MOD_IOT.id, 'svc', '-', C('string', 'sub_device_name', '子设备名称', '添加/编辑时必填', { maxLength: 32 })),
+  mk(MOD_IOT.id, 'svc', '-', C('string', 'sub_device_type', '子设备类型', '添加/编辑时必填', { maxLength: 32 })),
+  // IoTGatewayEditSubDeviceService · 编辑子设备属性
+  mk(MOD_IOT.id, 'svc', '-', C('string', 'sub_device_id', '子设备ID', '目标子设备', { maxLength: 64 })),
+  mk(MOD_IOT.id, 'svc', '-', C('struct', 'sub_device_property', '子设备属性', '透传', { fields: [] })),
+  // IoTGatewayExecuteSubDeviceService · 执行子设备操作
+  mk(MOD_IOT.id, 'svc', '-', C('string', 'sub_device_id', '子设备ID', '目标子设备', { maxLength: 64 })),
+  mk(MOD_IOT.id, 'svc', '-', C('array', 'sub_device_services', '子设备服务', '', { elementType: 'struct', maxLength: 8, fields: [{ name: '服务ID', identifier: 'service_key', dataType: 'string' }, { name: '参数', identifier: 'service_param', dataType: 'struct' }] })),
+  // TimeInfoProperty · 时间信息
+  mk(MOD_TIME.id, 'prop', 'r', C('int', 'timestamp', '当前时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '1645678900' })),
+  mk(MOD_TIME.id, 'prop', 'r', C('int', 'utc_offset', 'UTC偏移', '分钟，由时区推导', { min: -720, max: 840, unit: '分钟', defaultVal: '480' })),
+  mk(MOD_TIME.id, 'prop', 'r', C('boolean', 'current_dst_status', '夏令时状态', '是否处于夏令时', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  // TimeProperty · 时间设置
+  mk(MOD_TIME.id, 'prop', 'rw', C('string', 'time_zone', '时区', 'IANA 时区名', { maxLength: 64 })),
+  mk(MOD_TIME.id, 'prop', 'rw', C('boolean', 'dst_enable', '夏令时开关', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_TIME.id, 'prop', 'rw', C('int', 'dst_offset', '夏令时偏移', '分钟', { min: -120, max: 120, unit: '分钟', defaultVal: '60' })),
+  mk(MOD_TIME.id, 'prop', 'rw', C('string', 'dst_start', '夏令时开始', 'M<月>.<周>.<星期>/<时间>', { maxLength: 32 })),
+  mk(MOD_TIME.id, 'prop', 'rw', C('string', 'dst_end', '夏令时结束', 'M<月>.<周>.<星期>/<时间>', { maxLength: 32 })),
+  // TimeService · 时间同步
+  mk(MOD_TIME.id, 'svc', '-', C('int', 'timestamp', '同步时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '1645678900' })),
+  // StorageInfoProperty · 存储信息
+  mk(MOD_STORAGE.id, 'prop', 'r', C('boolean', 'storage_mount_status', '挂载状态', '是否可用', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_STORAGE.id, 'prop', 'r', C('enum', 'storage_type', '介质类型', '存储介质', { enumValues: [{ name: 'SDcard', val: 1 }, { name: 'EMMC', val: 2 }, { name: 'NAS', val: 3 }, { name: 'RAID', val: 4 }, { name: 'other', val: 5 }], defaultVal: '1' })),
+  mk(MOD_STORAGE.id, 'prop', 'r', C('int', 'storage_total', '总容量', 'KB', { min: 0, max: 999999999, unit: 'KB', defaultVal: '12800000' })),
+  mk(MOD_STORAGE.id, 'prop', 'r', C('int', 'storage_used', '已用容量', 'KB', { min: 0, max: 999999999, unit: 'KB', defaultVal: '12800' })),
+  mk(MOD_STORAGE.id, 'prop', 'r', C('int', 'storage_free', '剩余容量', 'KB', { min: 0, max: 999999999, unit: 'KB', defaultVal: '12672000' })),
+  mk(MOD_STORAGE.id, 'prop', 'r', C('string', 'storage_file_system', '文件系统', 'ext4 / fat32 / ntfs', { maxLength: 16 })),
+  mk(MOD_STORAGE.id, 'prop', 'r', C('int', 'storage_support_max_capacity', '支持最大容量', 'KB', { min: 0, max: 999999999, unit: 'KB', defaultVal: '102400000' })),
+  // StorageProperty · 存储设置
+  mk(MOD_STORAGE.id, 'prop', 'rw', C('boolean', 'storage_erase_flag', '自动覆盖', '满后覆盖最旧文件', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_STORAGE.id, 'prop', 'rw', C('boolean', 'storage_protect_flag', '写保护', '限制格式化与写入', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  // StorageService · 存储服务
+  mk(MOD_STORAGE.id, 'svc', '-', C('string', 'storage_file_system', '文件系统', '缺省用设备默认', { maxLength: 16 })),
+  mk(MOD_STORAGE.id, 'svc', '-', C('boolean', 'quick_format_flag', '快速格式化', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  // OTAInfoProperty · OTA信息
+  mk(MOD_OTA.id, 'prop', 'r', C('boolean', 'ota_ability', '支持OTA', '能力声明', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_OTA.id, 'prop', 'r', C('int', 'ota_support_mode', '支持升级方式', '位掩码', { min: 0, max: 15, unit: '', defaultVal: '7' })),
+  mk(MOD_OTA.id, 'prop', 'r', C('string', 'firmware_version', '固件版本', '版本号', { maxLength: 32 })),
+  mk(MOD_OTA.id, 'prop', 'r', C('string', 'sdk_version', 'SDK版本', '版本号', { maxLength: 32 })),
+  mk(MOD_OTA.id, 'prop', 'r', C('string', 'api_version', 'API版本', '版本号', { maxLength: 32 })),
+  mk(MOD_OTA.id, 'prop', 'r', C('array', 'module_versions', '分区版本', '分模块版本', { elementType: 'struct', maxLength: 8, fields: [{ name: '模块', identifier: 'module', dataType: 'string' }, { name: '版本', identifier: 'version', dataType: 'string' }] })),
+  // OTAService · 固件升级
+  mk(MOD_OTA.id, 'svc', '-', C('enum', 'ota_upgrade_type', '升级类型', '0 暂停；1 全量；2 增量；3 分区；4 断点续传', { enumValues: [{ name: '暂停', val: 0 }, { name: '全量', val: 1 }, { name: '增量', val: 2 }, { name: '分区', val: 3 }, { name: '断点续传', val: 4 }], defaultVal: '1' })),
+  mk(MOD_OTA.id, 'svc', '-', C('string', 'firmware_new_version', '目标版本', '升级后版本', { maxLength: 32 })),
+  mk(MOD_OTA.id, 'svc', '-', C('struct', 'module_new_version', '分区目标版本', '分区升级用', { fields: [] })),
+  mk(MOD_OTA.id, 'svc', '-', C('string', 'file_url', '升级包URL', '下载地址', { maxLength: 512 })),
+  mk(MOD_OTA.id, 'svc', '-', C('int', 'file_size', '升级包大小', '字节', { min: 0, max: 999999999, unit: '字节', defaultVal: '0' })),
+  mk(MOD_OTA.id, 'svc', '-', C('string', 'file_md5', '文件MD5', '校验值', { maxLength: 32 })),
+  mk(MOD_OTA.id, 'svc', '-', C('string', 'public_key', '下载公钥', '解密升级包', { maxLength: 2048 })),
+  mk(MOD_OTA.id, 'svc', '-', C('string', 'signature', '签名', '固件签名', { maxLength: 2048 })),
+  // PowerInfoProperty · 电源信息
+  mk(MOD_POWER.id, 'prop', 'r', C('enum', 'power_source', '供电来源', '当前供电方式', { enumValues: [{ name: 'AC/DC', val: 0 }, { name: 'POE', val: 1 }, { name: 'UPS', val: 2 }, { name: 'battery', val: 3 }, { name: 'SOLAR', val: 4 }], defaultVal: '0' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('double', 'input_voltage', '输入电压', 'V', { min: 0, max: 240, unit: 'V', defaultVal: '5' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('double', 'input_current', '输入电流', 'A', { min: 0, max: 50, unit: 'A', defaultVal: '1.5' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('double', 'output_voltage', '输出电压', 'V', { min: 0, max: 240, unit: 'V', defaultVal: '12' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('double', 'output_current', '输出电流', 'A', { min: 0, max: 50, unit: 'A', defaultVal: '2' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('int', 'power_on_time', '开机时间', 'UTC时间戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('boolean', 'battery_present', '电池存在', '是否带电池', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('enum', 'battery_type', '电池类型', '是否可充电', { enumValues: [{ name: '不可充电', val: 0 }, { name: '可充电', val: 1 }], defaultVal: '0' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('int', 'battery_capacity', '设计电量', 'mAh', { min: 0, max: 100000, unit: 'mAh', defaultVal: '8000' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('int', 'battery_full_capacity', '满充电量', 'mAh', { min: 0, max: 100000, unit: 'mAh', defaultVal: '7800' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('int', 'battery_remain_capacity', '剩余电量', 'mAh', { min: 0, max: 100000, unit: 'mAh', defaultVal: '5000' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('enum', 'charge_status', '充电状态', '充电进度', { enumValues: [{ name: '未充电', val: 0 }, { name: '充电中', val: 1 }, { name: '充满', val: 2 }, { name: '涓流', val: 3 }, { name: '未知', val: 4 }], defaultVal: '0' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('double', 'charge_voltage', '充电电压', 'V', { min: 0, max: 240, unit: 'V', defaultVal: '12' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('double', 'charge_current', '充电电流', 'A', { min: 0, max: 50, unit: 'A', defaultVal: '2' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('double', 'charge_power', '充电功率', 'W', { min: 0, max: 500, unit: 'W', defaultVal: '60' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('boolean', 'solar_present', '太阳能存在', '是否带太阳能板', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('double', 'solar_voltage', '太阳能电压', 'V', { min: 0, max: 240, unit: 'V', defaultVal: '12' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('double', 'solar_current', '太阳能电流', 'A', { min: 0, max: 50, unit: 'A', defaultVal: '2' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('double', 'solar_power', '太阳能功率', 'W', { min: 0, max: 500, unit: 'W', defaultVal: '24' })),
+  mk(MOD_POWER.id, 'prop', 'r', C('double', 'solar_radiance', '光照强度', 'W/㎡', { min: 0, max: 2000, unit: 'W/㎡', defaultVal: '36' })),
+  // PowerProperty · 电源设置
+  mk(MOD_POWER.id, 'prop', 'rw', C('int', 'battery_lower_threshold', '低电量告警', '剩余百分比', { min: 1, max: 100, unit: '%', defaultVal: '20' })),
+  mk(MOD_POWER.id, 'prop', 'rw', C('int', 'battery_critical_threshold', '严重低电量', '剩余百分比', { min: 1, max: 100, unit: '%', defaultVal: '10' })),
+  mk(MOD_POWER.id, 'prop', 'rw', C('int', 'battery_shutdown_threshold', '关机阈值', '剩余百分比', { min: 0, max: 100, unit: '%', defaultVal: '5' })),
+  // NetworkInfoProperty · 网络信息
+  mk(MOD_NETWORK.id, 'prop', 'r', C('array', 'network_ability', '支持网络能力', '网络类型列表', { elementType: 'struct', maxLength: 8, fields: [{ name: '网络类型', identifier: 'network_type', dataType: 'int' }] })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('enum', 'network_type', '当前网络', '当前使用的网络', { enumValues: [{ name: '无网络', val: 0 }, { name: '有线', val: 1 }, { name: 'WIFI', val: 2 }, { name: '蜂窝', val: 3 }, { name: '蓝牙', val: 4 }, { name: 'zigbee', val: 5 }, { name: 'zwave', val: 6 }, { name: 'other', val: 7 }], defaultVal: '2' })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('boolean', 'eth_status', '网口状态', '是否连接', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'eth_mac', '以太网MAC', '地址', { maxLength: 17 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'eth_ip', '以太网IP', '地址', { maxLength: 15 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'eth_netmask', '子网掩码', '地址', { maxLength: 15 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'eth_gateway', '网关', '地址', { maxLength: 15 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'eth_dns', 'DNS', '地址', { maxLength: 15 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'eth_dns2', 'DNS2', '地址', { maxLength: 15 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('boolean', 'wifi_status', 'WIFI状态', '是否连接', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'wifi_mac', 'WIFI MAC', '地址', { maxLength: 17 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'wifi_ip', 'WIFI IP', '地址', { maxLength: 15 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'wifi_netmask', 'WIFI掩码', '地址', { maxLength: 15 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'wifi_gateway', 'WIFI网关', '地址', { maxLength: 15 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'wifi_dns', 'WIFI DNS', '地址', { maxLength: 15 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'wifi_dns2', 'WIFI DNS2', '地址', { maxLength: 15 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('int', 'wifi_single_strength', 'WIFI信号', 'dBm', { min: -100, max: 0, unit: 'dBm', defaultVal: '-65' })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('enum', 'wifi_band', 'WIFI频段', '当前频段', { enumValues: [{ name: '2.4G', val: 0 }, { name: '5.8G', val: 1 }, { name: '6G', val: 2 }, { name: '60G', val: 3 }, { name: '60G+', val: 4 }, { name: 'other', val: 5 }], defaultVal: '0' })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('boolean', 'bluetooth_status', '蓝牙状态', '是否连接', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'bluetooth_name', '蓝牙名称', '设备蓝牙名', { maxLength: 32 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'bluetooth_mac', '蓝牙MAC', '地址', { maxLength: 17 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('enum', 'bluetooth_version', '蓝牙版本', '协议版本', { enumValues: [{ name: '4.0', val: 1 }, { name: '4.2', val: 2 }, { name: '5.0', val: 3 }, { name: '5.1', val: 4 }], defaultVal: '1' })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('enum', 'bluetooth_mode', '蓝牙模式', '工作模式', { enumValues: [{ name: 'ble', val: 1 }, { name: 'classic', val: 2 }, { name: 'dual', val: 3 }], defaultVal: '1' })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('boolean', 'cellular_status', '蜂窝状态', '是否连接', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('enum', 'cellular_type', '蜂窝类型', '制式', { enumValues: [{ name: 'unknown', val: 0 }, { name: '2G', val: 1 }, { name: '3G', val: 2 }, { name: '4G Cat1', val: 3 }, { name: '4G Cat4', val: 4 }, { name: '5G', val: 5 }, { name: 'NBIot', val: 6 }], defaultVal: '0' })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('int', 'cellular_single_strength', '蜂窝信号', 'dBm', { min: -140, max: 0, unit: 'dBm', defaultVal: '50' })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'cellular_module', '模组型号', '4G模块', { maxLength: 32 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('string', 'cellular_imei', 'IMEI', '模组IMEI', { maxLength: 32 })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('array', 'cellular_band', '支持频段', '如 B1/B3/B8', { elementType: 'struct', maxLength: 8, fields: [{ name: '频段', identifier: 'band', dataType: 'string' }] })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('int', 'cellular_slot_count', '卡槽数量', 'SIM卡槽数', { min: 0, max: 4, unit: '个', defaultVal: '2' })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('int', 'cellular_active_slot_id', '当前卡槽', '正在使用的卡槽', { min: 0, max: 4, unit: '', defaultVal: '0' })),
+  mk(MOD_NETWORK.id, 'prop', 'r', C('array', 'cellular_slot_infos', '卡槽信息', '每槽详情', { elementType: 'struct', maxLength: 8, fields: [{ name: '卡槽ID', identifier: 'slot_id', dataType: 'int' }, { name: '状态', identifier: 'slot_status', dataType: 'int' }, { name: '类型', identifier: 'slot_type', dataType: 'int' }, { name: '优先级', identifier: 'slot_priority', dataType: 'int' }, { name: 'eSIM种子卡', identifier: 'esim_boot_profile_info', dataType: 'string' }, { name: 'ICCID', identifier: 'sim_iccid', dataType: 'string' }, { name: 'IMSI', identifier: 'sim_imsi', dataType: 'string' }, { name: '运营商', identifier: 'sim_operator_name', dataType: 'string' }, { name: 'APN', identifier: 'sim_apn_info', dataType: 'string' }] })),
+  // NetworkProperty · 网络设置
+  mk(MOD_NETWORK.id, 'prop', 'rw', C('boolean', 'eth_dhcp_enable', '以太网DHCP', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_NETWORK.id, 'prop', 'rw', C('enum', 'wifi_mode', 'WIFI模式', '工作模式', { enumValues: [{ name: 'station', val: 1 }, { name: 'ap', val: 2 }, { name: 'station+ap', val: 3 }], defaultVal: '1' })),
+  mk(MOD_NETWORK.id, 'prop', 'rw', C('int', 'wifi_security_type', '安全类型', '加密方式', { min: 0, max: 8, unit: '', defaultVal: '3' })),
+  mk(MOD_NETWORK.id, 'prop', 'rw', C('string', 'wifi_ssid', 'WiFi名称', 'SSID', { maxLength: 32 })),
+  mk(MOD_NETWORK.id, 'prop', 'rw', C('string', 'wifi_password', 'WiFi密码', '读接口脱敏', { maxLength: 64 })),
+  mk(MOD_NETWORK.id, 'prop', 'rw', C('string', 'wifi_ap_ssid', '热点名称', 'AP模式SSID', { maxLength: 32 })),
+  mk(MOD_NETWORK.id, 'prop', 'rw', C('string', 'wifi_ap_password', '热点密码', '读接口脱敏', { maxLength: 64 })),
+  mk(MOD_NETWORK.id, 'prop', 'rw', C('int', 'wifi_channel', '信道', '1~13', { min: 1, max: 13, unit: '', defaultVal: '1' })),
+  mk(MOD_NETWORK.id, 'prop', 'rw', C('boolean', 'wifi_dhcp_enable', 'WIFI DHCP', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_NETWORK.id, 'prop', 'rw', C('array', 'cellular_slot_priority', '卡槽优先级', '数值越低越优先', { elementType: 'struct', maxLength: 8, fields: [{ name: '优先级', identifier: 'priority', dataType: 'int' }] })),
+  // WiFiSettingService · WiFi配网
+  mk(MOD_NETWORK.id, 'svc', '-', C('enum', 'wifi_mode', 'WIFI模式', '', { enumValues: [{ name: 'station', val: 1 }, { name: 'ap', val: 2 }, { name: 'station+ap', val: 3 }], defaultVal: '1' })),
+  mk(MOD_NETWORK.id, 'svc', '-', C('int', 'wifi_security_type', '安全类型', '', { min: 0, max: 8, unit: '', defaultVal: '3' })),
+  mk(MOD_NETWORK.id, 'svc', '-', C('string', 'wifi_ssid', 'SSID', '', { maxLength: 32 })),
+  mk(MOD_NETWORK.id, 'svc', '-', C('string', 'wifi_password', '密码', '', { maxLength: 64 })),
+  mk(MOD_NETWORK.id, 'svc', '-', C('string', 'wifi_ap_ssid', '热点SSID', '', { maxLength: 32 })),
+  mk(MOD_NETWORK.id, 'svc', '-', C('string', 'wifi_ap_password', '热点密码', '', { maxLength: 64 })),
+  mk(MOD_NETWORK.id, 'svc', '-', C('int', 'wifi_channel', '信道', '', { min: 1, max: 13, unit: '', defaultVal: '1' })),
+  // CellularSlotSwitchService · 蜂窝卡槽切换
+  mk(MOD_NETWORK.id, 'svc', '-', C('int', 'slot_id', '卡槽序号', '', { min: 0, max: 3, unit: '', defaultVal: '0' })),
+  // CellularSlotAPNService · 卡槽APN配置
+  mk(MOD_NETWORK.id, 'svc', '-', C('int', 'slot_id', '卡槽序号', '', { min: 0, max: 3, unit: '', defaultVal: '0' })),
+  mk(MOD_NETWORK.id, 'svc', '-', C('string', 'apn_info', 'APN信息', '', { maxLength: 64 })),
+  // CellularSlotESIMService · eSIM Profile设置
+  mk(MOD_NETWORK.id, 'svc', '-', C('int', 'slot_id', '卡槽序号', '', { min: 0, max: 3, unit: '', defaultVal: '0' })),
+  mk(MOD_NETWORK.id, 'svc', '-', C('string', 'esim_profile_info', 'eSIM Profile', '', { maxLength: 1024 })),
+  // NetworkSwitchService · 工作网络切换
+  mk(MOD_NETWORK.id, 'svc', '-', C('enum', 'network_type', '目标网络', '', { enumValues: [{ name: '有线', val: 1 }, { name: 'WIFI', val: 2 }, { name: '蜂窝', val: 3 }], defaultVal: '2' })),
+  // RecordInfoProperty · 录像信息
+  mk(MOD_RECORD.id, 'prop', 'r', C('int', 'cloud_record_mode_ability', '云录像支持类型', '位掩码', { min: 0, max: 7, unit: '', defaultVal: '7' })),
+  mk(MOD_RECORD.id, 'prop', 'r', C('enum', 'local_record_status', '本地录像状态', '运行状态', { enumValues: [{ name: '未录像', val: 0 }, { name: '录像中', val: 1 }, { name: '录像错误', val: 2 }], defaultVal: '0' })),
+  mk(MOD_RECORD.id, 'prop', 'r', C('enum', 'cloud_record_status', '云录像状态', '运行状态', { enumValues: [{ name: '未录像', val: 0 }, { name: '录像中', val: 1 }, { name: '录像错误', val: 2 }], defaultVal: '0' })),
+  mk(MOD_RECORD.id, 'prop', 'r', C('int', 'record_file_count', '文件数量', '本地录像数', { min: 0, max: 999999, unit: '个', defaultVal: '520' })),
+  // RecordProperty · 录像设置
+  mk(MOD_RECORD.id, 'prop', 'rw', C('boolean', 'record_enable', '录像总开关', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_RECORD.id, 'prop', 'rw', C('boolean', 'local_record_enable', '本地录像', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_RECORD.id, 'prop', 'rw', C('boolean', 'cloud_record_enable', '云录像', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  // RecordService · 录像
+  mk(MOD_RECORD.id, 'svc', '-', C('int', 'record_mode', '录像模式', '位掩码', { min: 0, max: 7, unit: '', defaultVal: '1' })),
+  mk(MOD_RECORD.id, 'svc', '-', C('int', 'record_streamid', '录制码流', '', { min: 0, max: 2, unit: '', defaultVal: '0' })),
+  mk(MOD_RECORD.id, 'svc', '-', C('enum', 'record_data_format', '数据格式', '', { enumValues: [{ name: 'Stream', val: 1 }, { name: 'IFrame', val: 2 }, { name: 'JPEG', val: 3 }], defaultVal: '1' })),
+  mk(MOD_RECORD.id, 'svc', '-', C('int', 'record_data_interval', '数据间隔', '毫秒', { min: 0, max: 10000, unit: 'ms', defaultVal: '1000' })),
+  mk(MOD_RECORD.id, 'svc', '-', C('int', 'pre_record_time', '预录时长', '秒', { min: 0, max: 30, unit: '秒', defaultVal: '2' })),
+  mk(MOD_RECORD.id, 'svc', '-', C('int', 'record_duration', '录像时长', '秒', { min: 1, max: 3600, unit: '秒', defaultVal: '15' })),
+  mk(MOD_RECORD.id, 'svc', '-', C('int', 'record_interval', '录像间隔', '秒', { min: 0, max: 3600, unit: '秒', defaultVal: '10' })),
+  // RecordQueryService · 查询本地文件
+  mk(MOD_RECORD.id, 'svc', '-', C('enum', 'file_type', '文件类型', '', { enumValues: [{ name: '录像', val: 1 }, { name: '抓图', val: 2 }, { name: '事件', val: 3 }], defaultVal: '1' })),
+  mk(MOD_RECORD.id, 'svc', '-', C('int', 'start_time', '起始时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_RECORD.id, 'svc', '-', C('int', 'end_time', '结束时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  // WorkModeInfoProperty · 工作模式信息
+  mk(MOD_WORKMODE.id, 'prop', 'r', C('int', 'work_mode_count', '模式数量', '支持的模式数', { min: 0, max: 8, unit: '个', defaultVal: '5' })),
+  mk(MOD_WORKMODE.id, 'prop', 'r', C('array', 'work_mode_list', '模式清单', 'ID 与名称', { elementType: 'struct', maxLength: 8, fields: [{ name: '模式ID', identifier: 'work_mode_id', dataType: 'int' }, { name: '模式名称', identifier: 'work_mode_name', dataType: 'string' }] })),
+  // WorkModeProperty · 工作模式设置
+  mk(MOD_WORKMODE.id, 'prop', 'rw', C('int', 'current_work_mode_id', '当前模式', '模式ID', { min: 1, max: 8, unit: '', defaultVal: '1' })),
+  mk(MOD_WORKMODE.id, 'prop', 'rw', C('struct', 'work_mode_param', '模式参数', '设备自定义，透传', { fields: [] })),
+  // WorkModeService · 工作模式服务
+  mk(MOD_WORKMODE.id, 'svc', '-', C('int', 'work_mode_id', '目标模式', '切换后的模式ID', { min: 1, max: 8, unit: '', defaultVal: '1' })),
+  // LightInfoProperty · 灯光信息
+  mk(MOD_LIGHT.id, 'prop', 'r', C('int', 'light_count', '灯数量', '设备灯数', { min: 0, max: 8, unit: '个', defaultVal: '1' })),
+  mk(MOD_LIGHT.id, 'prop', 'r', C('array', 'light_list', '灯清单', '类型与能力', { elementType: 'struct', maxLength: 8, fields: [{ name: '灯ID', identifier: 'light_id', dataType: 'int' }, { name: '名称', identifier: 'light_name', dataType: 'string' }, { name: '类型', identifier: 'light_type', dataType: 'int' }, { name: '支持模式', identifier: 'light_mode_ability', dataType: 'array' }] })),
+  // LightProperty · 灯光设置
+  mk(MOD_LIGHT.id, 'prop', 'rw', C('array', 'light_list', '灯参数', '每灯状态与参数', { elementType: 'struct', maxLength: 8, fields: [{ name: '灯ID', identifier: 'light_id', dataType: 'int' }, { name: '启用', identifier: 'light_enable', dataType: 'boolean' }, { name: '模式', identifier: 'light_mode', dataType: 'int' }, { name: '亮度', identifier: 'brightness', dataType: 'int' }, { name: '色温', identifier: 'colortemp', dataType: 'int' }, { name: 'RGB', identifier: 'color_rgb', dataType: 'string' }] })),
+  mk(MOD_LIGHT.id, 'prop', 'rw', C('array', 'light_mode_list', '灯光模式', '多灯联合定义', { elementType: 'struct', maxLength: 8, fields: [{ name: '模式ID', identifier: 'light_mode_id', dataType: 'int' }, { name: '模式名称', identifier: 'light_mode_name', dataType: 'string' }, { name: '联合动作', identifier: 'light_switch_services', dataType: 'array' }] })),
+  // LightSwitchService · 切换单灯
+  mk(MOD_LIGHT.id, 'svc', '-', C('int', 'light_id', '灯ID', '', { min: 1, max: 8, unit: '', defaultVal: '1' })),
+  mk(MOD_LIGHT.id, 'svc', '-', C('boolean', 'light_enable', '启用', '', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_LIGHT.id, 'svc', '-', C('enum', 'light_mode', '灯光模式', '', { enumValues: [{ name: 'off', val: 0 }, { name: 'on', val: 1 }, { name: 'auto', val: 2 }, { name: 'breath', val: 3 }, { name: 'flash', val: 4 }], defaultVal: '0' })),
+  mk(MOD_LIGHT.id, 'svc', '-', C('int', 'light_duration', '持续时长', '秒，0 为持续', { min: 0, max: 3600, unit: '秒', defaultVal: '0' })),
+  mk(MOD_LIGHT.id, 'svc', '-', C('int', 'brightness', '亮度', '0~100', { min: 0, max: 100, unit: '%', defaultVal: '0' })),
+  mk(MOD_LIGHT.id, 'svc', '-', C('int', 'colortemp', '色温', '2700~6500', { min: 2700, max: 6500, unit: 'K', defaultVal: '4000' })),
+  mk(MOD_LIGHT.id, 'svc', '-', C('int', 'color_mode', '色彩模式', '0 无；1 RGB；2 HSV；3 CCT；4 Preset', { min: 0, max: 4, unit: '', defaultVal: '1' })),
+  mk(MOD_LIGHT.id, 'svc', '-', C('string', 'color_rgb', 'RGB颜色', '', { maxLength: 7 })),
+  mk(MOD_LIGHT.id, 'svc', '-', C('string', 'color_hsv', 'HSV颜色', '', { maxLength: 7 })),
+  mk(MOD_LIGHT.id, 'svc', '-', C('int', 'flash_count', '闪烁次数', '0 为无限', { min: 0, max: 255, unit: '次', defaultVal: '0' })),
+  mk(MOD_LIGHT.id, 'svc', '-', C('int', 'flash_interval', '闪烁间隔', '秒', { min: 0, max: 60, unit: '秒', defaultVal: '0' })),
+  // LightModeSwitchService · 切换灯光模式
+  mk(MOD_LIGHT.id, 'svc', '-', C('int', 'light_mode_id', '灯光模式ID', '', { min: 1, max: 8, unit: '', defaultVal: '1' })),
+  // AlgorithmInfoProperty · 算法信息
+  mk(MOD_ALGO.id, 'prop', 'r', C('int', 'algorithm_count', '算法数量', '支持算法数', { min: 0, max: 32, unit: '个', defaultVal: '9' })),
+  mk(MOD_ALGO.id, 'prop', 'r', C('int', 'algorithm_running_count', '并发上限', '同时工作算法数', { min: 0, max: 32, unit: '个', defaultVal: '4' })),
+  mk(MOD_ALGO.id, 'prop', 'r', C('int', 'algorithm_enabled_count', '已启用数量', '当前启用数', { min: 0, max: 32, unit: '个', defaultVal: '2' })),
+  mk(MOD_ALGO.id, 'prop', 'r', C('array', 'algorithm_list', '算法清单', 'ID/名称/类型', { elementType: 'struct', maxLength: 8, fields: [{ name: '算法ID', identifier: 'algorithm_id', dataType: 'string' }, { name: '算法名称', identifier: 'algorithm_name', dataType: 'string' }, { name: '类型', identifier: 'algorithm_type', dataType: 'int' }, { name: '运行中', identifier: 'algorithm_running', dataType: 'boolean' }] })),
+  // AlgorithmProperty · 算法设置
+  mk(MOD_ALGO.id, 'prop', 'rw', C('array', 'algorithm_list', '算法参数', '启用/灵敏度/间隔', { elementType: 'struct', maxLength: 8, fields: [{ name: '算法ID', identifier: 'algorithm_id', dataType: 'string' }, { name: '启用', identifier: 'algorithm_enable', dataType: 'boolean' }, { name: '灵敏度', identifier: 'algorithm_sensitive', dataType: 'int' }, { name: '分析间隔', identifier: 'analysis_interval', dataType: 'int' }] })),
+  // AlgorithmEnableService · 启用/禁用算法
+  mk(MOD_ALGO.id, 'svc', '-', C('string', 'algorithm_id', '算法ID', '目标算法', { maxLength: 64 })),
+  mk(MOD_ALGO.id, 'svc', '-', C('boolean', 'algorithm_enable', '启用', '', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  // AlgorithmRunningService · 启动/停止算法
+  mk(MOD_ALGO.id, 'svc', '-', C('string', 'algorithm_id', '算法ID', '目标算法', { maxLength: 64 })),
+  mk(MOD_ALGO.id, 'svc', '-', C('boolean', 'algorithm_running', '运行', '', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  // GPSInfoProperty · GPS信息
+  mk(MOD_GPS.id, 'prop', 'r', C('enum', 'gps_status', '定位状态', '当前定位情况', { enumValues: [{ name: '关闭', val: 0 }, { name: '已定位', val: 1 }, { name: '定位中', val: 2 }, { name: '信号丢失', val: 3 }], defaultVal: '0' })),
+  mk(MOD_GPS.id, 'prop', 'r', C('double', 'gps_latitude', '纬度', '度', { min: -90, max: 90, unit: '度', defaultVal: '0' })),
+  mk(MOD_GPS.id, 'prop', 'r', C('double', 'gps_longitude', '经度', '度', { min: -180, max: 180, unit: '度', defaultVal: '0' })),
+  mk(MOD_GPS.id, 'prop', 'r', C('double', 'gps_altitude', '海拔', '米', { min: -500, max: 10000, unit: '米', defaultVal: '0' })),
+  mk(MOD_GPS.id, 'prop', 'r', C('double', 'gps_speed', '速度', 'km/h', { min: 0, max: 500, unit: 'km/h', defaultVal: '0' })),
+  mk(MOD_GPS.id, 'prop', 'r', C('double', 'gps_direction', '方向', '正北为0度', { min: 0, max: 359.9, unit: '度', defaultVal: '0' })),
+  mk(MOD_GPS.id, 'prop', 'r', C('int', 'gps_time', '定位时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_GPS.id, 'prop', 'r', C('double', 'gps_distance', '累计距离', '上报后清零', { min: 0, max: 99999, unit: '米', defaultVal: '50' })),
+  // GPSProperty · GPS设置
+  mk(MOD_GPS.id, 'prop', 'rw', C('boolean', 'gps_enable', 'GPS开关', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_GPS.id, 'prop', 'rw', C('enum', 'report_mode', '上报模式', '上报触发方式', { enumValues: [{ name: '定时', val: 1 }, { name: '距离', val: 2 }, { name: '混合', val: 3 }], defaultVal: '1' })),
+  mk(MOD_GPS.id, 'prop', 'rw', C('int', 'report_interval', '上报间隔', '秒', { min: 1, max: 3600, unit: '秒', defaultVal: '10' })),
+  mk(MOD_GPS.id, 'prop', 'rw', C('double', 'report_distance', '上报距离', '米', { min: 1, max: 10000, unit: '米', defaultVal: '100' })),
+  mk(MOD_GPS.id, 'prop', 'rw', C('array', 'fence_list', '电子围栏', '上限 8', { elementType: 'struct', maxLength: 8, fields: [{ name: '围栏ID', identifier: 'fence_id', dataType: 'int' }, { name: '名称', identifier: 'fence_name', dataType: 'string' }, { name: '启用', identifier: 'fence_enable', dataType: 'boolean' }, { name: '类型', identifier: 'fence_type', dataType: 'int' }, { name: '半径', identifier: 'fence_radius', dataType: 'double' }, { name: '圆心', identifier: 'fence_center', dataType: 'struct' }, { name: '顶点', identifier: 'fence_points', dataType: 'array' }] })),
+  // GPSReportService · GPS上报策略调整
+  mk(MOD_GPS.id, 'svc', '-', C('boolean', 'gps_enable', 'GPS开关', '', { trueLabel: '开', falseLabel: '关', defaultVal: '0' })),
+  mk(MOD_GPS.id, 'svc', '-', C('enum', 'report_mode', '上报模式', '', { enumValues: [{ name: '定时', val: 1 }, { name: '距离', val: 2 }, { name: '混合', val: 3 }], defaultVal: '1' })),
+  mk(MOD_GPS.id, 'svc', '-', C('int', 'report_interval', '上报间隔', '秒', { min: 1, max: 3600, unit: '秒', defaultVal: '10' })),
+  mk(MOD_GPS.id, 'svc', '-', C('double', 'report_distance', '上报距离', '米', { min: 1, max: 10000, unit: '米', defaultVal: '100' })),
+  // GPSFenceService · GPS电子围栏设置
+  mk(MOD_GPS.id, 'svc', '-', C('enum', 'fence_control', '围栏操作', '0 删除；1 新增', { enumValues: [{ name: '删除', val: 0 }, { name: '新增', val: 1 }], defaultVal: '1' })),
+  mk(MOD_GPS.id, 'svc', '-', C('array', 'fence_id', '围栏ID', '待删除列表', { elementType: 'struct', maxLength: 8, fields: [{ name: '围栏ID', identifier: 'fence_id', dataType: 'int' }] })),
+  mk(MOD_GPS.id, 'svc', '-', C('string', 'fence_name', '围栏名称', '', { maxLength: 32 })),
+  mk(MOD_GPS.id, 'svc', '-', C('int', 'fence_type', '围栏类型', '', { min: 0, max: 1, unit: '', defaultVal: '0' })),
+  mk(MOD_GPS.id, 'svc', '-', C('double', 'fence_radius', '半径', '米', { min: 0, max: 10000, unit: '米', defaultVal: '0' })),
+  mk(MOD_GPS.id, 'svc', '-', C('struct', 'fence_center', '圆心', '圆形围栏', { fields: [] })),
+  mk(MOD_GPS.id, 'svc', '-', C('array', 'fence_points', '顶点', '多边形围栏', { elementType: 'struct', maxLength: 8, fields: [{ name: '纬度', identifier: 'latitude', dataType: 'double' }, { name: '经度', identifier: 'longitude', dataType: 'double' }] })),
+  // GSensorInfoProperty · GSensor信息
+  mk(MOD_SENSOR.id, 'prop', 'r', C('enum', 'gsensor_status', '工作状态', '传感器状态', { enumValues: [{ name: '关闭', val: 0 }, { name: '工作中', val: 1 }, { name: '校准中', val: 2 }, { name: '错误', val: 3 }], defaultVal: '1' })),
+  mk(MOD_SENSOR.id, 'prop', 'r', C('double', 'g_x', 'X轴加速度', 'g', { min: -16, max: 16, unit: 'g', defaultVal: '0' })),
+  mk(MOD_SENSOR.id, 'prop', 'r', C('double', 'g_y', 'Y轴加速度', 'g', { min: -16, max: 16, unit: 'g', defaultVal: '0' })),
+  mk(MOD_SENSOR.id, 'prop', 'r', C('double', 'g_z', 'Z轴加速度', 'g', { min: -16, max: 16, unit: 'g', defaultVal: '0' })),
+  mk(MOD_SENSOR.id, 'prop', 'r', C('double', 'pitch', '俯仰角', '度', { min: -180, max: 180, unit: '度', defaultVal: '0' })),
+  mk(MOD_SENSOR.id, 'prop', 'r', C('double', 'roll', '翻滚角', '度', { min: -180, max: 180, unit: '度', defaultVal: '0' })),
+  mk(MOD_SENSOR.id, 'prop', 'r', C('double', 'vibration_level', '震动强度', 'RMS值', { min: 0, max: 16, unit: 'g', defaultVal: '0' })),
+  mk(MOD_SENSOR.id, 'prop', 'r', C('double', 'range', '量程', '±2/±4/±8/±16', { min: 0, max: 16, unit: 'g', defaultVal: '2' })),
+  // GSensorProperty · GSensor设置
+  mk(MOD_SENSOR.id, 'prop', 'rw', C('boolean', 'gsensor_enable', '开关', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_SENSOR.id, 'prop', 'rw', C('enum', 'gsensor_sensitivity', '灵敏度', '灵敏度等级', { enumValues: [{ name: '低', val: 1 }, { name: '中', val: 2 }, { name: '高', val: 3 }], defaultVal: '1' })),
+  // GSensorService · GSensor服务
+  mk(MOD_SENSOR.id, 'svc', '-', C('boolean', 'gsensor_enable', '开关', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_SENSOR.id, 'svc', '-', C('enum', 'gsensor_sensitivity', '灵敏度', '灵敏度等级', { enumValues: [{ name: '低', val: 1 }, { name: '中', val: 2 }, { name: '高', val: 3 }], defaultVal: '1' })),
+  // AromaInfoProperty · 香薰信息
+  mk(MOD_AROMA.id, 'prop', 'r', C('int', 'nozzle_count', '喷口数量', '左右喷口数', { min: 1, max: 4, unit: '个', defaultVal: '2' })),
+  mk(MOD_AROMA.id, 'prop', 'r', C('int', 'gear_count', '档位数量', '支持档位数', { min: 1, max: 8, unit: '档', defaultVal: '4' })),
+  mk(MOD_AROMA.id, 'prop', 'r', C('int', 'gear_spray_duration', '档位喷香时长', '设备按内置映射上报', { min: 1, max: 60, unit: '秒', defaultVal: '20' })),
+  mk(MOD_AROMA.id, 'prop', 'r', C('int', 'gear_spray_interval', '档位喷香间隔', '设备按内置映射上报', { min: 1, max: 120, unit: '分钟', defaultVal: '50' })),
+  mk(MOD_AROMA.id, 'prop', 'r', C('enum', 'liquid_status', '余液状态', '是否缺液', { enumValues: [{ name: '正常', val: 0 }, { name: '缺液', val: 1 }], defaultVal: '0' })),
+  mk(MOD_AROMA.id, 'prop', 'r', C('int', 'liquid_percent', '余液百分比', '%', { min: 0, max: 100, unit: '%', defaultVal: '82' })),
+  // AromaProperty · 香薰设置
+  mk(MOD_AROMA.id, 'prop', 'rw', C('boolean', 'wake_switch', '唤醒开关', '0 休眠；1 唤醒', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_AROMA.id, 'prop', 'rw', C('enum', 'nozzle_select', '喷口选择', '喷雾喷口', { enumValues: [{ name: '混合', val: 0 }, { name: '左喷雾口', val: 1 }, { name: '右喷雾口', val: 2 }], defaultVal: '0' })),
+  mk(MOD_AROMA.id, 'prop', 'rw', C('boolean', 'screen_switch', '屏显开关', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_AROMA.id, 'prop', 'rw', C('enum', 'spray_mode', '喷雾模式', '标准或自定义', { enumValues: [{ name: '标准', val: 0 }, { name: '自定义', val: 1 }], defaultVal: '1' })),
+  mk(MOD_AROMA.id, 'prop', 'rw', C('int', 'gear_level', '喷雾档位', '仅标准模式生效', { min: 1, max: 4, unit: '档', defaultVal: '2' })),
+  mk(MOD_AROMA.id, 'prop', 'rw', C('int', 'left_duration', '左喷香时长', '秒', { min: 3, max: 20, unit: '秒', defaultVal: '20' })),
+  mk(MOD_AROMA.id, 'prop', 'rw', C('int', 'left_interval', '左喷香间隔', '分钟', { min: 3, max: 50, unit: '分钟', defaultVal: '50' })),
+  mk(MOD_AROMA.id, 'prop', 'rw', C('int', 'right_duration', '右喷香时长', '秒', { min: 3, max: 20, unit: '秒', defaultVal: '20' })),
+  mk(MOD_AROMA.id, 'prop', 'rw', C('int', 'right_interval', '右喷香间隔', '分钟', { min: 3, max: 50, unit: '分钟', defaultVal: '50' })),
+  // AromaScheduleProperty · 香薰时段
+  mk(MOD_AROMA.id, 'prop', 'rw', C('struct', 'left_schedule', '左喷口时段', 'start_time / end_time，当天秒数', { fields: [] })),
+  mk(MOD_AROMA.id, 'prop', 'rw', C('struct', 'right_schedule', '右喷口时段', 'start_time / end_time，全天=不限', { fields: [] })),
+  // AromaResetService · 恢复出厂设置
+  // （无入参，直接下发执行）
+  // AromaSprayService · 立即喷雾
+  mk(MOD_AROMA.id, 'svc', '-', C('int', 'spray_seconds', '喷雾时长', '秒', { min: 3, max: 60, unit: '秒', defaultVal: '5' })),
+  // MeterInfoProperty · 电表信息
+  mk(MOD_METER.id, 'prop', 'r', C('enum', 'meter_status', '表状态', '运行状态', { enumValues: [{ name: '运行', val: 0 }, { name: '停机', val: 1 }, { name: '故障', val: 2 }], defaultVal: '0' })),
+  mk(MOD_METER.id, 'prop', 'r', C('double', 'voltage', '电压', 'V', { min: 0, max: 500, unit: 'V', defaultVal: '220' })),
+  mk(MOD_METER.id, 'prop', 'r', C('double', 'current', '电流', 'A', { min: 0, max: 100, unit: 'A', defaultVal: '3.2' })),
+  mk(MOD_METER.id, 'prop', 'r', C('double', 'active_power', '有功功率', 'W', { min: 0, max: 50000, unit: 'W', defaultVal: '704' })),
+  mk(MOD_METER.id, 'prop', 'r', C('double', 'reactive_power', '无功功率', 'var', { min: 0, max: 50000, unit: 'var', defaultVal: '120' })),
+  mk(MOD_METER.id, 'prop', 'r', C('double', 'power_factor', '功率因数', '0.00~1.00', { min: 0, max: 1, unit: '', defaultVal: '0.96' })),
+  mk(MOD_METER.id, 'prop', 'r', C('double', 'frequency', '频率', 'Hz', { min: 45, max: 65, unit: 'Hz', defaultVal: '50' })),
+  mk(MOD_METER.id, 'prop', 'r', C('double', 'energy_total', '累计电量', 'kWh', { min: 0, max: 99999999, unit: 'kWh', defaultVal: '12580.66' })),
+  mk(MOD_METER.id, 'prop', 'r', C('double', 'energy_forward', '正向电量', 'kWh', { min: 0, max: 99999999, unit: 'kWh', defaultVal: '12580.66' })),
+  mk(MOD_METER.id, 'prop', 'r', C('double', 'energy_reverse', '反向电量', 'kWh', { min: 0, max: 99999999, unit: 'kWh', defaultVal: '0' })),
+  mk(MOD_METER.id, 'prop', 'r', C('array', 'energy_tariff_list', '分时电量', '尖峰平谷', { elementType: 'struct', maxLength: 8, fields: [{ name: '费率ID', identifier: 'tariff_id', dataType: 'int' }, { name: '电量', identifier: 'energy', dataType: 'double' }] })),
+  mk(MOD_METER.id, 'prop', 'r', C('double', 'demand_current', '当前需量', 'kW', { min: 0, max: 1000, unit: 'kW', defaultVal: '1.85' })),
+  mk(MOD_METER.id, 'prop', 'r', C('double', 'demand_max', '最大需量', 'kW', { min: 0, max: 1000, unit: 'kW', defaultVal: '2.6' })),
+  mk(MOD_METER.id, 'prop', 'r', C('double', 'balance', '预付费余额', '元', { min: 0, max: 999999, unit: '元', defaultVal: '128.5' })),
+  mk(MOD_METER.id, 'prop', 'r', C('boolean', 'relay_status', '继电器状态', '0 断开；1 闭合', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  // MeterProperty · 电表设置
+  mk(MOD_METER.id, 'prop', 'rw', C('int', 'report_interval', '上报周期', '秒', { min: 1, max: 3600, unit: '秒', defaultVal: '60' })),
+  mk(MOD_METER.id, 'prop', 'rw', C('int', 'settlement_day', '结算日', '每月结算日', { min: 1, max: 28, unit: '日', defaultVal: '1' })),
+  mk(MOD_METER.id, 'prop', 'rw', C('int', 'demand_period', '需量周期', '分钟', { min: 1, max: 60, unit: '分钟', defaultVal: '15' })),
+  mk(MOD_METER.id, 'prop', 'rw', C('double', 'balance_alert_threshold', '余额告警阈值', '元', { min: 0, max: 99999, unit: '元', defaultVal: '20' })),
+  mk(MOD_METER.id, 'prop', 'rw', C('boolean', 'auto_trip_enable', '欠费自动跳闸', '开关', { trueLabel: '开', falseLabel: '关', defaultVal: '1' })),
+  mk(MOD_METER.id, 'prop', 'rw', C('array', 'tariff_list', '费率时段', '分时电价', { elementType: 'struct', maxLength: 8, fields: [{ name: '费率ID', identifier: 'tariff_id', dataType: 'int' }, { name: '电价', identifier: 'tariff_price', dataType: 'double' }, { name: '开始', identifier: 'start_time', dataType: 'int' }, { name: '结束', identifier: 'end_time', dataType: 'int' }] })),
+  // MeterSwitchService · 拉合闸控制
+  mk(MOD_METER.id, 'svc', '-', C('boolean', 'relay_enable', '合闸', '1 合闸；0 拉闸', { trueLabel: '合闸', falseLabel: '拉闸', defaultVal: '1' })),
+  // MeterClearService · 电量清零
+  // （无入参，直接下发执行）
+  // MeterRechargeService · 充值
+  mk(MOD_METER.id, 'svc', '-', C('double', 'recharge_amount', '充值金额', '元', { min: 0, max: 99999, unit: '元', defaultVal: '100' })),
+  mk(MOD_METER.id, 'svc', '-', C('string', 'recharge_order', '充值流水号', '防重复', { maxLength: 64 })),
+  // DeviceEventItem · 设备状态事件
+  mk(MOD_DEV.id, 'evt', '-', C('enum', 'event_id', '事件ID', '枚举，取值为该域事件', { enumValues: [{ name: '设备离线', val: 109300 }, { name: '设备在线', val: 109301 }, { name: '设备休眠', val: 109302 }], defaultVal: '109300' })),
+  mk(MOD_DEV.id, 'evt', '-', C('string', 'event_name', '事件名称', '运行时回填', { maxLength: 32 })),
+  mk(MOD_DEV.id, 'evt', '-', C('int', 'event_time', '发生时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_DEV.id, 'evt', '-', C('string', 'description', '描述', '事件描述', { maxLength: 256 })),
+  // TargetDetectEventItem · 目标检测事件
+  mk(MOD_ALGO.id, 'evt', '-', C('enum', 'event_id', '事件ID', '枚举，取值为该域事件', { enumValues: [{ name: '运动侦测', val: 100000 }, { name: '人形侦测', val: 100001 }, { name: '人脸侦测', val: 100015 }, { name: '入侵检测', val: 100017 }, { name: '车牌侦测', val: 100020 }, { name: '逗留侦测', val: 100021 }, { name: '声音侦测', val: 100400 }, { name: '低电量侦测', val: 101201 }, { name: '跌倒侦测', val: 102400 }, { name: '火焰侦测', val: 102500 }, { name: '哭声侦测', val: 102800 }, { name: '宠物侦测', val: 102900 }, { name: '区域闯入事件', val: 107900 }, { name: '区域离开事件', val: 108000 }, { name: '烟火侦测', val: 108200 }, { name: '车辆侦测', val: 108300 }, { name: '包裹检测', val: 110900 }, { name: '鸟类侦测', val: 200002 }, { name: '松鼠侦测', val: 200003 }, { name: '包裹侦测', val: 200006 }], defaultVal: '100001' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'event_name', '事件名称', '运行时回填', { maxLength: 32 })),
+  mk(MOD_ALGO.id, 'evt', '-', C('int', 'event_time', '发生时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'description', '描述', '事件描述', { maxLength: 256 })),
+  // VehicleEventItem · 车辆车位事件
+  mk(MOD_ALGO.id, 'evt', '-', C('enum', 'event_id', '事件ID', '枚举，取值为该域事件', { enumValues: [{ name: '非机动车', val: 108600 }, { name: '电动车', val: 108601 }, { name: '自行车', val: 108602 }, { name: '车位占用', val: 108901 }], defaultVal: '108600' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'event_name', '事件名称', '运行时回填', { maxLength: 32 })),
+  mk(MOD_ALGO.id, 'evt', '-', C('int', 'event_time', '发生时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'description', '描述', '事件描述', { maxLength: 256 })),
+  // PetBehaviorEventItem · 宠物行为事件
+  mk(MOD_ALGO.id, 'evt', '-', C('enum', 'event_id', '事件ID', '枚举，取值为该域事件', { enumValues: [{ name: '宠物逗留', val: 102901 }, { name: '宠物拆家', val: 102902 }, { name: '宠物喝水', val: 102903 }, { name: '宠物进食', val: 102904 }, { name: '宠物睡觉', val: 102905 }, { name: '宠物屋内排便', val: 102906 }], defaultVal: '102901' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'event_name', '事件名称', '运行时回填', { maxLength: 32 })),
+  mk(MOD_ALGO.id, 'evt', '-', C('int', 'event_time', '发生时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'description', '描述', '事件描述', { maxLength: 256 })),
+  // ChildCareEventItem · 儿童看护事件
+  mk(MOD_ALGO.id, 'evt', '-', C('enum', 'event_id', '事件ID', '枚举，取值为该域事件', { enumValues: [{ name: '儿童检测', val: 109600 }, { name: '儿童哭闹', val: 109601 }, { name: '儿童外出', val: 109602 }, { name: '儿童回家', val: 109603 }, { name: '儿童摔倒', val: 109604 }, { name: '做作业', val: 109605 }, { name: '玩手机', val: 109606 }], defaultVal: '109600' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'event_name', '事件名称', '运行时回填', { maxLength: 32 })),
+  mk(MOD_ALGO.id, 'evt', '-', C('int', 'event_time', '发生时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'description', '描述', '事件描述', { maxLength: 256 })),
+  // ElderCareEventItem · 老人看护事件
+  mk(MOD_ALGO.id, 'evt', '-', C('enum', 'event_id', '事件ID', '枚举，取值为该域事件', { enumValues: [{ name: '老人检测', val: 109700 }, { name: '老人外出', val: 109701 }, { name: '老人回家', val: 109702 }, { name: '老人摔倒', val: 109703 }], defaultVal: '109700' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'event_name', '事件名称', '运行时回填', { maxLength: 32 })),
+  mk(MOD_ALGO.id, 'evt', '-', C('int', 'event_time', '发生时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'description', '描述', '事件描述', { maxLength: 256 })),
+  // KitchenSafetyEventItem · 厨房安全事件
+  mk(MOD_ALGO.id, 'evt', '-', C('enum', 'event_id', '事件ID', '枚举，取值为该域事件', { enumValues: [{ name: '火焰侦测', val: 102500 }, { name: '烟雾检测', val: 102600 }], defaultVal: '102500' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'event_name', '事件名称', '运行时回填', { maxLength: 32 })),
+  mk(MOD_ALGO.id, 'evt', '-', C('int', 'event_time', '发生时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'description', '描述', '事件描述', { maxLength: 256 })),
+  // StaffEventItem · 岗位管理事件
+  mk(MOD_ALGO.id, 'evt', '-', C('enum', 'event_id', '事件ID', '枚举，取值为该域事件', { enumValues: [{ name: '人员离岗', val: 107000 }, { name: '双人在岗', val: 107001 }], defaultVal: '107000' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'event_name', '事件名称', '运行时回填', { maxLength: 32 })),
+  mk(MOD_ALGO.id, 'evt', '-', C('int', 'event_time', '发生时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'description', '描述', '事件描述', { maxLength: 256 })),
+  // AccessEventItem · 出入事件
+  mk(MOD_ALGO.id, 'evt', '-', C('enum', 'event_id', '事件ID', '枚举，取值为该域事件', { enumValues: [{ name: '进入', val: 109000 }, { name: '出去', val: 109001 }], defaultVal: '109000' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'event_name', '事件名称', '运行时回填', { maxLength: 32 })),
+  mk(MOD_ALGO.id, 'evt', '-', C('int', 'event_time', '发生时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'description', '描述', '事件描述', { maxLength: 256 })),
+  // CallEventItem · 呼叫事件
+  mk(MOD_CALL.id, 'evt', '-', C('enum', 'event_id', '事件ID', '枚举，取值为该域事件', { enumValues: [{ name: '语音呼叫', val: 103700 }, { name: '语音加视频呼叫', val: 103701 }, { name: '挂断呼叫', val: 103702 }], defaultVal: '103700' })),
+  mk(MOD_CALL.id, 'evt', '-', C('string', 'event_name', '事件名称', '运行时回填', { maxLength: 32 })),
+  mk(MOD_CALL.id, 'evt', '-', C('int', 'event_time', '发生时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_CALL.id, 'evt', '-', C('string', 'description', '描述', '事件描述', { maxLength: 256 })),
+  // FishEventItem · 鱼类事件
+  mk(MOD_ALGO.id, 'evt', '-', C('enum', 'event_id', '事件ID', '枚举，取值为该域事件', { enumValues: [{ name: '鱼类检测', val: 111100 }, { name: '鱼类精彩瞬间', val: 111101 }], defaultVal: '111100' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'event_name', '事件名称', '运行时回填', { maxLength: 32 })),
+  mk(MOD_ALGO.id, 'evt', '-', C('int', 'event_time', '发生时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_ALGO.id, 'evt', '-', C('string', 'description', '描述', '事件描述', { maxLength: 256 })),
+  // AromaEventItem · 香薰事件
+  mk(MOD_AROMA.id, 'evt', '-', C('enum', 'event_id', '事件ID', '枚举，取值为该域事件', { enumValues: [{ name: '缺液报警', val: 120001 }, { name: '喷头堵塞', val: 120002 }], defaultVal: '120001' })),
+  mk(MOD_AROMA.id, 'evt', '-', C('string', 'event_name', '事件名称', '运行时回填', { maxLength: 32 })),
+  mk(MOD_AROMA.id, 'evt', '-', C('int', 'event_time', '发生时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_AROMA.id, 'evt', '-', C('string', 'description', '描述', '事件描述', { maxLength: 256 })),
+  // MeterEventItem · 电表事件
+  mk(MOD_METER.id, 'evt', '-', C('enum', 'event_id', '事件ID', '枚举，取值为该域事件', { enumValues: [{ name: '欠压', val: 130001 }, { name: '过压', val: 130002 }, { name: '过流', val: 130003 }, { name: '漏电', val: 130004 }, { name: '停电', val: 130005 }, { name: '上电', val: 130006 }, { name: '开盖', val: 130007 }, { name: '余额不足', val: 130008 }, { name: '继电器跳闸', val: 130009 }], defaultVal: '130001' })),
+  mk(MOD_METER.id, 'evt', '-', C('string', 'event_name', '事件名称', '运行时回填', { maxLength: 32 })),
+  mk(MOD_METER.id, 'evt', '-', C('int', 'event_time', '发生时间', 'UTC毫秒戳', { min: 0, max: 9999999999999, unit: 'ms', defaultVal: '0' })),
+  mk(MOD_METER.id, 'evt', '-', C('string', 'description', '描述', '事件描述', { maxLength: 256 })),
 ]
+
+const initialCapItems = [
+  { id: nextId(), moduleId: MOD_DEV.id, name: '设备信息', identifier: 'DeviceInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['company_id', 'product_id', 'ctei', 'did', 'gid'] },
+  { id: nextId(), moduleId: MOD_DEV.id, name: '设备设置', identifier: 'DeviceProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['device_name'] },
+  { id: nextId(), moduleId: MOD_IMAGE.id, name: '图像信息', identifier: 'CaptureInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['capture_stream_id', 'conbine_stream_type', 'conbine_lens_ids', 'focal_type', 'focal_length_min', 'focal_length_max', 'encode_stream_count', 'lens_count', 'show_stream_count', 'snap_ability', 'wdr_ability', 'hdr_ability', 'anti_flicker_ability', 'privacy_mask_ability', 'region_sign_ability', 'custom_osd_ability', 'osd_show_ability', 'lens_corrent_type', 'lens_correct_algorithm', 'pt_control_type', 'pt_ability', 'ptz_3d_position_ability', 'ptz_preset_ability', 'ptz_cruise_ability', 'ptz_speed_ability'] },
+  { id: nextId(), moduleId: MOD_IMAGE.id, name: '图像设置', identifier: 'CaptureProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['capture_stream_id', 'flip_type', 'focal_length', 'encode_stream_id', 'width', 'height', 'video_encode_type', 'frame_rate', 'video_encode_mode', 'wdr_mode', 'hdr_mode', 'anti_flicker_mode', 'scan_frequency', 'osd_enable', 'osd_list', 'privacy_mask_list', 'ptz_speed', 'pt_position_list', 'guard_pt_position_id', 'guard_return_interval', 'cruise_list'] },
+  { id: nextId(), moduleId: MOD_IMAGE.id, name: '云台转动控制', identifier: 'PTZControlService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['lens_id', 'ptz_control_type', 'pt_position_id', 'ptz_control', 'ptz_step'] },
+  { id: nextId(), moduleId: MOD_IMAGE.id, name: '云台位置重置', identifier: 'PTZResetService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['lens_id'] },
+  { id: nextId(), moduleId: MOD_IMAGE.id, name: '抓图', identifier: 'SnapPictureService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['snap_type', 'snap_picture_type', 'picture_size_type', 'capture_stream_id', 'snap_picture_interval', 'snap_picture_count'] },
+  { id: nextId(), moduleId: MOD_IMAGE.id, name: '采集码流开关', identifier: 'CaptureStreamSwitchService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['capture_stream_id', 'capture_stream_enable'] },
+  { id: nextId(), moduleId: MOD_IMAGE.id, name: '执行巡航', identifier: 'CruiseService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['cruise_id', 'cruise_interval'] },
+  { id: nextId(), moduleId: MOD_AUDIO.id, name: '麦克风信息', identifier: 'MicrophoneInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['volumn_ability', 'audio_encode_ability', 'channel', 'sample_rate', 'nr_ability', 'aec_ability'] },
+  { id: nextId(), moduleId: MOD_AUDIO.id, name: '麦克风设置', identifier: 'MicrophoneProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['microphone_enable', 'volumn', 'audio_encode_type', 'nr_level', 'aec_enable'] },
+  { id: nextId(), moduleId: MOD_AUDIO.id, name: '麦克风音量调节', identifier: 'MicrophoneVolumnService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['volumn'] },
+  { id: nextId(), moduleId: MOD_AUDIO.id, name: '麦克风拾音开关', identifier: 'MicrophoneCloseService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['microphone_enable'] },
+  { id: nextId(), moduleId: MOD_AUDIO.id, name: '扬声器信息', identifier: 'SpeakerInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['volumn_ability', 'audio_encode_ability'] },
+  { id: nextId(), moduleId: MOD_AUDIO.id, name: '扬声器设置', identifier: 'SpeakerProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['speaker_enable', 'volumn'] },
+  { id: nextId(), moduleId: MOD_AUDIO.id, name: '自定义语音', identifier: 'SoundFileProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['support_sound_file_format', 'audio_upload_ability', 'tts_ability', 'max_audio_size', 'max_sound_size', 'sound_file_list'] },
+  { id: nextId(), moduleId: MOD_AUDIO.id, name: '扬声器音量调节', identifier: 'SpeakerVolumnService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['volumn'] },
+  { id: nextId(), moduleId: MOD_AUDIO.id, name: '扬声器播放开关', identifier: 'SpeakerEnableService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['speaker_enable'] },
+  { id: nextId(), moduleId: MOD_AUDIO.id, name: '语音播报', identifier: 'SoundFilePlayService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['sound_play_mode', 'sound_play_priority', 'sound_play_interval', 'sound_play_count', 'sound_file_list'] },
+  { id: nextId(), moduleId: MOD_DISPLAY.id, name: '屏幕信息', identifier: 'DisplayInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['display_text_ability', 'display_richtext_ability', 'display_picture_ability', 'display_video_ability', 'url_download_ability', 'display_screen_split_ability', 'screen_width', 'screen_height', 'support_picture_format', 'support_video_encode_format', 'support_text_encode_format'] },
+  { id: nextId(), moduleId: MOD_DISPLAY.id, name: '屏幕设置', identifier: 'DisplayProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['screen_saver_timeout', 'auto_play_mode'] },
+  { id: nextId(), moduleId: MOD_DISPLAY.id, name: '屏显内容下发', identifier: 'DisPlayContentService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['display_content_type', 'display_mode', 'text_content', 'text_encode_format', 'text_color', 'text_size', 'text_position', 'picture_count', 'picture_list', 'video_url', 'video_format', 'richtext_content', 'richtext_encode_format', 'richtext_color', 'richtext_size', 'richtext_position', 'url_content'] },
+  { id: nextId(), moduleId: MOD_DISPLAY.id, name: '屏显背景图设置', identifier: 'DisPlayBackgroundService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['background_picture_url', 'background_picture_format'] },
+  { id: nextId(), moduleId: MOD_IOT.id, name: '子设备信息', identifier: 'IoTGatewayInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['max_sub_device_count', 'sub_device_list'] },
+  { id: nextId(), moduleId: MOD_IOT.id, name: '子设备管理', identifier: 'IoTGatewayManageService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['sub_device_edit_type', 'sub_device_id', 'sub_device_name', 'sub_device_type'] },
+  { id: nextId(), moduleId: MOD_IOT.id, name: '编辑子设备属性', identifier: 'IoTGatewayEditSubDeviceService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['sub_device_id', 'sub_device_property'] },
+  { id: nextId(), moduleId: MOD_IOT.id, name: '执行子设备操作', identifier: 'IoTGatewayExecuteSubDeviceService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['sub_device_id', 'sub_device_services'] },
+  { id: nextId(), moduleId: MOD_TIME.id, name: '时间信息', identifier: 'TimeInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['timestamp', 'utc_offset', 'current_dst_status'] },
+  { id: nextId(), moduleId: MOD_TIME.id, name: '时间设置', identifier: 'TimeProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['time_zone', 'dst_enable', 'dst_offset', 'dst_start', 'dst_end'] },
+  { id: nextId(), moduleId: MOD_TIME.id, name: '时间同步', identifier: 'TimeService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['timestamp'] },
+  { id: nextId(), moduleId: MOD_STORAGE.id, name: '存储信息', identifier: 'StorageInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['storage_mount_status', 'storage_type', 'storage_total', 'storage_used', 'storage_free', 'storage_file_system', 'storage_support_max_capacity'] },
+  { id: nextId(), moduleId: MOD_STORAGE.id, name: '存储设置', identifier: 'StorageProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['storage_erase_flag', 'storage_protect_flag'] },
+  { id: nextId(), moduleId: MOD_STORAGE.id, name: '存储服务', identifier: 'StorageService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['storage_file_system', 'quick_format_flag'] },
+  { id: nextId(), moduleId: MOD_OTA.id, name: 'OTA信息', identifier: 'OTAInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['ota_ability', 'ota_support_mode', 'firmware_version', 'sdk_version', 'api_version', 'module_versions'] },
+  { id: nextId(), moduleId: MOD_OTA.id, name: '固件升级', identifier: 'OTAService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['ota_upgrade_type', 'firmware_new_version', 'module_new_version', 'file_url', 'file_size', 'file_md5', 'public_key', 'signature'] },
+  { id: nextId(), moduleId: MOD_POWER.id, name: '电源信息', identifier: 'PowerInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['power_source', 'input_voltage', 'input_current', 'output_voltage', 'output_current', 'power_on_time', 'battery_present', 'battery_type', 'battery_capacity', 'battery_full_capacity', 'battery_remain_capacity', 'charge_status', 'charge_voltage', 'charge_current', 'charge_power', 'solar_present', 'solar_voltage', 'solar_current', 'solar_power', 'solar_radiance'] },
+  { id: nextId(), moduleId: MOD_POWER.id, name: '电源设置', identifier: 'PowerProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['battery_lower_threshold', 'battery_critical_threshold', 'battery_shutdown_threshold'] },
+  { id: nextId(), moduleId: MOD_NETWORK.id, name: '网络信息', identifier: 'NetworkInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['network_ability', 'network_type', 'eth_status', 'eth_mac', 'eth_ip', 'eth_netmask', 'eth_gateway', 'eth_dns', 'eth_dns2', 'wifi_status', 'wifi_mac', 'wifi_ip', 'wifi_netmask', 'wifi_gateway', 'wifi_dns', 'wifi_dns2', 'wifi_single_strength', 'wifi_band', 'bluetooth_status', 'bluetooth_name', 'bluetooth_mac', 'bluetooth_version', 'bluetooth_mode', 'cellular_status', 'cellular_type', 'cellular_single_strength', 'cellular_module', 'cellular_imei', 'cellular_band', 'cellular_slot_count', 'cellular_active_slot_id', 'cellular_slot_infos'] },
+  { id: nextId(), moduleId: MOD_NETWORK.id, name: '网络设置', identifier: 'NetworkProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['eth_dhcp_enable', 'wifi_mode', 'wifi_security_type', 'wifi_ssid', 'wifi_password', 'wifi_ap_ssid', 'wifi_ap_password', 'wifi_channel', 'wifi_dhcp_enable', 'cellular_slot_priority'] },
+  { id: nextId(), moduleId: MOD_NETWORK.id, name: 'WiFi配网', identifier: 'WiFiSettingService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['wifi_mode', 'wifi_security_type', 'wifi_ssid', 'wifi_password', 'wifi_ap_ssid', 'wifi_ap_password', 'wifi_channel'] },
+  { id: nextId(), moduleId: MOD_NETWORK.id, name: '蜂窝卡槽切换', identifier: 'CellularSlotSwitchService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['slot_id'] },
+  { id: nextId(), moduleId: MOD_NETWORK.id, name: '卡槽APN配置', identifier: 'CellularSlotAPNService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['slot_id', 'apn_info'] },
+  { id: nextId(), moduleId: MOD_NETWORK.id, name: 'eSIM配置', identifier: 'CellularSlotESIMService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['slot_id', 'esim_profile_info'] },
+  { id: nextId(), moduleId: MOD_NETWORK.id, name: '工作网络切换', identifier: 'NetworkSwitchService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['network_type'] },
+  { id: nextId(), moduleId: MOD_RECORD.id, name: '录像信息', identifier: 'RecordInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['cloud_record_mode_ability', 'local_record_status', 'cloud_record_status', 'record_file_count'] },
+  { id: nextId(), moduleId: MOD_RECORD.id, name: '录像设置', identifier: 'RecordProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['record_enable', 'local_record_enable', 'cloud_record_enable'] },
+  { id: nextId(), moduleId: MOD_RECORD.id, name: '录像', identifier: 'RecordService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['record_mode', 'record_streamid', 'record_data_format', 'record_data_interval', 'pre_record_time', 'record_duration', 'record_interval'] },
+  { id: nextId(), moduleId: MOD_RECORD.id, name: '查询本地文件', identifier: 'RecordQueryService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['file_type', 'start_time', 'end_time'] },
+  { id: nextId(), moduleId: MOD_WORKMODE.id, name: '工作模式信息', identifier: 'WorkModeInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['work_mode_count', 'work_mode_list'] },
+  { id: nextId(), moduleId: MOD_WORKMODE.id, name: '工作模式设置', identifier: 'WorkModeProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['current_work_mode_id', 'work_mode_param'] },
+  { id: nextId(), moduleId: MOD_WORKMODE.id, name: '工作模式服务', identifier: 'WorkModeService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['work_mode_id'] },
+  { id: nextId(), moduleId: MOD_LIGHT.id, name: '灯光信息', identifier: 'LightInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['light_count', 'light_list'] },
+  { id: nextId(), moduleId: MOD_LIGHT.id, name: '灯光设置', identifier: 'LightProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['light_list', 'light_mode_list'] },
+  { id: nextId(), moduleId: MOD_LIGHT.id, name: '切换单灯', identifier: 'LightSwitchService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['light_id', 'light_enable', 'light_mode', 'light_duration', 'brightness', 'colortemp', 'color_mode', 'color_rgb', 'color_hsv', 'flash_count', 'flash_interval'] },
+  { id: nextId(), moduleId: MOD_LIGHT.id, name: '切换灯光模式', identifier: 'LightModeSwitchService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['light_mode_id'] },
+  { id: nextId(), moduleId: MOD_ALGO.id, name: '算法信息', identifier: 'AlgorithmInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['algorithm_count', 'algorithm_running_count', 'algorithm_enabled_count', 'algorithm_list'] },
+  { id: nextId(), moduleId: MOD_ALGO.id, name: '算法设置', identifier: 'AlgorithmProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['algorithm_list'] },
+  { id: nextId(), moduleId: MOD_ALGO.id, name: '启用禁用算法', identifier: 'AlgorithmEnableService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['algorithm_id', 'algorithm_enable'] },
+  { id: nextId(), moduleId: MOD_ALGO.id, name: '启动停止算法', identifier: 'AlgorithmRunningService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['algorithm_id', 'algorithm_running'] },
+  { id: nextId(), moduleId: MOD_GPS.id, name: 'GPS信息', identifier: 'GPSInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['gps_status', 'gps_latitude', 'gps_longitude', 'gps_altitude', 'gps_speed', 'gps_direction', 'gps_time', 'gps_distance'] },
+  { id: nextId(), moduleId: MOD_GPS.id, name: 'GPS设置', identifier: 'GPSProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['gps_enable', 'report_mode', 'report_interval', 'report_distance', 'fence_list'] },
+  { id: nextId(), moduleId: MOD_GPS.id, name: 'GPS上报策略调整', identifier: 'GPSReportService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['gps_enable', 'report_mode', 'report_interval', 'report_distance'] },
+  { id: nextId(), moduleId: MOD_GPS.id, name: 'GPS电子围栏设置', identifier: 'GPSFenceService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['fence_control', 'fence_id', 'fence_name', 'fence_type', 'fence_radius', 'fence_center', 'fence_points'] },
+  { id: nextId(), moduleId: MOD_SENSOR.id, name: 'GSensor信息', identifier: 'GSensorInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['gsensor_status', 'g_x', 'g_y', 'g_z', 'pitch', 'roll', 'vibration_level', 'range'] },
+  { id: nextId(), moduleId: MOD_SENSOR.id, name: 'GSensor设置', identifier: 'GSensorProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['gsensor_enable', 'gsensor_sensitivity'] },
+  { id: nextId(), moduleId: MOD_SENSOR.id, name: 'GSensor服务', identifier: 'GSensorService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['gsensor_enable', 'gsensor_sensitivity'] },
+  { id: nextId(), moduleId: MOD_AROMA.id, name: '香薰信息', identifier: 'AromaInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['nozzle_count', 'gear_count', 'gear_spray_duration', 'gear_spray_interval', 'liquid_status', 'liquid_percent'] },
+  { id: nextId(), moduleId: MOD_AROMA.id, name: '香薰设置', identifier: 'AromaProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['wake_switch', 'nozzle_select', 'screen_switch', 'spray_mode', 'gear_level', 'left_duration', 'left_interval', 'right_duration', 'right_interval'] },
+  { id: nextId(), moduleId: MOD_AROMA.id, name: '香薰时段', identifier: 'AromaScheduleProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['left_schedule', 'right_schedule'] },
+  { id: nextId(), moduleId: MOD_AROMA.id, name: '恢复出厂设置', identifier: 'AromaResetService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: [] },
+  { id: nextId(), moduleId: MOD_AROMA.id, name: '立即喷雾', identifier: 'AromaSprayService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['spray_seconds'] },
+  { id: nextId(), moduleId: MOD_METER.id, name: '电表信息', identifier: 'MeterInfoProperty', capType: 'prop', accessMode: 'ro', updateTime: '2026-11-04 10:00:00',
+    params: ['meter_status', 'voltage', 'current', 'active_power', 'reactive_power', 'power_factor', 'frequency', 'energy_total', 'energy_forward', 'energy_reverse', 'energy_tariff_list', 'demand_current', 'demand_max', 'balance', 'relay_status'] },
+  { id: nextId(), moduleId: MOD_METER.id, name: '电表设置', identifier: 'MeterProperty', capType: 'prop', accessMode: 'rw', updateTime: '2026-11-04 10:00:00',
+    params: ['report_interval', 'settlement_day', 'demand_period', 'balance_alert_threshold', 'auto_trip_enable', 'tariff_list'] },
+  { id: nextId(), moduleId: MOD_METER.id, name: '拉合闸控制', identifier: 'MeterSwitchService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['relay_enable'] },
+  { id: nextId(), moduleId: MOD_METER.id, name: '电量清零', identifier: 'MeterClearService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: [] },
+  { id: nextId(), moduleId: MOD_METER.id, name: '充值', identifier: 'MeterRechargeService', capType: 'svc', updateTime: '2026-11-04 10:00:00',
+    params: ['recharge_amount', 'recharge_order'] },
+  { id: nextId(), moduleId: MOD_DEV.id, name: '设备状态事件', identifier: 'DeviceEventItem', capType: 'evt', updateTime: '2026-11-04 10:00:00',
+    params: ['event_id', 'event_name', 'event_time', 'description'] },
+  { id: nextId(), moduleId: MOD_ALGO.id, name: '目标检测事件', identifier: 'TargetDetectEventItem', capType: 'evt', updateTime: '2026-11-04 10:00:00',
+    params: ['event_id', 'event_name', 'event_time', 'description'] },
+  { id: nextId(), moduleId: MOD_ALGO.id, name: '车辆车位事件', identifier: 'VehicleEventItem', capType: 'evt', updateTime: '2026-11-04 10:00:00',
+    params: ['event_id', 'event_name', 'event_time', 'description'] },
+  { id: nextId(), moduleId: MOD_ALGO.id, name: '宠物行为事件', identifier: 'PetBehaviorEventItem', capType: 'evt', updateTime: '2026-11-04 10:00:00',
+    params: ['event_id', 'event_name', 'event_time', 'description'] },
+  { id: nextId(), moduleId: MOD_ALGO.id, name: '儿童看护事件', identifier: 'ChildCareEventItem', capType: 'evt', updateTime: '2026-11-04 10:00:00',
+    params: ['event_id', 'event_name', 'event_time', 'description'] },
+  { id: nextId(), moduleId: MOD_ALGO.id, name: '老人看护事件', identifier: 'ElderCareEventItem', capType: 'evt', updateTime: '2026-11-04 10:00:00',
+    params: ['event_id', 'event_name', 'event_time', 'description'] },
+  { id: nextId(), moduleId: MOD_ALGO.id, name: '厨房安全事件', identifier: 'KitchenSafetyEventItem', capType: 'evt', updateTime: '2026-11-04 10:00:00',
+    params: ['event_id', 'event_name', 'event_time', 'description'] },
+  { id: nextId(), moduleId: MOD_ALGO.id, name: '岗位管理事件', identifier: 'StaffEventItem', capType: 'evt', updateTime: '2026-11-04 10:00:00',
+    params: ['event_id', 'event_name', 'event_time', 'description'] },
+  { id: nextId(), moduleId: MOD_ALGO.id, name: '出入事件', identifier: 'AccessEventItem', capType: 'evt', updateTime: '2026-11-04 10:00:00',
+    params: ['event_id', 'event_name', 'event_time', 'description'] },
+  { id: nextId(), moduleId: MOD_CALL.id, name: '呼叫事件', identifier: 'CallEventItem', capType: 'evt', updateTime: '2026-11-04 10:00:00',
+    params: ['event_id', 'event_name', 'event_time', 'description'] },
+  { id: nextId(), moduleId: MOD_ALGO.id, name: '鱼类事件', identifier: 'FishEventItem', capType: 'evt', updateTime: '2026-11-04 10:00:00',
+    params: ['event_id', 'event_name', 'event_time', 'description'] },
+  { id: nextId(), moduleId: MOD_AROMA.id, name: '香薰事件', identifier: 'AromaEventItem', capType: 'evt', updateTime: '2026-11-04 10:00:00',
+    params: ['event_id', 'event_name', 'event_time', 'description'] },
+  { id: nextId(), moduleId: MOD_METER.id, name: '电表事件', identifier: 'MeterEventItem', capType: 'evt', updateTime: '2026-11-04 10:00:00',
+    params: ['event_id', 'event_name', 'event_time', 'description'] },
+]
+
+
+// 回填参数归属（按生成顺序一一对应）
+let _capCursor = 0
+initialCapItems.forEach(item => {
+  item.params.forEach(() => {
+    if (initialCapabilities[_capCursor]) initialCapabilities[_capCursor].capItemId = item.id
+    _capCursor++
+  })
+})
+
+// ===== 类目-能力关联（按模块整组关联）=====
+const initialCategoryCaps = []
+const linkModules = (categoryId, moduleIds) => {
+  initialCapabilities
+    .filter(c => moduleIds.includes(c.moduleId))
+    .forEach(c => initialCategoryCaps.push({ categoryId, capabilityId: c.id }))
+}
+
+const CAMERA_MODULES = [
+  MOD_DEV.id, MOD_IMAGE.id, MOD_AUDIO.id, MOD_DISPLAY.id, MOD_IOT.id, MOD_TIME.id,
+  MOD_STORAGE.id, MOD_OTA.id, MOD_POWER.id, MOD_NETWORK.id, MOD_RECORD.id,
+  MOD_WORKMODE.id, MOD_LIGHT.id, MOD_ALGO.id, MOD_GPS.id, MOD_SENSOR.id, MOD_CALL.id
+]
+linkModules(_catIpc, CAMERA_MODULES)
+linkModules(_catLowCam, CAMERA_MODULES)
+linkModules(_catPtz, CAMERA_MODULES)
+linkModules(_catBell, CAMERA_MODULES)
+linkModules(_catSensor, CAMERA_MODULES)
+linkModules(_catAroma, [MOD_AROMA.id])
+linkModules(_catMeter, [MOD_METER.id])
 
 // ===== 老能力模块（能力池（老）用） =====
 const initialLegacyModules = [

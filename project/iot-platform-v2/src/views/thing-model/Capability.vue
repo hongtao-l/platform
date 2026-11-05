@@ -134,8 +134,13 @@
                   <el-table-column label="数据类型" width="100" align="center">
                     <template #default="{ row: p }"><span class="cell-datatype">{{ dataTypeLabel(p) || '—' }}</span></template>
                   </el-table-column>
-                  <el-table-column label="数据定义" min-width="190" show-overflow-tooltip>
-                    <template #default="{ row: p }"><span class="cell-def">{{ dataDefDetail(p) || '—' }}</span></template>
+                  <el-table-column label="数据定义" min-width="320">
+                    <template #default="{ row: p }">
+                      <div v-if="p.dataDef?.dataType === 'enum' && (p.dataDef.enumValues || []).length" class="enum-values">
+                        <span v-for="ev in p.dataDef.enumValues" :key="ev.val" class="enum-chip">{{ ev.name }}<em>{{ ev.val }}</em></span>
+                      </div>
+                      <span v-else class="cell-def">{{ dataDefDetail(p) || '—' }}</span>
+                    </template>
                   </el-table-column>
                   <el-table-column label="描述" min-width="150" show-overflow-tooltip>
                     <template #default="{ row: p }"><span class="cell-desc">{{ p.descr || '—' }}</span></template>
@@ -159,7 +164,8 @@
           </el-table-column>
           <el-table-column label="读写模式" width="100" align="left">
             <template #default="{ row }">
-              <span :class="['type-tag', row.accessMode === 'ro' ? 'type-ro' : 'type-rw']">{{ row.accessMode === 'ro' ? '只读' : '读写' }}</span>
+              <span v-if="row.capType === 'prop'" :class="['type-tag', row.accessMode === 'ro' ? 'type-ro' : 'type-rw']">{{ row.accessMode === 'ro' ? '只读' : '读写' }}</span>
+              <span v-else class="text-slate-300">—</span>
             </template>
           </el-table-column>
           <el-table-column label="能力项名称" min-width="220">
@@ -240,11 +246,11 @@
               :key="t.value"
               class="seg-item"
               :class="{ active: capItemForm.capType === t.value }"
-              @click="capItemForm.capType = t.value"
+              @click="onCapItemTypeChange(t.value)"
             >{{ t.label }}</span>
           </div>
         </el-form-item>
-        <el-form-item label="读写模式">
+        <el-form-item v-if="capItemForm.capType === 'prop'" label="读写模式">
           <div class="seg-control">
             <span
               v-for="m in accessModeOptions"
@@ -739,42 +745,36 @@ function typeLabel(t) { return typeTagMap[t] || t }
 function typeTagCls(t) { return typeTagClsMap[t] || '' }
 function paramTypeLabel(t) { return paramTypeMap[t] || t }
 
+const dataTypeNameMap = { enum: '枚举型', int: '数值型', double: '浮点型', boolean: '布尔型', string: '字符串', array: '数组型', struct: '结构体型' }
+
+// 参数行（能力项下的具体参数）按 dataDef.dataType 展示
 function dataTypeLabel(cap) {
-  if (cap.capType === 'prop') {
-    const m = { enum: '枚举型', int: '数值型', double: '浮点型', boolean: '布尔型', string: '字符串', array: '数组型', struct: '结构体型' }
-    return m[cap.dataDef?.dataType] || ''
-  }
-  if (cap.capType === 'svc') return '服务'
-  if (cap.capType === 'evt') return '事件'
-  return ''
+  return dataTypeNameMap[cap.dataDef?.dataType] || ''
 }
 
 function dataDefDetail(cap) {
-  if (cap.capType === 'prop') {
-    const dd = cap.dataDef
-    if (dd.dataType === 'enum') return (dd.enumValues || []).map(ev => `${ev.name}(${ev.val})`).join(', ')
-    if (['int', 'double'].includes(dd.dataType)) {
-      let s = `${dd.min}~${dd.max}`
-      if (dd.step && dd.step !== 1) s += `, 步长${dd.step}`
-      if (dd.unit) s += ` ${dd.unit}`
-      return s
-    }
-    if (dd.dataType === 'boolean') return `${dd.trueLabel || 'true'}/${dd.falseLabel || 'false'}`
-    if (dd.dataType === 'string') return `最大${dd.limit || dd.maxLength || 64}字节`
-    if (dd.dataType === 'array') {
-      const et = { int: 'Int', string: 'String', struct: 'Struct' }[dd.elementType] || dd.elementType || '—'
-      return `元素${et}, ${dd.maxLength || 100}个元素`
-    }
-    if (dd.dataType === 'struct') return `${(dd.fields || []).length} 个字段`
+  const dd = cap.dataDef || {}
+  if (dd.dataType === 'enum') {
+    const list = dd.enumValues || []
+    return list.length ? list.map(ev => `${ev.name}(${ev.val})`).join(', ') : '未定义枚举值'
   }
-  if (cap.capType === 'svc') {
-    const dd = cap.dataDef
-    return `入参${(dd.inputParams || []).length}个, 出参${(dd.outputParams || []).length}个`
+  if (['int', 'double'].includes(dd.dataType)) {
+    let s = `${dd.min}~${dd.max}`
+    if (dd.step && dd.step !== 1) s += `, 步长${dd.step}`
+    if (dd.unit) s += ` ${dd.unit}`
+    return s
   }
-  if (cap.capType === 'evt') {
-    const dd = cap.dataDef
-    const et = dd.eventType === 'alarm' ? '告警' : dd.eventType === 'fault' ? '故障' : '信息'
-    return `${et}事件, 出参${(dd.outputParams || []).length}个`
+  if (dd.dataType === 'boolean') return `${dd.trueLabel || 'true'}/${dd.falseLabel || 'false'}`
+  if (dd.dataType === 'string') return `最大${dd.limit || dd.maxLength || 64}字节`
+  if (dd.dataType === 'array') {
+    const et = { int: 'Int', string: 'String', struct: 'Struct' }[dd.elementType] || dd.elementType || '—'
+    const fields = (dd.fields || []).map(f => f.name || f.identifier).filter(Boolean)
+    const fs = fields.length ? `, 字段: ${fields.join(' / ')}` : ''
+    return `元素${et}, ${dd.maxLength || 100}个元素${fs}`
+  }
+  if (dd.dataType === 'struct') {
+    const fields = (dd.fields || []).map(f => f.name || f.identifier).filter(Boolean)
+    return fields.length ? `${fields.length} 个字段: ${fields.join(' / ')}` : '0 个字段'
   }
   return ''
 }
@@ -849,6 +849,12 @@ const capItemDialogTitle = computed(() => editingCapItemId.value ? '编辑能力
 const draftParams = ref([])
 const inDraftMode = ref(false)
 
+// 属性才需要读写模式；切到服务/事件时复位
+function onCapItemTypeChange(type) {
+  capItemForm.capType = type
+  if (type !== 'prop') capItemForm.accessMode = 'rw'
+}
+
 function openAddCapItem() {
   editingCapItemId.value = null
   draftParams.value = []
@@ -876,11 +882,13 @@ function handleCapItemConfirm() {
   }
   const dup = store.capItems.some(x => x.identifier === capItemForm.identifier && x.id !== editingCapItemId.value)
   if (dup) { ElMessage.warning('能力项ID已存在，请更换'); return }
+  const payload = { ...capItemForm }
+  if (payload.capType !== 'prop') delete payload.accessMode
   if (editingCapItemId.value) {
-    updateCapItem(editingCapItemId.value, { ...capItemForm })
+    updateCapItem(editingCapItemId.value, payload)
     ElMessage.success('编辑成功')
   } else {
-    const newItemId = addCapItem({ ...capItemForm })
+    const newItemId = addCapItem(payload)
     draftParams.value.forEach(dp => {
       addCapability({
         moduleId: capItemForm.moduleId,
@@ -889,9 +897,12 @@ function handleCapItemConfirm() {
         name: dp.name,
         identifier: dp.identifier,
         descr: dp.descr,
-        dataDef: Object.assign(JSON.parse(JSON.stringify(dp.dataDef)), {
-          accessMode: capItemForm.accessMode === 'ro' ? 'ro' : 'rw'
-        })
+        dataDef: Object.assign(
+          JSON.parse(JSON.stringify(dp.dataDef)),
+          capItemForm.capType === 'prop'
+            ? { accessMode: capItemForm.accessMode === 'ro' ? 'ro' : 'rw' }
+            : {}
+        )
       })
     })
     ElMessage.success(draftParams.value.length
@@ -1026,13 +1037,14 @@ function openEditCapability(cap) {
   capForm.capType = 'prop'
   capForm.name = cap.name; capForm.identifier = cap.identifier; capForm.descr = cap.descr
   const propTypes = ['enum', 'int', 'double', 'boolean', 'string', 'array', 'struct']
-  if (cap.capType === 'prop' && propTypes.includes(dd.dataType)) {
+  // 参数统一按属性内容配置，任何 capType 下只要 dataType 合法就回填数据定义
+  if (propTypes.includes(dd.dataType)) {
     capForm.dataType = dd.dataType; capForm.accessMode = dd.accessMode || 'rw'
     capForm.enumValues = dd.enumValues ? JSON.parse(JSON.stringify(dd.enumValues)) : [{ name: '', val: 0 }]
     capForm.defaultVal = dd.defaultVal || ''
     capForm.min = dd.min || 0; capForm.max = dd.max || 100; capForm.step = dd.step || 1; capForm.unit = dd.unit || ''
     capForm.trueLabel = dd.trueLabel || '开启'; capForm.falseLabel = dd.falseLabel || '关闭'
-    capForm.maxLength = dd.limit || 64
+    capForm.maxLength = dd.limit || dd.maxLength || 64
     capForm.elementType = dd.elementType || 'int'; capForm.arrayCount = dd.maxLength || 100
     capForm.fields = dd.fields ? JSON.parse(JSON.stringify(dd.fields)) : []
   } else {
@@ -1133,10 +1145,14 @@ function handleCapabilityConfirm() {
   if (!editingCapId.value && !capForm.capItemId) {
     ElMessage.warning('请从能力项的「添加参数」进入，参数必须归属于某个能力项'); return
   }
+  // 参数编辑时保留其原有归属类型（prop/svc/evt），不要因统一按属性配置而改写
+  const originCapType = editingCapId.value
+    ? store.capabilities.find(c => c.id === editingCapId.value)?.capType
+    : null
   const item = {
     moduleId: capFormModuleId(),
     capItemId: capForm.capItemId,
-    capType: capForm.capType,
+    capType: originCapType || capForm.capType,
     name: capForm.name.trim(),
     identifier: capForm.identifier.trim(),
     descr: capForm.descr.trim(),
@@ -1290,6 +1306,14 @@ function openEditStructField(idx) {
 .cell-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8; }
 .cell-module, .cell-datatype { font-size: 12px; color: #475569; }
 .cell-def { font-size: 11px; color: #64748b; font-family: 'JetBrains Mono', monospace; }
+.enum-values { display: flex; flex-wrap: wrap; gap: 4px; padding: 2px 0; }
+.enum-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 1px 6px; border-radius: 4px;
+  background: #f1f5f9; border: 1px solid #e2e8f0;
+  font-size: 11px; color: #334155; line-height: 18px; white-space: nowrap;
+}
+.enum-chip em { font-style: normal; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #94a3b8; }
 .cell-desc { font-size: 12px; color: #64748b; }
 .row-actions { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
 .param-empty { padding: 22px 0; text-align: center; font-size: 12px; color: #94a3b8; }
