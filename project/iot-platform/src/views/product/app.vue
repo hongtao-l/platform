@@ -105,6 +105,80 @@
                 </div>
 
                 <div class="config-item">
+                  <el-form-item label="画面拼接/拆分">
+                    <div class="split-wrapper">
+                      <div class="inline-switch-group">
+                        <el-switch v-model="layoutConfig.enabled" size="small" />
+                        <span class="switch-label">{{ layoutConfig.enabled ? '开启' : '关闭' }}</span>
+                      </div>
+
+                      <div v-if="layoutConfig.enabled" class="sub-config">
+                        <div class="sub-config-row">
+                          <span class="sub-config-label">模式</span>
+                          <el-radio-group v-model="layoutConfig.mode" size="small">
+                            <el-radio label="stitch">拼接</el-radio>
+                            <el-radio label="split">拆分</el-radio>
+                          </el-radio-group>
+                        </div>
+
+                        <!-- 拼接：无额外配置 -->
+                        <div v-if="layoutConfig.mode === 'stitch'" class="layout-note">
+                          拼接模式无需额外配置，设备的多路视频流将合成为一个画面呈现。
+                        </div>
+
+                        <!-- 拆分：按 Camera 配置 -->
+                        <template v-else-if="activeSplit">
+                          <div class="sub-config-row">
+                            <span class="sub-config-label">Camera</span>
+                            <el-select v-model="activeSplitIdx" size="small" style="width:150px">
+                              <el-option v-for="(cam, i) in cameraSplits" :key="cam.id" :label="cam.name" :value="i" />
+                            </el-select>
+                            <el-button size="small" @click="addSplitCamera">
+                              <el-icon><Plus /></el-icon>添加
+                            </el-button>
+                            <el-button size="small" text type="danger" @click="removeSplitCamera(activeSplitIdx)">删除</el-button>
+                          </div>
+                          <div class="sub-config-row">
+                            <span class="sub-config-label">子画面数量</span>
+                            <el-select
+                              :model-value="activeSplit.paneCount"
+                              size="small"
+                              style="width:170px"
+                              @update:model-value="setPaneCount"
+                            >
+                              <el-option v-for="n in paneOptions" :key="n" :label="`${n} 路`" :value="n" />
+                            </el-select>
+                          </div>
+                          <div class="sub-config-row">
+                            <span class="sub-config-label">分割点</span>
+                            <div class="ratio-list">
+                              <span v-for="(v, i) in activeSplit.splits" :key="i" class="ratio-item">
+                                <el-input-number
+                                  v-model="activeSplit.splits[i]"
+                                  :min="1"
+                                  :max="99"
+                                  :step="1"
+                                  size="small"
+                                  controls-position="right"
+                                  style="width:96px"
+                                  @change="normalizeSplits(activeSplit)"
+                                />
+                                <span class="sub-config-unit">%</span>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="sub-config-hint ratio-summary">{{ splitRatioHint }}</div>
+                        </template>
+                      </div>
+
+                      <div class="config-descr split-descr">
+                        拼接：多路视频流合成为一个画面；拆分：一路视频流按分割点拆分为多个画面。
+                      </div>
+                    </div>
+                  </el-form-item>
+                </div>
+
+                <div class="config-item">
                   <el-form-item label="全彩模式时段">
                     <el-radio-group v-model="defaultConfig.fullColorMode">
                       <el-radio label="auto">夜间智能感知</el-radio>
@@ -255,6 +329,81 @@ const defaultConfig = reactive({
     threshold: 20,
     disabledFeatures: []
   }
+})
+
+// ===== 画面合分配置（按 Camera 维度）=====
+const paneOptions = [2, 3, 4]
+const CN_NUM = ['一', '二', '三', '四']
+
+// 按画面数生成均分的分割点，如 3 路 → [33, 66]
+function evenSplits(count) {
+  const arr = []
+  for (let i = 1; i < count; i++) arr.push(Math.round((100 / count) * i))
+  return arr
+}
+
+function newSplitCamera(idx) {
+  return {
+    id: Date.now() + idx,
+    name: `Camera_${idx}`,
+    paneCount: 2,
+    splits: evenSplits(2)
+  }
+}
+
+const layoutConfig = reactive({ enabled: false, mode: 'split' })
+const cameraSplits = ref([newSplitCamera(1)])
+const activeSplitIdx = ref(0)
+const activeSplit = computed(() => cameraSplits.value[activeSplitIdx.value] || null)
+
+function addSplitCamera() {
+  const idx = cameraSplits.value.length + 1
+  cameraSplits.value.push(newSplitCamera(idx))
+  activeSplitIdx.value = cameraSplits.value.length - 1
+}
+
+function removeSplitCamera(idx) {
+  if (cameraSplits.value.length <= 1) {
+    ElMessage.warning('至少保留一个 Camera')
+    return
+  }
+  cameraSplits.value.splice(idx, 1)
+  if (activeSplitIdx.value >= cameraSplits.value.length) {
+    activeSplitIdx.value = cameraSplits.value.length - 1
+  }
+}
+
+function setPaneCount(n) {
+  const cam = activeSplit.value
+  if (!cam) return
+  cam.paneCount = n
+  cam.splits = evenSplits(n)
+}
+
+// 保证分割点递增、且后续还有空间，始终落在 1~99
+function normalizeSplits(cam) {
+  if (!cam) return
+  const len = cam.splits.length
+  const next = []
+  cam.splits.forEach((v, i) => {
+    const min = i === 0 ? 1 : next[i - 1] + 1
+    const max = 99 - (len - 1 - i)
+    const val = Number(v) || min
+    next.push(Math.min(max, Math.max(min, Math.round(val))))
+  })
+  cam.splits = next
+}
+
+// 分割点 → 每个子画面的占比
+const splitRatioHint = computed(() => {
+  const cam = activeSplit.value
+  if (!cam) return ''
+  const bounds = [0, ...cam.splits, 100]
+  const parts = []
+  for (let i = 0; i < bounds.length - 1; i++) {
+    parts.push(`画面${CN_NUM[i]} ${bounds[i + 1] - bounds[i]}%`)
+  }
+  return parts.join('，')
 })
 
 // ===== Actions =====
@@ -455,6 +604,75 @@ function goBack() {
   padding: 40px 0;
   color: var(--text-placeholder);
   font-size: 14px;
+}
+
+// ===== 分屏显示 =====
+.split-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sub-config {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  background: var(--gray-50);
+  border-radius: 6px;
+}
+
+.sub-config-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sub-config-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  width: 100px;
+}
+
+.sub-config-unit {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.sub-config-hint {
+  font-size: 12px;
+  color: var(--text-placeholder);
+  margin-left: 4px;
+}
+
+.split-descr {
+  margin-top: 0;
+}
+
+.ratio-list {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ratio-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ratio-summary {
+  margin-left: 0;
+}
+
+.layout-note {
+  font-size: 13px;
+  color: var(--text-placeholder);
+  line-height: 1.6;
+  margin-left: 100px;
 }
 
 // ===== 低电量保护策略 =====

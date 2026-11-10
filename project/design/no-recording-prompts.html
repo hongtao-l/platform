@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>查不到录像 · 友好提示</title>
+<style>
+:root {
+  --bg-page: #F5F5F7;
+  --text-main: #1D1D1F;
+  --text-sub: #8E8E93;
+  --text-body: #6B6B70;
+  --orange: #FF8A1E;
+  --orange-bg: #FFF1E6;
+  --blue: #1A73E8;
+  --blue-bg: #E8F0FE;
+  --gray: #8E8E93;
+  --gray-bg: #F2F3F5;
+  --radius-card: 24px;
+  --radius-btn: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: #E9EAEE;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  color: var(--text-main);
+  padding: 40px 24px 64px;
+}
+.page-head { max-width: 1700px; margin: 0 auto 36px; }
+.page-head h1 { font-size: 20px; font-weight: 700; letter-spacing: .2px; }
+.page-head p { font-size: 13px; color: #6B6B70; margin-top: 8px; line-height: 1.7; }
+
+.gallery { display: flex; flex-wrap: wrap; gap: 44px 40px; justify-content: center; max-width: 1700px; margin: 0 auto; }
+.case { width: 375px; }
+.case-cap { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-left: 4px; }
+.case-no {
+  flex: none; width: 22px; height: 22px; border-radius: 7px; background: #1D1D1F; color: #fff;
+  font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.case-name { font-size: 13px; font-weight: 600; color: #1D1D1F; }
+.case-tag { font-size: 11px; color: #8E8E93; margin-left: auto; padding: 3px 8px; border-radius: 20px; background: rgba(0,0,0,.05); }
+
+/* ---------- 手机外框 ---------- */
+.phone {
+  position: relative; width: 375px; height: 812px; border-radius: 40px; overflow: hidden;
+  background: var(--bg-page); box-shadow: 0 24px 60px rgba(0,0,0,.22);
+}
+
+/* ---------- 背景：事件详情页 ---------- */
+.screen { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--bg-page); }
+.stage { position: relative; height: 330px; flex: none; background: linear-gradient(180deg, #1C1C22 0%, #0B0B0E 100%); }
+.status-row {
+  position: absolute; top: 14px; left: 0; right: 0; padding: 0 24px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,.9);
+}
+.status-row .t { font-size: 14px; font-weight: 700; }
+.status-row .r { display: flex; gap: 5px; align-items: center; opacity: .85; }
+.status-row .r i { display: block; width: 15px; height: 9px; border: 1.4px solid currentColor; border-radius: 2px; }
+.stage-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+.stage-play {
+  width: 54px; height: 54px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.28);
+  display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.42);
+}
+.stage-note { font-size: 12px; color: rgba(255,255,255,.38); letter-spacing: .3px; }
+.info {
+  flex: 1; margin-top: -20px; background: #fff; border-radius: var(--radius-card) var(--radius-card) 0 0;
+  padding: 22px 18px; position: relative;
+}
+.info-title { font-size: 17px; font-weight: 600; }
+.info-time { font-size: 12px; color: var(--text-sub); margin-top: 6px; }
+.info-card {
+  margin-top: 18px; border-radius: 14px; background: #F7F7F9; padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.info-row { display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
+.info-row .k { color: var(--text-sub); }
+.info-row .v { color: var(--text-main); font-weight: 500; }
+.info-sub { font-size: 13px; font-weight: 600; margin: 20px 2px 0; }
+
+/* ---------- 遮罩 + 弹窗 ---------- */
+.mask { position: absolute; inset: 0; background: rgba(0,0,0,.45); }
+.dialog-wrap { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 20px; }
+.dialog {
+  width: 100%; max-width: 305px; background: #fff; border-radius: 20px;
+  padding: 26px 20px 14px; text-align: center;
+  box-shadow: 0 16px 44px rgba(0,0,0,.24);
+}
+.d-icon {
+  width: 56px; height: 56px; border-radius: 50%; margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+}
+.d-icon svg { width: 26px; height: 26px; }
+.d-title { font-size: 17px; font-weight: 600; line-height: 1.4; margin-top: 14px; }
+.d-body { font-size: 13px; line-height: 1.65; color: var(--text-body); margin-top: 8px; }
+.d-list { list-style: none; text-align: left; margin: 12px 0 0; padding: 0 4px; display: flex; flex-direction: column; gap: 7px; }
+.d-list li { position: relative; padding-left: 14px; font-size: 13px; line-height: 1.6; color: var(--text-body); }
+.d-list li::before {
+  content: ''; position: absolute; left: 2px; top: 8px;
+  width: 4px; height: 4px; border-radius: 50%; background: #C7C7CC;
+}
+.d-note { font-size: 12px; line-height: 1.6; color: #9A9AA0; margin-top: 14px; }
+.d-btn {
+  display: block; width: 100%; height: 46px; margin-top: 22px;
+  border: 0; border-radius: var(--radius-btn); background: #1D1D1F; color: #fff;
+  font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer;
+  transition: opacity .2s;
+}
+.d-btn:active { opacity: .78; }
+.d-link {
+  display: block; width: 100%; padding: 13px 0 2px; border: 0; background: none;
+  font-size: 13px; color: var(--text-sub); font-family: inherit; cursor: pointer;
+}
+.d-link:active { opacity: .6; }
+
+.c-blue .d-icon { background: var(--blue-bg); color: var(--blue); }
+.c-orange .d-icon { background: var(--orange-bg); color: var(--orange); }
+.c-gray .d-icon { background: var(--gray-bg); color: var(--gray); }
+
+@media (max-width: 480px) {
+  body { padding: 20px 12px 40px; }
+  .gallery { gap: 32px 0; }
+  .phone { width: 100%; max-width: 375px; }
+}
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <h1>查不到录像 · 友好提示</h1>
+  <p>按存储组合四种情况给提示。具体原因无法准确判断的，文案只说"可能"，并给出一个能继续操作的入口。</p>
+</div>
+
+<div class="gallery">
+
+  <!-- ========== 1 无云无卡 ========== -->
+  <div class="case c-blue">
+    <div class="case-cap"><span class="case-no">1</span><span class="case-name">无云无卡</span><span class="case-tag">引导开通</span></div>
+    <div class="phone">
+      <div class="screen">
+        <div class="stage">
+          <div class="status-row"><span class="t">9:41</span><span class="r"><i></i><i></i></span></div>
+          <div class="stage-center">
+            <div class="stage-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></div>
+            <div class="stage-note">该时段无录像</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="info-title">人形移动</div>
+          <div class="info-time">今天 14:32:08 · 客厅摄像头</div>
+          <div class="info-card">
+            <div class="info-row"><span class="k">事件类型</span><span class="v">人形检测</span></div>
+            <div class="info-row"><span class="k">持续时间</span><span class="v">12 秒</span></div>
+            <div class="info-row"><span class="k">存储方式</span><span class="v">未配置</span></div>
+          </div>
+          <div class="info-sub">设备信息</div>
+          <div class="info-card">
+            <div class="info-row"><span class="k">设备名称</span><span class="v">客厅摄像头</span></div>
+            <div class="info-row"><span class="k">固件版本</span><span class="v">V2.3.1</span></div>
+            <div class="info-row"><span class="k">信号强度</span><span class="v">良好</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="mask"></div>
+      <div class="dialog-wrap">
+        <div class="dialog">
+          <div class="d-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.2 18.5a4.3 4.3 0 0 0 .3-8.58A6.3 6.3 0 0 0 5.6 10.4 3.6 3.6 0 0 0 6.3 18.5"/>
+              <path d="M12 14.2v5M9.5 16.7h5"/>
+            </svg>
+          </div>
+          <div class="d-title">未查询到录像</div>
+          <div class="d-body">该设备目前可能没有可用的录像存储。</div>
+          <ul class="d-list">
+            <li>未插入存储卡</li>
+            <li>未开通云存储</li>
+          </ul>
+          <div class="d-note">开通云存储后，从开通时刻起的事件会自动保存。</div>
+          <button class="d-btn">开通云录像</button>
+          <button class="d-link">以后再说</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 2 无云有卡 ========== -->
+  <div class="case c-orange">
+    <div class="case-cap"><span class="case-no">2</span><span class="case-name">无云有卡</span><span class="case-tag">存储卡问题</span></div>
+    <div class="phone">
+      <div class="screen">
+        <div class="stage">
+          <div class="status-row"><span class="t">9:41</span><span class="r"><i></i><i></i></span></div>
+          <div class="stage-center">
+            <div class="stage-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></div>
+            <div class="stage-note">该时段无录像</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="info-title">人形移动</div>
+          <div class="info-time">今天 14:32:08 · 客厅摄像头</div>
+          <div class="info-card">
+            <div class="info-row"><span class="k">事件类型</span><span class="v">人形检测</span></div>
+            <div class="info-row"><span class="k">存储方式</span><span class="v">存储卡</span></div>
+            <div class="info-row"><span class="k">存储卡状态</span><span class="v" style="color:#FF8A1E;">未格式化</span></div>
+          </div>
+          <div class="info-sub">设备信息</div>
+          <div class="info-card">
+            <div class="info-row"><span class="k">设备名称</span><span class="v">客厅摄像头</span></div>
+            <div class="info-row"><span class="k">固件版本</span><span class="v">V2.3.1</span></div>
+            <div class="info-row"><span class="k">信号强度</span><span class="v">良好</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="mask"></div>
+      <div class="dialog-wrap">
+        <div class="dialog">
+          <div class="d-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7.2 3h6.6l4.2 4.2V20a1 1 0 0 1-1 1H7.2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/>
+              <path d="M12 11v4M12 18h.01"/>
+            </svg>
+          </div>
+          <div class="d-title">未查询到录像</div>
+          <div class="d-body">该事件可能未被保存，常见原因：</div>
+          <ul class="d-list">
+            <li>事件发生时存储卡未插好或未被识别</li>
+            <li>存储卡被格式化或出现损坏</li>
+            <li>存储卡录像已被循环覆盖</li>
+          </ul>
+          <button class="d-btn">检查存储卡</button>
+          <button class="d-link">我知道了</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 3 有云无卡 ========== -->
+  <div class="case c-blue">
+    <div class="case-cap"><span class="case-no">3</span><span class="case-name">有云无卡</span><span class="case-tag">开通前产生</span></div>
+    <div class="phone">
+      <div class="screen">
+        <div class="stage">
+          <div class="status-row"><span class="t">9:41</span><span class="r"><i></i><i></i></span></div>
+          <div class="stage-center">
+            <div class="stage-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></div>
+            <div class="stage-note">该时段无录像</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="info-title">人形移动</div>
+          <div class="info-time">10 月 22 日 18:05 · 客厅摄像头</div>
+          <div class="info-card">
+            <div class="info-row"><span class="k">事件类型</span><span class="v">人形检测</span></div>
+            <div class="info-row"><span class="k">云存储</span><span class="v">已开通</span></div>
+            <div class="info-row"><span class="k">开通时间</span><span class="v">10 月 24 日</span></div>
+          </div>
+          <div class="info-sub">设备信息</div>
+          <div class="info-card">
+            <div class="info-row"><span class="k">设备名称</span><span class="v">客厅摄像头</span></div>
+            <div class="info-row"><span class="k">固件版本</span><span class="v">V2.3.1</span></div>
+            <div class="info-row"><span class="k">信号强度</span><span class="v">良好</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="mask"></div>
+      <div class="dialog-wrap">
+        <div class="dialog">
+          <div class="d-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3.4" y="5.2" width="17.2" height="15.4" rx="2.2"/>
+              <path d="M3.4 9.8h17.2M8 3.2v4M16 3.2v4"/>
+              <path d="M10.2 13.4l3.6 3.6M13.8 13.4l-3.6 3.6"/>
+            </svg>
+          </div>
+          <div class="d-title">未查询到录像</div>
+          <div class="d-body">该事件可能未被保存，常见原因：</div>
+          <ul class="d-list">
+            <li>事件可能发生在云存储开通前，之前的录像无法回放</li>
+            <li>录像已超过保存期限，被循环覆盖</li>
+          </ul>
+          <button class="d-btn">查看云录像</button>
+          <button class="d-link">我知道了</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 4 有云有卡 ========== -->
+  <div class="case c-gray">
+    <div class="case-cap"><span class="case-no">4</span><span class="case-name">有云有卡</span><span class="case-tag">综合原因</span></div>
+    <div class="phone">
+      <div class="screen">
+        <div class="stage">
+          <div class="status-row"><span class="t">9:41</span><span class="r"><i></i><i></i></span></div>
+          <div class="stage-center">
+            <div class="stage-play"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></div>
+            <div class="stage-note">该时段无录像</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="info-title">人形移动</div>
+          <div class="info-time">10 月 26 日 02:47 · 客厅摄像头</div>
+          <div class="info-card">
+            <div class="info-row"><span class="k">事件类型</span><span class="v">人形检测</span></div>
+            <div class="info-row"><span class="k">云存储</span><span class="v">已开通</span></div>
+            <div class="info-row"><span class="k">存储卡</span><span class="v">正常</span></div>
+          </div>
+          <div class="info-sub">设备信息</div>
+          <div class="info-card">
+            <div class="info-row"><span class="k">设备名称</span><span class="v">客厅摄像头</span></div>
+            <div class="info-row"><span class="k">固件版本</span><span class="v">V2.3.1</span></div>
+            <div class="info-row"><span class="k">信号强度</span><span class="v">良好</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="mask"></div>
+      <div class="dialog-wrap">
+        <div class="dialog">
+          <div class="d-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3.2 3.8 20.4 20.2"/>
+              <rect x="3" y="6.4" width="12.6" height="11.8" rx="2"/>
+              <path d="m15.6 11 5.2-3.2v8.6l-2.4-1.5"/>
+            </svg>
+          </div>
+          <div class="d-title">未查询到录像</div>
+          <div class="d-body">该事件可能未被保存，常见原因：</div>
+          <ul class="d-list">
+            <li>事件可能发生在云存储开通前，之前的录像无法回放</li>
+            <li>录像已超过保存期限，被循环覆盖</li>
+            <li>事件发生时存储卡未插好或未被识别</li>
+            <li>存储卡被格式化或出现损坏</li>
+          </ul>
+          <button class="d-btn">查看存储设置</button>
+          <button class="d-link">我知道了</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

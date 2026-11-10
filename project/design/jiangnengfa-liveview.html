@@ -24,11 +24,12 @@
 
 html, body { height: 100%; }
 body {
-  display: flex; align-items: center; justify-content: center;
+  display: flex; align-items: safe center; justify-content: safe center; gap: 48px;
+  padding: 24px; min-height: 100%;
   background: #E9EAEE;
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
   color: var(--text-main);
-  overflow: hidden;
+  overflow: auto;
 }
 .phone {
   position: relative; width: 375px; height: 812px;
@@ -77,7 +78,7 @@ body {
   background: radial-gradient(closest-side, rgba(0,0,0,0.55), rgba(0,0,0,0));
 }
 .video-timestamp {
-  position: absolute; left: 12px; top: 10px; font-size: 11px; letter-spacing: 0.2px;
+  position: absolute; left: 50%; transform: translateX(-50%); bottom: 44px; z-index: 7; font-size: 11px; letter-spacing: 0.2px;
   color: rgba(255, 255, 255, 0.92); text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
   font-variant-numeric: tabular-nums;
 }
@@ -92,12 +93,14 @@ body {
 
 /* 回放态角标 */
 .video-mode-tag {
-  position: absolute; left: 12px; bottom: 10px; display: none; align-items: center; gap: 5px;
+  position: absolute; left: 12px; top: 32px; display: none; align-items: center; gap: 5px;
   padding: 3px 8px; border-radius: 4px; background: rgba(0, 0, 0, 0.45);
   font-size: 11px; color: #fff;
 }
 .video-wrap.playing .video-mode-tag { display: flex; }
-.video-wrap.playing .video-feed { filter: brightness(0.82); }
+
+.video-wrap.playing .video-feed,
+.video-wrap.playing .feed-item { filter: brightness(0.82); }
 
 .video-off {
   position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
@@ -107,10 +110,7 @@ body {
 .video-off svg { opacity: 0.6; }
 
 /* ---------- 直播 / 回放 共用控制条 ---------- */
-.control-bar {
-  flex: none; height: 42px; background: var(--bg-bar);
-  display: flex; align-items: center; justify-content: space-between; padding: 0 22px;
-}
+.control-bar { display: none; }
 .cb-btn { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border: 0; background: none; color: #fff; cursor: pointer; }
 .cb-btn:active { opacity: 0.6; }
 .cb-btn .off-line { display: none; }
@@ -239,7 +239,7 @@ body {
 
 /* ---------- 轻提示 / 闪光 ---------- */
 .toast {
-  position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(6px);
+  position: absolute; left: 50%; bottom: 88px; transform: translateX(-50%) translateY(6px);
   padding: 9px 16px; border-radius: 20px; background: rgba(29, 29, 31, 0.88); color: #fff;
   font-size: 13px; white-space: nowrap; opacity: 0; pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease; z-index: 30;
@@ -265,9 +265,410 @@ body {
 .date-chip.active { background: #FFF3E8; border-color: var(--orange); color: var(--orange); }
 
 /* ---------- 全屏态 ---------- */
-.phone.fullscreen .header { display: none; }
-.phone.fullscreen .video-wrap { aspect-ratio: auto; flex: 1; }
-.phone.fullscreen .stage { flex: 1; display: flex; flex-direction: column; }
+.phone.fullscreen .header { display: none !important; }
+.phone.fullscreen .list-zone,
+.phone.fullscreen .compact-zone,
+.phone.fullscreen .bottom-zone { display: none !important; }
+.phone.fullscreen .stage { flex: 1 !important; min-height: 0; display: flex; flex-direction: column; }
+.phone.fullscreen .video-wrap { flex: 1; height: auto !important; aspect-ratio: auto !important; max-height: none; }
+
+/* ================= 多路预览 ================= */
+.video-wrap { transition: height .22s ease; }
+.feed-grid { position: absolute; inset: 0; display: grid; gap: 2px; background: #000; }
+.feed-grid[data-layout="single"],
+.feed-grid[data-layout="single-pip"] { grid-template-columns: 1fr; grid-template-rows: 1fr; }
+.feed-grid[data-layout="dual"],
+.feed-grid[data-layout="dual-pip"] { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+.feed-grid[data-layout="quad"] { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+/* 品字形：上 1 全宽（占 2/3 高），下 2 并排 */
+.feed-grid[data-layout="tri"] { grid-template-columns: 1fr 1fr; grid-template-rows: 2fr 1fr; }
+.feed-grid[data-layout="tri"] .feed-item:nth-child(1) { grid-column: 1 / -1; }
+/* 条字形：每路一条，纵向滚动 */
+.feed-grid[data-layout="strip"] {
+  grid-auto-rows: auto; align-content: start;
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+}
+/* 条字形：视频墙模式，让出事件列表的空间 */
+.phone.strip-mode .list-zone { display: none; }
+.phone.style-b.strip-mode .stage { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.phone.style-b.strip-mode .video-wrap { flex: 1; height: auto !important; aspect-ratio: auto !important; }
+
+.feed-item {
+  position: relative; overflow: hidden; min-height: 0; background: #23252B;
+  border: 2px solid transparent; transition: border-color .18s ease, transform .2s ease;
+  cursor: pointer;
+}
+/* 画面层固定 16:9：格子保持比例，不拉伸不裁切 */
+.feed-item::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; aspect-ratio: 16 / 9;
+  background:
+    radial-gradient(120% 80% at 18% 12%, rgba(120,132,150,.55) 0%, rgba(28,30,36,0) 58%),
+    radial-gradient(90% 70% at 82% 18%, rgba(92,96,110,.45) 0%, rgba(20,20,24,0) 62%),
+    linear-gradient(160deg, #3A3D45 0%, #23252B 42%, #141518 100%);
+}
+.feed-item.is-selected { border-color: var(--orange); }
+.feed-item.is-offline { background: #121214; }
+.feed-item .feed-label {
+  position: absolute; left: 8px; top: 7px; display: flex; align-items: center; gap: 5px;
+  padding: 2px 7px; border-radius: 4px; background: rgba(0,0,0,.5);
+  font-size: 11px; color: #fff; line-height: 15px; white-space: nowrap;
+}
+.feed-item .feed-kind { opacity: .65; }
+.feed-item .feed-off {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,.45); font-size: 12px;
+}
+.feed-item.is-selected .feed-label { background: var(--orange); }
+
+/* 画中画浮窗 */
+.pip-box {
+  position: absolute; right: 10px; top: 10px; width: 32%; aspect-ratio: 16 / 9;
+  border-radius: 8px; overflow: hidden; border: 1.5px solid rgba(255,255,255,.55);
+  box-shadow: 0 6px 18px rgba(0,0,0,.45); display: none; cursor: pointer; z-index: 6;
+  background:
+    radial-gradient(120% 80% at 18% 12%, rgba(120,132,150,.55) 0%, rgba(28,30,36,0) 58%),
+    linear-gradient(160deg, #3A3D45 0%, #23252B 42%, #141518 100%);
+}
+.pip-box.on { display: block; }
+.pip-badge {
+  position: absolute; left: 6px; bottom: 5px; padding: 1px 5px; border-radius: 3px;
+  background: rgba(0,0,0,.55); font-size: 10px; color: #fff; line-height: 14px;
+}
+.pip-swap {
+  position: absolute; right: 4px; top: 4px; width: 20px; height: 20px; border-radius: 50%;
+  border: 0; background: rgba(0,0,0,.5); color: #fff; display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+
+/* 流路数演示切换 */
+.stream-pill {
+  position: absolute; right: 10px; bottom: 42px; z-index: 7;
+  padding: 3px 8px; border-radius: 20px; border: 1px solid rgba(255,255,255,.3);
+  background: rgba(0,0,0,.45); color: #fff; font-size: 11px; cursor: pointer; line-height: 15px;
+}
+
+/* ================= 单屏/双屏：沉浸布局（配色沿用原设计） ================= */
+/* 统一两种样式：A = 分页面板；B = 视频墙 + 底部操作条（按剩余空间自动切换） */
+.phone .control-bar, .phone .list-zone { display: none !important; }
+.phone.style-a .bottom-zone { display: none !important; }
+.phone.style-b .bottom-zone { margin-top: auto; }
+.phone.style-b .page { overflow-y: auto; }
+.phone.style-b .compact-zone { display: none !important; }
+.phone.style-a .stage { flex: none; }
+.phone.style-b:not(.strip-mode) .stage { flex: none; }
+.phone.style-b.strip-mode .stage { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.phone.style-b.strip-mode .video-wrap { flex: 1; height: auto !important; aspect-ratio: auto !important; }
+.phone.style-a .video-wrap, .phone.style-b .video-wrap { overflow: hidden; }
+/* B 样式底部条：圆钮行已覆盖 声音/截图/对讲/录制/回放，这里只留 事件/云台/布局/操作 */
+#talkBtn, #shotBtn, #recBtn, #replayBtn, #zoomBtn { display: none !important; }
+/* B 样式底部条：摄像机操作完整集合（圆钮行已覆盖 声音/截图/对讲/录制/回放） */
+#ptzBtn { order: 1; }
+#layoutBtn { order: 2; }
+#eventsBtn { order: 20; }
+#shareBtn { order: 21; }
+#settingBtn2 { order: 22; }
+#opsBtn { display: none !important; }
+/* 单/双屏：格子按 16:9 居中 */
+.phone .feed-grid[data-layout="single"] .feed-item,
+.phone .feed-grid[data-layout="single-pip"] .feed-item,
+.phone .feed-grid[data-layout="dual"] .feed-item,
+.phone .feed-grid[data-layout="dual-pip"] .feed-item { aspect-ratio: 16 / 9; height: 100%; width: auto; max-width: 100%; }
+
+.compact-zone { display: none; flex: 1; min-height: 0; flex-direction: column; background: var(--bg-page); }
+.phone.style-a .compact-zone { display: flex; }
+
+/* 演示：路数平铺切换 */
+/* 右侧演示面板 */
+.demo-side {
+  width: 320px; min-width: 0; flex: 0 0 320px;
+  display: flex; flex-direction: column; gap: 16px;
+  max-height: calc(100vh - 48px); overflow-y: auto; padding-right: 4px;
+  scrollbar-width: thin;
+}
+.demo-side::-webkit-scrollbar { width: 6px; }
+.demo-side::-webkit-scrollbar-thumb { background: #D5D5DA; border-radius: 3px; }
+.demo-card {
+  background: #fff; border-radius: 16px; padding: 18px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.06);
+}
+.demo-card h4 { font-size: 14px; font-weight: 600; color: #1D1D1F; margin-bottom: 12px; }
+.demo-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.rd-map {
+  display: flex; flex-direction: column; gap: 2px; margin-bottom: 10px;
+  border-radius: 10px; overflow: hidden;
+}
+.rd-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 7px 10px; font-size: 11px; color: #8E8E93; background: #F2F3F5;
+}
+.rd-row span { font-size: 10px; color: #A8A8AE; }
+.rd-video { background: #1D1D1F; color: rgba(255,255,255,.9); padding: 18px 10px; }
+.rd-video span { color: rgba(255,255,255,.5); }
+.rd-target {
+  background: #FFF3E8; color: var(--orange); font-weight: 600;
+  border: 1.5px dashed var(--orange); padding: 16px 10px;
+}
+.rd-target span { color: #C77A31; }
+.rd-formula { font-size: 11px; line-height: 16px; color: #8E8E93; margin-bottom: 10px; }
+.rd-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.rd-table th, .rd-table td {
+  padding: 6px 6px; text-align: left; border-bottom: 1px solid #EDEDF0; color: #4A4A50; line-height: 16px;
+}
+.rd-table th { color: #1D1D1F; font-weight: 600; background: #F8F8FA; }
+.rd-table td:first-child { width: 52px; color: #8E8E93; }
+.rd-table td:last-child { width: 92px; }
+
+.demo-notes { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.demo-notes li {
+  font-size: 12px; line-height: 18px; color: #6B6B72; padding-left: 12px; position: relative;
+}
+.demo-notes li::before {
+  content: ""; position: absolute; left: 0; top: 7px;
+  width: 4px; height: 4px; border-radius: 50%; background: var(--orange);
+}
+@media (max-width: 900px) { .demo-side { display: none; } }
+@media (max-width: 480px) { body { padding: 0; gap: 0; } }
+.demo-chip {
+  height: 32px; padding: 0 12px; border-radius: 16px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--bg-card); color: #4A4A50; font-size: 12px; line-height: 1;
+}
+.demo-chip.on { border-color: var(--orange); background: #FFF3E8; color: var(--orange); font-weight: 600; }
+
+/* 圆形操作按钮行 */
+.circle-row { display: flex; justify-content: space-between; padding: 14px 20px 8px; flex: none; }
+.circle-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--bg-card);
+  color: var(--icon); display: flex; align-items: center; justify-content: center; cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.circle-btn:active { background: #F2F3F5; }
+.circle-btn.is-on { border-color: var(--orange); background: #FFF7EF; color: var(--orange); }
+.circle-btn.recording { border-color: #FF3B30; background: #FFF1F0; color: #FF3B30; }
+
+/* 分页内容 */
+.tab-panel { flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 8px; -webkit-overflow-scrolling: touch; }
+.tab-page { display: none; }
+.tab-page.on { display: block; }
+/* 云台页内容垂直居中，避免大片留白 */
+.tab-page[data-page="云台"].on { display: flex; flex-direction: column; justify-content: center; min-height: 100%; }
+
+/* 云台：圆形方向盘 */
+.ptz-stage { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+.ptz-dial { --d: 230px; position: relative; flex: none; width: var(--d); height: var(--d); margin: 10px auto 0; transform-origin: center center; }
+.ptz-dial-btn {
+  position: absolute; --b: 64px; width: var(--b); height: var(--b); border: 0; background: none;
+  color: var(--icon); display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.ptz-dial-btn:active { color: var(--orange); }
+.ptz-dial-btn[data-dir="up"]    { left: calc((var(--d) - var(--b)) / 2); top: 0; }
+.ptz-dial-btn[data-dir="down"]  { left: calc((var(--d) - var(--b)) / 2); bottom: 0; }
+.ptz-dial-btn[data-dir="left"]  { left: 0; top: calc((var(--d) - var(--b)) / 2); }
+.ptz-dial-btn[data-dir="right"] { right: 0; top: calc((var(--d) - var(--b)) / 2); }
+.ptz-dial-core {
+  position: absolute; --c: 76px;
+  left: calc((var(--d) - var(--c)) / 2); top: calc((var(--d) - var(--c)) / 2);
+  width: var(--c); height: var(--c); border-radius: 50%;
+  border: 0; background: #1D1D1F; color: #fff;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,.16);
+}
+.ptz-dial-core:active { background: #333; }
+.ptz-preset {
+  position: absolute; right: -46px; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--bg-card); color: var(--icon);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+.ptz-hint { text-align: center; font-size: 12px; color: var(--text-sub); margin-top: 8px; }
+/* 双屏时可用高度更小，方向盘缩小一级 */
+.compact-zone.dual .ptz-dial { --d: 200px; margin-top: 2px; }
+.compact-zone.dual .ptz-dial-core { --c: 66px; }
+.compact-zone.dual .ptz-dial-btn { --b: 54px; }
+.compact-zone.dual .ptz-preset { right: -40px; width: 38px; height: 38px; }
+
+/* 操作：功能网格 */
+.op-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 6px; padding-top: 10px; }
+.op-cell {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  border: 0; background: none; color: #4A4A50; font-size: 11px; line-height: 14px; cursor: pointer;
+}
+.op-cell:active { color: var(--orange); }
+.op-cell.on { color: var(--orange); }
+
+/* 双屏：事件横向排列，左右滑动 */
+.tab-page.hscroll .event-grid {
+  display: flex; grid-template-columns: none; gap: 10px;
+  overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; padding-bottom: 2px;
+}
+.tab-page.hscroll .event-grid::-webkit-scrollbar { display: none; }
+.tab-page.hscroll .event { flex: 0 0 118px; }
+.tab-page.hscroll .event-thumb { width: 118px; aspect-ratio: 16 / 9; }
+.tab-page.hscroll .event-meta { height: auto; }
+
+/* 事件：空间不足时降级为单列紧凑行 */
+.tab-page.dense .event-grid { grid-template-columns: 1fr; gap: 8px; padding: 0; }
+.tab-page.dense .event { flex-direction: row; align-items: center; gap: 10px; }
+.tab-page.dense .event-thumb { width: 86px; flex: none; aspect-ratio: 16 / 9; border-radius: 7px; }
+.tab-page.dense .event-thumb .event-time { font-size: 10px; left: 5px; bottom: 4px; }
+.tab-page.dense .event-thumb .event-play { width: 16px; height: 16px; right: 4px; bottom: 4px; }
+.tab-page.dense .event-meta { height: auto; }
+.tab-page.dense .compact-day { padding: 1px 0 8px; font-size: 13px; }
+.tab-page.dense .compact-day .count { font-size: 11px; }
+
+/* 事件：沿用列表样式 */
+.compact-day { display: flex; align-items: baseline; gap: 8px; padding: 6px 0 12px; color: #2C2C30; font-size: 15px; font-weight: 600; }
+.compact-day .count { font-size: 12px; font-weight: 400; color: var(--text-sub); }
+.compact-more {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 2px;
+  border: 0; background: none; padding: 2px 0 2px 8px; cursor: pointer;
+  font-size: 12px; font-weight: 400; color: var(--text-sub); align-self: center;
+}
+.compact-more:active { opacity: .6; }
+
+/* 底部分页胶囊 */
+.pill-bar {
+  display: flex; flex: none; margin-top: auto; background: var(--bg-card);
+  border-top: 1px solid var(--line);
+  padding: 0 6px calc(env(safe-area-inset-bottom));
+}
+.pill {
+  flex: 1; height: 54px; border: 0; border-radius: 0; background: none; cursor: pointer;
+  position: relative; color: var(--text-sub); font-size: 15px; line-height: 54px;
+  transition: color .16s ease;
+}
+.pill.on { color: var(--orange); font-weight: 600; }
+.pill.on::after {
+  content: ""; position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%);
+  width: 18px; height: 3px; border-radius: 2px; background: var(--orange);
+}
+.pill:active { color: var(--orange); }
+
+
+/* 视频上的质量 / 全屏角标（仅单双屏） */
+/* 视频叠加层：点击画面显示/隐藏 */
+.video-ui { position: absolute; inset: 0; z-index: 6; transition: opacity .2s ease; pointer-events: none; }
+.video-ui.hidden { opacity: 0; }
+/* 镜头类型标签也跟随点击显隐 */
+.feed-item .feed-label { transition: opacity .2s ease; }
+.phone.ui-off .feed-item .feed-label { opacity: 0; }
+.video-ui > * { pointer-events: auto; }
+.video-ui.hidden > * { pointer-events: none; }
+.video-ctrl {
+  position: absolute; left: 10px; right: 10px; bottom: 10px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.vo-left, .vo-right { display: flex; align-items: center; gap: 6px; }
+#layoutChip { gap: 4px; }
+.vo-chip {
+  height: 24px; min-width: 30px; padding: 0 8px; border-radius: 4px;
+  border: 1px solid rgba(255,255,255,.42); background: rgba(0,0,0,.35);
+  color: #fff; font-size: 11px; line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.vo-chip.on { border-color: var(--orange); color: var(--orange); }
+.video-badge { display: flex; }
+.phone .feed-grid[data-layout="single"] .feed-label,
+.phone .feed-grid[data-layout="single-pip"] .feed-label,
+.phone .feed-grid[data-layout="dual"] .feed-label,
+.phone .feed-grid[data-layout="dual-pip"] .feed-label { display: none; }
+
+/* ================= 底部操作栏 ================= */
+.bottom-zone {
+  position: relative; flex: none; background: var(--bg-card); z-index: 5;
+  padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
+  box-shadow: 0 -6px 20px rgba(0,0,0,.06);
+}
+/* 右侧渐隐，提示还能左滑 */
+.bottom-zone.has-more::after {
+  content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 40px;
+  background: linear-gradient(to right, rgba(255,255,255,.2), #fff 78%);
+  pointer-events: none;
+}
+.scroll-hint {
+  position: absolute; right: 2px; top: 50%; transform: translateY(-50%);
+  width: 18px; height: 18px; border-radius: 50%; z-index: 2;
+  background: var(--bg-card); border: 1px solid var(--line);
+  display: none; align-items: center; justify-content: center;
+  color: var(--text-sub); pointer-events: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,.1);
+}
+.bottom-zone.has-more .scroll-hint { display: flex; }
+.op-bar {
+  display: flex; align-items: flex-start;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; scroll-snap-type: x proximity;
+}
+.op-bar::-webkit-scrollbar { display: none; }
+.op-item {
+  flex: 0 0 58px; scroll-snap-align: start;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  border: 0; background: none; padding: 4px 0; cursor: pointer; color: var(--icon);
+}
+.op-item:active { opacity: .55; }
+.op-item .op-label { font-size: 11px; line-height: 15px; color: var(--text-main); }
+.op-item.is-disabled { opacity: .3; }
+.op-item.recording, .op-item.recording .op-label { color: #FF3B30; }
+
+/* ================= 通用弹窗 ================= */
+.modal-layer { position: absolute; inset: 0; z-index: 50; display: none; background: rgba(0,0,0,.36); }
+.modal-layer.on { display: block; }
+/* 云台/对讲这类要盯着画面操作的，不加蒙层 */
+.modal-layer.no-mask { background: transparent; }
+.modal-layer.no-mask .modal-sheet { box-shadow: 0 -10px 34px rgba(0, 0, 0, .22); }
+.modal-sheet {
+  position: absolute; left: 0; right: 0; bottom: 0; background: #fff;
+  border-radius: 20px 20px 0 0; padding: 14px 16px calc(20px + env(safe-area-inset-bottom));
+  transform: translateY(100%); transition: transform .26s cubic-bezier(.2,.8,.3,1);
+  max-height: 76%; overflow-y: auto;
+}
+.modal-layer.on .modal-sheet { transform: translateY(0); }
+.modal-head { display: flex; align-items: center; margin-bottom: 14px; }
+.modal-title { font-size: 15px; font-weight: 600; }
+.modal-sub { font-size: 11px; color: var(--text-sub); margin-left: 8px; }
+.modal-close { margin-left: auto; border: 0; background: none; font-size: 13px; color: var(--text-sub); cursor: pointer; }
+.modal-empty { padding: 28px 0; text-align: center; color: var(--text-sub); font-size: 13px; }
+
+/* 布局选择 */
+.layout-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.layout-opt {
+  border: 1px solid var(--line); border-radius: 12px; padding: 10px 6px; background: #fff;
+  display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer;
+}
+.layout-opt.active { border-color: var(--orange); background: #FFF7EF; }
+.layout-opt .mini { position: relative; width: 46px; height: 30px; display: grid; gap: 2px; padding: 2px; border-radius: 4px; background: #EFF0F3; }
+.layout-opt .mini i { background: #B9BEC8; border-radius: 2px; }
+.layout-opt span { font-size: 12px; color: #4A4A50; line-height: 15px; }
+
+/* 清晰度 / 列表选项 */
+.opt-list { display: flex; flex-direction: column; gap: 8px; }
+.opt-row {
+  display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px;
+  border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 14px;
+}
+.opt-row.active { border-color: var(--orange); background: #FFF7EF; color: var(--orange); font-weight: 600; }
+.opt-row .tick { margin-left: auto; opacity: 0; }
+.opt-row.active .tick { opacity: 1; }
+
+/* 语音对讲 */
+.talk-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 10px 0 6px; }
+.talk-btn {
+  width: 108px; height: 108px; border-radius: 50%; border: 0; cursor: pointer;
+  background: #1D1D1F; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  user-select: none; -webkit-user-select: none;
+}
+.talk-btn.on { background: var(--orange); transform: scale(.97); }
+.talk-tip { font-size: 12px; color: var(--text-sub); }
+
+/* 云台面板 */
+.ptz-pad { display: grid; grid-template-columns: repeat(3, 64px); grid-template-rows: repeat(3, 64px); gap: 8px; justify-content: center; align-items: center; }
+.ptz-pad button { display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; border: 0; border-radius: 16px; background: #F2F3F5; color: var(--icon); cursor: pointer; }
+.ptz-pad button:active { background: #E6E7EA; }
+.ptz-pad .center { background: #1D1D1F; color: #fff; border-radius: 50%; }
+.ptz-empty { width: 64px; height: 64px; }
 </style>
 </head>
 <body>
@@ -302,8 +703,30 @@ body {
     <!-- 视频 + 控制 + 功能卡（固定区） -->
     <div class="stage">
       <div class="video-wrap" id="videoWrap">
-        <div class="video-feed" id="videoFeed"></div>
-        <div class="video-timestamp" id="timestamp">2026/10/27 星期二 15:37:52</div>
+        <div class="feed-grid" id="feedGrid" data-layout="single"></div>
+        <div class="pip-box" id="pipBox">
+          <span class="pip-badge" id="pipBadge">镜头2</span>
+          <button class="pip-swap" id="pipSwap" aria-label="切换主画面">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M17 7L7 17"/></svg>
+          </button>
+        </div>
+        <div class="video-ui" id="videoUI">
+          <div class="video-timestamp" id="timestamp">2026/10/27 星期二 15:37:52</div>
+          <div class="video-ctrl">
+            <div class="vo-left">
+              <button class="vo-chip" id="compactQuality">3K</button>
+            </div>
+            <div class="vo-right">
+              <button class="vo-chip" id="layoutChip">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="4" width="7.4" height="7" rx="1.4"/><rect x="13.6" y="4" width="7.4" height="7" rx="1.4"/><rect x="3" y="13" width="7.4" height="7" rx="1.4"/><rect x="13.6" y="13" width="7.4" height="7" rx="1.4"/></svg>
+                <span id="layoutChipLabel">品字形</span>
+              </button>
+              <button class="vo-chip" id="compactFull" aria-label="全屏">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 H4 v5" /><path d="M15 4 h5 v5" /><path d="M15 20 h5 v-5" /><path d="M9 20 H4 v-5" /></svg>
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="video-mode-tag">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
           <span>回放</span>
@@ -315,6 +738,25 @@ body {
         </div>
         <div class="flash" id="flash"></div>
       </div>
+
+      <div class="circle-row">
+        <button class="circle-btn is-on" id="cMute" aria-label="声音开关">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5 h3.2 L12 5.6 v12.8 L7.2 14.5 H4 Z"/><path d="M16.2 9.4 L21 14.2"/></svg>
+        </button>
+        <button class="circle-btn" id="cShot" aria-label="截图">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 8.4 h3.4 l1.6 -2.4 h7.6 l1.6 2.4 h3.4 v10.2 H3.2 Z"/><circle cx="12" cy="13.2" r="3.4"/></svg>
+        </button>
+        <button class="circle-btn" id="cTalk" aria-label="对讲">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="9.2" y="2.8" width="5.6" height="10.4" rx="2.8"/><path d="M5.6 11.6 a6.4 6.4 0 0 0 12.8 0"/><path d="M12 18 v3.2"/></svg>
+        </button>
+        <button class="circle-btn" id="cRec" aria-label="录制">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.8" y="6.2" width="12.6" height="11.6" rx="2.4"/><path d="M15.4 11 L21.2 7.8 v8.4 L15.4 13 Z"/></svg>
+        </button>
+        <button class="circle-btn" id="cReplay" aria-label="回放">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.4"/><path d="M10 8.2 L15.4 12 L10 15.8 Z"/></svg>
+        </button>
+      </div>
+
 
       <!-- 直播控制条 -->
       <div class="control-bar" id="liveBar">
@@ -351,69 +793,60 @@ body {
         </button>
       </div>
 
-      <!-- 直播功能卡 -->
-      <div class="fn-card" id="liveFnCard">
-        <div class="fn-row">
-          <button class="fn-item" id="talkBtn">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-              <rect x="9.2" y="2.8" width="5.6" height="10.4" rx="2.8" /><path d="M5.6 11.6 a6.4 6.4 0 0 0 12.8 0" /><path d="M12 18 v3.2" />
-            </svg>
-            <span class="fn-label">语音</span>
-          </button>
-          <button class="fn-item" id="shotBtn">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3.2 8.4 h3.4 l1.6 -2.4 h7.6 l1.6 2.4 h3.4 v10.2 H3.2 Z" /><circle cx="12" cy="13.2" r="3.4" />
-            </svg>
-            <span class="fn-label">截图</span>
-          </button>
-          <button class="fn-item" id="recBtn">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2.8" y="6.2" width="12.6" height="11.6" rx="2.4" /><path d="M15.4 11 L21.2 7.8 v8.4 L15.4 13 Z" />
-            </svg>
-            <span class="fn-label" id="recLabel">录制</span>
-          </button>
-          <button class="fn-item" id="ptzBtn">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="8.4" /><circle cx="12" cy="12" r="2.1" fill="currentColor" stroke="none" />
-              <path d="M12 2.4 v3" /><path d="M12 18.6 v3" /><path d="M2.4 12 h3" /><path d="M18.6 12 h3" />
-            </svg>
-            <span class="fn-label">云台</span>
-          </button>
+    </div>
+
+    <!-- 单屏/双屏：沉浸布局（事件 / 云台 / 操作 分页） -->
+    <div class="compact-zone" id="compactZone">
+
+      <div class="tab-panel" id="tabPanel">
+        <!-- 事件 -->
+        <div class="tab-page" data-page="事件">
+          <div class="compact-day">
+            <span>最新事件</span><span class="count" id="compactDayCount"></span>
+            <button class="compact-more" id="compactMore">
+              查看更多
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5 L16 12 L9 19"/></svg>
+            </button>
+          </div>
+          <div class="event-grid" id="compactEventGrid"></div>
         </div>
-        <div class="sheet-handle"></div>
+
+        <!-- 云台 -->
+        <div class="tab-page" data-page="云台">
+          <div class="ptz-stage" id="ptzStage">
+          <div class="ptz-dial" id="ptzDial">
+            <button class="ptz-dial-btn" data-dir="up" aria-label="上"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 14 L12 8 L18 14"/></svg></button>
+            <button class="ptz-dial-btn" data-dir="left" aria-label="左"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6 L8 12 L14 18"/></svg></button>
+            <button class="ptz-dial-core" data-dir="center" aria-label="复位"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3.4"/></svg></button>
+            <button class="ptz-dial-btn" data-dir="right" aria-label="右"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6 L16 12 L10 18"/></svg></button>
+            <button class="ptz-dial-btn" data-dir="down" aria-label="下"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10 L12 16 L18 10"/></svg></button>
+            <button class="ptz-preset" id="ptzPreset" aria-label="预置位">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.6 L14.6 9 l6 .8 -4.4 4.2 1.1 6 -5.3 -2.9 -5.3 2.9 1.1 -6 L3.4 9.8 l6 -.8 Z"/></svg>
+            </button>
+          </div>
+          <div class="ptz-hint" id="ptzHint">拖动方向键控制镜头</div>
+          </div>
+        </div>
+
+        <!-- 操作 -->
+        <div class="tab-page" data-page="操作">
+          <div class="op-grid">
+            <button class="op-cell" data-op="报警"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.4 a5.6 5.6 0 0 1 5.6 5.6 v3.4 l1.8 3.2 H4.6 l1.8 -3.2 V9 a5.6 5.6 0 0 1 5.6 -5.6 Z"/><path d="M9.8 18.6 a2.4 2.4 0 0 0 4.4 0"/></svg>报警</button>
+            <button class="op-cell" data-op="GPS"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21 s6.4 -6 6.4 -10.4 a6.4 6.4 0 1 0 -12.8 0 C5.6 15 12 21 12 21 Z"/><circle cx="12" cy="10.4" r="2.2"/></svg>GPS</button>
+            <button class="op-cell" data-op="夜视"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.4 A8.4 8.4 0 1 1 9.6 4 a6.6 6.6 0 0 0 10.4 10.4 Z"/></svg>夜视</button>
+            <button class="op-cell" data-op="正放"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M6 8 h12"/><path d="M6 16 h12"/></svg>正放</button>
+            <button class="op-cell" data-op="云台校准"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="3.2"/><path d="M12 1.8 v3.4"/><path d="M12 18.8 v3.4"/></svg>云台校准</button>
+            <button class="op-cell" data-op="单屏"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="3.4" y="5" width="17.2" height="14" rx="2"/></svg>单屏</button>
+            <button class="op-cell" data-op="截图"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 8.4 h3.4 l1.6 -2.4 h7.6 l1.6 2.4 h3.4 v10.2 H3.2 Z"/><circle cx="12" cy="13.2" r="3.4"/></svg>截图</button>
+            <button class="op-cell" data-op="设置"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2.6 L19.2 6.8 V17.2 L12 21.4 L4.8 17.2 V6.8 Z"/><circle cx="12" cy="12" r="3.1"/></svg>设置</button>
+          </div>
+        </div>
       </div>
 
-      <!-- 回放功能卡：左侧醒目的「返回直播」 -->
-      <div class="fn-card" id="playFnCard" style="display:none">
-        <div class="fn-row">
-          <button class="fn-item back-live" id="backLiveBtn">
-            <span class="icon-wrap">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 12 a8 8 0 1 1 -2.6 -5.9" /><path d="M20 4 v4.4 h-4.4" />
-              </svg>
-            </span>
-            <span class="fn-label">返回直播</span>
-          </button>
-          <button class="fn-item" id="speedBtn">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 7.5 L11 12 L5 16.5" /><path d="M12.6 7.5 L18.6 12 L12.6 16.5" />
-            </svg>
-            <span class="fn-label" id="speedLabel">倍速</span>
-          </button>
-          <button class="fn-item" id="downloadBtn">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 3.6 v11" /><path d="M7.6 10.4 L12 14.8 L16.4 10.4" /><path d="M4.6 17.6 v2.6 h14.8 v-2.6" />
-            </svg>
-            <span class="fn-label">下载</span>
-          </button>
-          <button class="fn-item" id="deleteBtn">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4.5 7 h15" /><path d="M9.5 7 V4.6 h5 V7" /><path d="M6.6 7 l0.9 12.4 h9 l0.9 -12.4" /><path d="M10.4 10.6 v6" /><path d="M13.6 10.6 v6" />
-            </svg>
-            <span class="fn-label">删除</span>
-          </button>
-        </div>
-        <div class="sheet-handle"></div>
+      <div class="pill-bar">
+        <button class="pill" data-tab="事件">事件</button>
+        <button class="pill" data-tab="云台">云台</button>
+        <button class="pill" data-tab="操作">操作</button>
       </div>
     </div>
 
@@ -429,23 +862,124 @@ body {
       </div>
       <div class="event-grid" id="eventGrid"></div>
       </div>
+    </div>
 
-    <!-- 云台浮窗（从顶部向下展开） -->
-    <div class="ptz-layer" id="ptzMask">
-      <div class="ptz-float">
-          <div class="ptz-pad">
-          <div class="ptz-empty"></div>
-          <button data-dir="up" aria-label="上"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 14 L12 8 L18 14"/></svg></button>
-          <div class="ptz-empty"></div>
-          <button data-dir="left" aria-label="左"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6 L8 12 L14 18"/></svg></button>
-          <button class="center" data-dir="center" aria-label="复位"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3.4"/></svg></button>
-          <button data-dir="right" aria-label="右"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6 L16 12 L10 18"/></svg></button>
-          <div class="ptz-empty"></div>
-          <button data-dir="down" aria-label="下"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10 L12 16 L18 10"/></svg></button>
-          <div class="ptz-empty"></div>
-        </div>
+    <!-- 底部操作栏：只做入口，实际操作面板一律弹窗 -->
+    <div class="bottom-zone">
+      <div class="scroll-hint" aria-hidden="true">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5 L16 12 L9 19"/></svg>
+      </div>
+      <div class="op-bar" id="liveFnCard">
+        <button class="op-item" id="talkBtn">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+            <rect x="9.2" y="2.8" width="5.6" height="10.4" rx="2.8" /><path d="M5.6 11.6 a6.4 6.4 0 0 0 12.8 0" /><path d="M12 18 v3.2" />
+          </svg>
+          <span class="op-label">语音</span>
+        </button>
+        <button class="op-item" id="shotBtn">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3.2 8.4 h3.4 l1.6 -2.4 h7.6 l1.6 2.4 h3.4 v10.2 H3.2 Z" /><circle cx="12" cy="13.2" r="3.4" />
+          </svg>
+          <span class="op-label">截图</span>
+        </button>
+        <button class="op-item" id="recBtn">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2.8" y="6.2" width="12.6" height="11.6" rx="2.4" /><path d="M15.4 11 L21.2 7.8 v8.4 L15.4 13 Z" />
+          </svg>
+          <span class="op-label" id="recLabel">录制</span>
+        </button>
+        <button class="op-item" id="ptzBtn">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="8.4" /><circle cx="12" cy="12" r="2.1" fill="currentColor" stroke="none" />
+            <path d="M12 2.4 v3" /><path d="M12 18.6 v3" /><path d="M2.4 12 h3" /><path d="M18.6 12 h3" />
+          </svg>
+          <span class="op-label" id="ptzLabel">云台</span>
+        </button>
+        <button class="op-item" id="layoutBtn">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+            <rect x="3" y="4" width="7.4" height="7" rx="1.4" /><rect x="13.6" y="4" width="7.4" height="7" rx="1.4" />
+            <rect x="3" y="13" width="7.4" height="7" rx="1.4" /><rect x="13.6" y="13" width="7.4" height="7" rx="1.4" />
+          </svg>
+          <span class="op-label">布局</span>
+        </button>
+        <button class="op-item" id="opsBtn">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" /><path d="M12 3 v3"/><path d="M12 18 v3"/><path d="M3 12 h3"/><path d="M18 12 h3"/>
+          </svg>
+          <span class="op-label">操作</span>
+        </button>
+        <button class="op-item" id="eventsBtn">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4.4 6.4 h15.2" /><path d="M4.4 12 h15.2" /><path d="M4.4 17.6 h9.6" />
+          </svg>
+          <span class="op-label">事件</span>
+        </button>
+        <button class="op-item" id="replayBtn">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="8.6" /><path d="M12 7.6 V12 l3.2 2" />
+          </svg>
+          <span class="op-label">回放</span>
+        </button>
+        <button class="op-item" id="zoomBtn">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="10.6" cy="10.6" r="6.4" /><path d="M15.4 15.4 L20.4 20.4" /><path d="M8 10.6 h5.2" /><path d="M10.6 8 v5.2" />
+          </svg>
+          <span class="op-label" id="zoomLabel">放大</span>
+        </button>
+        <button class="op-item" id="shareBtn">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="17.6" cy="5.6" r="2.4" /><circle cx="6.4" cy="12" r="2.4" /><circle cx="17.6" cy="18.4" r="2.4" />
+            <path d="M8.6 10.8 L15.4 6.8" /><path d="M8.6 13.2 L15.4 17.2" />
+          </svg>
+          <span class="op-label">分享</span>
+        </button>
+        <button class="op-item" id="settingBtn2">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+            <path d="M12 2.6 L19.2 6.8 V17.2 L12 21.4 L4.8 17.2 V6.8 Z" /><circle cx="12" cy="12" r="3.1" />
+          </svg>
+          <span class="op-label">设置</span>
+        </button>
+      </div>
+
+      <!-- 回放操作栏 -->
+      <div class="op-bar" id="playFnCard" style="display:none">
+        <button class="op-item" id="backLiveBtn" style="color:var(--orange)">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12 a8 8 0 1 1 -2.6 -5.9" /><path d="M20 4 v4.4 h-4.4" />
+          </svg>
+          <span class="op-label" style="color:var(--orange);font-weight:600">返回直播</span>
+        </button>
+        <button class="op-item" id="speedBtn">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 7.5 L11 12 L5 16.5" /><path d="M12.6 7.5 L18.6 12 L12.6 16.5" />
+          </svg>
+          <span class="op-label" id="speedLabel">倍速</span>
+        </button>
+        <button class="op-item" id="downloadBtn">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3.6 v11" /><path d="M7.6 10.4 L12 14.8 L16.4 10.4" /><path d="M4.6 17.6 v2.6 h14.8 v-2.6" />
+          </svg>
+          <span class="op-label">下载</span>
+        </button>
+        <button class="op-item" id="deleteBtn">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4.5 7 h15" /><path d="M9.5 7 V4.6 h5 V7" /><path d="M6.6 7 l0.9 12.4 h9 l0.9 -12.4" /><path d="M10.4 10.6 v6" /><path d="M13.6 10.6 v6" />
+          </svg>
+          <span class="op-label">删除</span>
+        </button>
       </div>
     </div>
+  </div>
+
+  <!-- 通用弹窗：所有操作面板都走这里 -->
+  <div class="modal-layer" id="modalLayer">
+    <div class="modal-sheet">
+      <div class="modal-head">
+        <span class="modal-title" id="modalTitle">标题</span>
+        <span class="modal-sub" id="modalSub"></span>
+        <button class="modal-close" id="modalClose">关闭</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
     </div>
   </div>
 
@@ -466,6 +1000,63 @@ body {
   <div class="toast" id="toast"></div>
 </div>
 
+<!-- 右侧：演示控制 + 产品说明 -->
+<aside class="demo-side" id="demoBar">
+  <section class="demo-card">
+    <h4>路数切换</h4>
+    <div class="demo-chips">
+      <button class="demo-chip" data-n="1">1 路</button>
+      <button class="demo-chip" data-n="2">2 路</button>
+      <button class="demo-chip" data-n="3">3 路</button>
+      <button class="demo-chip" data-n="4">4 路</button>
+      <button class="demo-chip" data-n="5">5 路</button>
+    </div>
+  </section>
+
+  <section class="demo-card">
+    <h4>样式判定规则</h4>
+    <div class="rd-map">
+      <div class="rd-row rd-dim">顶部栏</div>
+      <div class="rd-row rd-video">视频区<span>高度由当前布局决定</span></div>
+      <div class="rd-row rd-dim">圆形操作按钮行</div>
+      <div class="rd-row rd-target"><b>分页面板区</b><span>「170px」指的就是这里</span></div>
+      <div class="rd-row rd-dim">底部标签栏 / 操作条</div>
+    </div>
+    <p class="rd-formula">面板区高度 = 屏幕高 − 顶部栏 − 视频区 − 圆钮行 − 底栏</p>
+    <ul class="demo-notes">
+      <li>面板区 <b>≥ 170px</b> → <b>A 样式</b>：显示事件 / 云台 / 操作分页面板</li>
+      <li>面板区 <b>&lt; 170px</b> → <b>B 样式</b>：隐藏面板，功能平铺到贴底操作条（左右滑动）</li>
+      <li>所有布局统一按此判定，<b>条字形不再固定 B</b>；只是它整体较高，多数手机仍会落到 B</li>
+    </ul>
+  </section>
+
+  <section class="demo-card">
+    <h4>按路数可选范围</h4>
+    <table class="rd-table">
+      <thead><tr><th>路数</th><th>非全屏</th><th>全屏</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>单屏</td><td>单屏</td></tr>
+        <tr><td>2</td><td>单屏 · 双屏</td><td>单屏</td></tr>
+        <tr><td>3</td><td>单屏 · 双屏 · 品字形 · 条字形</td><td>四宫格 · 单屏</td></tr>
+        <tr><td>4 及以上</td><td>单屏 · 双屏 · 条字形 · 四宫格</td><td>四宫格 · 单屏</td></tr>
+      </tbody>
+    </table>
+    <p class="rd-formula">全屏下双屏不提供，第二路自动进入画面上的小窗。</p>
+  </section>
+
+  <section class="demo-card">
+    <h4>其他规则</h4>
+    <ul class="demo-notes">
+      <li>5 种画面布局：单屏 / 双屏 / 品字形 / 条字形 / 四宫格，按路数与是否全屏决定可选项</li>
+      <li>画面始终完整显示，不裁切、不拉伸；放不下时整体等比缩小留黑边</li>
+      <li>170px 的由来：事件页需 128px、操作页需 118px、云台页需 270px（不足时方向盘等比缩放）；取 170 保证事件与操作完整显示，云台方向键约 45px（≈ 44pt 触控下限）</li>
+      <li>点击画面显示 / 隐藏叠加信息（镜头类型、时间、清晰度、画面形式、全屏）</li>
+      <li>云台只作用于当前选中的那一路；选中枪机时云台置灰</li>
+      <li>只有 1 路时隐藏布局切换入口</li>
+    </ul>
+  </section>
+</aside>
+
 <script>
 /* ================= 基础状态 ================= */
 const $ = (id) => document.getElementById(id);
@@ -473,8 +1064,201 @@ const phone = $('phone');
 const state = {
   deviceName: '客厅', speedKbps: 7, online: true, muted: true, quality: '超清',
   recording: false, fullscreen: false, mode: 'live', selectedId: null,
-  playing: false, progress: 0, duration: 30, rate: 1
+  playing: false, progress: 0, duration: 30, rate: 1,
+  /* ---- 多路预览 ---- */
+  streamCount: 3,      // 演示用：可切 1/2/3/4/5 路
+  selectedStream: 1,   // 当前操作对象（所有操作只作用于它）
+  layout: 'tri'
 };
+
+/* 设备镜头：球机有云台，枪机没有 */
+const STREAMS = [
+  { id: 1, name: '镜头1', kind: '球机', hasPtz: true,  online: true },
+  { id: 2, name: '镜头2', kind: '枪机', hasPtz: false, online: true },
+  { id: 3, name: '镜头3', kind: '枪机', hasPtz: false, online: true },
+  { id: 4, name: '镜头4', kind: '枪机', hasPtz: false, online: true },
+  { id: 5, name: '镜头5', kind: '枪机', hasPtz: false, online: true }
+];
+
+const LAYOUTS = {
+  'single': { label: '单屏',   cap: 1 },
+  'dual':   { label: '双屏',   cap: 2 },
+  'tri':    { label: '品字形', cap: 3 },
+  'strip':  { label: '条字形', cap: Infinity },
+  'quad':   { label: '四宫格', cap: 4 }
+};
+
+/* 可用性矩阵：非全屏 / 全屏 两套 */
+function availableLayouts(n, fullscreen) {
+  if (n <= 1) return ['single'];
+  if (n === 2) return fullscreen ? ['single'] : ['single', 'dual'];
+  if (fullscreen) return ['quad', 'single'];
+  return n === 3 ? ['single', 'dual', 'tri', 'strip'] : ['single', 'dual', 'strip', 'quad'];
+}
+
+function defaultLayout(n, fullscreen) {
+  if (n <= 1) return 'single';
+  if (n === 2) return fullscreen ? 'single' : 'dual';
+  if (fullscreen) return 'quad';
+  return n === 3 ? 'tri' : 'quad';
+}
+
+function streamById(id) { return STREAMS.find((s) => s.id === id) || STREAMS[0]; }
+function visibleStreams() { return STREAMS.slice(0, Math.min(state.streamCount, STREAMS.length)); }
+function selectedStream() { return streamById(state.selectedStream); }
+
+/* ================= 多路渲染 ================= */
+function feedItemMarkup(s) {
+  const sel = s.id === state.selectedStream ? ' is-selected' : '';
+  const off = s.online ? '' : ' is-offline';
+  return `<div class="feed-item${sel}${off}" data-stream="${s.id}">
+    ${s.online ? '' : '<div class="feed-off">离线</div>'}
+    <span class="feed-label">${s.kind}</span>
+  </div>`;
+}
+
+function renderFeeds() {
+  const list = visibleStreams();
+  const L = LAYOUTS[state.layout] || LAYOUTS.single;
+  const cap = Math.min(L.cap, list.length);
+  let shown = list.slice(0, cap);
+
+  // 单屏：只显示选中那一路，其余进小窗
+  if (state.layout === 'single') shown = [streamById(state.selectedStream)];
+
+  const grid = $('feedGrid');
+  grid.dataset.layout = state.layout;
+  grid.innerHTML = shown.map(feedItemMarkup).join('');
+  phone.classList.toggle('strip-mode', state.layout === 'strip');
+
+
+  // 画中画：容量之外的第一路，其余折叠成计数
+  const extra = list.filter((s) => !shown.some((m) => m.id === s.id));
+  const pip = extra[0];
+  const pipBox = $('pipBox');
+  $('videoWrap').classList.toggle('pip-on', !!pip);
+  if (pip) {
+    pipBox.classList.add('on');
+    const rest = extra.length - 1;
+    $('pipBadge').textContent = rest > 0 ? `+${rest}` : pip.kind;
+    pipBox.dataset.stream = pip.id;
+  } else {
+    pipBox.classList.remove('on');
+    pipBox.dataset.stream = '';
+  }
+
+  applyLayoutSize();
+  renderStreamPill();
+  renderPtzAvailability();
+  renderTimestamp();
+  const chip = $('layoutChipLabel');
+  if (chip && LAYOUTS[state.layout]) chip.textContent = LAYOUTS[state.layout].label;
+  // 1 路只有一种画面，不展示布局切换
+  const onlyOne = visibleStreams().length <= 1;
+  $('layoutChip').style.display = onlyOne ? 'none' : '';
+  $('layoutBtn').style.display = onlyOne ? 'none' : '';
+  updateChrome();
+}
+
+/* 容器高度跟随行数，避免多路时每格被压扁 */
+function applyLayoutSize() {
+  const wrap = $('videoWrap');
+  const grid = $('feedGrid');
+  wrap.style.height = '';
+  wrap.style.aspectRatio = '';
+  grid.style.gridAutoRows = '';
+  grid.style.alignContent = '';
+  grid.style.gridTemplateRows = '';
+  // 全屏：保持 16:9，整体垂直居中（不拉伸、不裁切）
+  if (state.fullscreen) {
+    const cols = (state.layout === 'quad') ? 2 : 1;
+    const rowH = Math.round(wrap.clientWidth / cols * 9 / 16);
+    grid.style.gridTemplateRows = 'none';
+    grid.style.gridAutoRows = rowH + 'px';
+    grid.style.alignContent = 'center';
+    return;
+  }
+  if (state.layout === 'dual' || state.layout === 'dual-pip') {
+    wrap.style.aspectRatio = '16 / 18';
+  } else if (state.layout === 'strip') {
+    const n = Math.max(1, visibleStreams().length);
+    const tile = Math.round(wrap.clientWidth * 9 / 16);
+    wrap.style.aspectRatio = 'auto';
+    grid.style.gridAutoRows = tile + 'px';
+    grid.style.alignContent = 'start';
+    // A 样式：按自然高度展示；B 样式：交给 flex 撑满并滚动
+    wrap.style.height = isStyleA() ? (tile * n + (n - 1) * 2) + 'px' : '';
+  } else if (state.layout === 'single' || state.layout === 'single-pip') {
+    wrap.style.aspectRatio = '16 / 9';
+  } else if (state.layout === 'tri') {
+    // 上 1 全宽 + 下 2 并排：总高 = 16:9 的 1.5 倍
+    wrap.style.aspectRatio = '16 / 13.5';
+  } else if (state.layout === 'quad') {
+    wrap.style.aspectRatio = '16 / 9';
+  } else {
+    wrap.style.aspectRatio = '16 / 9';
+  }
+}
+
+function renderStreamPill() {
+  const n = visibleStreams().length;
+  document.querySelectorAll('#demoBar .demo-chip').forEach((b) => {
+    b.classList.toggle('on', Number(b.dataset.n) === n);
+  });
+}
+
+/* 点击画面：显示/隐藏叠加上层（时间、镜头类型、清晰度、放大、全屏） */
+let uiVisible = true;
+function setUiVisible(v) {
+  uiVisible = v;
+  $('videoUI').classList.toggle('hidden', !v);
+  phone.classList.toggle('ui-off', !v);
+}
+$('videoWrap').addEventListener('click', (e) => {
+  // 叠加层里的按钮自己处理
+  if (e.target.closest('.video-ctrl') || e.target.closest('.stream-pill') || e.target.closest('.pip-box')) return;
+  const item = e.target.closest('.feed-item');
+  if (uiVisible) {
+    setUiVisible(false);                       // 点画面 → 收起
+  } else {
+    setUiVisible(true);                        // 再点 → 呈现，并选中点到的这一路
+    if (item) selectStream(Number(item.dataset.stream));
+  }
+});
+
+/* 云台可用性跟着「选中的那一路」走：枪机禁用 */
+function renderPtzAvailability() {
+  const s = selectedStream();
+  const btn = $('ptzBtn');
+  const ok = !!s.hasPtz;
+  btn.classList.toggle('is-disabled', !ok);
+  $('ptzLabel').textContent = ok ? '云台' : '无云台';
+}
+
+function selectStream(id) {
+  state.selectedStream = id;
+  renderFeeds();
+  const s = streamById(id);
+  toast(`已选中 ${s.name} · ${s.kind}`);
+}
+
+function setLayout(layout) {
+  if (layout === 'single-pip') layout = 'single';
+  if (layout === 'dual-pip') layout = 'dual';
+  const avail = availableLayouts(visibleStreams().length, state.fullscreen);
+  if (!avail.includes(layout)) return;
+  state.layout = layout;
+  closeModal();
+  renderFeeds();
+}
+
+function setStreamCount(n) {
+  state.streamCount = n;
+  if (state.selectedStream > n) state.selectedStream = 1;
+  const avail = availableLayouts(n, state.fullscreen);
+  if (!avail.includes(state.layout)) state.layout = defaultLayout(n, state.fullscreen);
+  renderFeeds();
+}
 
 let toastTimer = null;
 function toast(msg) {
@@ -561,7 +1345,7 @@ function renderEvents() {
 
 /* ================= 直播 / 回放 切换 ================= */
 function enterPlayback(ev) {
-  togglePtz(false);
+  closeModal();
   state.mode = 'playback';
   state.selectedId = ev.id;
   state.duration = ev.dur;
@@ -571,9 +1355,16 @@ function enterPlayback(ev) {
   $('liveBar').style.display = 'none';
   $('playBar').classList.add('on');
   $('liveFnCard').style.display = 'none';
-  $('playFnCard').style.display = 'block';
+  $('playFnCard').style.display = 'flex';
   $('videoWrap').classList.add('playing');
   $('timestamp').textContent = `${TODAY.replace(/-/g, '/')} ${ev.time}:00`;
+
+  // 回放只展示单路画面，先记住直播时的布局
+  state.liveLayout = state.layout;
+  state.liveStreamCount = state.streamCount;
+  state.streamCount = 1;
+  state.layout = 'single';
+  renderFeeds();
 
   renderEvents();
   startProgress();
@@ -581,17 +1372,22 @@ function enterPlayback(ev) {
 }
 
 function backToLive() {
-  togglePtz(false);
+  closeModal();
   state.mode = 'live';
   state.selectedId = null;
   state.playing = false;
   stopProgress();
 
-  $('liveBar').style.display = 'flex';
+  $('liveBar').style.display = '';
   $('playBar').classList.remove('on');
-  $('liveFnCard').style.display = 'block';
+  $('liveFnCard').style.display = 'flex';
   $('playFnCard').style.display = 'none';
   $('videoWrap').classList.remove('playing');
+
+  // 恢复直播时的多路布局
+  if (state.liveStreamCount != null) state.streamCount = state.liveStreamCount;
+  if (state.liveLayout) state.layout = state.liveLayout;
+  renderFeeds();
 
   renderTimestamp();
   renderEvents();
@@ -711,68 +1507,208 @@ function closeSubpage() { $('subpage').classList.remove('on'); }
 $('moreBtn').addEventListener('click', openSubpage);
 $('subBack').addEventListener('click', closeSubpage);
 
-/* ================= 直播功能卡 ================= */
-$('talkBtn').addEventListener('pointerdown', () => {
-  if (!state.online) return toast('设备已关闭');
-  $('talkBtn').classList.add('active');
-  toast('正在说话…');
-});
-['pointerup', 'pointercancel', 'pointerleave'].forEach((evt) => {
-  $('talkBtn').addEventListener(evt, () => {
-    $('talkBtn').classList.remove('active');
-  });
+/* ================= 通用弹窗 ================= */
+function openModal(title, sub, html, opts = {}) {
+  $('modalTitle').textContent = title;
+  $('modalSub').textContent = sub || '';
+  $('modalBody').innerHTML = html;
+  $('modalLayer').classList.toggle('no-mask', opts.mask === false);
+  $('modalLayer').classList.add('on');
+}
+function closeModal() {
+  $('modalLayer').classList.remove('on');
+}
+$('modalClose').addEventListener('click', closeModal);
+$('modalLayer').addEventListener('click', (e) => {
+  // 云台/对讲不加蒙层，点画面也不误关，靠「关闭」按钮退出
+  if (e.target !== $('modalLayer') || $('modalLayer').classList.contains('no-mask')) return;
+  closeModal();
 });
 
+/* ================= 底部操作栏 ================= */
+
+/* 语音：按住说话 */
+$('talkBtn').addEventListener('click', () => {
+  if (!state.online) return toast('设备已关闭');
+  openModal('语音对讲', selectedStream().name, `
+    <div class="talk-wrap">
+      <button class="talk-btn" id="talkHold">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <rect x="9.2" y="2.8" width="5.6" height="10.4" rx="2.8"/><path d="M5.6 11.6 a6.4 6.4 0 0 0 12.8 0"/><path d="M12 18 v3.2"/>
+        </svg>
+        <span style="font-size:13px">按住说话</span>
+      </button>
+      <div class="talk-tip">对讲只作用于 <b>${selectedStream().name}</b></div>
+    </div>`, { mask: false });
+  const hold = $('talkHold');
+  hold.addEventListener('pointerdown', () => { hold.classList.add('on'); toast('正在说话…'); });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach((evt) =>
+    hold.addEventListener(evt, () => hold.classList.remove('on')));
+});
+
+/* 截图：即时动作，不走弹窗 */
 $('shotBtn').addEventListener('click', () => {
+  if (!state.online) return toast('设备已关闭');
   const flash = $('flash');
   flash.classList.remove('on'); void flash.offsetWidth; flash.classList.add('on');
-  toast('截图已保存至相册');
+  toast(`${selectedStream().name} 截图已保存`);
 });
 
+/* 录制：即时动作，作用于选中那一路 */
 let recTimer = null, recSeconds = 0, recState = false;
 $('recBtn').addEventListener('click', () => {
+  if (!state.online) return toast('设备已关闭');
   recState = !recState;
   $('recBtn').classList.toggle('recording', recState);
+  $('cRec').classList.toggle('recording', recState);    // 同步单/双屏圆形按钮
   $('recBadge').classList.toggle('on', recState);
   $('recLabel').textContent = recState ? '停止' : '录制';
   if (recState) {
     recSeconds = 0; $('recTime').textContent = '00:00';
     recTimer = setInterval(() => { recSeconds += 1; $('recTime').textContent = fmt(recSeconds); }, 1000);
-    toast('开始录制');
+    toast(`开始录制 ${selectedStream().name}`);
   } else {
     clearInterval(recTimer);
     toast(`录制完成，时长 ${fmt(recSeconds)}`);
   }
 });
 
-let ptzTimer = null;
-function togglePtz(open) {
-  const next = typeof open === 'boolean' ? open : !$('ptzMask').classList.contains('on');
-  clearTimeout(ptzTimer);
-  if (next) {
-    phone.classList.add('ptz-open');          // 先拉平功能卡底角，面板再从下方推出
-    $('ptzMask').classList.add('on');
-    $('ptzBtn').classList.add('active');
-  } else {
-    $('ptzMask').classList.remove('on');
-    $('ptzBtn').classList.remove('active');
-    // 等收起动画结束再把圆角还原，避免中途露出缝隙
-    ptzTimer = setTimeout(() => phone.classList.remove('ptz-open'), 320);
-  }
-}
+/* 云台：弹窗，且只有球机可用 */
 $('ptzBtn').addEventListener('click', () => {
   if (!state.online) return toast('设备已关闭');
-  togglePtz();
-});
-$('ptzMask').addEventListener('click', (e) => { if (e.target === $('ptzMask')) togglePtz(false); });
-$('ptzMask').querySelectorAll('[data-dir]').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    const dir = btn.dataset.dir;
-    const map = { up: '上', down: '下', left: '左', right: '右', center: '复位' };
-    const shift = { up: 'translateY(-6px)', down: 'translateY(6px)', left: 'translateX(-6px)', right: 'translateX(6px)', center: 'translate(0,0)' }[dir];
-    $('videoFeed').style.transform = shift;
-    toast(dir === 'center' ? '镜头已复位' : `镜头${map[dir]}`);
+  const s = selectedStream();
+  if (!s.hasPtz) {
+    return toast(`${s.name} 是枪机，不支持云台控制`);
+  }
+  openModal('云台控制', s.name, `
+    <div class="ptz-pad">
+      <div class="ptz-empty"></div>
+      <button data-dir="up" aria-label="上"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 14 L12 8 L18 14"/></svg></button>
+      <div class="ptz-empty"></div>
+      <button data-dir="left" aria-label="左"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6 L8 12 L14 18"/></svg></button>
+      <button class="center" data-dir="center" aria-label="复位"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3.4"/></svg></button>
+      <button data-dir="right" aria-label="右"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6 L16 12 L10 18"/></svg></button>
+      <div class="ptz-empty"></div>
+      <button data-dir="down" aria-label="下"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10 L12 16 L18 10"/></svg></button>
+      <div class="ptz-empty"></div>
+    </div>`, { mask: false });
+
+  $('modalBody').querySelectorAll('[data-dir]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const dir = btn.dataset.dir;
+      const label = { up: '上', down: '下', left: '左', right: '右', center: '复位' }[dir];
+      const target = $('feedGrid').querySelector(`.feed-item[data-stream="${state.selectedStream}"]`) || $('feedGrid').firstElementChild;
+      if (target) {
+        const shift = { up: 'translateY(-6px)', down: 'translateY(6px)', left: 'translateX(-6px)', right: 'translateX(6px)', center: 'translate(0,0)' }[dir];
+        target.style.transform = shift;
+      }
+      toast(dir === 'center' ? '镜头已复位' : `镜头${label}`);
+    });
   });
+});
+
+/* 布局：弹窗，只列当前路数 + 屏态下可用的 */
+function openLayoutModal() {
+  const n = visibleStreams().length;
+  const avail = availableLayouts(n, state.fullscreen);
+  const miniOf = (key) => {
+    const map = {
+      'single': '<i style="grid-column:1/-1;grid-row:1/-1"></i>',
+      'single-pip': '<i style="grid-column:1/-1;grid-row:1/-1"></i><i style="position:absolute;right:2px;bottom:2px;width:38%;height:52%;background:#FF8A1E;border-radius:2px"></i>',
+      'dual': '<i></i><i></i>',
+      'dual-pip': '<i></i><i></i>',
+      'tri': '<i style="grid-column:1/-1"></i><i></i><i></i>',
+      'strip': '<i></i><i></i><i></i>',
+      'quad': '<i></i><i></i><i></i><i></i>'
+    };
+    const cols = (key === 'quad' || key === 'tri') ? 2 : 1;
+    const rows = key === 'single' || key === 'single-pip' ? 1 : (key === 'strip' ? 3 : 2);
+    return `<div class="mini" style="grid-template-columns:repeat(${cols},1fr);grid-template-rows:repeat(${rows},1fr)">${map[key]}</div>`;
+  };
+  openModal('选择布局', `${n} 路 · ${state.fullscreen ? '全屏' : '非全屏'}`, `
+    <div class="layout-list">
+      ${avail.map((k) => `
+        <button class="layout-opt${state.layout === k ? ' active' : ''}" data-layout="${k}">
+          ${miniOf(k)}
+          <span>${LAYOUTS[k].label}</span>
+        </button>`).join('')}
+    </div>`);
+
+  $('modalBody').querySelectorAll('[data-layout]').forEach((btn) => {
+    btn.addEventListener('click', () => setLayout(btn.dataset.layout));
+  });
+}
+$('layoutBtn').addEventListener('click', openLayoutModal);
+
+/* 事件：多目场景下列表被画面挤掉时，从这里弹出查看 */
+function openOpsModal() {
+  const grid = document.querySelector('.tab-page[data-page="操作"] .op-grid');
+  openModal('操作', '', grid ? grid.outerHTML : '');
+}
+
+function openEventsModal() {
+  const list = todayEvents;
+  openModal('今日事件', `${TODAY.slice(5).replace('-', '月')}日 · ${list.length} 条`, `
+    <div class="event-grid" style="padding:0">${
+      list.length ? list.map((ev) => eventMarkup(ev, state.selectedId)).join('')
+                  : '<div class="empty">今天还没有事件</div>'
+    }</div>`);
+
+  $('modalBody').querySelectorAll('.event').forEach((node) => {
+    node.addEventListener('click', () => {
+      closeModal();
+      onEventClick(node.dataset.id);
+    });
+  });
+}
+$('eventsBtn').addEventListener('click', openEventsModal);
+$('opsBtn').addEventListener('click', openOpsModal);
+
+/* 把「操作」里的项平铺到底部栏（左右滑动查看） */
+(function buildBarOps() {
+  const cells = {};
+  document.querySelectorAll('#tabPanel .op-cell').forEach((c) => { cells[c.dataset.op] = c; });
+  const bar = $('liveFnCard');
+  const list = ['报警', 'GPS', '夜视', '正放', '云台校准', '单屏'];
+  list.forEach((op, i) => {
+    const cell = cells[op];
+    if (!cell) return;
+    const btn = document.createElement('button');
+    btn.className = 'op-item';
+    btn.dataset.op = op;
+    btn.style.order = 3 + i;
+    const svg = cell.querySelector('svg');
+    btn.innerHTML = (svg ? svg.outerHTML : '') + '<span class="op-label">' + op + '</span>';
+    btn.addEventListener('click', () => {
+      if (op === '单屏') return setLayout('single');
+      handleOp(op, btn);
+    });
+    bar.appendChild(btn);
+  });
+})();
+
+/* 回放 / 放大 / 分享 / 设置 */
+$('replayBtn').addEventListener('click', openSubpage);
+
+let zoomed = false;
+
+$('shareBtn').addEventListener('click', () => toast('已生成分享链接'));
+$('settingBtn2').addEventListener('click', () => toast('打开设备设置'));
+
+/* 演示：路数平铺切换 */
+document.querySelectorAll('#demoBar .demo-chip').forEach((btn) => {
+  btn.addEventListener('click', () => setStreamCount(Number(btn.dataset.n)));
+});
+
+/* 点击画中画 → 与主画面互换 */
+$('pipSwap').addEventListener('click', (e) => {
+  e.stopPropagation();
+  const pipId = Number($('pipBox').dataset.stream);
+  if (!pipId) return;
+  const prev = state.selectedStream;
+  state.selectedStream = pipId;
+  renderFeeds();
+  toast(`${streamById(pipId).name} 已切为主画面`);
 });
 
 /* ================= 直播控制条 ================= */
@@ -780,7 +1716,22 @@ function renderTimestamp() {
   const d = new Date();
   const p = (n) => String(n).padStart(2, '0');
   const week = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][d.getDay()];
-  $('timestamp').textContent = `${d.getFullYear()}/${p(d.getMonth() + 1)}/${p(d.getDate())} ${week} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+  const time = `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+  const full = `${d.getFullYear()}/${p(d.getMonth() + 1)}/${p(d.getDate())} ${week} ${time}`;
+
+  const ts = $('timestamp');
+  const wrap = $('videoWrap');
+  const item = $('feedGrid').querySelector(`.feed-item[data-stream="${state.selectedStream}"]`)
+            || $('feedGrid').firstElementChild;
+  if (!item || state.mode !== 'live') { ts.textContent = full; return; }
+
+  // 贴在选中画面的顶部居中；格子窄时只显示时间，避免压到相邻格
+  const wr = wrap.getBoundingClientRect();
+  const ir = item.getBoundingClientRect();
+  ts.textContent = ir.width < 240 ? time : full;
+  ts.style.left = (ir.left - wr.left + ir.width / 2) + 'px';
+  ts.style.top = (ir.top - wr.top + 8) + 'px';
+  ts.style.bottom = 'auto';
 }
 renderTimestamp();
 setInterval(() => { if (state.mode === 'live') renderTimestamp(); }, 1000);
@@ -801,6 +1752,7 @@ $('powerBtn').addEventListener('click', () => {
 $('muteBtn').addEventListener('click', () => {
   state.muted = !state.muted;
   $('muteBtn').classList.toggle('is-off', state.muted);
+  $('cMute').classList.toggle('is-on', state.muted);   // 同步单/双屏圆形按钮
   toast(state.muted ? '已静音' : '已取消静音');
 });
 
@@ -812,18 +1764,261 @@ $('qualityBtn').addEventListener('click', () => {
   toast(`已切换至${state.quality}`);
 });
 
-$('fullBtn').addEventListener('click', () => {
+/* 全屏切换会改变可用布局：当前布局不可用时回落到该屏态的默认布局 */
+function toggleFullscreen() {
   state.fullscreen = !state.fullscreen;
   phone.classList.toggle('fullscreen', state.fullscreen);
+  const n = visibleStreams().length;
+  const avail = availableLayouts(n, state.fullscreen);
+  if (!avail.includes(state.layout)) state.layout = defaultLayout(n, state.fullscreen);
+  renderFeeds();
+}
+$('fullBtn').addEventListener('click', toggleFullscreen);
+$('pbFull').addEventListener('click', toggleFullscreen);
+
+/* ================= 统一样式：A 分页面板 / B 底部操作条 ================= */
+// 非视频区占用：顶栏 + 演示条 + 圆钮行 + 底部条（动态测量）
+function chromeHeight() {
+  const h = (sel) => { const el = document.querySelector(sel); return el ? el.offsetHeight : 0; };
+  return h('.header') + h('.demo-bar') + h('.circle-row') + 55;
+}
+// 分页面板保底高度：事件需 128 / 操作需 118 / 云台需 270（不足则等比缩放）
+// 取 170：事件·操作完整显示，云台方向键约 45px（≈44pt 触控下限）
+const MIN_PANEL = 170;
+
+// 当前布局按 16:9 排完后视频的自然高度（不含样式影响）
+function naturalVideoHeight() {
+  const n = Math.max(1, visibleStreams().length);
+  const tile = Math.round($('videoWrap').clientWidth * 9 / 16);
+  switch (state.layout) {
+    case 'dual':  return tile * 2 + 2;
+    case 'tri':   return Math.round(tile * 1.5) + 2;
+    case 'quad':  return tile + 2;
+    case 'strip': return tile * n + (n - 1) * 2;
+    default:      return tile;                       // single
+  }
+}
+
+function isStyleA() {
+  if (state.mode !== 'live') return false;
+  return (window.innerHeight - chromeHeight() - naturalVideoHeight()) >= MIN_PANEL;
+}
+
+function updateChrome() {
+  const A = isStyleA();
+  phone.classList.toggle('style-a', A);
+  phone.classList.toggle('style-b', !A);
+  $('compactZone').classList.toggle('dual', state.streamCount === 2);
+  $('eventsBtn').style.display = '';
+  // 条字形的高度依赖 flex 撑开，样式类切换后需要重算一次
+  if (state.layout === 'strip') applyLayoutSize();
+  if (A) renderCompact();
+}
+
+function setCompactTab(tab) {
+  state.compactTab = tab;
+  document.querySelectorAll('.pill-bar .pill').forEach((b) => b.classList.toggle('on', b.dataset.tab === tab));
+  document.querySelectorAll('#tabPanel .tab-page').forEach((p) => p.classList.toggle('on', p.dataset.page === tab));
+  if (tab === '云台') sizePtzDial();
+}
+
+/* 云台方向盘：按分页区可用高度等比缩放，保证完整可见（不裁切） */
+function sizePtzDial() {
+  const stage = $('ptzStage'), dial = $('ptzDial');
+  if (!stage || !dial) return;
+  dial.style.transform = '';
+  stage.style.height = '';
+  $('ptzHint').style.display = '';
+  const tabH = $('tabPanel').clientHeight;
+  const dialH = dial.offsetHeight;
+  if (!dialH || !tabH) return;
+  const hint = $('ptzHint');
+  const gap = 8;
+  const hintH = hint.offsetHeight + 8;
+  if (dialH + hintH <= tabH - gap) {          // 完整放得下
+    stage.style.height = (dialH + hintH) + 'px';
+    return;
+  }
+  hint.style.display = 'none';
+  if (dialH <= tabH - gap) {                  // 去掉提示后放得下
+    stage.style.height = dialH + 'px';
+    return;
+  }
+  const avail = Math.max(110, tabH - gap);
+  stage.style.height = avail + 'px';
+  dial.style.transform = 'scale(' + (avail / dialH).toFixed(3) + ')';
+}
+
+function renderCompact() {
+  // 画面始终 16:9 满宽显示，绝不裁切、不缩小让位（多目由 applyLayoutSize 负责）
+  $('compactZone').classList.toggle('dual', state.streamCount === 2);
+  if (state.streamCount <= 2) {
+    const L = LAYOUTS[state.layout] || LAYOUTS.single;
+    const n = Math.max(1, Math.min(state.streamCount, Number.isFinite(L.cap) ? L.cap : state.streamCount));
+    const wrapEl = $('videoWrap');
+    const gridEl = $('feedGrid');
+    const tileH = Math.round(wrapEl.clientWidth * 9 / 16);
+    const natural = tileH * n + (n - 1) * 2;
+    wrapEl.style.aspectRatio = 'auto';
+    wrapEl.style.height = natural + 'px';
+    wrapEl.style.maxHeight = '';
+    gridEl.style.gridTemplateRows = 'repeat(' + n + ', ' + tileH + 'px)';
+    gridEl.style.alignContent = 'start';
+  }
+
+  // 事件
+  const list = todayEvents;
+  $('compactDayCount').textContent = `${TODAY.slice(5).replace('-', '月')}日 · ${list.length} 条`;
+  const grid = $('compactEventGrid');
+  grid.innerHTML = list.length
+    ? list.map((ev) => eventMarkup(ev, state.selectedId)).join('')
+    : '<div class="empty">今天还没有事件</div>';
+  grid.querySelectorAll('.event').forEach((node) => {
+    node.addEventListener('click', () => onEventClick(node.dataset.id));
+  });
+
+  // 云台可用性
+  const s = selectedStream();
+  const usable = s.hasPtz;
+  $('ptzDial').style.opacity = usable ? '1' : '.35';
+  $('ptzDial').style.pointerEvents = usable ? 'auto' : 'none';
+  $('ptzPreset').style.opacity = usable ? '1' : '.35';
+  $('ptzHint').textContent = usable ? '上下左右控制镜头，中间复位' : `${s.kind}不支持云台控制`;
+
+  $('compactQuality').textContent = state.quality === '超清' ? '3K' : state.quality === '高清' ? 'HD' : 'SD';
+  // 单屏项与当前布局联动
+  const singleCell = document.querySelector('#tabPanel .op-cell[data-op="单屏"]');
+  if (singleCell) singleCell.classList.toggle('on', state.layout === 'single');
+  $('cMute').classList.toggle('is-on', state.muted);
+  $('cRec').classList.toggle('recording', recState);
+
+  // 分页区高度决定展现形态：先恢复显示再量，避免上一次隐藏状态把高度量成 0
+  $('tabPanel').style.display = '';
+  const tabH = $('tabPanel').clientHeight;
+  const eventsPage = document.querySelector('.tab-page[data-page="事件"]');
+  // 分页区太矮：三个分页都改为弹窗承载，避免内容被挤成一条缝
+  state.compactModal = tabH < 150;
+  state.compactEventModal = state.compactModal;
+  $('tabPanel').style.display = state.compactModal ? 'none' : '';
+  $('compactZone').classList.toggle('modal-only', state.compactModal);
+  // 事件列表统一横向排列，左右滑动
+  eventsPage.classList.toggle('hscroll', !state.compactModal);
+  eventsPage.classList.remove('dense');
+  $('compactDayCount').style.display = state.compactEventModal ? 'none' : '';
+
+
+  // 默认页：事件放不下时不让它成为默认页
+  let tab = state.compactTab || (usable ? '云台' : '操作');
+  if (tab === '事件' && state.compactEventModal) tab = usable ? '云台' : '操作';
+  setCompactTab(tab);
+  // 全部走弹窗时没有“当前页”，不点亮任何标签
+  if (state.compactModal) document.querySelectorAll('.pill-bar .pill').forEach((b) => b.classList.remove('on'));
+}
+
+$('compactMore').addEventListener('click', openSubpage);   // 查看更多 → 回放页
+
+/* 分页切换 */
+document.querySelectorAll('.pill-bar .pill').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    // 空间不足时三个分页都改为弹窗
+    if (state.compactModal) {
+      const tab = btn.dataset.tab;
+      if (tab === '事件') return openEventsModal();
+      if (tab === '云台') { if (!selectedStream().hasPtz) return toast('该镜头不支持云台控制'); return $('ptzBtn').click(); }
+      if (tab === '操作') return openOpsModal();
+      return;
+    }
+    setCompactTab(btn.dataset.tab);
+  });
 });
-$('pbFull').addEventListener('click', () => {
-  state.fullscreen = !state.fullscreen;
-  phone.classList.toggle('fullscreen', state.fullscreen);
+
+/* 圆形按钮行 */
+$('cShot').addEventListener('click', () => {
+  const flash = $('flash');
+  flash.classList.remove('on'); void flash.offsetWidth; flash.classList.add('on');
+  toast(`${selectedStream().name} 截图已保存`);
+});
+$('cTalk').addEventListener('click', () => $('talkBtn').click());
+$('cMute').addEventListener('click', () => $('muteBtn').click());
+$('cRec').addEventListener('click', () => $('recBtn').click());
+$('cReplay').addEventListener('click', openSubpage);
+
+/* 云台方向盘 */
+$('ptzDial').querySelectorAll('[data-dir]').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const dir = btn.dataset.dir;
+    const label = { up: '上', down: '下', left: '左', right: '右', center: '复位' }[dir];
+    const target = $('feedGrid').querySelector(`.feed-item[data-stream="${state.selectedStream}"]`) || $('feedGrid').firstElementChild;
+    if (target) {
+      target.style.transform = {
+        up: 'translateY(-6px)', down: 'translateY(6px)',
+        left: 'translateX(-6px)', right: 'translateX(6px)', center: 'translate(0,0)'
+      }[dir];
+    }
+    toast(dir === 'center' ? '镜头已复位' : `镜头${label}`);
+  });
+});
+$('ptzPreset').addEventListener('click', () => toast('打开预置位列表'));
+
+/* 操作网格 */
+function handleOp(op, cell) {
+  if (op === '夜视' || op === '正放' || op === 'GPS' || op === '报警') {
+    const on = !cell.classList.contains('on');
+    // 网格与底部栏同名项同步选中态
+    document.querySelectorAll('[data-op="' + op + '"]').forEach((n) => n.classList.toggle('on', on));
+    document.querySelectorAll('.op-item[data-op="' + op + '"]').forEach((n) => n.classList.toggle('on', on));
+    toast(`${op}已${on ? '开启' : '关闭'}`);
+    return;
+  }
+  if (op === '截图') return $('cShot').click();
+  if (op === '云台校准') return toast('正在校准云台…');
+  if (op === '单屏') { closeModal(); return setLayout('single'); }   // 单屏 = 布局切换
+  if (op === '设置') return toast('打开设备设置');
+  toast(`打开${op}`);
+}
+document.querySelectorAll('#tabPanel .op-cell').forEach((cell) => {
+  cell.addEventListener('click', () => handleOp(cell.dataset.op, cell));
+});
+$('modalBody').addEventListener('click', (e) => {
+  const cell = e.target.closest('.op-cell');
+  if (cell) handleOp(cell.dataset.op, cell);
+});
+
+/* 视频角标：清晰度 / 全屏 */
+$('compactQuality').addEventListener('click', () => {
+  const i = qualityList.indexOf(state.quality);
+  state.quality = qualityList[(i + 1) % qualityList.length];
+  $('qualityBtn').textContent = state.quality;
+  $('compactQuality').textContent = state.quality === '超清' ? '3K' : state.quality === '高清' ? 'HD' : 'SD';
+  toast(`已切换至${state.quality}`);
+});
+$('compactFull').addEventListener('click', toggleFullscreen);
+$('layoutChip').addEventListener('click', (e) => { e.stopPropagation(); openLayoutModal(); });
+
+/* 操作栏横向滚动：右侧渐隐提示 */
+function updateBarFade() {
+  const bar = $('liveFnCard');
+  const more = bar.scrollWidth - bar.clientWidth - bar.scrollLeft > 4;
+  document.querySelector('.bottom-zone').classList.toggle('has-more', more);
+}
+$('liveFnCard').addEventListener('scroll', updateBarFade);
+// 桌面预览：滚轮也横向滚动
+$('liveFnCard').addEventListener('wheel', (e) => {
+  if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+  e.currentTarget.scrollLeft += e.deltaY;
+  e.preventDefault();
+}, { passive: false });
+window.addEventListener('resize', () => {
+  updateBarFade();
+  applyLayoutSize();
+  if (isStyleA()) renderCompact();
 });
 
 /* ================= 初始化 ================= */
+renderFeeds();
 renderEvents();
 renderProgress();
+updateBarFade();
 </script>
 </body>
 </html>
