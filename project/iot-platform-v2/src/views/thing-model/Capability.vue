@@ -159,8 +159,13 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="类型" width="90" align="left">
+          <el-table-column label="能力类型" width="96" align="left">
             <template #default="{ row }"><span :class="['type-tag', typeTagCls(row.capType)]">{{ typeLabel(row.capType) }}</span></template>
+          </el-table-column>
+          <el-table-column label="类型" width="80" align="left">
+            <template #default="{ row }">
+              <span :class="['type-tag', row.ownerType === 'platform' ? 'type-platform' : 'type-device']">{{ ownerTypeLabel(row.ownerType) }}</span>
+            </template>
           </el-table-column>
           <el-table-column label="读写模式" width="100" align="left">
             <template #default="{ row }">
@@ -239,7 +244,7 @@
     <!-- ===== Capability item dialog ===== -->
     <el-dialog v-model="capItemDialogVisible" :title="capItemDialogTitle" width="520px" :close-on-click-modal="false">
       <el-form :model="capItemForm" label-width="96px">
-        <el-form-item label="类型" required>
+        <el-form-item label="能力类型" required>
           <div class="seg-control">
             <span
               v-for="t in capTypeOptions"
@@ -247,6 +252,17 @@
               class="seg-item"
               :class="{ active: capItemForm.capType === t.value }"
               @click="onCapItemTypeChange(t.value)"
+            >{{ t.label }}</span>
+          </div>
+        </el-form-item>
+        <el-form-item label="类型" required>
+          <div class="seg-control">
+            <span
+              v-for="t in ownerTypeOptions"
+              :key="t.value"
+              class="seg-item"
+              :class="{ active: capItemForm.ownerType === t.value }"
+              @click="capItemForm.ownerType = t.value"
             >{{ t.label }}</span>
           </div>
         </el-form-item>
@@ -698,6 +714,7 @@ const capItemTree = computed(() => {
       moduleId: item.moduleId,
       moduleName,
       capType: item.capType || 'prop',
+      ownerType: item.ownerType || 'device',
       accessMode: item.accessMode || 'rw',
       name: item.name,
       identifier: item.identifier,
@@ -840,11 +857,18 @@ function handleDeleteModule(mod) {
 // ===== Capability item CRUD =====
 const capItemDialogVisible = ref(false)
 const editingCapItemId = ref(null)
-const capItemForm = reactive({ name: '', identifier: '', moduleId: null, capType: 'prop', accessMode: 'rw' })
+const capItemForm = reactive({ name: '', identifier: '', moduleId: null, capType: 'prop', accessMode: 'rw', ownerType: 'device' })
 const accessModeOptions = [
   { label: '读写', value: 'rw' },
   { label: '只读', value: 'ro' }
 ]
+const ownerTypeOptions = [
+  { label: '平台', value: 'platform' },
+  { label: '设备', value: 'device' }
+]
+function ownerTypeLabel(v) {
+  return v === 'platform' ? '平台' : '设备'
+}
 const capItemDialogTitle = computed(() => editingCapItemId.value ? '编辑能力项' : '添加能力项')
 const draftParams = ref([])
 const inDraftMode = ref(false)
@@ -862,6 +886,7 @@ function openAddCapItem() {
   capItemForm.identifier = ''
   capItemForm.capType = 'prop'
   capItemForm.accessMode = 'rw'
+  capItemForm.ownerType = 'device'
   capItemForm.moduleId = currentModuleId.value !== 'all' ? currentModuleId.value : (store.modules[0]?.id ?? null)
   capItemDialogVisible.value = true
 }
@@ -872,6 +897,7 @@ function openEditCapItem(item) {
   capItemForm.identifier = item.identifier
   capItemForm.capType = item.capType || 'prop'
   capItemForm.accessMode = item.accessMode || 'rw'
+  capItemForm.ownerType = item.ownerType === 'platform' ? 'platform' : 'device'
   capItemForm.moduleId = item.moduleId
   capItemDialogVisible.value = true
 }

@@ -1028,6 +1028,7 @@ export function addCapItem(item) {
     id,
     moduleId: item.moduleId,
     capType: item.capType || 'prop',
+    ownerType: item.ownerType === 'platform' ? 'platform' : 'device',
     name: item.name,
     identifier: item.identifier,
     accessMode: item.accessMode === 'ro' ? 'ro' : 'rw',
@@ -1041,6 +1042,7 @@ export function updateCapItem(id, item) {
   if (ci) {
     ci.moduleId = item.moduleId
     ci.capType = item.capType || 'prop'
+    ci.ownerType = item.ownerType === 'platform' ? 'platform' : 'device'
     ci.name = item.name
     ci.identifier = item.identifier
     ci.accessMode = item.accessMode === 'ro' ? 'ro' : 'rw'

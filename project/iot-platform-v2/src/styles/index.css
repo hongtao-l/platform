@@ -587,6 +587,15 @@ body {
     @apply bg-rose-50 text-rose-600 border-rose-200/80;
   }
 
+  /* 能力项归属类型：平台 / 设备 */
+  .type-platform {
+    @apply bg-indigo-50 text-indigo-700 border-indigo-200/80;
+  }
+
+  .type-device {
+    @apply bg-slate-100 text-slate-600 border-slate-200;
+  }
+
   .status-tag {
     @apply inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border whitespace-nowrap;
   }
