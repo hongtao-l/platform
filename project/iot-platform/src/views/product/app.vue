@@ -131,13 +131,13 @@
                               style="width:170px"
                               @update:model-value="setStitchCount"
                             >
-                              <el-option v-for="n in paneOptions" :key="n" :label="`${n} 路`" :value="n" />
+                              <el-option v-for="n in stitchCountOptions" :key="n" :label="`${n} 路`" :value="n" />
                             </el-select>
                           </div>
                           <div class="sub-config-row">
                             <span class="sub-config-label">拼接 Camera</span>
                             <el-select
-                              v-model="layoutConfig.stitchCameraIds"
+                              v-model="layoutConfig.stitchCameras"
                               multiple
                               collapse-tags
                               :multiple-limit="layoutConfig.stitchCount"
@@ -145,59 +145,64 @@
                               size="small"
                               style="width:240px"
                             >
-                              <el-option v-for="cam in cameraSplits" :key="cam.id" :label="cam.name" :value="cam.id" />
+                              <el-option v-for="n in cameraOptions" :key="n" :label="`Camera ${n}`" :value="n" />
                             </el-select>
-                            <el-button size="small" @click="addStitchCamera">
-                              <el-icon><Plus /></el-icon>添加
-                            </el-button>
                           </div>
                           <div class="sub-config-hint ratio-summary">
-                            已选 {{ layoutConfig.stitchCameraIds.length }} / {{ layoutConfig.stitchCount }} 路
+                            已选 {{ layoutConfig.stitchCameras.length }} / {{ layoutConfig.stitchCount }} 路
                           </div>
                         </template>
 
-                        <!-- 拆分：按 Camera 配置 -->
-                        <template v-else-if="activeSplit">
-                          <div class="sub-config-row">
-                            <span class="sub-config-label">Camera</span>
-                            <el-select v-model="activeSplitIdx" size="small" style="width:150px">
-                              <el-option v-for="(cam, i) in cameraSplits" :key="cam.id" :label="cam.name" :value="i" />
-                            </el-select>
-                            <el-button size="small" @click="addSplitCamera">
-                              <el-icon><Plus /></el-icon>添加
-                            </el-button>
-                            <el-button size="small" text type="danger" @click="removeSplitCamera(activeSplitIdx)">删除</el-button>
-                          </div>
-                          <div class="sub-config-row">
-                            <span class="sub-config-label">子画面数量</span>
-                            <el-select
-                              :model-value="activeSplit.paneCount"
-                              size="small"
-                              style="width:170px"
-                              @update:model-value="setPaneCount"
-                            >
-                              <el-option v-for="n in paneOptions" :key="n" :label="`${n} 路`" :value="n" />
-                            </el-select>
-                          </div>
-                          <div class="sub-config-row">
-                            <span class="sub-config-label">分割点</span>
-                            <div class="ratio-list">
-                              <span v-for="(v, i) in activeSplit.splits" :key="i" class="ratio-item">
-                                <el-input-number
-                                  v-model="activeSplit.splits[i]"
-                                  :min="1"
-                                  :max="99"
-                                  :step="1"
-                                  size="small"
-                                  controls-position="right"
-                                  style="width:96px"
-                                  @change="normalizeSplits(activeSplit)"
+                        <!-- 拆分：每条配置一块完整表单 -->
+                        <template v-else>
+                          <div v-for="(cfg, i) in splitConfigs" :key="cfg.id" class="split-card">
+                            <div class="sub-config-row">
+                              <span class="sub-config-label">Camera</span>
+                              <el-select v-model="cfg.camera" size="small" style="width:170px">
+                                <el-option
+                                  v-for="n in cameraOptions"
+                                  :key="n"
+                                  :label="`Camera ${n}`"
+                                  :value="n"
+                                  :disabled="isCameraUsed(n, cfg.id)"
                                 />
-                                <span class="sub-config-unit">%</span>
-                              </span>
+                              </el-select>
+                              <el-button size="small" text type="danger" class="row-end" @click="removeSplitConfig(i)">删除</el-button>
                             </div>
+                            <div class="sub-config-row">
+                              <span class="sub-config-label">子画面数量</span>
+                              <el-select
+                                :model-value="cfg.paneCount"
+                                size="small"
+                                style="width:170px"
+                                @update:model-value="(v) => setPaneCount(cfg, v)"
+                              >
+                                <el-option v-for="n in paneOptions" :key="n" :label="`${n} 路`" :value="n" />
+                              </el-select>
+                            </div>
+                            <div class="sub-config-row">
+                              <span class="sub-config-label">分割点</span>
+                              <div class="ratio-list">
+                                <span v-for="(v, j) in cfg.splits" :key="j" class="ratio-item">
+                                  <el-input-number
+                                    v-model="cfg.splits[j]"
+                                    :min="1"
+                                    :max="99"
+                                    :step="1"
+                                    size="small"
+                                    controls-position="right"
+                                    style="width:96px"
+                                    @change="normalizeSplits(cfg)"
+                                  />
+                                  <span class="sub-config-unit">%</span>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="sub-config-hint ratio-summary">{{ splitRatioHint(cfg) }}</div>
                           </div>
-                          <div class="sub-config-hint ratio-summary">{{ splitRatioHint }}</div>
+                          <el-button size="small" class="split-add" @click="addSplitConfig">
+                            <el-icon><Plus /></el-icon>添加配置
+                          </el-button>
                         </template>
                       </div>
 
@@ -365,6 +370,11 @@ const defaultConfig = reactive({
 const paneOptions = [2, 3, 4]
 const CN_NUM = ['一', '二', '三', '四']
 
+// Camera 编号 0~6
+const cameraOptions = Array.from({ length: 7 }, (_, i) => i)
+// 拼接路数 1~7，上限不超过可选 Camera 数量
+const stitchCountOptions = cameraOptions.map(n => n + 1)
+
 // 按画面数生成均分的分割点，如 3 路 → [33, 66]
 function evenSplits(count) {
   const arr = []
@@ -372,10 +382,10 @@ function evenSplits(count) {
   return arr
 }
 
-function newSplitCamera(idx) {
+function newSplitConfig(camera) {
   return {
-    id: Date.now() + idx,
-    name: `Camera_${idx}`,
+    id: Date.now() + Math.random(),
+    camera,
     paneCount: 2,
     splits: evenSplits(2)
   }
@@ -385,101 +395,80 @@ const layoutConfig = reactive({
   enabled: false,
   mode: 'split',
   stitchCount: 2,
-  stitchCameraIds: []
+  stitchCameras: []
 })
-const cameraSplits = ref([newSplitCamera(0)])
-const activeSplitIdx = ref(0)
-const activeSplit = computed(() => cameraSplits.value[activeSplitIdx.value] || null)
 
-// Camera 编号从 0 开始，删除后补空位，避免重名
-function nextCameraIndex() {
-  const used = cameraSplits.value
-    .map(c => Number((c.name.match(/Camera_(\d+)$/) || [])[1]))
-    .filter(n => !Number.isNaN(n))
-  let i = 0
-  while (used.includes(i)) i++
-  return i
+const splitConfigs = ref([newSplitConfig(0)])
+
+// 该 Camera 编号是否已被其他配置占用
+function isCameraUsed(num, exceptId) {
+  return splitConfigs.value.some(c => c.id !== exceptId && c.camera === num)
 }
 
-function addSplitCamera() {
-  cameraSplits.value.push(newSplitCamera(nextCameraIndex()))
-  activeSplitIdx.value = cameraSplits.value.length - 1
+function nextCameraNumber() {
+  const used = splitConfigs.value.map(c => c.camera)
+  for (const n of cameraOptions) if (!used.includes(n)) return n
+  return 0
 }
 
-function removeSplitCamera(idx) {
-  if (cameraSplits.value.length <= 1) {
-    ElMessage.warning('至少保留一个 Camera')
+function addSplitConfig() {
+  if (splitConfigs.value.length >= 4) {
+    ElMessage.warning('最多添加 4 个拆分配置')
     return
   }
-  const removed = cameraSplits.value[idx]
-  cameraSplits.value.splice(idx, 1)
-  // 被删除的 Camera 同步从拼接选择里移除
-  if (removed) {
-    layoutConfig.stitchCameraIds = layoutConfig.stitchCameraIds.filter(id => id !== removed.id)
+  splitConfigs.value.push(newSplitConfig(nextCameraNumber()))
+}
+
+function removeSplitConfig(idx) {
+  if (splitConfigs.value.length <= 1) {
+    ElMessage.warning('至少保留一个拆分配置')
+    return
   }
-  if (activeSplitIdx.value >= cameraSplits.value.length) {
-    activeSplitIdx.value = cameraSplits.value.length - 1
-  }
+  splitConfigs.value.splice(idx, 1)
 }
 
 // 拼接路数变化：多选上限跟随，超出部分截断
 function setStitchCount(n) {
   layoutConfig.stitchCount = n
-  if (layoutConfig.stitchCameraIds.length > n) {
-    layoutConfig.stitchCameraIds = layoutConfig.stitchCameraIds.slice(0, n)
+  if (layoutConfig.stitchCameras.length > n) {
+    layoutConfig.stitchCameras = layoutConfig.stitchCameras.slice(0, n)
   }
 }
 
-// 拼接模式下补一个 Camera，并自动勾选（未满路数时）
-function addStitchCamera() {
-  if (cameraSplits.value.length >= 4) {
-    ElMessage.warning('最多 4 个 Camera')
-    return
-  }
-  const cam = newSplitCamera(nextCameraIndex())
-  cameraSplits.value.push(cam)
-  if (layoutConfig.stitchCameraIds.length < layoutConfig.stitchCount) {
-    layoutConfig.stitchCameraIds.push(cam.id)
-  }
-}
-
-function setPaneCount(n) {
-  const cam = activeSplit.value
-  if (!cam) return
-  cam.paneCount = n
-  cam.splits = evenSplits(n)
+function setPaneCount(cfg, n) {
+  cfg.paneCount = n
+  cfg.splits = evenSplits(n)
 }
 
 // 保证分割点递增、且后续还有空间，始终落在 1~99
-function normalizeSplits(cam) {
-  if (!cam) return
-  const len = cam.splits.length
+function normalizeSplits(cfg) {
+  if (!cfg) return
+  const len = cfg.splits.length
   const next = []
-  cam.splits.forEach((v, i) => {
+  cfg.splits.forEach((v, i) => {
     const min = i === 0 ? 1 : next[i - 1] + 1
     const max = 99 - (len - 1 - i)
     const val = Number(v) || min
     next.push(Math.min(max, Math.max(min, Math.round(val))))
   })
-  cam.splits = next
+  cfg.splits = next
 }
 
 // 分割点 → 每个子画面的占比
-const splitRatioHint = computed(() => {
-  const cam = activeSplit.value
-  if (!cam) return ''
-  const bounds = [0, ...cam.splits, 100]
+function splitRatioHint(cfg) {
+  if (!cfg) return ''
+  const bounds = [0, ...cfg.splits, 100]
   const parts = []
   for (let i = 0; i < bounds.length - 1; i++) {
     parts.push(`画面${CN_NUM[i]} ${bounds[i + 1] - bounds[i]}%`)
   }
   return parts.join('，')
-})
+}
 
 // ===== Actions =====
 function handleSave() {
   if (layoutConfig.enabled && layoutConfig.mode === 'stitch'
-    && layoutConfig.stitchCameraIds.length !== layoutConfig.stitchCount) {
+    && layoutConfig.stitchCameras.length !== layoutConfig.stitchCount) {
     ElMessage.warning(`请选择 ${layoutConfig.stitchCount} 个 Camera 参与拼接`)
     return
   }
@@ -741,6 +730,24 @@ function goBack() {
 
 .ratio-summary {
   margin-left: 0;
+}
+
+.split-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid var(--border-lighter);
+  border-radius: 8px;
+}
+
+.split-add {
+  align-self: flex-start;
+}
+
+.row-end {
+  margin-left: auto;
 }
 
 
