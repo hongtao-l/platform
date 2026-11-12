@@ -279,15 +279,15 @@ const menuList = ref([
       { title: '事件库', path: '/thing-model/event', icon: Zap }
     ]
   },
-  {
-    // 物模型管理（new）：按需求去掉算法库、事件库（对应页面未复制）
-    title: '物模型管理（new）',
-    icon: Boxes,
-    children: [
-      { title: 'IOT类目（new）', path: '/thing-model-new/category', icon: FolderTree },
-      { title: '能力库（new）', path: '/thing-model-new/capability', icon: Blocks }
-    ]
-  },
+  // 物模型管理（new）：菜单已隐藏，路由保留，需要恢复时取消注释
+  // {
+  //   title: '物模型管理（new）',
+  //   icon: Boxes,
+  //   children: [
+  //     { title: 'IOT类目（new）', path: '/thing-model-new/category', icon: FolderTree },
+  //     { title: '能力库（new）', path: '/thing-model-new/capability', icon: Blocks }
+  //   ]
+  // },
   {
     title: '产品管理',
     icon: Package,
@@ -296,14 +296,15 @@ const menuList = ref([
       { title: '产品审核', path: '/product/audit', icon: ClipboardCheck }
     ]
   },
-  {
-    title: '产品管理（new）',
-    icon: Package,
-    children: [
-      { title: '产品开发（new）', path: '/product-new/development', icon: Wrench },
-      { title: '产品审核（new）', path: '/product-new/audit', icon: ClipboardCheck }
-    ]
-  },
+  // 产品管理（new）：菜单已隐藏，路由保留，需要恢复时取消注释
+  // {
+  //   title: '产品管理（new）',
+  //   icon: Package,
+  //   children: [
+  //     { title: '产品开发（new）', path: '/product-new/development', icon: Wrench },
+  //     { title: '产品审核（new）', path: '/product-new/audit', icon: ClipboardCheck }
+  //   ]
+  // },
   {
     title: '套餐管理',
     icon: Layers,

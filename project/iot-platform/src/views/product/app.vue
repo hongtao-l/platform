@@ -121,10 +121,40 @@
                           </el-radio-group>
                         </div>
 
-                        <!-- 拼接：无额外配置 -->
-                        <div v-if="layoutConfig.mode === 'stitch'" class="layout-note">
-                          拼接模式无需额外配置，设备的多路视频流将合成为一个画面呈现。
-                        </div>
+                        <!-- 拼接：选择拼接路数与参与的 Camera -->
+                        <template v-if="layoutConfig.mode === 'stitch'">
+                          <div class="sub-config-row">
+                            <span class="sub-config-label">拼接路数</span>
+                            <el-select
+                              :model-value="layoutConfig.stitchCount"
+                              size="small"
+                              style="width:170px"
+                              @update:model-value="setStitchCount"
+                            >
+                              <el-option v-for="n in paneOptions" :key="n" :label="`${n} 路`" :value="n" />
+                            </el-select>
+                          </div>
+                          <div class="sub-config-row">
+                            <span class="sub-config-label">拼接 Camera</span>
+                            <el-select
+                              v-model="layoutConfig.stitchCameraIds"
+                              multiple
+                              collapse-tags
+                              :multiple-limit="layoutConfig.stitchCount"
+                              placeholder="选择需要拼接的 Camera"
+                              size="small"
+                              style="width:240px"
+                            >
+                              <el-option v-for="cam in cameraSplits" :key="cam.id" :label="cam.name" :value="cam.id" />
+                            </el-select>
+                            <el-button size="small" @click="addStitchCamera">
+                              <el-icon><Plus /></el-icon>添加
+                            </el-button>
+                          </div>
+                          <div class="sub-config-hint ratio-summary">
+                            已选 {{ layoutConfig.stitchCameraIds.length }} / {{ layoutConfig.stitchCount }} 路
+                          </div>
+                        </template>
 
                         <!-- 拆分：按 Camera 配置 -->
                         <template v-else-if="activeSplit">
@@ -351,14 +381,28 @@ function newSplitCamera(idx) {
   }
 }
 
-const layoutConfig = reactive({ enabled: false, mode: 'split' })
-const cameraSplits = ref([newSplitCamera(1)])
+const layoutConfig = reactive({
+  enabled: false,
+  mode: 'split',
+  stitchCount: 2,
+  stitchCameraIds: []
+})
+const cameraSplits = ref([newSplitCamera(0)])
 const activeSplitIdx = ref(0)
 const activeSplit = computed(() => cameraSplits.value[activeSplitIdx.value] || null)
 
+// Camera 编号从 0 开始，删除后补空位，避免重名
+function nextCameraIndex() {
+  const used = cameraSplits.value
+    .map(c => Number((c.name.match(/Camera_(\d+)$/) || [])[1]))
+    .filter(n => !Number.isNaN(n))
+  let i = 0
+  while (used.includes(i)) i++
+  return i
+}
+
 function addSplitCamera() {
-  const idx = cameraSplits.value.length + 1
-  cameraSplits.value.push(newSplitCamera(idx))
+  cameraSplits.value.push(newSplitCamera(nextCameraIndex()))
   activeSplitIdx.value = cameraSplits.value.length - 1
 }
 
@@ -367,9 +411,35 @@ function removeSplitCamera(idx) {
     ElMessage.warning('至少保留一个 Camera')
     return
   }
+  const removed = cameraSplits.value[idx]
   cameraSplits.value.splice(idx, 1)
+  // 被删除的 Camera 同步从拼接选择里移除
+  if (removed) {
+    layoutConfig.stitchCameraIds = layoutConfig.stitchCameraIds.filter(id => id !== removed.id)
+  }
   if (activeSplitIdx.value >= cameraSplits.value.length) {
     activeSplitIdx.value = cameraSplits.value.length - 1
+  }
+}
+
+// 拼接路数变化：多选上限跟随，超出部分截断
+function setStitchCount(n) {
+  layoutConfig.stitchCount = n
+  if (layoutConfig.stitchCameraIds.length > n) {
+    layoutConfig.stitchCameraIds = layoutConfig.stitchCameraIds.slice(0, n)
+  }
+}
+
+// 拼接模式下补一个 Camera，并自动勾选（未满路数时）
+function addStitchCamera() {
+  if (cameraSplits.value.length >= 4) {
+    ElMessage.warning('最多 4 个 Camera')
+    return
+  }
+  const cam = newSplitCamera(nextCameraIndex())
+  cameraSplits.value.push(cam)
+  if (layoutConfig.stitchCameraIds.length < layoutConfig.stitchCount) {
+    layoutConfig.stitchCameraIds.push(cam.id)
   }
 }
 
@@ -408,6 +478,11 @@ const splitRatioHint = computed(() => {
 
 // ===== Actions =====
 function handleSave() {
+  if (layoutConfig.enabled && layoutConfig.mode === 'stitch'
+    && layoutConfig.stitchCameraIds.length !== layoutConfig.stitchCount) {
+    ElMessage.warning(`请选择 ${layoutConfig.stitchCount} 个 Camera 参与拼接`)
+    return
+  }
   const tabLabel = tabOptions.find(t => t.value === activeTab.value)?.label || ''
   ElMessage.success(`${tabLabel}配置已保存`)
 }
@@ -668,12 +743,6 @@ function goBack() {
   margin-left: 0;
 }
 
-.layout-note {
-  font-size: 13px;
-  color: var(--text-placeholder);
-  line-height: 1.6;
-  margin-left: 100px;
-}
 
 // ===== 低电量保护策略 =====
 .policy-extra {
