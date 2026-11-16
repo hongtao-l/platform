@@ -100,6 +100,11 @@
               :class="typeFilter === 'evt' ? 'text-slate-900 bg-white shadow-2xs' : 'text-slate-600 hover:text-slate-900'"
               @click="typeFilter = 'evt'"
             ><span class="w-1.5 h-1.5 rounded-full bg-amber-500" /><span>事件 ({{ typeCounts.evt }})</span></button>
+            <button
+              class="px-2.5 py-1 font-medium rounded-md transition-all flex items-center space-x-1"
+              :class="typeFilter === 'policy' ? 'text-slate-900 bg-white shadow-2xs' : 'text-slate-600 hover:text-slate-900'"
+              @click="typeFilter = 'policy'"
+            ><span class="w-1.5 h-1.5 rounded-full bg-violet-500" /><span>策略 ({{ typeCounts.policy }})</span></button>
           </div>
         </div>
 
@@ -134,6 +139,12 @@
                   <el-table-column label="数据类型" width="100" align="center">
                     <template #default="{ row: p }"><span class="cell-datatype">{{ dataTypeLabel(p) || '—' }}</span></template>
                   </el-table-column>
+                  <el-table-column label="读写模式" width="90" align="center">
+                    <template #default="{ row: p }">
+                      <span v-if="p.capType === 'prop'" :class="['type-tag', p.dataDef?.accessMode === 'ro' ? 'type-ro' : 'type-rw']">{{ p.dataDef?.accessMode === 'ro' ? '只读' : '读写' }}</span>
+                      <span v-else class="text-slate-300">—</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column label="数据定义" min-width="320">
                     <template #default="{ row: p }">
                       <div v-if="p.dataDef?.dataType === 'enum' && (p.dataDef.enumValues || []).length" class="enum-values">
@@ -161,17 +172,6 @@
 
           <el-table-column label="能力类型" width="96" align="left">
             <template #default="{ row }"><span :class="['type-tag', typeTagCls(row.capType)]">{{ typeLabel(row.capType) }}</span></template>
-          </el-table-column>
-          <el-table-column label="类型" width="80" align="left">
-            <template #default="{ row }">
-              <span :class="['type-tag', row.ownerType === 'platform' ? 'type-platform' : 'type-device']">{{ ownerTypeLabel(row.ownerType) }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="读写模式" width="100" align="left">
-            <template #default="{ row }">
-              <span v-if="row.capType === 'prop'" :class="['type-tag', row.accessMode === 'ro' ? 'type-ro' : 'type-rw']">{{ row.accessMode === 'ro' ? '只读' : '读写' }}</span>
-              <span v-else class="text-slate-300">—</span>
-            </template>
           </el-table-column>
           <el-table-column label="能力项名称" min-width="220">
             <template #default="{ row }"><span class="cell-item-name">{{ row.name }}</span></template>
@@ -255,28 +255,6 @@
             >{{ t.label }}</span>
           </div>
         </el-form-item>
-        <el-form-item label="类型" required>
-          <div class="seg-control">
-            <span
-              v-for="t in ownerTypeOptions"
-              :key="t.value"
-              class="seg-item"
-              :class="{ active: capItemForm.ownerType === t.value }"
-              @click="capItemForm.ownerType = t.value"
-            >{{ t.label }}</span>
-          </div>
-        </el-form-item>
-        <el-form-item v-if="capItemForm.capType === 'prop'" label="读写模式">
-          <div class="seg-control">
-            <span
-              v-for="m in accessModeOptions"
-              :key="m.value"
-              class="seg-item"
-              :class="{ active: capItemForm.accessMode === m.value }"
-              @click="capItemForm.accessMode = m.value"
-            >{{ m.label }}</span>
-          </div>
-        </el-form-item>
         <el-form-item label="能力项名称" required>
           <el-input v-model="capItemForm.name" placeholder="请输入能力项名称" />
         </el-form-item>
@@ -324,7 +302,7 @@
           <span class="form-hint">字母开头，仅允许字母、数字、下划线，全局唯一</span>
         </el-form-item>
 
-        <template v-if="capForm.capType === 'prop'">
+        <template v-if="isPropLike">
           <el-form-item label="数据类型" required>
             <el-select v-model="capForm.dataType" style="width:100%" @change="onDataTypeChange">
               <el-option label="枚举型 (Enum)" value="enum" />
@@ -336,9 +314,17 @@
               <el-option label="结构体型 (Struct)" value="struct" />
             </el-select>
           </el-form-item>
-          <div class="form-hint" style="margin:-4px 0 14px 110px">
-            读写模式由所属能力项决定（当前：{{ currentItemAccessMode() === 'ro' ? '只读' : '读写' }}）
-          </div>
+          <el-form-item v-if="capForm.capType === 'prop'" label="读写模式">
+            <div class="seg-control">
+              <span
+                v-for="m in accessModeOptions"
+                :key="m.value"
+                class="seg-item"
+                :class="{ active: capForm.accessMode === m.value }"
+                @click="capForm.accessMode = m.value"
+              >{{ m.label }}</span>
+            </div>
+          </el-form-item>
         </template>
 
         <el-form-item label="描述">
@@ -348,7 +334,7 @@
         <div class="step-divider my-4"><span>数据定义</span></div>
 
         <!-- Enum -->
-        <template v-if="capForm.capType === 'prop' && capForm.dataType === 'enum'">
+        <template v-if="isPropLike && capForm.dataType === 'enum'">
           <el-form-item label="枚举值定义" required>
             <div class="w-full space-y-2">
               <div v-for="(ev, i) in capForm.enumValues" :key="i" class="flex items-center gap-2">
@@ -369,7 +355,7 @@
         </template>
 
         <!-- Int / Double -->
-        <template v-if="capForm.capType === 'prop' && ['int', 'double'].includes(capForm.dataType)">
+        <template v-if="isPropLike && ['int', 'double'].includes(capForm.dataType)">
           <el-form-item label="取值范围" required>
             <div class="flex items-center gap-2 w-full">
               <el-input-number v-model="capForm.min" :max="capForm.max - 1" :step="capForm.dataType === 'double' ? 0.1 : 1" placeholder="最小值" style="flex:1" />
@@ -389,7 +375,7 @@
         </template>
 
         <!-- Boolean -->
-        <template v-if="capForm.capType === 'prop' && capForm.dataType === 'boolean'">
+        <template v-if="isPropLike && capForm.dataType === 'boolean'">
           <el-form-item label="布尔值标签">
             <div class="flex gap-3 w-full">
               <div class="flex-1">
@@ -411,7 +397,7 @@
         </template>
 
         <!-- String -->
-        <template v-if="capForm.capType === 'prop' && capForm.dataType === 'string'">
+        <template v-if="isPropLike && capForm.dataType === 'string'">
           <el-form-item label="最大长度（字节）" required>
             <el-input-number v-model="capForm.maxLength" :min="1" :max="65535" style="width:150px" />
           </el-form-item>
@@ -421,7 +407,7 @@
         </template>
 
         <!-- Array -->
-        <template v-if="capForm.capType === 'prop' && capForm.dataType === 'array'">
+        <template v-if="isPropLike && capForm.dataType === 'array'">
           <el-form-item label="元素类型" required>
             <el-select v-model="capForm.elementType" style="width:100%">
               <el-option label="Int (数字)" value="int" />
@@ -453,7 +439,7 @@
         </template>
 
         <!-- Struct -->
-        <template v-if="capForm.capType === 'prop' && capForm.dataType === 'struct'">
+        <template v-if="isPropLike && capForm.dataType === 'struct'">
           <el-form-item label="结构体字段">
             <div class="w-full">
               <div class="param-list">
@@ -473,71 +459,6 @@
         </template>
 
         <!-- Service -->
-        <template v-if="capForm.capType === 'svc'">
-          <el-form-item label="输入参数">
-            <div class="w-full">
-              <div class="param-list">
-                <div v-for="(p, i) in capForm.inputParams" :key="i" class="param-item">
-                  <div class="param-info">
-                    <span class="param-name">{{ p.name || '未命名' }}</span>
-                    <span class="param-meta">{{ p.identifier }} · {{ paramTypeLabel(p.dataType) }}</span>
-                  </div>
-                  <button class="link-action" @click="openEditParam('input', i)">编辑</button>
-                  <button class="link-danger" @click="capForm.inputParams.splice(i, 1)">删除</button>
-                </div>
-                <div v-if="!capForm.inputParams.length" class="param-empty">暂无输入参数</div>
-              </div>
-              <el-button size="small" style="margin-top:8px" @click="openAddParam('input')">+ 添加参数</el-button>
-            </div>
-          </el-form-item>
-          <el-form-item label="输出参数">
-            <div class="w-full">
-              <div class="param-list">
-                <div v-for="(p, i) in capForm.outputParams" :key="i" class="param-item">
-                  <div class="param-info">
-                    <span class="param-name">{{ p.name || '未命名' }}</span>
-                    <span class="param-meta">{{ p.identifier }} · {{ paramTypeLabel(p.dataType) }}</span>
-                  </div>
-                  <button class="link-action" @click="openEditParam('output', i)">编辑</button>
-                  <button class="link-danger" @click="capForm.outputParams.splice(i, 1)">删除</button>
-                </div>
-                <div v-if="!capForm.outputParams.length" class="param-empty">暂无输出参数</div>
-              </div>
-              <el-button size="small" style="margin-top:8px" @click="openAddParam('output')">+ 添加参数</el-button>
-            </div>
-          </el-form-item>
-        </template>
-
-        <!-- Event -->
-        <template v-if="capForm.capType === 'evt'">
-          <el-form-item label="事件类型" required>
-            <div class="seg-control">
-              <span
-                v-for="et in eventTypeOptions"
-                :key="et.value"
-                class="seg-item !px-3"
-                :class="{ active: capForm.eventType === et.value }"
-                @click="capForm.eventType = et.value"
-              >{{ et.label }}</span>
-            </div>
-          </el-form-item>
-          <el-form-item label="输出参数">
-            <div class="w-full">
-              <div class="param-list">
-                <div v-for="(p, i) in capForm.outputParams" :key="i" class="param-item">
-                  <div class="param-info">
-                    <span class="param-name">{{ p.name || '未命名' }}</span>
-                    <span class="param-meta">{{ p.identifier }} · {{ paramTypeLabel(p.dataType) }}</span>
-                  </div>
-                  <button class="link-action" @click="openEditParam('output', i)">编辑</button>
-                  <button class="link-danger" @click="capForm.outputParams.splice(i, 1)">删除</button>
-                </div>
-                <div v-if="!capForm.outputParams.length" class="param-empty">暂无输出参数</div>
-              </div>
-              <el-button size="small" style="margin-top:8px" @click="openAddParam('output')">+ 添加参数</el-button>
-            </div>
-          </el-form-item>
-        </template>
       </el-form>
 
       <template #footer>
@@ -643,6 +564,7 @@
         <el-button type="primary" @click="handleParamConfirm">确定</el-button>
       </template>
     </el-dialog>
+
   </div>
 </template>
 
@@ -714,8 +636,6 @@ const capItemTree = computed(() => {
       moduleId: item.moduleId,
       moduleName,
       capType: item.capType || 'prop',
-      ownerType: item.ownerType || 'device',
-      accessMode: item.accessMode || 'rw',
       name: item.name,
       identifier: item.identifier,
       paramCount: params.length,
@@ -740,7 +660,7 @@ const filteredTree = computed(() => {
 })
 
 const typeCounts = computed(() => {
-  const c = { all: capItemTree.value.length, prop: 0, svc: 0, evt: 0 }
+  const c = { all: capItemTree.value.length, prop: 0, svc: 0, evt: 0, policy: 0 }
   capItemTree.value.forEach(r => { if (c[r.capType] != null) c[r.capType]++ })
   return c
 })
@@ -755,8 +675,8 @@ const rangeEnd = computed(() => Math.min(page.value * pageSize.value, filteredTr
 function rowClassName() { return '' }
 
 // ===== Labels =====
-const typeTagMap = { prop: '属性', svc: '服务', evt: '事件' }
-const typeTagClsMap = { prop: 'type-prop', svc: 'type-svc', evt: 'type-evt' }
+const typeTagMap = { prop: '属性', svc: '服务', evt: '事件', policy: '策略' }
+const typeTagClsMap = { prop: 'type-prop', svc: 'type-svc', evt: 'type-evt', policy: 'type-policy' }
 const paramTypeMap = { int: 'Int', double: 'Double', string: 'String', boolean: 'Boolean', enum: 'Enum' }
 function typeLabel(t) { return typeTagMap[t] || t }
 function typeTagCls(t) { return typeTagClsMap[t] || '' }
@@ -776,10 +696,11 @@ function dataDefDetail(cap) {
     return list.length ? list.map(ev => `${ev.name}(${ev.val})`).join(', ') : '未定义枚举值'
   }
   if (['int', 'double'].includes(dd.dataType)) {
-    let s = `${dd.min}~${dd.max}`
-    if (dd.step && dd.step !== 1) s += `, 步长${dd.step}`
-    if (dd.unit) s += ` ${dd.unit}`
-    return s
+    const parts = []
+    if (dd.min !== undefined || dd.max !== undefined) parts.push(`${dd.min ?? '—'}~${dd.max ?? '—'}`)
+    if (dd.step && dd.step !== 1) parts.push(`步长${dd.step}`)
+    if (dd.unit) parts.push(dd.unit)
+    return parts.length ? parts.join(', ') : '未设范围'
   }
   if (dd.dataType === 'boolean') return `${dd.trueLabel || 'true'}/${dd.falseLabel || 'false'}`
   if (dd.dataType === 'string') return `最大${dd.limit || dd.maxLength || 64}字节`
@@ -857,26 +778,17 @@ function handleDeleteModule(mod) {
 // ===== Capability item CRUD =====
 const capItemDialogVisible = ref(false)
 const editingCapItemId = ref(null)
-const capItemForm = reactive({ name: '', identifier: '', moduleId: null, capType: 'prop', accessMode: 'rw', ownerType: 'device' })
+const capItemForm = reactive({ name: '', identifier: '', moduleId: null, capType: 'prop' })
 const accessModeOptions = [
   { label: '读写', value: 'rw' },
   { label: '只读', value: 'ro' }
 ]
-const ownerTypeOptions = [
-  { label: '平台', value: 'platform' },
-  { label: '设备', value: 'device' }
-]
-function ownerTypeLabel(v) {
-  return v === 'platform' ? '平台' : '设备'
-}
 const capItemDialogTitle = computed(() => editingCapItemId.value ? '编辑能力项' : '添加能力项')
 const draftParams = ref([])
 const inDraftMode = ref(false)
 
-// 属性才需要读写模式；切到服务/事件时复位
 function onCapItemTypeChange(type) {
   capItemForm.capType = type
-  if (type !== 'prop') capItemForm.accessMode = 'rw'
 }
 
 function openAddCapItem() {
@@ -885,8 +797,6 @@ function openAddCapItem() {
   capItemForm.name = ''
   capItemForm.identifier = ''
   capItemForm.capType = 'prop'
-  capItemForm.accessMode = 'rw'
-  capItemForm.ownerType = 'device'
   capItemForm.moduleId = currentModuleId.value !== 'all' ? currentModuleId.value : (store.modules[0]?.id ?? null)
   capItemDialogVisible.value = true
 }
@@ -896,8 +806,6 @@ function openEditCapItem(item) {
   capItemForm.name = item.name
   capItemForm.identifier = item.identifier
   capItemForm.capType = item.capType || 'prop'
-  capItemForm.accessMode = item.accessMode || 'rw'
-  capItemForm.ownerType = item.ownerType === 'platform' ? 'platform' : 'device'
   capItemForm.moduleId = item.moduleId
   capItemDialogVisible.value = true
 }
@@ -909,7 +817,6 @@ function handleCapItemConfirm() {
   const dup = store.capItems.some(x => x.identifier === capItemForm.identifier && x.id !== editingCapItemId.value)
   if (dup) { ElMessage.warning('能力项ID已存在，请更换'); return }
   const payload = { ...capItemForm }
-  if (payload.capType !== 'prop') delete payload.accessMode
   if (editingCapItemId.value) {
     updateCapItem(editingCapItemId.value, payload)
     ElMessage.success('编辑成功')
@@ -923,12 +830,7 @@ function handleCapItemConfirm() {
         name: dp.name,
         identifier: dp.identifier,
         descr: dp.descr,
-        dataDef: Object.assign(
-          JSON.parse(JSON.stringify(dp.dataDef)),
-          capItemForm.capType === 'prop'
-            ? { accessMode: capItemForm.accessMode === 'ro' ? 'ro' : 'rw' }
-            : {}
-        )
+        dataDef: JSON.parse(JSON.stringify(dp.dataDef))
       })
     })
     ElMessage.success(draftParams.value.length
@@ -951,13 +853,15 @@ function handleDeleteCapItem(item) {
 
 // ===== Capability (parameter) dialog =====
 const dialogVisible = ref(false)
+
 const capFormRef = ref(null)
 const editingCapId = ref(null)
 const dialogTitle = computed(() => editingCapId.value ? '编辑参数' : '添加参数')
 const capTypeOptions = [
   { label: '属性', value: 'prop' },
   { label: '服务', value: 'svc' },
-  { label: '事件', value: 'evt' }
+  { label: '事件', value: 'evt' },
+  { label: '策略', value: 'policy' }
 ]
 const eventTypeOptions = [
   { label: '信息 (Info)', value: 'info' },
@@ -984,6 +888,9 @@ const capForm = reactive({
   inputParams: [], outputParams: []
 })
 
+// 属性与策略都用「数据类型 + 数据定义」编辑器；读写模式只有属性有
+const isPropLike = computed(() => ['prop', 'svc', 'evt', 'policy'].includes(capForm.capType))
+
 function resetCapForm() {
   Object.assign(capForm, {
     capItemId: null, moduleId: null, capType: 'prop', name: '', identifier: '', descr: '',
@@ -1007,17 +914,11 @@ function onCapTypeChange(type) {
   }
 }
 function resetDataDefForType() {
-  if (capForm.capType === 'prop') {
-    capForm.dataType = 'enum'
-    capForm.enumValues = [{ name: '', val: 0 }]; capForm.defaultVal = ''
-    capForm.min = 0; capForm.max = 100; capForm.step = 1; capForm.unit = ''
-    capForm.trueLabel = '开启'; capForm.falseLabel = '关闭'
-    capForm.maxLength = 64; capForm.elementType = 'int'; capForm.arrayCount = 100; capForm.fields = []
-  } else if (capForm.capType === 'svc') {
-    capForm.inputParams = []; capForm.outputParams = []
-  } else {
-    capForm.eventType = 'alarm'; capForm.outputParams = []
-  }
+  capForm.dataType = 'enum'
+  capForm.enumValues = [{ name: '', val: 0 }]; capForm.defaultVal = ''
+  capForm.min = 0; capForm.max = 100; capForm.step = 1; capForm.unit = ''
+  capForm.trueLabel = '开启'; capForm.falseLabel = '关闭'
+  capForm.maxLength = 64; capForm.elementType = 'int'; capForm.arrayCount = 100; capForm.fields = []
 }
 function onDataTypeChange() {
   capForm.defaultVal = ''
@@ -1032,8 +933,7 @@ function openAddCapability(capItemRow) {
   if (capItemRow?._isCapItem) {
     capForm.capItemId = capItemRow._rawId
     capForm.moduleId = capItemRow.moduleId
-    // 参数统一按属性内容配置，不再跟随能力项类型
-    capForm.capType = 'prop'
+    capForm.capType = capItemRow.capType || 'prop'
     resetDataDefForType()
   }
   dialogVisible.value = true
@@ -1047,8 +947,7 @@ function openDraftParam() {
   editingCapId.value = null
   resetCapForm()
   inDraftMode.value = true
-  // 参数统一按属性内容配置，不再跟随能力项类型
-  capForm.capType = 'prop'
+  capForm.capType = capItemForm.capType || 'prop'
   resetDataDefForType()
   dialogVisible.value = true
 }
@@ -1059,8 +958,8 @@ function openEditCapability(cap) {
   capForm.capItemId = cap.capItemId ?? null
   capForm.moduleId = cap.moduleId ?? null
   const dd = cap.dataDef || {}
-  // 参数统一按属性内容配置；旧的服务/事件参数在编辑时转为属性默认配置
-  capForm.capType = 'prop'
+  // 沿用参数所属能力项的类型：属性才有读写模式，服务/事件/策略没有
+  capForm.capType = cap.capType || 'prop'
   capForm.name = cap.name; capForm.identifier = cap.identifier; capForm.descr = cap.descr
   const propTypes = ['enum', 'int', 'double', 'boolean', 'string', 'array', 'struct']
   // 参数统一按属性内容配置，任何 capType 下只要 dataType 合法就回填数据定义
@@ -1099,38 +998,24 @@ function capFormModuleId() {
   return store.modules[0]?.id
 }
 
-// 读写模式归属能力项：参数不再单独选择，统一继承所属能力项
-function currentItemAccessMode() {
-  if (inDraftMode.value) return capItemForm.accessMode === 'ro' ? 'ro' : 'rw'
-  const itemId = capForm.capItemId
-    ?? (editingCapId.value ? store.capabilities.find(c => c.id === editingCapId.value)?.capItemId : null)
-  const item = store.capItems.find(x => x.id === itemId)
-  return item?.accessMode === 'ro' ? 'ro' : 'rw'
-}
-
 function buildDataDef() {
-  if (capForm.capType === 'prop') {
-    const dd = { dataType: capForm.dataType, accessMode: currentItemAccessMode(), defaultVal: capForm.defaultVal }
-    if (capForm.dataType === 'enum') {
-      dd.enumValues = capForm.enumValues.filter(ev => ev.name.trim())
-    } else if (['int', 'double'].includes(capForm.dataType)) {
-      dd.min = capForm.min; dd.max = capForm.max; dd.step = capForm.step; dd.unit = capForm.unit
-    } else if (capForm.dataType === 'boolean') {
-      dd.trueLabel = capForm.trueLabel; dd.falseLabel = capForm.falseLabel
-    } else if (capForm.dataType === 'string') {
-      dd.limit = capForm.maxLength
-    } else if (capForm.dataType === 'array') {
-      dd.elementType = capForm.elementType; dd.maxLength = capForm.arrayCount
-      if (capForm.elementType === 'struct') dd.fields = capForm.fields.filter(f => f.name.trim())
-    } else if (capForm.dataType === 'struct') {
-      dd.fields = capForm.fields.filter(f => f.name.trim())
-    }
-    return dd
+  const dd = { dataType: capForm.dataType, defaultVal: capForm.defaultVal }
+  if (capForm.capType === 'prop') dd.accessMode = capForm.accessMode === 'ro' ? 'ro' : 'rw'
+  if (capForm.dataType === 'enum') {
+    dd.enumValues = capForm.enumValues.filter(ev => ev.name.trim())
+  } else if (['int', 'double'].includes(capForm.dataType)) {
+    dd.min = capForm.min; dd.max = capForm.max; dd.step = capForm.step; dd.unit = capForm.unit
+  } else if (capForm.dataType === 'boolean') {
+    dd.trueLabel = capForm.trueLabel; dd.falseLabel = capForm.falseLabel
+  } else if (capForm.dataType === 'string') {
+    dd.limit = capForm.maxLength
+  } else if (capForm.dataType === 'array') {
+    dd.elementType = capForm.elementType; dd.maxLength = capForm.arrayCount
+    if (capForm.elementType === 'struct') dd.fields = capForm.fields.filter(f => f.name.trim())
+  } else if (capForm.dataType === 'struct') {
+    dd.fields = capForm.fields.filter(f => f.name.trim())
   }
-  if (capForm.capType === 'svc') {
-    return { dataType: 'service', inputParams: capForm.inputParams, outputParams: capForm.outputParams }
-  }
-  return { dataType: 'event', eventType: capForm.eventType, outputParams: capForm.outputParams }
+  return dd
 }
 
 function handleCapabilityConfirm() {

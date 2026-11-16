@@ -232,6 +232,7 @@ const menus = [
     icon: icons.beaker,
     children: [
       { title: '能力库', path: '/thing-model-new/capability', match: ['/thing-model-new/capability'], count: 22 },
+      { title: '事件库', path: '/thing-model-new/event', match: ['/thing-model-new/event'], count: 66 },
       { title: '物模型类目', path: '/thing-model-new/category', match: ['/thing-model-new/category'], count: 6 }
     ]
   },

@@ -11,6 +11,12 @@ const routes = [
     meta: { title: '能力库 (Registry)', section: 'thing-model' }
   },
   {
+    path: '/thing-model-new/event',
+    name: 'ThingModelNewEvent',
+    component: () => import('@/views/thing-model/EventLibrary.vue'),
+    meta: { title: '事件库', section: 'thing-model' }
+  },
+  {
     path: '/thing-model-new/category',
     name: 'ThingModelNewCategory',
     component: () => import('@/views/thing-model/Category.vue'),
