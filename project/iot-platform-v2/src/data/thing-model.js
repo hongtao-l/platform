@@ -101,7 +101,7 @@ const initialCapabilities = [
   mk(MOD_IMAGE.id, 'svc', '-', C('int', 'lens_id', '镜头ID', '镜头ID，-1 表示全部镜头（设备级）')),
   mk(MOD_IMAGE.id, 'svc', '-', C('int', 'cruise_id', '巡航ID', '巡航ID，从0开始编号')),
   mk(MOD_IMAGE.id, 'svc', '-', C('int', 'cruise_interval', '巡航间隔', '巡航间隔，单位秒;若为0，表示只执行一次；')),
-  mk(MOD_IMAGE.id, 'evt', '-', C('int', 'event_type_id', '事件类型ID', '事件类型ID，平台统一定义，推送查询描述')),
+  mk(MOD_IMAGE.id, 'evt', '-', C('enum', 'event_type_id', '事件类型ID', '平台统一定义', { enumValues: [{ name: 'PTZ状态变化', val: 109310 }], defaultVal: '109310' })),
   mk(MOD_IMAGE.id, 'evt', '-', C('string', 'state', '状态', '状态：motion_start/motion_done/preset_arrived/guard_returned')),
   mk(MOD_IMAGE.id, 'evt', '-', C('int', 'preset_id', '预置位编号', '预置位编号，到达预置位时携带')),
   mk(MOD_IMAGE.id, 'evt', '-', C('int', 'x', '当前水平逻辑坐标', '当前水平逻辑坐标')),
@@ -240,7 +240,7 @@ const initialCapabilities = [
   mk(MOD_OTA.id, 'svc', '-', C('string', 'file_md5', '升级文件MD5值', '升级文件MD5值')),
   mk(MOD_OTA.id, 'svc', '-', C('string', 'public_key', '升级文件下载需要有公钥加密下载', '升级文件下载需要有公钥加密下载，解密下载文件；')),
   mk(MOD_OTA.id, 'svc', '-', C('string', 'signature', '签名', '签名，固件提供方需要有签名验签方可使用；')),
-  mk(MOD_OTA.id, 'evt', '-', C('int', 'event_type_id', '事件类型ID', '事件类型ID，平台统一定义，推送查询描述')),
+  mk(MOD_OTA.id, 'evt', '-', C('enum', 'event_type_id', '事件类型ID', '平台统一定义', { enumValues: [{ name: 'OTA升级结果', val: 109410 }], defaultVal: '109410' })),
   mk(MOD_OTA.id, 'evt', '-', C('string', 'module', '升级模块', '升级模块，空表示设备整机固件')),
   mk(MOD_OTA.id, 'evt', '-', C('int', 'result', '升级结果', '升级结果：0.失败；1.成功；')),
   mk(MOD_OTA.id, 'evt', '-', C('int', 'reason', '失败原因码', '失败原因码')),
@@ -1484,6 +1484,8 @@ const initialAlgorithms = [
 ]
 
 const initialEvents = [
+  { id: nextId(), eventId: 109310, eventName: "{\"1\": \"PTZ状态变化\"}", category: '设备状态事件', descr: "{}", pushCopy: "{\"1\": \"PTZ状态变化\"}", referencedCount: 0 },
+  { id: nextId(), eventId: 109410, eventName: "{\"1\": \"OTA升级结果\"}", category: '设备状态事件', descr: "{}", pushCopy: "{\"1\": \"OTA升级结果\"}", referencedCount: 0 },
   { id: nextId(), eventId: 109300, eventName: "{\"1\": \"\u79bb\u7ebf\"}", category: '设备状态事件', pushCopy: "{\"1\": \"\u79bb\u7ebf\"}", referencedCount: 0 },
   { id: nextId(), eventId: 109301, eventName: "{\"1\": \"\u5728\u7ebf\"}", category: '设备状态事件', pushCopy: "{\"1\": \"\u5728\u7ebf\"}", referencedCount: 0 },
   { id: nextId(), eventId: 109302, eventName: "{\"1\": \"\u4f11\u7720\"}", category: '设备状态事件', pushCopy: "{\"1\": \"\u4f11\u7720\"}", referencedCount: 0 },
