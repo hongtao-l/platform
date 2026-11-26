@@ -153,40 +153,124 @@
       </footer>
     </main>
 
-    <!-- Create dialog -->
-    <el-dialog v-model="createDialogVisible" title="创建产品" width="560px" top="8vh" :close-on-click-modal="false">
-      <el-form ref="createFormRef" :model="createForm" label-width="90px">
-        <el-form-item label="产品ID" required>
-          <el-input v-model="createForm.productId" placeholder="例: IPC_PRO_001" maxlength="64" class="!font-mono" />
+    <!-- Create drawer -->
+    <el-drawer
+      v-model="createDialogVisible"
+      title="创建产品"
+      direction="rtl"
+      size="560px"
+      :close-on-click-modal="false"
+      class="create-product-drawer"
+    >
+      <el-form ref="createFormRef" :model="createForm" label-width="120px">
+        <el-form-item label="产品归属企业" required>
+          <el-select
+            v-model="createForm.company"
+            filterable
+            remote
+            :remote-method="searchCompany"
+            placeholder="可输入企业名称或企业ID查询"
+            style="width:100%"
+          >
+            <el-option v-for="c in companyOptions" :key="c.value" :label="c.label" :value="c.value" />
+          </el-select>
         </el-form-item>
-        <el-form-item label="产品名称" required>
-          <el-input v-model="createForm.name" placeholder="请输入产品名称" maxlength="50" />
+
+        <el-form-item label="开发方式" required>
+          <el-radio-group v-model="createForm.devMethod">
+            <el-radio value="self">自研发</el-radio>
+            <el-radio value="solution">基于方案</el-radio>
+          </el-radio-group>
         </el-form-item>
+
         <el-form-item label="产品类目" required>
-          <el-select v-model="createForm.category" placeholder="请选择产品类目" style="width:100%">
+          <el-select v-model="createForm.category" placeholder="请选择产品类目（需选到最末级）" style="width:100%">
             <el-option v-for="c in categoryOptions" :key="c" :label="c" :value="c" />
           </el-select>
         </el-form-item>
-        <el-form-item label="开发方式" required>
-          <el-select v-model="createForm.devMethod" placeholder="请选择开发方式" style="width:100%">
-            <el-option label="标准开发" value="standard" />
-            <el-option label="自定义开发" value="custom" />
+
+        <el-form-item label="产品名称" required>
+          <el-input v-model="createForm.name" placeholder="请输入产品名称" maxlength="40" show-word-limit />
+        </el-form-item>
+
+        <el-form-item label="产品型号">
+          <el-input v-model="createForm.model" placeholder="请输入产品型号" maxlength="40" show-word-limit />
+        </el-form-item>
+
+        <el-form-item label="产品图">
+          <el-upload
+            v-model:file-list="imageFileList"
+            drag
+            :auto-upload="false"
+            :limit="1"
+            accept="image/*"
+            class="product-image-upload"
+            @change="onImageChange"
+          >
+            <div class="upload-inner">
+              <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" />
+                <path d="M4 16v2.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V16" />
+              </svg>
+              <div class="upload-text">点击或拖拽产品图上传</div>
+              <div class="upload-hint">最多可上传1个文件</div>
+            </div>
+          </el-upload>
+        </el-form-item>
+
+        <el-form-item label="产品描述">
+          <el-input v-model="createForm.description" type="textarea" :rows="4" placeholder="请输入产品描述" maxlength="200" show-word-limit />
+        </el-form-item>
+
+        <!-- ===== 网络信息 ===== -->
+        <div class="drawer-section-title">网络信息</div>
+
+        <el-form-item label="联网方式" required>
+          <el-checkbox-group v-model="createForm.netTypes">
+            <el-checkbox v-for="t in NET_TYPES" :key="t.value" :value="t.value">{{ t.label }}</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+
+        <el-form-item v-if="hasWifi" label="是否支持 5GHz">
+          <el-radio-group v-model="createForm.supportDualBand">
+            <el-radio value="no">否</el-radio>
+            <el-radio value="yes">是</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item label="配网方式" required>
+          <el-checkbox-group v-model="createForm.provisioningMethods" @change="syncDefaultProvision">
+            <el-checkbox v-for="m in provisionOptions" :key="m.value" :value="m.value">{{ m.label }}</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+
+        <el-form-item label="默认配网方式" required>
+          <el-select v-model="createForm.defaultProvisioningMethod" placeholder="请选择默认配网方式" style="width:100%">
+            <el-option
+              v-for="m in selectedProvisionOptions"
+              :key="m.value"
+              :label="m.label"
+              :value="m.value"
+            />
           </el-select>
         </el-form-item>
-        <el-form-item label="产品描述">
-          <el-input v-model="createForm.description" type="textarea" :rows="3" placeholder="请输入产品描述（选填）" maxlength="200" show-word-limit />
-        </el-form-item>
       </el-form>
+
       <template #footer>
-        <el-button @click="createDialogVisible = false">取消</el-button>
-        <el-button type="primary" :loading="createSubmitting" @click="handleCreateSubmit">确定创建</el-button>
+        <div class="drawer-footer">
+          <el-button @click="createDialogVisible = false">取消</el-button>
+          <div class="drawer-footer-right">
+            <el-button :loading="createSubmitting" @click="handleCreateSubmit(false)">保存产品</el-button>
+            <el-button type="primary" :loading="createSubmitting" @click="handleCreateSubmit(true)">保存并开发</el-button>
+          </div>
+        </div>
       </template>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -274,29 +358,135 @@ function devMethodLabel(m) { return devMethodMap[m] || m }
 
 // ===== Create product =====
 const createDialogVisible = ref(false)
-const createForm = reactive({ productId: '', name: '', category: '', devMethod: 'standard', description: '' })
+const createForm = reactive({
+  company: '',
+  devMethod: 'self',
+  category: '',
+  name: '',
+  model: '',
+  description: '',
+  // 网络信息
+  netTypes: ['wifi'],
+  supportDualBand: 'no',
+  provisioningMethods: ['ap'],
+  defaultProvisioningMethod: 'ap'
+})
 const createFormRef = ref(null)
 const createSubmitting = ref(false)
+const imageFileList = ref([])
+
+// ===== 网络信息 =====
+const NET_TYPES = [
+  { label: '有线', value: 'wired' },
+  { label: 'WIFI', value: 'wifi' },
+  { label: '移动网络', value: 'cellular' }
+]
+
+const PROVISION_ALL = [
+  { label: 'AP', value: 'ap' },
+  { label: '声音', value: 'sound' },
+  { label: 'smartlink', value: 'smartlink' },
+  { label: '摄像机识别二维码添加', value: 'qr_camera' },
+  { label: '局域网', value: 'lan' },
+  { label: 'APP扫码添加', value: 'qr_app' },
+  { label: '蓝牙添加', value: 'ble' }
+]
+
+// 不含 WIFI 时只保留扫码两类
+const PROVISION_NON_WIFI = [
+  { label: '扫描机身二维码', value: 'qr_app' },
+  { label: '摄像头扫码', value: 'qr_camera' }
+]
+
+const hasWifi = computed(() => createForm.netTypes.includes('wifi'))
+const provisionOptions = computed(() => (hasWifi.value ? PROVISION_ALL : PROVISION_NON_WIFI))
+const selectedProvisionOptions = computed(() =>
+  provisionOptions.value.filter(o => createForm.provisioningMethods.includes(o.value))
+)
+
+// 默认配网方式必须落在已选配网方式内
+function syncDefaultProvision() {
+  const allowed = selectedProvisionOptions.value.map(o => o.value)
+  if (!allowed.includes(createForm.defaultProvisioningMethod)) {
+    createForm.defaultProvisioningMethod = allowed[0] || ''
+  }
+}
+
+// 联网方式变化 → 收敛配网方式
+watch(() => createForm.netTypes.slice(), () => {
+  const allowed = provisionOptions.value.map(o => o.value)
+  const kept = createForm.provisioningMethods.filter(v => allowed.includes(v))
+  if (kept.length) {
+    createForm.provisioningMethods = kept
+  } else {
+    // 不含 WIFI：扫码两类默认全选；含 WIFI：默认 AP
+    createForm.provisioningMethods = hasWifi.value ? ['ap'] : allowed.slice()
+  }
+  if (!hasWifi.value) createForm.supportDualBand = 'no'
+  syncDefaultProvision()
+}, { immediate: true })
+
+// 企业远程搜索
+const ALL_COMPANIES = [
+  { label: '深圳市安嘉科技有限公司', value: '0000213ed0cdb8bc' },
+  { label: '上海市经纬有限公司', value: 'AFEF9OTA9nl7xlVnW' },
+  { label: '深圳市极目视讯技术有限公司', value: '739CSNveI5x6ebjY' },
+  { label: '长沙市搬码创新科技有限公司', value: 'CV3vzzdgJWN1vQL' }
+]
+const companyOptions = ref(ALL_COMPANIES)
+function searchCompany(keyword) {
+  const k = (keyword || '').trim().toLowerCase()
+  companyOptions.value = k
+    ? ALL_COMPANIES.filter(c => c.label.toLowerCase().includes(k) || c.value.toLowerCase().includes(k))
+    : ALL_COMPANIES
+}
+
+function onImageChange() {
+  // el-upload 自身维护 file-list，这里只占位
+}
 
 function handleCreate() {
-  Object.assign(createForm, { productId: '', name: '', category: '', devMethod: 'standard', description: '' })
+  Object.assign(createForm, {
+    company: '',
+    devMethod: 'self',
+    category: '',
+    name: '',
+    model: '',
+    description: '',
+    netTypes: ['wifi'],
+    supportDualBand: 'no',
+    provisioningMethods: ['ap'],
+    defaultProvisioningMethod: 'ap'
+  })
+  imageFileList.value = []
   createDialogVisible.value = true
 }
-async function handleCreateSubmit() {
-  if (!createForm.productId.trim() || !createForm.name.trim() || !createForm.category) {
-    ElMessage.warning('请填写产品ID、产品名称和产品类目')
-    return
-  }
+async function handleCreateSubmit(andDevelop = false) {
+  if (!createForm.company) { ElMessage.warning('请选择产品归属企业'); return }
+  if (!createForm.category) { ElMessage.warning('请选择产品类目'); return }
+  if (!createForm.name.trim()) { ElMessage.warning('请输入产品名称'); return }
+  if (!createForm.netTypes.length) { ElMessage.warning('请至少选择一种联网方式'); return }
+  if (!createForm.provisioningMethods.length) { ElMessage.warning('请至少选择一种配网方式'); return }
+  if (!createForm.defaultProvisioningMethod) { ElMessage.warning('请选择默认配网方式'); return }
+
   createSubmitting.value = true
   try {
     const now = new Date().toISOString().slice(0, 10)
+    const createdId = Date.now()
     productList.value.unshift({
-      id: Date.now(),
-      productId: createForm.productId.trim(),
+      id: createdId,
+      productId: createForm.model.trim() || `P${Date.now()}`,
       name: createForm.name.trim(),
+      model: createForm.model.trim(),
       category: createForm.category,
       devMethod: createForm.devMethod,
       description: createForm.description.trim(),
+      network: {
+        types: [...createForm.netTypes],
+        supportDualBand: hasWifi.value ? createForm.supportDualBand : 'no',
+        provisioningMethods: [...createForm.provisioningMethods],
+        defaultProvisioningMethod: createForm.defaultProvisioningMethod
+      },
       sourceCompany: '本公司',
       status: 'developing',
       authInfo: '未授权',
@@ -307,6 +497,7 @@ async function handleCreateSubmit() {
     })
     ElMessage.success(`产品「${createForm.name}」创建成功`)
     createDialogVisible.value = false
+    if (andDevelop) router.push({ path: '/product-new/config', query: { id: createdId, name: createForm.name.trim() } })
   } finally {
     createSubmitting.value = false
   }
@@ -351,4 +542,81 @@ function handleMore(cmd, row) {
 .cell-text { font-size: 12px; color: #475569; }
 .cell-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8; }
 .row-actions { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
+
+/* ===== 创建产品抽屉 ===== */
+.create-product-drawer :deep(.el-drawer__header) {
+  margin-bottom: 0;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.create-product-drawer :deep(.el-drawer__body) {
+  padding: 20px;
+  overflow-y: auto;
+}
+.create-product-drawer :deep(.el-drawer__footer) {
+  border-top: 1px solid #f1f5f9;
+  padding: 12px 20px;
+}
+
+.create-product-drawer :deep(.el-form-item) { align-items: flex-start; }
+.create-product-drawer :deep(.el-form-item__label) {
+  line-height: 20px;
+  padding-top: 5px;
+  white-space: normal;
+  word-break: break-word;
+}
+.create-product-drawer :deep(.el-checkbox-group) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  padding-top: 4px;
+}
+.create-product-drawer :deep(.el-checkbox) { margin-right: 0; }
+
+.drawer-section-title {
+  margin: 8px 0 14px;
+  padding-left: 10px;
+  border-left: 3px solid #0284c7;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.product-image-upload { width: 100%; }
+.product-image-upload :deep(.el-upload) { width: 100%; }
+.product-image-upload :deep(.el-upload-dragger) {
+  width: 100%;
+  padding: 28px 16px;
+  border-radius: 8px;
+  border: 1px dashed #dbe2ea;
+  background: #fbfcfd;
+}
+.product-image-upload :deep(.el-upload-dragger:hover) { border-color: #7dd3fc; }
+
+.upload-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: #94a3b8;
+}
+.upload-icon { width: 34px; height: 34px; color: #38bdf8; }
+.upload-text { font-size: 13px; color: #475569; }
+.upload-hint { font-size: 11px; color: #94a3b8; }
+
+.drawer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.drawer-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 </style>

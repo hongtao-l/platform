@@ -208,6 +208,7 @@ import {
   Sparkles,
   Gift,
   Users,
+  Megaphone,
   FlaskConical,
   PanelLeft,
   CircleHelp,
@@ -329,6 +330,7 @@ const menuList = ref([
       { title: '推荐位运营', path: '/ops/recommend', icon: Sparkles },
       { title: '活动位运营', path: '/ops/activity', icon: Gift },
       { title: '用户分群', path: '/ops/usergroup', icon: Users },
+      { title: '广告投放策略', path: '/ops/ad-strategy', icon: Megaphone },
       { title: 'A/B Test', path: '/abtest', icon: FlaskConical }
     ]
   }

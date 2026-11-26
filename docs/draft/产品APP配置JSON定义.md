@@ -1,58 +1,65 @@
 # 产品 APP 配置 — 返回 JSON 定义
 
-> 平台把「产品审核 / App功能配置」里的配置项以 JSON 形式下发给 APP，APP 据此渲染页面。
-> 设计原则：**分组清晰、字段自解释、缺省即默认、新增不破坏老 APP**。
+## 使用场景
+
+APP 层面对功能呈现做进一步处理，满足不同客户需求的差异化显示配置。
 
 ---
 
-## 一、完整示例
+## 一、示例
 
 ```json
 {
-  "version": "1.0",
-  "product_id": "P10086",
-  "updated_at": "2026-11-16T10:30:00Z",
+  "updated_at": "2026-11-17T10:30:00Z",
 
-  "install_guide": {
-    "steps": [
-      { "order": 1, "title": "下载App", "desc": "扫描二维码或在应用商店搜索下载" },
-      { "order": 2, "title": "注册账号", "desc": "使用手机号注册并登录" },
-      { "order": 3, "title": "添加设备", "desc": "点击右上角「+」扫描设备二维码" }
-    ]
-  },
-
-  "app_scope": {
-    "restricted": false,
-    "apps": []
-  },
-
-  "preview": {
-    "resolution": "uhd",
-    "image_interp": { "enabled": true, "size": "1920x1080" },
-    "video_interp": true
-  },
-
-  "layout": {
-    "enabled": true,
-    "mode": "split",
-    "stitch": { "count": 0, "cameras": [] },
-    "split": [
-      { "camera": 0, "pane_count": 2, "splits": [60] },
-      { "camera": 1, "pane_count": 3, "splits": [33, 66] }
-    ]
-  },
-
-  "features": {
-    "full_color_mode": "auto",
-    "one_key_alarm": true,
-    "fake_triple_lens": false,
-    "light_switch": { "show": true, "default_duration": 60 }
-  },
-
-  "low_battery_policy": {
-    "enabled": true,
-    "threshold": 20,
-    "disabled_features": ["ptz", "talk"]
+  "app_display": {
+    "resolution_display_mode": "pixel",
+    "image_interp": {
+      "enabled": true,
+      "height": 1080,
+      "width": 1920
+    },
+    "video_interp": true,
+    "playback_limit": {
+      "mode": "unlimited",
+      "limit_seconds": 0,
+      "warning_enabled": true,
+      "warning_seconds": 0
+    },
+    "fake_triple_lens": {
+      "enabled": true,
+      "stream_id": 1,
+      "crop_percent": 100
+    },
+    "layout": {
+      "enabled": true,
+      "mode": "split",
+      "stitch": {
+        "count": 0,
+        "cameras": []
+      },
+      "split": [
+        {
+          "camera": 0,
+          "pane_count": 2,
+          "splits": [
+            50
+          ]
+        }
+      ]
+    },
+    "light_switch": {
+      "show": false,
+      "duration": 43200
+    },
+    "low_battery_policy": {
+      "enabled": true,
+      "threshold": 20,
+      "disabled_features": [
+        "ptz",
+        "talk"
+      ]
+    }
   }
 }
 ```
@@ -61,104 +68,50 @@
 
 ## 二、字段说明
 
-### 1. 基础信息
-
-| 字段 | 类型 | 说明 |
+| 字段 | 类型 | 取值 / 说明 |
 |---|---|---|
-| `version` | string | 配置结构版本，APP 按此做兼容；结构变更才升版本 |
-| `product_id` | string | 产品ID |
-| `updated_at` | string | 配置最后更新时间，ISO 8601 |
-
-### 2. 安装引导 `install_guide`
-
-| 字段 | 类型 | 说明 |
-|---|---|---|
-| `steps[].order` | int | 步骤序号，从 1 开始 |
-| `steps[].title` | string | 步骤标题，如「下载App」 |
-| `steps[].desc` | string | 步骤说明 |
-
-> APP 按 `order` 升序渲染引导页；`steps` 为空数组时跳过引导。
-
-### 3. 使用范围 `app_scope`
-
-| 字段 | 类型 | 说明 |
-|---|---|---|
-| `restricted` | bool | `false` 不限 App；`true` 仅限 `apps` 内指定的 App 绑定 |
-| `apps` | string[] | 允许的 App 标识，如 `["carecam_pro","ipc_viewer"]` |
-
-### 4. 预览 `preview`
-
-| 字段 | 类型 | 说明 |
-|---|---|---|
-| `resolution` | enum | `uhd` 超清(2K/4K) / `sd` 标清(1080P及以下) |
-| `image_interp.enabled` | bool | 图片插值开关 |
-| `image_interp.size` | string | 插值目标尺寸，如 `1920x1080` |
+| `resolution_display_mode` | enum | `friendly` 通俗标识（超清/高清/标清）/ `pixel` 像素规格（1080P/2K/4K） |
+| `image_interp.enabled` | bool | 图片插值开关；`video_interp = true` 时强制为 `true` |
+| `image_interp.height` | int | 插值高度，如 `1080` |
+| `image_interp.width` | int | 插值宽度，如 `1920` |
 | `video_interp` | bool | 视频插值开关 |
-
-### 5. 画面布局 `layout`（拼接 / 拆分）
-
-| 字段 | 类型 | 说明 |
-|---|---|---|
-| `enabled` | bool | 是否启用画面布局；false 时 APP 按单画面显示 |
-| `mode` | enum | `stitch` 拼接 / `split` 拆分 |
-| `stitch.count` | int | 拼接路数，1~7 |
-| `stitch.cameras` | int[] | 参与拼接的 Camera 编号，0~6，长度 = `count` |
-| `split[].camera` | int | 该条拆分配置对应的 Camera 编号，0~6 |
-| `split[].pane_count` | int | 子画面数量，2~4 |
-| `split[].splits` | int[] | 分割点百分比，长度 = `pane_count - 1`，严格递增，取值 1~99 |
-
-> - `mode = stitch` 时只需读 `stitch`，`split` 可为空数组；
-> - `mode = split` 时只需读 `split`，`stitch` 的 `count` 传 0；
-> - 两个分支都给默认空值，APP 不用判空。
-
-### 6. 功能开关 `features`
-
-| 字段 | 类型 | 说明 |
-|---|---|---|
-| `full_color_mode` | enum | `auto` 夜间智能感知 / `scheduled` 定时开启 |
-| `one_key_alarm` | bool | 是否启用一键报警 |
-| `fake_triple_lens` | bool | 假三目展示 |
+| `playback_limit.mode` | enum | `limited` 开启限制 / `unlimited` 无限制 |
+| `playback_limit.limit_seconds` | int | 单次播放时长上限，秒；`unlimited` 时忽略 |
+| `playback_limit.warning_enabled` | bool | 播放预警开关，仅 `mode = limited` 时有效 |
+| `playback_limit.warning_seconds` | int | 剩余多少秒触发预警；`warning_enabled = false` 时忽略 |
+| `fake_triple_lens.enabled` | bool | 假三目开关 |
+| `fake_triple_lens.stream_id` | int | 原始流ID，第几个 camera，从 1 开始 |
+| `fake_triple_lens.crop_percent` | int | 截取百分比，1~100 |
+| `layout.enabled` | bool | 画面分屏开关；false 时按单画面展示 |
+| `layout.mode` | enum | `stitch` 拼接 / `split` 拆分 |
+| `layout.stitch.count` | int | 拼接路数，1~7 |
+| `layout.stitch.cameras` | int[] | 参与拼接的 Camera 编号，0~6，长度 = `count` |
+| `layout.split[].camera` | int | 该条配置对应的 Camera 编号，0~6，不可重复 |
+| `layout.split[].pane_count` | int | 子画面数量，2~4 |
+| `layout.split[].splits` | int[] | 分割点百分比，长度 = `pane_count - 1`，1~99 递增 |
 | `light_switch.show` | bool | APP 是否显示灯控开关 |
-| `light_switch.default_duration` | int | 灯控默认时长，单位秒，5~300 |
-
-### 7. 低电量保护 `low_battery_policy`
-
-| 字段 | 类型 | 说明 |
-|---|---|---|
-| `enabled` | bool | 是否启用低电量保护策略 |
-| `threshold` | int | 低电量阈值百分比，1~100 |
-| `disabled_features` | string[] | 低于阈值时禁用的功能，取值 `ptz` / `talk` / `call` |
-
-> `enabled = false` 时 APP 忽略后两个字段。
+| `light_switch.duration` | int | 灯光控制时长，秒，0~86400，默认 43200 |
+| `low_battery_policy.enabled` | bool | 是否启用低电量保护策略 |
+| `low_battery_policy.threshold` | int | 低电量阈值百分比，1~100 |
+| `low_battery_policy.disabled_features` | string[] | 禁用的功能：`ptz` 云台 / `talk` 语音对讲 / `sos` 一键呼叫 |
 
 ---
 
-## 三、几条约定
+## 三、联动规则（与配置页一致）
 
-1. **缺省即默认**：APP 读不到某个字段时按默认值渲染，不因字段缺失报错。平台侧建议所有字段都给默认值下发，不要省略。
-2. **枚举值固定小写**：`uhd` / `sd`、`auto` / `scheduled`、`stitch` / `split`，避免 APP 大小写兼容问题。
-3. **未知字段忽略**：平台新增字段时 APP 直接忽略即可，不需要同步发版才能兼容。
-4. **结构变更才升 `version`**：新增字段不升版本；字段改名、语义变化才升，APP 按版本号做分支。
-5. **配对字段成组下发**：如 `image_interp` 的 `enabled` 与 `size` 一起给，避免"开了插值但没给尺寸"的半截状态。
-
----
-
-## 四、取值边界汇总
-
-| 字段 | 取值 | 默认 |
-|---|---|---|
-| `preview.resolution` | `uhd` / `sd` | `uhd` |
-| `preview.image_interp.size` | `1920x1080` / `2560x1440` / `3840x2160` | `1920x1080` |
-| `layout.stitch.count` | 1~7 | 0（不拼接） |
-| `layout.stitch.cameras` | 0~6，数量 = count | `[]` |
-| `layout.split[].camera` | 0~6，不可重复 | — |
-| `layout.split[].pane_count` | 2~4 | 2 |
-| `layout.split[].splits` | 1~99 递增 | 均分 |
-| `features.full_color_mode` | `auto` / `scheduled` | `auto` |
-| `features.light_switch.default_duration` | 5~300 秒 | 60 |
-| `low_battery_policy.threshold` | 1~100 | 20 |
-| `low_battery_policy.disabled_features` | `ptz` / `talk` / `call` | `[]` |
+1. **视频插值 → 图片插值**：`video_interp = true` 时 `image_interp.enabled` 强制为 `true`，APP 侧置灰不可关。
+2. **播放限制 → 预警**：`playback_limit.mode = unlimited` 时，`warning_enabled` / `warning_seconds` 不下发。
+3. **拼接 vs 拆分**：`mode = stitch` 只看 `stitch`，`split` 可空；`mode = split` 只看 `split`，`stitch.count` 传 0。
+4. **假三目展开字段**：`fake_triple_lens.enabled = false` 时，`stream_id` / `crop_percent` 不下发。
 
 ---
 
-*文档版本: v1.0 | 创建日期: 2026-11-16*
+## 四、约定
+
+1. 本配置只作用于**实时预览与 APP 交互**，不影响物模型与设备固件。
+2. 缺失字段一律按默认值渲染，不允许因缺字段白屏。
+3. 新增字段不升接口版本，APP 忽略未知字段即可。
+
+---
+
+*文档版本: v2.0 | 创建日期: 2026-11-17*

@@ -311,3 +311,98 @@
 
 > 跨天取到上限（`StartTime=86399`、`EndTime=172799`）时，`get_config` 回复 **151** 字节、
 > `set_timer_schedule` 回复 **110** 字节 —— 都在 244 限内，跨天只让每帧各长 1 字节。
+
+---
+
+## 八、广播数据解析（iOS）
+
+iOS 通过 CoreBluetooth 扫描时**拿不到设备 MAC**（`CBPeripheral.identifier` 是系统生成的 UUID），必须从广播内容里反推设备身份。
+
+### 8.1 实测样例
+
+| 广播项 | 值 |
+|---|---|
+| Complete Local Name | `eDifusor_X01_52da3` |
+| MAC | `18:24:39:95:2D:A3` |
+| Service UUID | 实测解析为 `0x2418`，**应为 `0x1824`**（见 8.2） |
+| Service Data | `0x39952DA3` |
+| Manufacturer Company ID | `0x4D48`（Reserved ID） |
+| Manufacturer Data | `0x50566B49417A34375243375A34524777`（ASCII `PVkIAz47RC7Z4RGw`） |
+
+### 8.2 问题：Service UUID 字节序反了
+
+APP 侧授权校验要求 Service UUID 为 **`0x1824`**，实测广播解析出来是 **`0x2418`**，导致「设备未授权」。
+
+两个值互为字节颠倒：
+
+```
+期望 UUID   0x1824  →  空中应为小端字节  24 18
+实测解析    0x2418  ←  空中实际字节      18 24  （大端写入）
+```
+
+BLE 协议规定 16-bit UUID 在广播中按**小端序**存放。固件把 `0x1824` 按大端写成 `18 24`，标准解析（iOS / nRF Connect）按小端读回来就变成了 `0x2418`。
+
+**两种改法，二选一：**
+
+| 方案 | 改哪里 | 说明 |
+|---|---|---|
+| **A（推荐）固件修正字节序** | 设备固件 | 空中改写为 `24 18`，所有标准客户端都解析成 `0x1824` |
+| B. APP 侧做兼容 | APP | 读到的 UUID 若为 `0x2418`，交换高低字节后再比对。只能救这一版固件，新设备仍需 A |
+
+> 注：`0x1824` 同时也是 MAC 的前两个字节（`18 24`），需与固件确认这个 UUID 是「产品固定值」还是「取 MAC 前两字节生成」。若是后者，换 OUI 的模组会导致 UUID 变化。
+
+### 8.3 匹配规则
+
+**① Service Data（4 字节）= MAC 去掉前 2 字节**
+
+```
+MAC          18 24 | 39 95 2D A3
+Service Data        39 95 2D A3   → 0x39952DA3
+```
+
+从 MAC 第 3 字节起取 4 字节，高位在前（大端）。这条与 UUID 字节序问题无关，数据部分本身是对的。
+
+**② 名称后缀 = MAC 后 5 位十六进制（小写）**
+
+```
+MAC  18:24:39:95:2D:A3
+去分隔符  182439952DA3
+取后 5 位   52DA3
+广播名       eDifusor_X01_52da3
+```
+
+**③ Manufacturer Data 与 MAC 无对应关系**
+
+实测值可解为 ASCII `PVkIAz47RC7Z4RGw`，推测为设备凭证/随机标识，暂不用于识别（用途待确认）。
+
+### 8.4 使用建议
+
+1. **先用 UUID 认设备、再用 Service Data 认具体哪一台**：
+   - UUID（应为 `0x1824`）→ 判断是不是本产品，用于授权校验
+   - Service Data 后 4 字节 / 名称后 5 位 → 匹配具体设备
+2. **UUID 未通过时不要直接判「未授权」**：建议 APP 先做一次字节交换兜底（`0x2418 → 0x1824`），避免旧固件大规模不可用。
+3. **名称后缀做二次校验**，两者都匹配才连接，避免同名设备误连。
+4. **iOS 无法还原完整 MAC**：缺 OUI 前两字节，只能用后 4 字节与平台记录的 MAC 做尾段匹配。
+
+### 8.5 取值示例（Swift）
+
+```swift
+/// 广播名后缀：MAC 后 5 位十六进制
+func nameSuffix(from name: String) -> String? {
+    guard let s = name.split(separator: "_").last, s.count == 5 else { return nil }
+    return String(s).uppercased()                       // "52DA3"
+}
+
+/// Service Data 4 字节：等价于 MAC 后 4 字节
+func deviceKey(from serviceData: Data) -> String? {
+    guard serviceData.count == 4 else { return nil }
+    return serviceData.map { String(format: "%02X", $0) }.joined()   // "39952DA3"
+}
+
+/// UUID 字节序兜底：0x2418 → 0x1824
+func normalizedServiceUUID(_ uuid: UInt16) -> UInt16 {
+    return (uuid >> 8) | (uuid << 8)
+}
+```
+
+> Android 端可直接从 `BluetoothDevice.address` 拿到完整 MAC；以上规则仅在 iOS 上需要。

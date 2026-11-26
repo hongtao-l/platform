@@ -152,6 +152,8 @@
             <span class="config-text">安装指引：<em>{{ appConfig.installGuideStatus }}</em></span>
             <span class="config-divider">|</span>
             <span class="config-text">App使用范围：<em>{{ appConfig.scopeStatus }}</em></span>
+            <span class="config-divider">|</span>
+            <span class="config-text">设备预唤醒：<em>{{ appConfig.preWakeStatus }}</em></span>
           </div>
           <el-button type="primary" link @click="goToAppConfig">前往查看/修改</el-button>
         </div>
@@ -1918,7 +1920,8 @@ function confirmPackageBinding(pkgId) {
 // ===== App配置 =====
 const appConfig = reactive({
   installGuideStatus: '已配置',
-  scopeStatus: '不限范围'
+  scopeStatus: '不限范围',
+  preWakeStatus: '关闭'
 })
 function goToAppConfig() {
   router.push({ path: '/product/app', query: { productId: productId.value, name: productName.value } })

@@ -130,6 +130,12 @@ const routes = [
     meta: { title: '用户分群' }
   },
   {
+    path: '/ops/ad-strategy',
+    name: 'OpsAdStrategy',
+    component: () => import('@/views/ops/ad-strategy.vue'),
+    meta: { title: '广告投放策略' }
+  },
+  {
     path: '/thing-model/capability',
     name: 'ThingModelCapability',
     component: () => import('@/views/iot/thing-model/capability.vue'),

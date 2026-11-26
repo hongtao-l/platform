@@ -213,6 +213,30 @@
                   </el-form-item>
                 </div>
 
+                <div v-if="!isMainsPowered" class="config-item">
+                  <el-form-item label="设备预唤醒">
+                    <div class="prewake-wrapper">
+                      <el-tooltip
+                        :disabled="supportsRemoteWake"
+                        content="当前产品不支持远程唤醒，请先在设备能力中开启"
+                        placement="top"
+                      >
+                        <div class="inline-switch-group">
+                          <el-switch
+                            v-model="defaultConfig.preWake"
+                            size="small"
+                            :disabled="!supportsRemoteWake"
+                          />
+                          <span class="switch-label">{{ defaultConfig.preWake ? '开启' : '关闭' }}</span>
+                        </div>
+                      </el-tooltip>
+                      <div class="config-descr split-descr">
+                        开启后，APP 进入首页时会自动唤醒该产品下的设备，减少打开时的等待时间。频繁唤醒会增加设备耗电与流量消耗。
+                      </div>
+                    </div>
+                  </el-form-item>
+                </div>
+
                 <div class="config-item">
                   <el-form-item label="全彩模式时段">
                     <el-radio-group v-model="defaultConfig.fullColorMode">
@@ -354,6 +378,7 @@ const defaultConfig = reactive({
   resolution: 'uhd',
   imageInterp: { enabled: true, size: '1920x1080' },
   videoInterp: true,
+  preWake: false,
   fullColorMode: 'auto',
   alarmConfig: 'enabled',
   fakeTriple: 'off',
@@ -365,6 +390,12 @@ const defaultConfig = reactive({
     disabledFeatures: []
   }
 })
+
+// ===== 设备预唤醒 =====
+// 产品是否支持远程唤醒（真实环境由「设备能力 → 唤醒能力」读取，此处先置为 true）
+const supportsRemoteWake = ref(true)
+// 是否长电机型（长电机型一直在线，不展示该配置项）
+const isMainsPowered = ref(false)
 
 // ===== 画面合分配置（按 Camera 维度）=====
 const paneOptions = [2, 3, 4]
@@ -713,6 +744,17 @@ function goBack() {
 
 .split-descr {
   margin-top: 0;
+}
+
+.prewake-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.prewake-wrapper .el-tooltip__trigger {
+  display: inline-flex;
 }
 
 .ratio-list {
